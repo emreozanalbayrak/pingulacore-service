@@ -8,4 +8,26 @@ wheels/
 
 # Virtual environments
 .venv
+
+# env file
+.env
+.env.local
+
+# Runtime artifacts
+service.db
+generated_assets/
+ortak/
+sp_files/
+catalog/
+tests/
+scripts
+.pytest_cache/
+
+# Legacy reference workspace
 old
+
+# Frontend
+frontend/
+
+
+

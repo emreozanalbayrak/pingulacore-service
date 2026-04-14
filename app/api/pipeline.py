@@ -1,0 +1,285 @@
+from __future__ import annotations
+
+from typing import Any
+from pathlib import Path
+
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import FileResponse
+from sqlalchemy.orm import Session
+
+from app.core.config import get_settings
+from app.db import repository
+from app.db.database import get_db
+from app.schemas.api import (
+    FullPipelineRunRequest,
+    FullPipelineRunResponse,
+    LayoutToHtmlRunRequest,
+    LayoutToHtmlRunResponse,
+    PipelineAgentLinkResponse,
+    PipelineGetResponse,
+    PipelineLogEntryResponse,
+    QuestionToLayoutRunRequest,
+    QuestionToLayoutRunResponse,
+    RuntimeInfoResponse,
+    SpFilesResponse,
+    SpHtmlFileResponse,
+    SpJsonFileResponse,
+    SubPipelineGetResponse,
+    YamlFileContentResponse,
+    YamlFilesResponse,
+    YamlToQuestionRunRequest,
+    YamlToQuestionRunResponse,
+)
+from app.services.pipeline_service import PipelineService
+from app.services import sub_pipeline_files_service as sp_files
+from app.services.yaml_service import load_yaml_file
+
+router = APIRouter(prefix="/v1", tags=["pipeline"])
+
+
+def _dt(value: Any) -> str | None:
+    if value is None:
+        return None
+    return value.isoformat()
+
+
+@router.post("/pipelines/full/run", response_model=FullPipelineRunResponse)
+async def run_full_pipeline(req: FullPipelineRunRequest, db: Session = Depends(get_db)) -> FullPipelineRunResponse:
+    service = PipelineService(db)
+    return await service.run_full_pipeline(req.yaml_filename, req.retry_config)
+
+
+@router.get("/runtime-info", response_model=RuntimeInfoResponse)
+def get_runtime_info() -> RuntimeInfoResponse:
+    import os
+
+    settings = get_settings()
+    return RuntimeInfoResponse(
+        use_stub_agents=settings.use_stub_agents,
+        text_model=settings.gemini_text_model,
+        light_model=settings.gemini_light_model,
+        image_model=settings.gemini_image_model,
+        has_google_api_key=bool(os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")),
+        has_anthropic_api_key=bool(os.getenv("ANTHROPIC_API_KEY")),
+    )
+
+
+@router.get("/yaml-files", response_model=YamlFilesResponse)
+def list_yaml_files() -> YamlFilesResponse:
+    settings = get_settings()
+    names: set[str] = set()
+
+    for directory in [settings.yaml_primary_dir, settings.yaml_fallback_dir]:
+        if not directory.exists() or not directory.is_dir():
+            continue
+        for path in directory.iterdir():
+            if path.is_file() and path.suffix.lower() in {".yaml", ".yml"}:
+                names.add(path.name)
+
+    return YamlFilesResponse(files=sorted(names))
+
+
+@router.get("/yaml-files/{filename}", response_model=YamlFileContentResponse)
+def get_yaml_file_content(filename: str) -> YamlFileContentResponse:
+    token = Path(filename)
+    if token.name != filename or token.is_absolute() or ".." in token.parts:
+        raise HTTPException(status_code=400, detail="Geçersiz dosya adı")
+    try:
+        data = load_yaml_file(filename)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="YAML bulunamadı")
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    return YamlFileContentResponse(filename=filename, data=data)
+
+
+@router.get("/sp-files/q_json", response_model=SpFilesResponse)
+def list_sp_question_files() -> SpFilesResponse:
+    return SpFilesResponse(files=sp_files.list_files("q_json"))
+
+
+@router.get("/sp-files/layout", response_model=SpFilesResponse)
+def list_sp_layout_files() -> SpFilesResponse:
+    return SpFilesResponse(files=sp_files.list_files("layout"))
+
+
+@router.get("/sp-files/q_html", response_model=SpFilesResponse)
+def list_sp_html_files() -> SpFilesResponse:
+    return SpFilesResponse(files=sp_files.list_files("q_html"))
+
+
+@router.get("/sp-files/q_json/{filename}", response_model=SpJsonFileResponse)
+def get_sp_question_file(filename: str) -> SpJsonFileResponse:
+    try:
+        data = sp_files.read_json_file("q_json", filename)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Geçersiz dosya adı")
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Dosya bulunamadı")
+    return SpJsonFileResponse(filename=filename, data=data)
+
+
+@router.get("/sp-files/layout/{filename}", response_model=SpJsonFileResponse)
+def get_sp_layout_file(filename: str) -> SpJsonFileResponse:
+    try:
+        data = sp_files.read_json_file("layout", filename)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Geçersiz dosya adı")
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Dosya bulunamadı")
+    return SpJsonFileResponse(filename=filename, data=data)
+
+
+@router.get("/sp-files/q_html/{filename}", response_model=SpHtmlFileResponse)
+def get_sp_html_file(filename: str) -> SpHtmlFileResponse:
+    try:
+        html_content = sp_files.read_html_file(filename)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Geçersiz dosya adı")
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Dosya bulunamadı")
+    return SpHtmlFileResponse(filename=filename, html_content=html_content)
+
+
+@router.get("/assets/{filename:path}")
+def get_generated_asset(filename: str) -> FileResponse:
+    settings = get_settings()
+    token = Path(filename)
+    if token.name != filename or token.is_absolute() or ".." in token.parts:
+        raise HTTPException(status_code=400, detail="Geçersiz asset yolu")
+
+    roots = [settings.output_dir.resolve(), settings.catalog_dir.resolve()]
+    for root in roots:
+        candidate = (root / token.name).resolve()
+        if root not in candidate.parents:
+            continue
+        if candidate.exists() and candidate.is_file():
+            return FileResponse(candidate)
+
+    raise HTTPException(status_code=404, detail="Asset bulunamadı")
+
+
+@router.post("/pipelines/sub/yaml-to-question/run", response_model=YamlToQuestionRunResponse)
+async def run_sub_yaml_to_question(req: YamlToQuestionRunRequest, db: Session = Depends(get_db)) -> YamlToQuestionRunResponse:
+    service = PipelineService(db)
+    return await service.run_sub_yaml_to_question(req.yaml_filename, req.retry_config)
+
+
+@router.post("/pipelines/sub/question-to-layout/run", response_model=QuestionToLayoutRunResponse)
+async def run_sub_question_to_layout(req: QuestionToLayoutRunRequest, db: Session = Depends(get_db)) -> QuestionToLayoutRunResponse:
+    service = PipelineService(db)
+    return await service.run_sub_question_to_layout(req.question_json, req.retry_config)
+
+
+@router.post("/pipelines/sub/layout-to-html/run", response_model=LayoutToHtmlRunResponse)
+async def run_sub_layout_to_html(req: LayoutToHtmlRunRequest, db: Session = Depends(get_db)) -> LayoutToHtmlRunResponse:
+    service = PipelineService(db)
+    return await service.run_sub_layout_to_html(req.layout_plan_json, req.retry_config)
+
+
+@router.get("/pipelines/{pipeline_id}", response_model=PipelineGetResponse)
+def get_pipeline(pipeline_id: str, db: Session = Depends(get_db)) -> PipelineGetResponse:
+    row = repository.get_pipeline(db, pipeline_id)
+    if row is None:
+        raise HTTPException(status_code=404, detail="Pipeline bulunamadı")
+    return PipelineGetResponse(
+        id=row.id,
+        mode=row.mode,
+        yaml_filename=row.yaml_filename,
+        status=row.status,
+        retry_config=repository.parse_json(row.retry_config_json),
+        error=row.error,
+        created_at=_dt(row.created_at) or "",
+        finished_at=_dt(row.finished_at),
+    )
+
+
+@router.get("/pipelines/{pipeline_id}/agent-runs", response_model=list[PipelineAgentLinkResponse])
+def get_pipeline_runs(pipeline_id: str, db: Session = Depends(get_db)) -> list[PipelineAgentLinkResponse]:
+    rows = repository.list_pipeline_links(db, pipeline_id)
+    return [
+        PipelineAgentLinkResponse(
+            id=row.id,
+            pipeline_id=row.pipeline_id,
+            sub_pipeline_id=row.sub_pipeline_id,
+            agent_name=row.agent_name,
+            agent_table=row.agent_table,
+            agent_run_id=row.agent_run_id,
+            created_at=_dt(row.created_at) or "",
+        )
+        for row in rows
+    ]
+
+
+@router.get("/pipelines/{pipeline_id}/logs", response_model=list[PipelineLogEntryResponse])
+def get_pipeline_logs(pipeline_id: str, db: Session = Depends(get_db)) -> list[PipelineLogEntryResponse]:
+    rows = repository.list_pipeline_logs(db, pipeline_id)
+    return [
+        PipelineLogEntryResponse(
+            id=row.id,
+            pipeline_id=row.pipeline_id,
+            sub_pipeline_id=row.sub_pipeline_id,
+            mode=row.mode,
+            level=row.level,
+            component=row.component,
+            message=row.message,
+            details=repository.parse_json(row.details_json),
+            created_at=_dt(row.created_at) or "",
+        )
+        for row in rows
+    ]
+
+
+@router.get("/sub-pipelines/{sub_pipeline_id}", response_model=SubPipelineGetResponse)
+def get_sub_pipeline(sub_pipeline_id: str, db: Session = Depends(get_db)) -> SubPipelineGetResponse:
+    row = repository.get_sub_pipeline(db, sub_pipeline_id)
+    if row is None:
+        raise HTTPException(status_code=404, detail="Sub-pipeline bulunamadı")
+    return SubPipelineGetResponse(
+        id=row.id,
+        pipeline_id=row.pipeline_id,
+        mode=row.mode,
+        kind=row.kind,
+        status=row.status,
+        input_json=repository.parse_json(row.input_json),
+        output_json=repository.parse_json(row.output_json),
+        error=row.error,
+        created_at=_dt(row.created_at) or "",
+        finished_at=_dt(row.finished_at),
+    )
+
+
+@router.get("/sub-pipelines/{sub_pipeline_id}/agent-runs", response_model=list[PipelineAgentLinkResponse])
+def get_sub_pipeline_runs(sub_pipeline_id: str, db: Session = Depends(get_db)) -> list[PipelineAgentLinkResponse]:
+    rows = repository.list_sub_pipeline_links(db, sub_pipeline_id)
+    return [
+        PipelineAgentLinkResponse(
+            id=row.id,
+            pipeline_id=row.pipeline_id,
+            sub_pipeline_id=row.sub_pipeline_id,
+            agent_name=row.agent_name,
+            agent_table=row.agent_table,
+            agent_run_id=row.agent_run_id,
+            created_at=_dt(row.created_at) or "",
+        )
+        for row in rows
+    ]
+
+
+@router.get("/sub-pipelines/{sub_pipeline_id}/logs", response_model=list[PipelineLogEntryResponse])
+def get_sub_pipeline_logs(sub_pipeline_id: str, db: Session = Depends(get_db)) -> list[PipelineLogEntryResponse]:
+    rows = repository.list_sub_pipeline_logs(db, sub_pipeline_id)
+    return [
+        PipelineLogEntryResponse(
+            id=row.id,
+            pipeline_id=row.pipeline_id,
+            sub_pipeline_id=row.sub_pipeline_id,
+            mode=row.mode,
+            level=row.level,
+            component=row.component,
+            message=row.message,
+            details=repository.parse_json(row.details_json),
+            created_at=_dt(row.created_at) or "",
+        )
+        for row in rows
+    ]
