@@ -116,7 +116,7 @@ def build_settings() -> Settings:
         catalog_dir=Path(os.getenv("CATALOG_DIR", str(catalog_dir))),
         gemini_text_model=os.getenv("AI_TEXT_MODEL") or os.getenv("GEMINI_TEXT_MODEL", default_text_model),
         gemini_light_model=os.getenv("AI_LIGHT_MODEL") or os.getenv("GEMINI_LIGHT_MODEL", default_light_model),
-        gemini_image_model=os.getenv("GEMINI_IMAGE_MODEL", "gemini-2.5-flash-image-preview"),
+        gemini_image_model=os.getenv("GEMINI_IMAGE_MODEL", "gemini-2.5-flash-image"),
         question_max_retries=_as_int(os.getenv("QUESTION_MAX_RETRIES"), 3),
         layout_max_retries=_as_int(os.getenv("LAYOUT_MAX_RETRIES"), 3),
         html_max_retries=_as_int(os.getenv("HTML_MAX_RETRIES"), 3),

@@ -463,7 +463,6 @@ class AgentService:
         # Keep configurable primary model first, then try known compatibility fallbacks.
         models = [
             primary_model,
-            "gemini-2.0-flash-preview-image-generation",
             "gemini-2.5-flash-image",
         ]
         deduped: list[str] = []
