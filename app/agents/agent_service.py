@@ -8,7 +8,7 @@ import os
 import re
 import time
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, Literal
 from uuid import uuid4
 
 from pydantic_ai import Agent
@@ -35,6 +35,7 @@ from app.schemas.domain import (
 )
 from pydantic_ai.models.google import GoogleModel, GoogleModelSettings
 from pydantic_ai.models.anthropic import AnthropicModel, AnthropicModelSettings
+
 
 
 try:
