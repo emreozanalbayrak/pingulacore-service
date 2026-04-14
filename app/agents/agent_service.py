@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import base64
 from concurrent.futures import ThreadPoolExecutor
+import mimetypes
 import os
 import re
 import time
@@ -78,6 +79,11 @@ HTML_GENERATOR_INSTRUCTIONS = (
     "Use src values from provided asset_map entries for catalog assets and do not invent unknown file paths."
 )
 HTML_VALIDATOR_INSTRUCTIONS = "Validate consistency between LayoutPlan and HTML."
+IMAGE_COMPOSITE_SYSTEM_INSTRUCTIONS = (
+    "Üreteceğin görsel, ek olarak verilen katalog görselleriyle birlikte katmanlı bir kompozisyonda kullanılacak. "
+    "Bu yüzden görselini katalog ögeleriyle stil, perspektif, ışık, ölçek ve renk uyumu olacak şekilde üret. "
+    "Görsel opak ve dikdörtgen/kare bir katman olarak yerleşecek; kritik ögeleri kapatmayacak, temiz ve kullanılabilir boş alan bırak."
+)
 
 
 class AgentService:
@@ -350,7 +356,13 @@ class AgentService:
             print(f"[agent] validate_layout_html fallback to stub: {exc}", flush=True)
             return self._stub_validate_layout_html(layout, html_content)
 
-    def generate_composite_image(self, asset: AssetSpec, max_retries: int) -> CompositeImageResult:
+    def generate_composite_image(
+        self,
+        asset: AssetSpec,
+        max_retries: int,
+        *,
+        catalog_context_filenames: list[str] | None = None,
+    ) -> CompositeImageResult:
         output_path = self.settings.output_dir / f"{asset.slug}.png"
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -364,14 +376,27 @@ class AgentService:
             return CompositeImageResult(asset_slug=asset.slug, image_path=str(output_path), note="fallback-stub-image(no-key)")
 
         client = genai.Client(api_key=api_key)
-        prompt = f"Generate PNG for asset={asset.slug}. description={asset.description}. prompt={asset.prompt}"
+        prompt = (
+            f"Generate PNG for asset={asset.slug}. "
+            f"description={asset.description}. "
+            f"prompt={asset.prompt}. "
+            "This image will be layered with provided catalog PNG assets in the final composition."
+        )
+        context_parts, used_catalog_files = self._build_catalog_context_parts(catalog_context_filenames or [])
+        request_parts: list[Any] = [prompt, *context_parts]
         image_models = self._candidate_image_models(self.settings.gemini_image_model)
         last_error: str | None = None
 
         for image_model in image_models:
             for attempt in range(1, max(1, max_retries) + 1):
                 try:
-                    response = client.models.generate_content(model=image_model, contents=prompt)
+                    response = client.models.generate_content(
+                        model=image_model,
+                        contents=request_parts,
+                        config={
+                            "systemInstruction": IMAGE_COMPOSITE_SYSTEM_INSTRUCTIONS,
+                        },
+                    )
                 except Exception as exc:  # pragma: no cover - live provider instability path
                     last_error = str(exc)
                     sleep_sec = min(1.0 * attempt, 4.0)
@@ -388,7 +413,7 @@ class AgentService:
                     return CompositeImageResult(
                         asset_slug=asset.slug,
                         image_path=str(output_path),
-                        note=f"generated-by-image-model({image_model})",
+                        note=f"generated-by-image-model({image_model});catalog_refs={len(used_catalog_files)}",
                     )
 
         output_path.write_bytes(PIXEL_PNG_BYTES)
@@ -399,6 +424,38 @@ class AgentService:
                 note=f"fallback-stub-image(error={last_error})",
             )
         return CompositeImageResult(asset_slug=asset.slug, image_path=str(output_path), note="fallback-stub-image(no-image-part)")
+
+    def _build_catalog_context_parts(self, catalog_filenames: list[str]) -> tuple[list[Any], list[str]]:
+        parts: list[Any] = []
+        used: list[str] = []
+        if genai is None:
+            return parts, used
+
+        safe_names: list[str] = []
+        for name in catalog_filenames:
+            token = Path(name).name
+            if not token or token.startswith("."):
+                continue
+            if token not in safe_names:
+                safe_names.append(token)
+
+        for filename in safe_names:
+            path = self.settings.catalog_dir / filename
+            if not path.exists() or not path.is_file():
+                continue
+            mime, _ = mimetypes.guess_type(path.name)
+            if not mime or not mime.startswith("image/"):
+                continue
+            try:
+                data = path.read_bytes()
+            except Exception:
+                continue
+            if not data:
+                continue
+            parts.append(genai.types.Part.from_bytes(data=data, mime_type=mime))
+            used.append(filename)
+
+        return parts, used
 
     @staticmethod
     def _candidate_image_models(primary_model: str) -> list[str]:

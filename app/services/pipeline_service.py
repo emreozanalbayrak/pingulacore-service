@@ -450,6 +450,13 @@ class PipelineService:
         feedback: str | None = None
         last_validation = None
         asset_map: dict[str, str] = {}
+        catalog_context_filenames = sorted(
+            {
+                Path(asset.source_filename or asset.output_filename).name
+                for asset in layout.asset_library.values()
+                if asset.asset_type.value == "catalog_component"
+            }
+        )
 
         for asset in layout.asset_library.values():
             if asset.asset_type.value == "catalog_component":
@@ -470,9 +477,17 @@ class PipelineService:
                 message=f"Composite image generation başlatıldı: {asset.slug}",
                 pipeline_id=pipeline_id,
                 sub_pipeline_id=sub_pipeline_id,
-                details={"slug": asset.slug, "image_max_retries": retry.image_max_retries},
+                details={
+                    "slug": asset.slug,
+                    "image_max_retries": retry.image_max_retries,
+                    "catalog_context_count": len(catalog_context_filenames),
+                },
             )
-            result = self.agents.generate_composite_image(asset, retry.image_max_retries)
+            result = self.agents.generate_composite_image(
+                asset,
+                retry.image_max_retries,
+                catalog_context_filenames=catalog_context_filenames,
+            )
             asset_map[asset.slug] = Path(result.image_path).name
             repository.record_agent_run(
                 self.db,
