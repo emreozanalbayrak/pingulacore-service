@@ -35,6 +35,7 @@ class PipelineService:
         self.db = db
         self.settings = settings or get_settings()
         self.agents = AgentService(self.settings)
+        self._log_path: Path | None = None
 
     def _log(
         self,
@@ -56,6 +57,7 @@ class PipelineService:
             sub_pipeline_id=sub_pipeline_id,
             level=level,
             details=details,
+            log_path=self._log_path,
         )
 
     def _persist_sub_output_question(
@@ -683,6 +685,7 @@ class PipelineService:
         )
 
         run_dir = create_full_run_dir(self.settings.runs_dir, yaml_filename)
+        self._log_path = run_dir / "log.txt"
         write_manifest(
             run_dir,
             run_type="full",
@@ -906,6 +909,7 @@ class PipelineService:
         sub_id = sub.id
 
         run_dir = create_sub_run_dir(self.settings.runs_dir, yaml_filename=yaml_filename)
+        self._log_path = run_dir / "log.txt"
         write_manifest(
             run_dir,
             run_type="sub",
@@ -999,6 +1003,7 @@ class PipelineService:
         sub_id = sub.id
 
         run_dir = create_sub_run_dir(self.settings.runs_dir, token=question.question_id)
+        self._log_path = run_dir / "log.txt"
         write_manifest(
             run_dir,
             run_type="sub",
@@ -1077,6 +1082,7 @@ class PipelineService:
         sub_id = sub.id
 
         run_dir = create_sub_run_dir(self.settings.runs_dir, token=question.question_id)
+        self._log_path = run_dir / "log.txt"
         write_manifest(
             run_dir,
             run_type="sub",

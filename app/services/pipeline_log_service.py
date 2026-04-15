@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any
 
 from sqlalchemy.orm import Session
@@ -18,9 +19,17 @@ def write_pipeline_log(
     sub_pipeline_id: str | None,
     level: str = "info",
     details: Any | None = None,
+    log_path: Path | None = None,
 ) -> int:
     ts = datetime.now(timezone.utc).isoformat()
-    print(f"{ts} [{component}] {message}", flush=True)
+    line = f"{ts} [{level.upper()}] [{component}] {message}"
+    print(line, flush=True)
+    if log_path is not None:
+        try:
+            with log_path.open("a", encoding="utf-8") as fh:
+                fh.write(line + "\n")
+        except Exception:
+            pass
     return repository.record_pipeline_log(
         db,
         mode=mode,
