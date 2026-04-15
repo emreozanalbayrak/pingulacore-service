@@ -145,7 +145,24 @@ def get_sp_html_file(filename: str) -> SpHtmlFileResponse:
 def get_generated_asset(filename: str) -> FileResponse:
     settings = get_settings()
     token = Path(filename)
-    if token.name != filename or token.is_absolute() or ".." in token.parts:
+
+    # Reject path traversal regardless of serving mode
+    if token.is_absolute() or ".." in token.parts:
+        raise HTTPException(status_code=400, detail="Geçersiz asset yolu")
+
+    # New structured runs path: runs/{kind}/{name}/...
+    if token.parts and token.parts[0] == "runs":
+        runs_dir_resolved = settings.runs_dir.resolve()
+        # Reconstruct path relative to root_dir (runs_dir's parent)
+        candidate = (settings.runs_dir.parent / token).resolve()
+        if runs_dir_resolved not in candidate.parents:
+            raise HTTPException(status_code=400, detail="Geçersiz asset yolu")
+        if candidate.exists() and candidate.is_file():
+            return FileResponse(candidate)
+        raise HTTPException(status_code=404, detail="Asset bulunamadı")
+
+    # Legacy flat filename: must be a bare name with no directory separators
+    if token.name != filename:
         raise HTTPException(status_code=400, detail="Geçersiz asset yolu")
 
     roots = [settings.output_dir.resolve(), settings.catalog_dir.resolve()]

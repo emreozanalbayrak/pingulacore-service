@@ -23,6 +23,7 @@ from app.schemas.api import (
 )
 from app.schemas.domain import AssetSpec
 from app.services.pipeline_log_service import write_pipeline_log
+from app.services.run_dir_service import create_standalone_run_dir, write_manifest
 
 router = APIRouter(prefix="/v1", tags=["agent"])
 
@@ -342,7 +343,20 @@ def standalone_generate_composite_image(
     _log_standalone(db, component=component, message="Run başlatıldı.")
     try:
         asset = AssetSpec(**req.asset)
-        result = agents.generate_composite_image(asset, settings.image_max_retries)
+        run_dir = create_standalone_run_dir(settings.runs_dir, agent_name="generate_composite_image")
+        write_manifest(
+            run_dir,
+            run_type="standalone",
+            yaml_filename=None,
+            agent_name="generate_composite_image",
+            pipeline_id=None,
+            sub_pipeline_id=None,
+            sub_kind=None,
+        )
+        img_output_path = run_dir / f"{asset.slug}.png"
+        result = agents.generate_composite_image(
+            asset, settings.image_max_retries, output_path=img_output_path
+        )
         run_id = repository.record_agent_run(
             db,
             agent_name="helper_generate_composite_image",
@@ -357,13 +371,15 @@ def standalone_generate_composite_image(
             pipeline_id=None,
             sub_pipeline_id=None,
         )
+        result_dict: Any = result.model_dump()
+        result_dict["run_path"] = str(run_dir.relative_to(settings.root_dir))
         _log_standalone(
             db,
             component=component,
             message=f"Run tamamlandı: success (run_id={run_id})",
             details={"run_id": run_id},
         )
-        return StandaloneAgentResponse(run_id=run_id, result=result)
+        return StandaloneAgentResponse(run_id=run_id, result=result_dict)
     except Exception as exc:
         _log_standalone(db, component=component, message=f"Run hata ile sonlandı: {exc}", level="error")
         raise

@@ -59,6 +59,7 @@ class FullPipelineRunResponse(BaseModel):
     layout_plan_json: LayoutPlan
     question_html: dict[str, Any]
     rendered_image_path: str | None = None
+    run_path: str | None = None
 
 
 class YamlToQuestionRunRequest(BaseModel):
@@ -71,6 +72,7 @@ class YamlToQuestionRunResponse(BaseModel):
     question_json: QuestionSpec
     rule_evaluation: dict[str, Any]
     attempts: int
+    run_path: str | None = None
 
 
 class QuestionToLayoutRunRequest(BaseModel):
@@ -83,6 +85,7 @@ class QuestionToLayoutRunResponse(BaseModel):
     layout_plan_json: LayoutPlan
     validation: QuestionLayoutValidationResult
     attempts: int
+    run_path: str | None = None
 
 
 class LayoutToHtmlRunRequest(BaseModel):
@@ -98,6 +101,7 @@ class LayoutToHtmlRunResponse(BaseModel):
     attempts: int
     generated_assets: dict[str, str] = Field(default_factory=dict)
     rendered_image_path: str | None = None
+    run_path: str | None = None
 
 
 class StandaloneGenerateQuestionRequest(BaseModel):

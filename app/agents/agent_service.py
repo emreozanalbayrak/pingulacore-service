@@ -89,6 +89,7 @@ IMAGE_COMPOSITE_SYSTEM_INSTRUCTIONS = (
     "Üreteceğin görsel, ek olarak verilen katalog görselleriyle birlikte katmanlı bir kompozisyonda kullanılacak. "
     "Bu yüzden görselini katalog ögeleriyle stil, perspektif, ışık, ölçek ve renk uyumu olacak şekilde üret. "
     "Görsel opak ve dikdörtgen/kare bir katman olarak yerleşecek; kritik ögeleri kapatmayacak, temiz ve kullanılabilir boş alan bırak."
+    "Ek'te verilen katalog görsellerini ASLA üreteceğin görselin parçası olarak kullanma, sadece referans olarak kullanarak uyumlu ama ayrı bir görsel üret (örneğin benzer bir arka plan dokusu veya benzer bir nesne şeklinde). Ancak ek'teki görseller ASLA üreteceğin görselin içinde yer almamalı, sadece stil ve içerik uyumu için referans olarak kullanılmalı. "
 )
 
 
@@ -352,12 +353,21 @@ class AgentService:
         *,
         asset_map: dict[str, str] | None = None,
         question_id: str | None = None,
+        run_assets_dir: Path | None = None,
+        render_dir: Path | None = None,
     ) -> str:
-        render_id = self._slugify(question_id or f"render_{uuid4()}")
-        html_path = self.settings.output_dir / f"{render_id}.render.html"
-        image_path = self.settings.output_dir / f"{render_id}.render.png"
+        if render_dir is not None:
+            html_path = render_dir / "render.html"
+            image_path = render_dir / "render.png"
+        else:
+            render_id = self._slugify(question_id or f"render_{uuid4()}")
+            html_path = self.settings.output_dir / f"{render_id}.render.html"
+            image_path = self.settings.output_dir / f"{render_id}.render.png"
 
-        rewritten = self._rewrite_html_asset_urls_for_local_render(html_content, asset_map or {})
+        extra_dirs = [run_assets_dir] if run_assets_dir is not None else []
+        rewritten = self._rewrite_html_asset_urls_for_local_render(
+            html_content, asset_map or {}, extra_search_dirs=extra_dirs
+        )
         html_path.write_text(rewritten, encoding="utf-8")
 
         if self._capture_html_screenshot(html_path, image_path):
@@ -406,8 +416,9 @@ class AgentService:
         max_retries: int,
         *,
         catalog_context_filenames: list[str] | None = None,
+        output_path: Path | None = None,
     ) -> CompositeImageResult:
-        output_path = self.settings.output_dir / f"{asset.slug}.png"
+        output_path = output_path if output_path is not None else (self.settings.output_dir / f"{asset.slug}.png")
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
         if self.settings.use_stub_agents or genai is None:
@@ -553,7 +564,13 @@ class AgentService:
                             pass
         return None
 
-    def _rewrite_html_asset_urls_for_local_render(self, html_content: str, asset_map: dict[str, str]) -> str:
+    def _rewrite_html_asset_urls_for_local_render(
+        self,
+        html_content: str,
+        asset_map: dict[str, str],
+        *,
+        extra_search_dirs: list[Path] | None = None,
+    ) -> str:
         pattern = re.compile(r'\b(src|href)=([\'"])([^\'"]+)\2', re.IGNORECASE)
 
         def replacer(match: re.Match[str]) -> str:
@@ -586,8 +603,9 @@ class AgentService:
                 if token not in candidates:
                     candidates.append(token)
 
+            search_roots = list(extra_search_dirs or []) + [self.settings.output_dir, self.settings.catalog_dir]
             for name in candidates:
-                for root in (self.settings.output_dir, self.settings.catalog_dir):
+                for root in search_roots:
                     p = (root / name).resolve()
                     if p.exists() and p.is_file():
                         return f"{attr}={quote}{p.as_uri()}{quote}"
@@ -667,11 +685,15 @@ class AgentService:
                 mapping[token.lower()] = target
 
         for slug, asset in layout.asset_library.items():
-            resolved_name = Path(asset_map.get(slug) or asset.output_filename).name
+            resolved_name_in_map = asset_map.get(slug) or asset.output_filename
+            resolved_name = Path(resolved_name_in_map).name
             if not resolved_name:
                 continue
             if asset.asset_type == AssetType.CATALOG_COMPONENT:
                 target = f"catalog/{resolved_name}"
+            elif "/" in resolved_name_in_map or "\\" in resolved_name_in_map:
+                # New-structure run: asset_map value is already a relative path (e.g. runs/full/.../assets/foo.png)
+                target = resolved_name_in_map
             else:
                 target = f"generated_assets/{resolved_name}"
 
@@ -697,6 +719,7 @@ class AgentService:
                 or low.startswith("mailto:")
                 or low.startswith("catalog/")
                 or low.startswith("generated_assets/")
+                or low.startswith("runs/")
             ):
                 return f"{attr}={quote}{value}{quote}"
 

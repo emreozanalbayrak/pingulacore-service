@@ -392,4 +392,42 @@ This section covers foundational modules that provide general utilities and conf
 
 ---
 
+## 6. Frontend
+
+The frontend is a modern web application built using **React**, **TypeScript**, and **Vite**, with **React Router DOM** for client-side routing. It's designed to provide a user interface for interacting with the backend services.
+
+### Technologies Used
+
+*   **React (v19.x):** A JavaScript library for building user interfaces.
+*   **TypeScript (v6.0.x):** A superset of JavaScript that adds static types, improving code quality and maintainability.
+*   **Vite (v8.0.x):** A fast build tool that provides a rapid development experience for modern web projects.
+*   **React Router DOM (v7.x):** Used for declarative routing within the single-page application.
+*   **ESLint:** For static code analysis to enforce code style and identify potential issues.
+*   **Vitest & React Testing Library:** For unit and integration testing of React components.
+*   **JSDOM:** Provides a simulated DOM environment for running frontend tests without a browser.
+
+### Project Structure (`frontend/src/`)
+
+The `src/` directory follows a common and organized structure for React applications:
+
+*   **`main.tsx`:** The application's entry point. It bootstraps the React application, rendering the root `<App />` component within `<StrictMode>` and `<BrowserRouter>`.
+*   **`App.tsx`:** The main component of the application, likely containing the primary layout and route definitions.
+*   **`index.css` & `App.css`:** CSS files for global styles and application-specific styles, respectively.
+*   **`types.ts`:** Dedicated file for global TypeScript type definitions, enhancing type safety across the project.
+*   **`assets/`:** Contains static assets such as images, icons, or fonts used by the application.
+*   **`components/`:** A collection of reusable UI components (e.g., buttons, cards, forms) that can be composed to build complex interfaces.
+*   **`hooks/`:** Custom React Hooks to encapsulate reusable stateful logic and side effects.
+*   **`lib/`:** Utility functions, helper modules, or third-party library configurations.
+*   **`pages/`:** Components that represent distinct views or "pages" of the application, typically corresponding to different routes defined by `react-router-dom`.
+*   **`test/`:** Contains additional test-related files, configurations, or mocks, complementing the component-level tests.
+
+### Development and Build Process
+
+*   **Development Server:** `npm run dev` (or `pnpm dev`, `yarn dev`) starts a development server powered by Vite, offering hot module replacement and fast feedback loops.
+*   **Build:** `npm run build` compiles the TypeScript code and bundles the application for production deployment.
+*   **Linting:** `npm run lint` runs ESLint to check for code quality and style consistency.
+*   **Testing:** `npm run test` executes unit and integration tests using Vitest, often leveraging React Testing Library to simulate user interactions and assert UI behavior. `npm run test:watch` runs tests in watch mode.
+
+---
+
 This documentation provides a comprehensive overview of the PingulaCore-Service codebase.

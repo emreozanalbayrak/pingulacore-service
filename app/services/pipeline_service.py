@@ -19,6 +19,13 @@ from app.schemas.api import (
 from app.schemas.domain import LayoutPlan, QuestionSpec
 from app.services.pipeline_log_service import write_pipeline_log
 from app.services.retry_service import RetrySettings, merge_retry_config
+from app.services.run_dir_service import (
+    create_full_run_dir,
+    create_sub_run_dir,
+    run_relative_path,
+    update_manifest_status,
+    write_manifest,
+)
 from app.services.sub_pipeline_files_service import write_html_file, write_layout_file, write_question_file
 from app.services.yaml_service import load_yaml_file
 
@@ -435,6 +442,7 @@ class PipelineService:
         retry: RetrySettings,
         pipeline_id: str | None,
         sub_pipeline_id: str | None,
+        run_dir: Path | None = None,
     ) -> tuple[dict[str, Any], dict[str, Any], int, dict[str, str], str | None]:
         self._log(
             mode=mode,
@@ -487,12 +495,19 @@ class PipelineService:
                     "catalog_context_count": len(catalog_context_filenames),
                 },
             )
+            img_output_path = (
+                run_dir / "assets" / f"{asset.slug}.png" if run_dir is not None else None
+            )
             result = self.agents.generate_composite_image(
                 asset,
                 retry.image_max_retries,
                 catalog_context_filenames=catalog_context_filenames,
+                output_path=img_output_path,
             )
-            asset_map[asset.slug] = Path(result.image_path).name
+            if run_dir is not None:
+                asset_map[asset.slug] = run_relative_path(run_dir, self.settings.runs_dir, "assets", f"{asset.slug}.png")
+            else:
+                asset_map[asset.slug] = Path(result.image_path).name
             repository.record_agent_run(
                 self.db,
                 agent_name="helper_generate_composite_image",
@@ -563,6 +578,8 @@ class PipelineService:
                 html.html_content,
                 asset_map=asset_map,
                 question_id=layout.question_id,
+                run_assets_dir=run_dir / "assets" if run_dir is not None else None,
+                render_dir=run_dir,
             )
             last_html = html.model_dump()
             last_rendered_image_path = rendered_image_path
@@ -664,6 +681,18 @@ class PipelineService:
             yaml_filename=yaml_filename,
             retry_config=retry.__dict__,
         )
+
+        run_dir = create_full_run_dir(self.settings.runs_dir, yaml_filename)
+        write_manifest(
+            run_dir,
+            run_type="full",
+            yaml_filename=yaml_filename,
+            agent_name=None,
+            pipeline_id=pipeline.id,
+            sub_pipeline_id=None,
+            sub_kind=None,
+        )
+
         self._log(
             mode="full",
             component="pipeline",
@@ -790,6 +819,7 @@ class PipelineService:
                 retry=retry,
                 pipeline_id=pipeline.id,
                 sub_pipeline_id=sub_h.id,
+                run_dir=run_dir,
             )
             repository.finish_sub_pipeline(
                 self.db,
@@ -810,6 +840,12 @@ class PipelineService:
                 html_payload=html,
                 question_id=layout.question_id,
             )
+
+            # Write all pipeline artifacts into the structured run directory
+            (run_dir / "question.json").write_text(question.model_dump_json(indent=2), encoding="utf-8")
+            (run_dir / "layout.json").write_text(layout.model_dump_json(indent=2), encoding="utf-8")
+            (run_dir / "question.html").write_text(html.get("html_content", ""), encoding="utf-8")
+
             self._log(
                 mode="full",
                 component="pipeline",
@@ -819,6 +855,7 @@ class PipelineService:
             )
 
             repository.finish_pipeline(self.db, pipeline.id, status="success")
+            update_manifest_status(run_dir, "success")
             self._log(
                 mode="full",
                 component="pipeline",
@@ -827,6 +864,7 @@ class PipelineService:
                 sub_pipeline_id=None,
             )
 
+            run_path = str(run_dir.relative_to(self.settings.root_dir))
             return FullPipelineRunResponse(
                 pipeline_id=pipeline.id,
                 sub_pipeline_ids={
@@ -838,6 +876,7 @@ class PipelineService:
                 layout_plan_json=layout,
                 question_html=html,
                 rendered_image_path=rendered_image_path,
+                run_path=run_path,
             )
         except Exception as exc:
             self._log(
@@ -848,6 +887,7 @@ class PipelineService:
                 sub_pipeline_id=None,
                 level="error",
             )
+            update_manifest_status(run_dir, "failed")
             repository.finish_sub_pipeline(self.db, sub_q.id, status="failed", error=str(exc))
             repository.finish_sub_pipeline(self.db, sub_l.id, status="failed", error=str(exc))
             repository.finish_sub_pipeline(self.db, sub_h.id, status="failed", error=str(exc))
@@ -864,6 +904,18 @@ class PipelineService:
             input_payload={"yaml_filename": yaml_filename},
         )
         sub_id = sub.id
+
+        run_dir = create_sub_run_dir(self.settings.runs_dir, yaml_filename=yaml_filename)
+        write_manifest(
+            run_dir,
+            run_type="sub",
+            yaml_filename=yaml_filename,
+            agent_name=None,
+            pipeline_id=None,
+            sub_pipeline_id=sub_id,
+            sub_kind="yaml_to_question",
+        )
+
         self._log(
             mode="sub",
             component="pipeline",
@@ -900,6 +952,10 @@ class PipelineService:
             payload = {"question": question.model_dump(), "rule_evaluation": rule_eval, "attempts": attempts}
             repository.finish_sub_pipeline(self.db, sub_id, status="success", output_payload=payload)
             self._persist_sub_output_question(mode="sub", sub_pipeline_id=sub_id, question=question)
+
+            (run_dir / "question.json").write_text(question.model_dump_json(indent=2), encoding="utf-8")
+            update_manifest_status(run_dir, "success")
+
             self._log(
                 mode="sub",
                 component="pipeline",
@@ -912,6 +968,7 @@ class PipelineService:
                 question_json=question,
                 rule_evaluation=rule_eval,
                 attempts=attempts,
+                run_path=str(run_dir.relative_to(self.settings.root_dir)),
             )
         except Exception as exc:
             self._log(
@@ -922,6 +979,7 @@ class PipelineService:
                 sub_pipeline_id=sub_id,
                 level="error",
             )
+            update_manifest_status(run_dir, "failed")
             repository.finish_sub_pipeline(self.db, sub_id, status="failed", error=str(exc))
             raise
 
@@ -939,6 +997,18 @@ class PipelineService:
             input_payload=question.model_dump(),
         )
         sub_id = sub.id
+
+        run_dir = create_sub_run_dir(self.settings.runs_dir, token=question.question_id)
+        write_manifest(
+            run_dir,
+            run_type="sub",
+            yaml_filename=None,
+            agent_name=None,
+            pipeline_id=None,
+            sub_pipeline_id=sub_id,
+            sub_kind="question_to_layout",
+        )
+
         self._log(
             mode="sub",
             component="pipeline",
@@ -959,6 +1029,10 @@ class PipelineService:
             payload = {"layout": layout.model_dump(), "validation": validation, "attempts": attempts}
             repository.finish_sub_pipeline(self.db, sub_id, status="success", output_payload=payload)
             self._persist_sub_output_layout(mode="sub", sub_pipeline_id=sub_id, layout=layout)
+
+            (run_dir / "layout.json").write_text(layout.model_dump_json(indent=2), encoding="utf-8")
+            update_manifest_status(run_dir, "success")
+
             self._log(
                 mode="sub",
                 component="pipeline",
@@ -971,6 +1045,7 @@ class PipelineService:
                 layout_plan_json=layout,
                 validation=validation,
                 attempts=attempts,
+                run_path=str(run_dir.relative_to(self.settings.root_dir)),
             )
         except Exception as exc:
             self._log(
@@ -981,6 +1056,7 @@ class PipelineService:
                 sub_pipeline_id=sub_id,
                 level="error",
             )
+            update_manifest_status(run_dir, "failed")
             repository.finish_sub_pipeline(self.db, sub_id, status="failed", error=str(exc))
             raise
 
@@ -999,6 +1075,18 @@ class PipelineService:
             input_payload={"question": question.model_dump(), "layout": layout.model_dump()},
         )
         sub_id = sub.id
+
+        run_dir = create_sub_run_dir(self.settings.runs_dir, token=question.question_id)
+        write_manifest(
+            run_dir,
+            run_type="sub",
+            yaml_filename=None,
+            agent_name=None,
+            pipeline_id=None,
+            sub_pipeline_id=sub_id,
+            sub_kind="layout_to_html",
+        )
+
         self._log(
             mode="sub",
             component="pipeline",
@@ -1016,6 +1104,7 @@ class PipelineService:
                 retry=retry,
                 pipeline_id=None,
                 sub_pipeline_id=sub_id,
+                run_dir=run_dir,
             )
             payload = {
                 "html": html,
@@ -1031,6 +1120,10 @@ class PipelineService:
                 html_payload=html,
                 question_id=layout.question_id,
             )
+
+            (run_dir / "question.html").write_text(html.get("html_content", ""), encoding="utf-8")
+            update_manifest_status(run_dir, "success")
+
             self._log(
                 mode="sub",
                 component="pipeline",
@@ -1045,6 +1138,7 @@ class PipelineService:
                 attempts=attempts,
                 generated_assets=asset_map,
                 rendered_image_path=rendered_image_path,
+                run_path=str(run_dir.relative_to(self.settings.root_dir)),
             )
         except Exception as exc:
             self._log(
@@ -1055,5 +1149,6 @@ class PipelineService:
                 sub_pipeline_id=sub_id,
                 level="error",
             )
+            update_manifest_status(run_dir, "failed")
             repository.finish_sub_pipeline(self.db, sub_id, status="failed", error=str(exc))
             raise

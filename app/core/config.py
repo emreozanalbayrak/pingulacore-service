@@ -60,6 +60,7 @@ class Settings:
     yaml_fallback_dir: Path
     output_dir: Path
     catalog_dir: Path
+    runs_dir: Path
 
     gemini_text_model: str
     gemini_light_model: str
@@ -83,6 +84,7 @@ def build_settings() -> Settings:
     fallback_yaml = root_dir / "old" / "ortak"
     output_dir = root_dir / "generated_assets"
     catalog_dir = root_dir / "catalog"
+    runs_dir = root_dir / "runs"
 
     database_url = os.getenv("DATABASE_URL", f"sqlite:///{root_dir / 'service.db'}")
 
@@ -114,6 +116,7 @@ def build_settings() -> Settings:
         yaml_fallback_dir=Path(os.getenv("YAML_FALLBACK_DIR", str(fallback_yaml))),
         output_dir=Path(os.getenv("ASSET_OUTPUT_DIR", str(output_dir))),
         catalog_dir=Path(os.getenv("CATALOG_DIR", str(catalog_dir))),
+        runs_dir=Path(os.getenv("RUNS_DIR", str(runs_dir))),
         gemini_text_model=os.getenv("AI_TEXT_MODEL") or os.getenv("GEMINI_TEXT_MODEL", default_text_model),
         gemini_light_model=os.getenv("AI_LIGHT_MODEL") or os.getenv("GEMINI_LIGHT_MODEL", default_light_model),
         gemini_image_model=os.getenv("GEMINI_IMAGE_MODEL", "gemini-2.5-flash-image"),
@@ -132,4 +135,5 @@ def get_settings() -> Settings:
     settings = build_settings()
     settings.output_dir.mkdir(parents=True, exist_ok=True)
     settings.catalog_dir.mkdir(parents=True, exist_ok=True)
+    settings.runs_dir.mkdir(parents=True, exist_ok=True)
     return settings
