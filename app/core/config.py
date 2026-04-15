@@ -66,6 +66,9 @@ class Settings:
     gemini_light_model: str
     gemini_image_model: str
 
+    anthropic_text_model: str
+    anthropic_light_model: str
+
     question_max_retries: int
     layout_max_retries: int
     html_max_retries: int
@@ -99,15 +102,16 @@ def build_settings() -> Settings:
     use_stub_default = not (gemini_key or anthropic_key)
 
     if gemini_key:
-        default_text_model = "google-gla:gemini-3.1-pro-preview"
-        default_light_model = "google-gla:gemini-3.1-flash-lite-preview"
-    elif anthropic_key:
-        default_text_model = "anthropic:claude-sonnet-4-6"
-        default_light_model = "anthropic:claude-haiku-4-5"
+        gemini_default_text_model = "google-gla:gemini-3.1-pro-preview"
+        gemini_default_light_model = "google-gla:gemini-3.1-flash-lite-preview"
     else:
         # Fallback values remain overrideable via env even when keys are missing.
-        default_text_model = "google-gla:gemini-2.5-pro"
-        default_light_model = "google-gla:gemini-2.5-flash"
+        gemini_default_text_model = "google-gla:gemini-2.5-pro"
+        gemini_default_light_model = "google-gla:gemini-2.5-flash"
+    
+    if anthropic_key:
+        anthropic_default_text_model = "anthropic:claude-sonnet-4-6"
+        anthropic_default_light_model = "anthropic:claude-haiku-4-5"        
 
     return Settings(
         root_dir=root_dir,
@@ -117,9 +121,11 @@ def build_settings() -> Settings:
         output_dir=Path(os.getenv("ASSET_OUTPUT_DIR", str(output_dir))),
         catalog_dir=Path(os.getenv("CATALOG_DIR", str(catalog_dir))),
         runs_dir=Path(os.getenv("RUNS_DIR", str(runs_dir))),
-        gemini_text_model=os.getenv("AI_TEXT_MODEL") or os.getenv("GEMINI_TEXT_MODEL", default_text_model),
-        gemini_light_model=os.getenv("AI_LIGHT_MODEL") or os.getenv("GEMINI_LIGHT_MODEL", default_light_model),
+        gemini_text_model=os.getenv("AI_TEXT_MODEL") or os.getenv("GEMINI_TEXT_MODEL", gemini_default_text_model),
+        gemini_light_model=os.getenv("AI_LIGHT_MODEL") or os.getenv("GEMINI_LIGHT_MODEL", gemini_default_light_model),
         gemini_image_model=os.getenv("GEMINI_IMAGE_MODEL", "gemini-2.5-flash-image"),
+        anthropic_light_model=os.getenv("ANTHROPIC_LIGHT_MODEL", anthropic_default_light_model) if anthropic_key else "",
+        anthropic_text_model=os.getenv("ANTHROPIC_TEXT_MODEL", anthropic_default_text_model) if anthropic_key else "",
         question_max_retries=_as_int(os.getenv("QUESTION_MAX_RETRIES"), 3),
         layout_max_retries=_as_int(os.getenv("LAYOUT_MAX_RETRIES"), 3),
         html_max_retries=_as_int(os.getenv("HTML_MAX_RETRIES"), 3),

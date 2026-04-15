@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -41,6 +42,7 @@ def _log_standalone(
     message: str,
     level: str = "info",
     details: Any | None = None,
+    log_path: Path | None = None,
 ) -> None:
     write_pipeline_log(
         db,
@@ -51,6 +53,7 @@ def _log_standalone(
         sub_pipeline_id=None,
         level=level,
         details=details,
+        log_path=log_path,
     )
 
 
@@ -340,10 +343,12 @@ def standalone_generate_composite_image(
     settings = get_settings()
     agents = AgentService(settings)
     component = "standalone.helper_generate_composite_image"
-    _log_standalone(db, component=component, message="Run başlatıldı.")
+    log_path: Path | None = None
     try:
         asset = AssetSpec(**req.asset)
         run_dir = create_standalone_run_dir(settings.runs_dir, agent_name="generate_composite_image")
+        log_path = run_dir / "log.txt"
+        _log_standalone(db, component=component, message="Run başlatıldı.", log_path=log_path)
         write_manifest(
             run_dir,
             run_type="standalone",
@@ -378,10 +383,11 @@ def standalone_generate_composite_image(
             component=component,
             message=f"Run tamamlandı: success (run_id={run_id})",
             details={"run_id": run_id},
+            log_path=log_path,
         )
         return StandaloneAgentResponse(run_id=run_id, result=result_dict)
     except Exception as exc:
-        _log_standalone(db, component=component, message=f"Run hata ile sonlandı: {exc}", level="error")
+        _log_standalone(db, component=component, message=f"Run hata ile sonlandı: {exc}", level="error", log_path=log_path)
         raise
 
 

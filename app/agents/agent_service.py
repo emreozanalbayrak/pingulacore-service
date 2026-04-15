@@ -336,7 +336,7 @@ class AgentService:
         }
         try:
             return self._run_agent(
-                model_name=self.settings.gemini_text_model,
+                model_name=self.settings.anthropic_text_model if self.settings.anthropic_text_model else self.settings.gemini_text_model,
                 output_type=GeneratedHtml,
                 system_prompt=HTML_GENERATOR_INSTRUCTIONS,
                 payload=payload,
