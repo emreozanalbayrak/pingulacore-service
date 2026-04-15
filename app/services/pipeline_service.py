@@ -430,11 +430,12 @@ class PipelineService:
         self,
         *,
         mode: str,
+        question: QuestionSpec,
         layout: LayoutPlan,
         retry: RetrySettings,
         pipeline_id: str | None,
         sub_pipeline_id: str | None,
-    ) -> tuple[dict[str, Any], dict[str, Any], int, dict[str, str]]:
+    ) -> tuple[dict[str, Any], dict[str, Any], int, dict[str, str], str | None]:
         self._log(
             mode=mode,
             component="pipeline",
@@ -445,10 +446,13 @@ class PipelineService:
                 "html_max_retries": retry.html_max_retries,
                 "image_max_retries": retry.image_max_retries,
                 "asset_count": len(layout.asset_library),
+                "question_id": question.question_id,
             },
         )
         feedback: str | None = None
         last_validation = None
+        last_html: dict[str, Any] | None = None
+        last_rendered_image_path: str | None = None
         asset_map: dict[str, str] = {}
         catalog_context_filenames = sorted(
             {
@@ -521,14 +525,24 @@ class PipelineService:
                 sub_pipeline_id=sub_pipeline_id,
                 details={"attempt": attempt, "asset_map_count": len(asset_map)},
             )
-            html = self.agents.generate_html(layout, asset_map, feedback)
+            html = self.agents.generate_html(question, layout, asset_map, feedback)
+            html.html_content = self.agents.post_process_html_asset_paths(
+                html.html_content,
+                layout,
+                asset_map,
+            )
             repository.record_agent_run(
                 self.db,
                 agent_name="main_generate_html",
                 mode=mode,
                 attempt_no=attempt,
                 status="success",
-                input_payload={"layout": layout.model_dump(), "asset_map": asset_map, "feedback": feedback},
+                input_payload={
+                    "question": question.model_dump(),
+                    "layout": layout.model_dump(),
+                    "asset_map": asset_map,
+                    "feedback": feedback,
+                },
                 output_payload=html.model_dump(),
                 feedback_text=feedback,
                 error=None,
@@ -545,6 +559,22 @@ class PipelineService:
                 details={"attempt": attempt, "html_length": len(html.html_content)},
             )
 
+            rendered_image_path = self.agents.render_html_to_image(
+                html.html_content,
+                asset_map=asset_map,
+                question_id=layout.question_id,
+            )
+            last_html = html.model_dump()
+            last_rendered_image_path = rendered_image_path
+            self._log(
+                mode=mode,
+                component="html.render",
+                message=f"HTML render edildi: {Path(rendered_image_path).name}",
+                pipeline_id=pipeline_id,
+                sub_pipeline_id=sub_pipeline_id,
+                details={"attempt": attempt, "rendered_image_path": rendered_image_path},
+            )
+
             self._log(
                 mode=mode,
                 component="validation.layout_html",
@@ -553,7 +583,7 @@ class PipelineService:
                 sub_pipeline_id=sub_pipeline_id,
                 details={"attempt": attempt},
             )
-            validation = self.agents.validate_layout_html(layout, html.html_content)
+            validation = self.agents.validate_html(html.html_content, rendered_image_path)
             last_validation = validation
             repository.record_agent_run(
                 self.db,
@@ -561,7 +591,7 @@ class PipelineService:
                 mode=mode,
                 attempt_no=attempt,
                 status="success" if validation.overall_status == "pass" else "failed",
-                input_payload={"layout": layout.model_dump(), "html": html.html_content},
+                input_payload={"html": html.html_content, "rendered_image_path": rendered_image_path},
                 output_payload=validation.model_dump(),
                 feedback_text=validation.feedback,
                 error=None,
@@ -586,7 +616,7 @@ class PipelineService:
                     pipeline_id=pipeline_id,
                     sub_pipeline_id=sub_pipeline_id,
                 )
-                return html.model_dump(), validation.model_dump(), attempt, asset_map
+                return html.model_dump(), validation.model_dump(), attempt, asset_map, rendered_image_path
 
             feedback = validation.feedback or "\n".join(validation.issues)
             self._log(
@@ -599,21 +629,32 @@ class PipelineService:
                 details={"attempt": attempt, "feedback": feedback},
             )
 
+        if last_validation is None:
+            last_validation_payload = {
+                "overall_status": "fail",
+                "issues": ["HTML validasyon sonucu alınamadı."],
+                "feedback": "HTML denemeleri tamamlandı ancak geçerli bir kalite validasyon çıktısı üretilmedi.",
+            }
+        else:
+            last_validation_payload = last_validation.model_dump()
+
+        if last_html is None:
+            last_html = {"selected_template": "unknown", "html_content": "", "schema_version": "question-html.v1"}
+
         self._log(
             mode=mode,
             component="pipeline",
-            message="Layout -> HTML döngüsü retry limitine takıldı.",
+            message="Layout -> HTML retry limiti doldu; son deneme çıktısı hata atmadan döndürülüyor.",
             pipeline_id=pipeline_id,
             sub_pipeline_id=sub_pipeline_id,
-            level="error",
-        )
-        raise HTTPException(
-            status_code=422,
-            detail={
-                "message": "HTML generation retry limiti aşıldı.",
-                "validation": last_validation.model_dump() if last_validation else {},
+            level="warning",
+            details={
+                "attempts": retry.html_max_retries,
+                "validation_status": last_validation_payload.get("overall_status"),
+                "rendered_image_path": last_rendered_image_path,
             },
         )
+        return last_html, last_validation_payload, retry.html_max_retries, asset_map, last_rendered_image_path
 
     async def run_full_pipeline(self, yaml_filename: str, retry_config: RetryConfig | None) -> FullPipelineRunResponse:
         retry = merge_retry_config(retry_config, self.settings)
@@ -742,8 +783,9 @@ class PipelineService:
                 sub_pipeline_id=sub_l.id,
             )
 
-            html, lh_validation, ha, asset_map = await self._run_layout_to_html_loop(
+            html, lh_validation, ha, asset_map, rendered_image_path = await self._run_layout_to_html_loop(
                 mode="full",
+                question=question,
                 layout=layout,
                 retry=retry,
                 pipeline_id=pipeline.id,
@@ -758,6 +800,7 @@ class PipelineService:
                     "validation": lh_validation,
                     "attempts": ha,
                     "asset_map": asset_map,
+                    "rendered_image_path": rendered_image_path,
                 },
             )
             self._persist_sub_output_html(
@@ -794,6 +837,7 @@ class PipelineService:
                 question_json=question,
                 layout_plan_json=layout,
                 question_html=html,
+                rendered_image_path=rendered_image_path,
             )
         except Exception as exc:
             self._log(
@@ -942,6 +986,7 @@ class PipelineService:
 
     async def run_sub_layout_to_html(
         self,
+        question: QuestionSpec,
         layout: LayoutPlan,
         retry_config: RetryConfig | None,
     ) -> LayoutToHtmlRunResponse:
@@ -951,7 +996,7 @@ class PipelineService:
             kind="layout_to_html",
             mode="sub",
             pipeline_id=None,
-            input_payload=layout.model_dump(),
+            input_payload={"question": question.model_dump(), "layout": layout.model_dump()},
         )
         sub_id = sub.id
         self._log(
@@ -964,14 +1009,21 @@ class PipelineService:
         )
 
         try:
-            html, validation, attempts, asset_map = await self._run_layout_to_html_loop(
+            html, validation, attempts, asset_map, rendered_image_path = await self._run_layout_to_html_loop(
                 mode="sub",
+                question=question,
                 layout=layout,
                 retry=retry,
                 pipeline_id=None,
                 sub_pipeline_id=sub_id,
             )
-            payload = {"html": html, "validation": validation, "attempts": attempts, "asset_map": asset_map}
+            payload = {
+                "html": html,
+                "validation": validation,
+                "attempts": attempts,
+                "asset_map": asset_map,
+                "rendered_image_path": rendered_image_path,
+            }
             repository.finish_sub_pipeline(self.db, sub_id, status="success", output_payload=payload)
             self._persist_sub_output_html(
                 mode="sub",
@@ -992,6 +1044,7 @@ class PipelineService:
                 validation=validation,
                 attempts=attempts,
                 generated_assets=asset_map,
+                rendered_image_path=rendered_image_path,
             )
         except Exception as exc:
             self._log(

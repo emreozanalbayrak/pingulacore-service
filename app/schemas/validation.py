@@ -36,7 +36,7 @@ class QuestionLayoutValidationResult(BaseModel):
     feedback: str = ""
 
 
-class LayoutHtmlValidationResult(BaseModel):
+class HtmlValidationResult(BaseModel):
     overall_status: Literal["pass", "fail"]
     issues: list[str] = Field(default_factory=list)
     feedback: str = ""

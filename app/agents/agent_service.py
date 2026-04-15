@@ -6,6 +6,8 @@ from concurrent.futures import ThreadPoolExecutor
 import mimetypes
 import os
 import re
+import shutil
+import subprocess
 import time
 from pathlib import Path
 from typing import Any, Callable, Literal
@@ -21,7 +23,7 @@ from app.schemas.domain import (
     CompositeImageResult,
     EntitySpec,
     GeneratedHtml,
-    LayoutHtmlValidationResult,
+    HtmlValidationResult,
     LayoutPlan,
     QuestionLayoutValidationResult,
     QuestionOptionSpec,
@@ -33,11 +35,6 @@ from app.schemas.domain import (
     RuleExtractionResult,
     ValidationRule,
 )
-from pydantic_ai.models.google import GoogleModel, GoogleModelSettings
-from pydantic_ai.models.anthropic import AnthropicModel, AnthropicModelSettings
-
-
-
 try:
     from google import genai
 except Exception:  # pragma: no cover
@@ -76,10 +73,18 @@ LAYOUT_VALIDATOR_INSTRUCTIONS = (
     "Check multi-scene coverage and ensure opaque AI assets do not hide critical foreground elements."
 )
 HTML_GENERATOR_INSTRUCTIONS = (
-    "Generate question HTML from LayoutPlan and asset map. "
+    "Generate question HTML from QuestionSpec, LayoutPlan, and asset map. "
+    "Use QuestionSpec.stem/options/solution semantics to keep educational intent clear in the final card. "
     "Use src values from provided asset_map entries for catalog assets and do not invent unknown file paths."
 )
-HTML_VALIDATOR_INSTRUCTIONS = "Validate consistency between LayoutPlan and HTML."
+HTML_VALIDATOR_INSTRUCTIONS = (
+    "You are a visual QA agent for educational question cards. "
+    "Evaluate the quality of the FINAL RENDERED QUESTION IMAGE together with the HTML source. "
+    "Primary criterion is visual quality and pedagogical usability, not strict layout-plan matching. "
+    "Check readability, spacing, alignment, overlap/occlusion, option clarity, visual hierarchy, and whether the question is understandable at first glance. "
+    "Return fail when quality is not acceptable for student-facing usage. "
+    "Issues must be concrete and feedback must be actionable editing guidance for the HTML."
+)
 IMAGE_COMPOSITE_SYSTEM_INSTRUCTIONS = (
     "Üreteceğin görsel, ek olarak verilen katalog görselleriyle birlikte katmanlı bir kompozisyonda kullanılacak. "
     "Bu yüzden görselini katalog ögeleriyle stil, perspektif, ışık, ölçek ve renk uyumu olacak şekilde üret. "
@@ -313,14 +318,16 @@ class AgentService:
 
     def generate_html(
         self,
+        question: QuestionSpec,
         layout: LayoutPlan,
         asset_map: dict[str, str],
         feedback: str | None = None,
     ) -> GeneratedHtml:
         if self.settings.use_stub_agents:
-            return self._stub_generate_html(layout, asset_map, feedback)
+            return self._stub_generate_html(question, layout, asset_map, feedback)
 
         payload = {
+            "question": question.model_dump(),
             "layout": layout.model_dump(),
             "asset_map": asset_map,
             "feedback": feedback or "",
@@ -337,25 +344,61 @@ class AgentService:
             )
         except Exception as exc:  # pragma: no cover - live provider instability path
             print(f"[agent] generate_html fallback to stub: {exc}", flush=True)
-            return self._stub_generate_html(layout, asset_map, feedback)
+            return self._stub_generate_html(question, layout, asset_map, feedback)
 
-    def validate_layout_html(self, layout: LayoutPlan, html_content: str) -> LayoutHtmlValidationResult:
+    def render_html_to_image(
+        self,
+        html_content: str,
+        *,
+        asset_map: dict[str, str] | None = None,
+        question_id: str | None = None,
+    ) -> str:
+        render_id = self._slugify(question_id or f"render_{uuid4()}")
+        html_path = self.settings.output_dir / f"{render_id}.render.html"
+        image_path = self.settings.output_dir / f"{render_id}.render.png"
+
+        rewritten = self._rewrite_html_asset_urls_for_local_render(html_content, asset_map or {})
+        html_path.write_text(rewritten, encoding="utf-8")
+
+        if self._capture_html_screenshot(html_path, image_path):
+            return str(image_path)
+
+        # Deterministic fallback so pipeline keeps moving even if local renderer is unavailable.
+        image_path.write_bytes(PIXEL_PNG_BYTES)
+        return str(image_path)
+
+    def validate_html(self, html_content: str, rendered_image_path: str) -> HtmlValidationResult:
         if self.settings.use_stub_agents:
-            return self._stub_validate_layout_html(layout, html_content)
+            return self._stub_validate_html(html_content, rendered_image_path)
 
-        payload = {"layout": layout.model_dump(), "html_content": html_content}
+        image_path = Path(rendered_image_path)
+        if not image_path.exists() or not image_path.is_file():
+            return HtmlValidationResult(
+                overall_status="fail",
+                issues=["Rendered image not found for visual validation."],
+                feedback="HTML render çıktısı üretilemediği için kalite doğrulaması tamamlanamadı.",
+            )
+
+        payload = {
+            "html_content": html_content,
+            "rendered_image_path": str(image_path.resolve()),
+            "note": (
+                "Rendered image path is provided for visual QA. "
+                "Use this with HTML source to assess final question quality."
+            ),
+        }
         try:
             return self._run_agent(
                 model_name=self.settings.gemini_text_model,
-                output_type=LayoutHtmlValidationResult,
+                output_type=HtmlValidationResult,
                 system_prompt=HTML_VALIDATOR_INSTRUCTIONS,
                 payload=payload,
-                agent_name="layout_html_validator",
-                thinking_level="medium",
+                agent_name="html_validator",
+                thinking_level="high",
             )
         except Exception as exc:  # pragma: no cover - live provider instability path
-            print(f"[agent] validate_layout_html fallback to stub: {exc}", flush=True)
-            return self._stub_validate_layout_html(layout, html_content)
+            print(f"[agent] validate_html fallback to stub: {exc}", flush=True)
+            return self._stub_validate_html(html_content, rendered_image_path)
 
     def generate_composite_image(
         self,
@@ -510,6 +553,88 @@ class AgentService:
                             pass
         return None
 
+    def _rewrite_html_asset_urls_for_local_render(self, html_content: str, asset_map: dict[str, str]) -> str:
+        pattern = re.compile(r'\b(src|href)=([\'"])([^\'"]+)\2', re.IGNORECASE)
+
+        def replacer(match: re.Match[str]) -> str:
+            attr = match.group(1)
+            quote = match.group(2)
+            value = match.group(3)
+            low = value.strip().lower()
+            if (
+                low.startswith("http://")
+                or low.startswith("https://")
+                or low.startswith("//")
+                or low.startswith("/")
+                or low.startswith("data:")
+                or low.startswith("#")
+                or low.startswith("mailto:")
+            ):
+                return f"{attr}={quote}{value}{quote}"
+
+            raw = value.split("?")[0].split("#")[0]
+            file_name = Path(raw).name
+            if not file_name:
+                return f"{attr}={quote}{value}{quote}"
+
+            candidates = [file_name]
+            mapped = asset_map.get(file_name)
+            if mapped:
+                candidates.append(Path(mapped).name)
+            for mapped_value in asset_map.values():
+                token = Path(mapped_value).name
+                if token not in candidates:
+                    candidates.append(token)
+
+            for name in candidates:
+                for root in (self.settings.output_dir, self.settings.catalog_dir):
+                    p = (root / name).resolve()
+                    if p.exists() and p.is_file():
+                        return f"{attr}={quote}{p.as_uri()}{quote}"
+
+            return f"{attr}={quote}{value}{quote}"
+
+        return pattern.sub(replacer, html_content)
+
+    @staticmethod
+    def _browser_candidates() -> list[str]:
+        return [
+            "google-chrome",
+            "chromium",
+            "chromium-browser",
+            "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+            "/Applications/Chromium.app/Contents/MacOS/Chromium",
+        ]
+
+    def _capture_html_screenshot(self, html_path: Path, image_path: Path) -> bool:
+        for browser in self._browser_candidates():
+            cmd = browser
+            if not Path(browser).is_absolute():
+                found = shutil.which(browser)
+                if not found:
+                    continue
+                cmd = found
+
+            args = [
+                cmd,
+                "--headless=new",
+                "--disable-gpu",
+                "--hide-scrollbars",
+                "--allow-file-access-from-files",
+                "--no-first-run",
+                "--no-default-browser-check",
+                f"--screenshot={str(image_path)}",
+                "--window-size=1600,1200",
+                html_path.resolve().as_uri(),
+            ]
+            try:
+                subprocess.run(args, check=True, capture_output=True, text=True, timeout=30)
+                if image_path.exists() and image_path.is_file():
+                    return True
+            except Exception:
+                pass
+        return False
+
     @staticmethod
     def _slugify(value: str) -> str:
         token = re.sub(r"[^a-zA-Z0-9_]+", "_", value.strip().lower())
@@ -525,6 +650,79 @@ class AgentService:
             for path in folder.iterdir()
             if path.is_file() and not path.name.startswith(".") and path.suffix.lower() in allowed
         )
+
+    def post_process_html_asset_paths(
+        self,
+        html_content: str,
+        layout: LayoutPlan,
+        asset_map: dict[str, str],
+    ) -> str:
+        mapping: dict[str, str] = {}
+
+        def add_name(name: str | None, target: str) -> None:
+            if not name:
+                return
+            token = Path(name).name
+            if token:
+                mapping[token.lower()] = target
+
+        for slug, asset in layout.asset_library.items():
+            resolved_name = Path(asset_map.get(slug) or asset.output_filename).name
+            if not resolved_name:
+                continue
+            if asset.asset_type == AssetType.CATALOG_COMPONENT:
+                target = f"catalog/{resolved_name}"
+            else:
+                target = f"generated_assets/{resolved_name}"
+
+            add_name(resolved_name, target)
+            add_name(asset.output_filename, target)
+            add_name(asset.source_filename, target)
+
+        pattern = re.compile(r'\b(src|href)=([\'"])([^\'"]+)\2', re.IGNORECASE)
+        image_ext = {".png", ".jpg", ".jpeg", ".webp", ".svg"}
+
+        def replacer(match: re.Match[str]) -> str:
+            attr = match.group(1)
+            quote = match.group(2)
+            value = match.group(3)
+            low = value.strip().lower()
+            if (
+                low.startswith("http://")
+                or low.startswith("https://")
+                or low.startswith("//")
+                or low.startswith("/")
+                or low.startswith("data:")
+                or low.startswith("#")
+                or low.startswith("mailto:")
+                or low.startswith("catalog/")
+                or low.startswith("generated_assets/")
+            ):
+                return f"{attr}={quote}{value}{quote}"
+
+            split_idx = len(value)
+            for sep in ("?", "#"):
+                pos = value.find(sep)
+                if pos != -1:
+                    split_idx = min(split_idx, pos)
+            base = value[:split_idx]
+            suffix = value[split_idx:]
+            file_name = Path(base).name
+            if not file_name or Path(file_name).suffix.lower() not in image_ext:
+                return f"{attr}={quote}{value}{quote}"
+
+            replacement = mapping.get(file_name.lower())
+            if not replacement:
+                if (self.settings.catalog_dir / file_name).exists():
+                    replacement = f"catalog/{file_name}"
+                elif (self.settings.output_dir / file_name).exists():
+                    replacement = f"generated_assets/{file_name}"
+
+            if not replacement:
+                return f"{attr}={quote}{value}{quote}"
+            return f"{attr}={quote}{replacement}{suffix}{quote}"
+
+        return pattern.sub(replacer, html_content)
 
     @staticmethod
     def _map_difficulty(value: str | None) -> Literal["easy", "medium", "hard"]:
@@ -876,7 +1074,13 @@ class AgentService:
             )
         return QuestionLayoutValidationResult(overall_status="pass", issues=[], feedback="")
 
-    def _stub_generate_html(self, layout: LayoutPlan, asset_map: dict[str, str], feedback: str | None = None) -> GeneratedHtml:
+    def _stub_generate_html(
+        self,
+        question: QuestionSpec,
+        layout: LayoutPlan,
+        asset_map: dict[str, str],
+        feedback: str | None = None,
+    ) -> GeneratedHtml:
         _ = feedback
         images = []
         for slug, asset in layout.asset_library.items():
@@ -887,6 +1091,7 @@ class AgentService:
             [
                 "<html><body>",
                 "<section data-layout-slug='root'>",
+                f"<h1>{question.stem}</h1>",
                 *images,
                 "</section>",
                 "</body></html>",
@@ -894,20 +1099,24 @@ class AgentService:
         )
         return GeneratedHtml(selected_template="stub_template", html_content=html)
 
-    def _stub_validate_layout_html(self, layout: LayoutPlan, html_content: str) -> LayoutHtmlValidationResult:
-        missing = []
+    def _stub_validate_html(self, html_content: str, rendered_image_path: str) -> HtmlValidationResult:
+        issues: list[str] = []
         low = html_content.lower()
-        for asset in layout.asset_library.values():
-            if asset.output_filename.lower() not in low and asset.slug.lower() not in low:
-                missing.append(asset.output_filename)
+        if "<img" not in low:
+            issues.append("Soru görselinde img etiketi bulunamadı")
+        if "<body" not in low:
+            issues.append("HTML gövdesi eksik")
+        image_path = Path(rendered_image_path) if rendered_image_path else None
+        if image_path is None or not image_path.exists() or image_path.stat().st_size <= len(PIXEL_PNG_BYTES):
+            issues.append("Render edilmiş final soru görseli üretilemedi")
 
-        if missing:
-            return LayoutHtmlValidationResult(
+        if issues:
+            return HtmlValidationResult(
                 overall_status="fail",
-                issues=[f"Eksik asset referansı: {name}" for name in missing],
-                feedback="Tüm asset dosyaları HTML içinde görünmeli.",
+                issues=issues,
+                feedback="Final görsel kalitesini artırmak için HTML yerleşimini, okunabilirliği ve görsel öğe kullanımını iyileştir.",
             )
-        return LayoutHtmlValidationResult(overall_status="pass", issues=[], feedback="")
+        return HtmlValidationResult(overall_status="pass", issues=[], feedback="")
 
 
 

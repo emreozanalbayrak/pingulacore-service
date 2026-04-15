@@ -131,7 +131,12 @@ def standalone_generate_html(req: StandaloneGenerateHtmlRequest, db: Session = D
     component = "standalone.main_generate_html"
     _log_standalone(db, component=component, message="Run başlatıldı.")
     try:
-        result = agents.generate_html(req.layout_plan_json, req.asset_map, req.feedback)
+        result = agents.generate_html(req.question_json, req.layout_plan_json, req.asset_map, req.feedback)
+        result.html_content = agents.post_process_html_asset_paths(
+            result.html_content,
+            req.layout_plan_json,
+            req.asset_map,
+        )
         run_id = repository.record_agent_run(
             db,
             agent_name="main_generate_html",
@@ -277,7 +282,23 @@ def standalone_validate_layout_html(
     component = "standalone.validation_layout_html"
     _log_standalone(db, component=component, message="Run başlatıldı.")
     try:
-        result = agents.validate_layout_html(req.layout_plan_json, req.html_content)
+        asset_map = dict(req.asset_map)
+        if req.layout_plan_json is not None:
+            for asset in req.layout_plan_json.asset_library.values():
+                if asset.asset_type.value == "catalog_component":
+                    asset_map.setdefault(asset.slug, asset.source_filename or asset.output_filename)
+                else:
+                    asset_map.setdefault(asset.slug, asset.output_filename)
+
+        rendered_image_path = req.rendered_image_path
+        if not rendered_image_path:
+            rendered_image_path = agents.render_html_to_image(
+                req.html_content,
+                asset_map=asset_map,
+                question_id=req.layout_plan_json.question_id if req.layout_plan_json else None,
+            )
+
+        result = agents.validate_html(req.html_content, rendered_image_path)
         run_status = "success" if result.overall_status == "pass" else "failed"
         run_id = repository.record_agent_run(
             db,
@@ -285,7 +306,11 @@ def standalone_validate_layout_html(
             mode="standalone",
             attempt_no=1,
             status=run_status,
-            input_payload=req.model_dump(),
+            input_payload={
+                "html_content": req.html_content,
+                "rendered_image_path": rendered_image_path,
+                "asset_map": asset_map,
+            },
             output_payload=result.model_dump(),
             feedback_text=result.feedback,
             error=None,

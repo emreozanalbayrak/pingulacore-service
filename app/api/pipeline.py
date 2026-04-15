@@ -174,7 +174,7 @@ async def run_sub_question_to_layout(req: QuestionToLayoutRunRequest, db: Sessio
 @router.post("/pipelines/sub/layout-to-html/run", response_model=LayoutToHtmlRunResponse)
 async def run_sub_layout_to_html(req: LayoutToHtmlRunRequest, db: Session = Depends(get_db)) -> LayoutToHtmlRunResponse:
     service = PipelineService(db)
-    return await service.run_sub_layout_to_html(req.layout_plan_json, req.retry_config)
+    return await service.run_sub_layout_to_html(req.question_json, req.layout_plan_json, req.retry_config)
 
 
 @router.get("/pipelines/{pipeline_id}", response_model=PipelineGetResponse)

@@ -4,7 +4,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-from app.schemas.domain import LayoutHtmlValidationResult, LayoutPlan, QuestionLayoutValidationResult, QuestionSpec, ValidationRule
+from app.schemas.domain import HtmlValidationResult, LayoutPlan, QuestionLayoutValidationResult, QuestionSpec, ValidationRule
 
 
 class RetryConfig(BaseModel):
@@ -58,6 +58,7 @@ class FullPipelineRunResponse(BaseModel):
     question_json: QuestionSpec
     layout_plan_json: LayoutPlan
     question_html: dict[str, Any]
+    rendered_image_path: str | None = None
 
 
 class YamlToQuestionRunRequest(BaseModel):
@@ -85,6 +86,7 @@ class QuestionToLayoutRunResponse(BaseModel):
 
 
 class LayoutToHtmlRunRequest(BaseModel):
+    question_json: QuestionSpec
     layout_plan_json: LayoutPlan
     retry_config: RetryConfig | None = None
 
@@ -92,9 +94,10 @@ class LayoutToHtmlRunRequest(BaseModel):
 class LayoutToHtmlRunResponse(BaseModel):
     sub_pipeline_id: str
     question_html: dict[str, Any]
-    validation: LayoutHtmlValidationResult
+    validation: HtmlValidationResult
     attempts: int
     generated_assets: dict[str, str] = Field(default_factory=dict)
+    rendered_image_path: str | None = None
 
 
 class StandaloneGenerateQuestionRequest(BaseModel):
@@ -108,6 +111,7 @@ class StandaloneGenerateLayoutRequest(BaseModel):
 
 
 class StandaloneGenerateHtmlRequest(BaseModel):
+    question_json: QuestionSpec
     layout_plan_json: LayoutPlan
     feedback: str | None = None
     asset_map: dict[str, str] = Field(default_factory=dict)
@@ -128,8 +132,10 @@ class StandaloneQuestionLayoutValidationRequest(BaseModel):
 
 
 class StandaloneLayoutHtmlValidationRequest(BaseModel):
-    layout_plan_json: LayoutPlan
     html_content: str
+    rendered_image_path: str | None = None
+    asset_map: dict[str, str] = Field(default_factory=dict)
+    layout_plan_json: LayoutPlan | None = None
 
 
 class StandaloneGenerateCompositeImageRequest(BaseModel):

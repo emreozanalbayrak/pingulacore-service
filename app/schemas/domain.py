@@ -11,7 +11,7 @@ from app.schemas.question import (
     QuestionSpec,
 )
 from app.schemas.validation import (
-    LayoutHtmlValidationResult,
+    HtmlValidationResult,
     QuestionLayoutValidationResult,
     RuleEvaluation,
     RuleEvaluationSet,
@@ -39,5 +39,5 @@ __all__ = [
     "RuleEvaluation",
     "RuleEvaluationSet",
     "QuestionLayoutValidationResult",
-    "LayoutHtmlValidationResult",
+    "HtmlValidationResult",
 ]
