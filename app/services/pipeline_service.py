@@ -201,6 +201,7 @@ class PipelineService:
 
         feedback: str | None = None
         last_eval = None
+        last_question: QuestionSpec | None = None
         for attempt in range(1, retry.question_max_retries + 1):
             self._log(
                 mode=mode,
@@ -211,6 +212,7 @@ class PipelineService:
                 details={"attempt": attempt},
             )
             question = await asyncio.to_thread(self.agents.generate_question, yaml_content, feedback)
+            last_question = question
             repository.record_agent_run(
                 self.db,
                 agent_name="main_generate_question",
@@ -313,18 +315,24 @@ class PipelineService:
         self._log(
             mode=mode,
             component="pipeline",
-            message="YAML -> Question döngüsü retry limitine takıldı.",
+            message="YAML -> Question retry limiti doldu; son deneme çıktısı döndürülüyor.",
             pipeline_id=pipeline_id,
             sub_pipeline_id=sub_pipeline_id,
-            level="error",
-        )
-        raise HTTPException(
-            status_code=422,
-            detail={
-                "message": "Question generation retry limiti aşıldı.",
-                "rule_evaluation": last_eval.model_dump() if last_eval else {},
+            level="warning",
+            details={
+                "attempts": retry.question_max_retries,
+                "validation_status": "failed",
+                "failed_rule_count": len([it for it in last_eval.items if it.status == "fail"]) if last_eval else None,
             },
         )
+        if last_question is None:
+            raise HTTPException(
+                status_code=500,
+                detail="Question generation retry döngüsü tamamlandı ancak question üretilemedi.",
+            )
+
+        last_eval_payload = last_eval.model_dump() if last_eval else {"items": []}
+        return last_question, last_eval_payload, retry.question_max_retries
 
     async def _run_question_to_layout_loop(
         self,
@@ -345,6 +353,7 @@ class PipelineService:
         )
         feedback: str | None = None
         last_validation = None
+        last_layout: LayoutPlan | None = None
 
         for attempt in range(1, retry.layout_max_retries + 1):
             self._log(
@@ -356,6 +365,7 @@ class PipelineService:
                 details={"attempt": attempt},
             )
             layout = await asyncio.to_thread(self.agents.generate_layout, question, feedback)
+            last_layout = layout
             repository.record_agent_run(
                 self.db,
                 agent_name="main_generate_layout",
@@ -436,17 +446,24 @@ class PipelineService:
         self._log(
             mode=mode,
             component="pipeline",
-            message="Question -> Layout döngüsü retry limitine takıldı.",
+            message="Question -> Layout retry limiti doldu; son deneme çıktısı döndürülüyor.",
             pipeline_id=pipeline_id,
             sub_pipeline_id=sub_pipeline_id,
-            level="error",
-        )
-        raise HTTPException(
-            status_code=422,
-            detail={
-                "message": "Layout generation retry limiti aşıldı.",
-                "validation": last_validation.model_dump() if last_validation else {},
+            level="warning",
+            details={
+                "attempts": retry.layout_max_retries,
+                "validation_status": last_validation.overall_status if last_validation is not None else "unknown",
             },
+        )
+        if last_layout is None:
+            raise HTTPException(
+                status_code=500,
+                detail="Layout generation retry döngüsü tamamlandı ancak layout üretilemedi.",
+            )
+        return (
+            last_layout,
+            last_validation.model_dump() if last_validation is not None else {"overall_status": "fail", "issues": [], "feedback": ""},
+            retry.layout_max_retries,
         )
 
     async def _run_layout_to_html_loop(
