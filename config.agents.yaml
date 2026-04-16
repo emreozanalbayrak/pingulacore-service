@@ -49,7 +49,7 @@ instructions:
 run_settings:
   generate_question:
     primary_model: gemini-3.1-pro
-    primary_max_retry: 5
+    primary_max_retry: 5 # Bağlantı sorunları veya beklenmeyen hatalar gibi geçici başarısızlık durumlarında yeniden deneme sayısı
     on_fail: fallback
     fallback_model: gemini-3.1-flash
     thinking_level: high
