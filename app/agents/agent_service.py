@@ -16,6 +16,7 @@ from uuid import uuid4
 
 from pydantic_ai import Agent, BinaryContent, BinaryImage
 from pydantic_ai.exceptions import ModelHTTPError
+from pydantic_ai.messages import CachePoint
 
 from app.agents.config import AgentConfig, AgentSettings, get_agent_settings
 from app.core.config import Settings, get_settings
@@ -90,7 +91,12 @@ class AgentService:
         payload: Any,
         agent_name: str,
     ) -> Any:
-        payload_text = str(payload)
+        if isinstance(payload, str):
+            user_prompt: Any = payload
+        elif isinstance(payload, (list, tuple)):
+            user_prompt = payload
+        else:
+            user_prompt = str(payload)
         models = [config.primary_model]
         if config.on_fail == "fallback" and config.fallback_model:
             models.append(config.fallback_model)
@@ -112,7 +118,7 @@ class AgentService:
                 )
 
                 def invoke_sync() -> Any:
-                    result = agent.run_sync(user_prompt=payload_text)
+                    result = agent.run_sync(user_prompt=user_prompt)
                     return result
 
                 # When called from async request contexts, run_sync may conflict with
@@ -288,14 +294,38 @@ class AgentService:
             )
 
         safe_question = self.question_payload_for_generate_html(question)
-        payload = {
-            "question": safe_question,
-            "layout": layout.model_dump(),
-            "asset_map": asset_map,
-            "feedback": feedback or "",
-            "previous_raw_html": previous_raw_html or "",
-            "catalog_files": self._list_catalog_files(),
-        }
+        if previous_raw_html and previous_raw_html.strip():
+            payload = [
+                json.dumps(
+                    {
+                        "cached_context": {
+                            "instructions": self.agent_settings.generate_html.instructions,
+                            "question": safe_question,
+                            "layout": layout.model_dump(),
+                        }
+                    },
+                    ensure_ascii=False,
+                ),
+                CachePoint(ttl="5m"),
+                json.dumps(
+                    {
+                        "input": {
+                            "previous_raw_html": previous_raw_html,
+                            "feedback": feedback or "",
+                        }
+                    },
+                    ensure_ascii=False,
+                ),
+            ]
+        else:
+            payload = {
+                "question": safe_question,
+                "layout": layout.model_dump(),
+                "asset_map": asset_map,
+                "feedback": feedback or "",
+                "previous_raw_html": "",
+                "catalog_files": self._list_catalog_files(),
+            }
         try:
             return self._run_agent(
                 config=self.agent_settings.generate_html,
