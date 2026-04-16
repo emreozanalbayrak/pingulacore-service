@@ -154,13 +154,15 @@ def standalone_generate_html(req: StandaloneGenerateHtmlRequest, db: Session = D
             req.layout_plan_json,
             req.asset_map,
         )
+        safe_input_payload = req.model_dump()
+        safe_input_payload["question_json"] = agents.question_payload_for_generate_html(req.question_json)
         run_id = repository.record_agent_run(
             db,
             agent_name="main_generate_html",
             mode="standalone",
             attempt_no=1,
             status="success",
-            input_payload=req.model_dump(),
+            input_payload=safe_input_payload,
             output_payload=result.model_dump(),
             feedback_text=req.feedback,
             error=None,
@@ -405,7 +407,7 @@ def standalone_generate_composite_image(
             output_payload=result.model_dump(),
             feedback_text=result.note,
             error=None,
-            model_name=settings.gemini_image_model if not settings.use_stub_agents else "stub",
+            model_name=get_agent_settings().generate_image.primary_model if not settings.use_stub_agents else "stub",
             pipeline_id=None,
             sub_pipeline_id=None,
         )

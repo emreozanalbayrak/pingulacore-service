@@ -1,70 +1,35 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Literal
+from pathlib import Path
+from typing import Any, Literal
 
-# ---------------------------------------------------------------------------
-# Model aliases
-# ---------------------------------------------------------------------------
-GEMINI_PRO = "google-gla:gemini-3.1-pro-preview"
-GEMINI_FLASH_LITE = "google-gla:gemini-3.1-flash-lite-preview"
-CLAUDE_SONNET = "anthropic:claude-sonnet-4-6"
-CLAUDE_HAIKU = "anthropic:claude-haiku-4-5"
-
-# ---------------------------------------------------------------------------
-# Agent instructions
-# ---------------------------------------------------------------------------
-QUESTION_AGENT_INSTRUCTIONS = (
-    "You generate only QuestionSpec from curriculum YAML. "
-    "Do not produce layout, coordinates, HTML, or render instructions. "
-    "Use scenario.scenes as a list. "
-    "Do not use a singular scene field."
-)
-
-RULE_EXTRACTOR_INSTRUCTIONS = (
-    "Extract atomically testable validation rules from the YAML input. "
-    "Prioritize only the most critical constraints for generation quality and correctness. "
-    "Merge overlapping or near-duplicate rules into a single concise rule when possible. "
-    "Return at most 12 rules."
-)
-
-RULE_EVALUATOR_INSTRUCTIONS = (
-    "Evaluate one rule against a QuestionSpec and return pass/partial/fail."
-)
-
-LAYOUT_PLANNER_INSTRUCTIONS = (
-    "Generate a LayoutPlan from QuestionSpec. "
-    "QuestionSpec.scenario.scenes may include multiple scene items; each enabled scene should map to a background asset. "
-    "AI-generated assets are opaque and rectangular/square (not transparent), so place them carefully to avoid hiding critical objects. "
-    "Catalog assets are transparent and can be layered above AI assets. "
-    "Use binding layer and z_index so critical foreground objects remain visible. "
-    "Use catalog components from the provided catalog_files list. "
-    "For catalog_component assets, source_filename must be one of catalog_files and transparent_background should be true."
-)
-
-LAYOUT_VALIDATOR_INSTRUCTIONS = (
-    "Validate consistency between QuestionSpec and LayoutPlan. "
-    "Check multi-scene coverage and ensure opaque AI assets do not hide critical foreground elements."
-)
-
-HTML_GENERATOR_INSTRUCTIONS = (
-    "Generate question HTML from QuestionSpec, LayoutPlan, and asset map. "
-    "Use QuestionSpec.stem/options/solution semantics to keep educational intent clear in the final card. "
-    "Use src values from provided asset_map entries for catalog assets and do not invent unknown file paths."
-)
-
-HTML_VALIDATOR_INSTRUCTIONS = (
-    "You are a visual QA agent for educational question cards. "
-    "Evaluate the quality of the FINAL RENDERED QUESTION IMAGE together with the HTML source. "
-    "Primary criterion is visual quality and pedagogical usability, not strict layout-plan matching. "
-    "Check readability, spacing, alignment, overlap/occlusion, option clarity, visual hierarchy, and whether the question is understandable at first glance. "
-    "Return fail when quality is not acceptable for student-facing usage. "
-    "Issues must be concrete and feedback must be actionable editing guidance for the HTML."
-)
+import yaml
 
 # ---------------------------------------------------------------------------
 # Config types
 # ---------------------------------------------------------------------------
+
+AGENTS_YAML_PATH = Path(__file__).resolve().parents[2] / "config.agents.yaml"
+
+# ---------------------------------------------------------------------------
+# Model aliases  (short name → full provider-prefixed model id)
+# ---------------------------------------------------------------------------
+MODEL_ALIASES: dict[str, str] = {
+    "gemini-3.1-pro": "google-gla:gemini-3.1-pro-preview",
+    "gemini-3.1-flash": "google-gla:gemini-3.1-flash-lite-preview",
+    "gemini-2.5-pro": "google-gla:gemini-2.5-pro",
+    "gemini-2.5-flash": "google-gla:gemini-2.5-flash",
+    "claude-sonnet-4-6": "anthropic:claude-sonnet-4-6",
+    "claude-opus-4-6": "anthropic:claude-opus-4-6",
+    "claude-haiku-4-5": "anthropic:claude-haiku-4-5",
+    "gemini-2.5-flash-image": "google-gla:gemini-2.5-flash-image",
+    "gemini-2.0-flash-image": "google-gla:gemini-2.0-flash-image-generation",
+}
+
+
+def _resolve_model(name: str) -> str:
+    return MODEL_ALIASES.get(name, name)
 
 
 @dataclass(frozen=True)
@@ -86,71 +51,52 @@ class AgentSettings:
     validate_question_layout: AgentConfig
     generate_html: AgentConfig
     validate_html: AgentConfig
+    generate_image: AgentConfig
 
 
 # ---------------------------------------------------------------------------
-# Default settings
+# YAML loader
 # ---------------------------------------------------------------------------
 
-_DEFAULT_AGENT_SETTINGS = AgentSettings(
-    generate_question=AgentConfig(
-        instructions=QUESTION_AGENT_INSTRUCTIONS,
-        primary_model=GEMINI_PRO,
-        primary_max_retry=5,
-        on_fail="fallback",
-        fallback_model=GEMINI_FLASH_LITE,
-        thinking_level="high",
-    ),
-    extract_rules=AgentConfig(
-        instructions=RULE_EXTRACTOR_INSTRUCTIONS,
-        primary_model=GEMINI_FLASH_LITE,
-        primary_max_retry=5,
-        on_fail="fallback",
-        fallback_model=GEMINI_PRO,
-        thinking_level="medium",
-    ),
-    evaluate_rule=AgentConfig(
-        instructions=RULE_EVALUATOR_INSTRUCTIONS,
-        primary_model=GEMINI_FLASH_LITE,
-        primary_max_retry=5,
-        on_fail="fallback",
-        fallback_model=GEMINI_PRO,
-        thinking_level="low",
-    ),
-    generate_layout=AgentConfig(
-        instructions=LAYOUT_PLANNER_INSTRUCTIONS,
-        primary_model=GEMINI_PRO,
-        primary_max_retry=5,
-        on_fail="fallback",
-        fallback_model=GEMINI_FLASH_LITE,
-        thinking_level="high",
-    ),
-    validate_question_layout=AgentConfig(
-        instructions=LAYOUT_VALIDATOR_INSTRUCTIONS,
-        primary_model=GEMINI_PRO,
-        primary_max_retry=5,
-        on_fail="fallback",
-        fallback_model=GEMINI_FLASH_LITE,
-        thinking_level="medium",
-    ),
-    generate_html=AgentConfig(
-        instructions=HTML_GENERATOR_INSTRUCTIONS,
-        primary_model=CLAUDE_SONNET,
-        primary_max_retry=5,
-        on_fail="fallback",
-        fallback_model=GEMINI_PRO,
-        thinking_level="high",
-    ),
-    validate_html=AgentConfig(
-        instructions=HTML_VALIDATOR_INSTRUCTIONS,
-        primary_model=GEMINI_PRO,
-        primary_max_retry=5,
-        on_fail="fallback",
-        fallback_model=GEMINI_FLASH_LITE,
-        thinking_level="high",
-    ),
-)
+_AGENT_NAMES = [
+    "generate_question",
+    "extract_rules",
+    "evaluate_rule",
+    "generate_layout",
+    "validate_question_layout",
+    "generate_html",
+    "validate_html",
+    "generate_image",
+]
+
+
+def _load_from_yaml(path: Path) -> AgentSettings:
+    with path.open("r", encoding="utf-8") as fh:
+        raw: dict[str, Any] = yaml.safe_load(fh) or {}
+
+    instructions_block: dict[str, Any] = raw.get("instructions", {})
+    run_settings_block: dict[str, Any] = raw.get("run_settings", {})
+
+    configs: dict[str, AgentConfig] = {}
+    for name in _AGENT_NAMES:
+        instr_lines = instructions_block.get(name, [])
+        instructions = " ".join(str(line) for line in instr_lines) if isinstance(instr_lines, list) else str(instr_lines)
+
+        rs: dict[str, Any] = run_settings_block.get(name, {})
+        on_fail_raw = str(rs.get("on_fail", "error"))
+        on_fail: Literal["error", "fallback"] = "fallback" if on_fail_raw == "fallback" else "error"
+
+        configs[name] = AgentConfig(
+            instructions=instructions,
+            primary_model=_resolve_model(str(rs["primary_model"])),
+            primary_max_retry=int(rs.get("primary_max_retry", 3)),
+            on_fail=on_fail,
+            fallback_model=_resolve_model(str(rs["fallback_model"])) if rs.get("fallback_model") else None,
+            thinking_level=str(rs.get("thinking_level", "medium")),
+        )
+
+    return AgentSettings(**configs)
 
 
 def get_agent_settings() -> AgentSettings:
-    return _DEFAULT_AGENT_SETTINGS
+    return _load_from_yaml(AGENTS_YAML_PATH)

@@ -1,0 +1,105 @@
+instructions:
+  generate_question:
+    - "Müfredat YAML'ından yalnızca QuestionSpec oluşturun."
+    - "Yerleşim, koordinatlar, HTML veya render talimatları üretmeyin."
+    - "scenario.scenes'i bir liste olarak kullanın."
+    - "Tekil bir sahne alanı kullanmayın."
+
+  extract_rules:
+    - "YAML girdisinden atomik olarak test edilebilir doğrulama kurallarını çıkarın."
+    - "Üretim kalitesi ve doğruluğu için yalnızca en kritik kısıtlamalara öncelik verin."
+    - "Mümkün olduğunda örtüşen veya neredeyse aynı kuralları tek, özlü bir kuralda birleştirin."
+    - "En fazla 12 kural döndürün."
+
+  evaluate_rule:
+    - "Bir kuralı QuestionSpec'e göre değerlendirin ve geçme/kısmi/başarısız döndürün."
+
+  generate_layout:
+    - "QuestionSpec'ten bir LayoutPlan oluşturun."
+    - "QuestionSpec.scenario.scenes birden çok sahne öğesi içerebilir; etkinleştirilen her sahne bir arka plan varlığına eşlenmelidir."
+    - "Yapay zeka tarafından üretilen varlıklar opaktır ve dikdörtgen/kare şeklindedir (şeffaf değildir), bu nedenle kritik nesneleri gizlememek için dikkatlice yerleştirin."
+    - "Katalog varlıkları şeffaftır ve yapay zeka varlıklarının üzerine katmanlanabilir."
+    - "Kritik ön plan nesnelerinin görünür kalması için bağlama katmanını ve z_index'i kullanın."
+    - "Sağlanan catalog_files listesindeki katalog bileşenlerini kullanın."
+    - "catalog_component varlıkları için, source_filename catalog_files'tan biri olmalı ve transparent_background doğru olmalıdır."
+
+  validate_question_layout:
+    - "QuestionSpec ve LayoutPlan arasındaki tutarlılığı doğrulayın."
+    - "Çoklu sahne kapsamını kontrol edin ve opak yapay zeka varlıklarının kritik ön plan öğelerini gizlemediğinden emin olun."
+
+  generate_html:
+    - "QuestionSpec, LayoutPlan ve varlık haritasından soru HTML'i oluşturun."
+    - "Eğitimsel amacı son kartta açık tutmak için QuestionSpec.stem/options/solution semantiğini kullanın."
+    - "Katalog varlıkları için sağlanan asset_map girişlerindeki src değerlerini kullanın ve bilinmeyen dosya yolları uydurmayın."  
+
+  validate_html:
+    - "Eğitimsel soru kartları için görsel bir QA aracısısınız."
+    - "SON RENDER EDİLMİŞ SORU GÖRSELİNİN kalitesini HTML kaynağıyla birlikte değerlendirin."
+    - "Birincil kriter, katı düzen planı eşleşmesi değil, görsel kalite ve pedagojik kullanılabilirliktir."
+    - "Okunabilirliği, boşluk bırakmayı, hizalamayı, çakışmayı/kapanmayı, seçenek netliğini, görsel hiyerarşiyi ve sorunun ilk bakışta anlaşılıp anlaşılamadığını kontrol edin."
+    - "Öğrenciye yönelik kullanım için kalite kabul edilebilir olmadığında başarısız döndürün."
+    - "Sorunlar somut olmalı ve geri bildirim, HTML için uygulanabilir düzenleme rehberliği içermelidir."
+
+  generate_image:
+    - "Üreteceğin görsel, katalog görselleriyle birlikte katmanlı bir kompozisyonda kullanılacak."
+    - "Görselini katalog ögeleriyle stil, perspektif, ışık, ölçek ve renk uyumu olacak şekilde üret."
+    - "Görsel opak ve dikdörtgen/kare bir katman olarak yerleşecek; kritik ögeleri kapatmayacak, temiz ve kullanılabilir boş alan bırak."
+    - "Katalog görsellerini ASLA üreteceğin görselin parçası olarak kullanma; sadece stil ve içerik uyumu için referans olarak kullan."
+
+run_settings:
+  generate_question:
+    primary_model: gemini-3.1-pro
+    primary_max_retry: 5
+    on_fail: fallback
+    fallback_model: gemini-3.1-flash
+    thinking_level: high
+
+  extract_rules:
+    primary_model: gemini-3.1-flash
+    primary_max_retry: 5
+    on_fail: fallback
+    fallback_model: gemini-3.1-pro
+    thinking_level: medium
+
+  evaluate_rule:
+    primary_model: gemini-3.1-flash
+    primary_max_retry: 5
+    on_fail: fallback
+    fallback_model: gemini-3.1-pro
+    thinking_level: low
+
+  generate_layout:
+    primary_model: gemini-3.1-pro
+    primary_max_retry: 5
+    on_fail: fallback
+    fallback_model: gemini-3.1-flash
+    thinking_level: high
+
+  validate_question_layout:
+    primary_model: gemini-3.1-pro
+    primary_max_retry: 5
+    on_fail: fallback
+    fallback_model: gemini-3.1-flash
+    thinking_level: medium
+
+  generate_html:
+    primary_model: gemini-3.1-pro
+    primary_max_retry: 5
+    on_fail: fallback
+    fallback_model: gemini-3.1-flash
+    thinking_level: high
+
+  validate_html:
+    primary_model: gemini-3.1-pro
+    primary_max_retry: 5
+    on_fail: fallback
+    fallback_model: gemini-3.1-flash
+    thinking_level: high
+
+  generate_image:
+    primary_model: gemini-2.5-flash-image
+    primary_max_retry: 3
+    on_fail: fallback
+    fallback_model: gemini-2.0-flash-image
+    thinking_level: none
+

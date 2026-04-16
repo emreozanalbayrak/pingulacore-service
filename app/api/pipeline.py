@@ -60,7 +60,7 @@ def get_runtime_info() -> RuntimeInfoResponse:
         use_stub_agents=settings.use_stub_agents,
         text_model=agent_cfg.generate_question.primary_model,
         light_model=agent_cfg.extract_rules.primary_model,
-        image_model=settings.gemini_image_model,
+        image_model=agent_cfg.generate_image.primary_model,
         has_google_api_key=bool(os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")),
         has_anthropic_api_key=bool(os.getenv("ANTHROPIC_API_KEY")),
     )

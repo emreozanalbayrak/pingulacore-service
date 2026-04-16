@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import shutil
 from pathlib import Path
 from typing import Any
 
@@ -110,7 +111,8 @@ class PipelineService:
         question_id: str | None = None,
         pipeline_id: str | None = None,
     ) -> None:
-        filename = write_html_file(html_payload, sub_pipeline_id=sub_pipeline_id, question_id=question_id)
+        normalized_payload = self._normalize_html_payload_for_server(html_payload)
+        filename = write_html_file(normalized_payload, sub_pipeline_id=sub_pipeline_id, question_id=question_id)
         self._log(
             mode=mode,
             component="filesystem",
@@ -119,6 +121,13 @@ class PipelineService:
             sub_pipeline_id=sub_pipeline_id,
             details={"file": filename, "kind": "q_html"},
         )
+
+    def _normalize_html_payload_for_server(self, html_payload: dict[str, Any]) -> dict[str, Any]:
+        normalized = dict(html_payload)
+        normalized["html_content"] = self.agents.normalize_html_asset_urls_for_server(
+            str(html_payload.get("html_content") or "")
+        )
+        return normalized
 
     async def _run_yaml_to_question_loop(
         self,
@@ -526,7 +535,7 @@ class PipelineService:
                 output_payload=result.model_dump(),
                 feedback_text=result.note,
                 error=None,
-                model_name=self.settings.gemini_image_model if not self.settings.use_stub_agents else "stub",
+                model_name=get_agent_settings().generate_image.primary_model if not self.settings.use_stub_agents else "stub",
                 pipeline_id=pipeline_id,
                 sub_pipeline_id=sub_pipeline_id,
             )
@@ -540,6 +549,7 @@ class PipelineService:
             )
 
         for attempt in range(1, retry.html_max_retries + 1):
+            safe_question = self.agents.question_payload_for_generate_html(question)
             self._log(
                 mode=mode,
                 component="main.generate_html",
@@ -561,7 +571,7 @@ class PipelineService:
                 attempt_no=attempt,
                 status="success",
                 input_payload={
-                    "question": question.model_dump(),
+                    "question": safe_question,
                     "layout": layout.model_dump(),
                     "asset_map": asset_map,
                     "feedback": feedback,
@@ -582,24 +592,37 @@ class PipelineService:
                 details={"attempt": attempt, "html_length": len(html.html_content)},
             )
 
-            rendered_image_path = await asyncio.to_thread(
+            rendered_image_internal_path = await asyncio.to_thread(
                 self.agents.render_html_to_image,
                 html.html_content,
                 asset_map=asset_map,
                 question_id=layout.question_id,
+                attempt=attempt,
                 run_assets_dir=run_dir / "assets" if run_dir is not None else None,
                 render_dir=run_dir,
+            )
+            rendered_image_path = (
+                run_relative_path(run_dir, self.settings.runs_dir, Path(rendered_image_internal_path).name)
+                if run_dir is not None
+                else rendered_image_internal_path
             )
             last_html = html.model_dump()
             last_rendered_image_path = rendered_image_path
             self._log(
                 mode=mode,
                 component="html.render",
-                message=f"HTML render edildi: {Path(rendered_image_path).name}",
+                message=f"HTML render edildi: {Path(rendered_image_internal_path).name}",
                 pipeline_id=pipeline_id,
                 sub_pipeline_id=sub_pipeline_id,
                 details={"attempt": attempt, "rendered_image_path": rendered_image_path},
             )
+
+            # Publish render completion immediately so UI can show PNG while validation is running.
+            publish_event(self._stream_key or "", "html_render", {
+                "attempt": attempt,
+                "max_attempts": retry.html_max_retries,
+                "rendered_image_path": rendered_image_path,
+            })
 
             self._log(
                 mode=mode,
@@ -609,7 +632,7 @@ class PipelineService:
                 sub_pipeline_id=sub_pipeline_id,
                 details={"attempt": attempt},
             )
-            validation = await asyncio.to_thread(self.agents.validate_html, html.html_content, rendered_image_path)
+            validation = await asyncio.to_thread(self.agents.validate_html, html.html_content, rendered_image_internal_path)
             last_validation = validation
             repository.record_agent_run(
                 self.db,
@@ -617,7 +640,7 @@ class PipelineService:
                 mode=mode,
                 attempt_no=attempt,
                 status="success" if validation.overall_status == "pass" else "failed",
-                input_payload={"html": html.html_content, "rendered_image_path": rendered_image_path},
+                input_payload={"html": html.html_content, "rendered_image_path": rendered_image_internal_path},
                 output_payload=validation.model_dump(),
                 feedback_text=validation.feedback,
                 error=None,
@@ -634,17 +657,28 @@ class PipelineService:
                 details={"attempt": attempt, "issues": validation.issues, "feedback": validation.feedback},
             )
 
-            # Publish real-time iteration event for frontend
-            publish_event(self._stream_key or "", "html_iteration", {
+            # Publish validation completion separately from render completion.
+            publish_event(self._stream_key or "", "html_validation", {
                 "attempt": attempt,
-                "max_attempts": retry.html_max_retries,
-                "rendered_image_path": rendered_image_path,
                 "status": validation.overall_status,
                 "feedback": validation.feedback if validation.overall_status != "pass" else None,
                 "issues": validation.issues if validation.overall_status != "pass" else [],
             })
 
             if validation.overall_status == "pass":
+                final_rendered_image_path = rendered_image_path
+                if run_dir is not None:
+                    final_internal_path = run_dir / "render_final.png"
+                    shutil.copyfile(rendered_image_internal_path, final_internal_path)
+                    final_rendered_image_path = run_relative_path(run_dir, self.settings.runs_dir, final_internal_path.name)
+                    self._log(
+                        mode=mode,
+                        component="html.render",
+                        message="Final render kaydedildi: render_final.png",
+                        pipeline_id=pipeline_id,
+                        sub_pipeline_id=sub_pipeline_id,
+                        details={"attempt": attempt, "rendered_image_path": final_rendered_image_path},
+                    )
                 self._log(
                     mode=mode,
                     component="pipeline",
@@ -652,7 +686,7 @@ class PipelineService:
                     pipeline_id=pipeline_id,
                     sub_pipeline_id=sub_pipeline_id,
                 )
-                return html.model_dump(), validation.model_dump(), attempt, asset_map, rendered_image_path
+                return html.model_dump(), validation.model_dump(), attempt, asset_map, final_rendered_image_path
 
             feedback = validation.feedback or "\n".join(validation.issues)
             self._log(
@@ -835,7 +869,7 @@ class PipelineService:
                 sub_pipeline_id=sub_l.id,
             )
 
-            html, lh_validation, ha, asset_map, rendered_image_path = await self._run_layout_to_html_loop(
+            raw_html, lh_validation, ha, asset_map, rendered_image_path = await self._run_layout_to_html_loop(
                 mode="full",
                 question=question,
                 layout=layout,
@@ -844,6 +878,7 @@ class PipelineService:
                 sub_pipeline_id=sub_h.id,
                 run_dir=run_dir,
             )
+            html = self._normalize_html_payload_for_server(raw_html)
             repository.finish_sub_pipeline(
                 self.db,
                 sub_h.id,
@@ -1140,7 +1175,7 @@ class PipelineService:
         )
 
         try:
-            html, validation, attempts, asset_map, rendered_image_path = await self._run_layout_to_html_loop(
+            raw_html, validation, attempts, asset_map, rendered_image_path = await self._run_layout_to_html_loop(
                 mode="sub",
                 question=question,
                 layout=layout,
@@ -1149,6 +1184,7 @@ class PipelineService:
                 sub_pipeline_id=sub_id,
                 run_dir=run_dir,
             )
+            html = self._normalize_html_payload_for_server(raw_html)
             payload = {
                 "html": html,
                 "validation": validation,

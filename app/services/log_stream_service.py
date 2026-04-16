@@ -62,7 +62,7 @@ def publish(stream_key: str, line: str) -> None:
 
 
 def publish_event(stream_key: str, event: str, data: dict[str, Any]) -> None:
-    """Publish a named SSE event (e.g. html_iteration). Thread-safe."""
+    """Publish a named SSE event (e.g. html_render/html_validation). Thread-safe."""
     if not stream_key:
         return
     item: dict[str, Any] = {"_event": event, **data}

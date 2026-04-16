@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 import base64
 from concurrent.futures import ThreadPoolExecutor
-import mimetypes
+import json
 import os
 import re
 import shutil
@@ -11,9 +11,10 @@ import subprocess
 import time
 from pathlib import Path
 from typing import Any, Callable, Literal
+from urllib.parse import quote as url_quote
 from uuid import uuid4
 
-from pydantic_ai import Agent
+from pydantic_ai import Agent, BinaryContent, BinaryImage
 from pydantic_ai.exceptions import ModelHTTPError
 
 from app.agents.config import AgentConfig, AgentSettings, get_agent_settings
@@ -37,21 +38,9 @@ from app.schemas.domain import (
     RuleExtractionResult,
     ValidationRule,
 )
-try:
-    from google import genai
-except Exception:  # pragma: no cover
-    genai = None
-
-
+from app.utils.usage import extract_token_usage, make_usage_event
 PIXEL_PNG_BYTES = base64.b64decode(
     "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMB/axw0D0AAAAASUVORK5CYII="
-)
-
-IMAGE_COMPOSITE_SYSTEM_INSTRUCTIONS = (
-    "Üreteceğin görsel, ek olarak verilen katalog görselleriyle birlikte katmanlı bir kompozisyonda kullanılacak. "
-    "Bu yüzden görselini katalog ögeleriyle stil, perspektif, ışık, ölçek ve renk uyumu olacak şekilde üret. "
-    "Görsel opak ve dikdörtgen/kare bir katman olarak yerleşecek; kritik ögeleri kapatmayacak, temiz ve kullanılabilir boş alan bırak."
-    "Ek'te verilen katalog görsellerini ASLA üreteceğin görselin parçası olarak kullanma, sadece referans olarak kullanarak uyumlu ama ayrı bir görsel üret (örneğin benzer bir arka plan dokusu veya benzer bir nesne şeklinde). Ancak ek'teki görseller ASLA üreteceğin görselin içinde yer almamalı, sadece stil ve içerik uyumu için referans olarak kullanılmalı. "
 )
 
 
@@ -73,6 +62,25 @@ class AgentService:
                 pass
         if self.stream_key:
             log_stream_service.publish(self.stream_key, line)
+
+    def _emit_usage_event(self, agent_name: str, model_name: str, result: Any) -> None:
+        """Extract and emit usage event from agent result."""
+        try:
+            usage = extract_token_usage(result)
+            event = make_usage_event(
+                agent_name=agent_name,
+                model_name=model_name,
+                input_tokens=usage["input_tokens"],
+                output_tokens=usage["output_tokens"],
+                total_tokens=usage["total_tokens"],
+                cached_input_tokens=usage["cached_input_tokens"],
+                cache_read_tokens=usage["cache_read_tokens"],
+                cache_write_tokens=usage["cache_write_tokens"],
+            )
+            event_str = json.dumps(event)
+            self._emit(f"[usage] {event_str}")
+        except Exception as e:
+            self._emit(f"[usage] error capturing usage: {e}")
 
     def _run_agent(
         self,
@@ -105,7 +113,7 @@ class AgentService:
 
                 def invoke_sync() -> Any:
                     result = agent.run_sync(user_prompt=payload_text)
-                    return result.output
+                    return result
 
                 # When called from async request contexts, run_sync may conflict with
                 # the active loop. In that case execute it in a dedicated worker thread.
@@ -118,8 +126,13 @@ class AgentService:
                 try:
                     if running:
                         with ThreadPoolExecutor(max_workers=1) as executor:
-                            return executor.submit(invoke_sync).result()
-                    return invoke_sync()
+                            result = executor.submit(invoke_sync).result()
+                    else:
+                        result = invoke_sync()
+
+                    # Capture and emit usage
+                    self._emit_usage_event(agent_name, candidate_model, result)
+                    return result.output
                 except Exception as exc:  # pragma: no cover - live provider instability path
                     last_error = exc
                     status_code = getattr(exc, "status_code", None)
@@ -267,8 +280,9 @@ class AgentService:
         if self.settings.use_stub_agents:
             return self._stub_generate_html(question, layout, asset_map, feedback)
 
+        safe_question = self.question_payload_for_generate_html(question)
         payload = {
-            "question": question.model_dump(),
+            "question": safe_question,
             "layout": layout.model_dump(),
             "asset_map": asset_map,
             "feedback": feedback or "",
@@ -285,18 +299,25 @@ class AgentService:
             self._emit(f"[agent] generate_html fallback to stub: {exc}")
             return self._stub_generate_html(question, layout, asset_map, feedback)
 
+    @staticmethod
+    def question_payload_for_generate_html(question: QuestionSpec) -> dict[str, Any]:
+        """Generate-HTML agent input should never include solution content."""
+        return question.model_dump(exclude={"solution"})
+
     def render_html_to_image(
         self,
         html_content: str,
         *,
         asset_map: dict[str, str] | None = None,
         question_id: str | None = None,
+        attempt: int | None = None,
         run_assets_dir: Path | None = None,
         render_dir: Path | None = None,
     ) -> str:
         if render_dir is not None:
-            html_path = render_dir / "render.html"
-            image_path = render_dir / "render.png"
+            suffix = f"_{max(1, attempt)}" if attempt is not None else ""
+            html_path = render_dir / f"render{suffix}.html"
+            image_path = render_dir / f"render{suffix}.png"
         else:
             render_id = self._slugify(question_id or f"render_{uuid4()}")
             html_path = self.settings.output_dir / f"{render_id}.render.html"
@@ -346,6 +367,69 @@ class AgentService:
             self._emit(f"[agent] validate_html fallback to stub: {exc}")
             return self._stub_validate_html(html_content, rendered_image_path)
 
+    def _run_image_agent(
+        self,
+        *,
+        config: AgentConfig,
+        prompt: str,
+        agent_name: str,
+    ) -> bytes:
+        models = [config.primary_model]
+        if config.on_fail == "fallback" and config.fallback_model:
+            models.append(config.fallback_model)
+
+        last_error: Exception | None = None
+        self._emit(f"{agent_name} image agent başladı.")
+
+        for idx, candidate_model in enumerate(models):
+            if idx > 0:
+                self._emit(f"[image-agent] fallback model aktif: {candidate_model}")
+
+            for attempt in range(1, config.primary_max_retry + 1):
+                agent = Agent(
+                    model=candidate_model,
+                    output_type=BinaryImage,
+                    system_prompt=config.instructions,
+                )
+
+                def invoke_sync() -> Any:
+                    result = agent.run_sync(user_prompt=prompt)
+                    return result
+
+                try:
+                    loop = asyncio.get_running_loop()
+                    running = loop.is_running()
+                except RuntimeError:
+                    running = False
+
+                try:
+                    if running:
+                        with ThreadPoolExecutor(max_workers=1) as executor:
+                            result = executor.submit(invoke_sync).result()
+                    else:
+                        result = invoke_sync()
+
+                    # Capture and emit usage
+                    self._emit_usage_event(agent_name, candidate_model, result)
+                    return result.output.data
+                except Exception as exc:  # pragma: no cover - live provider instability path
+                    last_error = exc
+                    status_code = getattr(exc, "status_code", None)
+                    retryable = self._is_retryable_model_error(exc, status_code)
+                    if retryable and attempt < config.primary_max_retry:
+                        sleep_sec = min(1.0 * attempt, 4.0)
+                        self._emit(
+                            f"[image-agent] transient error (model={candidate_model}, attempt={attempt}/{config.primary_max_retry}, "
+                            f"status={status_code}) -> retry in {sleep_sec:.1f}s: {exc}"
+                        )
+                        time.sleep(sleep_sec)
+                        continue
+                    break
+
+        if last_error is not None:
+            raise last_error
+        raise RuntimeError("Image agent failed without a concrete error.")
+
     def generate_composite_image(
         self,
         asset: AssetSpec,
@@ -357,147 +441,41 @@ class AgentService:
         output_path = output_path if output_path is not None else (self.settings.output_dir / f"{asset.slug}.png")
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
-        if self.settings.use_stub_agents or genai is None:
+        if self.settings.use_stub_agents:
             output_path.write_bytes(PIXEL_PNG_BYTES)
             return CompositeImageResult(asset_slug=asset.slug, image_path=str(output_path), note="stub-image")
 
-        api_key = self._google_api_key()
-        if not api_key:
-            output_path.write_bytes(PIXEL_PNG_BYTES)
-            return CompositeImageResult(asset_slug=asset.slug, image_path=str(output_path), note="fallback-stub-image(no-key)")
-
-        client = genai.Client(api_key=api_key)
         prompt = (
             f"Generate PNG for asset={asset.slug}. "
             f"description={asset.description}. "
-            f"prompt={asset.prompt}. "
+            f"prompt={asset.prompt}."
         )
-        #context_parts, used_catalog_files = self._build_catalog_context_parts(catalog_context_filenames or [])
-        #request_parts: list[Any] = [prompt, *context_parts]
-        # TODO: take care of manual override
-        request_parts: list[Any] = [prompt]
+        config = self.agent_settings.generate_image
+        # Override primary_max_retry with caller-supplied max_retries when provided.
+        if max_retries != config.primary_max_retry:
+            from dataclasses import replace
+            config = replace(config, primary_max_retry=max(1, max_retries))
 
-        image_models = self._candidate_image_models(self.settings.gemini_image_model)
-        last_error: str | None = None
-
-        for image_model in image_models:
-            for attempt in range(1, max(1, max_retries) + 1):
-                try:
-                    response = client.models.generate_content(
-                        model=image_model,
-                        contents=request_parts,
-                        config={
-                            "systemInstruction": IMAGE_COMPOSITE_SYSTEM_INSTRUCTIONS,
-                        },
-                    )
-                except Exception as exc:  # pragma: no cover - live provider instability path
-                    last_error = str(exc)
-                    sleep_sec = min(1.0 * attempt, 4.0)
-                    self._emit(f"[image-agent] model error (model={image_model}, attempt={attempt}) -> {exc}")
-                    time.sleep(sleep_sec)
-                    continue
-
-                image_bytes = self._extract_image_bytes(response)
-                if image_bytes is not None:
-                    output_path.write_bytes(image_bytes)
-                    return CompositeImageResult(
-                        asset_slug=asset.slug,
-                        image_path=str(output_path),
-                        note=f"generated-by-image-model({image_model});", # catalog_refs={len(used_catalog_files)} # TODO: add back catalog reference count when context parts are included again
-                    )
-
-        output_path.write_bytes(PIXEL_PNG_BYTES)
-        if last_error:
+        try:
+            image_bytes = self._run_image_agent(
+                config=config,
+                prompt=prompt,
+                agent_name="image_generator",
+            )
+            output_path.write_bytes(image_bytes)
             return CompositeImageResult(
                 asset_slug=asset.slug,
                 image_path=str(output_path),
-                note=f"fallback-stub-image(error={last_error})",
+                note=f"generated-by-pydantic-agent({config.primary_model})",
             )
-        return CompositeImageResult(asset_slug=asset.slug, image_path=str(output_path), note="fallback-stub-image(no-image-part)")
-
-    def _build_catalog_context_parts(self, catalog_filenames: list[str]) -> tuple[list[Any], list[str]]:
-        parts: list[Any] = []
-        used: list[str] = []
-        if genai is None:
-            return parts, used
-
-        safe_names: list[str] = []
-        for name in catalog_filenames:
-            token = Path(name).name
-            if not token or token.startswith("."):
-                continue
-            if token not in safe_names:
-                safe_names.append(token)
-
-        for filename in safe_names:
-            path = self.settings.catalog_dir / filename
-            if not path.exists() or not path.is_file():
-                continue
-            mime, _ = mimetypes.guess_type(path.name)
-            if not mime or not mime.startswith("image/"):
-                continue
-            try:
-                data = path.read_bytes()
-            except Exception:
-                continue
-            if not data:
-                continue
-            parts.append(genai.types.Part.from_bytes(data=data, mime_type=mime))
-            used.append(filename)
-
-        return parts, used
-
-    @staticmethod
-    def _candidate_image_models(primary_model: str) -> list[str]:
-        # Keep configurable primary model first, then try known compatibility fallbacks.
-        models = [
-            primary_model,
-            "gemini-2.5-flash-image",
-        ]
-        deduped: list[str] = []
-        for item in models:
-            token = (item or "").strip()
-            if token and token not in deduped:
-                deduped.append(token)
-        return deduped
-
-    @staticmethod
-    def _google_api_key() -> str:
-        import os
-
-        return os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY") or ""
-
-    @staticmethod
-    def _extract_image_bytes(response: Any) -> bytes | None:
-        parts = getattr(response, "parts", None) or []
-        for part in parts:
-            inline = getattr(part, "inline_data", None)
-            if inline and getattr(inline, "data", None):
-                data = inline.data
-                if isinstance(data, bytes):
-                    return data
-                if isinstance(data, str):
-                    try:
-                        return base64.b64decode(data)
-                    except Exception:
-                        pass
-
-        candidates = getattr(response, "candidates", None) or []
-        for candidate in candidates:
-            content = getattr(candidate, "content", None)
-            cparts = getattr(content, "parts", None) or []
-            for part in cparts:
-                inline = getattr(part, "inline_data", None)
-                if inline and getattr(inline, "data", None):
-                    data = inline.data
-                    if isinstance(data, bytes):
-                        return data
-                    if isinstance(data, str):
-                        try:
-                            return base64.b64decode(data)
-                        except Exception:
-                            pass
-        return None
+        except Exception as exc:  # pragma: no cover - live provider instability path
+            self._emit(f"[image-agent] failed, using stub: {exc}")
+            output_path.write_bytes(PIXEL_PNG_BYTES)
+            return CompositeImageResult(
+                asset_slug=asset.slug,
+                image_path=str(output_path),
+                note=f"fallback-stub-image(error={exc})",
+            )
 
     def _rewrite_html_asset_urls_for_local_render(
         self,
@@ -506,12 +484,10 @@ class AgentService:
         *,
         extra_search_dirs: list[Path] | None = None,
     ) -> str:
-        pattern = re.compile(r'\b(src|href)=([\'"])([^\'"]+)\2', re.IGNORECASE)
+        attr_pattern = re.compile(r'\b(src|href)=([\'"])([^\'"]+)\2', re.IGNORECASE)
+        css_url_pattern = re.compile(r'url\(\s*([\'"]?)([^\'")]+)\1\s*\)', re.IGNORECASE)
 
-        def replacer(match: re.Match[str]) -> str:
-            attr = match.group(1)
-            quote = match.group(2)
-            value = match.group(3)
+        def resolve_local_uri(value: str) -> str | None:
             low = value.strip().lower()
             if (
                 low.startswith("http://")
@@ -522,20 +498,41 @@ class AgentService:
                 or low.startswith("#")
                 or low.startswith("mailto:")
             ):
-                return f"{attr}={quote}{value}{quote}"
+                return None
 
-            raw = value.split("?")[0].split("#")[0]
-            file_name = Path(raw).name
+            split_idx = len(value)
+            for sep in ("?", "#"):
+                pos = value.find(sep)
+                if pos != -1:
+                    split_idx = min(split_idx, pos)
+            base = value[:split_idx].replace("\\", "/").strip()
+            suffix = value[split_idx:]
+            if not base:
+                return None
+
+            runs_match = re.search(r"(?:^|/)(runs/.+)$", base, flags=re.IGNORECASE)
+            if runs_match:
+                runs_path = runs_match.group(1).strip("/")
+                runs_root = self.settings.runs_dir.parent.resolve()
+                candidate = (runs_root / runs_path).resolve()
+                if (candidate == runs_root or runs_root in candidate.parents) and candidate.exists() and candidate.is_file():
+                    return f"{candidate.as_uri()}{suffix}"
+
+            file_name = Path(base).name
             if not file_name:
-                return f"{attr}={quote}{value}{quote}"
+                return None
 
             candidates = [file_name]
-            mapped = asset_map.get(file_name)
-            if mapped:
-                candidates.append(Path(mapped).name)
+            for key in (file_name, base):
+                mapped = asset_map.get(key)
+                if mapped:
+                    token = Path(str(mapped)).name
+                    if token and token not in candidates:
+                        candidates.append(token)
+
             for mapped_value in asset_map.values():
-                token = Path(mapped_value).name
-                if token not in candidates:
+                token = Path(str(mapped_value)).name
+                if token and token not in candidates:
                     candidates.append(token)
 
             search_roots = list(extra_search_dirs or []) + [self.settings.output_dir, self.settings.catalog_dir]
@@ -543,11 +540,92 @@ class AgentService:
                 for root in search_roots:
                     p = (root / name).resolve()
                     if p.exists() and p.is_file():
-                        return f"{attr}={quote}{p.as_uri()}{quote}"
+                        return f"{p.as_uri()}{suffix}"
+            return None
 
-            return f"{attr}={quote}{value}{quote}"
+        def attr_replacer(match: re.Match[str]) -> str:
+            attr = match.group(1)
+            quote_char = match.group(2)
+            value = match.group(3)
+            resolved = resolve_local_uri(value)
+            if not resolved:
+                return f"{attr}={quote_char}{value}{quote_char}"
+            return f"{attr}={quote_char}{resolved}{quote_char}"
 
-        return pattern.sub(replacer, html_content)
+        def css_url_replacer(match: re.Match[str]) -> str:
+            quote_char = match.group(1)
+            value = match.group(2).strip()
+            resolved = resolve_local_uri(value)
+            if not resolved:
+                return f"url({quote_char}{value}{quote_char})"
+            return f"url({quote_char}{resolved}{quote_char})"
+
+        rewritten = attr_pattern.sub(attr_replacer, html_content)
+        return css_url_pattern.sub(css_url_replacer, rewritten)
+
+    @staticmethod
+    def normalize_html_asset_urls_for_server(html_content: str) -> str:
+        """
+        Normalize relative asset refs for server-side delivery via /v1/assets.
+        - runs/... refs keep their full relative path: /v1/assets/runs/...
+        - other relative refs are flattened to filename: /v1/assets/<file>
+        """
+        attr_pattern = re.compile(r'\b(src|href)=([\'"])([^\'"]+)\2', re.IGNORECASE)
+        css_url_pattern = re.compile(r'url\(\s*([\'"]?)([^\'")]+)\1\s*\)', re.IGNORECASE)
+
+        def to_server_asset_url(value: str) -> str | None:
+            low = value.strip().lower()
+            if (
+                low.startswith("http://")
+                or low.startswith("https://")
+                or low.startswith("//")
+                or low.startswith("/")
+                or low.startswith("data:")
+                or low.startswith("#")
+                or low.startswith("mailto:")
+            ):
+                return None
+
+            split_idx = len(value)
+            for sep in ("?", "#"):
+                pos = value.find(sep)
+                if pos != -1:
+                    split_idx = min(split_idx, pos)
+            base = value[:split_idx].replace("\\", "/").strip()
+            suffix = value[split_idx:]
+            if not base:
+                return None
+
+            runs_match = re.search(r"(?:^|/)(runs/.+)$", base, flags=re.IGNORECASE)
+            if runs_match:
+                runs_path = runs_match.group(1).strip("/")
+                encoded_runs = "/".join(url_quote(item, safe="") for item in runs_path.split("/"))
+                return f"/v1/assets/{encoded_runs}{suffix}"
+
+            file_name = Path(base).name
+            if not file_name:
+                return None
+            return f"/v1/assets/{url_quote(file_name, safe='')}{suffix}"
+
+        def attr_replacer(match: re.Match[str]) -> str:
+            attr = match.group(1)
+            quote_char = match.group(2)
+            value = match.group(3)
+            replaced = to_server_asset_url(value)
+            if not replaced:
+                return f"{attr}={quote_char}{value}{quote_char}"
+            return f"{attr}={quote_char}{replaced}{quote_char}"
+
+        def css_url_replacer(match: re.Match[str]) -> str:
+            quote_char = match.group(1)
+            value = match.group(2).strip()
+            replaced = to_server_asset_url(value)
+            if not replaced:
+                return f"url({quote_char}{value}{quote_char})"
+            return f"url({quote_char}{replaced}{quote_char})"
+
+        rewritten = attr_pattern.sub(attr_replacer, html_content)
+        return css_url_pattern.sub(css_url_replacer, rewritten)
 
     @staticmethod
     def _browser_candidates() -> list[str]:

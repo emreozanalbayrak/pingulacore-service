@@ -62,8 +62,6 @@ class Settings:
     catalog_dir: Path
     runs_dir: Path
 
-    gemini_image_model: str
-
     question_max_retries: int
     layout_max_retries: int
     html_max_retries: int
@@ -104,7 +102,6 @@ def build_settings() -> Settings:
         output_dir=Path(os.getenv("ASSET_OUTPUT_DIR", str(output_dir))),
         catalog_dir=Path(os.getenv("CATALOG_DIR", str(catalog_dir))),
         runs_dir=Path(os.getenv("RUNS_DIR", str(runs_dir))),
-        gemini_image_model=os.getenv("GEMINI_IMAGE_MODEL", "gemini-2.5-flash-image"),
         question_max_retries=_as_int(os.getenv("QUESTION_MAX_RETRIES"), 3),
         layout_max_retries=_as_int(os.getenv("LAYOUT_MAX_RETRIES"), 3),
         html_max_retries=_as_int(os.getenv("HTML_MAX_RETRIES"), 3),
