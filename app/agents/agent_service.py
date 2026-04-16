@@ -4,6 +4,7 @@ import asyncio
 import base64
 from concurrent.futures import ThreadPoolExecutor
 import json
+import mimetypes
 import os
 import re
 import shutil
@@ -407,11 +408,30 @@ class AgentService:
                 "When prior_feedback_history is present, shape current feedback considering previous rounds."
             ),
         }
+        media_type = mimetypes.guess_type(image_path.name)[0] or "image/png"
+        try:
+            image_bytes = image_path.read_bytes()
+        except Exception:
+            return HtmlValidationResult(
+                overall_status="fail",
+                issues=["Rendered image exists but could not be read for visual validation."],
+                feedback="Render görseli okunamadığı için görsel kalite doğrulaması tamamlanamadı.",
+            )
+        if not image_bytes:
+            return HtmlValidationResult(
+                overall_status="fail",
+                issues=["Rendered image is empty for visual validation."],
+                feedback="Render görseli boş olduğu için görsel kalite doğrulaması tamamlanamadı.",
+            )
+        user_prompt = [
+            json.dumps(payload, ensure_ascii=False),
+            BinaryContent(data=image_bytes, media_type=media_type, identifier=image_path.name),
+        ]
         try:
             return self._run_agent(
                 config=self.agent_settings.validate_html,
                 output_type=HtmlValidationResult,
-                payload=payload,
+                payload=user_prompt,
                 agent_name="html_validator",
             )
         except Exception as exc:  # pragma: no cover - live provider instability path

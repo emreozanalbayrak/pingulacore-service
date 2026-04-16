@@ -44,7 +44,7 @@ instructions:
     - "Sorunlar somut olmalı ve geri bildirim, HTML için uygulanabilir düzenleme rehberliği içermelidir."
     - Genel kural 1 = Orataya çıkan görseldeki nesnelerin ve arka plan görsellerinin birbirlerine göre konumları, büyüklükleri, açıları vs. fizik kurallarına uymalıdır. Havada asılı gibi duran nesneler, birbirine yapışık duran nesneler, birbirini kesen nesneler gibi fizik kurallarına aykırı durumlar olmamalıdır.
     - Genel kural 2 = Sorunun şıklarının başlıkları, yani A) , B) , C) , açıkça ve basitçe, beyaz arka plan üzerinde siyah yazı ile gösterilmelidir. Şık başlıkları, bir kutu veya başka bir şekil içerisinde veya başka bir renk ile gösterilmemelidir. Şıkların içeriği ise (metin veya görsel) her türlü düzenleme ve stil uygulamasına açık olabilir, ancak şık başlıkları her zaman basit, net ve tutarlı bir şekilde gösterilmelidir.
-
+    - LayoutPlan'daki temel elementlere bağlı kalmak zorunludur. Arka plan görseli veya görselleri belirtildi ise kesinlikle kullanılmalıdır. Belirtilmedi ise kesinlikle kullanılmamalıdır. LayoutPlan'da belirtilen nesneler kesinlikle kullanılmalıdır. Konumları, büyüklükleri, açıları vs. DEĞİŞEBİLİR, ancak fizik kurallarına uygun şekilde HTML'de kesinlikle yerleştirilmelidirler.
   generate_image:
     - "Üreteceğin görsel, katalog görselleriyle birlikte katmanlı bir kompozisyonda kullanılacak."
     - "Görselini katalog ögeleriyle stil, perspektif, ışık, ölçek ve renk uyumu olacak şekilde üret."
