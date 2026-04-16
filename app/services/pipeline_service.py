@@ -492,6 +492,7 @@ class PipelineService:
             },
         )
         feedback: str | None = None
+        feedback_history: list[str] = []
         previous_raw_html: str | None = None
         previous_validation_feedback_history: list[dict[str, Any]] = []
         last_validation = None
