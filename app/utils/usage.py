@@ -118,12 +118,14 @@ def normalize_token_usage(raw: Any) -> dict[str, int]:
 
     input_tokens = _to_int(
         raw.get("input_tokens")
+        or raw.get("request_tokens")
         or raw.get("prompt_token_count")
         or raw.get("prompt_tokens")
         or 0
     )
     output_tokens = _to_int(
         raw.get("output_tokens")
+        or raw.get("response_tokens")
         or raw.get("candidates_token_count")
         or raw.get("completion_tokens")
         or 0
@@ -148,6 +150,21 @@ def extract_token_usage(response: Any) -> dict[str, int]:
     """Extract token usage from pydantic_ai agent response."""
     if response is None:
         return normalize_token_usage(None)
+
+    # PydanticAI AgentRunResult path: response.usage() -> RunUsage
+    usage_method = getattr(response, "usage", None)
+    if callable(usage_method):
+        try:
+            return normalize_token_usage(usage_method())
+        except Exception:
+            pass
+
+    # PydanticAI ModelResponse path: response.response.usage -> RequestUsage
+    inner_response = getattr(response, "response", None)
+    if inner_response is not None:
+        usage = getattr(inner_response, "usage", None)
+        if usage is not None:
+            return normalize_token_usage(usage)
 
     # Try standard attributes
     usage = getattr(response, "usage_metadata", None)
