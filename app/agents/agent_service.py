@@ -380,9 +380,14 @@ class AgentService:
         image_path.write_bytes(PIXEL_PNG_BYTES)
         return str(image_path)
 
-    def validate_html(self, html_content: str, rendered_image_path: str) -> HtmlValidationResult:
+    def validate_html(
+        self,
+        html_content: str,
+        rendered_image_path: str,
+        prior_feedback_history: list[dict[str, Any]] | None = None,
+    ) -> HtmlValidationResult:
         if self.settings.use_stub_agents:
-            return self._stub_validate_html(html_content, rendered_image_path)
+            return self._stub_validate_html(html_content, rendered_image_path, prior_feedback_history)
 
         image_path = Path(rendered_image_path)
         if not image_path.exists() or not image_path.is_file():
@@ -395,9 +400,11 @@ class AgentService:
         payload = {
             "html_content": html_content,
             "rendered_image_path": str(image_path.resolve()),
+            "prior_feedback_history": prior_feedback_history or [],
             "note": (
                 "Rendered image path is provided for visual QA. "
-                "Use this with HTML source to assess final question quality."
+                "Use this with HTML source to assess final question quality. "
+                "When prior_feedback_history is present, shape current feedback considering previous rounds."
             ),
         }
         try:
@@ -409,7 +416,7 @@ class AgentService:
             )
         except Exception as exc:  # pragma: no cover - live provider instability path
             self._emit(f"[agent] validate_html fallback to stub: {exc}")
-            return self._stub_validate_html(html_content, rendered_image_path)
+            return self._stub_validate_html(html_content, rendered_image_path, prior_feedback_history)
 
     def _run_image_agent(
         self,
@@ -1181,7 +1188,13 @@ class AgentService:
         )
         return GeneratedHtml(selected_template="stub_template", html_content=html)
 
-    def _stub_validate_html(self, html_content: str, rendered_image_path: str) -> HtmlValidationResult:
+    def _stub_validate_html(
+        self,
+        html_content: str,
+        rendered_image_path: str,
+        prior_feedback_history: list[dict[str, Any]] | None = None,
+    ) -> HtmlValidationResult:
+        _ = prior_feedback_history
         issues: list[str] = []
         low = html_content.lower()
         if "<img" not in low:

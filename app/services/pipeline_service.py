@@ -200,6 +200,7 @@ class PipelineService:
         )
 
         feedback: str | None = None
+        feedback_history: list[str] = []
         last_eval = None
         last_question: QuestionSpec | None = None
         for attempt in range(1, retry.question_max_retries + 1):
@@ -492,6 +493,7 @@ class PipelineService:
         )
         feedback: str | None = None
         previous_raw_html: str | None = None
+        previous_validation_feedback_history: list[dict[str, Any]] = []
         last_validation = None
         last_html: dict[str, Any] | None = None
         last_rendered_image_path: str | None = None
@@ -659,7 +661,12 @@ class PipelineService:
                 sub_pipeline_id=sub_pipeline_id,
                 details={"attempt": attempt},
             )
-            validation = await asyncio.to_thread(self.agents.validate_html, html.html_content, rendered_image_internal_path)
+            validation = await asyncio.to_thread(
+                self.agents.validate_html,
+                html.html_content,
+                rendered_image_internal_path,
+                list(previous_validation_feedback_history),
+            )
             last_validation = validation
             repository.record_agent_run(
                 self.db,
@@ -667,7 +674,11 @@ class PipelineService:
                 mode=mode,
                 attempt_no=attempt,
                 status="success" if validation.overall_status == "pass" else "failed",
-                input_payload={"html": html.html_content, "rendered_image_path": rendered_image_internal_path},
+                input_payload={
+                    "html": html.html_content,
+                    "rendered_image_path": rendered_image_internal_path,
+                    "prior_feedback_history": list(previous_validation_feedback_history),
+                },
                 output_payload=validation.model_dump(),
                 feedback_text=validation.feedback,
                 error=None,
@@ -682,6 +693,14 @@ class PipelineService:
                 pipeline_id=pipeline_id,
                 sub_pipeline_id=sub_pipeline_id,
                 details={"attempt": attempt, "issues": validation.issues, "feedback": validation.feedback},
+            )
+            previous_validation_feedback_history.append(
+                {
+                    "attempt": attempt,
+                    "status": validation.overall_status,
+                    "feedback": validation.feedback,
+                    "issues": list(validation.issues),
+                }
             )
 
             # Publish validation completion separately from render completion.
@@ -715,7 +734,9 @@ class PipelineService:
                 )
                 return html.model_dump(), validation.model_dump(), attempt, asset_map, final_rendered_image_path
 
-            feedback = validation.feedback or "\n".join(validation.issues)
+            current_feedback = validation.feedback or "\n".join(validation.issues)
+            feedback_history.append(current_feedback)
+            feedback = "\n\n".join(feedback_history)
             previous_raw_html = current_raw_html
             self._log(
                 mode=mode,
@@ -724,7 +745,7 @@ class PipelineService:
                 pipeline_id=pipeline_id,
                 sub_pipeline_id=sub_pipeline_id,
                 level="warning",
-                details={"attempt": attempt, "feedback": feedback},
+                details={"attempt": attempt, "feedback": feedback, "current_feedback": current_feedback},
             )
 
         if last_validation is None:

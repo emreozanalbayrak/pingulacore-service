@@ -37,6 +37,7 @@ instructions:
   validate_html:
     - "Eğitimsel soru kartları için görsel bir QA aracısısınız."
     - "SON RENDER EDİLMİŞ SORU GÖRSELİNİN kalitesini HTML kaynağıyla birlikte değerlendirin."
+    - "prior_feedback_history alanı verilirse, önceki turlardaki sorunları tekrar etmeden ilerleyen ve net bir geri bildirim üretin."
     - "Birincil kriter, katı düzen planı eşleşmesi değil, görsel kalite ve pedagojik kullanılabilirliktir."
     - "Okunabilirliği, boşluk bırakmayı, hizalamayı, çakışmayı/kapanmayı, seçenek netliğini, görsel hiyerarşiyi ve sorunun ilk bakışta anlaşılıp anlaşılamadığını kontrol edin."
     - "Öğrenciye yönelik kullanım için kalite kabul edilebilir olmadığında başarısız döndürün."
