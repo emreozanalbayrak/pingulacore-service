@@ -403,7 +403,7 @@ class AgentService:
                     return CompositeImageResult(
                         asset_slug=asset.slug,
                         image_path=str(output_path),
-                        note=f"generated-by-image-model({image_model});catalog_refs={len(used_catalog_files)}",
+                        note=f"generated-by-image-model({image_model});", # catalog_refs={len(used_catalog_files)} # TODO: add back catalog reference count when context parts are included again
                     )
 
         output_path.write_bytes(PIXEL_PNG_BYTES)
