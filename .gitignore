@@ -19,7 +19,6 @@ service.db
 generated_assets/
 ortak/
 sp_files/
-catalog/
 tests/
 scripts
 test_runs/
