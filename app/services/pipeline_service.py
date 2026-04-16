@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 from pathlib import Path
 from typing import Any
 
@@ -7,6 +8,7 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from app.agents.agent_service import AgentService
+from app.agents.config import get_agent_settings
 from app.core.config import Settings, get_settings
 from app.db import repository
 from app.schemas.api import (
@@ -17,6 +19,7 @@ from app.schemas.api import (
     YamlToQuestionRunResponse,
 )
 from app.schemas.domain import LayoutPlan, QuestionSpec
+from app.services.log_stream_service import publish_done, publish_event
 from app.services.pipeline_log_service import write_pipeline_log
 from app.services.retry_service import RetrySettings, merge_retry_config
 from app.services.run_dir_service import (
@@ -36,6 +39,7 @@ class PipelineService:
         self.settings = settings or get_settings()
         self.agents = AgentService(self.settings)
         self._log_path: Path | None = None
+        self._stream_key: str | None = None
 
     def _log(
         self,
@@ -58,6 +62,7 @@ class PipelineService:
             level=level,
             details=details,
             log_path=self._log_path,
+            stream_key=self._stream_key,
         )
 
     def _persist_sub_output_question(
@@ -142,7 +147,7 @@ class PipelineService:
             pipeline_id=pipeline_id,
             sub_pipeline_id=sub_pipeline_id,
         )
-        rules = self.agents.extract_rules(yaml_content)
+        rules = await asyncio.to_thread(self.agents.extract_rules, yaml_content)
         original_rule_count = len(rules.items)
         if original_rule_count > self.settings.rule_eval_max_rules:
             rules.items = rules.items[: self.settings.rule_eval_max_rules]
@@ -172,7 +177,7 @@ class PipelineService:
             output_payload=rules.model_dump(),
             feedback_text=None,
             error=None,
-            model_name=self.settings.gemini_light_model if not self.settings.use_stub_agents else "stub",
+            model_name=get_agent_settings().extract_rules.primary_model if not self.settings.use_stub_agents else "stub",
             pipeline_id=pipeline_id,
             sub_pipeline_id=sub_pipeline_id,
         )
@@ -196,7 +201,7 @@ class PipelineService:
                 sub_pipeline_id=sub_pipeline_id,
                 details={"attempt": attempt},
             )
-            question = self.agents.generate_question(yaml_content, feedback)
+            question = await asyncio.to_thread(self.agents.generate_question, yaml_content, feedback)
             repository.record_agent_run(
                 self.db,
                 agent_name="main_generate_question",
@@ -207,7 +212,7 @@ class PipelineService:
                 output_payload=question.model_dump(),
                 feedback_text=feedback,
                 error=None,
-                model_name=self.settings.gemini_text_model if not self.settings.use_stub_agents else "stub",
+                model_name=get_agent_settings().generate_question.primary_model if not self.settings.use_stub_agents else "stub",
                 pipeline_id=pipeline_id,
                 sub_pipeline_id=sub_pipeline_id,
             )
@@ -264,7 +269,7 @@ class PipelineService:
                     output_payload=item.model_dump(),
                     feedback_text=item.rationale,
                     error=None,
-                    model_name=self.settings.gemini_light_model if not self.settings.use_stub_agents else "stub",
+                    model_name=get_agent_settings().evaluate_rule.primary_model if not self.settings.use_stub_agents else "stub",
                     pipeline_id=pipeline_id,
                     sub_pipeline_id=sub_pipeline_id,
                 )
@@ -341,7 +346,7 @@ class PipelineService:
                 sub_pipeline_id=sub_pipeline_id,
                 details={"attempt": attempt},
             )
-            layout = self.agents.generate_layout(question, feedback)
+            layout = await asyncio.to_thread(self.agents.generate_layout, question, feedback)
             repository.record_agent_run(
                 self.db,
                 agent_name="main_generate_layout",
@@ -352,7 +357,7 @@ class PipelineService:
                 output_payload=layout.model_dump(),
                 feedback_text=feedback,
                 error=None,
-                model_name=self.settings.gemini_text_model if not self.settings.use_stub_agents else "stub",
+                model_name=get_agent_settings().generate_layout.primary_model if not self.settings.use_stub_agents else "stub",
                 pipeline_id=pipeline_id,
                 sub_pipeline_id=sub_pipeline_id,
             )
@@ -373,7 +378,7 @@ class PipelineService:
                 sub_pipeline_id=sub_pipeline_id,
                 details={"attempt": attempt},
             )
-            validation = self.agents.validate_question_layout(question, layout)
+            validation = await asyncio.to_thread(self.agents.validate_question_layout, question, layout)
             last_validation = validation
             repository.record_agent_run(
                 self.db,
@@ -385,7 +390,7 @@ class PipelineService:
                 output_payload=validation.model_dump(),
                 feedback_text=validation.feedback,
                 error=None,
-                model_name=self.settings.gemini_text_model if not self.settings.use_stub_agents else "stub",
+                model_name=get_agent_settings().validate_question_layout.primary_model if not self.settings.use_stub_agents else "stub",
                 pipeline_id=pipeline_id,
                 sub_pipeline_id=sub_pipeline_id,
             )
@@ -500,7 +505,8 @@ class PipelineService:
             img_output_path = (
                 run_dir / "assets" / f"{asset.slug}.png" if run_dir is not None else None
             )
-            result = self.agents.generate_composite_image(
+            result = await asyncio.to_thread(
+                self.agents.generate_composite_image,
                 asset,
                 retry.image_max_retries,
                 catalog_context_filenames=catalog_context_filenames,
@@ -542,7 +548,7 @@ class PipelineService:
                 sub_pipeline_id=sub_pipeline_id,
                 details={"attempt": attempt, "asset_map_count": len(asset_map)},
             )
-            html = self.agents.generate_html(question, layout, asset_map, feedback)
+            html = await asyncio.to_thread(self.agents.generate_html, question, layout, asset_map, feedback)
             html.html_content = self.agents.post_process_html_asset_paths(
                 html.html_content,
                 layout,
@@ -563,7 +569,7 @@ class PipelineService:
                 output_payload=html.model_dump(),
                 feedback_text=feedback,
                 error=None,
-                model_name=self.settings.gemini_text_model if not self.settings.use_stub_agents else "stub",
+                model_name=get_agent_settings().generate_html.primary_model if not self.settings.use_stub_agents else "stub",
                 pipeline_id=pipeline_id,
                 sub_pipeline_id=sub_pipeline_id,
             )
@@ -576,7 +582,8 @@ class PipelineService:
                 details={"attempt": attempt, "html_length": len(html.html_content)},
             )
 
-            rendered_image_path = self.agents.render_html_to_image(
+            rendered_image_path = await asyncio.to_thread(
+                self.agents.render_html_to_image,
                 html.html_content,
                 asset_map=asset_map,
                 question_id=layout.question_id,
@@ -602,7 +609,7 @@ class PipelineService:
                 sub_pipeline_id=sub_pipeline_id,
                 details={"attempt": attempt},
             )
-            validation = self.agents.validate_html(html.html_content, rendered_image_path)
+            validation = await asyncio.to_thread(self.agents.validate_html, html.html_content, rendered_image_path)
             last_validation = validation
             repository.record_agent_run(
                 self.db,
@@ -614,7 +621,7 @@ class PipelineService:
                 output_payload=validation.model_dump(),
                 feedback_text=validation.feedback,
                 error=None,
-                model_name=self.settings.gemini_text_model if not self.settings.use_stub_agents else "stub",
+                model_name=get_agent_settings().validate_html.primary_model if not self.settings.use_stub_agents else "stub",
                 pipeline_id=pipeline_id,
                 sub_pipeline_id=sub_pipeline_id,
             )
@@ -626,6 +633,16 @@ class PipelineService:
                 sub_pipeline_id=sub_pipeline_id,
                 details={"attempt": attempt, "issues": validation.issues, "feedback": validation.feedback},
             )
+
+            # Publish real-time iteration event for frontend
+            publish_event(self._stream_key or "", "html_iteration", {
+                "attempt": attempt,
+                "max_attempts": retry.html_max_retries,
+                "rendered_image_path": rendered_image_path,
+                "status": validation.overall_status,
+                "feedback": validation.feedback if validation.overall_status != "pass" else None,
+                "issues": validation.issues if validation.overall_status != "pass" else [],
+            })
 
             if validation.overall_status == "pass":
                 self._log(
@@ -675,7 +692,8 @@ class PipelineService:
         )
         return last_html, last_validation_payload, retry.html_max_retries, asset_map, last_rendered_image_path
 
-    async def run_full_pipeline(self, yaml_filename: str, retry_config: RetryConfig | None) -> FullPipelineRunResponse:
+    async def run_full_pipeline(self, yaml_filename: str, retry_config: RetryConfig | None, stream_key: str | None = None) -> FullPipelineRunResponse:
+        self._stream_key = stream_key
         retry = merge_retry_config(retry_config, self.settings)
 
         pipeline = repository.create_pipeline(
@@ -686,6 +704,8 @@ class PipelineService:
 
         run_dir = create_full_run_dir(self.settings.runs_dir, yaml_filename)
         self._log_path = run_dir / "log.txt"
+        self.agents.log_path = self._log_path
+        self.agents.stream_key = self._stream_key
         write_manifest(
             run_dir,
             run_type="full",
@@ -896,8 +916,11 @@ class PipelineService:
             repository.finish_sub_pipeline(self.db, sub_h.id, status="failed", error=str(exc))
             repository.finish_pipeline(self.db, pipeline.id, status="failed", error=str(exc))
             raise
+        finally:
+            publish_done(self._stream_key or "")
 
-    async def run_sub_yaml_to_question(self, yaml_filename: str, retry_config: RetryConfig | None) -> YamlToQuestionRunResponse:
+    async def run_sub_yaml_to_question(self, yaml_filename: str, retry_config: RetryConfig | None, stream_key: str | None = None) -> YamlToQuestionRunResponse:
+        self._stream_key = stream_key
         retry = merge_retry_config(retry_config, self.settings)
         sub = repository.create_sub_pipeline(
             self.db,
@@ -910,6 +933,8 @@ class PipelineService:
 
         run_dir = create_sub_run_dir(self.settings.runs_dir, yaml_filename=yaml_filename)
         self._log_path = run_dir / "log.txt"
+        self.agents.log_path = self._log_path
+        self.agents.stream_key = self._stream_key
         write_manifest(
             run_dir,
             run_type="sub",
@@ -978,7 +1003,7 @@ class PipelineService:
             self._log(
                 mode="sub",
                 component="pipeline",
-                message=f"Sub-pipeline hata ile sonlandı: yaml_to_question ({exc})",
+                message=f"Sub-pipeline hata ile sonlandı: yaml_to_question ({exc.args[0] if exc.args else str(exc)})",
                 pipeline_id=None,
                 sub_pipeline_id=sub_id,
                 level="error",
@@ -986,12 +1011,16 @@ class PipelineService:
             update_manifest_status(run_dir, "failed")
             repository.finish_sub_pipeline(self.db, sub_id, status="failed", error=str(exc))
             raise
+        finally:
+            publish_done(self._stream_key or "")
 
     async def run_sub_question_to_layout(
         self,
         question: QuestionSpec,
         retry_config: RetryConfig | None,
+        stream_key: str | None = None,
     ) -> QuestionToLayoutRunResponse:
+        self._stream_key = stream_key
         retry = merge_retry_config(retry_config, self.settings)
         sub = repository.create_sub_pipeline(
             self.db,
@@ -1004,6 +1033,8 @@ class PipelineService:
 
         run_dir = create_sub_run_dir(self.settings.runs_dir, token=question.question_id)
         self._log_path = run_dir / "log.txt"
+        self.agents.log_path = self._log_path
+        self.agents.stream_key = self._stream_key
         write_manifest(
             run_dir,
             run_type="sub",
@@ -1056,7 +1087,7 @@ class PipelineService:
             self._log(
                 mode="sub",
                 component="pipeline",
-                message=f"Sub-pipeline hata ile sonlandı: question_to_layout ({exc})",
+                message=f"Sub-pipeline hata ile sonlandı: question_to_layout ({exc.args[0] if exc.args else str(exc)})",
                 pipeline_id=None,
                 sub_pipeline_id=sub_id,
                 level="error",
@@ -1064,13 +1095,17 @@ class PipelineService:
             update_manifest_status(run_dir, "failed")
             repository.finish_sub_pipeline(self.db, sub_id, status="failed", error=str(exc))
             raise
+        finally:
+            publish_done(self._stream_key or "")
 
     async def run_sub_layout_to_html(
         self,
         question: QuestionSpec,
         layout: LayoutPlan,
         retry_config: RetryConfig | None,
+        stream_key: str | None = None,
     ) -> LayoutToHtmlRunResponse:
+        self._stream_key = stream_key
         retry = merge_retry_config(retry_config, self.settings)
         sub = repository.create_sub_pipeline(
             self.db,
@@ -1083,6 +1118,8 @@ class PipelineService:
 
         run_dir = create_sub_run_dir(self.settings.runs_dir, token=question.question_id)
         self._log_path = run_dir / "log.txt"
+        self.agents.log_path = self._log_path
+        self.agents.stream_key = self._stream_key
         write_manifest(
             run_dir,
             run_type="sub",
@@ -1150,7 +1187,7 @@ class PipelineService:
             self._log(
                 mode="sub",
                 component="pipeline",
-                message=f"Sub-pipeline hata ile sonlandı: layout_to_html ({exc})",
+                message=f"Sub-pipeline hata ile sonlandı: layout_to_html ({exc.args[0] if exc.args else str(exc)})",
                 pipeline_id=None,
                 sub_pipeline_id=sub_id,
                 level="error",
@@ -1158,3 +1195,5 @@ class PipelineService:
             update_manifest_status(run_dir, "failed")
             repository.finish_sub_pipeline(self.db, sub_id, status="failed", error=str(exc))
             raise
+        finally:
+            publish_done(self._stream_key or "")

@@ -7,6 +7,10 @@ from pydantic import BaseModel, Field
 from app.schemas.domain import HtmlValidationResult, LayoutPlan, QuestionLayoutValidationResult, QuestionSpec, ValidationRule
 
 
+class CreateStreamKeyResponse(BaseModel):
+    stream_key: str
+
+
 class RetryConfig(BaseModel):
     question_max_retries: int | None = None
     layout_max_retries: int | None = None
@@ -18,6 +22,7 @@ class RetryConfig(BaseModel):
 class FullPipelineRunRequest(BaseModel):
     yaml_filename: str
     retry_config: RetryConfig | None = None
+    stream_key: str | None = None
 
 
 class RuntimeInfoResponse(BaseModel):
@@ -65,6 +70,7 @@ class FullPipelineRunResponse(BaseModel):
 class YamlToQuestionRunRequest(BaseModel):
     yaml_filename: str
     retry_config: RetryConfig | None = None
+    stream_key: str | None = None
 
 
 class YamlToQuestionRunResponse(BaseModel):
@@ -78,6 +84,7 @@ class YamlToQuestionRunResponse(BaseModel):
 class QuestionToLayoutRunRequest(BaseModel):
     question_json: QuestionSpec
     retry_config: RetryConfig | None = None
+    stream_key: str | None = None
 
 
 class QuestionToLayoutRunResponse(BaseModel):
@@ -92,6 +99,7 @@ class LayoutToHtmlRunRequest(BaseModel):
     question_json: QuestionSpec
     layout_plan_json: LayoutPlan
     retry_config: RetryConfig | None = None
+    stream_key: str | None = None
 
 
 class LayoutToHtmlRunResponse(BaseModel):
@@ -107,11 +115,13 @@ class LayoutToHtmlRunResponse(BaseModel):
 class StandaloneGenerateQuestionRequest(BaseModel):
     yaml_content: dict[str, Any]
     feedback: str | None = None
+    stream_key: str | None = None
 
 
 class StandaloneGenerateLayoutRequest(BaseModel):
     question_json: QuestionSpec
     feedback: str | None = None
+    stream_key: str | None = None
 
 
 class StandaloneGenerateHtmlRequest(BaseModel):
@@ -119,20 +129,24 @@ class StandaloneGenerateHtmlRequest(BaseModel):
     layout_plan_json: LayoutPlan
     feedback: str | None = None
     asset_map: dict[str, str] = Field(default_factory=dict)
+    stream_key: str | None = None
 
 
 class StandaloneExtractRulesRequest(BaseModel):
     yaml_content: dict[str, Any]
+    stream_key: str | None = None
 
 
 class StandaloneEvaluateRuleRequest(BaseModel):
     rule: ValidationRule
     question_json: QuestionSpec
+    stream_key: str | None = None
 
 
 class StandaloneQuestionLayoutValidationRequest(BaseModel):
     question_json: QuestionSpec
     layout_plan_json: LayoutPlan
+    stream_key: str | None = None
 
 
 class StandaloneLayoutHtmlValidationRequest(BaseModel):
@@ -140,10 +154,12 @@ class StandaloneLayoutHtmlValidationRequest(BaseModel):
     rendered_image_path: str | None = None
     asset_map: dict[str, str] = Field(default_factory=dict)
     layout_plan_json: LayoutPlan | None = None
+    stream_key: str | None = None
 
 
 class StandaloneGenerateCompositeImageRequest(BaseModel):
     asset: dict[str, Any]
+    stream_key: str | None = None
 
 
 class StandaloneAgentResponse(BaseModel):

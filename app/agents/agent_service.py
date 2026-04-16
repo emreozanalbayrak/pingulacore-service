@@ -16,7 +16,9 @@ from uuid import uuid4
 from pydantic_ai import Agent
 from pydantic_ai.exceptions import ModelHTTPError
 
+from app.agents.config import AgentConfig, AgentSettings, get_agent_settings
 from app.core.config import Settings, get_settings
+from app.services import log_stream_service
 from app.schemas.domain import (
     AssetSpec,
     AssetType,
@@ -45,46 +47,6 @@ PIXEL_PNG_BYTES = base64.b64decode(
     "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMB/axw0D0AAAAASUVORK5CYII="
 )
 
-QUESTION_AGENT_INSTRUCTIONS = (
-    "You generate only QuestionSpec from curriculum YAML. "
-    "Do not produce layout, coordinates, HTML, or render instructions. "
-    "Use scenario.scenes as a list. "
-    "Do not use a singular scene field."
-)
-
-RULE_EXTRACTOR_INSTRUCTIONS = (
-    "Extract atomically testable validation rules from the YAML input. "
-    "Prioritize only the most critical constraints for generation quality and correctness. "
-    "Merge overlapping or near-duplicate rules into a single concise rule when possible. "
-    "Return at most 12 rules."
-)
-RULE_EVALUATOR_INSTRUCTIONS = "Evaluate one rule against a QuestionSpec and return pass/partial/fail."
-LAYOUT_PLANNER_INSTRUCTIONS = (
-    "Generate a LayoutPlan from QuestionSpec. "
-    "QuestionSpec.scenario.scenes may include multiple scene items; each enabled scene should map to a background asset. "
-    "AI-generated assets are opaque and rectangular/square (not transparent), so place them carefully to avoid hiding critical objects. "
-    "Catalog assets are transparent and can be layered above AI assets. "
-    "Use binding layer and z_index so critical foreground objects remain visible. "
-    "Use catalog components from the provided catalog_files list. "
-    "For catalog_component assets, source_filename must be one of catalog_files and transparent_background should be true."
-)
-LAYOUT_VALIDATOR_INSTRUCTIONS = (
-    "Validate consistency between QuestionSpec and LayoutPlan. "
-    "Check multi-scene coverage and ensure opaque AI assets do not hide critical foreground elements."
-)
-HTML_GENERATOR_INSTRUCTIONS = (
-    "Generate question HTML from QuestionSpec, LayoutPlan, and asset map. "
-    "Use QuestionSpec.stem/options/solution semantics to keep educational intent clear in the final card. "
-    "Use src values from provided asset_map entries for catalog assets and do not invent unknown file paths."
-)
-HTML_VALIDATOR_INSTRUCTIONS = (
-    "You are a visual QA agent for educational question cards. "
-    "Evaluate the quality of the FINAL RENDERED QUESTION IMAGE together with the HTML source. "
-    "Primary criterion is visual quality and pedagogical usability, not strict layout-plan matching. "
-    "Check readability, spacing, alignment, overlap/occlusion, option clarity, visual hierarchy, and whether the question is understandable at first glance. "
-    "Return fail when quality is not acceptable for student-facing usage. "
-    "Issues must be concrete and feedback must be actionable editing guidance for the HTML."
-)
 IMAGE_COMPOSITE_SYSTEM_INSTRUCTIONS = (
     "Üreteceğin görsel, ek olarak verilen katalog görselleriyle birlikte katmanlı bir kompozisyonda kullanılacak. "
     "Bu yüzden görselini katalog ögeleriyle stil, perspektif, ışık, ölçek ve renk uyumu olacak şekilde üret. "
@@ -94,40 +56,50 @@ IMAGE_COMPOSITE_SYSTEM_INSTRUCTIONS = (
 
 
 class AgentService:
-    def __init__(self, settings: Settings | None = None):
+    def __init__(self, settings: Settings | None = None, agent_settings: AgentSettings | None = None):
         self.settings = settings or get_settings()
+        self.agent_settings = agent_settings or get_agent_settings()
+        self.log_path: Path | None = None
+        self.stream_key: str | None = None
+
+    def _emit(self, line: str) -> None:
+        """Print a line and mirror it to log_path / stream_key when set."""
+        print(line, flush=True)
+        if self.log_path is not None:
+            try:
+                with self.log_path.open("a", encoding="utf-8") as fh:
+                    fh.write(line + "\n")
+            except Exception:
+                pass
+        if self.stream_key:
+            log_stream_service.publish(self.stream_key, line)
 
     def _run_agent(
         self,
         *,
-        model_name: str,
+        config: AgentConfig,
         output_type: type[Any],
-        system_prompt: str,
         payload: Any,
         agent_name: str,
-        thinking_level: str = "medium",
     ) -> Any:
         payload_text = str(payload)
-        models = self._candidate_models(model_name)
-        attempts_per_model = 5
+        models = [config.primary_model]
+        if config.on_fail == "fallback" and config.fallback_model:
+            models.append(config.fallback_model)
+
         last_error: Exception | None = None
-        print(
-            f'{agent_name} agent, "{thinking_level}" düşünme seviyesiyle çalışmaya başladı.',
-            flush=True,
-        )
+        self._emit(f'{agent_name} agent, "{config.thinking_level}" düşünme seviyesiyle çalışmaya başladı.')
 
         for idx, candidate_model in enumerate(models):
             if idx > 0:
-                print(f"[agent] fallback model aktif: {candidate_model}", flush=True)
+                self._emit(f"[agent] fallback model aktif: {candidate_model}")
 
-            for attempt in range(1, attempts_per_model + 1):
-                #if candidate_model.startswith("google-gla:"):
-
+            for attempt in range(1, config.primary_max_retry + 1):
                 agent = Agent(
                     model=candidate_model,
-                    model_settings={"thinking": thinking_level},
+                    model_settings={"thinking": config.thinking_level},
                     output_type=output_type,
-                    system_prompt=system_prompt,
+                    system_prompt=config.instructions,
                     retries=1,
                 )
 
@@ -152,12 +124,11 @@ class AgentService:
                     last_error = exc
                     status_code = getattr(exc, "status_code", None)
                     retryable = self._is_retryable_model_error(exc, status_code)
-                    if retryable and attempt < attempts_per_model:
+                    if retryable and attempt < config.primary_max_retry:
                         sleep_sec = min(1.5 * attempt, 5.0)
-                        print(
-                            f"[agent] transient model error (model={candidate_model}, attempt={attempt}/{attempts_per_model}, "
-                            f"status={status_code}) -> retry in {sleep_sec:.1f}s: {exc}",
-                            flush=True,
+                        self._emit(
+                            f"[agent] transient model error (model={candidate_model}, attempt={attempt}/{config.primary_max_retry}, "
+                            f"status={status_code}) -> retry in {sleep_sec:.1f}s: {exc}"
                         )
                         time.sleep(sleep_sec)
                         continue
@@ -176,27 +147,6 @@ class AgentService:
         message = str(exc).lower()
         return "unavailable" in message or "timeout" in message or "rate limit" in message
 
-    def _candidate_models(self, primary_model: str) -> list[str]:
-        models = [primary_model]
-        # Prefer same-provider fallback between configured text/light models.
-        light_model = (self.settings.gemini_light_model or "").strip()
-        text_model = (self.settings.gemini_text_model or "").strip()
-        if light_model and light_model != primary_model:
-            models.append(light_model)
-        if text_model and text_model != primary_model:
-            models.append(text_model)
-
-        configured_fallback = (os.getenv("AI_TEXT_FALLBACK_MODEL") or "").strip()
-        if configured_fallback and configured_fallback != primary_model:
-            models.append(configured_fallback)
-
-        # Remove duplicates while preserving order.
-        deduped: list[str] = []
-        for item in models:
-            if item not in deduped:
-                deduped.append(item)
-        return deduped
-
     def generate_question(self, yaml_content: dict[str, Any], feedback: str | None = None) -> QuestionSpec:
         if self.settings.use_stub_agents:
             return self._stub_generate_question(yaml_content, feedback)
@@ -204,15 +154,13 @@ class AgentService:
         payload = {"yaml": yaml_content, "feedback": feedback or ""}
         try:
             return self._run_agent(
-                model_name=self.settings.gemini_text_model,
+                config=self.agent_settings.generate_question,
                 output_type=QuestionSpec,
-                system_prompt=QUESTION_AGENT_INSTRUCTIONS,
                 payload=payload,
                 agent_name="question_generator",
-                thinking_level="high",
             )
         except Exception as exc:  # pragma: no cover - live provider instability path
-            print(f"[agent] generate_question fallback to stub: {exc}", flush=True)
+            self._emit(f"[agent] generate_question fallback to stub: {exc}")
             return self._stub_generate_question(yaml_content, feedback)
 
     def extract_rules(self, yaml_content: dict[str, Any]) -> RuleExtractionResult:
@@ -221,15 +169,13 @@ class AgentService:
 
         try:
             return self._run_agent(
-                model_name=self.settings.gemini_light_model,
+                config=self.agent_settings.extract_rules,
                 output_type=RuleExtractionResult,
-                system_prompt=RULE_EXTRACTOR_INSTRUCTIONS,
                 payload={"yaml": yaml_content},
                 agent_name="rule_extractor",
-                thinking_level="medium",
             )
         except Exception as exc:  # pragma: no cover - live provider instability path
-            print(f"[agent] extract_rules fallback to stub: {exc}", flush=True)
+            self._emit(f"[agent] extract_rules fallback to stub: {exc}")
             return self._stub_extract_rules(yaml_content)
 
     def evaluate_rule(self, rule: ValidationRule, question: QuestionSpec) -> RuleEvaluation:
@@ -238,15 +184,13 @@ class AgentService:
 
         try:
             return self._run_agent(
-                model_name=self.settings.gemini_light_model,
+                config=self.agent_settings.evaluate_rule,
                 output_type=RuleEvaluation,
-                system_prompt=RULE_EVALUATOR_INSTRUCTIONS,
                 payload={"rule": rule.model_dump(), "question": question.model_dump()},
                 agent_name="rule_evaluator",
-                thinking_level="low",
             )
         except Exception as exc:  # pragma: no cover - live provider instability path
-            print(f"[agent] evaluate_rule fallback to stub: {exc}", flush=True)
+            self._emit(f"[agent] evaluate_rule fallback to stub: {exc}")
             return self._stub_evaluate_rule(rule, question)
 
     async def evaluate_rules_parallel(
@@ -288,15 +232,13 @@ class AgentService:
         }
         try:
             return self._run_agent(
-                model_name=self.settings.gemini_text_model,
+                config=self.agent_settings.generate_layout,
                 output_type=LayoutPlan,
-                system_prompt=LAYOUT_PLANNER_INSTRUCTIONS,
                 payload=payload,
                 agent_name="layout_generator",
-                thinking_level="high",
             )
         except Exception as exc:  # pragma: no cover - live provider instability path
-            print(f"[agent] generate_layout fallback to stub: {exc}", flush=True)
+            self._emit(f"[agent] generate_layout fallback to stub: {exc}")
             return self._stub_generate_layout(question, feedback)
 
     def validate_question_layout(self, question: QuestionSpec, layout: LayoutPlan) -> QuestionLayoutValidationResult:
@@ -306,15 +248,13 @@ class AgentService:
         payload = {"question": question.model_dump(), "layout": layout.model_dump()}
         try:
             return self._run_agent(
-                model_name=self.settings.gemini_text_model,
+                config=self.agent_settings.validate_question_layout,
                 output_type=QuestionLayoutValidationResult,
-                system_prompt=LAYOUT_VALIDATOR_INSTRUCTIONS,
                 payload=payload,
                 agent_name="question_layout_validator",
-                thinking_level="medium",
             )
         except Exception as exc:  # pragma: no cover - live provider instability path
-            print(f"[agent] validate_question_layout fallback to stub: {exc}", flush=True)
+            self._emit(f"[agent] validate_question_layout fallback to stub: {exc}")
             return self._stub_validate_question_layout(question, layout)
 
     def generate_html(
@@ -336,15 +276,13 @@ class AgentService:
         }
         try:
             return self._run_agent(
-                model_name=self.settings.anthropic_text_model if self.settings.anthropic_text_model else self.settings.gemini_text_model,
+                config=self.agent_settings.generate_html,
                 output_type=GeneratedHtml,
-                system_prompt=HTML_GENERATOR_INSTRUCTIONS,
                 payload=payload,
                 agent_name="html_generator",
-                thinking_level="high",
             )
         except Exception as exc:  # pragma: no cover - live provider instability path
-            print(f"[agent] generate_html fallback to stub: {exc}", flush=True)
+            self._emit(f"[agent] generate_html fallback to stub: {exc}")
             return self._stub_generate_html(question, layout, asset_map, feedback)
 
     def render_html_to_image(
@@ -399,15 +337,13 @@ class AgentService:
         }
         try:
             return self._run_agent(
-                model_name=self.settings.gemini_text_model,
+                config=self.agent_settings.validate_html,
                 output_type=HtmlValidationResult,
-                system_prompt=HTML_VALIDATOR_INSTRUCTIONS,
                 payload=payload,
                 agent_name="html_validator",
-                thinking_level="high",
             )
         except Exception as exc:  # pragma: no cover - live provider instability path
-            print(f"[agent] validate_html fallback to stub: {exc}", flush=True)
+            self._emit(f"[agent] validate_html fallback to stub: {exc}")
             return self._stub_validate_html(html_content, rendered_image_path)
 
     def generate_composite_image(
@@ -435,10 +371,12 @@ class AgentService:
             f"Generate PNG for asset={asset.slug}. "
             f"description={asset.description}. "
             f"prompt={asset.prompt}. "
-            "This image will be layered with provided catalog PNG assets in the final composition."
         )
-        context_parts, used_catalog_files = self._build_catalog_context_parts(catalog_context_filenames or [])
-        request_parts: list[Any] = [prompt, *context_parts]
+        #context_parts, used_catalog_files = self._build_catalog_context_parts(catalog_context_filenames or [])
+        #request_parts: list[Any] = [prompt, *context_parts]
+        # TODO: take care of manual override
+        request_parts: list[Any] = [prompt]
+
         image_models = self._candidate_image_models(self.settings.gemini_image_model)
         last_error: str | None = None
 
@@ -455,10 +393,7 @@ class AgentService:
                 except Exception as exc:  # pragma: no cover - live provider instability path
                     last_error = str(exc)
                     sleep_sec = min(1.0 * attempt, 4.0)
-                    print(
-                        f"[image-agent] model error (model={image_model}, attempt={attempt}) -> {exc}",
-                        flush=True,
-                    )
+                    self._emit(f"[image-agent] model error (model={image_model}, attempt={attempt}) -> {exc}")
                     time.sleep(sleep_sec)
                     continue
 

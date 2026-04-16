@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
+from app.agents.config import get_agent_settings
 from app.core.config import get_settings
 from app.db import repository
 from app.db.database import get_db
@@ -46,7 +47,7 @@ def _dt(value: Any) -> str | None:
 @router.post("/pipelines/full/run", response_model=FullPipelineRunResponse)
 async def run_full_pipeline(req: FullPipelineRunRequest, db: Session = Depends(get_db)) -> FullPipelineRunResponse:
     service = PipelineService(db)
-    return await service.run_full_pipeline(req.yaml_filename, req.retry_config)
+    return await service.run_full_pipeline(req.yaml_filename, req.retry_config, stream_key=req.stream_key)
 
 
 @router.get("/runtime-info", response_model=RuntimeInfoResponse)
@@ -54,10 +55,11 @@ def get_runtime_info() -> RuntimeInfoResponse:
     import os
 
     settings = get_settings()
+    agent_cfg = get_agent_settings()
     return RuntimeInfoResponse(
         use_stub_agents=settings.use_stub_agents,
-        text_model=settings.gemini_text_model,
-        light_model=settings.gemini_light_model,
+        text_model=agent_cfg.generate_question.primary_model,
+        light_model=agent_cfg.extract_rules.primary_model,
         image_model=settings.gemini_image_model,
         has_google_api_key=bool(os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")),
         has_anthropic_api_key=bool(os.getenv("ANTHROPIC_API_KEY")),
@@ -179,19 +181,19 @@ def get_generated_asset(filename: str) -> FileResponse:
 @router.post("/pipelines/sub/yaml-to-question/run", response_model=YamlToQuestionRunResponse)
 async def run_sub_yaml_to_question(req: YamlToQuestionRunRequest, db: Session = Depends(get_db)) -> YamlToQuestionRunResponse:
     service = PipelineService(db)
-    return await service.run_sub_yaml_to_question(req.yaml_filename, req.retry_config)
+    return await service.run_sub_yaml_to_question(req.yaml_filename, req.retry_config, stream_key=req.stream_key)
 
 
 @router.post("/pipelines/sub/question-to-layout/run", response_model=QuestionToLayoutRunResponse)
 async def run_sub_question_to_layout(req: QuestionToLayoutRunRequest, db: Session = Depends(get_db)) -> QuestionToLayoutRunResponse:
     service = PipelineService(db)
-    return await service.run_sub_question_to_layout(req.question_json, req.retry_config)
+    return await service.run_sub_question_to_layout(req.question_json, req.retry_config, stream_key=req.stream_key)
 
 
 @router.post("/pipelines/sub/layout-to-html/run", response_model=LayoutToHtmlRunResponse)
 async def run_sub_layout_to_html(req: LayoutToHtmlRunRequest, db: Session = Depends(get_db)) -> LayoutToHtmlRunResponse:
     service = PipelineService(db)
-    return await service.run_sub_layout_to_html(req.question_json, req.layout_plan_json, req.retry_config)
+    return await service.run_sub_layout_to_html(req.question_json, req.layout_plan_json, req.retry_config, stream_key=req.stream_key)
 
 
 @router.get("/pipelines/{pipeline_id}", response_model=PipelineGetResponse)

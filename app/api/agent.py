@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.agents.agent_service import AgentService
+from app.agents.config import get_agent_settings
 from app.core.config import get_settings
 from app.db import repository
 from app.db.database import get_db
@@ -23,6 +24,7 @@ from app.schemas.api import (
     StandaloneQuestionLayoutValidationRequest,
 )
 from app.schemas.domain import AssetSpec
+from app.services.log_stream_service import publish_done
 from app.services.pipeline_log_service import write_pipeline_log
 from app.services.run_dir_service import create_standalone_run_dir, write_manifest
 
@@ -43,6 +45,7 @@ def _log_standalone(
     level: str = "info",
     details: Any | None = None,
     log_path: Path | None = None,
+    stream_key: str | None = None,
 ) -> None:
     write_pipeline_log(
         db,
@@ -54,6 +57,7 @@ def _log_standalone(
         level=level,
         details=details,
         log_path=log_path,
+        stream_key=stream_key,
     )
 
 
@@ -65,7 +69,8 @@ def standalone_generate_question(
     settings = get_settings()
     agents = AgentService(settings)
     component = "standalone.main_generate_question"
-    _log_standalone(db, component=component, message="Run başlatıldı.")
+    stream_key = req.stream_key
+    _log_standalone(db, component=component, message="Run başlatıldı.", stream_key=stream_key)
     try:
         result = agents.generate_question(req.yaml_content, req.feedback)
         run_id = repository.record_agent_run(
@@ -78,7 +83,7 @@ def standalone_generate_question(
             output_payload=result.model_dump(),
             feedback_text=req.feedback,
             error=None,
-            model_name=settings.gemini_text_model if not settings.use_stub_agents else "stub",
+            model_name=get_agent_settings().generate_question.primary_model if not settings.use_stub_agents else "stub",
             pipeline_id=None,
             sub_pipeline_id=None,
         )
@@ -87,11 +92,14 @@ def standalone_generate_question(
             component=component,
             message=f"Run tamamlandı: success (run_id={run_id})",
             details={"run_id": run_id},
+            stream_key=stream_key,
         )
         return StandaloneAgentResponse(run_id=run_id, result=result)
     except Exception as exc:
-        _log_standalone(db, component=component, message=f"Run hata ile sonlandı: {exc}", level="error")
+        _log_standalone(db, component=component, message=f"Run hata ile sonlandı: {exc}", level="error", stream_key=stream_key)
         raise
+    finally:
+        publish_done(stream_key or "")
 
 
 @router.post("/agents/main/generate-layout/run", response_model=StandaloneAgentResponse)
@@ -99,7 +107,8 @@ def standalone_generate_layout(req: StandaloneGenerateLayoutRequest, db: Session
     settings = get_settings()
     agents = AgentService(settings)
     component = "standalone.main_generate_layout"
-    _log_standalone(db, component=component, message="Run başlatıldı.")
+    stream_key = req.stream_key
+    _log_standalone(db, component=component, message="Run başlatıldı.", stream_key=stream_key)
     try:
         result = agents.generate_layout(req.question_json, req.feedback)
         run_id = repository.record_agent_run(
@@ -112,7 +121,7 @@ def standalone_generate_layout(req: StandaloneGenerateLayoutRequest, db: Session
             output_payload=result.model_dump(),
             feedback_text=req.feedback,
             error=None,
-            model_name=settings.gemini_text_model if not settings.use_stub_agents else "stub",
+            model_name=get_agent_settings().generate_layout.primary_model if not settings.use_stub_agents else "stub",
             pipeline_id=None,
             sub_pipeline_id=None,
         )
@@ -121,11 +130,14 @@ def standalone_generate_layout(req: StandaloneGenerateLayoutRequest, db: Session
             component=component,
             message=f"Run tamamlandı: success (run_id={run_id})",
             details={"run_id": run_id},
+            stream_key=stream_key,
         )
         return StandaloneAgentResponse(run_id=run_id, result=result)
     except Exception as exc:
-        _log_standalone(db, component=component, message=f"Run hata ile sonlandı: {exc}", level="error")
+        _log_standalone(db, component=component, message=f"Run hata ile sonlandı: {exc}", level="error", stream_key=stream_key)
         raise
+    finally:
+        publish_done(stream_key or "")
 
 
 @router.post("/agents/main/generate-html/run", response_model=StandaloneAgentResponse)
@@ -133,7 +145,8 @@ def standalone_generate_html(req: StandaloneGenerateHtmlRequest, db: Session = D
     settings = get_settings()
     agents = AgentService(settings)
     component = "standalone.main_generate_html"
-    _log_standalone(db, component=component, message="Run başlatıldı.")
+    stream_key = req.stream_key
+    _log_standalone(db, component=component, message="Run başlatıldı.", stream_key=stream_key)
     try:
         result = agents.generate_html(req.question_json, req.layout_plan_json, req.asset_map, req.feedback)
         result.html_content = agents.post_process_html_asset_paths(
@@ -151,7 +164,7 @@ def standalone_generate_html(req: StandaloneGenerateHtmlRequest, db: Session = D
             output_payload=result.model_dump(),
             feedback_text=req.feedback,
             error=None,
-            model_name=settings.gemini_text_model if not settings.use_stub_agents else "stub",
+            model_name=get_agent_settings().generate_html.primary_model if not settings.use_stub_agents else "stub",
             pipeline_id=None,
             sub_pipeline_id=None,
         )
@@ -160,11 +173,14 @@ def standalone_generate_html(req: StandaloneGenerateHtmlRequest, db: Session = D
             component=component,
             message=f"Run tamamlandı: success (run_id={run_id})",
             details={"run_id": run_id},
+            stream_key=stream_key,
         )
         return StandaloneAgentResponse(run_id=run_id, result=result)
     except Exception as exc:
-        _log_standalone(db, component=component, message=f"Run hata ile sonlandı: {exc}", level="error")
+        _log_standalone(db, component=component, message=f"Run hata ile sonlandı: {exc}", level="error", stream_key=stream_key)
         raise
+    finally:
+        publish_done(stream_key or "")
 
 
 @router.post("/agents/validation/extract-rules/run", response_model=StandaloneAgentResponse)
@@ -172,7 +188,8 @@ def standalone_extract_rules(req: StandaloneExtractRulesRequest, db: Session = D
     settings = get_settings()
     agents = AgentService(settings)
     component = "standalone.validation_extract_rules"
-    _log_standalone(db, component=component, message="Run başlatıldı.")
+    stream_key = req.stream_key
+    _log_standalone(db, component=component, message="Run başlatıldı.", stream_key=stream_key)
     try:
         result = agents.extract_rules(req.yaml_content)
         run_id = repository.record_agent_run(
@@ -185,7 +202,7 @@ def standalone_extract_rules(req: StandaloneExtractRulesRequest, db: Session = D
             output_payload=result.model_dump(),
             feedback_text=None,
             error=None,
-            model_name=settings.gemini_light_model if not settings.use_stub_agents else "stub",
+            model_name=get_agent_settings().extract_rules.primary_model if not settings.use_stub_agents else "stub",
             pipeline_id=None,
             sub_pipeline_id=None,
         )
@@ -194,11 +211,14 @@ def standalone_extract_rules(req: StandaloneExtractRulesRequest, db: Session = D
             component=component,
             message=f"Run tamamlandı: success (run_id={run_id})",
             details={"run_id": run_id},
+            stream_key=stream_key,
         )
         return StandaloneAgentResponse(run_id=run_id, result=result)
     except Exception as exc:
-        _log_standalone(db, component=component, message=f"Run hata ile sonlandı: {exc}", level="error")
+        _log_standalone(db, component=component, message=f"Run hata ile sonlandı: {exc}", level="error", stream_key=stream_key)
         raise
+    finally:
+        publish_done(stream_key or "")
 
 
 @router.post("/agents/validation/evaluate-rule/run", response_model=StandaloneAgentResponse)
@@ -206,7 +226,8 @@ def standalone_evaluate_rule(req: StandaloneEvaluateRuleRequest, db: Session = D
     settings = get_settings()
     agents = AgentService(settings)
     component = "standalone.validation_evaluate_rule"
-    _log_standalone(db, component=component, message="Run başlatıldı.")
+    stream_key = req.stream_key
+    _log_standalone(db, component=component, message="Run başlatıldı.", stream_key=stream_key)
     try:
         result = agents.evaluate_rule(req.rule, req.question_json)
         run_status = "success" if result.status != "fail" else "failed"
@@ -220,7 +241,7 @@ def standalone_evaluate_rule(req: StandaloneEvaluateRuleRequest, db: Session = D
             output_payload=result.model_dump(),
             feedback_text=result.rationale,
             error=None,
-            model_name=settings.gemini_light_model if not settings.use_stub_agents else "stub",
+            model_name=get_agent_settings().evaluate_rule.primary_model if not settings.use_stub_agents else "stub",
             pipeline_id=None,
             sub_pipeline_id=None,
         )
@@ -230,11 +251,14 @@ def standalone_evaluate_rule(req: StandaloneEvaluateRuleRequest, db: Session = D
             message=f"Run tamamlandı: {run_status} (run_id={run_id})",
             level="warning" if run_status == "failed" else "info",
             details={"run_id": run_id},
+            stream_key=stream_key,
         )
         return StandaloneAgentResponse(run_id=run_id, result=result)
     except Exception as exc:
-        _log_standalone(db, component=component, message=f"Run hata ile sonlandı: {exc}", level="error")
+        _log_standalone(db, component=component, message=f"Run hata ile sonlandı: {exc}", level="error", stream_key=stream_key)
         raise
+    finally:
+        publish_done(stream_key or "")
 
 
 @router.post("/agents/validation/validate-question-layout/run", response_model=StandaloneAgentResponse)
@@ -245,7 +269,8 @@ def standalone_validate_question_layout(
     settings = get_settings()
     agents = AgentService(settings)
     component = "standalone.validation_question_layout"
-    _log_standalone(db, component=component, message="Run başlatıldı.")
+    stream_key = req.stream_key
+    _log_standalone(db, component=component, message="Run başlatıldı.", stream_key=stream_key)
     try:
         result = agents.validate_question_layout(req.question_json, req.layout_plan_json)
         run_status = "success" if result.overall_status == "pass" else "failed"
@@ -259,7 +284,7 @@ def standalone_validate_question_layout(
             output_payload=result.model_dump(),
             feedback_text=result.feedback,
             error=None,
-            model_name=settings.gemini_text_model if not settings.use_stub_agents else "stub",
+            model_name=get_agent_settings().validate_question_layout.primary_model if not settings.use_stub_agents else "stub",
             pipeline_id=None,
             sub_pipeline_id=None,
         )
@@ -269,11 +294,14 @@ def standalone_validate_question_layout(
             message=f"Run tamamlandı: {run_status} (run_id={run_id})",
             level="warning" if run_status == "failed" else "info",
             details={"run_id": run_id},
+            stream_key=stream_key,
         )
         return StandaloneAgentResponse(run_id=run_id, result=result)
     except Exception as exc:
-        _log_standalone(db, component=component, message=f"Run hata ile sonlandı: {exc}", level="error")
+        _log_standalone(db, component=component, message=f"Run hata ile sonlandı: {exc}", level="error", stream_key=stream_key)
         raise
+    finally:
+        publish_done(stream_key or "")
 
 
 @router.post("/agents/validation/validate-layout-html/run", response_model=StandaloneAgentResponse)
@@ -284,7 +312,8 @@ def standalone_validate_layout_html(
     settings = get_settings()
     agents = AgentService(settings)
     component = "standalone.validation_layout_html"
-    _log_standalone(db, component=component, message="Run başlatıldı.")
+    stream_key = req.stream_key
+    _log_standalone(db, component=component, message="Run başlatıldı.", stream_key=stream_key)
     try:
         asset_map = dict(req.asset_map)
         if req.layout_plan_json is not None:
@@ -318,7 +347,7 @@ def standalone_validate_layout_html(
             output_payload=result.model_dump(),
             feedback_text=result.feedback,
             error=None,
-            model_name=settings.gemini_text_model if not settings.use_stub_agents else "stub",
+            model_name=get_agent_settings().validate_html.primary_model if not settings.use_stub_agents else "stub",
             pipeline_id=None,
             sub_pipeline_id=None,
         )
@@ -328,11 +357,14 @@ def standalone_validate_layout_html(
             message=f"Run tamamlandı: {run_status} (run_id={run_id})",
             level="warning" if run_status == "failed" else "info",
             details={"run_id": run_id},
+            stream_key=stream_key,
         )
         return StandaloneAgentResponse(run_id=run_id, result=result)
     except Exception as exc:
-        _log_standalone(db, component=component, message=f"Run hata ile sonlandı: {exc}", level="error")
+        _log_standalone(db, component=component, message=f"Run hata ile sonlandı: {exc}", level="error", stream_key=stream_key)
         raise
+    finally:
+        publish_done(stream_key or "")
 
 
 @router.post("/agents/helper/generate-composite-image/run", response_model=StandaloneAgentResponse)
@@ -344,11 +376,12 @@ def standalone_generate_composite_image(
     agents = AgentService(settings)
     component = "standalone.helper_generate_composite_image"
     log_path: Path | None = None
+    stream_key = req.stream_key
     try:
         asset = AssetSpec(**req.asset)
         run_dir = create_standalone_run_dir(settings.runs_dir, agent_name="generate_composite_image")
         log_path = run_dir / "log.txt"
-        _log_standalone(db, component=component, message="Run başlatıldı.", log_path=log_path)
+        _log_standalone(db, component=component, message="Run başlatıldı.", log_path=log_path, stream_key=stream_key)
         write_manifest(
             run_dir,
             run_type="standalone",
@@ -384,11 +417,14 @@ def standalone_generate_composite_image(
             message=f"Run tamamlandı: success (run_id={run_id})",
             details={"run_id": run_id},
             log_path=log_path,
+            stream_key=stream_key,
         )
         return StandaloneAgentResponse(run_id=run_id, result=result_dict)
     except Exception as exc:
-        _log_standalone(db, component=component, message=f"Run hata ile sonlandı: {exc}", level="error", log_path=log_path)
+        _log_standalone(db, component=component, message=f"Run hata ile sonlandı: {exc}", level="error", log_path=log_path, stream_key=stream_key)
         raise
+    finally:
+        publish_done(stream_key or "")
 
 
 @router.get("/agent-runs/{agent_name}/{run_id}", response_model=AgentRunGetResponse)

@@ -7,6 +7,7 @@ from typing import Any
 from sqlalchemy.orm import Session
 
 from app.db import repository
+from app.services import log_stream_service
 
 
 def write_pipeline_log(
@@ -20,6 +21,7 @@ def write_pipeline_log(
     level: str = "info",
     details: Any | None = None,
     log_path: Path | None = None,
+    stream_key: str | None = None,
 ) -> int:
     ts = datetime.now(timezone.utc).isoformat()
     line = f"{ts} [{level.upper()}] [{component}] {message}"
@@ -30,6 +32,8 @@ def write_pipeline_log(
                 fh.write(line + "\n")
         except Exception:
             pass
+    if stream_key:
+        log_stream_service.publish(stream_key, line)
     return repository.record_pipeline_log(
         db,
         mode=mode,
