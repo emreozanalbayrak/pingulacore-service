@@ -1,0 +1,239 @@
+# Kalan Paralari Sirala — 2. Sinif
+
+meta:
+  id: "kalan_paralari_sirala"
+  ad: "Kalan Paralari Sirala"
+  sinif_seviyesi: 2
+  aciklama: >
+    Uc kisinin elindeki madeni para gruplari ve almak istedikleri
+    tek urunlerin fiyatlari gorsel uzerinden verilir. Ogrenci,
+    herkesin elinde ne kadar para kalacagini zihinden bulur ve
+    kalan para miktarlarini istenen yone gore siralar.
+  kaynak: "kalan_paralari_sirala.yaml"
+  frequency: "Medium"
+  difficulty: "orta"
+  varyant_sayisi: 3
+  varyant_kodlari: ["1", "2", "3"]
+
+varyantlar:
+  - kod: "1"
+    ad: "Ayni baslangic para, farkli urun fiyatlari"
+    aciklama: >
+      Uc kisinin baslangictaki para miktari aynidir. Ancak herkesin
+      aldigi urunun fiyati farklidir. Ogrenci, ayni para ile baslayip
+      farkli miktarda harcayan kisilerin kalan paralarini karsilastirir.
+    fark_olusturan_mantik: >
+      Baslangic para sabit oldugu icin ogrenci esas olarak urun
+      fiyatlarindaki farki okuyarak kalan miktarlari siralar.
+    soru_kokleri:
+      - "<b>Buna gore, kisilerin elinde kalan para miktarlari kucukten buyuge nasil siralanir?</b>"
+      - "<b>Buna gore, kisilerin elinde kalan paralar buyukten kucuge nasil siralanir?</b>"
+      - "<b>Buna gore, alisveristen sonra en az parasi kalan kisiden en cok parasi kalan kisiye dogru siralama nasildir?</b>"
+      - "<b>Buna gore, alisveristen sonra en cok parasi kalan kisiden en az parasi kalan kisiye dogru siralama nasildir?</b>"
+    gorsel_farki:
+      - "Uc kisinin baslangic para grubu ayni olmali"
+      - "Uc kisinin urun fiyati birbirinden farkli olmali"
+      - "Uc kisinin kalan miktari birbirinden farkli olmali"
+
+  - kod: "2"
+    ad: "Farkli baslangic para, ayni urun fiyati"
+    aciklama: >
+      Uc kisinin baslangictaki para miktari farklidir. Ancak herkes
+      ayni fiyattaki urunu alir. Ogrenci, ayni urun fiyatina karsi
+      farkli para gruplarini karsilastirarak kalan miktarlari siralar.
+    fark_olusturan_mantik: >
+      Urun fiyati sabit oldugu icin ogrenci esas olarak baslangictaki
+      para miktarlarindaki farki okuyarak kalan paralari siralar.
+    soru_kokleri:
+      - "<b>Buna gore, kisilerin elinde kalan para miktarlari kucukten buyuge nasil siralanir?</b>"
+      - "<b>Buna gore, kisilerin elinde kalan paralar buyukten kucuge nasil siralanir?</b>"
+      - "<b>Buna gore, alisveristen sonra en az parasi kalan kisiden en cok parasi kalan kisiye dogru siralama nasildir?</b>"
+      - "<b>Buna gore, alisveristen sonra en cok parasi kalan kisiden en az parasi kalan kisiye dogru siralama nasildir?</b>"
+    gorsel_farki:
+      - "Uc kisinin baslangic para grubu birbirinden farkli olmali"
+      - "Uc kisinin urun fiyati ayni olmali"
+      - "Uc kisinin kalan miktari birbirinden farkli olmali"
+
+  - kod: "3"
+    ad: "Farkli baslangic para, farkli urun fiyati"
+    aciklama: >
+      Uc kisinin baslangictaki para miktari da aldigi urunun fiyati da
+      farklidir. Ogrenci, her kisi icin ayri ayri dusunerek kalan para
+      miktarlarini bulur ve istenen yone gore siralar.
+    fark_olusturan_mantik: >
+      Bu varyantta hem para miktari hem urun fiyati degistigi icin
+      ogrenci tek bir gorsel ozellige degil, her kisi icin iki veriyi
+      birlikte okuyarak karar verir.
+    soru_kokleri:
+      - "<b>Buna gore, kisilerin elinde kalan para miktarlari kucukten buyuge nasil siralanir?</b>"
+      - "<b>Buna gore, kisilerin elinde kalan para miktarlari buyukten kucuge nasil siralanir?</b>"
+      - "<b>Buna gore, alisveristen sonra kalan para miktarlarinin siralanisi nasildir?</b>"
+      - "<b>Buna gore, kalan paralar en azdan en coga nasil siralanir?</b>"
+    gorsel_farki:
+      - "Uc kisinin baslangic para grubu birbirinden farkli olmali"
+      - "Uc kisinin urun fiyati birbirinden farkli olmali"
+      - "Uc kisinin kalan miktari birbirinden farkli olmali"
+
+context:
+  type: "kalan_paralari_sirala"
+  question_count: 1
+  generation:
+    word_count_min: 45
+    word_count_max: 90
+    image_type: "ortak_gorsel"
+    structure:
+      - "Bir okul, kermes, kantin, park bufesi, sinif etkinligi ya da benzeri bir baglamda gecen 5-6 cumlelik dogal bir senaryo yaz"
+      - "Senaryoda tam olarak 3 kisi yer almali"
+      - "Her kisi gorselde kendi para grubuyla ve almak istedigi tek urunle birlikte gosterilmeli"
+      - "KRITIK: Metinde gercek para degerleri, urun fiyatlari, kalan miktarlar ve dogru cevap YAZILMAMALI"
+      - "Sayisal bilgi yalnizca gorselde bulunmali"
+      - "Gorselde her kisi icin baslangic para grubu ve urun fiyat etiketi acik bicimde yer almali"
+      - "Kalan para gorselde ayrica gosterilmemeli"
+      - "Gorsel, senaryo ile soru koku arasinda yer almali"
+      - "Gorsel cozumun ana tasiyicisi olmali; metin yalnizca sahneyi kurmali"
+    kurallar:
+      - "2. sinif seviyesinde olmali"
+      - "Yalnizca madeni paralar kullanilmali"
+      - "Kullanilacak temel degerler 25 kurus, 50 kurus ve 1 TL ile sinirli olmali"
+      - "Her kisi yalnizca tek bir urun almali"
+      - "Baslangic para, urun fiyati icin yeterli olmali"
+      - "Uc kisinin kalan para miktarlari birbirinden farkli olmali"
+      - "Soru, tek ana beceri olarak kalan miktarlari karsilastirma ve siralama odaginda kalmali"
+      - "Turkce karakterler dogru kullanilmali"
+      - "Gorseller uzerinde Turkce disinda yazi bulunmamali"
+      - "Varyant 1'de baslangic para ayni, urun fiyatlari farkli olmali"
+      - "Varyant 2'de baslangic para farkli, urun fiyati ayni olmali"
+      - "Varyant 3'te baslangic para da urun fiyati da farkli olmali"
+  questions:
+    - slot: 1
+      type: "kalan_para_siralama"
+      soru_kokleri:
+        - "<b>Buna gore, kisilerin elinde kalan para miktarlari kucukten buyuge nasil siralanir?</b>"
+        - "<b>Buna gore, kisilerin elinde kalan paralar en azdan en coga nasil siralanir?</b>"
+        - "<b>Buna gore, kisilerin elinde kalan para miktarlari buyukten kucuge nasil siralanir?</b>"
+        - "<b>Buna gore, kisilerin elinde kalan paralar en coktan en aza nasil siralanir?</b>"
+      beceri:
+        katman: "KB2"
+        bilesenler:
+          - "gorsel_okuma"
+          - "karsilastirma"
+          - "siralama"
+        surec_bileseni: "bilgiyi_cikartma"
+
+format:
+  type: "llm_generated_html"
+  soru_koku: "Kisa, tek cumlelik soru koku. Kisilerin elinde kalan para miktarlarini siralamayi isteyen yapida."
+  paragraph:
+    required: true
+    word_count_min: 45
+    word_count_max: 90
+    sentence_count_min: 5
+    sentence_count_max: 6
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    style: "name_order_only"
+    word_count_min: 3
+    word_count_max: 6
+    correct_count: 1
+
+dogru_cevap:
+  tanim: "Her kisi icin kalan para miktarini dogru dusunup isimleri istenen yone gore dogru siralayan secenek"
+  kurallar:
+    - "KRITIK: Dogru cevap, baslangic para gruplari ile urun fiyatlarini karsilastirip kalan miktarlari bulmaya dayanmalidir"
+    - "Dogru cevap yalnizca kisi isimlerinin siralanisindan olusmalidir"
+    - "Dogru cevap hem gorseldeki para gruplari hem de urun fiyat etiketleri ile tutarli olmali"
+    - "Uc kisi icin kalan miktarlar birbirinden farkli olmali"
+    - "Kucukten buyuge soruluyorsa artan siralama, buyukten kucuge soruluyorsa azalan siralama verilmelidir"
+    - "Dogru cevap tek ve net olmali"
+    - "Ogrenci yalniz metni okuyarak degil, gorseldeki para ve fiyat iliskisini inceleyerek sonuca ulasmali"
+
+distractors:
+  kurallar:
+    - "Yanlis secenekler ogrencinin yayginca yaptigi hatalardan birine dayanmali"
+    - "Baslangic parayi siralama: ogrenci kalan miktari dusunmeden eldeki ilk para grubuna gore karar verir"
+    - "Yalniz urun fiyatina bakma: ogrenci urun fiyatlarini karsilastirir ama baslangic parayi dikkate almaz"
+    - "Bir kisi icin kalan miktari yanlis dusunme: basit zihinsel cikarma hatasi yapar"
+    - "Siralama yonunu ters okuma: kucukten buyuge yerine buyukten kucuge siralar ya da tersi"
+    - "Benzer iki kisiyi yer degistirme: iki yakin kalan miktar arasinda hata yapar"
+  yasaklar:
+    - "Bariz sacma veya baglamsiz isim siralari uretilmemeli"
+    - "Iki yanlis secenek ayni hata turunden olmamali"
+    - "Dogru cevabi kolay ele veren celdirici kullanilmamali"
+    - "Gorselde yer almayan kisi isimleri seceneklere yazilmamali"
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+      - "Gorselde tam olarak 3 kisi bulunmali"
+      - "Her kisi icin bir para grubu ve bir urun birlikte gosterilmeli"
+      - "Her urunun yaninda acik bir fiyat etiketi bulunmali"
+      - "Para gruplari 25 kurus, 50 kurus ve 1 TL duzeyinde acik secilmelidir"
+      - "Kalan para gorselde ayrica verilmemeli"
+      - "Uc kisinin bolumu tek bakista ayirt edilebilir olmali"
+      - "Gorsel sade, cocuk dostu ve 2. sinif duzeyine uygun olmali"
+      - "Gorsel soru cozumunde zorunlu veri tasiyicisi olmali"
+      - "Varyant 1'de baslangic para gorselleri ayni, fiyat etiketleri farkli olmali"
+      - "Varyant 2'de baslangic para gorselleri farkli, fiyat etiketleri ayni olmali"
+      - "Varyant 3'te baslangic para gorselleri de fiyat etiketleri de farkli olmali"
+    yasaklar:
+      - "4 veya daha fazla kisi gosterilmemeli"
+      - "Bir kisiye birden fazla urun verilmemeli"
+      - "Kagit para kullanilmamali"
+      - "Kalan para icin ayri kutu, ayri etiket veya ayri gorsel eklenmemeli"
+      - "Asiri karmasik veya dikkat dagitici gorsel ogeler kullanilmamali"
+      - "Gorselin ustunde gereksiz baslik bulunmamali"
+    stil: "uc_kisilik_para_ve_urun_gorseli"
+    boyut: "orta"
+  sik_gorseli:
+    gerekli: false
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: "Paralari degerlerine gore iliskilendirerek cozumleyebilme"
+  tema_siniri: "Yalnizca para degeri okuma, basit alisveris baglami, kalan miktari dusunme ve siralama odagi korunmali"
+  izinli_icerik:
+    kavramlar:
+      - "kurus"
+      - "Turk lirasi"
+      - "madeni para"
+      - "deger"
+      - "kalan para"
+      - "urun fiyati"
+    beceriler:
+      - "Para degeri okuma"
+      - "Basit alisveris baglamini yorumlama"
+      - "Kalan miktari zihinden bulma"
+      - "Karsilastirma"
+      - "Siralama"
+  yasaklar:
+    - "Kagit para - madeni para donusumu"
+    - "Bir degeri farkli para kombinasyonlariyla sistematik yeniden yazma"
+    - "Cok adimli alisveris problemi"
+    - "Birden fazla urun alma"
+    - "Uzun kasa veya para ustu problemi"
+    - "Ust sinif para donusum mantigi"
+
+izinli_icerikler:
+  kavramlar:
+    - "madeni para"
+    - "kurus"
+    - "Turk lirasi"
+    - "deger"
+    - "urun"
+    - "fiyat etiketi"
+    - "kalan miktar"
+    - "siralama"
+    - "varyant"
+  beceriler:
+    - "gorsel_okuma"
+    - "karsilastirma"
+    - "siralama"
+    - "basit_zihinden_cikarma"
+    - "isim_sirasi_okuma"
+  soru_islemleri:
+    - "deger okuma"
+    - "kalan para dusunme"
+    - "karsilastirma"
+    - "kucukten_buyuge_siralama"
+    - "buyukten_kucuge_siralama"
+    - "varyanta_gore_sabit_degisen_bilgiyi_okuma"

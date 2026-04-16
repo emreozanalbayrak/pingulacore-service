@@ -1,0 +1,160 @@
+# Onluk Bozarak Çıkarmayı Görselle Yap - 2. Sinif
+
+meta:
+  id: k18_onluk_bozarak_cikarmayi_gorselle_yap
+  ad: Onluk Bozarak Çıkarmayı Görselle Yap
+  sinif_seviyesi: 2
+  aciklama: Öğrenci, görselde verilen iki basamaklı sayıdan çıkarılan bir miktarı onluk bozarak çıkarma işlemi ile bulur.
+  kaynak: k18_Onluk Bozarak Çıkarmayı Görselle Yap.yaml
+  frequency: Low
+  difficulty: kolay
+
+context:
+  type: onluk_bozarak_cikarmayi_gorselle_yap
+  question_count: 1
+  generation:
+    word_count_min: 30
+    word_count_max: 65
+    image_type: tek_gorsel
+    structure:
+    - 4-6 cumlelik, gunluk yasamdan gelen dogal bir senaryo yaz
+    - Senaryoda iki basamakli bir sayidan onluk bozmayi gerektiren bir cikarma durumu kurulmali
+    - Metin, gorselden okunmasi gereken kritik sayi ya da iliskiyi dogrudan soylememeli
+    - Gorsel, cozumun ana veri kaynagi olmali
+    - Gorselde 10'luk gruplar yigin veya tabak halinde degil, her biri tek tek sayilabilen acik satirlar halinde verilmelidir
+    - Temsili anlatim kullanilsa bile senaryodaki ana nesne korunmali; uzum deniyorsa boncuk veya blok gibi alakasiz nesneler kullanilmamali
+    - Soru koku, "Görseldeki üzüm salkımından kaç üzüm kaldı?" benzeri tek cumlelik bir yapi tasimali
+    kurallar:
+    - 2. sinif seviyesinde olmali
+    - Turkce karakterler ve noktalama dogru kullanilmali
+    - Gorsel ve ust metin birbiriyle tam uyumlu olmali
+    - Dogru cevap tek ve net olmali
+    - Gorsel olmadan dogrudan sonuca ulastiracak acik islem ya da sonuc verilmemeli
+    - Secenekler 3 sikli olmali ve yalnizca bir dogru cevap icermeli
+  questions:
+  - slot: 1
+    type: onluk_bozarak_cikarmayi_gorselle_yap
+    soru_kokleri:
+    - Görseldeki üzüm salkımından kaç üzüm kaldı?
+    - Gösterilen sayıyı çıkarınca kaç üzüm kalır?
+    beceri:
+      katman: MAT.2.2.7
+      bilesenler:
+      - cikarma_islemi
+      - onluk_bozarak_cikarma
+      - gorsel_okuma
+      - problem_cozme
+      - gorsel_okuma_becerisi
+      - onluk_bozarak_cikarma_becerisi
+      surec_bileseni: matematiksel_muhakeme
+
+format:
+  type: llm_generated_html
+  soru_koku: Kisa, tek cumlelik soru koku. "Görseldeki üzüm salkımından kaç üzüm kaldı?" benzeri bir istem tasimali.
+  paragraph:
+    required: true
+    word_count_min: 30
+    word_count_max: 65
+    sentence_count_min: 4
+    sentence_count_max: 6
+  options:
+    count: 3
+    labels:
+    - A
+    - B
+    - C
+    style: text_only
+    word_count_min: 1
+    word_count_max: 6
+    correct_count: 1
+
+dogru_cevap:
+  tanim: Onluk bozma gerektiren cikarma iliskisini dogru kurup kalan miktari veren secenek
+  kurallar:
+  - Görseldeki onluk bozma işlemine göre hesaplama yapılmalı
+  - Çıkarma işlemi sonucunda doğru miktar bulunmalı
+  - Dogru cevap tek ve net olmali
+
+distractors:
+  kurallar:
+  - Bozma işlemi yapılmadan çıkarılan yanlış sonuçları içermeli
+  - Görseldeki yanlış yorumlamalardan kaynaklanan hatalar olmalı
+  - Onluk bozmadan islem yapan secenekler kullanilmali
+  - Birlik sayisini yanlis azaltan secenekler yer almali
+  - Yanlis secenekler ogrencinin dusebilecegi gercek hatalara dayanmali
+  - Yanlis secenekler dogru cevaba yakin ama ayirt edilebilir olmali
+  yasaklar:
+  - Görselde olmayan bilgiler
+  - İşlemle alakasız sonuçlar
+  - Bariz sacma, baglamsiz ya da islem mantigiyla ilgisiz secenek uretilmemeli
+  - Birden fazla yanlis secenek ayni hatayi tekrar etmemeli
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+    - Gorsel ilkokul duzeyine uygun, sade ve anlasilir olmali
+    - Bozulacak onluk ile birlikler ayni sahnede net bicimde gorunmeli
+    - Cikarilacak miktar ve kalan yapi karismayacak bicimde yerlestirilmeli
+    - Sayilmasi ya da karsilastirilmasi gereken ana ogeler net secilebilmeli
+    - Gorsel, soruda hedeflenen islem ya da iliskiyi bire bir karsilamali
+    - Gorselde iki basamakli onluk gosterimi, cikartilan miktar gosterimi acikca yer almali
+    - 4 onluk ve 2 birlik gibi yapilar uzum nesnesiyle gosterilmeli; 10'luk grup gerekiyorsa 10 uzumlu acik salkim, tepsi veya kart duzeni kullanilmali
+    - Her 10'luk grup tek satirda ya da acik dizilimli bir panelde tam 10 uzum olarak ayri ayri secilebilmelidir
+    yasaklar:
+    - Gorselin icinde veya ustunde cevabi ele veren islem, sonuc ya da ipucu yazilmamali
+    - Sayilmasi gereken ana ogeler dekoratif kalabalik icinde kaybolmamali
+    - Fotogercekci, karmasik veya yetiskinlere hitap eden bir gorsel dil kullanilmamali
+    - Gorsel ile metin arasinda sayi, nesne veya iliski celiskisi bulunmamali
+    - Kurabiyelerin tabaklarda ust uste geldigi, saymanin zorlastigi kompozisyonlar kullanilmamali
+    - Uzum senaryosunu boncuk, blok, kupe ya da senaryoyla ilgisiz baska nesnelerle temsil etme
+    stil: ilkokul_dostu_sade_illustrasyon
+    boyut: orta
+  sik_gorseli:
+    gerekli: false
+    kurallar:
+    - Secenekler yalnizca metin, sayi ya da islem ifadesi olarak verilmelidir
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: Öğrenci, görselde verilen iki basamaklı sayıdan çıkarılan bir miktarı onluk bozarak çıkarma işlemi ile
+    bulur.
+  tema_siniri: Yalnizca 2. sinif duzeyinde onluk bozarak cikarma, cikarma, onluk bozma, onluk, birlik odagi korunmali.
+  izinli_icerik:
+    kavramlar:
+    - onluk bozarak cikarma
+    - cikarma
+    - onluk bozma
+    - onluk
+    - birlik
+    - kalan
+    beceriler:
+    - Çıkarma işlemi
+    - Onluk bozarak çıkarma
+    - Görsel okuma
+    - Problem çözme
+    - Görsel okuma becerisi
+  yasaklar:
+  - 3 basamakli ve daha buyuk sayilarla ileri duzey islem zincirleri
+  - Kalanli bolme, bolme algoritmasi veya ust sinif duzeyindeki islem teknikleri
+  - 2. sinif duzeyini asan soyut cebir dili, sembolik ispat ya da formal tanimlar
+  - Gorsel olmadan cozume ulastiran acik sonuc, islem veya sayi bilgisini metinde vermek
+  - Gereksiz veri yuku olusturan cok adimli ve dikkat dagitici problem kurgulari
+
+izinli_icerikler:
+  kavramlar:
+  - onluk bozarak cikarma
+  - cikarma
+  - onluk bozma
+  - onluk
+  - birlik
+  - kalan
+  beceriler:
+  - cikarma_islemi
+  - onluk_bozarak_cikarma
+  - gorsel_okuma
+  - problem_cozme
+  - gorsel_okuma_becerisi
+  - onluk_bozarak_cikarma_becerisi
+  soru_islemleri:
+  - onluk_bozarak_cikarma
+  - basamak_degerini_kullanma
+  - kalani_bulma

@@ -1,0 +1,176 @@
+# Ardışık Çıkarmaya Uygun Sonucu Bul - 2. Sinif (Cocuk + Konusma Balonu + Gorselli Sik)
+
+meta:
+  id: k1001_ardisik_cikarmaya_uygun_sonucu_bul_gorsel_sikli
+  ad: Ardışık Çıkarmaya Uygun Sonucu Bul (Çocuk Cevap Balonlu Görselli Şık)
+  sinif_seviyesi: 2
+  aciklama: Öğrencilerden, ana görseldeki ardışık çıkarma sürecine uygun bölme ifadesini bulan çocuğu seçmeleri beklenir.
+    Bu varyantta şıklar metin değil, çocuk çizimi + konuşma balonu içindeki işlem ifadesi olarak sunulur.
+  kaynak: k10_Ardışık Çıkarmaya Uygun Sonucu Bul.yaml
+  frequency: Low
+  difficulty: kolay
+
+context:
+  type: k1001_ardisik_cikarmaya_uygun_sonucu_bul_cocuk_balonu_gorsel_sikli
+  question_count: 1
+  generation:
+    word_count_min: 30
+    word_count_max: 65
+    image_type: komponent_gorselleri
+    structure:
+    - 4-6 cumlelik, gunluk yasamdan gelen dogal bir senaryo yaz
+    - Senaryoda ya da gorselde ayni miktarin adim adim eksildigi bir surec kurulmali ve bu surec bolme iliskisine baglanmali
+    - Metin, gorselden okunmasi gereken kritik sayi ya da iliskiyi dogrudan soylememeli
+    - Gorsel, cozumun ana veri kaynagi olmali
+    - Soru koku, "Aşağıdaki çocuklardan hangisinin işlemi doğru?" benzeri tek cumlelik bir yapi tasimali
+    - Şıklar metin tabanlı degil, çocuk çizimi + konuşma balonu içeren görsel tabanlı olmalı
+    kurallar:
+    - 2. sinif seviyesinde olmali
+    - Turkce karakterler ve noktalama dogru kullanilmali
+    - Gorsel ve ust metin birbiriyle tam uyumlu olmali
+    - Dogru cevap tek ve net olmali
+    - Gorsel olmadan dogrudan sonuca ulastiracak acik islem ya da sonuc verilmemeli
+    - Secenekler 3 sikli olmali ve yalnizca bir dogru cevap icermeli
+    - Şıklar OptionItem listesi olarak üretilmeli (label, type, text_value, visual_elements)
+    - Tum şıklar type=image olmalı; text_value null olmalı; görsel içerik visual_elements ile tariflenmeli
+    - Her şık bir çocuğu temsil etmeli ve konuşma balonunda kendi işlem ifadesi bulunmalı
+    - Çocuk isimleri Ali, Mehmet ve Ayşe olarak kullanılmalı
+  questions:
+  - slot: 1
+    type: k1001_ardisik_cikarmaya_uygun_sonucu_bul_cocuk_balonu_gorsel_sikli
+    soru_kokleri:
+    - Aşağıdaki çocuklardan hangisinin konuşma balonundaki işlem ifadesi ana görsele uygundur?
+    - Ali, Mehmet ve Ayşe'den hangisi görseldeki ardışık çıkarma sürecine uygun bölme işlemini söylemiştir?
+    - Buna göre hangi çocuğun işlemi doğrudur?
+    beceri:
+      katman: MAT.2.2.4
+      bilesenler:
+      - ardisik_cikarma
+      - bolme_mantigini_anlama
+      - islem_eslestirme
+      - ardisik_cikarma_ve_anlama
+      - bolme_mantigini_kavrama
+      surec_bileseni: bulma_ve_cozumleme
+
+format:
+  type: llm_generated_html
+  soru_koku: Kisa, tek cumlelik soru koku. "Aşağıdaki çocuklardan hangisinin işlemi doğru?" benzeri
+    bir istem tasimali.
+  paragraph:
+    required: true
+    word_count_min: 30
+    word_count_max: 65
+    sentence_count_min: 4
+    sentence_count_max: 6
+  options:
+    count: 3
+    labels:
+    - A
+    - B
+    - C
+    style: visual
+    content_type: image_only
+    render_mode: component_based
+    presentation: child_with_speech_bubble
+    personas:
+    - label: A
+      name: Ali
+    - label: B
+      name: Mehmet
+    - label: C
+      name: Ayşe
+    correct_count: 1
+
+dogru_cevap:
+  tanim: Ana görseldeki ardışık çıkarma düzenine karşılık gelen doğru bölme ifadesini konuşma balonunda söyleyen çocuk
+  kurallar:
+  - Çıkarma işlemlerinin doğru eşleştirilmesi
+  - Görseldeki işlemlerin doğru sayılması
+  - Çocuğun konuşma balonundaki işlem ifadesi ana görselle tutarlı olmalı
+  - Dogru cevap tek ve net olmali
+
+distractors:
+  kurallar:
+  - Yanlış işlem eşleştirme
+  - Adım sayısını veya çıkarma miktarını yanlış hesaplama
+  - Bolen ile boluneni yer degistiren model kullanan secenekler olmalı
+  - Adim sayisi ile grup buyuklugunu karistiran model secenekleri olmalı
+  - Yanlis secenekler ogrencinin dusebilecegi gercek hatalara dayanmali
+  - Yanlis secenekler dogru cevaba yakin ama ayirt edilebilir olmali
+  - Yanlış şıklar da gerçekçi çocuk ifadesi gibi görünmeli; ancak matematiksel olarak hatalı olmalı
+  yasaklar:
+  - Doğru cevabın tekrarı
+  - Çok bariz şekilde yanlış olan
+  - Bariz sacma, baglamsiz ya da islem mantigiyla ilgisiz secenek uretilmemeli
+  - Birden fazla yanlis secenek ayni hatayi tekrar etmemeli
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+    - Gorsel ilkokul duzeyine uygun, sade ve anlasilir olmali
+    - Ardisik azalma adimlari sirasiyla ve karismayacak bicimde gosterilmeli
+    - Her adimda eksilen miktarin esit oldugu gorselden okunabilmeli
+    - Sayilmasi ya da karsilastirilmasi gereken ana ogeler net secilebilmeli
+    - Gorsel, soruda hedeflenen islem ya da iliskiyi bire bir karsilamali
+    - Gorselde adimlar, esit miktarda cikarilan degerler acikca yer almali
+    yasaklar:
+    - Gorselin icinde veya ustunde cevabi ele veren islem, sonuc ya da ipucu yazilmamali
+    - Sayilmasi gereken ana ogeler dekoratif kalabalik icinde kaybolmamali
+    - Fotogercekci, karmasik veya yetiskinlere hitap eden bir gorsel dil kullanilmamali
+    - Gorsel ile metin arasinda sayi, nesne veya iliski celiskisi bulunmamali
+    stil: ilkokul_dostu_sade_illustrasyon
+    boyut: orta
+  sik_gorseli:
+    gerekli: true
+    kurallar:
+    - Her şık type=image olarak planlanmalı; her şık için visual_elements dolu olmalı
+    - Her şık tek bir çocuğu göstermeli (A=Ali, B=Mehmet, C=Ayşe)
+    - Her çocuk çiziminde bir konuşma balonu olmalı ve balon içinde işlem ifadesi yer almalı
+    - Konuşma balonundaki ifade "Ali: 12 / 4 = 3" biçimindeki çocuk+işlem sunum mantığını takip etmeli
+    - Sayılar senaryoya göre değişebilir; ancak yalnızca bir çocuğun ifadesi doğru olmalı
+    - Şık görsellerinde doğru cevabı metinle ele veren ekstra ipucu kullanılmamalı
+    - Şık görselleri sade, net ve ilkokul seviyesinde anlaşılır olmalı
+    - Şıklar arasında stil tutarlılığı korunmalı
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: Öğrencilerden, ardışık çıkarma işlemleri ile verilen görseldeki işlemin hangi bölme işlemi ile ifade edilebileceğini
+    belirlemeleri beklenir. Bu kalıp, ardışık çıkarma ile bölme arasındaki ilişkiyi kavramalarını sağlar.
+  tema_siniri: Yalnizca 2. sinif duzeyinde cikarma ve bolme iliskisi kurma, ardisik cikarma, bolme, esit eksiltme, adim sayisi
+    odagi korunmali.
+  izinli_icerik:
+    kavramlar:
+    - cikarma ve bolme iliskisi kurma
+    - ardisik_cikarma
+    - bolme
+    - esit eksiltme
+    - adim sayisi
+    beceriler:
+    - Ardışık çıkarma
+    - Bölme mantığını anlama
+    - İşlem eşleştirme
+    - Ardışık çıkarma ve anlama
+    - Bölme mantığını kavrama
+  yasaklar:
+  - 3 basamakli ve daha buyuk sayilarla ileri duzey islem zincirleri
+  - Kalanli bolme, bolme algoritmasi veya ust sinif duzeyindeki islem teknikleri
+  - 2. sinif duzeyini asan soyut cebir dili, sembolik ispat ya da formal tanimlar
+  - Gorsel olmadan cozume ulastiran acik sonuc, islem veya sayi bilgisini metinde vermek
+  - Gereksiz veri yuku olusturan cok adimli ve dikkat dagitici problem kurgulari
+
+izinli_icerikler:
+  kavramlar:
+  - cikarma ve bolme iliskisi kurma
+  - ardisik_cikarma
+  - bolme
+  - esit eksiltme
+  - adim sayisi
+  beceriler:
+  - ardisik_cikarma
+  - bolme_mantigini_anlama
+  - islem_eslestirme
+  - ardisik_cikarma_ve_anlama
+  - bolme_mantigini_kavrama
+  soru_islemleri:
+  - ardisik_cikarmayi_bolmeye_donusturme
+  - gorselden_adim_sayma
+  - dogru_islemi_bulma

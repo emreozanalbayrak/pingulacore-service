@@ -1,0 +1,227 @@
+# o17/yarim_alani_tamamlama.yaml
+# Bölüm 2 - Sayılar ve Nicelikler (2)
+#
+# FORMAT:
+# 3-6 cümlelik doğal senaryo + üstte işlevsel görsel
+# + kısa soru kökü + 3 seçenek
+#
+# Bu dosya, 2. sınıf düzeyinde "Bütün - Yarım - Çeyrek İlişkisi"
+# başlığı altındaki O17 soru kalıbının 1-2 varyantı için kullanılır.
+#
+# Bu kalıpta amaç, öğrencinin görselde verilen açık yarım alanı ya da
+# eksik kalan bölümü dikkatle incelemesi; uygun parçayı veya uygun iki
+# parçayı seçerek bütünü tamamlama ilişkisini kurmasıdır.
+#
+# Öğrenciden beklenen:
+# - görseldeki bütünü dikkatle incelemesi,
+# - açık kalan yarım alanı fark etmesi,
+# - parçaların konumuna dikkat etmesi,
+# - hangi parçanın ya da hangi iki parçanın bütünü tamamladığını belirlemesidir.
+#
+# Bu kullanımda kesir sembolü, pay-payda dili, işlem yaptırma,
+# sayı doğrusu, açıklama yazdırma veya üst sınıf sembolik gösterim beklenmez.
+
+meta:
+  id: "yarim_alani_tamamlama"
+  ad: "Yarım Alanı Tamamlama"
+  sinif_seviyesi: 2
+  varyant_kodu: "1-2"
+  aciklama: >
+    Açık kalan yarım alanı ya da eksik kalan bölümü, uygun parça veya
+    uygun parça çifti ile tamamlama mantığına dayanan görsel soru kalıbı.
+  kaynak: "yarim_alani_tamamlama.yaml"
+  frequency: "Medium"
+  difficulty: "orta"
+
+context:
+  type: "yarim_alani_tamamlama"
+  question_count: 1
+  generation:
+    word_count_min: 28
+    word_count_max: 70
+    image_type: "ust_gorsel"
+    structure:
+      - "Bir sınıf, hazırlık alanı, etkinlik köşesi, kutlama alanı, park ya da benzeri doğal bir bağlamda geçen 3-6 cümlelik akıcı bir senaryo yaz"
+      - "Senaryoda kullanılacak nesne ya da alan açıkça belirtilmeli"
+      - "KRİTİK: Senaryo görseldeki açık kısmın yönünü, parça yerini, doğru cevabı veya görsel detay çözümünü anlatmamalı"
+      - "Öğrenci cevaba yalnız metinden değil, görseldeki bütün-parça ilişkisini inceleyerek ulaşmalı"
+      - "Görsel sorunun üstünde yer almalı"
+      - "Görsel süs değil, çözümün ana taşıyıcısı olmalı"
+      - "Türkçe karakterler doğru kullanılmalı"
+      - "Görseller üzerinde Türkçe dışında yazı bulunmamalı"
+    kurallar:
+      - "2. sınıf seviyesinde olmalı"
+      - "Yalnızca bütün-yarım-çeyrek ve eş parça odağı korunmalı"
+      - "Kesir sembolü kullanılmamalı"
+      - "Parçaların yönü ve konumu görselden anlaşılmalı"
+      - "Senaryo doğal olmalı; test dili, ödül dili veya yapay yönlendirme içermemeli"
+      - "Görsel olmadan soru çözülememeli"
+
+  questions:
+    - slot: 1
+      varyant_no: 1
+      varyant_adi: "Tek Parça ile Açık Yarım Alanı Tamamlama"
+      type: "tek_parca_ile_yarim_tamamlama"
+      soru_kokleri:
+        - "<b>Verilen açık yarım alanların birini hangi parça tamamlar?</b>"
+        - "<b>Açık kalan yarım alanlardan birine hangi parça uyar?</b>"
+        - "<b>Bu açık yarım alanlardan birini hangi parça kapatır?</b>"
+        - "<b>Verilen alanlardan birindeki açık yarımı hangi parça tamamlar?</b>"
+        - "<b>Hangi parça açık kalan yarım alanlardan birine yerleşir?</b>"
+      beceri:
+        katman: "KB2"
+        bilesenler:
+          - "gorsel_okuma"
+          - "eslestirme"
+          - "cozumleme"
+        surec_bileseni: "bilgiyi_cikartma"
+
+    - slot: 2
+      varyant_no: 2
+      varyant_adi: "İki Parça ile Bütünü Tamamlama"
+      type: "iki_parca_ile_butun_tamamlama"
+      soru_kokleri:
+        - "<b>Hangi iki parça {nesne} ile birleşirse bütün olur?</b>"
+        - "<b>Hangi iki parça {nesne} ile birleşirse bütün elde edilir?</b>"
+      beceri:
+        katman: "KB2"
+        bilesenler:
+          - "gorsel_okuma"
+          - "eslestirme"
+          - "parca_butun_iliskisi_kurma"
+        surec_bileseni: "bilgiyi_cikartma"
+
+format:
+  type: "llm_generated_html"
+  soru_koku: "Kısa, tek cümlelik soru kökü. Açık alanı tamamlayan parça ya da bütünü tamamlayan iki parçayı soran yapıda."
+  paragraph:
+    required: true
+    word_count_min: 28
+    word_count_max: 70
+    sentence_count_min: 3
+    sentence_count_max: 6
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    style: "visual_or_numeric_pair"
+    word_count_min: 1
+    word_count_max: 4
+    correct_count: 1
+
+dogru_cevap:
+  tanim: "Görselde açık kalan alanı ya da bütünü doğru tamamlayan tek seçenek"
+  kurallar:
+    - "Doğru cevap görseldeki açık bölümle tam uyumlu olmalı"
+    - "Doğru cevap yalnız bir seçenek olmalı"
+    - "1. varyantta doğru seçenek, verilen açık yarım alanlardan en az birini eksiksiz kapatan tek parça olmalı"
+    - "2. varyantta doğru seçenek, verilen nesne ile birleşince bütünü oluşturan tek parça çifti olmalı"
+    - "Öğrenci yalnız parça sayısına bakarak değil, parçaların yerini ve yönünü inceleyerek sonuca ulaşmalı"
+    - "Görsel ve soru kökü birbiriyle birebir tutarlı olmalı"
+
+distractors:
+  kurallar:
+    - "Yanlış seçenekler öğrencinin yaygın hatalarından birine dayanmalı"
+    - "Farklı konumdaki yarımı gösteren ama ilk bakışta benzer görünen parça kullanılabilir"
+    - "Çapraz duran veya bütünü tamamlamayan parça düzeni çeldirici olarak kullanılabilir"
+    - "İki yanlış seçenek aynı hata türünden olmamalı"
+    - "Yanlış seçenekler görselde makul görünmeli ama gerçekten uymamalı"
+    - "2. varyantta seçenekler yalnız 1, 2 ve 3 numaralı parçaların ikili eşleşmelerinden oluşmalı"
+  yasaklar:
+    - "Bariz saçma veya bağlamsız seçenek üretilmemeli"
+    - "Birden fazla doğru cevap oluşmamalı"
+    - "Doğru cevaba eşdeğer ikinci bir parça ya da parça çifti verilmemeli"
+    - "4 numaralı parça kullanılmamalı"
+    - "Şık sıralaması A-B-C dışında verilmemeli"
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+      - "Görsel sorunun üstünde yer almalı"
+      - "Görsel çözümün ana taşıyıcısı olmalı"
+      - "Bütün 4 eş parçalı bir yapıya dayanmalı"
+      - "Parçalar sade, net ve çocuk dostu görünmeli"
+      - "Görselde açık kalan bölüm yazıyla açıklanmamalı"
+      - "Yön, tamamlanma ve eşleşme ilişkisi yalnız görselden anlaşılmalı"
+      - "Görsel sade, temiz ve 2. sınıf düzeyine uygun olmalı"
+    yasaklar:
+      - "Görselde doğru cevabı yazıyla söylemek"
+      - "Aşırı karmaşık veya dikkat dağıtıcı ek öğeler"
+      - "Senaryoda görsel çözümünü açık eden ayrıntılar"
+    stil: "ustte_ana_gorsel"
+    boyut: "orta"
+
+  varyant_1_gorseli:
+    aciklama: "Üstte aynı büyüklükte 3 alan verilir. Her birinde açık kalan yarım alan bulunur."
+    kurallar:
+      - "Üst görselde 1. alan, 2. alan ve 3. alan biçiminde üç alan bulunmalı"
+      - "Her alan aynı büyüklükte olmalı"
+      - "Açık kalan bölüm yarım büyüklüğünde olmalı"
+      - "Şıklarda A-B-C etiketli üç parça görseli yer almalı"
+      - "Yalnız bir parça, verilen alanlardan en az birini doğru tamamlamalı"
+      - "Aynı anda iki doğru cevap oluşmamalı"
+
+  varyant_2_gorseli:
+    aciklama: "Üstte tek bir nesne ve altında 1, 2, 3 numaralı parçalar verilir."
+    kurallar:
+      - "Üst görselde yalnızca tek bir nesne ya da alan bulunmalı"
+      - "Altında yalnız 1, 2 ve 3 numaralı parçalar yer almalı"
+      - "4 numaralı parça bulunmamalı"
+      - "Şıklar A-B-C biçiminde verilmeli"
+      - "Şıklarda yalnız numara çiftleri yer almalı"
+      - "Seçenek biçimi örnek olarak '1 ve 2', '2 ve 3', '1 ve 3' yapısında olmalı"
+      - "Yalnız bir numara çifti nesne ile birleşince bütünü tamamlamalı"
+
+  sik_gorseli:
+    gerekli: "soru tipine göre değişir"
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: "Bütün, yarım ve çeyrek arasındaki ilişkiyi çözümleyebilme"
+  tema_siniri: "Yalnızca bütün-yarım-çeyrek ve eş parça odağı korunmalı"
+  izinli_icerik:
+    kavramlar:
+      - "bütün"
+      - "yarım"
+      - "çeyrek"
+      - "eş parça"
+      - "tamamlama"
+      - "parça"
+      - "alan"
+      - "nesne"
+    beceriler:
+      - "Açık kalan bölümü tamamlama"
+      - "Parça-bütün ilişkisi kurma"
+      - "Görsel model ile eşleştirme"
+      - "Uygun parçayı seçme"
+      - "Uygun iki parçayı seçme"
+  yasaklar:
+    - "1/2, 1/4 gibi kesir sembolleri"
+    - "pay, payda, kesir, birim kesir dili"
+    - "Toplama, çıkarma gibi işlemsel yapı"
+    - "Soyut anlatım; somut görsel olmadan soru kurma"
+    - "Üst sınıf teknik terimleri"
+    - "Birden fazla adımlı nicelik çözümü"
+
+izinli_icerikler:
+  kavramlar:
+    - "bütün"
+    - "yarım"
+    - "çeyrek"
+    - "eş parça"
+    - "alan"
+    - "tamamlama"
+    - "nesne"
+    - "parça"
+    - "eşleşme"
+    - "birleşme"
+  beceriler:
+    - "gorsel_okuma"
+    - "eslestirme"
+    - "cozumleme"
+    - "parca_butun_iliskisi_kurma"
+    - "yarim_tamamlama"
+    - "butun_tamamlama"
+  soru_islemleri:
+    - "uygun parca bulma"
+    - "uygun parca cifti bulma"
+    - "gorsel yorumlama"
+    - "eslesen alani belirleme"

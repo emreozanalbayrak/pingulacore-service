@@ -1,0 +1,153 @@
+# Eldeli Toplamayı Görselle Yap - 2. Sinif
+
+meta:
+  id: k17_eldeli_toplamayi_gorselle_yap
+  ad: Eldeli Toplamayı Görselle Yap
+  sinif_seviyesi: 2
+  aciklama: Eldeli toplama işlemini görsel destekle yapmayı ölçer. Öğrenciler, görseldeki nesne düzenlerini sayarak toplama
+    işlemi kurar.
+  kaynak: k17_Eldeli Toplamayı Görselle Yap.yaml
+  frequency: Low
+  difficulty: kolay
+
+context:
+  type: eldeli_toplamayi_gorselle_yap
+  question_count: 1
+  generation:
+    word_count_min: 30
+    word_count_max: 65
+    image_type: tek_gorsel
+    structure:
+    - 4-6 cumlelik, gunluk yasamdan gelen dogal bir senaryo yaz
+    - Senaryoda onluk ve birliklerin birlikte kullanildigi, elde gerektiren bir toplama durumu kurulmali
+    - Metin, gorselden okunmasi gereken kritik sayi ya da iliskiyi dogrudan soylememeli
+    - Gorsel, cozumun ana veri kaynagi olmali
+    - Soru koku, "Görseldeki toplam üzüm sayısını bulunuz." benzeri tek cumlelik bir yapi tasimali
+    kurallar:
+    - 2. sinif seviyesinde olmali
+    - Turkce karakterler ve noktalama dogru kullanilmali
+    - Gorsel ve ust metin birbiriyle tam uyumlu olmali
+    - Dogru cevap tek ve net olmali
+    - Gorsel olmadan dogrudan sonuca ulastiracak acik islem ya da sonuc verilmemeli
+    - Secenekler 3 sikli olmali ve yalnizca bir dogru cevap icermeli
+  questions:
+  - slot: 1
+    type: eldeli_toplamayi_gorselle_yap
+    soru_kokleri:
+    - Görseldeki toplam üzüm sayısını bulunuz.
+    - Kaç üzüm olduğunu hesaplayınız?
+    beceri:
+      katman: MAT.2.2.1
+      bilesenler:
+      - toplama_islemi
+      - gorsel_okuma
+      - basamak_degeri_anlama
+      - eldeli_toplama
+      - gorsellerden_toplama_islemi_cikarma
+      - eldeli_toplama_yapma
+      surec_bileseni: matematiksel_muhakeme
+
+format:
+  type: llm_generated_html
+  soru_koku: Kisa, tek cumlelik soru koku. "Görseldeki toplam üzüm sayısını bulunuz." benzeri bir istem tasimali.
+  paragraph:
+    required: true
+    word_count_min: 30
+    word_count_max: 65
+    sentence_count_min: 4
+    sentence_count_max: 6
+  options:
+    count: 3
+    labels:
+    - A
+    - B
+    - C
+    style: text_only
+    word_count_min: 1
+    word_count_max: 6
+    correct_count: 1
+
+dogru_cevap:
+  tanim: Onluk ve birlikleri dogru toplayip eldeyi hesaba katan secenek
+  kurallar:
+  - Nesneler doğru sayılmalı.
+  - Eldeli toplama doğru yapılmalı.
+  - Dogru cevap tek ve net olmali
+
+distractors:
+  kurallar:
+  - Eldeyi unutma hatası oluşturulmalı.
+  - Yanlış basamak sayma hatası oluşturulmalı.
+  - Eldeyi unutan secenekler kullanilmali
+  - Onluk ve birlikleri yanlis toplayan secenekler yer almali
+  - Yanlis secenekler ogrencinin dusebilecegi gercek hatalara dayanmali
+  - Yanlis secenekler dogru cevaba yakin ama ayirt edilebilir olmali
+  yasaklar:
+  - Çıkarma işlemi hatasına dayalı
+  - Bölme işlemi hatasına dayalı
+  - Bariz sacma, baglamsiz ya da islem mantigiyla ilgisiz secenek uretilmemeli
+  - Birden fazla yanlis secenek ayni hatayi tekrar etmemeli
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+    - Gorsel ilkokul duzeyine uygun, sade ve anlasilir olmali
+    - Onluk gruplar ile birlik ogeler birbirinden kolayca ayirt edilmeli
+    - Basamak degeri iliskisi gorsel duzen uzerinden acikca okunabilmeli
+    - Sayilmasi ya da karsilastirilmasi gereken ana ogeler net secilebilmeli
+    - Gorsel, soruda hedeflenen islem ya da iliskiyi bire bir karsilamali
+    - Gorselde onluk gruplar, birlik nesneler acikca yer almali
+    yasaklar:
+    - Gorselin icinde veya ustunde cevabi ele veren islem, sonuc ya da ipucu yazilmamali
+    - Sayilmasi gereken ana ogeler dekoratif kalabalik icinde kaybolmamali
+    - Fotogercekci, karmasik veya yetiskinlere hitap eden bir gorsel dil kullanilmamali
+    - Gorsel ile metin arasinda sayi, nesne veya iliski celiskisi bulunmamali
+    stil: ilkokul_dostu_sade_illustrasyon
+    boyut: orta
+  sik_gorseli:
+    gerekli: false
+    kurallar:
+    - Secenekler yalnizca metin, sayi ya da islem ifadesi olarak verilmelidir
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: Eldeli toplama işlemini görsel destekle yapmayı ölçer. Öğrenciler, görseldeki nesne düzenlerini sayarak
+    toplama işlemi kurar.
+  tema_siniri: Yalnizca 2. sinif duzeyinde toplama, eldeli toplama, onluk, birlik, basamak degeri odagi korunmali.
+  izinli_icerik:
+    kavramlar:
+    - toplama
+    - eldeli toplama
+    - onluk
+    - birlik
+    - basamak degeri
+    beceriler:
+    - Toplama işlemi
+    - Görsel okuma
+    - Basamak değeri anlama
+    - Eldeli toplama
+    - Görsellerden toplama işlemi çıkarma
+  yasaklar:
+  - 3 basamakli ve daha buyuk sayilarla ileri duzey islem zincirleri
+  - Kalanli bolme, bolme algoritmasi veya ust sinif duzeyindeki islem teknikleri
+  - 2. sinif duzeyini asan soyut cebir dili, sembolik ispat ya da formal tanimlar
+  - Gorsel olmadan cozume ulastiran acik sonuc, islem veya sayi bilgisini metinde vermek
+  - Gereksiz veri yuku olusturan cok adimli ve dikkat dagitici problem kurgulari
+
+izinli_icerikler:
+  kavramlar:
+  - toplama
+  - eldeli toplama
+  - onluk
+  - birlik
+  - basamak degeri
+  beceriler:
+  - toplama_islemi
+  - gorsel_okuma
+  - basamak_degeri_anlama
+  - eldeli_toplama
+  - gorsellerden_toplama_islemi_cikarma
+  - eldeli_toplama_yapma
+  soru_islemleri:
+  - eldeli_toplama_yapma
+  - onluk_ve_birlikleri_okuma
+  - dogru_toplami_bulma

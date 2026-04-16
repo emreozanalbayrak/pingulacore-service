@@ -1,0 +1,157 @@
+# Onluk Bozarak Çıkarma Gerektiren Senaryolu Problem - 2. Sinif
+
+meta:
+  id: o14_onluk_bozarak_cikarma_gerektiren_senaryolu_problem
+  ad: Onluk Bozarak Çıkarma Gerektiren Senaryolu Problem
+  sinif_seviyesi: 2
+  aciklama: Senaryolu problemde onluk bozarak çıkarma işlemi yapılır. Öğrenciler, görsel ve metin yardımıyla bu işlemi doğru
+    bir şekilde gerçekleştirmelidir.
+  kaynak: o14_Onluk Bozarak Çıkarma Gerektiren Senaryolu Problem.yaml
+  frequency: Medium
+  difficulty: orta
+
+context:
+  type: onluk_bozarak_cikarma_gerektiren_senaryolu_problem
+  question_count: 1
+  generation:
+    word_count_min: 35
+    word_count_max: 80
+    image_type: tek_gorsel
+    structure:
+    - 4-6 cumlelik, gunluk yasamdan gelen dogal bir senaryo yaz
+    - Senaryoda onluk bozmayi zorunlu kilan bir cikarma problemi kurulmali ve metin ile gorsel birlikte kullanilmali
+    - Metin, gorselden okunmasi gereken kritik sayi ya da iliskiyi dogrudan soylememeli
+    - Gorsel, cozumun ana veri kaynagi olmali
+    - Gorselde toplam miktar yalnizca buyuk bir etiketle verilmemeli; 6 onluk ve 4 birlik modeli acikca gosterilmeli
+    - Temsili anlatim kullanilsa bile senaryodaki ana nesne korunmali; simit deniyorsa alakasiz bloklar veya kup gibi nesneler kullanilmamali
+    - Soru koku, "Kalan miktarı hesaplayınız." benzeri tek cumlelik bir yapi tasimali
+    kurallar:
+    - 2. sinif seviyesinde olmali
+    - Turkce karakterler ve noktalama dogru kullanilmali
+    - Gorsel ve ust metin birbiriyle tam uyumlu olmali
+    - Dogru cevap tek ve net olmali
+    - Gorsel olmadan dogrudan sonuca ulastiracak acik islem ya da sonuc verilmemeli
+    - Secenekler 3 sikli olmali ve yalnizca bir dogru cevap icermeli
+  questions:
+  - slot: 1
+    type: onluk_bozarak_cikarma_gerektiren_senaryolu_problem
+    soru_kokleri:
+    - Kalan miktarı hesaplayınız.
+    - Çıkarma işlemini doğru yapınız.
+    beceri:
+      katman: MAT.2.2.4
+      bilesenler:
+      - problemi_anlama
+      - cikarma_islemi_yapma
+      - onluk_bozma
+      - dogru_sonuc_bulma
+      - onluk_bozarak_cikarma
+      surec_bileseni: matematiksel_muhakeme
+
+format:
+  type: llm_generated_html
+  soru_koku: Kisa, tek cumlelik soru koku. "Kalan miktarı hesaplayınız." benzeri bir istem tasimali.
+  paragraph:
+    required: true
+    word_count_min: 35
+    word_count_max: 80
+    sentence_count_min: 4
+    sentence_count_max: 6
+  options:
+    count: 3
+    labels:
+    - A
+    - B
+    - C
+    style: text_only
+    word_count_min: 1
+    word_count_max: 6
+    correct_count: 1
+
+dogru_cevap:
+  tanim: Onluk bozma gerektiren cikarma mantigini dogru kurup sonuca ulasan secenek
+  kurallar:
+  - Onluk bozarak doğru çıkarma işlemini yap
+  - Kalan miktarı doğru belirle
+  - Dogru cevap tek ve net olmali
+
+distractors:
+  kurallar:
+  - Yaygın hataları temsil etmeli
+  - Mantıklı görünmeli
+  - Onluk bozmayi goz ardi eden secenekler kullanilmali
+  - Birlik azaltimini yanlis yapan secenekler yer almali
+  - Yanlis secenekler ogrencinin dusebilecegi gercek hatalara dayanmali
+  - Yanlis secenekler dogru cevaba yakin ama ayirt edilebilir olmali
+  yasaklar:
+  - Alakasız sayılar
+  - Mantıksız seçenekler
+  - Bariz sacma, baglamsiz ya da islem mantigiyla ilgisiz secenek uretilmemeli
+  - Birden fazla yanlis secenek ayni hatayi tekrar etmemeli
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+    - Gorsel ilkokul duzeyine uygun, sade ve anlasilir olmali
+    - Onluk ve birlikler ayni sahnede duzenli bicimde gosterilmeli
+    - Bozulan onluk yapisi ogrencinin islem mantigini kurabilecegi aciklikta olmali
+    - Sayilmasi ya da karsilastirilmasi gereken ana ogeler net secilebilmeli
+    - Gorsel, soruda hedeflenen islem ya da iliskiyi bire bir karsilamali
+    - Gorselde baslangic miktari, eksilen miktar acikca yer almali
+    - 64 sayisi sadece yaziyla degil, 6 tane 10'lu simit grubu ve 4 tek simit ile modellenmelidir
+    - 10'lu simit gruplari tepsi, raf ya da ip dizisi gibi gercek baglama uygun tasiyicilarla gosterilmeli; her grupta tam 10 simit sayilabilmelidir
+    - Tek simitler ayri bolgede, 10'lu gruplarla karismadan sunulmalidir
+    - Cikarilacak simit miktari ayni nesne turuyle acikca gosterilmeli; sayi, nesne ve islem ayni sahnede birbiriyle uyumlu olmalidir
+    yasaklar:
+    - Gorselin icinde veya ustunde cevabi ele veren islem, sonuc ya da ipucu yazilmamali
+    - Sayilmasi gereken ana ogeler dekoratif kalabalik icinde kaybolmamali
+    - Fotogercekci, karmasik veya yetiskinlere hitap eden bir gorsel dil kullanilmamali
+    - Gorsel ile metin arasinda sayi, nesne veya iliski celiskisi bulunmamali
+    - Yalnizca kutu ustune yazilmis sayi etiketiyle cozum veren sahne kurulmamalidir
+    - Simit senaryosunu soyut onluk-birlik bloklariyla, kuplerle veya alakasiz geometri cisimleriyle temsil etme
+    stil: ilkokul_dostu_sade_illustrasyon
+    boyut: orta
+  sik_gorseli:
+    gerekli: false
+    kurallar:
+    - Secenekler yalnizca metin, sayi ya da islem ifadesi olarak verilmelidir
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: Senaryolu problemde onluk bozarak çıkarma işlemi yapılır. Öğrenciler, görsel ve metin yardımıyla bu işlemi
+    doğru bir şekilde gerçekleştirmelidir.
+  tema_siniri: Yalnizca 2. sinif duzeyinde cikarma, onluk bozma, senaryolu problem, basamak degeri odagi korunmali.
+  izinli_icerik:
+    kavramlar:
+    - cikarma
+    - onluk bozma
+    - senaryolu problem
+    - basamak degeri
+    beceriler:
+    - Problemi anlama
+    - Çıkarma işlemi yapma
+    - Onluk bozma
+    - Doğru sonuç bulma
+    - Onluk bozarak çıkarma
+  yasaklar:
+  - 3 basamakli ve daha buyuk sayilarla ileri duzey islem zincirleri
+  - Kalanli bolme, bolme algoritmasi veya ust sinif duzeyindeki islem teknikleri
+  - 2. sinif duzeyini asan soyut cebir dili, sembolik ispat ya da formal tanimlar
+  - Gorsel olmadan cozume ulastiran acik sonuc, islem veya sayi bilgisini metinde vermek
+  - Gereksiz veri yuku olusturan cok adimli ve dikkat dagitici problem kurgulari
+
+izinli_icerikler:
+  kavramlar:
+  - cikarma
+  - onluk bozma
+  - senaryolu problem
+  - basamak degeri
+  beceriler:
+  - problemi_anlama
+  - cikarma_islemi_yapma
+  - onluk_bozma
+  - dogru_sonuc_bulma
+  - onluk_bozarak_cikarma
+  soru_islemleri:
+  - onluk_bozarak_cikarma
+  - senaryodan_islem_kurma
+  - kalani_bulma

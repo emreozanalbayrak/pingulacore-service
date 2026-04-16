@@ -1,0 +1,155 @@
+# Ardışık Çıkarmaya Uygun Sonucu Bul - 2. Sinif
+
+meta:
+  id: k10_ardisik_cikarmaya_uygun_sonucu_bul
+  ad: Ardışık Çıkarmaya Uygun Sonucu Bul
+  sinif_seviyesi: 2
+  aciklama: Öğrencilerden, ardışık çıkarma işlemleri ile verilen görseldeki işlemin hangi bölme işlemi ile ifade edilebileceğini
+    belirlemeleri beklenir. Bu kalıp, ardışık çıkarma ile bölme arasındaki ilişkiyi kavramalarını sağlar.
+  kaynak: k10_Ardışık Çıkarmaya Uygun Sonucu Bul.yaml
+  frequency: Low
+  difficulty: kolay
+
+context:
+  type: ardisik_cikarmaya_uygun_sonucu_bul
+  question_count: 1
+  generation:
+    word_count_min: 30
+    word_count_max: 65
+    image_type: tek_gorsel
+    structure:
+    - 4-6 cumlelik, gunluk yasamdan gelen dogal bir senaryo yaz
+    - Senaryoda ya da gorselde ayni miktarin adim adim eksildigi bir surec kurulmali ve bu surec bolme iliskisine baglanmali
+    - Metin, gorselden okunmasi gereken kritik sayi ya da iliskiyi dogrudan soylememeli
+    - Gorsel, cozumun ana veri kaynagi olmali
+    - Soru koku, "Aşağıdaki şekilde görülen işlemler hangi bölme işlemi ile ifade edilebilir?" benzeri tek cumlelik bir yapi
+      tasimali
+    kurallar:
+    - 2. sinif seviyesinde olmali
+    - Turkce karakterler ve noktalama dogru kullanilmali
+    - Gorsel ve ust metin birbiriyle tam uyumlu olmali
+    - Dogru cevap tek ve net olmali
+    - Gorsel olmadan dogrudan sonuca ulastiracak acik islem ya da sonuc verilmemeli
+    - Secenekler 3 sikli olmali ve yalnizca bir dogru cevap icermeli
+  questions:
+  - slot: 1
+    type: ardisik_cikarmaya_uygun_sonucu_bul
+    soru_kokleri:
+    - Aşağıdaki şekilde görülen işlemler hangi bölme işlemi ile ifade edilebilir?
+    - Görsele göre belirli sayıdaki adımlar hangi bölme işlemini temsil eder?
+    - Buna göre hangi bölme işlemi bu çıkarma işlemlerine eşittir?
+    beceri:
+      katman: MAT.2.2.4
+      bilesenler:
+      - ardisik_cikarma
+      - bolme_mantigini_anlama
+      - islem_eslestirme
+      - ardisik_cikarma_ve_anlama
+      - bolme_mantigini_kavrama
+      surec_bileseni: bulma_ve_cozumleme
+
+format:
+  type: llm_generated_html
+  soru_koku: Kisa, tek cumlelik soru koku. "Aşağıdaki şekilde görülen işlemler hangi bölme işlemi ile ifade edilebilir?" benzeri
+    bir istem tasimali.
+  paragraph:
+    required: true
+    word_count_min: 30
+    word_count_max: 65
+    sentence_count_min: 4
+    sentence_count_max: 6
+  options:
+    count: 3
+    labels:
+    - A
+    - B
+    - C
+    style: text_only
+    word_count_min: 1
+    word_count_max: 7
+    correct_count: 1
+
+dogru_cevap:
+  tanim: Ardisik cikarma adimlarini ve esit eksilme miktarini dogru okuyarak uygun bolme sonucuna ulasan secenek
+  kurallar:
+  - Çıkarma işlemlerinin doğru eşleştirilmesi
+  - Görseldeki işlemlerin doğru sayılması
+  - Dogru cevap tek ve net olmali
+
+distractors:
+  kurallar:
+  - Yanlış işlem eşleştirme
+  - Adım sayısını veya çıkarma miktarını yanlış hesaplama
+  - Bolen ile boluneni yer degistiren secenekler kullanilmali
+  - Adim sayisi ile grup buyuklugunu karistiran secenekler yer almali
+  - Yanlis secenekler ogrencinin dusebilecegi gercek hatalara dayanmali
+  - Yanlis secenekler dogru cevaba yakin ama ayirt edilebilir olmali
+  yasaklar:
+  - Doğru cevabın tekrarı
+  - Çok bariz şekilde yanlış olan
+  - Bariz sacma, baglamsiz ya da islem mantigiyla ilgisiz secenek uretilmemeli
+  - Birden fazla yanlis secenek ayni hatayi tekrar etmemeli
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+    - Gorsel ilkokul duzeyine uygun, sade ve anlasilir olmali
+    - Ardisik azalma adimlari sirasiyla ve karismayacak bicimde gosterilmeli
+    - Her adimda eksilen miktarin esit oldugu gorselden okunabilmeli
+    - Sayilmasi ya da karsilastirilmasi gereken ana ogeler net secilebilmeli
+    - Gorsel, soruda hedeflenen islem ya da iliskiyi bire bir karsilamali
+    - Gorselde adimlar, esit miktarda cikarilan degerler acikca yer almali
+    yasaklar:
+    - Gorselin icinde veya ustunde cevabi ele veren islem, sonuc ya da ipucu yazilmamali
+    - Sayilmasi gereken ana ogeler dekoratif kalabalik icinde kaybolmamali
+    - Fotogercekci, karmasik veya yetiskinlere hitap eden bir gorsel dil kullanilmamali
+    - Gorsel ile metin arasinda sayi, nesne veya iliski celiskisi bulunmamali
+    stil: ilkokul_dostu_sade_illustrasyon
+    boyut: orta
+  sik_gorseli:
+    gerekli: false
+    kurallar:
+    - Secenekler yalnizca metin, sayi ya da islem ifadesi olarak verilmelidir
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: Öğrencilerden, ardışık çıkarma işlemleri ile verilen görseldeki işlemin hangi bölme işlemi ile ifade edilebileceğini
+    belirlemeleri beklenir. Bu kalıp, ardışık çıkarma ile bölme arasındaki ilişkiyi kavramalarını sağlar.
+  tema_siniri: Yalnizca 2. sinif duzeyinde cikarma ve bolme iliskisi kurma, ardisik cikarma, bolme, esit eksiltme, adim sayisi
+    odagi korunmali.
+  izinli_icerik:
+    kavramlar:
+    - cikarma ve bolme iliskisi kurma
+    - ardisik cikarma
+    - bolme
+    - esit eksiltme
+    - adim sayisi
+    beceriler:
+    - Ardışık çıkarma
+    - Bölme mantığını anlama
+    - İşlem eşleştirme
+    - Ardışık çıkarma ve anlama
+    - Bölme mantığını kavrama
+  yasaklar:
+  - 3 basamakli ve daha buyuk sayilarla ileri duzey islem zincirleri
+  - Kalanli bolme, bolme algoritmasi veya ust sinif duzeyindeki islem teknikleri
+  - 2. sinif duzeyini asan soyut cebir dili, sembolik ispat ya da formal tanimlar
+  - Gorsel olmadan cozume ulastiran acik sonuc, islem veya sayi bilgisini metinde vermek
+  - Gereksiz veri yuku olusturan cok adimli ve dikkat dagitici problem kurgulari
+
+izinli_icerikler:
+  kavramlar:
+  - cikarma ve bolme iliskisi kurma
+  - ardisik cikarma
+  - bolme
+  - esit eksiltme
+  - adim sayisi
+  beceriler:
+  - ardisik_cikarma
+  - bolme_mantigini_anlama
+  - islem_eslestirme
+  - ardisik_cikarma_ve_anlama
+  - bolme_mantigini_kavrama
+  soru_islemleri:
+  - ardisik_cikarmayi_bolmeye_donusturme
+  - gorselden_adim_sayma
+  - dogru_islemi_bulma

@@ -1,0 +1,153 @@
+# Toplama ve Çıkarma Problemini Çöz - 2. Sinif
+
+meta:
+  id: o09_toplama_ve_cikarma_problemini_coz
+  ad: Toplama ve Çıkarma Problemini Çöz
+  sinif_seviyesi: 2
+  aciklama: Toplama ve çıkarma işlemlerinin birlikte kullanıldığı problemleri çözme becerisini ölçer. Öğrencinin işlem sırasını
+    doğru belirlemesi önemlidir.
+  kaynak: o09_Toplama ve Çıkarma Problemini Çöz.yaml
+  frequency: Medium
+  difficulty: orta
+
+context:
+  type: toplama_ve_cikarma_problemini_coz
+  question_count: 1
+  generation:
+    word_count_min: 35
+    word_count_max: 80
+    image_type: tek_gorsel
+    structure:
+    - 4-6 cumlelik, gunluk yasamdan gelen dogal bir senaryo yaz
+    - Senaryoda toplama ve cikarma birlikte kullanilmali; ogrencinin islem sirasini kurmasi gerekmeli
+    - Metin, gorselden okunmasi gereken kritik sayi ya da iliskiyi dogrudan soylememeli
+    - Gorsel, cozumun ana veri kaynagi olmali
+    - Soru koku, "Bu durumda toplam kaç tane kalır?" benzeri tek cumlelik bir yapi tasimali
+    kurallar:
+    - 2. sinif seviyesinde olmali
+    - Turkce karakterler ve noktalama dogru kullanilmali
+    - Gorsel ve ust metin birbiriyle tam uyumlu olmali
+    - Dogru cevap tek ve net olmali
+    - Gorsel olmadan dogrudan sonuca ulastiracak acik islem ya da sonuc verilmemeli
+    - Secenekler 3 sikli olmali ve yalnizca bir dogru cevap icermeli
+  questions:
+  - slot: 1
+    type: toplama_ve_cikarma_problemini_coz
+    soru_kokleri:
+    - Bu durumda toplam kaç tane kalır?
+    - En sonunda kaç tane olur?
+    beceri:
+      katman: MAT.2.2.4
+      bilesenler:
+      - problemi_anlama
+      - islem_sirasini_belirleme
+      - toplama_islemi
+      - cikarma_islemi
+      - toplama_ve_cikarma_islemlerini_dogru_sirada_yapma
+      - problemi_anlama_ve_cozme
+      surec_bileseni: problem_cozme
+
+format:
+  type: llm_generated_html
+  soru_koku: Kisa, tek cumlelik soru koku. "Bu durumda toplam kaç tane kalır?" benzeri bir istem tasimali.
+  paragraph:
+    required: true
+    word_count_min: 35
+    word_count_max: 80
+    sentence_count_min: 4
+    sentence_count_max: 6
+  options:
+    count: 3
+    labels:
+    - A
+    - B
+    - C
+    style: text_only
+    word_count_min: 1
+    word_count_max: 6
+    correct_count: 1
+
+dogru_cevap:
+  tanim: Toplama ve cikarma bilgilerini dogru sirayla birlestirip sonuca ulasan secenek
+  kurallar:
+  - Doğru işlem sırasını belirleme
+  - Verilen senaryoya uygun hesap yapma
+  - Hesapta kullanılan her miktar, görseldeki ilgili grup veya kap sayımıyla ayrıca doğrulanmalı
+  - Dogru cevap tek ve net olmali
+
+distractors:
+  kurallar:
+  - Yanlış işlem sıraları kullanılmalı
+  - Çeldiriciler mantıklı ve inandırıcı olmalı
+  - Islem sirasini karistiran secenekler kullanilmali
+  - Yalnizca tek islemi yaparak sonuca giden secenekler yer almali
+  - Yanlis secenekler ogrencinin dusebilecegi gercek hatalara dayanmali
+  - Yanlis secenekler dogru cevaba yakin ama ayirt edilebilir olmali
+  yasaklar:
+  - Alakasız sonuçlar
+  - Matematiksel olarak imkansız işlemler
+  - Bariz sacma, baglamsiz ya da islem mantigiyla ilgisiz secenek uretilmemeli
+  - Birden fazla yanlis secenek ayni hatayi tekrar etmemeli
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+    - Gorsel ilkokul duzeyine uygun, sade ve anlasilir olmali
+    - Toplama ve cikarma ile iliskili iki farkli bilgi ayni baglam icinde sunulmali
+    - Ara bilgiler gorselde karismadan okunabilmeli
+    - Sayilmasi ya da karsilastirilmasi gereken ana ogeler net secilebilmeli
+    - Gorsel, soruda hedeflenen islem ya da iliskiyi bire bir karsilamali
+    - Gorselde artis gosteren nesne, azalma gosteren nesne, baslangic, eklenen ve cikarilan miktarlar icin ayri ve sayilabilir
+      gorsel alan acikca yer almali
+    yasaklar:
+    - Gorselin icinde veya ustunde cevabi ele veren islem, sonuc ya da ipucu yazilmamali
+    - Sayilmasi gereken ana ogeler dekoratif kalabalik icinde kaybolmamali
+    - Fotogercekci, karmasik veya yetiskinlere hitap eden bir gorsel dil kullanilmamali
+    - Gorsel ile metin arasinda sayi, nesne veya iliski celiskisi bulunmamali
+    stil: ilkokul_dostu_sade_illustrasyon
+    boyut: orta
+  sik_gorseli:
+    gerekli: false
+    kurallar:
+    - Secenekler yalnizca metin, sayi ya da islem ifadesi olarak verilmelidir
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: Toplama ve çıkarma işlemlerinin birlikte kullanıldığı problemleri çözme becerisini ölçer. Öğrencinin işlem
+    sırasını doğru belirlemesi önemlidir.
+  tema_siniri: Yalnizca 2. sinif duzeyinde toplama, cikarma, islem sirasi, cok adimli problem odagi korunmali.
+  izinli_icerik:
+    kavramlar:
+    - toplama
+    - cikarma
+    - islem sirasi
+    - cok adimli problem
+    beceriler:
+    - Problemi anlama
+    - İşlem sırasını belirleme
+    - Toplama işlemi
+    - Çıkarma işlemi
+    - Toplama ve çıkarma işlemlerini doğru sırada yapma
+  yasaklar:
+  - 3 basamakli ve daha buyuk sayilarla ileri duzey islem zincirleri
+  - Kalanli bolme, bolme algoritmasi veya ust sinif duzeyindeki islem teknikleri
+  - 2. sinif duzeyini asan soyut cebir dili, sembolik ispat ya da formal tanimlar
+  - Gorsel olmadan cozume ulastiran acik sonuc, islem veya sayi bilgisini metinde vermek
+  - Gereksiz veri yuku olusturan cok adimli ve dikkat dagitici problem kurgulari
+
+izinli_icerikler:
+  kavramlar:
+  - toplama
+  - cikarma
+  - islem sirasi
+  - cok adimli problem
+  beceriler:
+  - problemi_anlama
+  - islem_sirasini_belirleme
+  - toplama_islemi
+  - cikarma_islemi
+  - toplama_ve_cikarma_islemlerini_dogru_sirada_yapma
+  - problemi_anlama_ve_cozme
+  soru_islemleri:
+  - toplama_ve_cikarmayi_birlikte_kullanma
+  - islem_sirasini_kurma
+  - sonucu_bulma

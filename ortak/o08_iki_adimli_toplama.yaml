@@ -1,0 +1,158 @@
+# İki Adımlı Toplama Problemini Görselle Çöz - 2. Sinif
+
+meta:
+  id: o08_iki_adimli_toplama_problemini_gorselle_coz
+  ad: İki Adımlı Toplama Problemini Görselle Çöz
+  sinif_seviyesi: 2
+  aciklama: İki farklı zamanda eklenen nesnelerin toplamını bulma becerisini ölçer. Öğrencinin bilgileri sıraya koyarak işlemi
+    doğru yapması beklenir.
+  kaynak: o08_İki Adımlı Toplama Problemini Görselle Çöz.yaml
+  frequency: Medium
+  difficulty: orta
+
+context:
+  type: iki_adimli_toplama_problemini_gorselle_coz
+  question_count: 1
+  generation:
+    word_count_min: 35
+    word_count_max: 80
+    image_type: tek_gorsel
+    structure:
+    - 4-6 cumlelik, gunluk yasamdan gelen dogal bir senaryo yaz
+    - Senaryoda baslangic miktarina sonradan eklenen ikinci bir adim bulunmali ve cozum icin hem metin hem gorsel birlikte
+      kullanilmali
+    - Metin, gorselden okunmasi gereken kritik sayi ya da iliskiyi dogrudan soylememeli
+    - Gorsel, cozumun ana veri kaynagi olmali
+    - Baslangic miktari gorselde 3 esit bolmeli bir raf veya 3 grup halinde net sayilabilir sekilde verilmeli
+    - Soru koku, "Son durumda toplam kaç nesne olur?" benzeri tek cumlelik bir yapi tasimali
+    kurallar:
+    - 2. sinif seviyesinde olmali
+    - Turkce karakterler ve noktalama dogru kullanilmali
+    - Gorsel ve ust metin birbiriyle tam uyumlu olmali
+    - Dogru cevap tek ve net olmali
+    - Gorsel olmadan dogrudan sonuca ulastiracak acik islem ya da sonuc verilmemeli
+    - Secenekler 3 sikli olmali ve yalnizca bir dogru cevap icermeli
+  questions:
+  - slot: 1
+    type: iki_adimli_toplama_problemini_gorselle_coz
+    soru_kokleri:
+    - Son durumda toplam kaç nesne olur?
+    - Görseldeki başlangıç miktarına sonradan eklenenlerle birlikte toplam kaç tane olur?
+    beceri:
+      katman: MAT.2.2.8
+      bilesenler:
+      - toplama_islemi
+      - siralama
+      - gorsel_okuma
+      - akil_yurutme
+      - toplama_becerisi
+      - adimlari_siralama
+      surec_bileseni: problem_cozme
+
+format:
+  type: llm_generated_html
+  soru_koku: Kisa, tek cumlelik soru koku. "Son durumda toplam kaç nesne olur?" benzeri bir istem tasimali.
+  paragraph:
+    required: true
+    word_count_min: 35
+    word_count_max: 80
+    sentence_count_min: 4
+    sentence_count_max: 6
+  options:
+    count: 3
+    labels:
+    - A
+    - B
+    - C
+    style: text_only
+    word_count_min: 1
+    word_count_max: 6
+    correct_count: 1
+
+dogru_cevap:
+  tanim: Baslangic miktari ile sonradan eklenen bilgiyi dogru sirayla birlestirip nihai toplami veren secenek
+  kurallar:
+  - Görseldeki başlangıç miktarı ile metinde verilen sonraki ekleme miktarını birleştirerek doğru sonucu bul
+  - Ara toplam ile nihai toplamı karıştırma
+  - Dogru cevap tek ve net olmali
+
+distractors:
+  kurallar:
+  - Ara toplamı seçeneklerde sun
+  - Görseldeki sayılarla karışıklık yarat
+  - Ara toplami nihai sonuc sanan secenekler kullanilmali
+  - Sadece gorseldeki ilk miktari cevap olarak veren secenekler yer almali
+  - Yanlis secenekler ogrencinin dusebilecegi gercek hatalara dayanmali
+  - Yanlis secenekler dogru cevaba yakin ama ayirt edilebilir olmali
+  yasaklar:
+  - Alakasız sayılar
+  - Çok benzer rakamlar
+  - Bariz sacma, baglamsiz ya da islem mantigiyla ilgisiz secenek uretilmemeli
+  - Birden fazla yanlis secenek ayni hatayi tekrar etmemeli
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+    - Gorsel ilkokul duzeyine uygun, sade ve anlasilir olmali
+    - Gorsel baslangic durumunu net vermeli; sonraki ekleme bilgisi metinde tamamlanmali
+    - Ogrenci yalniz gorseli sayarak sonuca ulasamamali
+    - Sayilmasi ya da karsilastirilmasi gereken ana ogeler net secilebilmeli
+    - Gorsel, soruda hedeflenen islem ya da iliskiyi bire bir karsilamali
+    - Gorselde baslangic durumu, gorselden okunacak ilk miktar acikca yer almali
+    - Kitaplar tek bir kalabalik rafta degil, 3 bolmede 5'er kitap gibi acik gruplar halinde yerlestirilmelidir
+    - Her kitap tamamen gorunmeli; egik ve ust uste binen kapaklar kullanilmamali
+    yasaklar:
+    - Gorselin icinde veya ustunde cevabi ele veren islem, sonuc ya da ipucu yazilmamali
+    - Sayilmasi gereken ana ogeler dekoratif kalabalik icinde kaybolmamali
+    - Fotogercekci, karmasik veya yetiskinlere hitap eden bir gorsel dil kullanilmamali
+    - Gorsel ile metin arasinda sayi, nesne veya iliski celiskisi bulunmamali
+    - Tek uzun raf uzerinde sayimi zorlastiran sıkisik kitap dizilimi kullanilmamali
+    stil: ilkokul_dostu_sade_illustrasyon
+    boyut: orta
+  sik_gorseli:
+    gerekli: false
+    kurallar:
+    - Secenekler yalnizca metin, sayi ya da islem ifadesi olarak verilmelidir
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: İki farklı zamanda eklenen nesnelerin toplamını bulma becerisini ölçer. Öğrencinin bilgileri sıraya koyarak
+    işlemi doğru yapması beklenir.
+  tema_siniri: Yalnizca 2. sinif duzeyinde toplama, iki adimli toplama, baslangic miktari, ekleme, nihai toplam odagi korunmali.
+  izinli_icerik:
+    kavramlar:
+    - toplama
+    - iki adimli toplama
+    - baslangic miktari
+    - ekleme
+    - nihai toplam
+    beceriler:
+    - Toplama işlemi
+    - Sıralama
+    - Görsel okuma
+    - Akıl yürütme
+    - Toplama becerisi
+  yasaklar:
+  - 3 basamakli ve daha buyuk sayilarla ileri duzey islem zincirleri
+  - Kalanli bolme, bolme algoritmasi veya ust sinif duzeyindeki islem teknikleri
+  - 2. sinif duzeyini asan soyut cebir dili, sembolik ispat ya da formal tanimlar
+  - Gorsel olmadan cozume ulastiran acik sonuc, islem veya sayi bilgisini metinde vermek
+  - Gereksiz veri yuku olusturan cok adimli ve dikkat dagitici problem kurgulari
+
+izinli_icerikler:
+  kavramlar:
+  - toplama
+  - iki adimli toplama
+  - baslangic miktari
+  - ekleme
+  - nihai toplam
+  beceriler:
+  - toplama_islemi
+  - siralama
+  - gorsel_okuma
+  - akil_yurutme
+  - toplama_becerisi
+  - adimlari_siralama
+  soru_islemleri:
+  - iki_adimli_toplama
+  - metin_ve_gorseli_birlestirme
+  - nihai_toplami_bulma

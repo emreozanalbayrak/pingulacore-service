@@ -1,0 +1,158 @@
+# Eksileni ya da Çıkanı Görselden Bul - 2. Sinif
+
+meta:
+  id: k21_eksileni_ya_da_cikani_gorselden_bul
+  ad: Eksileni ya da Çıkanı Görselden Bul
+  sinif_seviyesi: 2
+  aciklama: Öğrencilerden, görselde verilen başlangıç ve sonuç durumuna göre çıkarılan miktarı belirlemeleri istenir.
+  kaynak: k21_Eksileni ya da Çıkanı Görselden Bul.yaml
+  frequency: Low
+  difficulty: kolay
+
+context:
+  type: eksileni_ya_da_cikani_gorselden_bul
+  question_count: 1
+  generation:
+    word_count_min: 30
+    word_count_max: 65
+    image_type: tek_gorsel
+    structure:
+    - 4-6 cumlelik, gunluk yasamdan gelen dogal bir senaryo yaz
+    - Senaryoda baslangic durumu ile sonuc durumu birlikte verilerek cikarilan ya da eksilen miktarin bulunmasi beklenmeli
+    - Metin, gorselden okunmasi gereken kritik sayi ya da iliskiyi dogrudan soylememeli
+    - Gorsel, cozumun ana veri kaynagi olmali
+    - Gorsel mutlaka iki panelli olmali: solda baslangic, sagda sonuc
+    - Temsili anlatim kullanilsa bile baslangic ve sonuc panelinde ayni nesne ailesi korunmali; senaryodaki nesne alakasiz sekil ya da bloklarla degistirilmemeli
+    - Soru koku, "Görselde kaç nesne çıkarılmıştır?" benzeri tek cumlelik bir yapi tasimali
+    kurallar:
+    - 2. sinif seviyesinde olmali
+    - Turkce karakterler ve noktalama dogru kullanilmali
+    - Gorsel ve ust metin birbiriyle tam uyumlu olmali
+    - Dogru cevap tek ve net olmali
+    - Gorsel olmadan dogrudan sonuca ulastiracak acik islem ya da sonuc verilmemeli
+    - Secenekler 3 sikli olmali ve yalnizca bir dogru cevap icermeli
+  questions:
+  - slot: 1
+    type: eksileni_ya_da_cikani_gorselden_bul
+    soru_kokleri:
+    - Görselde kaç nesne çıkarılmıştır?
+    - Başlangıçtaki nesne sayısı ile sonuçtaki nesne sayısını karşılaştırarak çıkarılan miktarı bulun.
+    beceri:
+      katman: MAT.2.2.4
+      bilesenler:
+      - cikarma_islemi_yapma
+      - gorsel_okuma
+      - problem_cozme
+      - mantiksal_dusunme
+      - gorselden_bilgi_elde_etme
+      - sonuc_cikarma
+      surec_bileseni: bulma_ve_cozumleme
+
+format:
+  type: llm_generated_html
+  soru_koku: Kisa, tek cumlelik soru koku. "Görselde kaç nesne çıkarılmıştır?" benzeri bir istem tasimali.
+  paragraph:
+    required: true
+    word_count_min: 30
+    word_count_max: 65
+    sentence_count_min: 4
+    sentence_count_max: 6
+  options:
+    count: 3
+    labels:
+    - A
+    - B
+    - C
+    style: text_only
+    word_count_min: 1
+    word_count_max: 6
+    correct_count: 1
+
+dogru_cevap:
+  tanim: Baslangic ve sonuc arasindaki farki dogru okuyarak cikarilan miktari veren secenek
+  kurallar:
+  - Başlangıç ve sonuç durumları arasındaki fark doğru cevap olarak belirlenmelidir.
+  - Öğrencilerden görseli doğru okuyarak işlem yapmaları beklenmelidir.
+  - Dogru cevap tek ve net olmali
+
+distractors:
+  kurallar:
+  - Öğrencilerin yanlış yorumlamaları hedeflenmelidir.
+  - Kalan miktarı cevap olarak düşünebilecekleri seçenekler sunulmalıdır.
+  - Sonuc miktarini dogrudan cevap sanan secenekler kullanilmali
+  - Baslangic miktarini yanlis saymaya dayali secenekler yer almali
+  - Yanlis secenekler ogrencinin dusebilecegi gercek hatalara dayanmali
+  - Yanlis secenekler dogru cevaba yakin ama ayirt edilebilir olmali
+  yasaklar:
+  - Doğru cevaba yakın olmayan seçenekler
+  - Yanıltıcı olmayan basit hatalar
+  - Bariz sacma, baglamsiz ya da islem mantigiyla ilgisiz secenek uretilmemeli
+  - Birden fazla yanlis secenek ayni hatayi tekrar etmemeli
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+    - Gorsel ilkokul duzeyine uygun, sade ve anlasilir olmali
+    - Baslangic ve sonuc durumu ayni nesne turuyle tutarli bicimde gosterilmeli
+    - Azalan miktar ogrencinin karsilastirma yapabilecegi netlikte sunulmali
+    - Sayilmasi ya da karsilastirilmasi gereken ana ogeler net secilebilmeli
+    - Gorsel, soruda hedeflenen islem ya da iliskiyi bire bir karsilamali
+    - Gorselde baslangic durumu, son durum acikca yer almali
+    - Baslangic nesneleri duz bir izgara duzeninde, son durum nesneleri de ayni nesne boyutuyla ayri panelde verilmelidir
+    - Panel basliklari kisa ve Turkce olmali: Baslangic, Sonuc
+    - Iki panelde kullanilan ana nesne ayni tur olmali; ogrenci farki dogrudan sayarak gorebilmelidir
+    yasaklar:
+    - Gorselin icinde veya ustunde cevabi ele veren islem, sonuc ya da ipucu yazilmamali
+    - Sayilmasi gereken ana ogeler dekoratif kalabalik icinde kaybolmamali
+    - Fotogercekci, karmasik veya yetiskinlere hitap eden bir gorsel dil kullanilmamali
+    - Gorsel ile metin arasinda sayi, nesne veya iliski celiskisi bulunmamali
+    - Iki panel yerine tek tabakta karisik nesneler kullanilmamali
+    - Bir panelde baska, diger panelde baska nesne kullanma; senaryodaki nesnenin yerine alakasiz bloklar veya soyut sekiller koyma
+    stil: ilkokul_dostu_sade_illustrasyon
+    boyut: orta
+  sik_gorseli:
+    gerekli: false
+    kurallar:
+    - Secenekler yalnizca metin, sayi ya da islem ifadesi olarak verilmelidir
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: Öğrencilerden, görselde verilen başlangıç ve sonuç durumuna göre çıkarılan miktarı belirlemeleri istenir.
+  tema_siniri: Yalnizca 2. sinif duzeyinde cikarma, eksilen, cikan, baslangic, sonuc odagi korunmali.
+  izinli_icerik:
+    kavramlar:
+    - cikarma
+    - eksilen
+    - cikan
+    - baslangic
+    - sonuc
+    beceriler:
+    - Çıkarma işlemi yapma
+    - Görsel okuma
+    - Problem çözme
+    - Mantıksal düşünme
+    - Görselden bilgi elde etme
+  yasaklar:
+  - 3 basamakli ve daha buyuk sayilarla ileri duzey islem zincirleri
+  - Kalanli bolme, bolme algoritmasi veya ust sinif duzeyindeki islem teknikleri
+  - 2. sinif duzeyini asan soyut cebir dili, sembolik ispat ya da formal tanimlar
+  - Gorsel olmadan cozume ulastiran acik sonuc, islem veya sayi bilgisini metinde vermek
+  - Gereksiz veri yuku olusturan cok adimli ve dikkat dagitici problem kurgulari
+
+izinli_icerikler:
+  kavramlar:
+  - cikarma
+  - eksilen
+  - cikan
+  - baslangic
+  - sonuc
+  beceriler:
+  - cikarma_islemi_yapma
+  - gorsel_okuma
+  - problem_cozme
+  - mantiksal_dusunme
+  - gorselden_bilgi_elde_etme
+  - sonuc_cikarma
+  soru_islemleri:
+  - cikarilan_miktari_bulma
+  - baslangic_sonuc_karsilastirma
+  - farki_hesaplama

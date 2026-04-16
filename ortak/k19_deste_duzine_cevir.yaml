@@ -1,0 +1,155 @@
+# Deste ya da Düzineyi Sayıya Çevir - 2. Sinif
+
+meta:
+  id: k19_deste_ya_da_duzineyi_sayiya_cevir
+  ad: Deste ya da Düzineyi Sayıya Çevir
+  sinif_seviyesi: 2
+  aciklama: Öğrencilerin deste veya düzineyi temsil eden nesne gruplarını görsel olarak tanıyıp, toplamda kaç nesne olduğunu
+    sayıya çevirmeleri beklenir.
+  kaynak: k19_Deste ya da Düzineyi Sayıya Çevir.yaml
+  frequency: Low
+  difficulty: kolay
+
+context:
+  type: deste_ya_da_duzineyi_sayiya_cevir
+  question_count: 1
+  generation:
+    word_count_min: 30
+    word_count_max: 65
+    image_type: tek_gorsel
+    structure:
+    - 4-6 cumlelik, gunluk yasamdan gelen dogal bir senaryo yaz
+    - Senaryoda deste ya da duzineyi temsil eden nesne gruplari kurulmali ve toplam miktar sayiya donusturulmeli
+    - Metin, gorselden okunmasi gereken kritik sayi ya da iliskiyi dogrudan soylememeli
+    - Gorsel, cozumun ana veri kaynagi olmali
+    - Soru koku, "Bu görselde toplam kaç nesne vardır?" benzeri tek cumlelik bir yapi tasimali
+    kurallar:
+    - 2. sinif seviyesinde olmali
+    - Turkce karakterler ve noktalama dogru kullanilmali
+    - Gorsel ve ust metin birbiriyle tam uyumlu olmali
+    - Dogru cevap tek ve net olmali
+    - Gorsel olmadan dogrudan sonuca ulastiracak acik islem ya da sonuc verilmemeli
+    - Secenekler 3 sikli olmali ve yalnizca bir dogru cevap icermeli
+  questions:
+  - slot: 1
+    type: deste_ya_da_duzineyi_sayiya_cevir
+    soru_kokleri:
+    - Bu görselde toplam kaç nesne vardır?
+    - Görseldeki nesnelerle hangi sayı doğru eşleşir?
+    beceri:
+      katman: MAT.2.2.3
+      bilesenler:
+      - gorsel_algilama
+      - sayilarla_iliskilendirme
+      - temel_carpma_kavrami
+      - kavram_anlama
+      - gorsel_okuma
+      - sayisal_iliskilendirme
+      surec_bileseni: donusturme
+
+format:
+  type: llm_generated_html
+  soru_koku: Kisa, tek cumlelik soru koku. "Bu görselde toplam kaç nesne vardır?" benzeri bir istem tasimali.
+  paragraph:
+    required: true
+    word_count_min: 30
+    word_count_max: 65
+    sentence_count_min: 4
+    sentence_count_max: 6
+  options:
+    count: 3
+    labels:
+    - A
+    - B
+    - C
+    style: text_only
+    word_count_min: 1
+    word_count_max: 6
+    correct_count: 1
+
+dogru_cevap:
+  tanim: Deste veya duzine kavramini dogru yorumlayip toplam sayiyi veren secenek
+  kurallar:
+  - Deste veya düzineyi doğru sayıya çevir.
+  - Her grubu doğru bir şekilde topla.
+  - Dogru cevap tek ve net olmali
+
+distractors:
+  kurallar:
+  - Yanlış sayıda nesne gösterme.
+  - Yanlış çarpanlar kullanma.
+  - Grup degerini 10 yerine 12 ya da 12 yerine 10 alan secenekler kullanilmali
+  - Tekli nesneleri grup sayisina yanlis ekleyen secenekler yer almali
+  - Yanlis secenekler ogrencinin dusebilecegi gercek hatalara dayanmali
+  - Yanlis secenekler dogru cevaba yakin ama ayirt edilebilir olmali
+  yasaklar:
+  - Nesne sayısını yanlış gösteren görseller
+  - Yanıltıcı metinler
+  - Bariz sacma, baglamsiz ya da islem mantigiyla ilgisiz secenek uretilmemeli
+  - Birden fazla yanlis secenek ayni hatayi tekrar etmemeli
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+    - Gorsel ilkokul duzeyine uygun, sade ve anlasilir olmali
+    - Deste ve duzine gruplari tekli nesnelerden ayirt edilebilecek bicimde gosterilmeli
+    - Her grup yapisi ogrencinin grup mantigini bozmayacak sadelikte sunulmali
+    - Sayilmasi ya da karsilastirilmasi gereken ana ogeler net secilebilmeli
+    - Gorsel, soruda hedeflenen islem ya da iliskiyi bire bir karsilamali
+    - Gorselde nesne gruplari, gorsel ustunde sayilar veya simgeler acikca yer almali
+    yasaklar:
+    - Gorselin icinde veya ustunde cevabi ele veren islem, sonuc ya da ipucu yazilmamali
+    - Sayilmasi gereken ana ogeler dekoratif kalabalik icinde kaybolmamali
+    - Fotogercekci, karmasik veya yetiskinlere hitap eden bir gorsel dil kullanilmamali
+    - Gorsel ile metin arasinda sayi, nesne veya iliski celiskisi bulunmamali
+    stil: ilkokul_dostu_sade_illustrasyon
+    boyut: orta
+  sik_gorseli:
+    gerekli: false
+    kurallar:
+    - Secenekler yalnizca metin, sayi ya da islem ifadesi olarak verilmelidir
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: Öğrencilerin deste veya düzineyi temsil eden nesne gruplarını görsel olarak tanıyıp, toplamda kaç nesne
+    olduğunu sayıya çevirmeleri beklenir.
+  tema_siniri: Yalnizca 2. sinif duzeyinde deste hesaplama, duzine hesaplama, deste, duzine, grup degeri odagi korunmali.
+  izinli_icerik:
+    kavramlar:
+    - deste hesaplama
+    - duzine hesaplama
+    - deste
+    - duzine
+    - grup degeri
+    - toplam sayi
+    beceriler:
+    - görsel algılama
+    - sayılarla ilişkilendirme
+    - temel çarpma kavramı
+    - kavram anlama
+    - görsel okuma
+  yasaklar:
+  - 3 basamakli ve daha buyuk sayilarla ileri duzey islem zincirleri
+  - Kalanli bolme, bolme algoritmasi veya ust sinif duzeyindeki islem teknikleri
+  - 2. sinif duzeyini asan soyut cebir dili, sembolik ispat ya da formal tanimlar
+  - Gorsel olmadan cozume ulastiran acik sonuc, islem veya sayi bilgisini metinde vermek
+  - Gereksiz veri yuku olusturan cok adimli ve dikkat dagitici problem kurgulari
+
+izinli_icerikler:
+  kavramlar:
+  - deste hesaplama
+  - duzine hesaplama
+  - deste
+  - duzine
+  - grup degeri
+  - toplam sayi
+  beceriler:
+  - gorsel_algilama
+  - sayilarla_iliskilendirme
+  - temel_carpma_kavrami
+  - kavram_anlama
+  - gorsel_okuma
+  - sayisal_iliskilendirme
+  soru_islemleri:
+  - deste_ve_duzineyi_sayiya_cevirme
+  - grup_degerini_okuma
+  - toplami_bulma

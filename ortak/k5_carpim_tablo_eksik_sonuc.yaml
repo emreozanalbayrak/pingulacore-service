@@ -1,0 +1,168 @@
+# Çarpım Tablosunda Eksik Sonucu Tamamlama - 2. Sinif
+
+meta:
+  id: k05_carpim_tablosunda_eksik_sonucu_tamamlama
+  ad: Çarpım Tablosunda Eksik Sonucu Tamamlama
+  sinif_seviyesi: 2
+  aciklama: Öğrencilerden, çarpım tablosundaki eksik çarpma sonucunu tamamlamaları beklenir. Bu kalıp, temel çarpma tablosuna alışmayı
+    hedefler.
+  kaynak: k5_Çarpım Tablosunda Eksik Sonucu Tamamlama.yaml
+  frequency: Medium
+  difficulty: kolay
+
+context:
+  type: carpim_tablosunda_eksik_sonucu_tamamlama
+  question_count: 1
+  generation:
+    word_count_min: 25
+    word_count_max: 55
+    image_type: tek_gorsel
+    structure:
+    - 3-5 cumlelik, gunluk yasamdan gelen dogal bir senaryo yaz
+    - Senaryoda carpim tablosunun kullanildigi dogal bir baglam kurulmali
+    - Carpma islemi metinde belirtilmemeli, gorselden cikarilmasi beklenmeli
+    - Gorsel, cozumun ana veri kaynagi olmali
+    - Soru koku, "Görsele göre eksik çarpma sonucu kaçtır?" benzeri tek cumlelik bir yapi tasimali
+    ana_gorsel:
+      kurallar:
+      - Gorsel ilkokul duzeyine uygun, sade ve anlasilir olmali
+      - Tablodaki sayilar net ve okunabilir olmali
+      - Eksik carpma islemi soru isareti ile gosterilmeli, cevap gorsel icinde yer almamali
+      - Sayilmasi ya da karsilastirilmasi gereken ana ogeler net secilebilmeli
+      - Gorsel, soruda hedeflenen islem ya da iliskiyi bire bir karsilamali
+      - Gorselde carpim tablosu ve eksik carpma sonucu acikca yer almali
+      - Tablo en fazla 3x3 boyutunda olmali (baslik satirlari haric), satır ve sütun sayiları (tablonun içindeki sonuç sayıları değil) 1-5 arasinda secilmeli
+      - Eksik hucre soru isareti (?) ile gosterilmeli
+      yasaklar:
+      - Gorselin icinde veya ustunde cevabi ele veren islem, sonuc ya da ipucu yazilmamali
+      - Sayilmasi gereken ana ogeler dekoratif kalabalik icinde kaybolmamali
+      - Fotogercekci, karmasik veya yetiskinlere hitap eden bir gorsel dil kullanilmamali
+      - Gorsel ile metin arasinda sayi, nesne veya iliski celiskisi bulunmamali
+      stil: ilkokul_dostu_sade_illustrasyon
+      boyut: orta
+    sik_gorseli:
+      gerekli: false
+      kurallar:
+      - Secenekler yalnizca metin, sayi ya da islem ifadesi olarak verilmelidir
+    kurallar:
+    - 2. sinif seviyesinde olmali
+    - Turkce karakterler ve noktalama dogru kullanilmali
+    - Gorsel ve ust metin birbiriyle tam uyumlu olmali
+    - Dogru cevap tek ve net olmali
+    - Gorsel olmadan dogrudan sonuca ulastiracak acik islem ya da sonuc verilmemeli
+    - Secenekler 3 sikli olmali ve yalnizca bir dogru cevap icermeli
+  questions:
+  - slot: 1
+    type: carpim_tablosunda_eksik_sonucu_tamamlama
+    soru_kokleri:
+    - Aşağıdaki tabloya göre eksik çarpma sonucu kaçtır?
+    - Görsele göre belirli çarpmanın sonucu nedir?
+    - Buna göre eksik olan çarpma sonucu kaçtır?
+    beceri:
+      katman: MAT.2.2.4
+      bilesenler:
+      - ritmik_sayma
+      - carpma_tablosunu_tamamlama
+      - carpma_mantigi
+      - gorsel_okuma
+      surec_bileseni: matematiksel_muhakeme
+
+format:
+  type: llm_generated_html
+  soru_koku: Kisa, tek cumlelik soru koku. "Görsele göre eksik çarpma sonucu kaçtır?" benzeri bir istem tasimali.
+  paragraph:
+    required: true
+    word_count_min: 25
+    word_count_max: 55
+    sentence_count_min: 3
+    sentence_count_max: 5
+  options:
+    count: 3
+    labels:
+    - A
+    - B
+    - C
+    style: text
+    word_count_min: 1
+    word_count_max: 6
+    correct_count: 1
+
+dogru_cevap:
+  tanim: Carpim tablosundaki eksik sonucu dogru hesaplayarak bulan secenek
+  kurallar:
+  - Çarpım tablosundaki eksik sonucu doğru hesaplama
+  - Tablodaki ardışık ilişkileri doğru anlama
+  - Dogru cevap tek ve net olmali
+
+distractors:
+  kurallar:
+  - Eksik çarpma sonucunu yanlış hesaplayan seçenekler içermeli
+  - Tabloda yanlış sonuçla karıştıran seçenekler kullanılmalı
+  - Yanlis secenekler ogrencinin dusebilecegi gercek hatalara dayanmali
+  - Yanlis secenekler dogru cevaba yakin ama ayirt edilebilir olmali
+  yasaklar:
+  - Doğru cevabın tekrarı
+  - Çok bariz şekilde yanlış olan seçenekler
+  - Bariz sacma, baglamsiz ya da islem mantigiyla ilgisiz secenek uretilmemeli
+  - Birden fazla yanlis secenek ayni hatayi tekrar etmemeli
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+    - Gorsel ilkokul duzeyine uygun, sade ve anlasilir olmali
+    - Tablodaki sayilar net ve okunabilir olmali
+    - Eksik carpma islemi net bir sekilde gosterilmeli
+    - Sayilmasi ya da karsilastirilmasi gereken ana ogeler net secilebilmeli
+    - Gorsel, soruda hedeflenen islem ya da iliskiyi bire bir karsilamali
+    - Gorselde carpim tablosu ve eksik carpma sonucu acikca yer almali
+    yasaklar:
+    - Gorselin icinde veya ustunde cevabi ele veren islem, sonuc ya da ipucu yazilmamali
+    - Sayilmasi gereken ana ogeler dekoratif kalabalik icinde kaybolmamali
+    - Fotogercekci, karmasik veya yetiskinlere hitap eden bir gorsel dil kullanilmamali
+    - Gorsel ile metin arasinda sayi, nesne veya iliski celiskisi bulunmamali
+    stil: ilkokul_dostu_sade_illustrasyon
+    boyut: orta
+  sik_gorseli:
+    gerekli: false
+    kurallar:
+    - Secenekler yalnizca metin, sayi ya da islem ifadesi olarak verilmelidir
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: Öğrencilerden, çarpım tablosundaki eksik çarpma sonucunu tamamlamaları beklenir. Bu kalıp, temel çarpma tablosuna
+    alışmayı hedefler.
+  tema_siniri: Yalnizca 2. sinif duzeyinde carpma tablosu, ritmik sayma, carpma mantigi odagi korunmali.
+  izinli_icerik:
+    kavramlar:
+    - carpim tablosu
+    - carpma
+    - ritmik sayma
+    - es gruplar
+    - carpma sonucu
+    beceriler:
+    - Ritmik sayma
+    - Çarpma tablosunu tamamlama
+    - Çarpma mantığını anlama
+    - Görsel okuma
+  yasaklar:
+  - 3 basamakli ve daha buyuk sayilarla ileri duzey islem zincirleri
+  - Kalanli bolme, bolme algoritmasi veya ust sinif duzeyindeki islem teknikleri
+  - 2. sinif duzeyini asan soyut cebir dili, sembolik ispat ya da formal tanimlar
+  - Gorsel olmadan cozume ulastiran acik sonuc, islem veya sayi bilgisini metinde vermek
+  - Gereksiz veri yuku olusturan cok adimli ve dikkat dagitici problem kurgulari
+
+izinli_icerikler:
+  kavramlar:
+  - carpim tablosu
+  - carpma
+  - ritmik sayma
+  - es gruplar
+  - carpma sonucu
+  beceriler:
+  - ritmik_sayma
+  - carpma_tablosunu_tamamlama
+  - carpma_mantigi
+  - gorsel_okuma
+  soru_islemleri:
+  - eksik_carpma_sonucunu_bulma
+  - carpim_tablosunu_okuma
+  - ardisik_iliskiyi_kullanma

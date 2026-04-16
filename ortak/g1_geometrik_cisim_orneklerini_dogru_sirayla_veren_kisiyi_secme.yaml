@@ -1,0 +1,202 @@
+# Geometrik Cisimlere Benzeyen Gunluk Yasam Orneklerini Dogru Sirayla Veren Kisiyi Secme — 2. Sinif
+
+meta:
+  id: "geometrik_cisim_orneklerini_dogru_sirayla_veren_kisiyi_secme"
+  ad: "Geometrik Cisim Orneklerini Dogru Sirayla Veren Kisiyi Secme"
+  sinif_seviyesi: 2
+  aciklama: >
+    Bir ogretmen, karakter, oyun yoneticisi ya da baglamdaki yonlendirici kisi;
+    ogrencilerden ya da kisilerden belirli geometrik cisimlere benzeyen gunluk
+    yasam nesnelerine belirli bir sirayla ornek vermelerini ister. Ogrenci,
+    gorselde yer alan kisilerin verdigi nesneleri hem dogru geometrik cisimle
+    eslestirir hem de siranin korunup korunmadigini kontrol ederek dogru kisiyi secer.
+  kaynak: "geometrik_cisim_orneklerini_dogru_sirayla_veren_kisiyi_secme.yaml"
+  frequency: "Medium"
+  difficulty: "orta"
+
+context:
+  type: "geometrik_cisim_orneklerini_dogru_sirayla_veren_kisiyi_secme"
+  question_count: 1
+  generation:
+    word_count_min: 30
+    word_count_max: 90
+    image_type: "ortak_gorsel"
+    structure:
+      - "Bir sinifta, oyunda, etkinlik alaninda, kulupte, yarismada ya da cocuklara uygun dogal bir baglamda gecen 3-7 cumlelik kisa bir senaryo yaz"
+      - "Senaryoda bir yonlendirici kisi bulunmali: ogretmen, karakter, oyun yoneticisi, sunucu, rehber ya da benzeri biri"
+      - "Bu yonlendirici kisi, kisilerden belirli geometrik cisimlere benzeyen gunluk yasam nesnelerine ORNEK vermelerini istemeli"
+      - "KRITIK: Hedef geometrik cisimlerin adlari metinde acikca verilmeli ve belirli bir sirayla istenmeli"
+      - "Metinde 'sirasiyla' anlami net bicimde kurulmalı; ogrenci sadece dogru nesneyi degil dogru SIRAYI da kontrol etmeli"
+      - "Her soruda tam 3 hedef geometrik cisim kullanilmali"
+      - "Gorselde tam 3 kisi yan yana yer almali"
+      - "Her kisinin altinda ya da yaninda, kutu icinde yatay dizilmis tam 3 gunluk yasam nesnesi gosterilmeli"
+      - "Nesneler gunluk hayattan, 2. sinif ogrencisinin taniyabilecegi acik ve sade orneklerden secilmeli"
+      - "Metin, kisilerin verdigi tek tek nesneleri soylememeli; bu bilgi ana olarak gorselden okunmali"
+      - "Gorsel cozumun ana tasiyicisi olmali; metin yalnizca gorevi, hedef geometrik cisimleri ve baglami kurmali"
+      - "Metinde senaryo, soru isareti gerektirecek cumleler kullanilmamali; soru yalnizca soru kokunde yer almali"
+    kurallar:
+      - "2. sinif seviyesinde olmali"
+      - "Her soruda yalnizca 3 kisi bulunmali"
+      - "Her kiside tam 3 nesne bulunmali"
+      - "Hedef geometrik cisimler ve istenen sira acik olmali"
+      - "Ogrenci cevaba yalniz metinden degil, kisilerin verdigi nesneleri gorselden yorumlayarak ulasmali"
+      - "Yalnizca bir kisi tum kosullari dogru saglamali"
+      - "Yanlis kisiler farkli hata turleri tasimali; ayni hata iki kiside tekrar edilmemeli"
+      - "Turkce karakterler dogru kullanilmali"
+      - "Gorseller uzerinde Turkce disinda yazi bulunmamali"
+  questions:
+    - slot: 1
+      type: "dogru_kisiyi_secme"
+      soru_kokleri:
+        - "<b>Buna gore hangi ogrencinin verdigi ornekler dogrudur?</b>"
+        - "<b>Buna gore hangi kisinin soyledigi ornekler dogru siradadir?</b>"
+        - "<b>Verilen kurala gore dogru ornekleri hangi kisi vermistir?</b>"
+        - "<b>Hedef geometrik cisimlere uygun ornekleri hangi ogrenci vermistir?</b>"
+        - "<b>Sirasiyla istenen ornekleri dogru veren kisi hangisidir?</b>"
+        - "<b>Bu etkinlikte kurala uygun ornekleri hangi kisi secmistir?</b>"
+      beceri:
+        katman: "KB2"
+        bilesenler:
+          - "gorsel_okuma"
+          - "eslestirme"
+          - "siralama_kontrolu"
+          - "kural_denetime"
+        surec_bileseni: "bilgiyi_cikartma"
+
+format:
+  type: "llm_generated_html"
+  soru_koku: "Kisa, tek cumlelik soru koku. Dogru kisiyi, dogru sirayi ve dogru eslestirmeyi sorduran yapida."
+  paragraph:
+    required: true
+    word_count_min: 45
+    word_count_max: 90
+    sentence_count_min: 4
+    sentence_count_max: 7
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    style: "person_only"
+    word_count_min: 1
+    word_count_max: 3
+    correct_count: 1
+
+dogru_cevap:
+  tanim: "Hedef geometrik cisimlere benzeyen 3 gunluk yasam nesnesini tam dogru ve tam dogru sirayla veren kisi"
+  kurallar:
+    - "KRITIK: Dogru cevapta hem nesneler dogru geometrik cisimlere benzemeli hem de istenen SIRA eksiksiz korunmali"
+    - "Dogru cevap tek ve net olmali"
+    - "Dogru kisiye ait 1. nesne 1. hedef geometrik cisme, 2. nesne 2. hedef geometrik cisme, 3. nesne 3. hedef geometrik cisme uymali"
+    - "Gunluk yasam nesneleri 2. sinif duzeyinde kolay ayirt edilebilir olmali"
+    - "Dogru kiside belirsiz, iki anlama gelebilecek ya da baska bir cisme de benzeyebilecek nesne bulunmamali"
+    - "Ogrenci, dogru cevaba ulasmak icin hem metindeki hedef sirasini hem de gorseldeki kisi-ornek iliskisini birlikte incelemeli"
+
+distractors:
+  kurallar:
+    - "Yanlis secenekler ogrencinin yaygin yapabilecegi farkli hata turlerine dayanmalı"
+    - "Bir yanlis kisi, ilk iki nesneyi dogru verip son nesnede yanlis geometrik cisme benzeyen bir ornek kullanabilir"
+    - "Bir yanlis kisi, dogru geometrik cisimlere benzeyen nesneler kullanip bunlari yanlis sirada verebilir"
+    - "Gerekirse ucuncu bir hata tipi olarak, yalnizca bir nesne belirsiz ya da hedef disi secilebilir; ancak gorsel yine net okunur olmali"
+    - "Yanlis secenekler ogrenciyi dikkatli siralama ve eslestirme kontrolu yapmaya zorlamali"
+    - "Her yanlis kisi ayri birincil hata turunu temsil etmeli"
+  yasaklar:
+    - "Bariz sacma veya baglamsiz nesneler uretilmemeli"
+    - "Iki yanlis kisi ayni hata turunden olmamali"
+    - "Tum nesneleri tamamen alakasiz olan kolay elenen kisi uretilmemeli"
+    - "Yalnizca siraya bakilarak veya yalnizca tek bir nesneye bakilarak cok kolay cevap bulunmamali"
+    - "Secenekler, ust gorselde bulunmayan farkli kisi adlari ya da farkli kisi gorselleriyle verilmemeli"
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+      - "Gorselde tam 3 kisi yan yana yer almali"
+      - "Her kisinin yuz gorseli acik, ayirt edilebilir ve cocuk dostu olmali"
+      - "Her kisinin altinda veya hemen yaninda, kutu icinde yatay dizilmis tam 3 gunluk yasam nesnesi bulunmali"
+      - "Nesneler birbirinden acik secilmeli ve hangi geometrik cisme benzedigi kolayca ayirt edilebilmeli"
+      - "Her kisinin nesne kutusu sadece o kisiye ait olmali; nesneler kisiler arasinda karismamali"
+      - "Hedef geometrik cisim adlari ust metinde verilmeli; gorsel bu siraya gore kontrol edilebilecek sekilde duzenlenmeli"
+      - "Gunluk yasam nesneleri cocuklarin taniyabilecegi, sade ve gercek hayata uygun orneklerden secilmeli"
+      - "Gorsel sade, temiz, dikkat dagitmayan ve 2. sinif duzeyine uygun olmali"
+      - "Dogru kisi ile yanlis kisiler arasindaki fark yalnizca nesne-secim ve sira duzeyinde olmali; ekstra isaretleme yapilmamali"
+    yasaklar:
+      - "3 kisiden az veya fazla kisi gosterilmemeli"
+      - "Bir kiside 3'ten az veya fazla nesne bulunmamali"
+      - "Nesneler ustteki metinde tek tek yazilarak gorselin cozum degeri dusurulmemeli"
+      - "Dogru kisiyi gosteren ok, yildiz, isaret, renkli vurgu gibi dogrudan ipucu verilmemeli"
+      - "Belirsiz, uzaktan secilemeyen ya da birden fazla geometrik cisme ayni anda benzeyebilecek problemli nesneler kullanilmamali"
+      - "Asiri karmasik arka plan veya dikkat dagitici sus ogeleri kullanilmamali"
+    stil: "uc_kisi_ve_uc_gunluk_nesne_kutusu"
+    boyut: "orta"
+  sik_gorseli:
+    gerekli: true
+    kurallar:
+      - "Secenekler ust gorselde yer alan 3 kisinin ayni kimlikleriyle olusturulmali"
+      - "Seceneklerde nesneler degil kisiler temsil edilmeli"
+      - "A, B ve C seceneklerinde verilen kisi gorselleri ust gorseldeki kisi gorselleriyle birebir eslesmeli"
+      - "Secenekte kullanilan kisi gorseli, ustteki kisiyle sac, kiyafet, yuz, renk ve genel gorunum olarak ayni olmali"
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: "Gunluk yasamdaki nesneleri geometrik cisim ve sekil ozelliklerine gore tanima, siniflandirma, iliski kurma ve model olusturma"
+  tema_siniri: "Yalnizca geometrik cisimler, geometrik sekiller, bicimsel ozelliklerin korunumu ve standart olmayan sivi olcme odagi korunmali"
+  izinli_icerik:
+    kavramlar:
+      - "kup"
+      - "kare prizma"
+      - "dikdortgen prizma"
+      - "ucgen prizma"
+      - "kure"
+      - "dik dairesel silindir"
+      - "ucgen"
+      - "kare"
+      - "dikdortgen"
+      - "cember"
+      - "daire"
+      - "geometrik cisim"
+      - "geometrik sekil"
+      - "bicimsel ozellik"
+      - "yon"
+      - "konum"
+      - "buyukluk"
+      - "standart olmayan sivi olcme araci"
+      - "tahmin"
+      - "olcum sonucu"
+    beceriler:
+      - "Nesneleri bicimsel ozelliklerine gore ayirma"
+      - "Geometrik cisim olarak siniflandirma ve adlandirma"
+      - "Geometrik cisim modelleriyle yapi olusturma"
+      - "Geometrik sekillerle model olusturma"
+      - "Yon, konum veya buyukluk degisse de ayni sekil/cisim oldugunu fark etme"
+      - "Standart olmayan araclarla sivi miktarini tahmin etme"
+      - "Tahmin ile olcum sonucunu karsilastirma"
+      - "Gorsel model uzerinden yorum yapma"
+  yasaklar:
+    - "Aci, cevre, alan, hacim gibi ust duzey geometri konulari"
+    - "Kesir, olcu birimleri veya standart olcme birimleri ile islem"
+    - "Soyut ve gorselsiz geometrik tanimlar"
+    - "2. sinif duzeyini asan teknik terminoloji"
+    - "Birden fazla kazanim alanini gereksiz yere ayni soruda yukleme"
+
+izinli_icerikler:
+  kavramlar:
+    - "kure"
+    - "kup"
+    - "silindir"
+    - "koni"
+    - "dikdortgen prizma"
+    - "gunluk yasam nesnesi"
+    - "ornek"
+    - "sira"
+    - "kisi"
+    - "ogrenci"
+    - "eslestirme"
+  beceriler:
+    - "gorsel_okuma"
+    - "eslestirme"
+    - "siralama_kontrolu"
+    - "dogru_kisiyi_bulma"
+    - "kural_denetime"
+    - "gorsel_yorumlama"
+  soru_islemleri:
+    - "dogru kisiyi secme"
+    - "siraya gore kontrol etme"
+    - "gunluk nesne - geometrik cisim eslestirme"
+    - "gorsel yorumlama"

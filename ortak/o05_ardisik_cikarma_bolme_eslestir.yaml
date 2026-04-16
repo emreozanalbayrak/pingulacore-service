@@ -1,0 +1,175 @@
+# Ardışık Çıkarma ile Bölmeyi Eşleştir - 2. Sinif
+
+meta:
+  id: o05_ardisik_cikarma_ile_bolmeyi_eslestir
+  ad: Ardışık Çıkarma ile Bölmeyi Eşleştir
+  sinif_seviyesi: 2
+  aciklama: Öğrenciler, ardışık çıkarma adımlarını sayarak bölme ilişkisini kurmalıdır. Bu kalıp, temsil dönüşümünü ölçer.
+  kaynak: o05_Ardışık Çıkarma ile Bölmeyi Eşleştir.yaml
+  frequency: Medium
+  difficulty: orta
+
+context:
+  type: ardisik_cikarma_ile_bolmeyi_eslestir
+  question_count: 1
+  generation:
+    word_count_min: 35
+    word_count_max: 80
+    image_type: tek_gorsel
+    structure:
+    - 4-6 cumlelik, gunluk yasamdan gelen dogal bir senaryo yaz
+    - Senaryoda ardisik cikarma adimlarindan bolme iliskisine gecis kurduran daha dikkat gerektiren bir yapi kurulmali
+    - Metin, gorselden okunmasi gereken kritik sayi ya da iliskiyi dogrudan soylememeli
+    - Gorsel, cozumun ana veri kaynagi olmali
+    - Soru koku, "Bu sürecin hangi bölme işlemine karşılık geldiğini bulunuz." benzeri tek cumlelik bir yapi tasimali
+    - Gorsel MUTLAKA nesne tabanli olmali: Her adimda nesne grubu (tabak, sepet, kutu gibi) gosterilmeli ve nesneler azalarak devam etmeli
+    - Gorselde ardisik cikarma adimlari nesne azalmasiyla gosterilmeli (metin denklem olarak degil)
+    ana_gorsel:
+      kurallar:
+      - Gorsel ilkokul duzeyine uygun, sade ve anlasilir olmali
+      - Her adim yatay dizilmis bir nesne grubu olarak gosterilmeli (ornegin 3 tabak yan yana, sonra 2 tabak, sonra 1 tabak)
+      - Adimlar arasinda ok veya cizgi ile gecis gosterilmeli
+      - Her nesne grubunun altina adim numarasi ve nesne sayisi yazilmali
+      - Gorsel YALNIZCA nesne cizimi icermeli, matematiksel denklem icermemeli
+      - En fazla 4 adim gosterilmeli, her adimda en fazla 8 nesne olmali
+      yasaklar:
+      - Gorselin icinde matematiksel esitlik (= isaretli) veya bolme sembolu (÷) kesinlikle yer almamali
+      - Gorselin icinde veya ustunde cevabi ele veren bolme islemi yazilmamali
+      - Sayilmasi gereken ana ogeler dekoratif kalabalik icinde kaybolmamali
+      - Fotogercekci, karmasik veya yetiskinlere hitap eden bir gorsel dil kullanilmamali
+      stil: ilkokul_dostu_sade_illustrasyon
+      boyut: orta
+    sik_gorseli:
+      gerekli: false
+      kurallar:
+      - Secenekler yalnizca metin, sayi ya da islem ifadesi olarak verilmelidir
+    kurallar:
+    - 2. sinif seviyesinde olmali
+    - Turkce karakterler ve noktalama dogru kullanilmali
+    - Gorsel ve ust metin birbiriyle tam uyumlu olmali
+    - Dogru cevap tek ve net olmali
+    - Gorsel olmadan dogrudan sonuca ulastiracak acik islem ya da sonuc verilmemeli
+    - Secenekler 3 sikli olmali ve yalnizca bir dogru cevap icermeli
+  questions:
+  - slot: 1
+    type: ardisik_cikarma_ile_bolmeyi_eslestir
+    soru_kokleri:
+    - Bu sürecin hangi bölme işlemine karşılık geldiğini bulunuz.
+    - Aşamaların sonucunda elde edilen bölme işlemi nedir?
+    beceri:
+      katman: MAT.2.2.9
+      bilesenler:
+      - ardisik_cikarma
+      - bolme_islemi
+      - temsil_iliskisi_kurma
+      - problem_cozme
+      - ardisik_cikarma_adimlarini_belirleme
+      - bolme_islemi_ile_eslestirme
+      surec_bileseni: eslestirme
+
+format:
+  type: llm_generated_html
+  soru_koku: Kisa, tek cumlelik soru koku. "Bu sürecin hangi bölme işlemine karşılık geldiğini bulunuz." benzeri bir istem
+    tasimali.
+  paragraph:
+    required: true
+    word_count_min: 35
+    word_count_max: 80
+    sentence_count_min: 4
+    sentence_count_max: 6
+  options:
+    count: 3
+    labels:
+    - A
+    - B
+    - C
+    style: text
+    word_count_min: 1
+    word_count_max: 7
+    correct_count: 1
+
+dogru_cevap:
+  tanim: Ardisik cikarma duzenini dogru yorumlayip buna karsilik gelen bolme islemini veren secenek
+  kurallar:
+  - Ardışık çıkarma adımları sayılarak bölme işlemi doğru belirlenmelidir.
+  - Kalan sayısı ile bölüm karıştırılmamalıdır.
+  - Bölme eşleştirmesi yapılmadan önce tüm aşamalarda sabit azalış miktarının korunduğu doğrulanmalıdır.
+  - Dogru cevap tek ve net olmali
+
+distractors:
+  kurallar:
+  - Yanlış bölme işlemlerini karıştırarak seçenek oluşturma.
+  - Kalan ve bölüm değerlerini karıştırma.
+  - Bolum ile boleni karistiran secenekler kullanilmali
+  - Adim sayisini yanlis yorumlayan secenekler yer almali
+  - Yanlis secenekler ogrencinin dusebilecegi gercek hatalara dayanmali
+  - Yanlis secenekler dogru cevaba yakin ama ayirt edilebilir olmali
+  yasaklar:
+  - Kalan ve bölüm aynı
+  - Tam doğru cevap
+  - Bariz sacma, baglamsiz ya da islem mantigiyla ilgisiz secenek uretilmemeli
+  - Birden fazla yanlis secenek ayni hatayi tekrar etmemeli
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+    - Gorsel ilkokul duzeyine uygun, sade ve anlasilir olmali
+    - Adimlarin tamami sirayla izlenebilecek bicimde gorunmeli
+    - Her adimda esit eksilme mantigi acikca secilebilmeli
+    - Sayilmasi ya da karsilastirilmasi gereken ana ogeler net secilebilmeli
+    - Gorsel, soruda hedeflenen islem ya da iliskiyi bire bir karsilamali
+    - Gorselde asama sayisi, kalan miktar acikca yer almali
+    yasaklar:
+    - Gorselin icinde veya ustunde cevabi ele veren islem, sonuc ya da ipucu yazilmamali
+    - Sayilmasi gereken ana ogeler dekoratif kalabalik icinde kaybolmamali
+    - Fotogercekci, karmasik veya yetiskinlere hitap eden bir gorsel dil kullanilmamali
+    - Gorsel ile metin arasinda sayi, nesne veya iliski celiskisi bulunmamali
+    stil: ilkokul_dostu_sade_illustrasyon
+    boyut: orta
+  sik_gorseli:
+    gerekli: false
+    kurallar:
+    - Secenekler yalnizca metin, sayi ya da islem ifadesi olarak verilmelidir
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: Öğrenciler, ardışık çıkarma adımlarını sayarak bölme ilişkisini kurmalıdır. Bu kalıp, temsil dönüşümünü
+    ölçer.
+  tema_siniri: Yalnizca 2. sinif duzeyinde cikarma, ardisik cikarma, bolme, temsil donusumu, esit azaltma odagi korunmali.
+  izinli_icerik:
+    kavramlar:
+    - cikarma
+    - ardisik cikarma
+    - bolme
+    - temsil donusumu
+    - esit azaltma
+    beceriler:
+    - Ardışık çıkarma
+    - Bölme işlemi
+    - Temsil ilişkisi kurma
+    - Problem çözme
+    - Ardışık çıkarma adımlarını belirleme
+  yasaklar:
+  - 3 basamakli ve daha buyuk sayilarla ileri duzey islem zincirleri
+  - Kalanli bolme, bolme algoritmasi veya ust sinif duzeyindeki islem teknikleri
+  - 2. sinif duzeyini asan soyut cebir dili, sembolik ispat ya da formal tanimlar
+  - Gorsel olmadan cozume ulastiran acik sonuc, islem veya sayi bilgisini metinde vermek
+  - Gereksiz veri yuku olusturan cok adimli ve dikkat dagitici problem kurgulari
+
+izinli_icerikler:
+  kavramlar:
+  - cikarma
+  - ardisik cikarma
+  - bolme
+  - temsil donusumu
+  - esit azaltma
+  beceriler:
+  - ardisik_cikarma
+  - bolme_islemi
+  - temsil_iliskisi_kurma
+  - problem_cozme
+  - ardisik_cikarma_adimlarini_belirleme
+  - bolme_islemi_ile_eslestirme
+  soru_islemleri:
+  - ardisik_cikarmayi_bolmeye_esleme
+  - temsil_donusturme
+  - dogru_bolme_ifadesini_bulma

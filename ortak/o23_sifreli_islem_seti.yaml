@@ -1,0 +1,187 @@
+# Şifreli İşlem Setini Çöz - 2. Sinif
+
+meta:
+  id: o23_sifreli_islem_setini_coz
+  ad: Şifreli İşlem Setini Çöz
+  sinif_seviyesi: 2
+  aciklama: Öğrenciler, verilen işlemleri çözerek, sonuçları harflerle eşleştirir ve doğru kombinasyonu bulurlar.
+  kaynak: o23_Şifreli İşlem Setini Çöz.yaml
+  frequency: Medium
+  difficulty: orta
+
+context:
+  type: sifreli_islem_setini_coz
+  question_count: 1
+  generation:
+    word_count_min: 35
+    word_count_max: 80
+    image_type: tek_gorsel
+    structure:
+    - 4-6 cumlelik, gunluk yasamdan gelen dogal bir senaryo yaz
+    - Senaryoda birden fazla kisa islemin sonucu harf ya da sembollerle iliskilendirilmeli ve ogrenciden dogru sifreyi kurmasi
+      istenmeli
+    - Metin, gorselden okunmasi gereken kritik sayi ya da iliskiyi dogrudan soylememeli
+    - Gorsel, cozumun ana veri kaynagi olmali
+    - Her islem grubu, nesnelerin ust uste binmedigi duz kartlar veya acik kutucuklar icinde verilmelidir
+    - Soru koku, "Hangi harflerle doğru şifre oluşturulabilir?" benzeri tek cumlelik bir yapi tasimali
+    ana_gorsel:
+      kurallar:
+      - Gorsel ilkokul duzeyine uygun, sade ve anlasilir olmali
+      - Her islem ile karsilik gelen harf ya da sembol duzeni net bicimde ayrilmali
+      - Sifreyi olusturan sira bilgisi gorselde takip edilebilir olmali
+      - Sayilmasi ya da karsilastirilmasi gereken ana ogeler net secilebilmeli
+      - Gorsel, soruda hedeflenen islem ya da iliskiyi bire bir karsilamali
+      - Gorselde harfler, islem sonuclari, her isleme karsilik gelen ayri nesne grubu acikca yer almali
+      - Gorsel en fazla 3 ayri nesne grubu icermeli, her grupta en fazla 5 nesne olmali
+      - Sifre tablosu basit ve okunabilir olmali, en fazla 5 satir icermeli
+      - Nesneler basit geometrik sekiller veya ikonlar olarak cizilmeli (fotorealistik degil)
+      - 1. grup torba icinde bilye gibi gizlenen nesnelerle degil, 3 ayri kartta 4'er mavi nokta olarak gosterilmelidir
+      - 2. grup 10 kurabiye, 2 satir x 5 duzende ve altinda 2 bos tabakla verilmelidir
+      - 3. grup 4 kutu ve her kutuda 2 kalem, kutular arasinda acik bosluk birakilarak verilmelidir
+      - Tablodaki ilk satir 12-T olarak net yazilmali; 12 sayisi yaninda tire, cizik veya fazladan karakter olmamalidir
+      yasaklar:
+      - Gorselin icinde veya ustunde cevabi ele veren islem, sonuc ya da ipucu yazilmamali
+      - Sayilmasi gereken ana ogeler dekoratif kalabalik icinde kaybolmamali
+      - Fotogercekci, karmasik veya yetiskinlere hitap eden bir gorsel dil kullanilmamali
+      - Gorsel ile metin arasinda sayi, nesne veya iliski celiskisi bulunmamali
+      - Bilyelerin torba icinde bir kisminin gizlendigi veya saymayi zorlastirdigi kompozisyonlar kullanilmamali
+      stil: ilkokul_dostu_sade_illustrasyon
+      boyut: orta
+    sik_gorseli:
+      gerekli: false
+      kurallar:
+      - Secenekler yalnizca metin, sayi ya da islem ifadesi olarak verilmelidir
+    kurallar:
+    - 2. sinif seviyesinde olmali
+    - Turkce karakterler ve noktalama dogru kullanilmali
+    - Gorsel ve ust metin birbiriyle tam uyumlu olmali
+    - Dogru cevap tek ve net olmali
+    - Gorsel olmadan dogrudan sonuca ulastiracak acik islem ya da sonuc verilmemeli
+    - Secenekler 4 sikli olmali ve yalnizca bir dogru cevap icermeli
+  questions:
+  - slot: 1
+    type: sifreli_islem_setini_coz
+    soru_kokleri:
+    - Hangi harflerle doğru şifre oluşturulabilir?
+    - Verilen işlemleri çözerek şifreyi bulunuz.
+    beceri:
+      katman: '[MAT.2.3.1]'
+      bilesenler:
+      - carpma_islemi
+      - bolme_islemi
+      - sonuc_esleme
+      - dikkat_ve_islem_secimi
+      - islem_yetenegi
+      - eslestirme_becerisi
+      surec_bileseni: problem_cozme
+
+format:
+  type: llm_generated_html
+  soru_koku: Kisa, tek cumlelik soru koku. "Hangi harflerle doğru şifre oluşturulabilir?" benzeri bir istem tasimali.
+  paragraph:
+    required: true
+    word_count_min: 35
+    word_count_max: 80
+    sentence_count_min: 4
+    sentence_count_max: 6
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    style: text
+    word_count_min: 1
+    word_count_max: 6
+    correct_count: 1
+
+dogru_cevap:
+  tanim: Islemleri dogru cozup sonuc-harf eslestirmesinden dogru sifreyi olusturan secenek
+  kurallar:
+  - Tüm işlemler doğru çözülmeli
+  - Sonuçlar doğru harflerle eşleştirilmeli
+  - İşlemlerin doğruluğu, görseldeki nesne sayılarıyla ayrıca doğrulanmalı
+  - Dogru cevap tek ve net olmali
+
+distractors:
+  kurallar:
+  - Yanlış işlem sonuçları kullanılmalı
+  - Yanlış harf eşlemesi yapılmalı
+  - Harf sirasini karistiran secenekler kullanilmali
+  - Islem sonuclarindan birini yanlis cozume dayandiran secenekler yer almali
+  - Yanlis secenekler ogrencinin dusebilecegi gercek hatalara dayanmali
+  - Yanlis secenekler dogru cevaba yakin ama ayirt edilebilir olmali
+  yasaklar:
+  - Doğru sonuca çok yakın olanlar
+  - Karmaşık ve anlaşılmaz seçenekler
+  - Bariz sacma, baglamsiz ya da islem mantigiyla ilgisiz secenek uretilmemeli
+  - Birden fazla yanlis secenek ayni hatayi tekrar etmemeli
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+    - Gorsel ilkokul duzeyine uygun, sade ve anlasilir olmali
+    - Her islem ile karsilik gelen harf ya da sembol duzeni net bicimde ayrilmali
+    - Sifreyi olusturan sira bilgisi gorselde takip edilebilir olmali
+    - Sayilmasi ya da karsilastirilmasi gereken ana ogeler net secilebilmeli
+    - Gorsel, soruda hedeflenen islem ya da iliskiyi bire bir karsilamali
+    - Gorselde harfler, islem sonuclari, her isleme karsilik gelen ayri nesne grubu acikca yer almali
+    - 1. grupte 3 kart veya 3 acik kutucukta 4'er mavi nokta bulunmali; toplam gorunen bilye sayisi tam 12 olmalidir
+    - Sayi-harf tablosunda tum satirlar duz, ortali ve okunakli olmali
+    yasaklar:
+    - Gorselin icinde veya ustunde cevabi ele veren islem, sonuc ya da ipucu yazilmamali
+    - Sayilmasi gereken ana ogeler dekoratif kalabalik icinde kaybolmamali
+    - Fotogercekci, karmasik veya yetiskinlere hitap eden bir gorsel dil kullanilmamali
+    - Gorsel ile metin arasinda sayi, nesne veya iliski celiskisi bulunmamali
+    - 12 yerine 15 gibi fazla nesne cizilmesine yol acacak daginik bilye yerlesimleri kullanilmamali
+    stil: ilkokul_dostu_sade_illustrasyon
+    boyut: orta
+  sik_gorseli:
+    gerekli: false
+    kurallar:
+    - Secenekler yalnizca metin, sayi ya da islem ifadesi olarak verilmelidir
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: Öğrenciler, verilen işlemleri çözerek, sonuçları harflerle eşleştirir ve doğru kombinasyonu bulurlar.
+  tema_siniri: Yalnizca 2. sinif duzeyinde carpma, bolme, sifre, islem seti, eslestirme odagi korunmali.
+  izinli_icerik:
+    kavramlar:
+    - carpma
+    - bolme
+    - sifre
+    - islem seti
+    - eslestirme
+    - siralama
+    beceriler:
+    - Çarpma işlemi
+    - Bölme işlemi
+    - Sonuç eşleme
+    - Dikkat ve işlem seçimi
+    - İşlem yeteneği
+  yasaklar:
+  - 3 basamakli ve daha buyuk sayilarla ileri duzey islem zincirleri
+  - Kalanli bolme, bolme algoritmasi veya ust sinif duzeyindeki islem teknikleri
+  - 2. sinif duzeyini asan soyut cebir dili, sembolik ispat ya da formal tanimlar
+  - Gorsel olmadan cozume ulastiran acik sonuc, islem veya sayi bilgisini metinde vermek
+  - Gereksiz veri yuku olusturan cok adimli ve dikkat dagitici problem kurgulari
+
+izinli_icerikler:
+  kavramlar:
+  - carpma
+  - bolme
+  - sifre
+  - islem seti
+  - eslestirme
+  - siralama
+  beceriler:
+  - carpma_islemi
+  - bolme_islemi
+  - sonuc_esleme
+  - dikkat_ve_islem_secimi
+  - islem_yetenegi
+  - eslestirme_becerisi
+  soru_islemleri:
+  - sifreli_islem_setini_cozme
+  - islem_sonuclarini_harflerle_esleme
+  - dogru_kombinasyonu_bulma

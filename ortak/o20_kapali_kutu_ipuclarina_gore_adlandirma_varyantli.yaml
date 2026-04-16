@@ -1,0 +1,247 @@
+# Kapali Kutu Ipuclarina Gore Adlandirma — 2. Sinif
+
+meta:
+  id: "o20_kapali_kutu_ipuclarina_gore_adlandirma"
+  ad: "Kapali Kutu Ipuclarina Gore Adlandirma"
+  sinif_seviyesi: 2
+  aciklama: >
+    Uc kapali kutunun yanindaki insan figurlerinin soyledigi ipuclarina gore,
+    kutularda bulunan parcalari butun, yarim ve ceyrek olarak adlandirma sorusu.
+  kaynak: "o20_kapali_kutu_ipuclarina_gore_adlandirma.yaml"
+  frequency: "Medium"
+  difficulty: "orta-zor"
+  varyant_sayisi: 2
+  varyant_kodlari: ["1", "2"]
+
+context:
+  type: "kapali_kutu_ipuclarina_gore_adlandirma"
+  question_count: 1
+  generation:
+    word_count_min: 40
+    word_count_max: 85
+    image_type: "ortak_gorsel"
+    structure:
+      - "Bir sinif, pano, koridor, kutuphane kosesi ya da etkinlik alaninda gecen 5-6 cumlelik dogal bir senaryo yaz"
+      - "Senaryoda 3 kapali kutu ve her kutunun yaninda konusma balonlu 1 insan figuru ayni baglamda yer almali"
+      - "Sistem her soruda varyant 1 veya varyant 2 mantigindan yalnizca birini secmeli"
+      - "KRITIK: Metinde dogrudan butun, yarim, ceyrek siralamasi ve dogru cevap YAZILMAMALI"
+      - "Gorselde ustte soldan saga dizilmis 3 kapali kutu bulunmali"
+      - "Her kutunun yaninda ya da hafif ust yaninda 1 insan figuru ve 1 konusma balonu yer almali"
+      - "Konusma balonlarinda yalnizca tek cumlelik kisa ipucu bulunmali"
+      - "Kutular kapali olmali; kutunun icindeki parca gosterilmemeli"
+      - "Kutularin dis gorunusu cevabi ele vermemeli"
+      - "Gorsel cozumun ana tasiyicisi ipuclari olmali; metin yalnizca sahneyi kurmali"
+    kurallar:
+      - "2. sinif seviyesinde olmali"
+      - "Yalnizca butun-yarim-ceyrek ve es parca odagi korunmali"
+      - "Kesir sembolu ve ust sinif dili kullanilmamali"
+      - "Ogrenci cevaba yalniz senaryodan degil, gorseldeki ipuclarini inceleyerek ulasmali"
+      - "Turkce karakterler dogru kullanilmali"
+      - "Gorseller uzerinde Turkce disinda yazi bulunmamali"
+      - "Her soruda tek dogru cevap olmali"
+      - "Ayni soruda ipuclar birbiriyle celismemeli"
+      - "Varyant farki yalniz soru kokunde degil, ipucu mantiginda gorulmeli"
+  questions:
+    - slot: 1
+      type: "butun_yarim_ceyrek_ipucu_eslestirme"
+      aktif_varyantlar: ["1", "2"]
+      soru_kokleri:
+        - "<b>Buna gore, soldan saga dogru kutularin adlari hangisidir?</b>"
+        - "<b>Buna gore, hangi secenekte kutular dogru adlandirilmistir?</b>"
+        - "<b>Buna gore, 1. kutu, 2. kutu ve 3. kutu icin dogru eslestirme hangisidir?</b>"
+        - "<b>Buna gore, kutularin butun-yarim-ceyrek siralamasi nasil olmalidir?</b>"
+        - "<b>Buna gore, kutularla adlar hangi secenekte dogru eslesmistir?</b>"
+      beceri:
+        katman: "KB2"
+        bilesenler:
+          - "gorsel_okuma"
+          - "eslestirme"
+          - "yorumlama"
+          - "parca_butun_iliskisi"
+        surec_bileseni: "bilgiyi_cikartma"
+
+varyantlar:
+  - kod: "1"
+    ad: "Dogrudan Ipuclu Tam Eslestirme"
+    amac: >
+      Ogrencinin, konusma balonlarinda acik bicimde verilen ipuclarini kullanarak
+      kutulari dogrudan butun, yarim ve ceyrek olarak eslestirmesi beklenir.
+    ipucu_mantigi: "dogrudan_tanima_ve_eslestirme"
+    ipucu_yapilari:
+      tercih_edilenler:
+        - "Bu parca tek basina butundur."
+        - "Bu parcadan 2 tane olursa butun olur."
+        - "Bu parcadan 4 tane olursa butun olur."
+        - "Bu parca yarimin yarisidir."
+        - "Bu parcanin baska esine ihtiyaci yoktur."
+      dikkatli_kullan:
+        - "Bu parca tamdir."
+        - "Bu parcanin bir tanesi yeterlidir."
+    soru_odagi:
+      - "Dogrudan verilen ipucudan dogru kavrami tanima"
+      - "Kutulari soldan saga dogru eslestirme"
+      - "Butun-yarim-ceyrek arasindaki temel iliskiyi kullanma"
+    kurallar:
+      - "Uc ipucunun en az ikisi dogrudan tanimlayici olmali"
+      - "Bir ipucu tek basina tek bir kavrama goturmeli"
+      - "Ipuclarda gereksiz dolayli anlatim kullanilmamali"
+      - "Ogrenci dogrudan tanima yoluyla sonuca ulasabilmeli"
+    dogru_cevap_mantigi:
+      - "Tek basina tamdir ifadesi butune goturur"
+      - "2 tane olursa butun olur ifadesi yarima goturur"
+      - "4 tane olursa butun olur ifadesi ceyrege goturur"
+      - "Yarimin yarisi ifadesi kullanilirsa cevap ceyrek olur"
+
+  - kod: "2"
+    ad: "Dolayli Ipuclu Tam Eslestirme"
+    amac: >
+      Ogrencinin, konusma balonlarinda dolayli ya da iliski kurduran ipuclarini
+      yorumlayarak kutulari butun, yarim ve ceyrek olarak eslestirmesi beklenir.
+    ipucu_mantigi: "yorumlama_ve_cikarsal_eslestirme"
+    ipucu_yapilari:
+      tercih_edilenler:
+        - "Bu parca yarimin yarisidir."
+        - "Bu parca ne butundur ne de ceyrektir."
+        - "Bu parca tam olan degildir."
+        - "Bu parca ceyrekten buyuk, butunden kucuktur."
+        - "Bu parcayi tamamlamak icin bir tane daha aynisi gerekir."
+        - "Bu parca tek basina yetmez, ama cok kucuk de degildir."
+      dikkatli_kullan:
+        - "Bu parca butunden kucuktur."
+        - "Bu parca tek basina tamam sayilmaz."
+    soru_odagi:
+      - "Dolayli ipucuyu yorumlayarak kavrama ulasma"
+      - "Eleme ve karsilastirma ile kutulari eslestirme"
+      - "Parca-butun iliskisini dogrudan olmayan yoldan kurma"
+    kurallar:
+      - "En az bir ipucu dolayli anlatim icermeli"
+      - "Dolayli ipucu yine tek bir dogru kavrama goturmeli"
+      - "Belirsiz ya da iki anlama gelebilecek ipucu kullanilmamali"
+      - "Dil yukunun 2. sinif seviyesini asmamasi gerekir"
+    dogru_cevap_mantigi:
+      - "Yarimin yarisidir ifadesi ceyrege goturur"
+      - "Ne butundur ne de ceyrektir ifadesi yarima goturur"
+      - "Bir tane daha aynisi gerekir ifadesi yarima goturur"
+      - "Ceyrekten buyuk, butunden kucuktur ifadesi yarima goturur"
+      - "Tam olan degildir ifadesi tek basina yetmez; baska ipucularla birlikte cozulmelidir"
+
+format:
+  type: "llm_generated_html"
+  soru_koku: "Kisa, tek cumlelik soru koku. Kutularin butun-yarim-ceyrek olarak dogru adlandirilmasini soran yapida."
+  paragraph:
+    required: true
+    word_count_min: 40
+    word_count_max: 85
+    sentence_count_min: 5
+    sentence_count_max: 6
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    style: "text_only"
+    word_count_min: 3
+    word_count_max: 12
+    correct_count: 1
+
+dogru_cevap:
+  tanim: "Uc kapali kutuyu, yanlarindaki ipuclarina gore butun-yarim-ceyrek olarak dogru eslestiren tek yazili secenek"
+  kurallar:
+    - "KRITIK: Dogru cevap kutularin dis gorunusune degil, konusma balonlarindaki ipuclarina dayanarak belirlenmeli"
+    - "Dogru cevapta her kutu yalniz bir kavramla eslesmeli: butun, yarim veya ceyrek"
+    - "Bir kutu icin kullanilan ipucu tek bir kavrama guvenli bicimde goturmeli"
+    - "Butun ipucu tam parcaya, yarim ipucu iki es parca iliskisine, ceyrek ipucu dort es parca iliskisine dayanmali"
+    - "Varyant 1'de cozum dogrudan tanima agirlikli olmali"
+    - "Varyant 2'de cozum dolayli yorumlama veya eleme icerebilmeli"
+    - "Yarimin yarisi ifadesi kullanildiginda cevap ceyrek olmali"
+    - "Iki tanesi bir butun olur ifadesi kullanildiginda cevap yarim olmali"
+    - "Dort tanesi bir butun olur ifadesi kullanildiginda cevap ceyrek olmali"
+    - "Tek basina tamdir ya da baska esine gerek yoktur ifadesi kullanildiginda cevap butun olmali"
+    - "Dogru cevap tek ve net olmali"
+
+distractors:
+  kurallar:
+    - "Yanlis secenekler ogrencinin yayginca yaptigi hata turlerinden birine dayanmalı"
+    - "Yuzey okuma hatasi: iki tanesi butun eder ifadesini ceyrek sanma"
+    - "Dolayli ipucunu yanlis yorumlama: yarimin yarisi ifadesini yarim sanma"
+    - "Tam olma ifadesini buyuk parca olarak dusunup yarimla karistirma"
+    - "Kutulari soldan saga yanlis siraya koyma"
+    - "Iki kutuyu dogru, bir kutuyu yanlis eslestirerek makul celdirici olusturma"
+    - "Varyant 2'de eleme ipucularini eksik okuyup erken karar verme"
+  yasaklar:
+    - "Bariz sacma veya baglamsiz secenek uretilmemeli"
+    - "Uc secenekte de ayni siralama mantigi tekrar edilmemeli"
+    - "Iki yanlis secenek ayni hata turunden olmamali"
+    - "Ipuclari okunmadan sadece tahminle secilebilecek secenek yapisi kurulmamalı"
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+      - "Ustte soldan saga dizilmis 3 kapali kutu gosterilmeli"
+      - "Her kutunun yaninda 1 insan figuru bulunmali"
+      - "Her insan figurunun 1 konusma balonu olmali"
+      - "Konusma balonunda yalnizca tek cumlelik kisa ipucu yer almali"
+      - "Kutularin ici gorunmemeli"
+      - "Kutular ayni boyutta, benzer renkte ve notr gorunumde olmali"
+      - "Kutularin ustunde a-b-c gibi harfler bulunmamali"
+      - "Insan figuru ve balonlar cevap icin gerekli olmali; dekor olmamali"
+      - "Gorsel sade, cocuk dostu ve 2. sinif duzeyine uygun olmali"
+    yasaklar:
+      - "Kutunun icindeki parcayi gosterme"
+      - "Kutu renginden veya seklinden cevap belli etme"
+      - "Ayni kutuyu daha buyuk, daha parlak ya da daha dikkat cekici yapma"
+      - "Bir konusma balonunda birden fazla cumle kullanma"
+      - "Gorselde metindeki dogru cevabi acikca yazmak"
+      - "Asiri karmasik veya dikkat dagitici gorsel ogeler"
+    stil: "uc_kapali_kutu_insan_figuru_ve_ipucu_balonu"
+    boyut: "orta"
+  sik_gorseli:
+    gerekli: false
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: "Butun, yarim ve ceyrek arasindaki iliskiyi cozumleyebilme"
+  tema_siniri: "Yalnizca butun-yarim-ceyrek ve es parca odagi korunmali"
+  izinli_icerik:
+    kavramlar:
+      - "butun"
+      - "yarim"
+      - "ceyrek"
+      - "es parca"
+      - "parca-butun iliskisi"
+      - "ipucu"
+      - "eslestirme"
+    beceriler:
+      - "Butun-yarim-ceyrek adlandirma"
+      - "Ipuclardan hareketle iliski kurma"
+      - "Parca-butun iliskisini yorumlama"
+      - "Gorsel bilgi ile secenek eslestirme"
+  yasaklar:
+    - "Kesir sembolu kullanma"
+    - "Pay, payda, birim kesir dili kullanma"
+    - "Sayi dogrusunda kesir gosterimi"
+    - "Kesirlerle toplama veya cikarma"
+    - "Ust sinif karsilastirma dili"
+    - "Cok adimli nicelik cozumu"
+
+izinli_icerikler:
+  kavramlar:
+    - "butun"
+    - "yarim"
+    - "ceyrek"
+    - "es parca"
+    - "ipucu"
+    - "konusma balonu"
+    - "kapali kutu"
+    - "dogrudan ipucu"
+    - "dolayli ipucu"
+  beceriler:
+    - "gorsel_okuma"
+    - "eslestirme"
+    - "yorumlama"
+    - "parca_butun_iliskisi"
+    - "ipucundan_sonuca_gitme"
+    - "eleme_yapma"
+  soru_islemleri:
+    - "adlandirma"
+    - "siralama"
+    - "eslestirme"
+    - "gorsel yorumlama"
+    - "ipucu kullanma"

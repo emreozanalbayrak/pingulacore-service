@@ -1,0 +1,163 @@
+# Ardışık Eksilen Nesne İşlemini Bul - 2. Sinif
+
+meta:
+  id: k11_ardisik_eksilen_nesne_islemini_bul
+  ad: Ardışık Eksilen Nesne İşlemini Bul
+  sinif_seviyesi: 2
+  aciklama: Öğrencilerden, görseldeki düzen üzerinden eksilen nesne miktarını ve adım sayısını hesaplamaları beklenir. Bu
+    kalıp, ardışık çıkarma ve sıfıra ulaşma mantığını anlama becerisini geliştirir.
+  kaynak: k11_Ardışık Eksilen Nesne İşlemini Bul.yaml
+  frequency: Low
+  difficulty: kolay
+
+context:
+  type: ardisik_eksilen_nesne_islemini_bul
+  question_count: 1
+  generation:
+    word_count_min: 30
+    word_count_max: 65
+    image_type: tek_gorsel
+    structure:
+    - 4-6 cumlelik, gunluk yasamdan gelen dogal bir senaryo yaz
+    - Senaryoda nesnelerin her adimda ayni miktarda azaldigi bir duzen kurulmali ve ogrenciden eksilen miktar ile adim yapisini
+      okumasi beklenmeli
+    - Metin, gorselden okunmasi gereken kritik sayi ya da iliskiyi dogrudan soylememeli
+    - Gorsel, cozumun ana veri kaynagi olmali
+    - Soru koku, "Aşağıdaki şekilde görülen nesnelerin eksilmesi kaç adımda tamamlanır?" benzeri tek cumlelik bir yapi tasimali
+    ana_gorsel:
+      kurallar:
+      - Gorsel ilkokul duzeyine uygun, sade ve anlasilir olmali
+      - Her adim arasindaki fark net bicimde secilebilmeli
+      - Baslangic, ara durumlar ve son durum birbirine karismadan yerlestirilmeli
+      - Sayilmasi ya da karsilastirilmasi gereken ana ogeler net secilebilmeli
+      - Gorsel, soruda hedeflenen islem ya da iliskiyi bire bir karsilamali
+      - Her gruptaki nesne sayisi 10'u gecmemeli
+      - Nesneler duzgun siralanmis ve kolayca sayilabilir olmali
+      - Her adim icin nesne sayisi etiketle belirtilmeli (ornegin altinda sayi yazili)
+      yasaklar:
+      - Gorselin icinde veya ustunde cevabi ele veren islem, sonuc ya da ipucu yazilmamali
+      - Sayilmasi gereken ana ogeler dekoratif kalabalik icinde kaybolmamali
+      - Fotogercekci, karmasik veya yetiskinlere hitap eden bir gorsel dil kullanilmamali
+      - Gorsel ile metin arasinda sayi, nesne veya iliski celiskisi bulunmamali
+      stil: ilkokul_dostu_sade_illustrasyon
+      boyut: orta
+    sik_gorseli:
+      gerekli: false
+      kurallar:
+      - Secenekler yalnizca metin, sayi ya da islem ifadesi olarak verilmelidir
+    kurallar:
+    - 2. sinif seviyesinde olmali
+    - Turkce karakterler ve noktalama dogru kullanilmali
+    - Gorsel ve ust metin birbiriyle tam uyumlu olmali
+    - Dogru cevap tek ve net olmali
+    - Gorsel olmadan dogrudan sonuca ulastiracak acik islem ya da sonuc verilmemeli
+    - Secenekler 3 sikli olmali ve yalnizca bir dogru cevap icermeli
+  questions:
+  - slot: 1
+    type: ardisik_eksilen_nesne_islemini_bul
+    soru_kokleri:
+    - Aşağıdaki şekilde görülen nesnelerin eksilmesi kaç adımda tamamlanır?
+    - Görsele göre belirli adımda eksilen nesne sayısı kaçtır?
+    - Buna göre adım sayısı kaçtır?
+    beceri:
+      katman: MAT.2.2.4
+      bilesenler:
+      - ardisik_cikarma
+      - adim_hesaplama
+      surec_bileseni: bulma_ve_cozumleme
+
+format:
+  type: llm_generated_html
+  soru_koku: Kisa, tek cumlelik soru koku. "Aşağıdaki şekilde görülen nesnelerin eksilmesi kaç adımda tamamlanır?" benzeri
+    bir istem tasimali.
+  paragraph:
+    required: true
+    word_count_min: 30
+    word_count_max: 65
+    sentence_count_min: 4
+    sentence_count_max: 6
+  options:
+    count: 3
+    labels:
+    - A
+    - B
+    - C
+    style: text
+    word_count_min: 1
+    word_count_max: 6
+    correct_count: 1
+
+dogru_cevap:
+  tanim: Eksilme duzenini dogru okuyup eksilen miktar ya da adim sayisini dogru veren secenek
+  kurallar:
+  - Eksilmenin doğru hesaplanması
+  - Görseldeki adım sayısının doğru belirlenmesi
+  - Dogru cevap tek ve net olmali
+
+distractors:
+  kurallar:
+  - Yanlış adım sayısı veya eksilme miktarı
+  - Doğru toplamı yanlış işlemle bulma
+  - Bir adimi eksik ya da fazla sayan secenekler kullanilmali
+  - Her adimda eksilen nesne miktarini yanlis okutan secenekler yer almali
+  - Yanlis secenekler ogrencinin dusebilecegi gercek hatalara dayanmali
+  - Yanlis secenekler dogru cevaba yakin ama ayirt edilebilir olmali
+  yasaklar:
+  - Doğru cevabın tekrarı
+  - Çok bariz şekilde yanlış olan
+  - Bariz sacma, baglamsiz ya da islem mantigiyla ilgisiz secenek uretilmemeli
+  - Birden fazla yanlis secenek ayni hatayi tekrar etmemeli
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+    - Gorsel ilkokul duzeyine uygun, sade ve anlasilir olmali
+    - Her adim arasindaki fark net bicimde secilebilmeli
+    - Baslangic, ara durumlar ve son durum birbirine karismadan yerlestirilmeli
+    - Sayilmasi ya da karsilastirilmasi gereken ana ogeler net secilebilmeli
+    - Gorsel, soruda hedeflenen islem ya da iliskiyi bire bir karsilamali
+    yasaklar:
+    - Gorselin icinde veya ustunde cevabi ele veren islem, sonuc ya da ipucu yazilmamali
+    - Sayilmasi gereken ana ogeler dekoratif kalabalik icinde kaybolmamali
+    - Fotogercekci, karmasik veya yetiskinlere hitap eden bir gorsel dil kullanilmamali
+    - Gorsel ile metin arasinda sayi, nesne veya iliski celiskisi bulunmamali
+    stil: ilkokul_dostu_sade_illustrasyon
+    boyut: orta
+  sik_gorseli:
+    gerekli: false
+    kurallar:
+    - Secenekler yalnizca metin, sayi ya da islem ifadesi olarak verilmelidir
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: Öğrencilerden, görseldeki düzen üzerinden eksilen nesne miktarını ve adım sayısını hesaplamaları beklenir.
+    Bu kalıp, ardışık çıkarma ve sıfıra ulaşma mantığını anlama becerisini geliştirir.
+  tema_siniri: Yalnizca 2. sinif duzeyinde ardisik cikarma, eksilen, adim sayisi, azalma duzeni odagi korunmali.
+  izinli_icerik:
+    kavramlar:
+    - ardisik cikarma
+    - eksilen
+    - adim sayisi
+    - azalma duzeni
+    beceriler:
+    - Ardışık çıkarma
+    - Adım hesaplama
+  yasaklar:
+  - 3 basamakli ve daha buyuk sayilarla ileri duzey islem zincirleri
+  - Kalanli bolme, bolme algoritmasi veya ust sinif duzeyindeki islem teknikleri
+  - 2. sinif duzeyini asan soyut cebir dili, sembolik ispat ya da formal tanimlar
+  - Gorsel olmadan cozume ulastiran acik sonuc, islem veya sayi bilgisini metinde vermek
+  - Gereksiz veri yuku olusturan cok adimli ve dikkat dagitici problem kurgulari
+
+izinli_icerikler:
+  kavramlar:
+  - ardisik cikarma
+  - eksilen
+  - adim sayisi
+  - azalma duzeni
+  beceriler:
+  - ardisik_cikarma
+  - adim_hesaplama
+  soru_islemleri:
+  - ardisik_eksilmeyi_okuma
+  - eksilen_miktari_bulma
+  - adim_sayisini_belirleme

@@ -1,0 +1,215 @@
+# Butun Yarım Ceyrek Sayisal Iliski — 2. Sinif
+
+meta:
+  id: "butun_yarim_ceyrek_sayisal_iliski"
+  ad: "Butun Yarım Ceyrek Sayisal Iliski"
+  sinif_seviyesi: 2
+  varyant_kodu: "1-2"
+  aciklama: >
+    Ayni nesnenin butun, yarim ve ceyrek modelleri ile kurulan
+    kisa iliski cumlelerindeki eksik sayilari buldurma sorusu.
+  kaynak: "butun_yarim_ceyrek_sayisal_iliski.yaml"
+  frequency: "Medium"
+  difficulty: "orta"
+
+context:
+  type: "butun_yarim_ceyrek_sayisal_iliski"
+  question_count: 1
+  varyantlar:
+    - kod: "1"
+      ad: "Dogrudan donusum cumleleri"
+      aciklama: >
+        Iliski cumleleri butun, yarim ve ceyrek arasindaki donusumu
+        dogrudan ve duz bir akista verir. Cumle yapilari daha temiz ve
+        daha kolay okunur.
+      yapi_ozellikleri:
+        - "Cumleler dogrudan donusum iliskisi kurar"
+        - "Bosluklar genellikle cumlenin sonunda yer alir"
+        - "Donusum yonu daha duz ve takip edilmesi kolaydir"
+      ornek_mantik:
+        - "2 butun elma __ yarim elma eder."
+        - "3 yarim elma __ ceyrek elma eder."
+        - "8 ceyrek elma __ butun elma eder."
+    - kod: "2"
+      ad: "Karisik yonlu donusum cumleleri"
+      aciklama: >
+        Iliski cumleleri butun, yarim ve ceyrek arasinda farkli yonlerde
+        kurulur. Bosluklar cumlenin basinda, ortasinda ya da sonunda
+        bulunabilir.
+      yapi_ozellikleri:
+        - "Cumleler farkli donusum yonlerinde kurulur"
+        - "Bosluklar farkli konumlarda yer alabilir"
+        - "Ogrenci yonu ve iliskiyi daha dikkatli takip eder"
+      ornek_mantik:
+        - "__ butun kek, 6 yarim kek eder."
+        - "10 ceyrek kek, __ yarim kek eder."
+        - "4 yarim kek, __ butun kek eder."
+  generation:
+    word_count_min: 45
+    word_count_max: 90
+    image_type: "ortak_gorsel"
+    structure:
+      - "Bir mutfak, piknik, sinif ikrami, firin ziyareti, kahvalti ya da benzeri gunluk yasam baglaminda gecen 5-6 cumlelik dogal bir senaryo yaz"
+      - "Senaryoda tek bir nesnenin paylastirilmak, bolunmek ya da parcalara ayrilmak uzere hazirlandigi bir durum yer almali"
+      - "KRITIK: Metinde bosluklara gelecek sayilar, dogru cevap dizisi ve iliski sonucu YAZILMAMALI"
+      - "Her soruda yalnizca 1 varyant secilmeli: ya 1. varyant ya da 2. varyant kullanilmali"
+      - "1. varyantta iliski cumleleri dogrudan donusum akisiyla kurulmalidir"
+      - "2. varyantta iliski cumleleri karisik yonlu kurulmalidir"
+      - "Gorselde yalnizca ayni nesnenin butun, yarim ve ceyrek halleri birlikte bulunmali"
+      - "Gorsel ustte yer almali ve cozumun ana tasiyicisi olmali"
+      - "Gorselin altinda 3 ya da 4 kisa iliski cumlesi bulunmali ve her cumlede yalnizca bir sayi boslugu olmali"
+      - "Cumleler butun, yarim ve ceyrek arasindaki iliskiyi islem gostermeden kurmali"
+      - "Soru koku tum bosluklari birlikte sormali; tek tek bosluk veya toplam sormamali"
+      - "Secenekler yalnizca sayi dizilerinden olusmali ve A-B-C biciminde verilmelidir"
+      - "Gorsel cozumun ana tasiyicisi olmali; metin yalnizca sahneyi kurmali"
+    kurallar:
+      - "2. sinif seviyesinde olmali"
+      - "Yalnizca butun-yarim-ceyrek ve es parca odagi korunmali"
+      - "Kesir sembolu, pay, payda, birim kesir ve islemsel dil kullanilmamali"
+      - "Tum bosluklara gelecek cevaplar tam sayi olmali"
+      - "Ogrenci cevaba yalniz metinden degil, gorseldeki butun-yarim-ceyrek iliskisini inceleyerek ulasmali"
+      - "Turkce karakterler dogru kullanilmali"
+      - "Gorseller uzerinde Turkce disinda yazi bulunmamali"
+      - "Gorsel uzerinde A-B-C harfleri bulunmamali"
+      - "Gorselin ustunde sabit nesne etiketi bulunmamali"
+      - "Senaryolar hazir 20 sabit metin gibi donmemeli; her soruda anlik ve yeni kurulmalidir"
+      - "1. varyant ve 2. varyant soru serisi icinde dengeli dagitilmalidir"
+  questions:
+    - slot: 1
+      type: "bosluk_doldurmali_parca_iliskisi"
+      varyant_kullanim:
+        - "1. varyant: dogrudan donusum cumleleri"
+        - "2. varyant: karisik yonlu donusum cumleleri"
+      soru_kokleri:
+        - "<b>Buna gore, cumlelerdeki tum bosluklara hangi sayilar gelmelidir?</b>"
+        - "<b>Buna gore, eksik birakilan sayilarin dogru siralamasi hangisidir?</b>"
+        - "<b>Buna gore, butun bosluklar hangi sayilarla tamamlanir?</b>"
+        - "<b>Buna gore, cumlelerde eksik olan sayilar hangileridir?</b>"
+      beceri:
+        katman: "KB2"
+        bilesenler:
+          - "gorsel_okuma"
+          - "iliski_kurma"
+          - "eslestirme"
+          - "cozumleme"
+        surec_bileseni: "bilgiyi_cikartma"
+
+format:
+  type: "llm_generated_html"
+  soru_koku: "Kisa, tek cumlelik soru koku. Tum bosluklara gelecek sayilari birlikte soran yapida."
+  paragraph:
+    required: true
+    word_count_min: 45
+    word_count_max: 90
+    sentence_count_min: 5
+    sentence_count_max: 6
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    style: "numeric_sequence_only"
+    word_count_min: 3
+    word_count_max: 8
+    correct_count: 1
+
+dogru_cevap:
+  tanim: "Iliski cumlelerindeki tum bosluklari dogru sira ile veren sayi dizisi"
+  kurallar:
+    - "KRITIK: Dogru cevap tek bir boslugu degil, tum bosluklari birlikte dogru vermeli"
+    - "Dogru cevap hem gorseldeki butun-yarim-ceyrek modeli hem de cumlelerdeki iliski ile tutarli olmali"
+    - "1. varyantta donusum akisi daha duz oldugu icin iliskiler temiz ve dogrudan okunabilmeli"
+    - "2. varyantta cumle konumu degisse de dogru cevap iliski yonune gore belirlenmeli"
+    - "Butunden yarima geciste sayi 2 ile iliskili, butunden ceyrege geciste 4 ile iliskili olmali"
+    - "Yarimdan butune geciste baslangic sayisi cift secilmeli"
+    - "Ceyrekten yarima geciste baslangic sayisi cift secilmeli"
+    - "Ceyrekten butune geciste baslangic sayisi 4'un kati secilmeli"
+    - "Dogru cevap tek ve net olmali"
+    - "Ogrenci yalniz cumleyi okuyarak degil, modeli ve iliskiyi birlikte inceleyerek sonuca ulasmali"
+
+distractors:
+  kurallar:
+    - "Yanlis secenekler ogrencinin yayginca yaptigi hatalardan birine dayanmali"
+    - "2 ile 4 iliskisini karistirma: butun-ceyrek donusumunde yarim katsayisi kullanma"
+    - "Ters donusum hatasi: yarimdan butune ya da ceyrekten butune geciste carpma yerine bolme mantigini karistirma"
+    - "Kismi dogruluk: bosluklardan biri dogru, digerleri yanlis olan sayi dizileri kullanma"
+    - "Sira hatasi: sayilar dogru degerlerden secilir ama yanlis sirada verilir"
+    - "Yarim ve ceyrek iliskisini karistirma: 2 ceyrek = 1 yarim iliskisi yerine 4 ceyrek gibi dusunme"
+    - "2. varyantta boslugun konumuna aldanma: cumle basindaki ya da ortasindaki boslugu yanlis yonle tamamlama"
+  yasaklar:
+    - "Bariz sacma veya baglamsiz secenek uretilmemeli"
+    - "Iki yanlis secenek ayni hata turunden olmamali"
+    - "Seceneklerden biri tek boslugu sormaya kayan bir yapi kurmamali"
+    - "Dogru cevapla yalnizca tek rakam farki olan ama mantiksiz diziler kullanilmamali"
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+      - "Ayni nesnenin butun, yarim ve ceyrek modeli ayni gorselde yer almali"
+      - "Gorsel sorunun ust kisminda bulunmali"
+      - "Butun, yarim ve ceyrek halleri tek bakista ayirt edilebilmeli"
+      - "Parca sinirlari net ve es parca mantigina uygun olmali"
+      - "Gorsel sade, cocuk dostu ve 2. sinif duzeyine uygun olmali"
+      - "Gorselin altinda 3 ya da 4 kisa iliski cumlesi yer almali"
+      - "1. varyantta cumleler daha dogrudan bir akista dizilmeli"
+      - "2. varyantta cumleler karisik yonlu ve farkli bosluk konumlariyla dizilebilmeli"
+      - "Her iliski cumlesinde yalnizca bir sayi boslugu bulunmali"
+      - "Gorsel ustunde A-B-C ya da yonlendirici aciklama bulunmamali"
+      - "Gorselde sabit 'ayni tur nesne' satiri bulunmamali"
+    yasaklar:
+      - "Birden fazla ana nesne kullanilmamali"
+      - "Es parca mantigini bozan kesimler kullanilmamali"
+      - "Gorselde cevabi acikca yazmak"
+      - "Asiri karmasik veya dikkat dagitici gorsel ogeler"
+      - "Tek tek bosluklari farkli renklerle asiri belirginlestirmek"
+    stil: "ustte_model_altta_iliski_cumleleri"
+    boyut: "orta"
+  sik_gorseli:
+    gerekli: false
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: "Butun, yarim ve ceyrek arasindaki iliskiyi cozumleyebilme"
+  tema_siniri: "Yalnizca butun-yarim-ceyrek ve es parca odagi korunmali"
+  izinli_icerik:
+    kavramlar:
+      - "butun"
+      - "yarim"
+      - "ceyrek"
+      - "es parca"
+      - "parca-butun iliskisi"
+    beceriler:
+      - "Butun-yarim-ceyrek iliskisi kurma"
+      - "Gorsel model ile kisa cumle iliskisini eslestirme"
+      - "Eksik sayilari bulma"
+      - "Tam sayi sonucuna ulasma"
+  yasaklar:
+    - "Kesir sembolu kullanimi"
+    - "Pay, payda, birim kesir dili"
+    - "Sayi dogrusunda kesir gosterimi"
+    - "Kesirlerle toplama veya cikarma"
+    - "Bir coklugun kesri kadarini bulma"
+    - "Cok adimli nicelik cozumu"
+    - "Tek tek bosluklarin toplamini sorma"
+    - "Kismi bosluk sorma"
+
+izinli_icerikler:
+  kavramlar:
+    - "butun"
+    - "yarim"
+    - "ceyrek"
+    - "es parca"
+    - "parca-butun iliskisi"
+    - "iliski cumlesi"
+    - "bosluk tamamlama"
+    - "donusum yonu"
+  beceriler:
+    - "gorsel_okuma"
+    - "iliski_kurma"
+    - "eslestirme"
+    - "cozumleme"
+    - "tam_sayi_bulma"
+    - "sira_takibi"
+    - "donusum_yonunu_izleme"
+  soru_islemleri:
+    - "eksik sayi bulma"
+    - "dogru dizi secme"
+    - "parca-butun iliskisi kurma"
+    - "gorsel yorumlama"

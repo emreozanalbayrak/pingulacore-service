@@ -1,0 +1,156 @@
+# İşlem Sonuçlarını Karşılaştır - 2. Sinif
+
+meta:
+  id: o22_islem_sonuclarini_karsilastir
+  ad: İşlem Sonuçlarını Karşılaştır
+  sinif_seviyesi: 2
+  aciklama: Öğrenciler, farklı işlemleri çözerek sonuçları karşılaştırır ve en büyük veya en küçük sonucu bulur. Bu kalıp,
+    hem hesap yapma hem de sonuçları değerlendirme becerisini ölçer.
+  kaynak: o22_İşlem Sonuçlarını Karşılaştır.yaml
+  frequency: Medium
+  difficulty: orta
+
+context:
+  type: islem_sonuclarini_karsilastir
+  question_count: 1
+  generation:
+    word_count_min: 35
+    word_count_max: 80
+    image_type: tek_gorsel
+    structure:
+    - 4-6 cumlelik, gunluk yasamdan gelen dogal bir senaryo yaz
+    - Senaryoda birden fazla islemin sonucu karsilastirilmali ve ogrencinin buyuk-kucuk iliskisi kurmasi beklenmeli
+    - Metin, gorselden okunmasi gereken kritik sayi ya da iliskiyi dogrudan soylememeli
+    - Gorsel, cozumun ana veri kaynagi olmali
+    - Soru koku, "Hangi işlemin sonucu en büyüktür?" benzeri tek cumlelik bir yapi tasimali
+    kurallar:
+    - 2. sinif seviyesinde olmali
+    - Turkce karakterler ve noktalama dogru kullanilmali
+    - Gorsel ve ust metin birbiriyle tam uyumlu olmali
+    - Dogru cevap tek ve net olmali
+    - Gorsel olmadan dogrudan sonuca ulastiracak acik islem ya da sonuc verilmemeli
+    - Secenekler 3 sikli olmali ve yalnizca bir dogru cevap icermeli
+  questions:
+  - slot: 1
+    type: islem_sonuclarini_karsilastir
+    soru_kokleri:
+    - Hangi işlemin sonucu en büyüktür?
+    - Bu işlemlerden hangisi en küçüktür?
+    beceri:
+      katman: MAT.2.2.4
+      bilesenler:
+      - hesaplama
+      - karsilastirma
+      - degerlendirme
+      - problem_cozme
+      - hesaplama_kapasitesi
+      - sonuc_karsilastirma
+      surec_bileseni: karsilastirma
+
+format:
+  type: llm_generated_html
+  soru_koku: Kisa, tek cumlelik soru koku. "Hangi işlemin sonucu en büyüktür?" benzeri bir istem tasimali.
+  paragraph:
+    required: true
+    word_count_min: 35
+    word_count_max: 80
+    sentence_count_min: 4
+    sentence_count_max: 6
+  options:
+    count: 3
+    labels:
+    - A
+    - B
+    - C
+    style: text_only
+    word_count_min: 1
+    word_count_max: 6
+    correct_count: 1
+
+dogru_cevap:
+  tanim: Islem sonuclarini dogru hesaplayip istenen karsilastirmayi yapan secenek
+  kurallar:
+  - Doğru işlem hesaplanmalı ve karşılaştırılmalı.
+  - Sonuçlar net bir şekilde değerlendirilip doğru yanıt seçilmeli.
+  - Karşılaştırmaya giren her işlem, görseldeki kendi nesne grubuyla ayrıca doğrulanmalı.
+  - Dogru cevap tek ve net olmali
+
+distractors:
+  kurallar:
+  - Yanlış sonuçları doğru gibi göstermekten kaçınılmalı.
+  - Yanlış sonuçlar mantıklı ama yanlış olmalı.
+  - Yakin sonuclari karistiran secenekler kullanilmali
+  - Islemlerden yalniz birini hesaplayarak karar veren secenekler yer almali
+  - Yanlis secenekler ogrencinin dusebilecegi gercek hatalara dayanmali
+  - Yanlis secenekler dogru cevaba yakin ama ayirt edilebilir olmali
+  yasaklar:
+  - Açıkça yanlış olan işlemler
+  - Mantıksız sonuçlar
+  - Bariz sacma, baglamsiz ya da islem mantigiyla ilgisiz secenek uretilmemeli
+  - Birden fazla yanlis secenek ayni hatayi tekrar etmemeli
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+    - Gorsel ilkokul duzeyine uygun, sade ve anlasilir olmali
+    - Karsilastirilacak islemler ve dayandiklari nicelikler acikca ayristirilmali
+    - Buyuk-kucuk iliskisi gorsel ya da metinsel duzen icinde takip edilebilir olmali
+    - Sayilmasi ya da karsilastirilmasi gereken ana ogeler net secilebilmeli
+    - Gorsel, soruda hedeflenen islem ya da iliskiyi bire bir karsilamali
+    - Gorselde islem gorselleri, karsilastirma simgeleri, her islem icin ayri ve sayilabilir grup alani acikca yer almali
+    yasaklar:
+    - Gorselin icinde veya ustunde cevabi ele veren islem, sonuc ya da ipucu yazilmamali
+    - Sayilmasi gereken ana ogeler dekoratif kalabalik icinde kaybolmamali
+    - Fotogercekci, karmasik veya yetiskinlere hitap eden bir gorsel dil kullanilmamali
+    - Gorsel ile metin arasinda sayi, nesne veya iliski celiskisi bulunmamali
+    stil: ilkokul_dostu_sade_illustrasyon
+    boyut: orta
+  sik_gorseli:
+    gerekli: false
+    kurallar:
+    - Secenekler yalnizca metin, sayi ya da islem ifadesi olarak verilmelidir
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: Öğrenciler, farklı işlemleri çözerek sonuçları karşılaştırır ve en büyük veya en küçük sonucu bulur. Bu
+    kalıp, hem hesap yapma hem de sonuçları değerlendirme becerisini ölçer.
+  tema_siniri: Yalnizca 2. sinif duzeyinde toplama, cikarma, karsilastirma, islem sonucu, en buyuk odagi korunmali.
+  izinli_icerik:
+    kavramlar:
+    - toplama
+    - cikarma
+    - karsilastirma
+    - islem sonucu
+    - en buyuk
+    - en kucuk
+    beceriler:
+    - Hesaplama
+    - Karşılaştırma
+    - Değerlendirme
+    - Problem çözme
+    - Hesaplama kapasitesi
+  yasaklar:
+  - 3 basamakli ve daha buyuk sayilarla ileri duzey islem zincirleri
+  - Kalanli bolme, bolme algoritmasi veya ust sinif duzeyindeki islem teknikleri
+  - 2. sinif duzeyini asan soyut cebir dili, sembolik ispat ya da formal tanimlar
+  - Gorsel olmadan cozume ulastiran acik sonuc, islem veya sayi bilgisini metinde vermek
+  - Gereksiz veri yuku olusturan cok adimli ve dikkat dagitici problem kurgulari
+
+izinli_icerikler:
+  kavramlar:
+  - toplama
+  - cikarma
+  - karsilastirma
+  - islem sonucu
+  - en buyuk
+  - en kucuk
+  beceriler:
+  - hesaplama
+  - karsilastirma
+  - degerlendirme
+  - problem_cozme
+  - hesaplama_kapasitesi
+  - sonuc_karsilastirma
+  soru_islemleri:
+  - islem_sonuclarini_karsilastirma
+  - buyuk_kucuk_iliskisi_kurma
+  - istenen_sonucu_secme

@@ -1,0 +1,216 @@
+# Tamamlama Jetonlari — 2. Sinif
+
+meta:
+  id: "tamamlama_jetonlari"
+  ad: "Tamamlama Jetonlari"
+  sinif_seviyesi: 2
+  aciklama: >
+    Uc ogrencinin onundeki eksik nesneleri, verilen jeton kurallarina gore
+    butune tamamlama mantigi ile cozduren; gorsel uzerinden en az maliyetli
+    tamamlama yolunu buldurup ogrenci secme veya toplam jeton gereksinimini
+    belirletme sorusu.
+  kaynak: "tamamlama_jetonlari.html"
+  frequency: "Medium"
+
+context:
+  type: "tamamlama_jetonlari"
+  question_count: 1
+  generation:
+    word_count_min: 28
+    word_count_max: 65
+    image_type: "ortak_gorsel"
+    structure:
+      - "Bir etkinlik alani, sinif kosesi, sergi hazirligi ya da atolyede gecen 4-5 cumlelik dogal bir senaryo yaz"
+      - "Senaryoda uc ogrenci yer almali ve bu ogrencilerin jetonlari kullanarak nesneleri butune tamamlamaya calistigi belirtilmeli"
+      - "KRITIK: Senaryo gorseldeki nesnelerin ceyrek, yarim veya uc ceyrek oldugunu tek tek soylememeli"
+      - "KRITIK: Senaryoda hangi ogrencinin dogru cevap oldugunu ele veren ifade bulunmamali"
+      - "Gorselde 3 ogrenci bulunmali ve her ogrencinin onunde 3 nesne yer almali"
+      - "Toplam 9 nesne bulunmali; nesneler ceyrek, yarim ve uc ceyrek durumlarinin karisik dagilimiyla gosterilmeli"
+      - "Nesnelerin altinda kac jeton gerektigi yazilmamali; yalnizca parca durumu gorselden anlasilmali"
+      - "Gorselde ayri bir kural alani bulunmali ve burada yalnizca 'Yarim eklemek = 3 jeton' ve 'Ceyrek eklemek = 2 jeton' bilgisi verilmelidir"
+      - "Her ogrencinin sahip oldugu jeton sayisi sayiyla acikca yazilmalidir"
+      - "Ceyrek durumundaki bir nesneyi tamamlarken en az jetonlu yol esas alinmali; 1 yarim + 1 ceyrek kullanimi 3 ceyrek kullanimina gore daha uygun sayilmalidir"
+      - "Gorsel cozumun ana tasiyicisi olmali; metin yalnizca sahneyi kurmali"
+    kurallar:
+      - "2. sinif seviyesinde olmali"
+      - "Butun-yarim-ceyrek iliskisi ve temel toplama/karsilastirma odagi korunmali"
+      - "Kesir sembolu, pay, payda gibi ifadeler kullanilmamali"
+      - "Ogrenci cevaba yalniz metinden degil, gorseldeki parca durumlarini ve jeton sayilarini inceleyerek ulasmali"
+      - "Tum cumlelerin ilk harfi buyuk baslamali"
+      - "Turkce karakterler dogru kullanilmali"
+      - "Gorseller uzerinde Turkce disinda yazi bulunmamali"
+  questions:
+    - slot: 1
+      type: "en_az_jetonla_ogrenci_secme"
+      soru_kokleri:
+        - "<b>Buna Gore, En Az Jeton Kullanmak Kaydiyla Elindeki Butun Jetonlari Kullanan Ogrenci Hangisidir?</b>"
+      beceri:
+        katman: "KB2"
+        bilesenler:
+          - "gorsel_okuma"
+          - "karsilastirma"
+          - "temel_toplama"
+          - "en_uygun_yolu_belirleme"
+        surec_bileseni: "bilgiyi_cikartma"
+    - slot: 2
+      type: "en_az_jetonla_toplam_maliyet_bulma"
+      soru_kokleri:
+        - "<b>Bu Nesneleri En Az Jetonla Tamamlamak Icin Toplam Kac Jeton Gerekir?</b>"
+        - "<b>En Az Jeton Kullanilirse Bu Grubu Tamamlamak Icin Kac Jeton Harcanir?</b>"
+      beceri:
+        katman: "KB2"
+        bilesenler:
+          - "gorsel_okuma"
+          - "temel_toplama"
+          - "maliyet_hesaplama"
+          - "en_uygun_yolu_belirleme"
+        surec_bileseni: "bilgiyi_cikartma"
+
+format:
+  type: "llm_generated_html"
+  soru_koku: "Kisa, tek cumlelik soru koku. Gorseldeki nesneleri en az jetonla tamamlama mantigina dayali olmali."
+  paragraph:
+    required: true
+    word_count_min: 28
+    word_count_max: 65
+    sentence_count_min: 4
+    sentence_count_max: 5
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    style: "varyanta_gore"
+    word_count_min: 1
+    word_count_max: 4
+    correct_count: 1
+
+
+dogru_cevap:
+  tanim: "Varyanta gore ya en az maliyetli tamamlama ile tum jetonlarini kullanan ogrenci ya da gereken en az toplam jeton miktari"
+  kurallar:
+    - "Dogru cevap tek ve net olmali"
+    - "Her ogrencinin toplam jeton ihtiyaci, onundeki 3 nesnenin en az maliyetli tamamlama toplamina gore belirlenmeli"
+    - "Yarim durumundaki bir nesneyi butune tamamlamak icin 3 jeton kullanilir"
+    - "Uc ceyrek durumundaki bir nesneyi butune tamamlamak icin 2 jeton kullanilir"
+    - "Ceyrek durumundaki bir nesneyi butune tamamlamak icin en az maliyetli yol secilmelidir"
+    - "Ceyrek durumunda en uygun yol 1 yarim + 1 ceyrek eklemek oldugu icin toplam maliyet 5 jetondur"
+    - "3 ceyrek ekleyerek 6 jeton harcamak dogru tamamlama olsa da en az jetonlu yol olarak kabul edilmemelidir"
+    - "1. varyantta yalnizca bir ogrencinin jeton sayisi, en az maliyetli toplam tamamlama bedeli ile tam esit olmalidir"
+    - "2. varyantta dogru cevap, verilen nesne grubunu en az maliyetle tamamlamak icin gereken toplam jeton sayisi olmalidir"
+
+
+distractors:
+  kurallar:
+    - "Yanlis secenekler ogrencinin yayginca yapabilecegi hesap ve yorum hatalarina dayanmali"
+    - "Ceyrek durumundaki nesne icin 5 yerine 6 jeton dusunme hatasi kullanilabilir"
+    - "Uc ceyrek ile ceyrek durumu karistirilabilir"
+    - "Bir ogrencinin elindeki jeton sayisi toplam maliyete yakin ama esit olmayacak sekilde ayarlanabilir"
+    - "2. varyantta yanlis sayisal secenekler eksik toplama, fazla toplama veya yanlis tamamlama yolundan dogmali"
+    - "Yanlis ogrencilerden birinde jeton sayisi gerekli toplamin altinda, digerinde ustunde olabilir"
+  yasaklar:
+    - "Birden fazla ogrencinin jeton sayisi dogru toplamla esit olmamali"
+    - "Bariz sacma ya da asiri uzak jeton sayilari kullanilmamali"
+    - "Celdiriciler rastgele secilmemeli; gorselden dogabilecek hata turlerine dayanmalidir"
+
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+      - "Gorselde 3 ogrenci karti bulunmali"
+      - "Her ogrencinin onunde 3 nesne olmali"
+      - "Toplam 9 nesne yer almali"
+      - "Nesneler daire ve kare temelli sade nesne/sekil havuzundan secilmeli"
+      - "Her nesnenin ceyrek, yarim veya uc ceyrek durumu acikca anlasilmali"
+      - "Parca sinirlari belirgin cizgilerle gosterilmeli"
+      - "Ceyrek, yarim ve uc ceyrek durumlari birbirine karismayacak aciklikta olmali"
+      - "Nesnelerin altinda maliyet bilgisi yazilmamali"
+      - "Ayri bir kural alaninda yalnizca iki metin bulunmali: 'Yarim eklemek = 3 jeton' ve 'Ceyrek eklemek = 2 jeton'"
+      - "Bu iki metnin yaninda yalnizca uygun sayida jeton simgesi bulunmali"
+      - "Her ogrencinin sahip oldugu jeton sayisi sayiyla acikca yazilmali"
+      - "1. varyantta ogrenci kolonlari birlikte gorunmeli"
+      - "2. varyantta ayni gorsel yapisi korunabilir; ancak soru tek ogrenci grubu ya da hedef grup uzerinden toplam maliyeti sordurabilir"
+      - "Gorsel sade, cocuk dostu ve 2. sinif duzeyine uygun olmali"
+    yasaklar:
+      - "Nesnelerin altina kac jeton gerektigi yazilmasi"
+      - "Kural alaninda ek aciklama cumleleri bulunmasi"
+      - "Parca durumlarini belirsiz gosteren boyama kullanimi"
+      - "Asiri karmasik veya dikkat dagitici sus ogeleri"
+    stil: "ogrenci_kolonlari_ve_parcali_nesneler"
+    boyut: "genis"
+  sik_gorseli:
+    gerekli: false
+
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: "Butun, yarim ve ceyrek iliskisini kullanarak en uygun tamamlama yolunu belirleyebilme"
+  tema_siniri: "Yalnizca butun-yarim-ceyrek iliskisi, temel toplama ve karsilastirma odagi korunmali"
+  izinli_icerik:
+    kavramlar:
+      - "butun"
+      - "yarim"
+      - "ceyrek"
+      - "es parca"
+      - "jeton"
+      - "tamamlama"
+      - "en az"
+    beceriler:
+      - "Parca-butun iliskisi kurma"
+      - "En az maliyetli yolu belirleme"
+      - "Jeton sayilarini toplama ve karsilastirma"
+      - "Gorsel model uzerinden karar verme"
+  yasaklar:
+    - "Kesir sembolu kullanma"
+    - "Pay ve payda dili kullanma"
+    - "Birim kesir ya da denk kesir mantigina kayma"
+    - "Cok adimli ust sinif problem dili kurma"
+    - "Gorsel olmadan salt islemsel problem kurma"
+
+
+izinli_icerikler:
+  kavramlar:
+    - "butun"
+    - "yarim"
+    - "ceyrek"
+    - "uc ceyrek gorunumu"
+    - "jeton"
+    - "tamamlama"
+    - "en az"
+  beceriler:
+    - "gorsel_okuma"
+    - "karsilastirma"
+    - "temel_toplama"
+    - "en_uygun_yolu_belirleme"
+    - "parca_butun_iliskisi"
+  soru_islemleri:
+    - "maliyet belirleme"
+    - "toplam bulma"
+    - "esitlik kontrolu"
+    - "en az olan yolu secme"
+    - "gorsel yorumlama"
+
+varyant:
+  - kod: "1"
+    ad: "Ogrenci Secme"
+    aciklama: >
+      Uc ogrencinin onundeki nesneler en az jetonlu tamamlama yoluna gore
+      degerlendirilir. Elindeki tum jetonlari tam kullanan tek ogrenci bulunur.
+    soru_koku_ornekleri:
+      - "Buna Gore, En Az Jeton Kullanmak Kaydiyla Elindeki Butun Jetonlari Kullanan Ogrenci Hangisidir?"
+    secenek_yapisi: "ogrenci_adi"
+    dogru_cevap_mantigi: "Yalnizca bir ogrencinin jeton sayisi, en az maliyetli tamamlama toplami ile esit olmalidir."
+
+  - kod: "2"
+    ad: "Toplam Jeton Sayisini Bulma"
+    aciklama: >
+      Verilen nesne grubu ya da ogrenci kolonu icin, butun nesneleri en az
+      jetonla tamamlamak icin gereken toplam maliyet hesaplanir.
+    soru_koku_ornekleri:
+      - "Bu Nesneleri En Az Jetonla Tamamlamak Icin Toplam Kac Jeton Gerekir?"
+      - "En Az Jeton Kullanilirse Bu Grubu Tamamlamak Icin Kac Jeton Harcanir?"
+    secenek_yapisi: "sayisal"
+    dogru_cevap_mantigi: "Tum nesnelerin en az maliyetli tamamlama bedelleri toplanarak tek dogru sonuc elde edilir."
+
+zorluk_seviyesi:
+  duzey: "orta"
+  aciklama: >
+    Ogrenci hem parca durumlarini dogru okumali hem de ceyrek durumunda en az
+    jetonlu tamamlama yolunu secerek toplam maliyeti ya da dogru ogrenciyi bulmalidir.

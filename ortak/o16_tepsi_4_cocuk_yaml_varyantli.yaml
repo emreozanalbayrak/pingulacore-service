@@ -1,0 +1,203 @@
+# Adil Tepsi Paylaşımı — 2. Sınıf
+
+meta:
+  id: "adil_tepsi_paylasimi"
+  ad: "Adil Tepsi Paylaşımı"
+  sinif_seviyesi: 2
+  aciklama: >
+    Üç aynı büyüklükte yiyecek tepsisi üzerinden,
+    dört çocuk için gerçekten eş paylaşım sağlayan
+    tepsiyi ya da adil paylaşım için uygun olmayan
+    tepsiyi buldurma sorusu.
+  kaynak: "adil_tepsi_paylasimi.yaml"
+  frequency: "Medium"
+  difficulty: "orta"
+
+varyantlar:
+  - kod: "V1"
+    ad: "Doğru tepsiyi bulma"
+    amac: >
+      Öğrenci, üç tepsi arasından dört çocuk için gerçekten uygun olan,
+      yani dört eş parçaya ayrılmış tepsiyi belirler.
+    soru_koku_tipi: "olumlu_secim"
+    soru_kokleri:
+      - "<b>Buna göre, hangi tepsi dört çocuk için uygundur?</b>"
+      - "<b>Buna göre, hangi tepside her çocuğa aynı miktar düşer?</b>"
+      - "<b>Buna göre, hangi hazırlık adil paylaşım için doğrudur?</b>"
+      - "<b>Buna göre, dört çocuk bu tepsilerden hangisini eşit paylaşabilir?</b>"
+    dogru_cevap_mantigi: >
+      Doğru cevap, dört parçanın gerçekten eş büyüklükte olduğu tek tepsidir.
+    yasaklar:
+      - "Doğru tepsiyi yalnızca parça sayısıyla buldurma"
+      - "İki doğru tepsi oluşturma"
+      - "Belirsiz bölme çizgileri kullanma"
+
+  - kod: "V2"
+    ad: "Uygun olmayan tepsiyi bulma"
+    amac: >
+      Öğrenci, üç tepsi arasından dört çocuk için adil paylaşım sağlamayan,
+      yani parçaları eş büyüklükte olmayan tepsiyi belirler.
+    soru_koku_tipi: "olumsuz_secim"
+    soru_kokleri:
+      - "<b>Buna göre, hangi tepsiyle dört çocuğa eşit paylaşım yapılamaz?</b>"
+      - "<b>Buna göre, hangi tepside parçalar eş büyüklükte değildir?</b>"
+      - "<b>Buna göre, hangi hazırlık adil dağıtım için uygun değildir?</b>"
+      - "<b>Buna göre, hangi tepside çocukların payı aynı olmaz?</b>"
+    dogru_cevap_mantigi: >
+      Doğru cevap, dört parça görünse bile parçaları eş büyüklükte olmayan tepsidir.
+    yasaklar:
+      - "Olumsuz kökü aşırı uzun ve karmaşık kurma"
+      - "Birden fazla uygunsuz tepsi üretme"
+      - "Yanlış tepsiyi tartışmalı bırakma"
+
+context:
+  type: "adil_tepsi_paylasimi"
+  question_count: 1
+  generation:
+    word_count_min: 45
+    word_count_max: 90
+    image_type: "ortak_gorsel"
+    structure:
+      - "Bir sınıf, bahçe, piknik, kutlama, kitap okuma saati ya da etkinlik arasında geçen 5-6 cümlelik doğal bir senaryo yaz"
+      - "Senaryoda üç aynı büyüklükte yiyecek tepsisi aynı bağlamda yer almalı"
+      - "KRİTİK: Senaryoda doğru tepsi, eş parça düzeni veya cevap harfi YAZILMAMALI"
+      - "Senaryoda tepsilerin üstünde sabit not olduğu söylenmemeli"
+      - "Görselde üstte tam olarak 3 tepsi bulunmalı"
+      - "Tepsilerin boyutu ve dış biçimi aynı olmalı"
+      - "Her tepside tek bir yiyecek olmalı ve 4 parça görünmeli"
+      - "Yalnızca bir tepside 4 parça gerçekten eş büyüklükte olmalı"
+      - "Diğer iki tepside parça sayısı 4 olsa da en az bir parça açık biçimde büyük ya da küçük olmalı"
+      - "Görsel çözümün ana taşıyıcısı olmalı; metin yalnızca sahneyi kurmalı"
+    kurallar:
+      - "2. sınıf seviyesinde olmalı"
+      - "Yalnızca eş parça ve adil paylaşım odağı korunmalı"
+      - "Senaryolar anlık üretilmeli; sabit 20 senaryo havuzuna dönüşmemeli"
+      - "Senaryo doğal, akıcı ve rahat anlaşılır olmalı"
+      - "Soru tek ana beceri ölçmeli"
+      - "Öğrenci cevaba yalnız metinden değil, görseldeki tepsileri karşılaştırarak ulaşmalı"
+      - "Türkçe karakterler doğru kullanılmalı"
+      - "Görseller üzerinde Türkçe dışında yazı bulunmamalı"
+  questions:
+    - slot: 1
+      type: "es_parca_ve_adil_paylasim"
+      aktif_varyantlar: ["V1", "V2"]
+      beceri:
+        katman: "KB2"
+        bilesenler:
+          - "görsel_okuma"
+          - "karşılaştırma"
+          - "ayırt_etme"
+        surec_bileseni: "eş_parça_mantığını_fark_etme"
+
+format:
+  type: "llm_generated_html"
+  soru_koku: >
+    Kısa, tek cümlelik soru kökü. Aktif varyanta göre ya dört çocuk için
+    uygun tepsiyi ya da adil paylaşım için uygun olmayan tepsiyi soran yapıda.
+  paragraph:
+    required: true
+    word_count_min: 45
+    word_count_max: 90
+    sentence_count_min: 5
+    sentence_count_max: 6
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    style: "label_only_clickable"
+    word_count_min: 1
+    word_count_max: 1
+    correct_count: 1
+
+dogru_cevap:
+  tanim: >
+    Aktif varyanta göre ya üç tepsi arasındaki doğru eş parçalı tepsiyi
+    ya da adil paylaşım için uygun olmayan tepsiyi gösteren seçenek.
+  kurallar:
+    - "KRİTİK: Doğru cevap yalnızca 4 parça görünmesine değil, 4 parçanın GERÇEKTEN eş büyüklükte olmasına dayanmalı"
+    - "V1'de doğru cevap, aynı büyüklükteki tepsiler arasında adil paylaşım sağlayan tek hazırlık olmalı"
+    - "V2'de doğru cevap, dört parça görünse bile eş büyüklükte olmayan ve adil paylaşım sağlamayan tepsi olmalı"
+    - "Doğru cevap tek ve net olmalı"
+    - "Öğrenci yalnızca parça sayarak değil, parçaları karşılaştırarak sonuca ulaşmalı"
+
+distractors:
+  kurallar:
+    - "Yanlış seçenekler öğrencinin yaygınca yaptığı hatalardan birine dayanmalı"
+    - "Parça sayısına aldanma: 4 parça gördüğü için hepsini eş sanma"
+    - "Hızlı bakış hatası: bir parçanın belirgin büyük ya da küçük olduğunu fark etmeme"
+    - "Dış biçime aldanma: tepsiler aynı boyda diye içlerindeki parçaları da eş sanma"
+    - "Tek parça farkını kaçırma: üç parça benzer görünürken dördüncü parçanın büyük kaldığını görmeme"
+  yasaklar:
+    - "Bariz saçma veya bağlamsız seçenek üretilmemeli"
+    - "İki yanlış seçenek aynı hata türünden birebir kopya olmamalı"
+    - "Yanlış tepsiler belirsiz ya da tartışmalı çizilmemeli"
+    - "Öğrenci yalnızca sayarak karar vermeye yönlendirilmemeli"
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+      - "Görsel sorunun üstünde yer almalı"
+      - "Tam olarak 3 aynı büyüklükte tepsi gösterilmeli"
+      - "Tepsilerde yalnızca gerçek hayat yiyecekleri kullanılmalı"
+      - "Yiyecekler pizza, kek, börek, çikolata, brownie, tart, tost ekmeği gibi gerçek nesnelerden seçilmeli"
+      - "Her tepside 4 parça görünmeli"
+      - "Yalnızca bir tepside 4 eş parça bulunmalı"
+      - "Diğer iki tepside eşit olmayan parçalar açık biçimde seçilebilmeli"
+      - "Tepsilerin üstünde A-B-C harfleri bulunmamalı"
+      - "Tepsilerin üstünde sabit açıklama notu bulunmamalı"
+      - "Görsel sade, çocuk dostu ve 2. sınıf düzeyine uygun olmalı"
+    yasaklar:
+      - "Dikdörtgen, kare, daire gibi çıplak geometrik şekilleri yiyecek yerine kullanmak"
+      - "Yamuk ama yine de eş olabilir hissi veren belirsiz bölme çizgileri"
+      - "Birden fazla doğru tepsi oluşturmak"
+      - "Tepsiler arasında boyut farkı vermek"
+      - "Aşırı karmaşık veya dikkat dağıtıcı görsel ögeler"
+    stil: "ustte_uc_ayni_tepsi_gercek_yiyecek"
+    boyut: "orta"
+  sik_gorseli:
+    gerekli: false
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: "Eş parçalara ayrılmış modeli belirleyebilme ve adil paylaşımı fark edebilme"
+  tema_siniri: "Yalnızca bütün-çeyrek-eş parça ve adil paylaşım odağı korunmalı"
+  izinli_icerik:
+    kavramlar:
+      - "bütün"
+      - "çeyrek"
+      - "eş parça"
+      - "adil paylaşım"
+      - "aynı miktar"
+      - "tepsi"
+    beceriler:
+      - "Eş parçaları ayırt etme"
+      - "Görselleri karşılaştırma"
+      - "Adil paylaşım için uygun modeli bulma"
+      - "Parça sayısı ile parça eşliğini ayırt etme"
+  yasaklar:
+    - "1/2, 1/4 gibi kesir sembolleri"
+    - "Pay, payda, birim kesir dili"
+    - "Kesirlerle toplama veya çıkarma"
+    - "Çok adımlı nicelik çözümü"
+    - "Sadece parça saydıran soru"
+    - "Görselsiz, soyut parça eşliği sorusu"
+
+izinli_icerikler:
+  kavramlar:
+    - "bütün"
+    - "çeyrek"
+    - "eş parça"
+    - "adil paylaşım"
+    - "aynı miktar"
+    - "tepsi"
+    - "yiyecek"
+  beceriler:
+    - "görsel_okuma"
+    - "karşılaştırma"
+    - "ayırt_etme"
+    - "eş_parça_bulma"
+    - "adil_paylaşım_modeli_seçme"
+  soru_islemleri:
+    - "uygun_tepsiyi_bulma"
+    - "uygun_olmayan_tepsiyi_bulma"
+    - "eşit_paylaşımı_fark_etme"
+    - "görsel_yorumlama"
+    - "yanlış_hazırlığı_ele"

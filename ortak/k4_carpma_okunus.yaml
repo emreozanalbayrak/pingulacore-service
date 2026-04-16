@@ -1,0 +1,145 @@
+# Çarpma İşlemi Okunuşu - 2. Sinif
+
+meta:
+  id: k04_carpma_islemi_okunusu
+  ad: Çarpma İşlemi Okunuşu
+  sinif_seviyesi: 2
+  aciklama: Öğrenci, görselde verilen çarpma işleminin doğru sözel okunuşunu seçer. Çarpma sembolünün dilsel karşılığı öğretilir.
+  kaynak: k4_Çarpma İşlemi Okunuşu.yaml
+  frequency: Medium
+  difficulty: kolay
+
+context:
+  type: carpma_islemi_okunusu
+  question_count: 1
+  generation:
+    word_count_min: 25
+    word_count_max: 60
+    image_type: tek_gorsel
+    structure:
+    - 4-6 cumlelik, gunluk yasamdan gelen dogal bir senaryo yaz
+    - Senaryoda nesnelerin es gruplar halinde sunuldugu bir baglam kurulmali
+    - Carpma islemi metinde belirtilmemeli, gorselden cikarilmasi beklenmeli
+    - Gorsel, cozumun ana veri kaynagi olmali
+    - Soru koku, "Aşağıdaki çarpma işleminin doğru sözel okunuşu nedir?" benzeri tek cumlelik bir yapi tasimali
+    kurallar:
+    - 2. sinif seviyesinde olmali
+    - Turkce karakterler ve noktalama dogru kullanilmali
+    - Gorsel ve ust metin birbiriyle tam uyumlu olmali
+    - Dogru cevap tek ve net olmali
+    - Gorsel olmadan dogrudan sonuca ulastiracak acik islem ya da sonuc verilmemeli
+    - Secenekler 3 sikli olmali ve yalnizca bir dogru cevap icermeli
+  questions:
+  - slot: 1
+    type: carpma_islemi_okunusu
+    soru_kokleri:
+    - Aşağıdaki çarpma işleminin doğru sözel okunuşu nedir?
+    - Görsele göre çarpma işlemi nasıl okunur?
+    - Buna göre çarpma işlemini doğru okuma biçimi nedir?
+    beceri:
+      katman: MAT.2.2.4
+      bilesenler:
+      - carpma_islemi_okunusu
+      - gorsel_yorumlama
+      - matematiksel_dil_kullanimi
+      - es_gruplari_anlama
+      surec_bileseni: bilgiyi_cikartma
+
+format:
+  type: llm_generated_html
+  soru_koku: Kisa, tek cumlelik soru koku. "Aşağıdaki çarpma işleminin doğru sözel okunuşu nedir?" benzeri bir istem tasimali.
+  paragraph:
+    required: true
+    word_count_min: 25
+    word_count_max: 60
+    sentence_count_min: 4
+    sentence_count_max: 6
+  options:
+    count: 3
+    labels:
+    - A
+    - B
+    - C
+    style: text_only
+    word_count_min: 1
+    word_count_max: 6
+    correct_count: 1
+
+dogru_cevap:
+  tanim: Gorseldeki carpma isleminin dogru sozel okunusunu veren secenek
+  kurallar:
+  - Görseldeki çarpma işleminin doğru okunuşunun belirlenmesi
+  - Çarpan ve çarpılan sıralaması doğru olmalı
+  - Dogru cevap tek ve net olmali
+
+distractors:
+  kurallar:
+  - Yanlış sözel okuma içermeli
+  - Çarpan ve çarpımı karıştıran seçenekler kullanılmalı
+  - Yanlis secenekler ogrencinin dusebilecegi gercek hatalara dayanmali
+  - Yanlis secenekler dogru cevaba yakin ama ayirt edilebilir olmali
+  yasaklar:
+  - Doğru cevabın tekrarı
+  - Çok bariz şekilde yanlış olan seçenekler
+  - Bariz sacma, baglamsiz ya da islem mantigiyla ilgisiz secenek uretilmemeli
+  - Birden fazla yanlis secenek ayni hatayi tekrar etmemeli
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+    - Gorsel ilkokul duzeyine uygun, sade ve anlasilir olmali
+    - Nesneler es gruplar halinde ve net secilebilecek sekilde olmali
+    - Carpma islemi sembolu ve es gruplar acikca gosterilmeli
+    - Sayilmasi ya da karsilastirilmasi gereken ana ogeler net secilebilmeli
+    - Gorsel, soruda hedeflenen islem ya da iliskiyi bire bir karsilamali
+    - Gorselde es gruplar ve carpma isleminin gorsel temsili acikca yer almali
+    yasaklar:
+    - Gorselin icinde veya ustunde cevabi ele veren islem, sonuc ya da ipucu yazilmamali
+    - Sayilmasi gereken ana ogeler dekoratif kalabalik icinde kaybolmamali
+    - Fotogercekci, karmasik veya yetiskinlere hitap eden bir gorsel dil kullanilmamali
+    - Gorsel ile metin arasinda sayi, nesne veya iliski celiskisi bulunmamali
+    stil: ilkokul_dostu_sade_illustrasyon
+    boyut: orta
+  sik_gorseli:
+    gerekli: false
+    kurallar:
+    - Secenekler yalnizca metin olarak verilmelidir
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: Öğrenci, görselde verilen çarpma işleminin doğru sözel okunuşunu seçer. Çarpma sembolünün dilsel karşılığı öğretilir.
+  tema_siniri: Yalnizca 2. sinif duzeyinde carpma islemi okunusu, es gruplar, carpma sembolu odagi korunmali.
+  izinli_icerik:
+    kavramlar:
+    - carpma islemi
+    - es gruplar
+    - carpma sembolu
+    - sozel okunus
+    - carpan
+    - carpilan
+    beceriler:
+    - Çarpma işlemini doğru okuma
+    - Görsel okuma ve yorumlama
+    - Matematiksel dil kullanımı
+  yasaklar:
+  - 3 basamakli ve daha buyuk sayilarla ileri duzey islem zincirleri
+  - Kalanli bolme, bolme algoritmasi veya ust sinif duzeyindeki islem teknikleri
+  - 2. sinif duzeyini asan soyut cebir dili, sembolik ispat ya da formal tanimlar
+  - Gorsel olmadan cozume ulastiran acik sonuc, islem veya sayi bilgisini metinde vermek
+  - Gereksiz veri yuku olusturan cok adimli ve dikkat dagitici problem kurgulari
+
+izinli_icerikler:
+  kavramlar:
+  - carpma islemi
+  - es gruplar
+  - carpma sembolu
+  - sozel okunus
+  - carpan
+  - carpilan
+  beceriler:
+  - carpma_islemi_okunusu
+  - gorsel_yorumlama
+  - matematiksel_dil_kullanimi
+  - es_gruplari_anlama
+  soru_islemleri:
+  - carpma_islemini_dogru_okuma
+  - sozel_ifadeyle_eslestirme

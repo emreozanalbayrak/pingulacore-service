@@ -17,7 +17,6 @@ wheels/
 # Runtime artifacts
 service.db
 generated_assets/
-ortak/
 sp_files/
 tests/
 scripts
