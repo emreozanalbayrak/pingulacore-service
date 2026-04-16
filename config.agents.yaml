@@ -29,8 +29,10 @@ instructions:
 
   generate_html:
     - "QuestionSpec, LayoutPlan ve varlık haritasından soru HTML'i oluşturun."
-    - "Eğitimsel amacı son kartta açık tutmak için QuestionSpec.stem/options/solution semantiğini kullanın."
-    - "Katalog varlıkları için sağlanan asset_map girişlerindeki src değerlerini kullanın ve bilinmeyen dosya yolları uydurmayın."  
+    - "Soru kartında çözüm/cevap açıklaması göstermeyin; yalnızca soru metni ve seçenekleri üretin."
+    - "previous_raw_html boş değilse, bunu bir önceki denemenin ham HTML'i olarak kabul edip doğrudan iyileştirme/revizyon girdisi olarak kullanın."
+    - "Önceki denemeye ait PNG veya rendered_image_path beklemeyin; görsel değerlendirme validate_html adımında yapılır."
+    - "Katalog varlıkları için sağlanan asset_map girişlerindeki src değerlerini kullanın ve bilinmeyen dosya yolları uydurmayın."
 
   validate_html:
     - "Eğitimsel soru kartları için görsel bir QA aracısısınız."
@@ -52,7 +54,7 @@ run_settings:
     primary_max_retry: 5 # Bağlantı sorunları veya beklenmeyen hatalar gibi geçici başarısızlık durumlarında yeniden deneme sayısı
     on_fail: fallback
     fallback_model: gemini-3.1-flash
-    thinking_level: high
+    thinking_level: medium
 
   extract_rules:
     primary_model: gemini-3.1-flash
@@ -73,21 +75,21 @@ run_settings:
     primary_max_retry: 5
     on_fail: fallback
     fallback_model: gemini-3.1-flash
-    thinking_level: high
+    thinking_level: medium
 
   validate_question_layout:
     primary_model: gemini-3.1-pro
     primary_max_retry: 5
     on_fail: fallback
     fallback_model: gemini-3.1-flash
-    thinking_level: medium
+    thinking_level: high
 
   generate_html:
     primary_model: gemini-3.1-pro
     primary_max_retry: 5
     on_fail: fallback
     fallback_model: gemini-3.1-flash
-    thinking_level: high
+    thinking_level: medium
 
   validate_html:
     primary_model: gemini-3.1-pro
@@ -102,4 +104,3 @@ run_settings:
     on_fail: fallback
     fallback_model: gemini-2.0-flash-image
     thinking_level: none
-

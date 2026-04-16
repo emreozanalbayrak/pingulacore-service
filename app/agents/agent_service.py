@@ -276,9 +276,16 @@ class AgentService:
         layout: LayoutPlan,
         asset_map: dict[str, str],
         feedback: str | None = None,
+        previous_raw_html: str | None = None,
     ) -> GeneratedHtml:
         if self.settings.use_stub_agents:
-            return self._stub_generate_html(question, layout, asset_map, feedback)
+            return self._stub_generate_html(
+                question,
+                layout,
+                asset_map,
+                feedback,
+                previous_raw_html=previous_raw_html,
+            )
 
         safe_question = self.question_payload_for_generate_html(question)
         payload = {
@@ -286,6 +293,7 @@ class AgentService:
             "layout": layout.model_dump(),
             "asset_map": asset_map,
             "feedback": feedback or "",
+            "previous_raw_html": previous_raw_html or "",
             "catalog_files": self._list_catalog_files(),
         }
         try:
@@ -297,7 +305,13 @@ class AgentService:
             )
         except Exception as exc:  # pragma: no cover - live provider instability path
             self._emit(f"[agent] generate_html fallback to stub: {exc}")
-            return self._stub_generate_html(question, layout, asset_map, feedback)
+            return self._stub_generate_html(
+                question,
+                layout,
+                asset_map,
+                feedback,
+                previous_raw_html=previous_raw_html,
+            )
 
     @staticmethod
     def question_payload_for_generate_html(question: QuestionSpec) -> dict[str, Any]:
@@ -1116,8 +1130,10 @@ class AgentService:
         layout: LayoutPlan,
         asset_map: dict[str, str],
         feedback: str | None = None,
+        previous_raw_html: str | None = None,
     ) -> GeneratedHtml:
         _ = feedback
+        _ = previous_raw_html
         images = []
         for slug, asset in layout.asset_library.items():
             src = asset_map.get(slug) or asset.output_filename

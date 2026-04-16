@@ -491,6 +491,7 @@ class PipelineService:
             },
         )
         feedback: str | None = None
+        previous_raw_html: str | None = None
         last_validation = None
         last_html: dict[str, Any] | None = None
         last_rendered_image_path: str | None = None
@@ -575,7 +576,15 @@ class PipelineService:
                 sub_pipeline_id=sub_pipeline_id,
                 details={"attempt": attempt, "asset_map_count": len(asset_map)},
             )
-            html = await asyncio.to_thread(self.agents.generate_html, question, layout, asset_map, feedback)
+            html = await asyncio.to_thread(
+                self.agents.generate_html,
+                question,
+                layout,
+                asset_map,
+                feedback,
+                previous_raw_html,
+            )
+            current_raw_html = html.html_content
             html.html_content = self.agents.post_process_html_asset_paths(
                 html.html_content,
                 layout,
@@ -592,6 +601,7 @@ class PipelineService:
                     "layout": layout.model_dump(),
                     "asset_map": asset_map,
                     "feedback": feedback,
+                    "previous_raw_html": previous_raw_html,
                 },
                 output_payload=html.model_dump(),
                 feedback_text=feedback,
@@ -706,6 +716,7 @@ class PipelineService:
                 return html.model_dump(), validation.model_dump(), attempt, asset_map, final_rendered_image_path
 
             feedback = validation.feedback or "\n".join(validation.issues)
+            previous_raw_html = current_raw_html
             self._log(
                 mode=mode,
                 component="retry.feedback",
