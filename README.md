@@ -72,3 +72,8 @@ uv run python scripts/e2e_live_check.py
 # backend'i script başlatıp test etsin:
 ./scripts/run_e2e_with_backend.sh
 ```
+
+## Kılavuzlar
+
+- [Detaylı Kullanım Kılavuzu](docs/kullanim_kilavuzu.md)
+- [UI Kullanım Kılavuzu](docs/ui_kullanim_kilavuzu.md)
