@@ -405,6 +405,15 @@ def set_stored_json_output_favorite(
     return row
 
 
+def delete_stored_json_output(db: Session, *, kind: str, filename: str) -> bool:
+    row = get_stored_json_output(db, kind=kind, filename=filename)
+    if row is None:
+        return False
+    db.delete(row)
+    db.commit()
+    return True
+
+
 def parse_json(value: str | None) -> Any:
     if value is None:
         return None

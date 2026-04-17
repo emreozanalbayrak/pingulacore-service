@@ -67,6 +67,48 @@ class SpFileFavoriteRequest(BaseModel):
     is_favorite: bool
 
 
+ExplorerRoot = Literal["runs", "sp_files"]
+
+
+class ExplorerTreeNode(BaseModel):
+    name: str
+    path: str
+    kind: Literal["file", "dir"]
+    size: int | None = None
+    modified_at: str | None = None
+    is_favorite: bool = False
+    favoritable: bool = False
+    children: list["ExplorerTreeNode"] = Field(default_factory=list)
+
+
+class ExplorerTreeResponse(BaseModel):
+    root: ExplorerRoot
+    path: str | None = None
+    items: list[ExplorerTreeNode] = Field(default_factory=list)
+
+
+class ExplorerFileReadResponse(BaseModel):
+    root: ExplorerRoot
+    path: str
+    filename: str
+    content_type: Literal["json", "html", "text", "image", "binary"]
+    content: Any | None = None
+    mime_type: str | None = None
+    asset_url: str | None = None
+
+
+class ExplorerFavoriteRequest(BaseModel):
+    root: ExplorerRoot
+    path: str
+    is_favorite: bool
+
+
+class ExplorerFavoriteResponse(BaseModel):
+    root: ExplorerRoot
+    path: str
+    is_favorite: bool
+
+
 class FavoriteCreateRequest(BaseModel):
     name: str = Field(min_length=1, max_length=200)
     kind: Literal["question", "layout"]
@@ -255,3 +297,6 @@ class AgentRunGetResponse(BaseModel):
     schema_version: str | None = None
     started_at: str
     finished_at: str | None
+
+
+ExplorerTreeNode.model_rebuild()

@@ -358,7 +358,7 @@ class AgentService:
         attempt: int | None = None,
         run_assets_dir: Path | None = None,
         render_dir: Path | None = None,
-    ) -> str:
+        ) -> str:
         if render_dir is not None:
             suffix = f"_{max(1, attempt)}" if attempt is not None else ""
             html_path = render_dir / f"render{suffix}.html"
@@ -372,10 +372,26 @@ class AgentService:
         rewritten = self._rewrite_html_asset_urls_for_local_render(
             html_content, asset_map or {}, extra_search_dirs=extra_dirs
         )
-        html_path.write_text(rewritten, encoding="utf-8")
+        # Persist artifact HTML without machine-specific absolute paths.
+        # Use a temporary rewritten copy only for local headless screenshot capture.
+        html_path.write_text(html_content, encoding="utf-8")
 
-        if self._capture_html_screenshot(html_path, image_path):
-            return str(image_path)
+        capture_input_path = html_path
+        temp_capture_path: Path | None = None
+        if rewritten != html_content:
+            temp_capture_path = html_path.with_name(f"{html_path.stem}.capture{html_path.suffix}")
+            temp_capture_path.write_text(rewritten, encoding="utf-8")
+            capture_input_path = temp_capture_path
+
+        try:
+            if self._capture_html_screenshot(capture_input_path, image_path):
+                return str(image_path)
+        finally:
+            if temp_capture_path is not None and temp_capture_path.exists():
+                try:
+                    temp_capture_path.unlink()
+                except Exception:
+                    pass
 
         # Deterministic fallback so pipeline keeps moving even if local renderer is unavailable.
         image_path.write_bytes(PIXEL_PNG_BYTES)

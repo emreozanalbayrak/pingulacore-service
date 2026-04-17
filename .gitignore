@@ -28,7 +28,6 @@ runs/
 old
 
 # Frontend
-frontend/
 pingula-ui-mock/
 
 # claude config and data

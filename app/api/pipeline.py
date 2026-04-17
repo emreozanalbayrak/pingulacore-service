@@ -72,45 +72,75 @@ def _sp_file_item_response(row: Any) -> SpFileItemResponse:
 def _sync_stored_json_outputs(db: Session, kind: str) -> None:
     for filename in sp_files.list_files(kind):  # type: ignore[arg-type]
         row = repository.get_stored_json_output(db, kind=kind, filename=filename)
-        if row is not None:
-            continue
+        if row is None:
+            try:
+                data = sp_files.read_json_file(kind, filename)  # type: ignore[arg-type]
+            except Exception:
+                continue
+            try:
+                row = repository.upsert_stored_json_output(
+                    db,
+                    kind=kind,
+                    filename=filename,
+                    content=data,
+                    source_sub_pipeline_id=None,
+                )
+            except Exception:
+                continue
+
+        if row is not None and not bool(getattr(row, "is_favorite", False)):
+            try:
+                fs_favorite = sp_files.get_stored_json_favorite(kind, filename)  # type: ignore[arg-type]
+            except Exception:
+                fs_favorite = False
+            if fs_favorite:
+                try:
+                    repository.set_stored_json_output_favorite(
+                        db,
+                        kind=kind,
+                        filename=filename,
+                        is_favorite=True,
+                    )
+                except Exception:
+                    continue
+
+
+def _ensure_stored_json_output(db: Session, *, kind: str, filename: str) -> Any:
+    row = repository.get_stored_json_output(db, kind=kind, filename=filename)
+    if row is None:
         try:
             data = sp_files.read_json_file(kind, filename)  # type: ignore[arg-type]
-        except Exception:
-            continue
+        except ValueError:
+            raise HTTPException(status_code=400, detail="Geçersiz dosya adı")
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="Dosya bulunamadı")
+
         try:
-            repository.upsert_stored_json_output(
+            row = repository.upsert_stored_json_output(
                 db,
                 kind=kind,
                 filename=filename,
                 content=data,
                 source_sub_pipeline_id=None,
             )
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc))
+
+    if row is not None and not bool(getattr(row, "is_favorite", False)):
+        try:
+            fs_favorite = sp_files.get_stored_json_favorite(kind, filename)  # type: ignore[arg-type]
         except Exception:
-            continue
-
-
-def _ensure_stored_json_output(db: Session, *, kind: str, filename: str) -> Any:
-    row = repository.get_stored_json_output(db, kind=kind, filename=filename)
-    if row is not None:
-        return row
-    try:
-        data = sp_files.read_json_file(kind, filename)  # type: ignore[arg-type]
-    except ValueError:
-        raise HTTPException(status_code=400, detail="Geçersiz dosya adı")
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Dosya bulunamadı")
-
-    try:
-        return repository.upsert_stored_json_output(
-            db,
-            kind=kind,
-            filename=filename,
-            content=data,
-            source_sub_pipeline_id=None,
-        )
-    except ValueError as exc:
-        raise HTTPException(status_code=400, detail=str(exc))
+            fs_favorite = False
+        if fs_favorite:
+            updated = repository.set_stored_json_output_favorite(
+                db,
+                kind=kind,
+                filename=filename,
+                is_favorite=True,
+            )
+            if updated is not None:
+                row = updated
+    return row
 
 
 @router.post("/pipelines/full/run", response_model=FullPipelineRunResponse)
@@ -232,6 +262,7 @@ def set_sp_question_file_favorite(
     )
     if row is None:
         raise HTTPException(status_code=404, detail="Dosya bulunamadı")
+    sp_files.set_stored_json_favorite("q_json", filename, req.is_favorite)
     return _sp_file_item_response(row)
 
 
@@ -250,6 +281,7 @@ def set_sp_layout_file_favorite(
     )
     if row is None:
         raise HTTPException(status_code=404, detail="Dosya bulunamadı")
+    sp_files.set_stored_json_favorite("layout", filename, req.is_favorite)
     return _sp_file_item_response(row)
 
 
