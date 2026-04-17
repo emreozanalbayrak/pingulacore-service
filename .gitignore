@@ -31,5 +31,8 @@ old
 frontend/
 pingula-ui-mock/
 
+# claude config and data
+.claude/
+
 
 

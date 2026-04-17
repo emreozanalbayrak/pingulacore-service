@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any
 from uuid import uuid4
 
@@ -21,6 +22,9 @@ AGENT_TABLES: dict[str, type[models.Base]] = {
     "validation_layout_html": models.AgentLayoutHtmlValidationRun,
     "helper_generate_composite_image": models.AgentCompositeImageRun,
 }
+
+FAVORITE_KINDS = {"question", "layout"}
+STORED_JSON_KINDS = {"q_json", "layout"}
 
 
 def _to_json_text(payload: Any) -> str:
@@ -250,6 +254,155 @@ def get_agent_run(db: Session, agent_name: str, run_id: str) -> Any | None:
     if table is None:
         return None
     return db.get(table, run_id)
+
+
+def create_favorite_output(
+    db: Session,
+    *,
+    name: str,
+    kind: str,
+    content: Any,
+    source_sub_pipeline_id: str | None = None,
+) -> models.FavoriteOutput:
+    safe_name = (name or "").strip()
+    safe_kind = (kind or "").strip().lower()
+    if not safe_name:
+        raise ValueError("Favori adı boş olamaz")
+    if safe_kind not in FAVORITE_KINDS:
+        raise ValueError("Geçersiz favori türü")
+    if content is None:
+        raise ValueError("Favori içeriği boş olamaz")
+
+    row = models.FavoriteOutput(
+        name=safe_name,
+        kind=safe_kind,
+        content_json=_to_json_text(content),
+        source_sub_pipeline_id=source_sub_pipeline_id,
+    )
+    db.add(row)
+    db.commit()
+    db.refresh(row)
+    return row
+
+
+def list_favorite_outputs(db: Session, kind: str | None = None) -> list[models.FavoriteOutput]:
+    stmt = select(models.FavoriteOutput)
+    if kind is not None:
+        safe_kind = (kind or "").strip().lower()
+        if safe_kind not in FAVORITE_KINDS:
+            raise ValueError("Geçersiz favori türü")
+        stmt = stmt.where(models.FavoriteOutput.kind == safe_kind)
+    stmt = stmt.order_by(models.FavoriteOutput.created_at.desc(), models.FavoriteOutput.id.desc())
+    return list(db.scalars(stmt).all())
+
+
+def get_favorite_output(db: Session, favorite_id: int) -> models.FavoriteOutput | None:
+    return db.get(models.FavoriteOutput, favorite_id)
+
+
+def delete_favorite_output(db: Session, favorite_id: int) -> bool:
+    row = db.get(models.FavoriteOutput, favorite_id)
+    if row is None:
+        return False
+    db.delete(row)
+    db.commit()
+    return True
+
+
+def _validate_stored_kind(kind: str) -> str:
+    safe_kind = (kind or "").strip().lower()
+    if safe_kind not in STORED_JSON_KINDS:
+        raise ValueError("Geçersiz stored json türü")
+    return safe_kind
+
+
+def _validate_filename(filename: str) -> str:
+    token = Path(filename)
+    if token.is_absolute() or ".." in token.parts or token.name != filename:
+        raise ValueError("Geçersiz dosya adı")
+    return token.name
+
+
+def upsert_stored_json_output(
+    db: Session,
+    *,
+    kind: str,
+    filename: str,
+    content: Any,
+    source_sub_pipeline_id: str | None = None,
+) -> models.StoredJsonOutput:
+    safe_kind = _validate_stored_kind(kind)
+    safe_filename = _validate_filename(filename)
+    if content is None:
+        raise ValueError("Stored JSON içeriği boş olamaz")
+    if not isinstance(content, dict):
+        raise ValueError("Stored JSON üst seviye dict olmalı")
+
+    stmt = select(models.StoredJsonOutput).where(
+        models.StoredJsonOutput.kind == safe_kind,
+        models.StoredJsonOutput.filename == safe_filename,
+    )
+    row = db.scalar(stmt)
+    if row is None:
+        row = models.StoredJsonOutput(
+            kind=safe_kind,
+            filename=safe_filename,
+            content_json=_to_json_text(content),
+            source_sub_pipeline_id=source_sub_pipeline_id,
+        )
+    else:
+        row.content_json = _to_json_text(content)
+        if source_sub_pipeline_id is not None:
+            row.source_sub_pipeline_id = source_sub_pipeline_id
+
+    db.add(row)
+    db.commit()
+    db.refresh(row)
+    return row
+
+
+def list_stored_json_outputs(
+    db: Session,
+    *,
+    kind: str,
+    favorites_only: bool = False,
+) -> list[models.StoredJsonOutput]:
+    safe_kind = _validate_stored_kind(kind)
+    stmt = (
+        select(models.StoredJsonOutput)
+        .where(models.StoredJsonOutput.kind == safe_kind)
+        .order_by(models.StoredJsonOutput.created_at.desc(), models.StoredJsonOutput.id.desc())
+    )
+    if favorites_only:
+        stmt = stmt.where(models.StoredJsonOutput.is_favorite.is_(True))
+    return list(db.scalars(stmt).all())
+
+
+def get_stored_json_output(db: Session, *, kind: str, filename: str) -> models.StoredJsonOutput | None:
+    safe_kind = _validate_stored_kind(kind)
+    safe_filename = _validate_filename(filename)
+    stmt = select(models.StoredJsonOutput).where(
+        models.StoredJsonOutput.kind == safe_kind,
+        models.StoredJsonOutput.filename == safe_filename,
+    )
+    return db.scalar(stmt)
+
+
+def set_stored_json_output_favorite(
+    db: Session,
+    *,
+    kind: str,
+    filename: str,
+    is_favorite: bool,
+) -> models.StoredJsonOutput | None:
+    row = get_stored_json_output(db, kind=kind, filename=filename)
+    if row is None:
+        return None
+    row.is_favorite = bool(is_favorite)
+    db.add(row)
+    db.commit()
+    db.refresh(row)
+    return row
 
 
 def parse_json(value: str | None) -> Any:

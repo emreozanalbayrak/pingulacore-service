@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from sqlalchemy import DateTime, ForeignKey, Integer, Text
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.database import Base
@@ -33,7 +33,7 @@ class SubPipeline(Base):
     id: Mapped[str] = mapped_column(primary_key=True)
     pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("pipelines.id"), nullable=True)
     mode: Mapped[str] = mapped_column(default="sub")
-    kind: Mapped[str] = mapped_column(default="")
+    kind: Mapped[str] = mapped_column(Text, default="")
     status: Mapped[str] = mapped_column(default="running")
     input_json: Mapped[str] = mapped_column(Text, default="{}")
     output_json: Mapped[str | None] = mapped_column(Text, nullable=True)
@@ -118,3 +118,28 @@ class AgentLayoutHtmlValidationRun(AgentRunMixin, Base):
 
 class AgentCompositeImageRun(AgentRunMixin, Base):
     __tablename__ = "agent_composite_image_runs"
+
+
+class StoredJsonOutput(Base):
+    __tablename__ = "stored_json_outputs"
+    __table_args__ = (UniqueConstraint("kind", "filename", name="uq_stored_json_outputs_kind_filename"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    kind: Mapped[str] = mapped_column(default="")
+    filename: Mapped[str] = mapped_column(Text, default="")
+    content_json: Mapped[str] = mapped_column(Text, default="{}")
+    is_favorite: Mapped[bool] = mapped_column(Boolean, default=False)
+    source_sub_pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("sub_pipelines.id"), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
+
+
+class FavoriteOutput(Base):
+    __tablename__ = "favorite_outputs"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(Text, default="")
+    kind: Mapped[str] = mapped_column(default="")
+    content_json: Mapped[str] = mapped_column(Text, default="{}")
+    source_sub_pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("sub_pipelines.id"), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)

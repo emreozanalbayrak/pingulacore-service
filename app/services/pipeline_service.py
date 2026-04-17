@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import inspect
 import shutil
 from pathlib import Path
 from typing import Any
@@ -73,16 +74,24 @@ class PipelineService:
         sub_pipeline_id: str,
         question: QuestionSpec,
         pipeline_id: str | None = None,
-    ) -> None:
+    ) -> str:
         filename = write_question_file(question, sub_pipeline_id=sub_pipeline_id)
+        repository.upsert_stored_json_output(
+            self.db,
+            kind="q_json",
+            filename=filename,
+            content=question.model_dump(),
+            source_sub_pipeline_id=sub_pipeline_id,
+        )
         self._log(
             mode=mode,
             component="filesystem",
             message=f"QuestionSpec dosyaya kaydedildi: sp_files/q_json/{filename}",
             pipeline_id=pipeline_id,
             sub_pipeline_id=sub_pipeline_id,
-            details={"file": filename, "kind": "q_json"},
+            details={"file": filename, "kind": "q_json", "db_saved": True},
         )
+        return filename
 
     def _persist_sub_output_layout(
         self,
@@ -91,16 +100,24 @@ class PipelineService:
         sub_pipeline_id: str,
         layout: LayoutPlan,
         pipeline_id: str | None = None,
-    ) -> None:
+    ) -> str:
         filename = write_layout_file(layout, sub_pipeline_id=sub_pipeline_id)
+        repository.upsert_stored_json_output(
+            self.db,
+            kind="layout",
+            filename=filename,
+            content=layout.model_dump(),
+            source_sub_pipeline_id=sub_pipeline_id,
+        )
         self._log(
             mode=mode,
             component="filesystem",
             message=f"LayoutPlan dosyaya kaydedildi: sp_files/layout/{filename}",
             pipeline_id=pipeline_id,
             sub_pipeline_id=sub_pipeline_id,
-            details={"file": filename, "kind": "layout"},
+            details={"file": filename, "kind": "layout", "db_saved": True},
         )
+        return filename
 
     def _persist_sub_output_html(
         self,
@@ -495,6 +512,8 @@ class PipelineService:
         feedback_history: list[str] = []
         previous_raw_html: str | None = None
         previous_validation_feedback_history: list[dict[str, Any]] = []
+        validate_html_param_count = len(inspect.signature(self.agents.validate_html).parameters)
+        validate_html_supports_feedback_history = validate_html_param_count >= 3
         last_validation = None
         last_html: dict[str, Any] | None = None
         last_rendered_image_path: str | None = None
@@ -662,12 +681,19 @@ class PipelineService:
                 sub_pipeline_id=sub_pipeline_id,
                 details={"attempt": attempt},
             )
-            validation = await asyncio.to_thread(
-                self.agents.validate_html,
-                html.html_content,
-                rendered_image_internal_path,
-                list(previous_validation_feedback_history),
-            )
+            if validate_html_supports_feedback_history:
+                validation = await asyncio.to_thread(
+                    self.agents.validate_html,
+                    html.html_content,
+                    rendered_image_internal_path,
+                    list(previous_validation_feedback_history),
+                )
+            else:
+                validation = await asyncio.to_thread(
+                    self.agents.validate_html,
+                    html.html_content,
+                    rendered_image_internal_path,
+                )
             last_validation = validation
             repository.record_agent_run(
                 self.db,

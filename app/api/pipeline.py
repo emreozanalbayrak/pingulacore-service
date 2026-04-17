@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any
 from pathlib import Path
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
@@ -22,6 +22,10 @@ from app.schemas.api import (
     QuestionToLayoutRunRequest,
     QuestionToLayoutRunResponse,
     RuntimeInfoResponse,
+    FavoriteCreateRequest,
+    FavoriteResponse,
+    SpFileFavoriteRequest,
+    SpFileItemResponse,
     SpFilesResponse,
     SpHtmlFileResponse,
     SpJsonFileResponse,
@@ -42,6 +46,71 @@ def _dt(value: Any) -> str | None:
     if value is None:
         return None
     return value.isoformat()
+
+
+def _favorite_response(row: Any) -> FavoriteResponse:
+    data = repository.parse_json(getattr(row, "content_json", None))
+    if not isinstance(data, dict):
+        data = {}
+    return FavoriteResponse(
+        id=row.id,
+        name=row.name,
+        kind=row.kind,
+        data=data,
+        source_sub_pipeline_id=row.source_sub_pipeline_id,
+        created_at=_dt(row.created_at) or "",
+    )
+
+
+def _sp_file_item_response(row: Any) -> SpFileItemResponse:
+    return SpFileItemResponse(
+        filename=row.filename,
+        is_favorite=bool(getattr(row, "is_favorite", False)),
+    )
+
+
+def _sync_stored_json_outputs(db: Session, kind: str) -> None:
+    for filename in sp_files.list_files(kind):  # type: ignore[arg-type]
+        row = repository.get_stored_json_output(db, kind=kind, filename=filename)
+        if row is not None:
+            continue
+        try:
+            data = sp_files.read_json_file(kind, filename)  # type: ignore[arg-type]
+        except Exception:
+            continue
+        try:
+            repository.upsert_stored_json_output(
+                db,
+                kind=kind,
+                filename=filename,
+                content=data,
+                source_sub_pipeline_id=None,
+            )
+        except Exception:
+            continue
+
+
+def _ensure_stored_json_output(db: Session, *, kind: str, filename: str) -> Any:
+    row = repository.get_stored_json_output(db, kind=kind, filename=filename)
+    if row is not None:
+        return row
+    try:
+        data = sp_files.read_json_file(kind, filename)  # type: ignore[arg-type]
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Geçersiz dosya adı")
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Dosya bulunamadı")
+
+    try:
+        return repository.upsert_stored_json_output(
+            db,
+            kind=kind,
+            filename=filename,
+            content=data,
+            source_sub_pipeline_id=None,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
 
 
 @router.post("/pipelines/full/run", response_model=FullPipelineRunResponse)
@@ -96,18 +165,34 @@ def get_yaml_file_content(filename: str) -> YamlFileContentResponse:
 
 
 @router.get("/sp-files/q_json", response_model=SpFilesResponse)
-def list_sp_question_files() -> SpFilesResponse:
-    return SpFilesResponse(files=sp_files.list_files("q_json"))
+def list_sp_question_files(
+    favorites_only: bool = Query(default=False),
+    db: Session = Depends(get_db),
+) -> SpFilesResponse:
+    _sync_stored_json_outputs(db, "q_json")
+    rows = repository.list_stored_json_outputs(db, kind="q_json", favorites_only=favorites_only)
+    items = [_sp_file_item_response(row) for row in rows]
+    return SpFilesResponse(files=[item.filename for item in items], items=items)
 
 
 @router.get("/sp-files/layout", response_model=SpFilesResponse)
-def list_sp_layout_files() -> SpFilesResponse:
-    return SpFilesResponse(files=sp_files.list_files("layout"))
+def list_sp_layout_files(
+    favorites_only: bool = Query(default=False),
+    db: Session = Depends(get_db),
+) -> SpFilesResponse:
+    _sync_stored_json_outputs(db, "layout")
+    rows = repository.list_stored_json_outputs(db, kind="layout", favorites_only=favorites_only)
+    items = [_sp_file_item_response(row) for row in rows]
+    return SpFilesResponse(files=[item.filename for item in items], items=items)
 
 
 @router.get("/sp-files/q_html", response_model=SpFilesResponse)
 def list_sp_html_files() -> SpFilesResponse:
-    return SpFilesResponse(files=sp_files.list_files("q_html"))
+    files = sp_files.list_files("q_html")
+    return SpFilesResponse(
+        files=files,
+        items=[SpFileItemResponse(filename=filename, is_favorite=False) for filename in files],
+    )
 
 
 @router.get("/sp-files/q_json/{filename}", response_model=SpJsonFileResponse)
@@ -132,6 +217,42 @@ def get_sp_layout_file(filename: str) -> SpJsonFileResponse:
     return SpJsonFileResponse(filename=filename, data=data)
 
 
+@router.patch("/sp-files/q_json/{filename}/favorite", response_model=SpFileItemResponse)
+def set_sp_question_file_favorite(
+    filename: str,
+    req: SpFileFavoriteRequest,
+    db: Session = Depends(get_db),
+) -> SpFileItemResponse:
+    _ensure_stored_json_output(db, kind="q_json", filename=filename)
+    row = repository.set_stored_json_output_favorite(
+        db,
+        kind="q_json",
+        filename=filename,
+        is_favorite=req.is_favorite,
+    )
+    if row is None:
+        raise HTTPException(status_code=404, detail="Dosya bulunamadı")
+    return _sp_file_item_response(row)
+
+
+@router.patch("/sp-files/layout/{filename}/favorite", response_model=SpFileItemResponse)
+def set_sp_layout_file_favorite(
+    filename: str,
+    req: SpFileFavoriteRequest,
+    db: Session = Depends(get_db),
+) -> SpFileItemResponse:
+    _ensure_stored_json_output(db, kind="layout", filename=filename)
+    row = repository.set_stored_json_output_favorite(
+        db,
+        kind="layout",
+        filename=filename,
+        is_favorite=req.is_favorite,
+    )
+    if row is None:
+        raise HTTPException(status_code=404, detail="Dosya bulunamadı")
+    return _sp_file_item_response(row)
+
+
 @router.get("/sp-files/q_html/{filename}", response_model=SpHtmlFileResponse)
 def get_sp_html_file(filename: str) -> SpHtmlFileResponse:
     try:
@@ -141,6 +262,49 @@ def get_sp_html_file(filename: str) -> SpHtmlFileResponse:
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Dosya bulunamadı")
     return SpHtmlFileResponse(filename=filename, html_content=html_content)
+
+
+@router.post("/favorites", response_model=FavoriteResponse, status_code=201)
+def create_favorite(req: FavoriteCreateRequest, db: Session = Depends(get_db)) -> FavoriteResponse:
+    try:
+        row = repository.create_favorite_output(
+            db,
+            name=req.name,
+            kind=req.kind,
+            content=req.data,
+            source_sub_pipeline_id=req.source_sub_pipeline_id,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    return _favorite_response(row)
+
+
+@router.get("/favorites", response_model=list[FavoriteResponse])
+def list_favorites(
+    kind: str | None = Query(default=None, description="question|layout"),
+    db: Session = Depends(get_db),
+) -> list[FavoriteResponse]:
+    try:
+        rows = repository.list_favorite_outputs(db, kind=kind)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    return [_favorite_response(row) for row in rows]
+
+
+@router.get("/favorites/{favorite_id}", response_model=FavoriteResponse)
+def get_favorite(favorite_id: int, db: Session = Depends(get_db)) -> FavoriteResponse:
+    row = repository.get_favorite_output(db, favorite_id)
+    if row is None:
+        raise HTTPException(status_code=404, detail="Favori bulunamadı")
+    return _favorite_response(row)
+
+
+@router.delete("/favorites/{favorite_id}", status_code=204, response_class=Response)
+def delete_favorite(favorite_id: int, db: Session = Depends(get_db)) -> Response:
+    ok = repository.delete_favorite_output(db, favorite_id)
+    if not ok:
+        raise HTTPException(status_code=404, detail="Favori bulunamadı")
+    return Response(status_code=204)
 
 
 @router.get("/assets/{filename:path}")

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
@@ -43,8 +43,14 @@ class YamlFileContentResponse(BaseModel):
     data: dict[str, Any]
 
 
+class SpFileItemResponse(BaseModel):
+    filename: str
+    is_favorite: bool = False
+
+
 class SpFilesResponse(BaseModel):
     files: list[str] = Field(default_factory=list)
+    items: list[SpFileItemResponse] = Field(default_factory=list)
 
 
 class SpJsonFileResponse(BaseModel):
@@ -55,6 +61,26 @@ class SpJsonFileResponse(BaseModel):
 class SpHtmlFileResponse(BaseModel):
     filename: str
     html_content: str
+
+
+class SpFileFavoriteRequest(BaseModel):
+    is_favorite: bool
+
+
+class FavoriteCreateRequest(BaseModel):
+    name: str = Field(min_length=1, max_length=200)
+    kind: Literal["question", "layout"]
+    data: dict[str, Any]
+    source_sub_pipeline_id: str | None = None
+
+
+class FavoriteResponse(BaseModel):
+    id: int
+    name: str
+    kind: Literal["question", "layout"]
+    data: dict[str, Any]
+    source_sub_pipeline_id: str | None = None
+    created_at: str
 
 
 class FullPipelineRunResponse(BaseModel):
