@@ -1,0 +1,44 @@
+.editor-stage-viewport {
+  position: relative;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 0.875rem;
+  padding: 0.75rem;
+  background: #fefefe;
+}
+
+.editor-stage-canvas {
+  position: relative;
+  min-height: 580px;
+  min-width: 760px;
+  width: fit-content;
+}
+
+[data-editor-editable='true'] {
+  outline: 1px dashed transparent;
+  outline-offset: 1px;
+}
+
+[data-editor-editable='true']:hover {
+  outline-color: rgba(44, 74, 107, 0.5);
+}
+
+[data-editor-selected='true'] {
+  outline: 2px solid rgba(44, 74, 107, 0.8);
+  outline-offset: 2px;
+}
+
+[data-editor-readonly='true'] {
+  outline: 1px dashed rgba(214, 115, 85, 0.6);
+  outline-offset: 1px;
+}
+
+.moveable-control-box {
+  pointer-events: none !important;
+}
+
+.moveable-control-box .moveable-line,
+.moveable-control-box .moveable-control,
+.moveable-control-box .moveable-area {
+  pointer-events: auto !important;
+}

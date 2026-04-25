@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Code, Eye } from 'lucide-react'
+import { Code, Eye, Pencil } from 'lucide-react'
 
 import { rewriteRelativeAssetUrls } from '../lib/html'
 
@@ -7,9 +7,10 @@ interface HtmlViewerProps {
   html: string
   title?: string
   fillHeight?: boolean
+  onEditClick?: () => void
 }
 
-export function HtmlViewer({ html, title = 'HTML Çıktısı', fillHeight = false }: HtmlViewerProps) {
+export function HtmlViewer({ html, title = 'HTML Çıktısı', fillHeight = false, onEditClick }: HtmlViewerProps) {
   const [tab, setTab] = useState<'raw' | 'rendered'>('rendered')
   const rewritten = useMemo(() => rewriteRelativeAssetUrls(html), [html])
 
@@ -19,6 +20,16 @@ export function HtmlViewer({ html, title = 'HTML Çıktısı', fillHeight = fals
         style={{ background: 'linear-gradient(to right, color-mix(in srgb, var(--accent) 40%, transparent), color-mix(in srgb, var(--muted) 40%, transparent))' }}>
         <h3 className="text-sm font-medium text-foreground">{title}</h3>
         <div className="flex gap-1">
+          {onEditClick && (
+            <button
+              type="button"
+              onClick={onEditClick}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 border bg-primary/10 border-primary/30 hover:bg-primary/20 text-primary"
+            >
+              <Pencil className="w-3 h-3" />
+              Edit Manually
+            </button>
+          )}
           <button
             type="button"
             onClick={() => setTab('raw')}

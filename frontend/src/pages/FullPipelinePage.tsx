@@ -4,7 +4,9 @@ import { Play, RefreshCw, FileCode, Hash } from 'lucide-react'
 
 import { AgentRunsPanel } from '../components/AgentRunsPanel'
 import { HtmlIterationsPanel } from '../components/HtmlIterationsPanel'
+import { HtmlLayoutEditor } from '../components/HtmlLayoutEditor'
 import { HtmlViewer } from '../components/HtmlViewer'
+import { Modal } from '../components/Modal'
 import { JsonPanel } from '../components/JsonPanel'
 import { LogStreamPanel } from '../components/LogStreamPanel'
 import { PipelineLogsPanel } from '../components/PipelineLogsPanel'
@@ -135,7 +137,13 @@ export function FullPipelinePage() {
     }
   }
 
-  const htmlFromResponse = useMemo(() => pickHtmlContent(response?.question_html), [response])
+  const [htmlOverrideMain, setHtmlOverrideMain] = useState<string | null>(null)
+  const [editorOpenMain, setEditorOpenMain] = useState(false)
+  const [subHtmlOverrides, setSubHtmlOverrides] = useState<Record<string, string>>({})
+  const [editorOpenSub, setEditorOpenSub] = useState<string | null>(null)
+
+  const rawHtmlFromResponse = useMemo(() => pickHtmlContent(response?.question_html), [response])
+  const htmlFromResponse = htmlOverrideMain ?? rawHtmlFromResponse
   const fullRenderedImageUrl = useMemo(
     () => toAssetUrlFromPath(response?.rendered_image_path),
     [response?.rendered_image_path],
@@ -275,7 +283,16 @@ export function FullPipelinePage() {
 
             {/* HTML Output */}
             {htmlFromResponse && (
-              <HtmlViewer title="Full Pipeline HTML" html={htmlFromResponse} />
+              <>
+                <HtmlViewer title="Full Pipeline HTML" html={htmlFromResponse} onEditClick={() => setEditorOpenMain(true)} />
+                <Modal open={editorOpenMain} onClose={() => setEditorOpenMain(false)} size="full" title="HTML Layout Editor">
+                  <HtmlLayoutEditor
+                    html={htmlFromResponse}
+                    onSave={(edited) => { setHtmlOverrideMain(edited); setEditorOpenMain(false) }}
+                    onCancel={() => setEditorOpenMain(false)}
+                  />
+                </Modal>
+              </>
             )}
 
             {/* Rendered Image */}
@@ -302,7 +319,8 @@ export function FullPipelinePage() {
               <div className="p-6 space-y-6">
                 {Object.entries(response.sub_pipeline_ids).map(([name, id]) => {
                   const row = subPipelines[name]
-                  const html = pickHtmlContent((row?.output_json as Record<string, unknown> | undefined)?.html)
+                  const rawHtml = pickHtmlContent((row?.output_json as Record<string, unknown> | undefined)?.html)
+                  const html = subHtmlOverrides[name] ?? rawHtml
                   const subRenderedImagePath = (row?.output_json as Record<string, unknown> | undefined)?.rendered_image_path
                   const subRenderedImageUrl =
                     typeof subRenderedImagePath === 'string' ? toAssetUrlFromPath(subRenderedImagePath) : ''
@@ -318,7 +336,16 @@ export function FullPipelinePage() {
                       <div className="mt-3 space-y-2">
                         <JsonPanel title={`${name} Output`} data={row?.output_json} />
                         {name === 'layout_to_html' && html && (
-                          <HtmlViewer title="Ara Adım HTML" html={html} />
+                          <>
+                            <HtmlViewer title="Ara Adım HTML" html={html} onEditClick={() => setEditorOpenSub(name)} />
+                            <Modal open={editorOpenSub === name} onClose={() => setEditorOpenSub(null)} size="full" title="HTML Layout Editor">
+                              <HtmlLayoutEditor
+                                html={html}
+                                onSave={(edited) => { setSubHtmlOverrides((prev) => ({ ...prev, [name]: edited })); setEditorOpenSub(null) }}
+                                onCancel={() => setEditorOpenSub(null)}
+                              />
+                            </Modal>
+                          </>
                         )}
                         {name === 'layout_to_html' && subRenderedImageUrl && (
                           <div className="p-4 border border-border rounded-lg">

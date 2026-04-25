@@ -4,7 +4,9 @@ import { Play, RefreshCw, FileCode, Hash } from 'lucide-react'
 
 import { AgentRunsPanel } from '../components/AgentRunsPanel'
 import { HtmlIterationsPanel } from '../components/HtmlIterationsPanel'
+import { HtmlLayoutEditor } from '../components/HtmlLayoutEditor'
 import { HtmlViewer } from '../components/HtmlViewer'
+import { Modal } from '../components/Modal'
 import { JsonEditor } from '../components/JsonEditor'
 import { LayoutOutputDisplay } from '../components/LayoutOutputDisplay'
 import { LogStreamPanel } from '../components/LogStreamPanel'
@@ -267,7 +269,10 @@ export function SubPipelinesPage() {
     }
   }
 
-  const htmlOutput = pickHtmlContent(layoutToHtml?.question_html)
+  const [htmlOverride, setHtmlOverride] = useState<string | null>(null)
+  const [editorOpen, setEditorOpen] = useState(false)
+
+  const htmlOutput = htmlOverride ?? pickHtmlContent(layoutToHtml?.question_html)
   const stepYamlOutput = asRecord(stepYaml.detail?.output_json)
   const stepLayoutOutput = asRecord(stepLayout.detail?.output_json)
   const yamlQuestionOutput = yamlToQuestion?.question_json ?? asRecord(stepYamlOutput?.question) ?? undefined
@@ -580,7 +585,18 @@ export function SubPipelinesPage() {
                 {/* HTML Iterations (real-time) */}
                 <HtmlIterationsPanel renders={renders} validations={validations} running={htmlRunning} />
 
-{htmlOutput && <HtmlViewer html={htmlOutput} title="Sub-Pipeline HTML Preview" />}
+{htmlOutput && (
+                  <>
+                    <HtmlViewer html={htmlOutput} title="Sub-Pipeline HTML Preview" onEditClick={() => setEditorOpen(true)} />
+                    <Modal open={editorOpen} onClose={() => setEditorOpen(false)} size="full" title="HTML Layout Editor">
+                      <HtmlLayoutEditor
+                        html={htmlOutput}
+                        onSave={(edited) => { setHtmlOverride(edited); setEditorOpen(false) }}
+                        onCancel={() => setEditorOpen(false)}
+                      />
+                    </Modal>
+                  </>
+                )}
                 {renderedImageUrl && (
                   <div className="p-4 border border-border rounded-xl bg-white">
                     <h4 className="text-sm font-medium text-foreground mb-3">Final Render PNG</h4>

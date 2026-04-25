@@ -17,6 +17,7 @@ wheels/
 # Runtime artifacts
 service.db
 generated_assets/
+html-editor-mvp/
 sp_files/
 tests/
 scripts
