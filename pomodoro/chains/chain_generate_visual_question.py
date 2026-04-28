@@ -17,17 +17,35 @@ Prompt'taki her sey YAML'dan dinamik olarak gelir.
 """
 from __future__ import annotations
 
-import random
 from typing import Optional
 
 from langchain_core.output_parsers import PydanticOutputParser
 from langchain_core.prompts import PromptTemplate
 
+import hashlib
+
 from pomodoro.models import GeneratedVisualQuestion
 from pomodoro.pipeline_log import pipeline_log
-from pomodoro.variant_rotation import get_variant_details
+from pomodoro.variant_rotation import get_variant_details, get_variant_names
 from pomodoro.yaml_loader import ParsedTemplate, extract_for_question_chain, _dict_to_yaml_str
 from utils.llm import ModelRole, get_model
+
+
+def _variant_number_seeds(variant_name: str, idx: int) -> dict:
+    """Varyant adindan deterministik ama varyantlar arasi farkli sayisal tohum uretir.
+
+    Ayni varyant adi icin her zaman ayni tohumlari verir (reproducibility);
+    farkli varyantlar farkli sayilar alir — bu parallel uretimde sayisal
+    cesitliligi saglar.
+    """
+    h = int(hashlib.md5(variant_name.encode("utf-8")).hexdigest(), 16)
+    return {
+        "base": 12 + (idx * 17) + (h % 31),        # ~12..200 araliginda
+        "divisor": 2 + ((h >> 8) % 8),              # 2..9
+        "multiplier": 3 + ((h >> 16) % 10),         # 3..12
+        "unit_digit": (h + idx) % 10,               # 0..9 birim basamak egilimi
+        "secondary": 7 + (idx * 11) + ((h >> 24) % 17),  # ikincil kurgu sayisi
+    }
 
 
 _parser = PydanticOutputParser(pydantic_object=GeneratedVisualQuestion)
@@ -64,21 +82,17 @@ Bu kurallara eksiksiz uyarak soru üret.
 ## ZORLUK SEVİYESİ
 Zorluk: {difficulty}
 
-{geometry_half_area_instruction}
-
-{creativity_balance_instruction}
-
 ## GÖREV
 
 Aşağıdaki adımları sırayla uygula. Tüm çıktıyı tek seferde oluştur:
 
-1. **Sayıları sabitle (hidden_computation)**: İlk önce soru için kullanacağın TÜM sayısal değerleri belirle ve hidden_computation alanına yaz. Grup sayısı, eleman sayısı, toplam, fark, kalan — hepsini burada hesapla ve kaydet. **Bu adımdan sonra hiçbir sayıyı değiştirme.** Senaryo, görsel ve şıklar bu adımda belirlenen sayılardan türeyecek.
+1. **Görsel sahne tasarla**: Sahnenin genel tarifini (scene_description), sahne öğelerini (scene_elements), varsa karakter ve hedef nesneyi, renk paletini belirle. scene_description içine nesne adı, etiket, başlık veya yön yazısı KOYMA — sadece nesnelerin fiziksel tarifini yaz.
 
-2. **Görsel sahne tasarla**: Sahnenin genel tarifini (scene_description), sahne öğelerini (scene_elements), varsa karakter ve hedef nesneyi, renk paletini belirle. scene_elements içindeki nesne adetleri ve grup büyüklükleri **Adım 1'deki sayılarla birebir aynı** olmalı. scene_description içine nesne adı, etiket, başlık veya yön yazısı KOYMA — sadece nesnelerin fiziksel tarifini yaz.
+2. **Senaryo yaz**: Sahneye uygun, {sinif_seviyesi}. sınıf düzeyinde kısa ve anlaşılır bir senaryo metni oluştur (scenario_text). Bu metin basılı bir sınav veya çalışma kağıdında yer alacaktır. Senaryo, çözümü tamamen vermeden en az bir çözüm-relevant sayısal ya da ilişkisel ipucu içermelidir; geri kalan kritik bilgi görselden okunmalıdır. Okuyucuya veya öğrenciye doğrudan seslenen ifadeler KESİNLİKLE KULLANILMAMALI.
 
-3. **Senaryo yaz**: Sahneye uygun, {sinif_seviyesi}. sınıf düzeyinde kısa ve anlaşılır bir senaryo metni oluştur (scenario_text). Senaryodaki sayısal değerler **Adım 1'deki değerlerle birebir aynı** olmalı — farklı sayı türetme. Bu metin basılı bir sınav veya çalışma kağıdında yer alacaktır. Senaryo, çözümü tamamen vermeden en az bir çözüm-relevant sayısal ya da ilişkisel ipucu içermelidir; geri kalan kritik bilgi görselden okunmalıdır. Okuyucuya veya öğrenciye doğrudan seslenen ifadeler KESİNLİKLE KULLANILMAMALI.
+3. **Gizli hesaplamaları yap**: Soru tipine göre gerekli gizli hesaplamaları yap (hidden_computation). Doğru cevabın ve çeldiricilerin temelini oluştur. Özellikle artış-azalış, transfer, eşitleme ve ardışık sayma durumlarında her aşamadaki miktarları ayrı ayrı kaydet.
 
-4. **Görsel düzeni belirle**: Görselin düzenini (visual_layout) ve görsel öğeleri (visual_elements) tanımla. visual_elements içindeki adetler **Adım 1'deki sayılarla birebir aynı** olmalı. visual_elements içine "text", "label", "etiket" gibi yazı öğeleri EKLEME — sadece nesne çizimleri ve pozisyonlarını belirt.
+4. **Görsel düzeni belirle**: Görselin düzenini (visual_layout) ve görsel öğeleri (visual_elements) tanımla. visual_elements içine "text", "label", "etiket" gibi yazı öğeleri EKLEME — sadece nesne çizimleri ve pozisyonlarını belirt.
 
 {soru_uretim_talimati}
 
@@ -91,10 +105,6 @@ Aşağıdaki adımları sırayla uygula. Tüm çıktıyı tek seferde oluştur:
 {reference_mode_instructions}
 
 {variant_instruction}
-
-{number_hint_section}
-
-{object_diversity_hint}
 
 {feedback_section}
 
@@ -156,7 +166,6 @@ def _build_question_generation_instructions(template: ParsedTemplate) -> str:
     for i, q_data in enumerate(questions_data):
         slot = q_data.get("slot", i + 1)
         beceri = q_data.get("beceri", {})
-        if not isinstance(beceri, dict): beceri = {}
         katman = beceri.get("katman", "?")
         bilesenler = beceri.get("bilesenler", [])
         surec = beceri.get("surec_bileseni", "?")
@@ -241,75 +250,34 @@ def _build_reference_mode_instructions(template: ParsedTemplate) -> str:
     if template.has_reference_questions:
         lines.append(
             "\nBu YAML'da her soru slotu için referans tanımlar verilmiştir. "
-            "Referanslar bir ESİN KAYNAĞIDIR; birebir taklit değildir:"
+            "Aşağıdaki kurallara uy:"
         )
         lines.append(
-            "1. Referans senaryodan esinlen; karakteri, bağlamı, nesne seçimini ve "
-            "olayın akışını özgürce farklılaştırabilirsin. Önemli olan bilişsel "
-            "hedefi ve zorluk düzeyini korumak."
+            "1. Her slot için verilen referans senaryoyu TEMEL AL; karakteri, "
+            "bağlamı ve nesne seçimini değiştirebilirsin ama yapısal akışı koru."
         )
         lines.append(
-            "2. Seçenek sayısı ve biçim türü (metin/görsel/sayı) referansla aynı kalsın; "
-            "ancak seçeneklerin içeriği ve ifadeleri taze olabilir."
+            "2. Referans seçenek yapısını (kaç seçenek, ne tür içerik) aynen koru."
         )
         lines.append(
-            "3. Doğru cevap, referansla aynı MANTIKSAL işlemi temsil etmeli; "
-            "aynı sayıları kullanmak zorunda değilsin."
+            "3. Doğru cevap referanstaki ile aynı mantıksal doğruluğa sahip olmalı."
         )
         lines.append(
-            "4. Çözüm yöntemi referanstaki işlem mantığına uyumlu olmalı; "
-            "fakat anlatım adımları farklı ifade edilebilir."
+            "4. Çözüm akışı referanstaki adımları izlemeli."
         )
         lines.append(
-            "5. Soru kökünü soru_kokleri listesinden seçebilir veya aynı bilişsel "
-            "hedefi vuran özgün bir kök yazabilirsin."
+            "5. Soru kökü referanstaki soru_kokleri listesinden birini seç "
+            "VEYA aynı yapıda yeni bir kök oluştur."
         )
 
     if template.varyant_tanimlari:
         lines.append(
-            "\nVaryant tanımları bir çerçeve sunar: bilişsel hedefi ve işlem türünü korurken "
-            "senaryo, nesne, görsel düzen ve dilde özgürce çeşitlendir. "
-            "SABİT KALANLAR bölümündeki maddeler zorunludur; geri kalan her şeyde yaratıcı ol."
+            "\nVaryant tanımları verilmiştir. Her soru için uygun varyantı "
+            "seç veya belirtilen varyant tanımına göre üret. "
+            "SABİT KALANLAR bölümündeki maddelere kesinlikle uy."
         )
 
     return "\n".join(lines)
-
-
-def _build_creativity_balance_instruction(template: ParsedTemplate) -> str:
-    """Geometri disi soru uretiminde kontrollu yaraticilik talimati."""
-    if getattr(template, "visual_engine", "generative") == "geometric_deterministic":
-        return ""
-
-    return (
-        "## KONTROLLÜ YARATICILIK\n\n"
-        "Geometri dışı sorularda senaryo, nesne, mekân, karakter adı ve görsel düzen bakımından "
-        "daha taze ve beklenmedik ama çocuk düzeyine uygun seçimler yap. Aynı klişe okul/market/"
-        "sepet kurgularına sıkışma; bağlama doğal oturan farklı günlük yaşam alanları, nesneler "
-        "ve küçük hikâye gerilimleri kurabilirsin.\n\n"
-        "Yaratıcılık yalnızca sunum ve bağlamdadır: doğru cevap tanımı, YAML kuralları, "
-        "hidden_computation, seçenek mantığı, sayılabilirlik ve çözüm tutarlılığı değişmez. "
-        "Yaratıcı bir fikir matematiksel doğruluğu, tek doğru cevabı veya görsel-senaryo "
-        "uyumunu zayıflatıyorsa fikri sadeleştir; doğruluk her zaman önceliklidir."
-    )
-
-
-def _build_geometry_half_area_instruction(template: ParsedTemplate) -> str:
-    """Geometri sorularinda YAML izin veriyorsa kosegen/yarim alan kurgusuna izin verir."""
-    if getattr(template, "visual_engine", "generative") != "geometric_deterministic":
-        return ""
-
-    return (
-        "## GEOMETRİDE KÖŞEGEN / YARIM BİRİM ALAN\n\n"
-        "Önce YAML kurallarını oku. Eğer YAML veya soru tipi yarım birim, köşegen, üçgen parça, "
-        "diagonal/eğik kenar ya da 1/2 alan kullanımına izin veriyorsa; şeklin bazı birimleri "
-        "köşegenle ikiye bölünmüş yarım karelerden oluşabilir. Bu durumda hidden_computation'da "
-        "tam kareleri ve yarım kareleri ayrı ayrı yaz; örneğin `12 tam kare + 3 yarım kare = 13.5 birimkare`. "
-        "Yarım birim alan kullanırsan soru kökünde veya senaryoda `köşegen kareyi iki eş yarıma ayırır` "
-        "fikrini kısa ve doğal biçimde belirt; iki yarımın bir tam kare ettiğini sezdir ama toplam cevabı "
-        "doğrudan verme.\n\n"
-        "Eğer YAML açıkça `yalnız yatay-dikey kenar`, `çapraz/eğik kenar kullanılmamalı` veya "
-        "benzer bir yasak veriyorsa köşegen/yarım alan kullanma. Bu izin, YAML kuralını geçersiz kılmaz."
-    )
 
 
 def _build_important_rules(template: ParsedTemplate) -> str:
@@ -364,7 +332,6 @@ def _build_important_rules(template: ParsedTemplate) -> str:
 
     # format.options.word_count
     options = template.format_spec.get("options", {})
-    if not isinstance(options, dict): options = {}
     opt_wmin = options.get("word_count_min")
     opt_wmax = options.get("word_count_max")
     if opt_wmin is not None or opt_wmax is not None:
@@ -489,9 +456,10 @@ def _build_important_rules(template: ParsedTemplate) -> str:
 
     # --- Karakter ismi ---
     rules.append(
-        f"{idx}. Karakter ismi tamamen serbest — önceden belirlenmiş bir listeden seçme, "
-        f"soru kurgusu ve sahneye uygun özgün bir Türkçe isim kullan. "
-        f"Her üretimde farklı bir isim tercih et."
+        f"{idx}. Karakter ismi seçerken YAML'daki isim_havuzundan RASTGELE bir isim seç — "
+        f"havuzun tamamı adil biçimde kullanılmalı. Hiçbir ismi prompt'tan örnek alma; "
+        f"isim_havuzu kendisi zaten gerekli çeşitliliği sağlar. Yaygın isimleri "
+        f"(Ali, Ayse, Ece, Zeynep) da ender isimleri de eşit olasılıkla seç."
     )
     idx += 1
 
@@ -580,47 +548,38 @@ def _build_variant_instruction(
 
     if not details:
         return (
-            "## SEÇİLEN VARYANT\n\n"
-            f"Bu soru için **\"{variant_name}\"** varyantı kullanılacak. "
-            f"Varyantın bilişsel hedefini ve işlem türünü koru; senaryoyu, nesneleri ve "
-            f"bağlamı kendi yaratıcılığınla çeşitlendirebilirsin."
+            "## ZORUNLU VARYANT SEÇİMİ\n\n"
+            f"Bu soru için **\"{variant_name}\"** varyantı kullanılmalıdır. "
+            f"Senaryonun konusu, nesneleri ve bağlamı bu varyant tanımına uygun olmalıdır. "
+            f"Başka bir varyant KULLANMA."
         )
 
     sections = [
-        "## SEÇİLEN VARYANT BAĞLAMI\n",
-        f"Bu soru **\"{variant_name}\"** varyantına göre üretilecek.",
-        "Aşağıdaki bilgiler bir ÇERÇEVE sunar: bilişsel hedefi ve işlem türünü koru, "
-        "diğer unsurlarda (senaryo, nesne, karakter, görsel düzen, dil) özgürce çeşitlendir.\n",
+        "## ZORUNLU VARYANT KISITLARI\n",
+        f"Bu soru YALNIZCA **\"{variant_name}\"** varyantına göre üretilmelidir.",
+        "Aşağıdaki kısıtların TAMAMI zorunludur; hiçbiri atlanamaz.\n",
     ]
 
-    # 1. Senaryo cekirdegi — ilham kaynagi
+    # 1. Senaryo cekirdegi — en kritik hard constraint
     seed = details.get("senaryo_cekirdegi") or details.get("aciklama", "")
     if seed:
-        sections.append("### SENARYO ÇEKİRDEĞİ (İLHAM)")
-        sections.append(f"Aşağıdaki çekirdekten esinlen, ama bire bir kopyalama:\n{seed}")
-        sections.append(
-            "Bağlamı farklı bir yaşam alanına taşıyabilir, karakter ve nesneleri "
-            "değiştirebilir, kurguyu özgürce yeniden yazabilirsin. Korunacak olan "
-            "yalnızca soruda ölçülen bilişsel hedef ve işlem mantığıdır.\n"
-        )
+        sections.append("### SENARYO ÇEKİRDEĞİ (ZORUNLU)")
+        sections.append(f"Senaryo şu çekirdek üzerine kurulmalıdır:\n{seed}")
+        sections.append("Bu çekirdekten SAPMA veya FARKLI konu seçme YASAKTIR.\n")
 
-    # 2. Gorsel notlari — rehber
+    # 2. Gorsel notlari — zorunlu gorsel kurallari
     visual_notes = details.get("gorsel_notlari", [])
     if visual_notes:
-        sections.append("### GÖRSEL REHBERİ")
+        sections.append("### GÖRSEL ZORUNLULUKLARI")
         for note in visual_notes:
-            sections.append(f"- Öneri: {note}")
-        sections.append(
-            "Bu notlar görsel kurguya yön verir; ancak sahne düzenini, renkleri ve "
-            "öğe yerleşimini kendi yaratıcılığınla belirleyebilirsin.\n"
-        )
+            sections.append(f"- ZORUNLU: {note}")
+        sections.append("")
 
-    # 3. Soru koku ornekleri — referans
+    # 3. Soru koku ornekleri — zorunlu soru koku kaliplari
     stem_examples = details.get("soru_koku_ornekleri", [])
     if stem_examples:
-        sections.append("### SORU KÖKÜ ÖRNEKLERİ")
-        sections.append("Aşağıdaki örneklerden birini seçebilir veya aynı bilişsel hedefi "
-                        "vuran özgün bir soru kökü yazabilirsin:")
+        sections.append("### SORU KÖKÜ SEÇİMİ (ZORUNLU)")
+        sections.append("Soru kökü aşağıdakilerden biri OLMALI veya bunların yapısal eşdeğeri olmalı:")
         for stem in stem_examples:
             sections.append(f"  - {stem}")
         sections.append("")
@@ -650,83 +609,60 @@ def _build_variant_instruction(
             sections.append(str(value))
         sections.append("")
 
-    # 5. Farklilik vurgusu
-    sections.append("### ÇEŞİTLİLİK BEKLENTİSİ")
+    # 5. Farklilik zorunlulugu
+    sections.append("### FARKLILIK ZORUNLULUĞU")
     sections.append(
-        "Bu varyant, diğer varyantlardan ayrışan özgün bir soru üretmek içindir. "
-        "Senaryo, nesneler, karakter, bağlam ve görsel düzen bakımından taze bir "
-        "kurgu sun; aynı YAML'ın diğer varyantlarına ya da önceki üretimlere "
-        "benzemesin."
+        "Bu varyant, diğer varyantlardan TAMAMEN farklı bir soru üretmek içindir. "
+        "Senaryo, nesneler, sayısal değerler ve görsel düzen yukarıdaki kısıtlara "
+        "BİREBİR uymalı ve başka hiçbir varyanta benzememelidir."
     )
+
+    # 6. Sayisal cesitlilik zorunlulugu + deterministik tohum
+    all_variants = get_variant_names(template)
+    if len(all_variants) > 1 and variant_name in all_variants:
+        idx = all_variants.index(variant_name)
+        seeds = _variant_number_seeds(variant_name, idx)
+        siblings = [v for v in all_variants if v != variant_name]
+
+        sections.append("")
+        sections.append("### SAYISAL ÇEŞİTLİLİK ZORUNLULUĞU (KRİTİK)")
+        sections.append(
+            f"Bu varyant ({idx + 1}/{len(all_variants)}): \"{variant_name}\""
+        )
+        if siblings:
+            sections.append(
+                "Paralel olarak üretilen DİĞER varyantlar (bunlarla aynı sayıları "
+                f"KULLANMA): {', '.join(siblings)}"
+            )
+        sections.append("")
+        sections.append(
+            "Bu varyanta ÖZEL, deterministik sayısal tohum değerler "
+            "(diğer varyantlarda FARKLI olacaktır):"
+        )
+        sections.append(f"  - Temel kurgu sayısı önerisi: {seeds['base']}")
+        sections.append(f"  - İkincil kurgu sayısı önerisi: {seeds['secondary']}")
+        sections.append(f"  - Bölme/paylaşım için olası bölen: {seeds['divisor']}")
+        sections.append(f"  - Çarpma/tekrar için olası çarpan: {seeds['multiplier']}")
+        sections.append(f"  - Birim basamak eğilimi: {seeds['unit_digit']}")
+        sections.append("")
+        sections.append(
+            "KRİTİK KURALLAR:\n"
+            "1. Bu tohum değerleri YAML'daki sınıf seviyesi, sayı basamak sınırı ve "
+            "problem mantığına UYGUN olacak şekilde kullan. YAML yasağı (ör. "
+            "\"üç basamağı aşan yasak\", \"kalanlı bölme yasak\") her durumda önceliklidir.\n"
+            "2. Yukarıdaki tohumlar birebir olmasa da yakın değerlere (±10-20%) "
+            "yuvarlanabilir; ancak tam olarak aynı sayı dizisini başka varyantla "
+            "paylaşma.\n"
+            "3. Başka varyantlarda yaygın kullanılan klişe sayılar (10, 20, 50, 100, "
+            "3×4, 2×5 gibi) bu varyantta KAÇINILMASI gerekenlerdir — yukarıdaki "
+            "tohum değerlere sadık kal.\n"
+            "4. Doğru cevabın sayısal değeri, çeldirici seçeneklerin sayısal "
+            "değerleri ve senaryodaki TÜM miktarlar bu varyantta TOHUM TABANLI "
+            "olmalı; 'standart örnekte ne vardı' yerine 'tohum bana ne veriyor' "
+            "diye düşün."
+        )
 
     return "\n".join(sections)
-
-
-
-def _build_number_hint_section(
-    excluded_number_sets: Optional[list[list[int]]] = None,
-) -> str:
-    """Onceki uretimlerde kullanilan sayi setlerini prompt'a ekler.
-
-    LLM kendi soru tipine uygun sayilari serbest secer;
-    sadece daha once kullanilmis TAM SET tekrar gelmez.
-    """
-    if not excluded_number_sets:
-        return ""
-    sets_str = "  |  ".join(
-        "{" + ", ".join(str(n) for n in s) + "}"
-        for s in excluded_number_sets[-10:]  # son 10 set yeterli
-    )
-    return (
-        "## ZORUNLU SAYI ÇEŞİTLİLİĞİ\n\n"
-        f"Bu şablonun önceki üretimlerinde kullanılan sayı setleri: {sets_str}.\n"
-        f"hidden_computation'da belirleyeceğin ana sayılar bu setlerin HİÇBİRİYLE "
-        f"TAM OLARAK ÖRTÜŞEMEZ. Bu bir zorunluluktur — tavsiye değil.\n"
-        f"Birkaç sayının örtüşmesi kabul edilebilir; ancak tüm ana sayıların "
-        f"aynı olduğu bir set YASAKTIR.\n"
-        f"Kullandığın ana sayıları `used_numbers` alanına yaz (örn. [4, 7, 28])."
-    )
-
-
-
-def _build_object_diversity_hint(
-    excluded_objects: Optional[list[str]] = None,
-    suggested_object: Optional[str] = None,
-) -> str:
-    """Nesne cesitliligi talimati.
-
-    suggested_object: bu uretim icin havuzdan claim edilmis nesne — guclu direktif.
-    excluded_objects: onceki uretimlerde kullanilmis nesneler — ikincil engel.
-    """
-    lines = ["## BU ÜRETİMDE KULLANILACAK NESNE\n"]
-
-    if suggested_object:
-        lines.append(
-            f"Bu üretimde ana nesne olarak **\"{suggested_object}\"** kullan. "
-            f"Senaryo ve görsel bu nesne üzerine kurulmalı. "
-            f"Nesne sınıf seviyesine uygun değilse yapısal olarak benzer ama "
-            f"aynı kategoriden bir alternatif seçebilirsin — ama başka kategoriye geçme."
-        )
-    else:
-        lines.append(
-            "Soruda kullanacağın nesneleri ve ortamı özgürce seç. "
-            "Meyve, sebze, kırtasiye, müzik aleti, spor ekipmanı, ev eşyası, "
-            "oyuncak, giysi, yiyecek — sınıf seviyesine uygun her nesne kullanılabilir."
-        )
-
-    if excluded_objects:
-        excluded_str = ", ".join(excluded_objects)
-        lines.append(
-            f"\nBu şablonun önceki üretimlerinde şu nesneler kullanıldı: {excluded_str}. "
-            f"Bunları tekrar seçme."
-        )
-
-    lines.append(
-        "\nKullandığın ana nesne(leri) `used_objects` alanına Türkçe olarak yaz "
-        "(örn. `[\"havuç\", \"sepet\"]`)."
-    )
-
-    return "\n".join(lines)
 
 
 def _build_feedback_section(feedback: Optional[str]) -> str:
@@ -747,9 +683,6 @@ def _build_chain(
     difficulty: str = "orta",
     feedback: Optional[str] = None,
     variant_name: Optional[str] = None,
-    excluded_number_sets: Optional[list[list[int]]] = None,
-    excluded_objects: Optional[list[str]] = None,
-    suggested_object: Optional[str] = None,
 ):
     """ParsedTemplate'ten mega soru uretim chain'i olusturur."""
     prompt = PromptTemplate(
@@ -762,15 +695,11 @@ def _build_chain(
             "format_turu": template.format_spec.get("type", "?"),
             "yaml_constraints": extract_for_question_chain(template),
             "difficulty": difficulty,
-            "geometry_half_area_instruction": _build_geometry_half_area_instruction(template),
-            "creativity_balance_instruction": _build_creativity_balance_instruction(template),
             "soru_uretim_talimati": _build_question_generation_instructions(template),
             "html_talimati": _build_html_instructions(template),
             "onemli_kurallar": _build_important_rules(template),
             "reference_mode_instructions": _build_reference_mode_instructions(template),
             "variant_instruction": _build_variant_instruction(template, variant_name),
-            "number_hint_section": _build_number_hint_section(excluded_number_sets),
-            "object_diversity_hint": _build_object_diversity_hint(excluded_objects, suggested_object),
             "feedback_section": _build_feedback_section(feedback),
             "format_instructions": _parser.get_format_instructions(),
         },
@@ -783,9 +712,6 @@ def generate_visual_question(
     difficulty: str = "orta",
     feedback: Optional[str] = None,
     variant_name: Optional[str] = None,
-    excluded_number_sets: Optional[list[list[int]]] = None,
-    excluded_objects: Optional[list[str]] = None,
-    suggested_object: Optional[str] = None,
 ) -> GeneratedVisualQuestion:
     """Tek bir LLM call ile sahne + soru + siklar + cozum uretir.
 
@@ -794,52 +720,50 @@ def generate_visual_question(
         difficulty: Zorluk seviyesi (kolay/orta/zor)
         feedback: Onceki deneme geri bildirimi (retry icin)
         variant_name: Kullanilacak varyant adi (None ise LLM secer)
-        claimed_numbers: Sayi havuzundan claim edilen sayi seti
-        numbers_required: True ise claimed_numbers zorunlu, False ise tavsiye
 
     Returns:
         GeneratedVisualQuestion: Sahne, senaryo, soru, siklar, cozum, HTML
     """
-    chain = _build_chain(template, difficulty, feedback, variant_name, excluded_number_sets, excluded_objects, suggested_object)
+    import random
+
+    chain = _build_chain(template, difficulty, feedback, variant_name)
     pipeline_log("LLM-1", "Mega soru üretimi (sahne, soru, şıklar, HTML) — model çağrılıyor…")
     result = chain.invoke({})
     pipeline_log("LLM-1", "Mega soru üretimi tamamlandı.")
 
     # Siklari shuffle et: dogru cevap her zaman A olmasi engellensin.
-    # Gorsel sik sahneleri varsa ayni permutasyonla tasinir; aksi halde
-    # image_only sorularda A/B/C panelleri dogru cevap etiketiyle kayabilir.
+    # Shuffle sonrasi q.correct_answer yeni etikete map'lenir.
+    # Ayrica self_solution.chosen_answer (LLM'in kendi cevabi) ve html_content
+    # (LLM'in urettigi statik HTML) shuffle oncesi siraya dayandigindan senkronize
+    # edilmelidir: self_solution re-map, html_content ise bosaltilir — finalize
+    # node'u build_question_html ile post-shuffle kanonik HTML'i yeniden uretir.
+    self_solution = result.self_solution if isinstance(result.self_solution, dict) else None
+    pre_shuffle_chosen_value: Optional[str] = None
+    if self_solution and result.questions:
+        old_chosen = self_solution.get("chosen_answer")
+        if old_chosen:
+            pre_shuffle_chosen_value = result.questions[0].options.get(old_chosen)
+
     for q in result.questions:
-        old_options = dict(q.options)
-        old_option_scenes = dict(result.option_scenes or {})
         labels = list(q.options.keys())
-        old_label_order = labels[:]
-        random.shuffle(old_label_order)
-
-        q.options = {
-            new_label: old_options[old_label]
-            for new_label, old_label in zip(labels, old_label_order)
-        }
-
-        if old_option_scenes and len(result.questions) == 1:
-            result.option_scenes = {
-                new_label: old_option_scenes[old_label]
-                for new_label, old_label in zip(labels, old_label_order)
-                if old_label in old_option_scenes
-            }
-
-        # correct_answer etiketini guncelle (icerik ayni, etiketi tasindi)
-        old_correct = (q.correct_answer or "").strip().upper()
-        for new_label, old_label in zip(labels, old_label_order):
-            if old_label == old_correct:
-                q.correct_answer = new_label
+        values = list(q.options.values())
+        correct_value = q.options[q.correct_answer]
+        random.shuffle(values)
+        q.options = dict(zip(labels, values))
+        for label, value in q.options.items():
+            if value == correct_value:
+                q.correct_answer = label
                 break
 
-        # self_solution.chosen_answer etiketini de yeni konumuna guncelle
-        if result.self_solution and isinstance(result.self_solution, dict):
-            old_chosen = str(result.self_solution.get("chosen_answer", "")).strip().upper()
-            for new_label, old_label in zip(labels, old_label_order):
-                if old_label == old_chosen:
-                    result.self_solution["chosen_answer"] = new_label
-                    break
+    if self_solution is not None and pre_shuffle_chosen_value is not None and result.questions:
+        for label, value in result.questions[0].options.items():
+            if value == pre_shuffle_chosen_value:
+                self_solution["chosen_answer"] = label
+                break
+
+    # LLM'in urettigi statik html_content shuffle oncesi sik sirasini tasir;
+    # finalize node'u build_question_html ile post-shuffle dogru HTML'i yazacagi
+    # icin bu alani bosaltmak tek gercek kaynagi garantiler.
+    result.html_content = ""
 
     return result

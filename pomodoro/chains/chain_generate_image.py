@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import base64
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import PromptTemplate
@@ -24,6 +24,11 @@ from pomodoro.yaml_loader import (
     ParsedTemplate,
     extract_for_main_image_chain,
     extract_for_option_image_chain,
+)
+from utils.currency_assets import (
+    build_reference_block,
+    resolve_required_denominations,
+    upload_reference_files,
 )
 from utils.llm import MODEL_REGISTRY, ModelRole, get_image_client, get_model
 
@@ -70,43 +75,13 @@ def _collect_numeric_paths(data: object, prefix: str = "") -> list[str]:
 
 
 def _build_exact_count_checklist(question: GeneratedVisualQuestion) -> str:
-    """Question verisinden prompt'a eklenecek sayisal kontrol listesini uretir.
-
-    visible_* / gorunen_* / acik_* alanlarini tespit edip GORSEL'DE OLMASI GEREKEN
-    NET SAYI olarak ayri ve vurgulu sekilde listeler.
-    """
-    import re as _re
-
+    """Question verisinden prompt'a eklenecek sayisal kontrol listesini uretir."""
     checklist: list[str] = []
-
-    # scene_elements ve hidden_computation'dan tum sayisal yollar
-    all_items = _collect_numeric_paths(question.scene_elements or {})
-    all_items += _collect_numeric_paths(question.hidden_computation or {})
-
-    # visible / gorunen / acik / dis / dis_taraf alanlarini ayir
-    _VISIBLE_KEYWORDS = ("visible", "gorunen", "görünen", "acik", "açık",
-                         "dis_", "dış_", "masada", "tabakta", "disarida", "dışarıda")
-
-    visible_items = []
-    other_items = []
-    for item in all_items:
-        key_part = item.split(":")[0].lower()
-        if any(kw in key_part for kw in _VISIBLE_KEYWORDS):
-            visible_items.append(item)
-        else:
-            other_items.append(item)
-
-    if visible_items:
-        checklist.append("### GÖRSELDE OLMASI GEREKEN NET SAYI (KESİNLİKLE BU KADAR ÇİZ):")
-        checklist.extend(visible_items)
-        checklist.append("")
-
-    if other_items:
-        checklist.append("### DİĞER SAYISAL DEĞERLER:")
-        checklist.extend(other_items)
+    checklist.extend(_collect_numeric_paths(question.scene_elements or {}))
+    checklist.extend(_collect_numeric_paths(question.hidden_computation or {}))
 
     if not checklist:
-        checklist.append("- Sayısal öğeleri çizmeden önce sayarak sabitle")
+        checklist.append("- Sayisal ogeleri response once sayarak sabitle")
 
     return "\n".join(checklist)
 
@@ -126,7 +101,7 @@ def _build_countability_guardrails(question: GeneratedVisualQuestion) -> str:
     rules = [
         "- Sayılması gereken TÜM ana nesneleri düz, 2D eğitim afişi mantığında ve tamamen görünür çiz.",
         "- Sayılacak nesneleri açık boşluklarla ayır; birbirine temas eden, üst üste binen, yarısı gizlenen veya perspektif yüzünden küçülen nesne kullanma.",
-        "- Sayım kritikse nesneleri satır-sütun, tek sıra veya net bölünmüş grup blokları halinde yerleştir. Stack (üst üste yığın) kullanılıyorsa her nesne açıkça görünmeli, gizlenen veya kesilen nesne olmamalı; yığının kaç kattan oluştuğu tek bakışta anlaşılmalıdır.",
+        "- Sayım kritikse nesneleri satır-sütun, tek sıra veya net bölünmüş grup blokları halinde yerleştir.",
         "- Arka planı sade tut; dekoratif yaprak, gölge, kırıntı, desen veya tekrar eden aksesuarlar sayılması gereken nesnelerle karışmamalı.",
         "- Doğrudan sayılması gerekmeyen gizli miktarları tek tek görünür hale getirme; gerekiyorsa sadece etiket, kap veya grup göstergesi kullan.",
     ]
@@ -192,41 +167,26 @@ Hesaplama verileri: {hidden_computation}
 
 {main_image_constraints}
 
-## NESNE SAYISI DOĞRULUĞU — MUTLAK KURAL
+## NESNE SAYISI DOĞRULUĞU (KRİTİK)
 
-Görseli çizmeden önce aşağıdaki sayıları ezberle ve HİÇBİR GRUBA farklı sayı çizme:
-
-{exact_count_checklist}
-
-- Yukarıdaki listedeki her sayı görselde BİREBİR gerçekleşmelidir. Ne bir fazla ne bir eksik.
-- Görseli tamamladıktan sonra her grubu zihinsel olarak yeniden say; sayım tutmuyorsa yeniden çiz.
-- "Yaklaşık", "kabaca" veya "temsili" sayım KABUL EDİLMEZ — tam sayı zorunludur.
-- Öğrenci görseldeki nesneleri saydığında doğru cevaba ulaşmalıdır; başka bir seçeneğe götüren sayım KESİNLİKLE yanlıştır.
-- Bir sepette 3 nesne çizip doğru cevabı 5 yapan, ya da eksik miktarı görselde farklı sayıya işaret eden kurgu YASAKTIR.
-- Artış-azalış, transfer, eksilme içeren sahnelerde her aşamadaki miktar listede belirtilen değerle eşleşmelidir; görünür sayılar senaryodaki ipuçlarıyla çelişemez.
-
-## AZALMA / EKSİLME GÖSTERİMİ
-
-Çıkarılan, azalan veya transfer edilen nesneleri göstermek için **kırmızı çarpı (✗) KULLANMA**.
-Bunun yerine aşağıdaki yöntemlerden birini seç:
-- **Soluk / şeffaf**: Azalan nesneleri %40-50 opaklıkta, açık gri tonlu çiz — "gitmiş" hissi verir
-- **Kesik çizgi çerçeve / silüet**: Nesnenin yalnızca dış hatlarını soluk kesikli çizgiyle göster
-- **Ok + ayrı bölge**: Çıkan nesneleri küçük bir çıkış oküyla ayrı bir alana taşı
-- **Açık pastel ton**: Azalan nesneleri ana nesnelerden belirgin biçimde daha açık, soluk renkte çiz
-- **"Önce / sonra" iki panel**: Değişimi iki yan yana net panel ile göster; silinmiş nesne yerine boş alan veya noktalı daire bırak
-
-Seçtiğin yöntem sayımı zorlaştırmamalı; öğrenci kalan ve çıkan miktarları kolayca ayırt edebilmeli.
+- Görseldeki her nesne grubundaki öğe sayısı, hesaplama verilerinde belirtilen sayıyla BİREBİR eşleşmelidir.
+- Sayısal etiket (örneğin "6") varsa etiket ile görselde çizilen nesne adedi MUTLAKA ayni olmalidir. Etiket 6 ise tam 6 nesne çizilmeli, ne 5 ne 7.
+- Görseli üretmeden önce her grupta kaç nesne olacağını açıkça belirt ve bu sayıyı prompt boyunca koru.
+- Öğrenci görseldeki ana nesneleri yeniden saydığında, gördüğü miktar doğru seçenekten farklı bir sonuca götürmemelidir.
+- Bir sepette 3 nesne çizip doğru cevabı 5 yapan, ya da eksik miktarı görselde başka bir sayıya işaret eden kurgu KESİNLİKLE üretme.
+- Artış-azalış, transfer, eksilme veya eşitleme içeren sahnelerde her aşamadaki miktarların hangisinin metinden, hangisinin görselden okunacağı net olmalı; görünür sayılar senaryodaki ipuçlarıyla çelişmemelidir.
+- Eğer senaryo "her gün aynı miktar", "eşit sayıda", "aynı kadar arttı", "aynı kadar eksildi" diyorsa görselde de HER aşama bu kurala uymalıdır.
 
 ## KESİN YASAKLAR (tüm görseller için geçerli, istisnasız)
 
 - ÖNCELİKLİ YASAK: Görselde senaryo metni, üst metin, soru kökü ifadesi veya soru cümlesi KESİNLİKLE yer almamalıdır. Görselin üstüne, altına veya herhangi bir yerine soru metni, senaryo cümlesi ya da açıklama paragrafı YAZILMAMALIDIR. Bu metinler HTML'de ayrıca gösterilmektedir; görselde TEKRAR edilmemelidir.
 - Soru kökündeki ifadeler (örn. "Hangi renk karttaki işlemin sonucu en büyüktür?", "Oyunu kim kazanır?", "Toplam kaç boncuk kullanılmıştır?") görsele hiçbir biçimde yansıtılmamalıdır.
-- Görselde yalnızca etiketler (kişi adları, şekil adları, adım numaraları gibi kısa tanımlayıcılar) yer alabilir. Cümle, paragraf veya soru ifadesi ASLA görselde bulunmamalıdır.
+- Görselde yalnızca etiketler (kişi adları, şekil adları, sayılar, adım numaraları gibi kısa tanımlayıcılar) yer alabilir. Cümle, paragraf veya soru ifadesi ASLA görselde bulunmamalıdır.
 - Cevabı, karşılaştırma sonucunu veya doğru seçeneği ele veren herhangi bir yazı, sembol veya işaret görselde bulunmamalıdır.
 - Ust metin veya paragraf tek basina cozum vermemelidir; gorsel olmadan dogru cevap bulunabilecek kadar
   acik sayisal iliskiyi metinde tamamlama.
 - Görselde çizilen nesne sayısı ile etiketlerdeki sayı arasında ASLA tutarsızlık olmamalıdır.
-- Sayılması gereken nesneler dekoratif kümeler halinde değil, tek tek sayılabilir düzenli satır/sütun, açık gruplar veya net stack yığınları halinde gösterilmelidir. Stack kullanılıyorsa her nesne tam görünür, yan yana veya belirgin katmanlar halinde olmalı; üst üste tam gizlenen nesne kesinlikle kullanılmamalıdır.
+- Sayılması gereken nesneler dekoratif kümeler halinde değil, tek tek sayılabilir düzenli satır/sütun veya açık gruplar halinde gösterilmelidir.
 - Belirsiz, üst üste binmiş veya birbirini kapatan nesneler kullanma. Her nesne tekil olarak ayırt edilebilmelidir.
 - Öğrenci sayım yapmak için tahmin, yakınlaştırma veya nesneleri zihinde ayırma ihtiyacı duymamalıdır.
 - Metinden bilinmesi gereken ama görselden bilinmemesi gereken miktarları tek tek çizip cevap sızdırma.
@@ -337,7 +297,6 @@ def _sanitize_engineered_prompt(
 def _build_image_task_items(template: ParsedTemplate) -> str:
     """YAML context.generation.structure listesini gorsel gorevlerine cevirir."""
     generation = template.context.get("generation", {})
-    if not isinstance(generation, dict): generation = {}
     structure = generation.get("structure", [])
 
     items = [f"- {rule}" for rule in structure]
@@ -422,8 +381,16 @@ def _engineer_option_visual_prompt(
 def _generate_image_native(
     prompt_text: str,
     output_path: Path,
+    reference_files: Optional[list[Any]] = None,
 ) -> str:
-    """Native genai client ile gorsel uretir ve dosyaya kaydeder."""
+    """Native genai client ile gorsel uretir ve dosyaya kaydeder.
+
+    reference_files verilirse (Gemini Files API'ya onceden yuklenmis file
+    objeleri) multimodal input olarak prompt ile birlikte modele gecirilir.
+    PIL.Image inline yerine URI-tabanli file referansi kullanilir — bu yontem
+    cok gorselli prompt'larda daha guvenilir sonuclar verir ve base64 inline'i
+    onler. Ornek kullanim: Turk Lirasi banknot referansi.
+    """
     client = get_image_client()
     config = MODEL_REGISTRY[ModelRole.IMAGE_GENERATOR]
 
@@ -452,10 +419,15 @@ def _generate_image_native(
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
+    reference_files = reference_files or []
+
     for attempt_prompt in attempts:
+        # Multimodal contents: metin prompt + (opsiyonel) yuklenmis referans file'lar
+        contents: list = [attempt_prompt, *reference_files]
+
         response = client.models.generate_content(
             model=config["model"],
-            contents=[attempt_prompt],
+            contents=contents,
             config={
                 "response_modalities": ["TEXT", "IMAGE"],
             },
@@ -489,6 +461,9 @@ def generate_images(
     Sik gorselleri: extract_for_option_image_chain() + option_scenes ile
                     (sadece has_visual_options=True ve option_scenes doluysa)
 
+    real_currency=true ise Turk Lirasi referans gorselleri ana gorsel uretimine
+    multimodal input olarak gecirilir.
+
     Args:
         template: 7 baslikli ParsedTemplate
         question: Mega chain ciktisi (GeneratedVisualQuestion)
@@ -500,12 +475,42 @@ def generate_images(
     """
     output_dir = Path(output_dir)
 
+    # 0. Turk Lirasi referans gorsellerini (varsa) Gemini Files API'ye yukle.
+    # Denominasyonlara LLM-1 karar verir (question.chosen_denominations).
+    reference_files: list[Any] = []
+    currency_reference_block = ""
+    denomination_notes = ""
+    if template.real_currency:
+        denom_ids = question.chosen_denominations or []
+        if not denom_ids:
+            raise RuntimeError(
+                "real_currency=true ama LLM-1 chosen_denominations alanini "
+                "doldurmadi. Soru uretici promp'unda TL reference section dahil "
+                "degilse kontrol et veya YAML'a ornek senaryo ekle."
+            )
+        denom_ids = resolve_required_denominations(denom_ids)
+        uploaded = upload_reference_files(denom_ids)
+        reference_files = [f for _, f in uploaded]
+        currency_reference_block = build_reference_block(
+            [d for d, _ in uploaded]
+        )
+        denomination_notes = (
+            f"Türk Lirası referans görselleri (LLM-seçimi): {', '.join(denom_ids)}. "
+            "Sahnede bu para birimleri gerçek tasarımlarıyla görünmeli."
+        )
+
     # 1. Ana gorsel prompt muhendisligi (LLM-4a)
     main_prompt = _engineer_main_visual_prompt(question, template, feedback)
+    if currency_reference_block:
+        # Referans bloku LLM-4a ciktisinin sonuna eklenir; Gemini image modeline
+        # bu blok + ekli uploaded file'lar birlikte ulasir.
+        main_prompt = f"{main_prompt}\n\n{currency_reference_block}"
 
     # 2. Ana gorsel uretimi (LLM-4b)
     main_path = output_dir / "main_visual.png"
-    main_image_path = _generate_image_native(main_prompt, main_path)
+    main_image_path = _generate_image_native(
+        main_prompt, main_path, reference_files=reference_files or None
+    )
 
     # 3. Sik gorselleri (kosullu)
     option_images = None
@@ -515,11 +520,19 @@ def generate_images(
             opt_prompt = _engineer_option_visual_prompt(
                 label, scene_desc, question, template, feedback
             )
+            if currency_reference_block:
+                opt_prompt = f"{opt_prompt}\n\n{currency_reference_block}"
             opt_path = output_dir / f"option_{label}.png"
-            option_images[label] = _generate_image_native(opt_prompt, opt_path)
+            option_images[label] = _generate_image_native(
+                opt_prompt, opt_path, reference_files=reference_files or None,
+            )
+
+    notes = f"Görsel tipi: {template.image_type}"
+    if denomination_notes:
+        notes = f"{notes}. {denomination_notes}"
 
     return GeneratedImages(
         main_image_path=main_image_path,
         option_images=option_images,
-        generation_notes=f"Görsel tipi: {template.image_type}",
+        generation_notes=notes,
     )

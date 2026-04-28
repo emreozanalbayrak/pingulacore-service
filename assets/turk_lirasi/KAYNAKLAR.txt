@@ -1,0 +1,38 @@
+Türk paraları görsel paketi
+Klasörler:
+- banknotlar
+- madeni_paralar
+- ekstra_hatira_para
+
+Notlar:
+- Banknot görselleri kaynak dosyada SPECIMEN / ÖRNEKTİR / GEÇMEZ ibaresi içerebilir.
+- Tüm dosyalar PNG olarak verildi.
+- Şeffaf arka plan temizliği yapılmadı.
+
+Dosya -> Kaynak URL
+banknotlar/5_TL_on.png -> https://upload.wikimedia.org/wikipedia/commons/e/e2/5-II_T%C3%BCrk_Liras%C4%B1_front.jpg
+banknotlar/5_TL_arka.png -> https://upload.wikimedia.org/wikipedia/commons/c/c9/5-II_T%C3%BCrk_Liras%C4%B1_reverse.jpg
+banknotlar/10_TL_on.png -> https://upload.wikimedia.org/wikipedia/commons/1/14/10_T%C3%BCrk_Liras%C4%B1_front.jpg
+banknotlar/10_TL_arka.png -> https://upload.wikimedia.org/wikipedia/commons/3/3a/10_T%C3%BCrk_Liras%C4%B1_reverse.jpg
+banknotlar/20_TL_on.png -> https://upload.wikimedia.org/wikipedia/commons/4/4b/20_T%C3%BCrk_Liras%C4%B1_front.jpg
+banknotlar/20_TL_arka.png -> https://upload.wikimedia.org/wikipedia/commons/e/eb/20_T%C3%BCrk_Liras%C4%B1_reverse.jpg
+banknotlar/50_TL_on.png -> https://upload.wikimedia.org/wikipedia/commons/2/22/50_T%C3%BCrk_Liras%C4%B1_front.jpg
+banknotlar/50_TL_arka.png -> https://upload.wikimedia.org/wikipedia/commons/5/55/50_T%C3%BCrk_Liras%C4%B1_reverse.jpg
+banknotlar/100_TL_on.png -> https://upload.wikimedia.org/wikipedia/commons/5/58/100_T%C3%BCrk_Liras%C4%B1_front.jpg
+banknotlar/100_TL_arka.png -> https://upload.wikimedia.org/wikipedia/commons/3/3f/100_T%C3%BCrk_Liras%C4%B1_reverse.jpg
+banknotlar/200_TL_on.png -> https://upload.wikimedia.org/wikipedia/commons/d/df/200_T%C3%BCrk_Liras%C4%B1_front.jpg
+banknotlar/200_TL_arka.png -> https://upload.wikimedia.org/wikipedia/commons/4/4f/200_T%C3%BCrk_Liras%C4%B1_reverse.jpg
+madeni_paralar/1_kurus_on.png -> https://upload.wikimedia.org/wikipedia/commons/a/a4/1kr_obverse.png
+madeni_paralar/1_kurus_arka.png -> https://upload.wikimedia.org/wikipedia/commons/2/29/1kr_reverse.png
+madeni_paralar/5_kurus_on.png -> https://upload.wikimedia.org/wikipedia/commons/4/42/5kr_obverse.png
+madeni_paralar/5_kurus_arka.png -> https://upload.wikimedia.org/wikipedia/commons/a/a9/5kr_reverse.png
+madeni_paralar/10_kurus_on.png -> https://upload.wikimedia.org/wikipedia/commons/f/f1/10kr_obverse.png
+madeni_paralar/10_kurus_arka.png -> https://upload.wikimedia.org/wikipedia/commons/f/f8/10kr_reverse.png
+madeni_paralar/25_kurus_on.png -> https://upload.wikimedia.org/wikipedia/commons/4/40/25kr_obverse.png
+madeni_paralar/25_kurus_arka.png -> https://upload.wikimedia.org/wikipedia/commons/4/4d/25kr_reverse.png
+madeni_paralar/50_kurus_on.png -> https://upload.wikimedia.org/wikipedia/commons/7/7b/50kr_obverse.png
+madeni_paralar/50_kurus_arka.png -> https://upload.wikimedia.org/wikipedia/commons/0/03/50kr_reverse.png
+madeni_paralar/1_TL_madeni_on.png -> https://upload.wikimedia.org/wikipedia/commons/6/64/1TL_obverse.png
+madeni_paralar/1_TL_madeni_arka.png -> https://upload.wikimedia.org/wikipedia/commons/c/cd/1TL_reverse.png
+ekstra_hatira_para/5_TL_2023_hatira_on.png -> https://upload.wikimedia.org/wikipedia/commons/6/6c/5_TL_2023_%C3%B6n.png
+ekstra_hatira_para/5_TL_2023_hatira_arka.png -> https://upload.wikimedia.org/wikipedia/commons/2/29/5_TL_2023_arka.png

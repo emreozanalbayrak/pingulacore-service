@@ -1,0 +1,81 @@
+version: 1
+aciklama: |
+  Türk Lirası banknot ve madeni para referans görselleri kataloğu.
+  real_currency: true olan YAML'larda LLM-1 chosen_denominations alanını
+  bu dosyadaki id listesinden seçer; pipeline eşleşen PNG dosyalarını
+  Gemini image modeline multimodal input olarak gönderir.
+
+para_birimleri:
+  # ── Banknotlar (E9 serisi, 2009 sonrası) ────────────────────────────────
+  - id: "5_tl"
+    tip: "banknot"
+    deger_kurus: 500
+    dosya: "banknotlar/5_tl.png"
+    aciklama: "5 Türk Lirası banknotu (ön yüz)"
+
+  - id: "10_tl"
+    tip: "banknot"
+    deger_kurus: 1000
+    dosya: "banknotlar/10_tl.png"
+    aciklama: "10 Türk Lirası banknotu (ön yüz)"
+
+  - id: "20_tl"
+    tip: "banknot"
+    deger_kurus: 2000
+    dosya: "banknotlar/20_tl.png"
+    aciklama: "20 Türk Lirası banknotu (ön yüz)"
+
+  - id: "50_tl"
+    tip: "banknot"
+    deger_kurus: 5000
+    dosya: "banknotlar/50_tl.png"
+    aciklama: "50 Türk Lirası banknotu (ön yüz)"
+
+  - id: "100_tl"
+    tip: "banknot"
+    deger_kurus: 10000
+    dosya: "banknotlar/100_tl.png"
+    aciklama: "100 Türk Lirası banknotu (ön yüz)"
+
+  - id: "200_tl"
+    tip: "banknot"
+    deger_kurus: 20000
+    dosya: "banknotlar/200_tl.png"
+    aciklama: "200 Türk Lirası banknotu (ön yüz)"
+
+  # ── Madeni paralar ───────────────────────────────────────────────────────
+  - id: "1_kurus"
+    tip: "madeni_para"
+    deger_kurus: 1
+    dosya: "madeni_paralar/1_kurus_on.png"
+    aciklama: "1 kuruş madeni parası (ön yüz)"
+
+  - id: "5_kurus"
+    tip: "madeni_para"
+    deger_kurus: 5
+    dosya: "madeni_paralar/5_kurus_on.png"
+    aciklama: "5 kuruş madeni parası (ön yüz)"
+
+  - id: "10_kurus"
+    tip: "madeni_para"
+    deger_kurus: 10
+    dosya: "madeni_paralar/10_kurus_on.png"
+    aciklama: "10 kuruş madeni parası (ön yüz)"
+
+  - id: "25_kurus"
+    tip: "madeni_para"
+    deger_kurus: 25
+    dosya: "madeni_paralar/25_kurus_on.png"
+    aciklama: "25 kuruş madeni parası (ön yüz)"
+
+  - id: "50_kurus"
+    tip: "madeni_para"
+    deger_kurus: 50
+    dosya: "madeni_paralar/50_kurus_on.png"
+    aciklama: "50 kuruş madeni parası (ön yüz)"
+
+  - id: "1_tl_madeni"
+    tip: "madeni_para"
+    deger_kurus: 100
+    dosya: "madeni_paralar/1_TL_madeni_on.png"
+    aciklama: "1 Türk Lirası madeni parası (ön yüz)"

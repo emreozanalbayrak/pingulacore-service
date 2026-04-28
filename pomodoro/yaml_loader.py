@@ -12,7 +12,6 @@ Ek olarak:
 from __future__ import annotations
 
 import logging
-import re
 from pathlib import Path
 from typing import Any
 
@@ -59,12 +58,16 @@ class ParsedTemplate(BaseModel):
     option_labels: list[str] = Field(default_factory=lambda: ["A", "B", "C"])
     options_style: str = Field(default="numeric_only")
 
-    # Gorsel motoru: "generative" (Gemini Image), "geometric_deterministic"
-    # veya "solid_3d_deterministic"
-    # Auto-detect: 3D cisim sinyalleri "solid_3d_deterministic"; kareli/birimkare/noktali
-    # veya acik 2D geometri sinyalleri "geometric_deterministic" olur.
-    # YAML'da gorsel.ana_gorsel.engine veya top-level visual_engine ile ezilebilir.
-    visual_engine: str = Field(default="generative")
+    # Turk Lirasi referans gorsel sistemi (opsiyonel)
+    real_currency: bool = Field(
+        default=False,
+        description=(
+            "context.generation.real_currency: true ise Turk Lirasi referans "
+            "gorselleri Gemini image modeline multimodal input olarak gecirilir. "
+            "Kullanilacak para birimlerine LLM-1 soru uretimi sirasinda karar verir "
+            "ve GeneratedVisualQuestion.chosen_denominations alanini doldurur."
+        ),
+    )
 
     # Baglamli soru ayristirma parametreleri
     has_reference_questions: bool = Field(default=False)
@@ -193,8 +196,8 @@ def _normalize_question_variants(context: dict, data: dict) -> dict:
         first_question.get("varyant"),
         context.get("varyantlar"),
         context.get("varyant"),
-        data.get("varyantlar"),
-        data.get("varyant"),
+        _find_key(data, "varyantlar", "Varyantlar"),
+        _find_key(data, "varyant", "Varyant"),
     )
 
     if not normalized_varyantlar:
@@ -267,6 +270,24 @@ def _find_key(data: dict, *candidates: str) -> Any:
     return None
 
 
+def _iter_varyant_items(top_varyantlar: Any) -> list[tuple[str, dict]]:
+    """Top-level varyant yapisini dict ya da list olabilecegini varsayarak
+    (key, dict) ciftlerine normalize eder. List formatinda varyantin 'ad'
+    alani varsa key olarak kullanilir, yoksa 'varyant_N' fallback'i uretilir.
+    """
+    if isinstance(top_varyantlar, dict):
+        return [(str(k), v) for k, v in top_varyantlar.items() if isinstance(v, dict)]
+    if isinstance(top_varyantlar, list):
+        items: list[tuple[str, dict]] = []
+        for idx, v in enumerate(top_varyantlar, start=1):
+            if not isinstance(v, dict):
+                continue
+            key = v.get("ad") or v.get("tip") or f"varyant_{idx}"
+            items.append((str(key), v))
+        return items
+    return []
+
+
 # Gorsel gerektirmeyen (metin tabanli) option style'lari icin anahtar kelimeler.
 _NON_VISUAL_STYLE_KEYWORDS = ("text", "numeric", "name", "symbolic", "sequence", "label", "reference")
 
@@ -305,7 +326,7 @@ def _extract_baglamli_params(
     # ── 2. varyant_tanimlari ─────────────────────────────────────────────
     varyant_tanimlari: dict = {}
 
-    top_varyantlar = data.get("varyantlar", {}) or data.get("varyant", {})
+    top_varyantlar = _find_key(data, "varyantlar", "Varyantlar") or _find_key(data, "varyant", "Varyant") or {}
     if top_varyantlar:
         varyant_tanimlari["varyantlar"] = top_varyantlar
 
@@ -313,10 +334,13 @@ def _extract_baglamli_params(
     if varyant_bicimleri:
         varyant_tanimlari["varyant_bicimleri"] = varyant_bicimleri
 
+    # top_varyantlar dict ya da list olabilir; ikisini de (key, val) cift listesine normalize et.
+    varyant_items = _iter_varyant_items(top_varyantlar)
+
     # ── 3. ozel_kurallar ─────────────────────────────────────────────────
     ozel_kurallar: list[str] = []
-    for v_key, v_val in (top_varyantlar if isinstance(top_varyantlar, dict) else {}).items():
-        if isinstance(v_val, dict) and v_val.get("ozel_kural"):
+    for v_key, v_val in varyant_items:
+        if v_val.get("ozel_kural"):
             ozel_kurallar.append(f"[{v_key}] {v_val['ozel_kural']}")
     for v_key, v_val in (varyant_bicimleri or {}).items():
         if isinstance(v_val, dict) and v_val.get("kritik_kural"):
@@ -324,29 +348,23 @@ def _extract_baglamli_params(
 
     # ── 4. havuzlar ──────────────────────────────────────────────────────
     havuzlar: dict = {}
-    if isinstance(top_varyantlar, dict):
-        for v_val in top_varyantlar.values():
-            if not isinstance(v_val, dict):
-                continue
-            if v_val.get("baglam_havuzu"):
-                havuzlar.setdefault("baglam_havuzu", []).extend(v_val["baglam_havuzu"])
-            if v_val.get("uygun_nesne_havuzu"):
-                havuzlar.setdefault("nesne_havuzu", {}).update(v_val["uygun_nesne_havuzu"])
-            if v_val.get("soru_koku_havuzu"):
-                havuzlar.setdefault("soru_koku_havuzu", []).extend(v_val["soru_koku_havuzu"])
-            if v_val.get("soru_koku_ornekleri"):
-                havuzlar.setdefault("soru_koku_havuzu", []).extend(v_val["soru_koku_ornekleri"])
+    for _, v_val in varyant_items:
+        if v_val.get("baglam_havuzu"):
+            havuzlar.setdefault("baglam_havuzu", []).extend(v_val["baglam_havuzu"])
+        if v_val.get("uygun_nesne_havuzu"):
+            havuzlar.setdefault("nesne_havuzu", {}).update(v_val["uygun_nesne_havuzu"])
+        if v_val.get("soru_koku_havuzu"):
+            havuzlar.setdefault("soru_koku_havuzu", []).extend(v_val["soru_koku_havuzu"])
+        if v_val.get("soru_koku_ornekleri"):
+            havuzlar.setdefault("soru_koku_havuzu", []).extend(v_val["soru_koku_ornekleri"])
 
     # ── 5. sabit_ve_degisen ──────────────────────────────────────────────
     sabit_ve_degisen: dict = {"sabit": [], "degisen": []}
-    if isinstance(top_varyantlar, dict):
-        for v_key, v_val in top_varyantlar.items():
-            if not isinstance(v_val, dict):
-                continue
-            for s in v_val.get("sabit_kalanlar", []):
-                sabit_ve_degisen["sabit"].append(f"[{v_key}] {s}")
-            for d in v_val.get("degisenler", []):
-                sabit_ve_degisen["degisen"].append(f"[{v_key}] {d}")
+    for v_key, v_val in varyant_items:
+        for s in v_val.get("sabit_kalanlar", []):
+            sabit_ve_degisen["sabit"].append(f"[{v_key}] {s}")
+        for d in v_val.get("degisenler", []):
+            sabit_ve_degisen["degisen"].append(f"[{v_key}] {d}")
     if not sabit_ve_degisen["sabit"] and not sabit_ve_degisen["degisen"]:
         sabit_ve_degisen = {}
 
@@ -358,25 +376,21 @@ def _extract_baglamli_params(
                 "kaynak": f"Slot {q.get('slot', '?')}",
                 "senaryo": q["senaryo"],
             })
-    if isinstance(top_varyantlar, dict):
-        for v_key, v_val in top_varyantlar.items():
-            if isinstance(v_val, dict) and v_val.get("ornek_senaryo"):
-                ornek_senaryolar.append({
-                    "kaynak": v_key,
-                    "senaryo": v_val["ornek_senaryo"],
-                })
+    for v_key, v_val in varyant_items:
+        if v_val.get("ornek_senaryo"):
+            ornek_senaryolar.append({
+                "kaynak": v_key,
+                "senaryo": v_val["ornek_senaryo"],
+            })
 
     # ── 7. celdirici_notlari + gorsel_notlari ────────────────────────────
     celdirici_notlari: list[str] = []
     gorsel_notlari: list[str] = []
-    if isinstance(top_varyantlar, dict):
-        for v_key, v_val in top_varyantlar.items():
-            if not isinstance(v_val, dict):
-                continue
-            for n in v_val.get("celdirici_notu", []):
-                celdirici_notlari.append(f"[{v_key}] {n}")
-            if v_val.get("gorsel_notu"):
-                gorsel_notlari.append(f"[{v_key}] {v_val['gorsel_notu']}")
+    for v_key, v_val in varyant_items:
+        for n in v_val.get("celdirici_notu", []):
+            celdirici_notlari.append(f"[{v_key}] {n}")
+        if v_val.get("gorsel_notu"):
+            gorsel_notlari.append(f"[{v_key}] {v_val['gorsel_notu']}")
 
     return {
         "has_reference_questions": has_reference_questions,
@@ -391,15 +405,6 @@ def _extract_baglamli_params(
     }
 
 
-def _parse_sinif_seviyesi(val) -> int:
-    """sinif_seviyesi alanini int'e donusturur. '2. Sinif', '2', 2 gibi formatlari destekler."""
-    import re as _re
-    if isinstance(val, int):
-        return val
-    m = _re.search(r'\d+', str(val))
-    return int(m.group()) if m else 2
-
-
 def load_and_parse_template(yaml_path: str | Path) -> ParsedTemplate:
     """7 baslikli YAML sablonunu yukler ve ParsedTemplate'e donusturur."""
     path = Path(yaml_path)
@@ -412,17 +417,9 @@ def load_and_parse_template(yaml_path: str | Path) -> ParsedTemplate:
     if not isinstance(data, dict):
         raise ValueError(f"YAML ust duzey dict olmali: {path}")
 
-    meta = dict(data.get("meta", {})) if isinstance(data.get("meta"), dict) else {}
-    context = dict(data.get("context", {})) if isinstance(data.get("context"), dict) else {}
-    # context.generation'ı normalize et
-    if "generation" in context and not isinstance(context["generation"], dict):
-        context["generation"] = {}
-    _raw_format = data.get("format", {})
-    format_spec = _raw_format if isinstance(_raw_format, dict) else {}
-    # Alt alanları da dict'e normalize et
-    for _key in ("options", "paragraph", "soru_koku"):
-        if _key in format_spec and not isinstance(format_spec[_key], dict):
-            format_spec[_key] = {}
+    meta = dict(data.get("meta", {}))
+    context = dict(data.get("context", {}))
+    format_spec = data.get("format", {})
     generation = dict(context.get("generation", {}))
     gorsel = data.get("gorsel", {})
     top_level_difficulty = data.get("difficulty")
@@ -441,23 +438,36 @@ def load_and_parse_template(yaml_path: str | Path) -> ParsedTemplate:
     elif top_level_difficulty is not None and "difficulty" not in meta:
         meta["difficulty"] = top_level_difficulty
 
-    # questions: once context icinde ara, yoksa top-level'dan al (fallback)
-    questions = list(context.get("questions", []))
+    # questions: once context icinde ara, yoksa top-level'dan al (fallback),
+    # son care olarak context.generation.questions (yanlis girintili YAML'lar)
+    questions = list(context.get("questions") or [])
     if not questions:
-        top_level_questions = data.get("questions", [])
+        top_level_questions = data.get("questions") or []
         if top_level_questions:
             questions = list(top_level_questions)
             logger.info("questions top-level'dan context'e tasinarak yuklendi")
+    if not questions:
+        nested_questions = generation.get("questions") or []
+        if nested_questions:
+            questions = list(nested_questions)
+            generation = dict(generation)
+            generation.pop("questions", None)
+            logger.info(
+                "questions context.generation altindan context'e tasindi (yanlis girinti toleransi)"
+            )
     questions = _normalize_soru_kokleri(questions)
     context["questions"] = questions
     context = _normalize_question_variants(context, data)
 
     # question_count ile gercek questions sayisi uyumsuzsa otomatik duzelt
+    # NOT: Sadece declared > actual durumunda duzelt (slot sayisindan fazla
+    # soru uretilemez). declared < actual durumunda dokunma — fazla slot'lar
+    # varyant verisi olarak kullaniliyor olabilir.
     declared_qcount = context.get("question_count", 1)
     actual_qcount = len(questions)
-    if actual_qcount > 0 and declared_qcount != actual_qcount:
+    if actual_qcount > 0 and declared_qcount > actual_qcount:
         logger.warning(
-            "question_count (%d) ile gercek soru sayisi (%d) uyumsuz, "
+            "question_count (%d) gercek soru sayisindan (%d) buyuk, "
             "gercek sayiya duzeltiliyor: %s",
             declared_qcount, actual_qcount, path.name,
         )
@@ -474,22 +484,25 @@ def load_and_parse_template(yaml_path: str | Path) -> ParsedTemplate:
         context = dict(context)
         context["generation"] = generation
     options = format_spec.get("options", {})
-    if not isinstance(options, dict):
-        options = {}
 
     # has_visual_options: siklar gorsel mi?
+    # Oncelik gorsel.sik_gorseli.gerekli alaninda: False ise kesinlikle sik gorseli uretilmez.
+    # Yoksa options.style'a bakilir: text/numeric/name/symbolic/sequence iceren style'lar
+    # metin tabanlidir ve sik gorseli uretilmez.
     options_style = options.get("style", "numeric_only")
-    # text / numeric / name / symbolic / sequence iceren style'lar metin tabanlidir;
-    # bu durumda sik gorseli uretilmez.
-    style_lower = options_style.lower()
-    # sik_gorseli.gerekli: false ise gorsel sik uretilmez
-    sik_gorseli = generation.get("sik_gorseli") or gorsel.get("sik_gorseli", {})
-    sik_gorseli_gerekli = sik_gorseli.get("gerekli", True) if isinstance(sik_gorseli, dict) else True
-    has_visual_options = (
-        sik_gorseli_gerekli
-        and not any(kw in style_lower for kw in _NON_VISUAL_STYLE_KEYWORDS)
-        and not str(options_style).startswith("text_only")
-    )
+    sik_gorseli_conf = gorsel.get("sik_gorseli", {}) if isinstance(gorsel, dict) else {}
+    sik_gorseli_gerekli = sik_gorseli_conf.get("gerekli") if isinstance(sik_gorseli_conf, dict) else None
+
+    if sik_gorseli_gerekli is False:
+        has_visual_options = False
+    elif sik_gorseli_gerekli is True:
+        has_visual_options = True
+    else:
+        style_lower = options_style.lower()
+        has_visual_options = (
+            not any(kw in style_lower for kw in _NON_VISUAL_STYLE_KEYWORDS)
+            and not str(options_style).startswith("text_only")
+        )
 
     # requires_visual: birden fazla kaynaktan belirlenir (herhangi biri False yaparsa False)
     requires_visual = True
@@ -522,13 +535,9 @@ def load_and_parse_template(yaml_path: str | Path) -> ParsedTemplate:
     raw_labels = options.get("labels", ["A", "B", "C"])
     normalized_labels = _normalize_option_labels(raw_labels)
 
-    # Visual engine: auto-detect kareli/noktali/birimkare; YAML override varsa oncelikli
-    visual_engine = _determine_visual_engine(
-        data=data,
-        gorsel=gorsel if isinstance(gorsel, dict) else {},
-        image_type=normalized_image_type,
-        requires_visual=requires_visual,
-    )
+    # Turk Lirasi referans gorsel bayragi — denominasyonlara LLM-1 karar verir
+    # (GeneratedVisualQuestion.chosen_denominations alaninda).
+    real_currency_flag = bool(generation.get("real_currency", False))
 
     # Baglamli soru parametrelerini extract et
     baglamli = _extract_baglamli_params(data, context, format_spec)
@@ -546,7 +555,7 @@ def load_and_parse_template(yaml_path: str | Path) -> ParsedTemplate:
         gorsel=data.get("gorsel", {}),
         izinli_icerikler=data.get("izinli_icerikler", {}),
         # Turetilen alanlar
-        sinif_seviyesi=_parse_sinif_seviyesi(meta.get("sinif_seviyesi", 2)),
+        sinif_seviyesi=meta.get("sinif_seviyesi", 2),
         image_type=normalized_image_type,
         has_visual_options=has_visual_options,
         requires_visual=requires_visual,
@@ -554,136 +563,10 @@ def load_and_parse_template(yaml_path: str | Path) -> ParsedTemplate:
         option_count=options.get("count", 3),
         option_labels=normalized_labels,
         options_style=options_style,
-        visual_engine=visual_engine,
+        real_currency=real_currency_flag,
         # Baglamli soru parametreleri
         **baglamli,
     )
-
-
-# ---------------------------------------------------------------------------
-# Visual engine tespiti
-# ---------------------------------------------------------------------------
-
-# image_type / sinyal alanlari: bunlardan biri varsa deterministik renderer kullanilir.
-_SOLID_3D_PATTERNS = (
-    r"\b3d\b", r"\buc\s+boyutlu\b", r"\b3\s+boyutlu\b",
-    r"\bcisim\b", r"\bcisimler\b", r"\bgeometrik\s+cisim\b",
-    r"\bkup\b", r"\bkure\b", r"\bprizma\b", r"\bsilindir\b",
-    r"\bkare\s+prizma\b", r"\bdikdortgen\s+prizma\b", r"\bucgen\s+prizma\b",
-    r"\bdik\s+dairesel\s+silindir\b",
-    r"\bust\s+uste\s+yapi\b", r"\byapi\s+olusturma\b",
-    r"\bkatman\b", r"\bkatmanli\b",
-)
-
-_GEOMETRIC_STRONG_PATTERNS = (
-    r"\bgeometri\b", r"\bgeometrik\b",
-    r"\bkareli\b", r"\bbirimkare\b", r"\bbirim\s+kare\b",
-    r"\bnoktali\b", r"\bnoktali\s+duzlem\b",
-    r"\bucgen\b", r"\bdikdortgen\b", r"\bkare\b",
-    r"\bsimetri\b", r"\bkosegen\b",
-    r"\baci\b", r"\bacilar\b", r"\bdar\s+aci\b", r"\bdik\s+aci\b", r"\bgenis\s+aci\b",
-    r"\bcember\b", r"\bdaire\b",
-    r"\bdogru\s+parcasi\b",
-    r"\bsekil\s+sayma\b", r"\bgeometrik\s+sekil\b",
-)
-
-_GEOMETRIC_WEAK_PATTERNS = (
-    r"\bcevre\b", r"\balan\b", r"\bkenar\b", r"\bkose\b",
-    r"\bsekil\b", r"\bsekli\b", r"\bseklin\b", r"\bsekiller\b",
-)
-
-
-def _search_text(value: Any) -> str:
-    if value is None:
-        return ""
-    if isinstance(value, str):
-        return value
-    if isinstance(value, (int, float, bool)):
-        return str(value)
-    if isinstance(value, dict):
-        return " ".join(_search_text(v) for v in value.values())
-    if isinstance(value, list):
-        return " ".join(_search_text(v) for v in value)
-    return str(value)
-
-
-def _normalize_search_text(text: str) -> str:
-    text = text.translate(_TURKISH_TO_ASCII).lower()
-    text = re.sub(r"[^a-z0-9]+", " ", text)
-    return f" {text.strip()} "
-
-
-def _has_pattern(text: str, patterns: tuple[str, ...]) -> bool:
-    return any(re.search(pattern, text) for pattern in patterns)
-
-
-def _determine_visual_engine(
-    *,
-    data: dict,
-    gorsel: dict,
-    image_type: str,
-    requires_visual: bool,
-) -> str:
-    """Gorsel motorunu secer: 'generative' veya 'geometric_deterministic'.
-
-    Oncelik sirasi:
-      1. gorsel.ana_gorsel.engine (YAML explicit override)
-      2. Top-level visual_engine (YAML explicit override)
-      3. image_type / meta / context / gorsel stilinde geometri sinyali varsa otomatik geometric
-      4. Varsayilan: generative
-    """
-    if not requires_visual:
-        return "generative"  # Onemsiz — gorsel uretilmeyecek
-
-    # 1. YAML explicit override — gorsel.ana_gorsel.engine
-    ana = gorsel.get("ana_gorsel") if isinstance(gorsel, dict) else None
-    if isinstance(ana, dict):
-        override = ana.get("engine")
-        if isinstance(override, str) and override.strip():
-            return override.strip().lower()
-
-    # 2. Top-level override
-    top_override = data.get("visual_engine")
-    if isinstance(top_override, str) and top_override.strip():
-        return top_override.strip().lower()
-
-    # 3. Auto-detect geometri / 3D cisim sinyali.
-    # Bilerek tum YAML'i taramiyoruz: cok sayida sablon "tema disi geometri" gibi
-    # yasaklarda geometri kelimesi geciriyor. Sadece sablon kimligi ve gorsel stilini
-    # anlatan alanlar sinyal kabul edilir.
-    meta = data.get("meta") if isinstance(data.get("meta"), dict) else {}
-    context = data.get("context") if isinstance(data.get("context"), dict) else {}
-    generation = context.get("generation") if isinstance(context.get("generation"), dict) else {}
-    format_spec = data.get("format") if isinstance(data.get("format"), dict) else {}
-
-    ana = gorsel.get("ana_gorsel") if isinstance(gorsel, dict) else {}
-    ana = ana if isinstance(ana, dict) else {}
-
-    signal_text = _normalize_search_text(" ".join([
-        str(image_type),
-        _search_text({
-            "meta_id": meta.get("id"),
-            "meta_ad": meta.get("ad"),
-            "meta_aciklama": meta.get("aciklama"),
-            "context_type": context.get("type"),
-            "generation_image_type": generation.get("image_type"),
-            "generation_visual_layout": generation.get("visual_layout"),
-            "format_type": format_spec.get("type"),
-            "ana_gorsel_stil": ana.get("stil"),
-            "ana_gorsel_tur": ana.get("type"),
-        }),
-    ]))
-    if _has_pattern(signal_text, _SOLID_3D_PATTERNS):
-        return "solid_3d_deterministic"
-
-    if _has_pattern(signal_text, _GEOMETRIC_STRONG_PATTERNS):
-        return "geometric_deterministic"
-
-    weak_hits = sum(1 for pattern in _GEOMETRIC_WEAK_PATTERNS if re.search(pattern, signal_text))
-    if weak_hits >= 2:
-        return "geometric_deterministic"
-
-    return "generative"
 
 
 # ---------------------------------------------------------------------------
@@ -841,8 +724,6 @@ def extract_for_question_chain(t: ParsedTemplate) -> str:
             for stem in q.get("soru_kokleri", []):
                 sections.append(f"    - {stem}")
             beceri = q.get("beceri", {})
-            if not isinstance(beceri, dict):
-                beceri = {}
             if beceri:
                 katman = beceri.get("katman", "?")
                 bilesenler = beceri.get("bilesenler", [])
@@ -856,6 +737,14 @@ def extract_for_question_chain(t: ParsedTemplate) -> str:
                 pedagojik_not = _beceri_to_pedagogical_note(bilesenler, surec, katman)
                 if pedagojik_not:
                     sections.append(f"  ⮕ Pedagojik odak: {pedagojik_not}")
+        sections.append("")
+
+    # PARAGRAF KISITLARI
+    paragraph = t.format_spec.get("paragraph", {})
+    if paragraph:
+        sections.append("## PARAGRAF KISITLARI")
+        sections.append(f"Kelime sayısı: {paragraph.get('word_count_min', '?')}-{paragraph.get('word_count_max', '?')}")
+        sections.append(f"Cümle sayısı: {paragraph.get('sentence_count_min', '?')}-{paragraph.get('sentence_count_max', '?')}")
         sections.append("")
 
     # FORMAT
@@ -892,6 +781,46 @@ def extract_for_question_chain(t: ParsedTemplate) -> str:
         sections.append(_dict_to_yaml_str(t.izinli_icerikler))
         sections.append("")
 
+    # TURK LIRASI REFERANS (kosullu — real_currency aktifken)
+    if t.real_currency:
+        sections.append("## TÜRK LİRASI REFERANS GÖRSEL SİSTEMİ (KRİTİK)")
+        sections.append(
+            "Bu YAML'da real_currency=true aktif. Sahnede görünen Türk Lirası "
+            "banknot ve madeni paraları, üretim pipeline'ında gerçek TCMB "
+            "referans görselleri ile multimodal olarak Gemini'a gönderilecek."
+        )
+        sections.append(
+            "Sahneye uygun para birimlerine SEN karar vereceksin. Sahneyi "
+            "kurduktan sonra chosen_denominations alanını şu geçerli id "
+            "listesinden doldur:"
+        )
+        sections.append(
+            "  Banknotlar: 5_tl, 10_tl, 20_tl, 50_tl, 100_tl, 200_tl"
+        )
+        sections.append(
+            "  Madeni paralar: 1_kurus, 5_kurus, 10_kurus, 25_kurus, 50_kurus, 1_tl_madeni"
+        )
+        sections.append("Kurallar:")
+        sections.append(
+            "- Sadece gerçekten sahnede görünen para birimlerini listele."
+        )
+        sections.append(
+            "- Listedeki her id için sahnede en az 1 adet banknot/madeni para olmalı."
+        )
+        sections.append(
+            "- Para birimi sayıları (kaç adet) hidden_computation veya scene_elements "
+            "içinde ayrı bir alanda belirt; chosen_denominations sadece benzersiz id listesidir."
+        )
+        sections.append(
+            "- Sınıf seviyesine uygun denominasyonları seç: 1-2. sınıf için küçük "
+            "banknotlar (5-20 TL) ve kuruşlar, 3-4. sınıf için 50-200 TL uygun olur."
+        )
+        sections.append(
+            "- Aynı id'yi listede tekrar etme (örn. 2 adet 50 TL varsa chosen_denominations: "
+            "['50_tl'], sayı bilgisi scene_elements veya hidden_computation içinde)."
+        )
+        sections.append("")
+
     # ── BAGLAMLI SORU PARAMETRELERI (kosullu) ────────────────────────────
 
     # REFERANS SORU TANIMLARI
@@ -914,7 +843,6 @@ def extract_for_question_chain(t: ParsedTemplate) -> str:
             sections.append(f"\n### Slot {slot} (tip: {r_type})")
             q_data = next((q for q in questions_data if q.get("slot") == slot), {})
             beceri = q_data.get("beceri", {})
-            if not isinstance(beceri, dict): beceri = {}
             if beceri:
                 katman = beceri.get("katman", "?")
                 bilesenler = beceri.get("bilesenler", [])
@@ -931,18 +859,8 @@ def extract_for_question_chain(t: ParsedTemplate) -> str:
                 sections.append(f"Referans soru kökü: {ref['soru_koku']}")
             if ref.get("secenekler"):
                 sections.append("Referans seçenekler:")
-                secenekler = ref["secenekler"]
-                if isinstance(secenekler, dict):
-                    for label, text in secenekler.items():
-                        sections.append(f"  {label}: {text}")
-                elif isinstance(secenekler, list):
-                    for item in secenekler:
-                        if isinstance(item, dict):
-                            label = item.get("etiket", "?")
-                            text = item.get("metin", "?")
-                            sections.append(f"  {label}: {text}")
-                        else:
-                            sections.append(f"  - {item}")
+                for label, text in ref["secenekler"].items():
+                    sections.append(f"  {label}: {text}")
             if ref.get("dogru_cevap"):
                 sections.append(f"Referans doğru cevap: {ref['dogru_cevap']}")
             if ref.get("cozum"):
@@ -1034,10 +952,17 @@ def extract_for_validation_chain(t: ParsedTemplate) -> str:
 
     # FORMAT KURALLARI
     options = t.format_spec.get("options", {})
-    if not isinstance(options, dict): options = {}
     if options:
         sections.append("## FORMAT VE SEÇENEK KURALLARI")
         sections.append(_dict_to_yaml_str(t.format_spec))
+        sections.append("")
+
+    # PARAGRAF KISITLARI
+    paragraph = t.format_spec.get("paragraph", {})
+    if paragraph:
+        sections.append("## PARAGRAF KISITLARI (kontrol edilecek)")
+        sections.append(f"Kelime: {paragraph.get('word_count_min', '?')}-{paragraph.get('word_count_max', '?')}")
+        sections.append(f"Cümle: {paragraph.get('sentence_count_min', '?')}-{paragraph.get('sentence_count_max', '?')}")
         sections.append("")
 
     # URETIM KURALLARI
@@ -1057,7 +982,6 @@ def extract_for_validation_chain(t: ParsedTemplate) -> str:
         sections.append("## BECERİ HEDEFLERİ (pedagojik uyum kontrolü)")
         for q in questions:
             beceri = q.get("beceri", {})
-            if not isinstance(beceri, dict): beceri = {}
             if beceri:
                 sections.append(f"  Katman: {beceri.get('katman', '?')}")
                 bilesenler = beceri.get("bilesenler", [])
@@ -1177,6 +1101,13 @@ def extract_for_main_image_chain(t: ParsedTemplate) -> str:
             ornek = s.get("ornek", "")
             if ornek:
                 sections.append(f"  Örnek hata: {ornek}")
+        sections.append("")
+
+    # SENARYO UZUNLUGU
+    paragraph = t.format_spec.get("paragraph", {})
+    if paragraph:
+        sections.append("## SENARYO UZUNLUĞU")
+        sections.append(f"Kelime: {paragraph.get('word_count_min', '?')}-{paragraph.get('word_count_max', '?')}")
         sections.append("")
 
     # GÖRSELDE YAZISAL İÇERİK YASAĞI

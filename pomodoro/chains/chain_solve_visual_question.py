@@ -8,7 +8,6 @@ LLM sadece gorselleri + senaryo + soru + siklari gorur.
 """
 from __future__ import annotations
 
-from pathlib import Path
 from typing import Optional
 
 from langchain.messages import HumanMessage
@@ -49,44 +48,17 @@ Aşağıdaki görsele/görsellere bakarak soruyu adım adım çöz.
 
 ## GÖREV
 
-1. Görseli/görselleri dikkatlice incele. **Nesne sayılarını YALNIZCA görselden say** — senaryo metnindeki sayılara dayanarak hesap yapma.
-2. Senaryo ve soruyu oku; bağlamı anlamak için kullan ama sayısal değerleri GÖRSELDEN doğrula.
+1. Görseli/görselleri dikkatlice incele.
+2. Senaryo ve soruyu oku.
 3. Görseldeki bilgileri kullanarak soruyu adım adım çöz.
 4. Her şıkkı değerlendir.
 5. Doğru cevabı seç.
-6. Eğer görselde saydığın miktar senaryo metnindeki miktardan FARKLI ise bunu visual_issues'a açıkça yaz ve issues_affect_solution=true yap.
-7. Görselde herhangi bir sorun fark edersen (yanlış etiket, eksik öğe, belirsiz alan, bağlama uymayan temsil) visual_issues'a yaz.
-8. Küçük tipografi kusuru veya estetik sorun çözümü etkilemiyorsa issues_affect_solution=false bırak.
+6. Görselde herhangi bir sorun fark edersen (yanlış etiket, eksik öğe, belirsiz alan, bağlama uymayan temsil, metindeki sayılarla çelişen miktarlar vb.) visual_issues'a yaz.
+7. Görseldeki sorunlar çözümü gerçekten etkiliyorsa issues_affect_solution=true yap. Küçük tipografi kusuru, hafif hizalama sorunu veya çözümü etkilemeyen estetik kusur varsa false yap.
+8. Görselde görülen nesne sayıları, grup büyüklükleri veya eksik miktarlar seçeneklerde beklenen mantıkla çelişiyorsa bunu açıkça sorun olarak yaz. Görsel bariz biçimde başka bir cevabı destekliyorsa issues_affect_solution=true yap.
 
-KRİTİK: Senaryo "8 incir" dese bile görselde 9 incir görüyorsan, görsel sayısını (9) kullan ve tutarsızlığı raporla.
-"""
-
-
-GEOMETRY_COMPARE_PROMPT = """Sen geometri görsellerinde referans-final tutarlılığı kontrol eden bir denetçisin.
-
-İki görsel verilecek:
-1. Referans/base görsel: Kodla üretilmiş matematiksel iskelet.
-2. Final görsel: Image modelinin estetikleştirdiği çıktı.
-
-Görevin soruyu çözmek DEĞİL; final görseldeki matematiksel içeriğin base görselle tutup tutmadığını kontrol etmektir.
-
-KONTROL ET:
-- Ana geometri base ile aynı alan/çevre/sayım/simetri/açı/uzunluk sonucunu veriyor mu?
-- Grid/nokta varsa hücre düzeni, şeklin kapladığı hücreler ve etiketler finalde base ile uyumlu mu?
-- Grid olmayan geometride polygonlar, segmentler, açı kolları, simetriye etkili şekil özellikleri, kenar uzunluğu etiketleri ve numaralar base ile uyumlu mu?
-- Etiket/sayı varsa finalde base ile çelişiyor mu?
-
-GÖZ ARDI ET:
-- Ana geometri dışındaki frame, margin, kart zemini, tema rengi, kağıt dokusu, border, arka plan estetiği.
-- Çizgi yumuşatma, renk değişimi, modern eğitim materyali stili.
-- Ana geometri dışındaki tematik öğeler, geometriyi kapatmıyor ve yeni çözüm bilgisi eklemiyorsa.
-
-Eğer finaldeki geometri/sayım/ölçü ilişkisi base ile genel olarak tutuyorsa issues_affect_solution=false yap.
-Yalnızca final ana geometriyi, hücre/şekil sayısını, etiketleri, açı/simetri/uzunluk ilişkisini base'e göre açıkça değiştirdiyse issues_affect_solution=true yap.
-
-chosen_answer alanına "BASE_ILE_TUTARLI" veya "BASE_ILE_TUTARSIZ" yaz.
-reasoning alanında kısa karşılaştırma yap.
-visual_issues alanına yalnızca base-final matematiksel tutarsızlıklarını yaz; çevre/frame/stil farklarını sorun sayma.
+NOT: Sadece gördüğün bilgilerle çöz. Tahmin yapma.
+Temsilî görsel kullanılabilir; ancak senaryodaki ana nesne ile genel bağlam korunmalı ve temsil öğrenciyi yanlış nesneye ya da yanlış sayıya götürmemelidir.
 """
 
 
@@ -109,12 +81,7 @@ def _solve_single_visual_question(
 ) -> VisualQuestionSolution:
     """Tek bir QuestionItem icin gorsel bazli bagimsiz cozum yapar."""
     # Gorsel listesi aciklamasi
-    if getattr(template, "visual_engine", "generative") == "solid_3d_deterministic":
-        image_descriptions = [
-            "- Ana görsel (A/B/C seçenek panellerini tek görsel içinde içerir)"
-        ]
-    else:
-        image_descriptions = ["- Ana görsel (yukarıdaki ilk görsel)"]
+    image_descriptions = ["- Ana görsel (yukarıdaki ilk görsel)"]
     if option_image_paths:
         for label in sorted(option_image_paths.keys()):
             image_descriptions.append(f"- Şık {label} görseli")
@@ -158,50 +125,10 @@ def _solve_single_visual_question(
     llm_output = structured_model.invoke([message])
 
     answer_matches = llm_output.chosen_answer.strip().upper() == q.correct_answer.strip().upper()
-    # Gorsel sorunlari cozumu etkiliyorsa, cevap dogru olsa bile soru hatali sayilir
-    # ve gorsel yeniden uretilir — ogrenciyi yaniltacak gorseller kabul edilmez.
-    matches = answer_matches and not llm_output.issues_affect_solution
+    # Cevap dogru ise gorsel kabul edilir — kucuk estetik kusurlar retry dongusune sokmaz.
+    # Cevap yanlis ve gorsel sorunu varsa gorsel yeniden uretilir.
+    matches = answer_matches
     return VisualQuestionSolution(**llm_output.model_dump(), matches_expected=matches)
-
-
-def _compare_geometry_visual_with_base(
-    q,
-    main_image_path: str,
-    idx: int,
-    total: int,
-) -> VisualQuestionSolution | None:
-    """Geometri hybrid finalini base referansla karsilastirir.
-
-    Bu mod soruyu cozmeye calismaz; final gorseldeki ic geometri/sayim base ile
-    tutuyor mu diye bakar. Cevre/frame/tema farklari serbesttir.
-    """
-    base_path = Path(main_image_path).with_name("main_visual_base.png")
-    if not base_path.exists():
-        return None
-
-    content = [{"type": "text", "text": GEOMETRY_COMPARE_PROMPT}]
-    for path in (base_path, Path(main_image_path)):
-        content.append({
-            "type": "image_url",
-            "image_url": {"url": encode_image_data_uri(str(path))},
-        })
-
-    structured_model = _model.with_structured_output(
-        VisualQuestionSolutionLLM,
-        method="json_schema",
-    )
-
-    message = HumanMessage(content=content)
-    pipeline_log("LLM-6", f"Soru {idx}/{total} geometri base-final kontrolü — model çağrılıyor…")
-    llm_output = structured_model.invoke([message])
-
-    matches = not llm_output.issues_affect_solution
-    chosen = q.correct_answer if matches else (llm_output.chosen_answer or "?")
-    return VisualQuestionSolution(
-        **llm_output.model_dump(exclude={"chosen_answer"}),
-        chosen_answer=chosen,
-        matches_expected=matches,
-    )
 
 
 def solve_visual_question(
@@ -241,13 +168,9 @@ def solve_visual_question(
 
     results = []
     for i, q in enumerate(question.questions, 1):
-        solution = None
-        if getattr(template, "visual_engine", "generative") == "geometric_deterministic":
-            solution = _compare_geometry_visual_with_base(q, main_image_path, i, total)
-        if solution is None:
-            solution = _solve_single_visual_question(
-                template, question, q, main_image_path, option_image_paths, i, total,
-            )
+        solution = _solve_single_visual_question(
+            template, question, q, main_image_path, option_image_paths, i, total,
+        )
         results.append(solution)
 
     pipeline_log("LLM-6", f"Görsel üzerinden çözüm tamamlandı ({total} soru).")

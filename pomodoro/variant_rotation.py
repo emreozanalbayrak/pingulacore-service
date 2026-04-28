@@ -21,7 +21,11 @@ from pomodoro.yaml_loader import ParsedTemplate
 
 logger = logging.getLogger(__name__)
 
-_PROJECT_ROOT = Path(os.environ["LEGACY_STATE_DIR"]) if os.environ.get("LEGACY_STATE_DIR") else Path(__file__).resolve().parent.parent
+_PROJECT_ROOT = (
+    Path(os.environ["LEGACY_STATE_DIR"])
+    if os.environ.get("LEGACY_STATE_DIR")
+    else Path(__file__).resolve().parent.parent
+)
 _DEFAULT_STATE_FILE = _PROJECT_ROOT / ".variant_rotation.json"
 
 
@@ -36,8 +40,9 @@ def get_variant_names(template: ParsedTemplate) -> list[str]:
     names: list[str] = []
 
     # 1) varyant_tanimlari["varyantlar"] — dict-style (Pattern A)
+    #    Ic ice 'liste' varsa Pattern B'ye birak.
     top_varyantlar = template.varyant_tanimlari.get("varyantlar")
-    if isinstance(top_varyantlar, dict):
+    if isinstance(top_varyantlar, dict) and "liste" not in top_varyantlar:
         for key, val in top_varyantlar.items():
             if isinstance(val, dict):
                 names.append(val.get("ad", key))
@@ -46,14 +51,22 @@ def get_variant_names(template: ParsedTemplate) -> list[str]:
         if names:
             return names
 
-    # 2) raw YAML'daki varyantlar — list-style (Pattern B)
-    raw_varyantlar = template.raw.get("varyantlar") or template.raw.get("varyant")
+    # 2) raw YAML'daki varyantlar — list/dict-style (Pattern B)
+    raw_varyantlar = (
+        template.raw.get("varyantlar") or template.raw.get("Varyantlar")
+        or template.raw.get("varyant") or template.raw.get("Varyant")
+    )
+    # Dict with nested 'liste' key containing actual variant list
+    if isinstance(raw_varyantlar, dict) and "liste" in raw_varyantlar:
+        raw_varyantlar = raw_varyantlar["liste"]
     if isinstance(raw_varyantlar, list):
         for item in raw_varyantlar:
             if isinstance(item, dict):
-                name = item.get("varyant_adi") or item.get("ad") or ""
+                name = item.get("varyant_adi") or item.get("ad") or item.get("baslik") or ""
                 if name:
                     names.append(name)
+            elif isinstance(item, str):
+                names.append(item)
         if names:
             return names
 
@@ -76,21 +89,31 @@ def get_variant_details(template: ParsedTemplate, variant_name: str) -> dict[str
     zengin verileri dondurur. Bulamazsa bos dict.
     """
     # 1) raw YAML'daki varyantlar — dict-style
-    raw_varyantlar = template.raw.get("varyantlar") or template.raw.get("varyant") or {}
+    raw_varyantlar = (
+        template.raw.get("varyantlar") or template.raw.get("Varyantlar")
+        or template.raw.get("varyant") or template.raw.get("Varyant") or {}
+    )
 
-    if isinstance(raw_varyantlar, dict):
+    # Dict with nested 'liste' key containing actual variant list
+    if isinstance(raw_varyantlar, dict) and "liste" in raw_varyantlar:
+        raw_varyantlar = raw_varyantlar["liste"]
+    elif isinstance(raw_varyantlar, dict):
         for key, val in raw_varyantlar.items():
             if not isinstance(val, dict):
                 continue
-            if val.get("ad") == variant_name or key == variant_name:
+            if val.get("ad") == variant_name or val.get("baslik") == variant_name or key == variant_name:
                 return dict(val)
 
     # 2) raw YAML'daki varyantlar — list-style
     if isinstance(raw_varyantlar, list):
         for item in raw_varyantlar:
+            if isinstance(item, str):
+                if item == variant_name:
+                    return {"aciklama": item}
+                continue
             if not isinstance(item, dict):
                 continue
-            item_name = item.get("varyant_adi") or item.get("ad") or ""
+            item_name = item.get("varyant_adi") or item.get("ad") or item.get("baslik") or ""
             if item_name == variant_name:
                 return dict(item)
 
@@ -100,7 +123,7 @@ def get_variant_details(template: ParsedTemplate, variant_name: str) -> dict[str
             return dict(q)
         for v in q.get("varyantlar", []):
             if isinstance(v, dict):
-                v_name = v.get("varyant_adi") or v.get("ad") or ""
+                v_name = v.get("varyant_adi") or v.get("ad") or v.get("baslik") or ""
                 if v_name == variant_name:
                     return dict(v)
 

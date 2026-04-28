@@ -24,15 +24,10 @@ Pipeline akisi (8 node, 2 yol):
 from __future__ import annotations
 
 import json
-import os
 import re
-import subprocess
-import sys
-import time
-from contextlib import redirect_stderr, redirect_stdout
 from operator import add
 from pathlib import Path
-from typing import Annotated, Iterable, Optional, TypedDict
+from typing import Annotated, Optional, TypedDict
 
 from langgraph.graph import END, StateGraph
 
@@ -40,12 +35,12 @@ from pomodoro.chains.chain_generate_visual_question import generate_visual_quest
 from pomodoro.chains.chain_validate_batch import validate_batch
 from pomodoro.chains.chain_solve_question import solve_question
 from pomodoro.chains.chain_generate_image import generate_images
-from pomodoro.chains.chain_generate_geometry_image import generate_geometry_image
-from pomodoro.chains.chain_generate_solid3d_image import generate_solid3d_image
 from pomodoro.chains.chain_validate_visual import validate_visual
+from pomodoro.chains.chain_verify_currency import verify_currency
 from pomodoro.chains.chain_solve_visual_question import solve_visual_question
 from pomodoro.models import (
     BatchValidation,
+    CurrencyVerification,
     GeneratedImages,
     GeneratedVisualQuestion,
     QuestionSolution,
@@ -54,7 +49,6 @@ from pomodoro.models import (
 )
 from pomodoro.pipeline_log import pipeline_log
 from pomodoro.variant_rotation import get_variant_names, select_next_variant
-from pomodoro.number_pool import get_excluded_objects, register_objects, claim_object_suggestion, get_excluded_number_sets, register_numbers, clear_yaml_history
 from pomodoro.yaml_loader import ParsedTemplate, load_and_parse_template
 from src.build_question_html import build_question_html
 from src.render_question_html import render_question_html
@@ -64,10 +58,8 @@ MAX_QUESTION_ATTEMPTS = 3
 MAX_VALIDATION_ATTEMPTS = 3
 MAX_SOLVER_ATTEMPTS = 3
 MAX_IMAGE_ATTEMPTS = 3
-MAX_VISUAL_SOLVE_ATTEMPTS = 5
-KEEP_VERBOSE_OUTPUTS = os.getenv("PINGULA_KEEP_VERBOSE_OUTPUTS", "").lower() in {
-    "1", "true", "yes", "on"
-}
+MAX_VISUAL_SOLVE_ATTEMPTS = 3
+MAX_CURRENCY_VERIFY_ATTEMPTS = 2
 
 VISUAL_REFERENCE_PATTERNS = [
     # Çekimli görsel/şekil/şema/tablo/grafik/harita — açık konum/ilgi atıfları
@@ -212,16 +204,11 @@ class VisualQuestionPipelineState(TypedDict, total=False):
     difficulty: str
     output_dir: str
     variant_name: Optional[str]
-    excluded_number_sets: Optional[list[list[int]]]
-    pre_generated_question: Optional[dict]
-    excluded_objects: Optional[list[str]]
-    suggested_object: Optional[str]
 
     # --- parse edilmis sablon ---
     template: Optional[dict]
     has_visual_options: bool
     requires_visual: bool
-    force_no_visual_options: bool
 
     # --- Chain 1: Mega soru uretimi ---
     generated_question: Optional[dict]
@@ -253,6 +240,11 @@ class VisualQuestionPipelineState(TypedDict, total=False):
     visual_solver_results: Optional[list[dict]]
     visual_solve_attempts: int
 
+    # --- Chain (opsiyonel): Turk Lirasi sadakat dogrulama ---
+    currency_verify_status: Optional[str]  # "ok" | "mismatch" | "skipped"
+    currency_verify_feedback: Optional[str]
+    currency_verify_attempts: int
+
     # --- benzerlik / ek feedback ---
     extra_feedback: Optional[str]
 
@@ -279,41 +271,6 @@ def node_load_yaml(state: VisualQuestionPipelineState) -> dict:
             log_entries.append(f"[load_yaml] Varyant otomatik secildi: {variant_name} "
                                f"(mevcut: {', '.join(available)})")
 
-    # Sayi gecmisinden excluded setler yukle
-    excluded_number_sets = state.get("excluded_number_sets")
-    if excluded_number_sets is None:
-        try:
-            excluded_number_sets = get_excluded_number_sets(state["yaml_path"])
-            if excluded_number_sets:
-                pipeline_log("pipeline", f"Kaçınılacak sayı setleri: {excluded_number_sets}")
-                log_entries.append(f"[load_yaml] Excluded number sets: {excluded_number_sets}")
-        except Exception as exc:
-            excluded_number_sets = []
-            log_entries.append(f"[load_yaml] Sayi gecmisi okunamadi (atlanıyor): {exc}")
-
-    # Nesne gecmisinden excluded listesi + yeni nesne claim
-    excluded_objects = state.get("excluded_objects")
-    suggested_object = state.get("suggested_object")
-    if excluded_objects is None:
-        try:
-            excluded_objects = get_excluded_objects(state["yaml_path"])
-            if excluded_objects:
-                log_entries.append(f"[load_yaml] Excluded objects: {excluded_objects}")
-        except Exception as exc:
-            excluded_objects = []
-            log_entries.append(f"[load_yaml] Nesne gecmisi okunamadi (atlanıyor): {exc}")
-    if suggested_object is None:
-        try:
-            suggested_object = claim_object_suggestion(state["yaml_path"])
-            pipeline_log("pipeline", f"Nesne önerisi: {suggested_object}")
-            log_entries.append(f"[load_yaml] Suggested object: {suggested_object}")
-        except Exception as exc:
-            log_entries.append(f"[load_yaml] Nesne claim hatasi (atlanıyor): {exc}")
-
-    if state.get("force_no_visual_options"):
-        template.has_visual_options = False
-        log_entries.append("[load_yaml] force_no_visual_options aktif: has_visual_options=False zorlandi")
-
     log_entries.append(f"[load_yaml] YAML yuklendi: {state['yaml_path']} "
                        f"(has_visual_options={template.has_visual_options}, "
                        f"requires_visual={template.requires_visual})")
@@ -321,9 +278,6 @@ def node_load_yaml(state: VisualQuestionPipelineState) -> dict:
     return {
         "template": template.model_dump(),
         "variant_name": variant_name,
-        "excluded_number_sets": excluded_number_sets,
-        "excluded_objects": excluded_objects,
-        "suggested_object": suggested_object,
         "has_visual_options": template.has_visual_options,
         "requires_visual": template.requires_visual,
         "log": log_entries,
@@ -348,38 +302,39 @@ def node_generate_question(state: VisualQuestionPipelineState) -> dict:
     feedback = "\n\n".join(feedback_parts) if feedback_parts else None
 
     variant_name = state.get("variant_name")
-
-    # Onceden uretilmis soru varsa LLM cagrisi atla
-    if state.get("pre_generated_question"):
-        question_data = dict(state["pre_generated_question"])
-        pipeline_log("pipeline", "Soru üretimi atlandı — önceden üretilmiş soru kullanılıyor.")
-    else:
-        excluded_number_sets = state.get("excluded_number_sets") or []
-        excluded_objects = state.get("excluded_objects") or []
-        suggested_object = state.get("suggested_object")
-        question = generate_visual_question(
-            template, difficulty, feedback, variant_name,
-            excluded_number_sets=excluded_number_sets,
-            excluded_objects=excluded_objects,
-            suggested_object=suggested_object,
-        )
-        question_data = question.model_dump()
+    question = generate_visual_question(template, difficulty, feedback, variant_name)
+    question_data = question.model_dump()
     if variant_name:
         question_data["selected_variant"] = variant_name
-    requires_visual = state.get("requires_visual", False) or _question_explicitly_requires_visual(question_data)
+    # YAML acikca gorselsiz ise (ana_gorsel.gerekli=false veya image_type gorselsiz/gorsel_yok)
+    # LLM'in urettigi metindeki gorsel referanslarini override olarak KULLANMA.
+    # Sadece gorsel belirsiz olan sablonlarda override uygula.
+    yaml_requires_visual = state.get("requires_visual", False)
+    if yaml_requires_visual:
+        requires_visual = True
+    elif template.requires_visual is False:
+        # YAML acikca gorselsiz — override yapma
+        requires_visual = False
+        if _question_explicitly_requires_visual(question_data):
+            pipeline_log(
+                "pipeline",
+                "⚠️ Gorselsiz sablonda LLM gorsel referansi uretmis — override YAPILMADI.",
+            )
+    else:
+        requires_visual = _question_explicitly_requires_visual(question_data)
     question_path = _write_question_snapshot(
         question_data,
         state.get("output_dir", "output/visual_questions"),
         stage="question_generated",
     )
 
-    actual = len(question_data.get("questions") or [])
+    actual = len(question.questions)
     return {
         "generated_question": question_data,
         "question_attempts": attempts,
         "requires_visual": requires_visual,
         "log": [
-            f"[generate_question] Soru hazır (deneme {attempts}/{MAX_QUESTION_ATTEMPTS}) — {actual} soru",
+            f"[generate_question] Mega soru uretildi (deneme {attempts}/{MAX_QUESTION_ATTEMPTS}) — {actual} soru",
             (
                 "[generate_question] Soru metni gorsele acik atif yaptigi icin ana gorsel zorunlu kabul edildi"
                 if requires_visual and not template.requires_visual
@@ -388,44 +343,6 @@ def node_generate_question(state: VisualQuestionPipelineState) -> dict:
             f"[generate_question] Taslak JSON kaydedildi: {question_path}",
         ],
     }
-
-
-
-def _check_answer_numbers_in_context(question_data: dict) -> str | None:
-    """Correct answer'daki ana sayinin senaryo/gorsel baglaminda gecip gecmedigini kontrol eder.
-
-    Dogrudan sayisal bir cevap varsa (ornegin '24', '3 x 8 = 24') bu sayi senaryo
-    metninde ya da scene/visual elementlerinde yer almiyorsa revizyon gereklidir.
-    Yazi iceren sik cevaplari (ornegin 'evet', 'hayir', islem cumlesi) kontrol edilmez.
-    """
-    import re as _re
-
-    for q in question_data.get("questions") or []:
-        correct_key = q.get("correct_answer", "")
-        correct_val = str((q.get("options") or {}).get(correct_key, ""))
-
-        # Sadece icinde rakam olan siklari kontrol et
-        nums_in_answer = _re.findall(r"\b(\d{2,})\b", correct_val)
-        if not nums_in_answer:
-            continue
-
-        # Baglam: senaryo + scene_elements + visual_elements + hidden_computation
-        context_blob = " ".join([
-            str(question_data.get("scenario_text") or ""),
-            str(question_data.get("scene_elements") or ""),
-            str(question_data.get("visual_elements") or ""),
-            str(question_data.get("hidden_computation") or ""),
-            " ".join(str(qi.get("question_stem") or "") for qi in question_data.get("questions") or []),
-        ])
-
-        for num in nums_in_answer:
-            if num not in context_blob:
-                return (
-                    f"Doğru cevaptaki sayı '{num}' senaryo metninde, görsel tanımında "
-                    f"veya gizli hesaplamalarda geçmiyor. Senaryo, görsel ve cevap "
-                    f"sayısal olarak tutarsız."
-                )
-    return None
 
 
 def node_validate_question(state: VisualQuestionPipelineState) -> dict:
@@ -452,21 +369,6 @@ def node_validate_question(state: VisualQuestionPipelineState) -> dict:
 
     question_text = json.dumps(state["generated_question"], ensure_ascii=False, indent=2)
     validation = validate_batch(template, question_text)
-
-    # numeric_consistency_check fail ise override et
-    if not validation.numeric_consistency_check and validation.overall_status == "gecerli":
-        validation.overall_status = "revizyon_gerekli"
-        if not validation.feedback:
-            validation.feedback = "Senaryo sayıları ile görsel/doğru cevap arasında sayısal tutarsızlık."
-
-    # Kod seviyesi sayı tutarlılık kontrolü: correct_answer değerindeki sayılar
-    # senaryo metninde veya scene/visual elementlerinde geçmeli
-    if validation.overall_status == "gecerli":
-        code_feedback = _check_answer_numbers_in_context(state["generated_question"])
-        if code_feedback:
-            validation.overall_status = "revizyon_gerekli"
-            validation.feedback = code_feedback
-            pipeline_log("validate", f"⚠️ Kod-seviyesi sayı kontrolü başarısız: {code_feedback[:100]}")
 
     validation_failures = state.get("validation_failures", 0)
     if validation.overall_status != "gecerli":
@@ -539,41 +441,16 @@ def node_generate_images(state: VisualQuestionPipelineState) -> dict:
             "Görsel çözücü sorunları: "
             + "; ".join(state["visual_solver_issues"])
         )
-    # Retry'da exact sayıları feedback'e ekle
-    if attempts > 1:
-        import re as _re
-        hc = str(question.hidden_computation or {})
-        hc_nums = list(dict.fromkeys(
-            m for m in _re.findall(r"\b\d+\b", hc) if 1 < int(m) < 10000
-        ))
-        if hc_nums:
-            feedback_parts.append(
-                f"KRİTİK: Görseldeki nesne sayıları MUTLAKA şu değerlerle birebir eşleşmeli: "
-                f"{', '.join(hc_nums[:8])}. "
-                f"Önceki görselde sayım yanlıştı — her grubu tek tek say ve bu sayıları koru."
-            )
+    if state.get("currency_verify_feedback"):
+        feedback_parts.append(f"Türk Lirası sadakat: {state['currency_verify_feedback']}")
     feedback = "\n\n".join(feedback_parts) if feedback_parts else None
 
-    engine = getattr(template, "visual_engine", "generative")
-    if engine == "geometric_deterministic":
-        pipeline_log(
-            "pipeline",
-            f"Gorsel motoru: geometric_deterministic (hybrid referans + image model) — image_type={template.image_type}"
-        )
-        images = generate_geometry_image(template, question, output_dir, feedback)
-    elif engine == "solid_3d_deterministic":
-        pipeline_log(
-            "pipeline",
-            f"Gorsel motoru: solid_3d_deterministic (deterministik 3D main visual, sik gorselleri kapali) — image_type={template.image_type}"
-        )
-        images = generate_solid3d_image(template, question, output_dir, feedback)
-    else:
-        images = generate_images(template, question, output_dir, feedback)
+    images = generate_images(template, question, output_dir, feedback)
     return {
         "generated_images": images.model_dump(),
         "image_attempts": attempts,
         "log": [
-            f"[generate_images] Gorsel uretildi (deneme {attempts}/{MAX_IMAGE_ATTEMPTS}, engine={engine}): "
+            f"[generate_images] Gorsel uretildi (deneme {attempts}/{MAX_IMAGE_ATTEMPTS}): "
             f"{images.main_image_path}"
             + (f" + {len(images.option_images)} sik gorseli" if images.option_images else "")
         ],
@@ -597,6 +474,75 @@ def node_validate_visual(state: VisualQuestionPipelineState) -> dict:
             f"[validate_visual] Sonuc: {validation.overall_status}"
             + (f" - basarisiz: {validation.failed_targets}" if validation.failed_targets else "")
         ],
+    }
+
+
+def node_verify_currency(state: VisualQuestionPipelineState) -> dict:
+    """Turk Lirasi sadakat dogrulamasi (opsiyonel).
+
+    Sadece template.real_currency=True oldugunda calisir. Uretilen ana
+    gorseldeki banknot ve madeni paralari manifest'teki referanslarla
+    karsilastirir. Basarisiz olursa MAX_CURRENCY_VERIFY_ATTEMPTS'e kadar
+    gorsel uretimini tetikler; limit asilirsa uyariyla devam eder.
+    """
+    template = ParsedTemplate(**state["template"])
+
+    if not template.real_currency:
+        return {
+            "currency_verify_status": "skipped",
+            "currency_verify_feedback": None,
+            "log": ["[verify_currency] Bayrak kapali, atlaniyor."],
+        }
+
+    images = GeneratedImages(**state["generated_images"])
+    attempts = state.get("currency_verify_attempts", 0) + 1
+
+    # Denominasyonlara LLM-1 karar verir (question.chosen_denominations)
+    question = GeneratedVisualQuestion(**state["generated_question"])
+    denom_ids = question.chosen_denominations or []
+    if not denom_ids:
+        return {
+            "currency_verify_status": "skipped",
+            "currency_verify_feedback": None,
+            "log": ["[verify_currency] LLM chosen_denominations bos, atlaniyor."],
+        }
+
+    pipeline_log(
+        "pipeline",
+        f"Turk Lirasi sadakat kontrolu (deneme {attempts}/{MAX_CURRENCY_VERIFY_ATTEMPTS})…",
+    )
+    verification = verify_currency(
+        main_image_path=images.main_image_path,
+        required_denominations=denom_ids,
+    )
+
+    status = "ok" if verification.all_match else "mismatch"
+    feedback_lines: list[str] = []
+    if not verification.all_match:
+        if verification.issues:
+            feedback_lines.append("Türk Lirası tasarım sorunları: " + "; ".join(verification.issues))
+        if verification.missing_denominations:
+            feedback_lines.append(
+                "Gorselde eksik/tanınamaz para birimleri: "
+                + ", ".join(verification.missing_denominations)
+            )
+        feedback_lines.append(
+            "Ekli referans görselleri birebir kopyala: portre, renk kodu, rakam ve desen eşleşmeli."
+        )
+    feedback = "\n".join(feedback_lines) if feedback_lines else None
+
+    log_parts = [
+        f"[verify_currency] Sonuc: {status} "
+        f"(sorun={len(verification.issues)}, eksik={len(verification.missing_denominations)})"
+    ]
+    if feedback:
+        log_parts.append(f"[verify_currency] Geri bildirim: {feedback[:160]}")
+
+    return {
+        "currency_verify_status": status,
+        "currency_verify_feedback": feedback,
+        "currency_verify_attempts": attempts,
+        "log": log_parts,
     }
 
 
@@ -652,85 +598,14 @@ def node_finalize(state: VisualQuestionPipelineState) -> dict:
         is_problematic = not state.get("visual_solver_correct", False)
     else:
         is_problematic = not state.get("solver_correct", False)
-
-    # Ek yildizlama: cevap sayisi baglamda yoksa
-    if not is_problematic:
-        numeric_issue = _check_answer_numbers_in_context(state["generated_question"])
-        if numeric_issue:
-            is_problematic = True
-            pipeline_log("finalize", f"⚠️ Ek yıldızlama: {numeric_issue}")
-
     output_dir = _prepare_final_output_dir(requested_output_dir, is_problematic=is_problematic)
 
-    # Kullanilan sayilari gecmise kaydet (set bazli)
-    # Oncelik: used_numbers (LLM doldurmussa) → hidden_computation → senaryo/cevap regex
-    used_numbers = state["generated_question"].get("used_numbers") or []
-    if not used_numbers:
-        import re as _re
-        from collections import Counter
-        # 1. hidden_computation'dan cek (sayilarin birincil kaynagi)
-        hc = state["generated_question"].get("hidden_computation") or {}
-        hc_text = str(hc)
-        hc_nums = [int(m) for m in _re.findall(r"\b\d+\b", hc_text) if 1 < int(m) < 10000]
-        if hc_nums:
-            used_numbers = [n for n, _ in Counter(hc_nums).most_common(8)]
-        else:
-            # 2. Fallback: senaryo + soru koku + dogru cevap degeri
-            text_parts = [state["generated_question"].get("scenario_text", "")]
-            for q in state["generated_question"].get("questions", []):
-                text_parts.append(q.get("question_stem", ""))
-                correct_key = q.get("correct_answer", "")
-                correct_val = (q.get("options") or {}).get(correct_key, "")
-                if correct_val:
-                    text_parts.append(str(correct_val))
-            combined = " ".join(str(p) for p in text_parts)
-            nums = [int(m) for m in _re.findall(r"\b\d+\b", combined) if 1 < int(m) < 10000]
-            used_numbers = [n for n, _ in Counter(nums).most_common(6)]
-    if used_numbers:
-        try:
-            register_numbers(state["yaml_path"], used_numbers)
-            pipeline_log("pipeline", f"Sayı geçmişine eklendi: {sorted(set(used_numbers))}")
-        except Exception as exc:
-            pipeline_log("pipeline", f"Sayı geçmişi kaydedilemedi (atlanıyor): {exc}")
-
-    # Kullanilan nesneleri gecmise kaydet
-    used_objects = state["generated_question"].get("used_objects") or []
-    if not used_objects and state.get("suggested_object"):
-        used_objects = [state["suggested_object"]]
-    if used_objects:
-        try:
-            _tmpl = ParsedTemplate(**state["template"])
-            register_objects(state["yaml_path"], used_objects)
-            pipeline_log("pipeline", f"Nesne geçmişine eklendi: {used_objects}")
-        except Exception as exc:
-            pipeline_log("pipeline", f"Nesne geçmişi kaydedilemedi (atlanıyor): {exc}")
-
-    # Soru verisini finalize et
-    question_path = _write_question_snapshot(
-        state["generated_question"],
-        output_dir,
-        stage="finalized",
-    )
-
-    # HTML ciktisini kaydet
-    html_content = state["generated_question"].get("html_content", "")
+    # HTML ciktisini once uret: chain_generate_visual_question post-shuffle
+    # html_content'i bosalttigi icin build_question_html kanonik HTML kaynagidir.
+    # Bu HTML state'e geri yazilir ki JSON snapshot'inda da post-shuffle sira yer alsin.
     images = GeneratedImages(**state["generated_images"]) if state.get("generated_images") else None
-
-    # Yildizlama sırasında klasör yeniden adlandırıldıysa image path'i güncelle
-    if images and images.main_image_path:
-        old_img = Path(images.main_image_path)
-        if not old_img.exists():
-            new_img = output_dir / old_img.name
-            if new_img.exists():
-                imgs_dict = images.model_dump()
-                imgs_dict["main_image_path"] = str(new_img)
-                if imgs_dict.get("option_images"):
-                    imgs_dict["option_images"] = {
-                        k: str(output_dir / Path(v).name)
-                        for k, v in imgs_dict["option_images"].items()
-                    }
-                images = GeneratedImages(**imgs_dict)
     questions = state["generated_question"].get("questions") or []
+    html_content = state["generated_question"].get("html_content", "")
 
     if questions:
         html_content = build_question_html(
@@ -740,23 +615,21 @@ def node_finalize(state: VisualQuestionPipelineState) -> dict:
             option_images=images.option_images if images else None,
             inline_images=True,
         )
+        state["generated_question"]["html_content"] = html_content
+
+    # Soru verisini finalize et (post-shuffle, post-build_question_html)
+    question_path = _write_question_snapshot(
+        state["generated_question"],
+        output_dir,
+        stage="finalized",
+    )
     if html_content:
         html_path = output_dir / "question.html"
         with open(html_path, "w", encoding="utf-8") as f:
             f.write(html_content)
 
-        is_geometry = False
-        if state.get("template"):
-            try:
-                is_geometry = (
-                    ParsedTemplate(**state["template"]).visual_engine
-                    == "geometric_deterministic"
-                )
-            except Exception:
-                is_geometry = False
-
         preview_html_path = html_path
-        if questions and (not is_geometry or KEEP_VERBOSE_OUTPUTS):
+        if questions:
             preview_html_path = output_dir / "question.preview.html"
             preview_html = build_question_html(
                 question_data=state["generated_question"],
@@ -823,10 +696,26 @@ def route_after_solving(state: VisualQuestionPipelineState) -> str:
 
 
 def route_after_visual_validation(state: VisualQuestionPipelineState) -> str:
-    """Gorsel dogrulama sonrasi: uygun → cozume, revizyon → gorseli yeniden uret."""
+    """Gorsel dogrulama sonrasi: uygun → TL sadakat kontrolu, revizyon → yeniden uret."""
     if state.get("visual_validation_status") == "uygun":
-        return "solve_visual_question"
+        return "verify_currency"
     if state.get("image_attempts", 0) >= MAX_IMAGE_ATTEMPTS:
+        return "verify_currency"
+    return "generate_images"
+
+
+def route_after_currency_verify(state: VisualQuestionPipelineState) -> str:
+    """TL sadakat kontrolu sonrasi yonlendirme.
+
+    - skipped veya ok → cozume gec
+    - mismatch AND retry kaldi → gorseli yeniden uret
+    - mismatch AND retry bitti → uyariyla cozume gec (infinite retry yasagina uyumlu)
+    """
+    status = state.get("currency_verify_status")
+    if status in ("ok", "skipped"):
+        return "solve_visual_question"
+    # mismatch
+    if state.get("currency_verify_attempts", 0) >= MAX_CURRENCY_VERIFY_ATTEMPTS:
         return "solve_visual_question"
     return "generate_images"
 
@@ -846,13 +735,14 @@ def build_graph() -> StateGraph:
     """LangGraph StateGraph'ini olusturur ve derler."""
     graph = StateGraph(VisualQuestionPipelineState)
 
-    # Node'lar (8 toplam)
+    # Node'lar (9 toplam — 8 temel + opsiyonel TL sadakat)
     graph.add_node("load_yaml", node_load_yaml)
     graph.add_node("generate_question", node_generate_question)
     graph.add_node("validate_question", node_validate_question)
     graph.add_node("solve_question", node_solve_question)
     graph.add_node("generate_images", node_generate_images)
     graph.add_node("validate_visual", node_validate_visual)
+    graph.add_node("verify_currency", node_verify_currency)
     graph.add_node("solve_visual_question", node_solve_visual_question)
     graph.add_node("finalize", node_finalize)
 
@@ -884,10 +774,20 @@ def build_graph() -> StateGraph:
 
     graph.add_edge("generate_images", "validate_visual")
 
-    # Gorsel dogrulama sonrasi: cozume gec veya gorseli yeniden uret
+    # Gorsel dogrulama sonrasi: TL sadakat kontrolu (varsa) veya gorseli yeniden uret
     graph.add_conditional_edges(
         "validate_visual",
         route_after_visual_validation,
+        {
+            "verify_currency": "verify_currency",
+            "generate_images": "generate_images",
+        },
+    )
+
+    # TL sadakat kontrolu sonrasi: cozume gec veya gorseli yeniden uret
+    graph.add_conditional_edges(
+        "verify_currency",
+        route_after_currency_verify,
         {
             "solve_visual_question": "solve_visual_question",
             "generate_images": "generate_images",
@@ -921,8 +821,6 @@ def run(
     output_dir: str | Path = "output/visual_questions",
     extra_feedback: str | None = None,
     variant_name: str | None = None,
-    force_no_visual_options: bool = False,
-    pre_generated_question: dict | None = None,
 ) -> VisualQuestionPipelineState:
     """Pipeline'i calistirir ve son state'i dondurur.
 
@@ -947,10 +845,9 @@ def run(
         "solver_failures": 0,
         "image_attempts": 0,
         "visual_solve_attempts": 0,
+        "currency_verify_attempts": 0,
         "has_visual_options": False,
         "requires_visual": True,
-        "force_no_visual_options": force_no_visual_options,
-        "pre_generated_question": pre_generated_question,
         "log": [],
     }
 
@@ -962,240 +859,28 @@ def run(
     return final_state
 
 
-def generate_question_standalone(
-    yaml_path: str | Path,
-    difficulty: str = "orta",
-    output_dir: str | Path = "output/visual_questions",
-    clear_history: bool = False,
-) -> dict:
-    """Sadece soru uretimi (LLM-1) + sayi/nesne logu. Pipeline'in geri kalani calistirilmaz.
+def show_graph() -> None:
+    """Grafin Mermaid diyagramini tarayicida acar."""
+    import subprocess
+    import tempfile
 
-    Paralel uretimde seri Faz-1 icin kullanilir: her run bir oncekinin
-    sayi logunu gorebilsin diye sirayla cagirilir; ardindan `run()` ile
-    `pre_generated_question` enjekte edilerek paralel Faz-2 baslatilir.
+    mermaid_syntax = app.get_graph().draw_mermaid()
+    html = f"""<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<style>body{{display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;background:#fafafa}}</style>
+</head><body>
+<pre class="mermaid">{mermaid_syntax}</pre>
+<script>mermaid.initialize({{startOnLoad:true,theme:'default'}});</script>
+</body></html>"""
 
-    Returns:
-        question_data dict — `run(pre_generated_question=...)` icin hazir.
-    """
-    from pomodoro.yaml_loader import load_and_parse_template
-
-    yaml_path = str(yaml_path)
-    if clear_history:
-        clear_yaml_history(yaml_path)
-    template = load_and_parse_template(yaml_path)
-
-    # Varyant sec
-    available = get_variant_names(template)
-    variant_name = select_next_variant(yaml_path, available) if available else None
-    if variant_name:
-        pipeline_log("standalone", f"Varyant: {variant_name}")
-
-    # Excluded number sets
-    try:
-        excluded_number_sets = get_excluded_number_sets(yaml_path)
-    except Exception:
-        excluded_number_sets = []
-
-    # Object claim
-    try:
-        suggested_object = claim_object_suggestion(yaml_path)
-        excluded_objects = get_excluded_objects(yaml_path)
-    except Exception:
-        suggested_object = None
-        excluded_objects = []
-
-    # Soru uret
-    question = generate_visual_question(
-        template, difficulty, None, variant_name,
-        excluded_number_sets=excluded_number_sets,
-        excluded_objects=excluded_objects,
-        suggested_object=suggested_object,
+    tmp = tempfile.NamedTemporaryFile(
+        suffix=".html", prefix="visual_graph_", delete=False, mode="w", encoding="utf-8",
     )
-    question_data = question.model_dump()
-    question_data["selected_variant"] = variant_name
-
-    # Sayilari logla — oncelik: used_numbers → hidden_computation → regex fallback
-    used_numbers = question_data.get("used_numbers") or []
-    if not used_numbers:
-        import re as _re
-        from collections import Counter
-        hc = question_data.get("hidden_computation") or {}
-        hc_nums = [int(m) for m in _re.findall(r"\b\d+\b", str(hc)) if 1 < int(m) < 10000]
-        if hc_nums:
-            used_numbers = [n for n, _ in Counter(hc_nums).most_common(8)]
-    if not used_numbers:
-        import re as _re
-        from collections import Counter
-        text = " ".join([
-            question_data.get("scenario_text", ""),
-            *[q.get("question_stem", "") for q in question_data.get("questions", [])],
-        ])
-        nums = [int(m) for m in _re.findall(r"\b\d+\b", text) if 1 < int(m) < 10000]
-        used_numbers = [n for n, _ in Counter(nums).most_common(8)]
-    if used_numbers:
-        register_numbers(yaml_path, used_numbers)
-        pipeline_log("standalone", f"Sayı logu: {sorted(set(used_numbers))}")
-
-    # Nesneleri logla
-    used_objects = question_data.get("used_objects") or []
-    if not used_objects and suggested_object:
-        used_objects = [suggested_object]
-    if used_objects:
-        register_objects(yaml_path, used_objects)
-
-    # Cikti dizinine snapshot yaz
-    from pathlib import Path as _Path
-    out = _Path(output_dir)
-    out.mkdir(parents=True, exist_ok=True)
-    import json as _json
-    snap = dict(question_data)
-    snap["pipeline_stage"] = "question_generated"
-    (out / "question.json").write_text(_json.dumps(snap, ensure_ascii=False, indent=2))
-
-    return question_data
+    tmp.write(html)
+    tmp.close()
+    subprocess.Popen(["open", tmp.name])
 
 
-def _launch_stage2_process(
-    yaml_path: Path,
-    output_dir: Path,
-    difficulty: str,
-) -> tuple[subprocess.Popen, object, Path, Path]:
-    """Hazir question.json ile Faz-2'yi ayri process olarak baslatir.
-
-    Thread icinde stdout/stderr redirect etmek global oldugu icin loglari
-    karistirir. Subprocess + dosya handle'i ise her is icin izole log tutar.
-    """
-    log_path = output_dir / "run.log"
-    code = f"""
-import json
-from pathlib import Path
-from pomodoro.graph import run
-
-yaml_path = Path({str(yaml_path)!r})
-output_dir = Path({str(output_dir)!r})
-question_data = json.loads((output_dir / "question.json").read_text(encoding="utf-8"))
-state = run(
-    yaml_path=yaml_path,
-    difficulty={difficulty!r},
-    output_dir=output_dir,
-    variant_name=question_data.get("selected_variant"),
-    pre_generated_question=question_data,
-)
-print(state.get("final_output_path") or output_dir)
-"""
-    log_file = log_path.open("w", encoding="utf-8")
-    process = subprocess.Popen(
-        [sys.executable, "-c", code],
-        stdout=log_file,
-        stderr=subprocess.STDOUT,
-    )
-    return process, log_file, yaml_path, output_dir
-
-
-def run_batch_two_phase_streaming(
-    yaml_paths: Iterable[str | Path],
-    output_root: str | Path,
-    difficulty: str = "orta",
-    max_parallel_stage2: int = 3,
-    skip_completed: bool = True,
-    reuse_existing_question: bool = True,
-    clear_history: bool = False,
-    output_suffix: str = "",
-) -> list[dict]:
-    """Birden fazla YAML'i seri soru + akan paralel final fazi ile uretir.
-
-    Faz-1 (`question.json`) bilerek seri calisir; boylece sayi/nesne gecmisi
-    siradaki soru secimine yansir. Her YAML'in `question.json` dosyasi hazir
-    olur olmaz Faz-2 ayri subprocess olarak baslatilir; tum soru dosyalarinin
-    bitmesi beklenmez.
-    """
-    output_root = Path(output_root)
-    output_root.mkdir(parents=True, exist_ok=True)
-    yaml_list = [Path(path) for path in yaml_paths]
-    active: list[tuple[subprocess.Popen, object, Path, Path]] = []
-    results: list[dict] = []
-
-    def finish_process(item: tuple[subprocess.Popen, object, Path, Path]) -> dict:
-        process, log_file, yaml_path, output_dir = item
-        return_code = process.wait()
-        log_file.close()
-        status = "ok" if return_code == 0 and (output_dir / "question.html").exists() else "phase2_error"
-        result: dict = {
-            "yaml": str(yaml_path),
-            "output_dir": str(output_dir),
-            "status": status,
-            "return_code": return_code,
-        }
-        if status != "ok":
-            result["error"] = f"phase2 return_code={return_code}"
-        return result
-
-    def reap_one(block: bool) -> Optional[dict]:
-        while active:
-            for index, item in enumerate(active):
-                process = item[0]
-                if process.poll() is not None:
-                    active.pop(index)
-                    return finish_process(item)
-            if not block:
-                return None
-            time.sleep(1)
-        return None
-
-    for index, yaml_path in enumerate(yaml_list, 1):
-        output_dir = output_root / f"{yaml_path.stem}{output_suffix}"
-        output_dir.mkdir(parents=True, exist_ok=True)
-
-        if skip_completed and (output_dir / "question.html").exists():
-            results.append({
-                "yaml": str(yaml_path),
-                "output_dir": str(output_dir),
-                "status": "already_ok",
-            })
-            continue
-
-        question_path = output_dir / "question.json"
-        if not (reuse_existing_question and question_path.exists()):
-            phase1_log = output_dir / "run_phase1_question.log"
-            try:
-                with phase1_log.open("w", encoding="utf-8") as log_file:
-                    with redirect_stdout(log_file), redirect_stderr(log_file):
-                        generate_question_standalone(
-                            yaml_path=yaml_path,
-                            difficulty=difficulty,
-                            output_dir=output_dir,
-                            clear_history=clear_history,
-                        )
-            except Exception as exc:
-                results.append({
-                    "yaml": str(yaml_path),
-                    "output_dir": str(output_dir),
-                    "status": "phase1_error",
-                    "error": f"{type(exc).__name__}: {exc}",
-                })
-                continue
-
-        active.append(_launch_stage2_process(yaml_path, output_dir, difficulty))
-        print(f"[batch-two-phase] stage2 basladi {index}/{len(yaml_list)}: {yaml_path.name}")
-
-        while len(active) >= max(1, max_parallel_stage2):
-            finished = reap_one(block=True)
-            if finished:
-                results.append(finished)
-                print(f"[batch-two-phase] {finished['status']}: {Path(finished['yaml']).name}")
-
-        finished = reap_one(block=False)
-        while finished:
-            results.append(finished)
-            print(f"[batch-two-phase] {finished['status']}: {Path(finished['yaml']).name}")
-            finished = reap_one(block=False)
-
-    while active:
-        finished = reap_one(block=True)
-        if finished:
-            results.append(finished)
-            print(f"[batch-two-phase] {finished['status']}: {Path(finished['yaml']).name}")
-
-    summary_path = output_root / "batch_summary.json"
-    summary_path.write_text(json.dumps(results, ensure_ascii=False, indent=2), encoding="utf-8")
-    return results
+if __name__ == "__main__":
+    show_graph()

@@ -103,28 +103,20 @@ class GeneratedVisualQuestion(BaseModel):
         ),
     )
 
+    # --- Turk Lirasi referans gorsel ---
+    chosen_denominations: Optional[list[str]] = Field(
+        default=None,
+        description=(
+            "YAML'da real_currency=true aktifken ZORUNLU doldurulur. "
+            "LLM sahneye uygun para birimlerini manifest.yaml id listesinden secer. "
+            "Gecerli id'ler: 5_tl, 10_tl, 20_tl, 50_tl, 100_tl, 200_tl, "
+            "1_kurus, 5_kurus, 10_kurus, 25_kurus, 50_kurus, 1_tl_madeni. "
+            "Ornek: ['50_tl', '20_tl']. real_currency=false ise null birak."
+        ),
+    )
+
     # --- HTML sablonu ---
     html_content: str = Field(description="Uretilen HTML sablonu")
-
-    # --- Kullanilan sayilar (sayi gecmisi icin LLM tarafindan doldurulur) ---
-    used_numbers: list[int] = Field(
-        default_factory=list,
-        description=(
-            "Bu soruda kullanilan ana tam sayilar. "
-            "Ornek: [4, 5, 20] veya [6, 3, 18]. "
-            "Sayi gecmisine kaydedilir; ayni sablonun sonraki uretimlerinde tekrar secilmez."
-        ),
-    )
-
-    # --- Kullanilan nesneler (nesne gecmisi icin LLM tarafindan doldurulur) ---
-    used_objects: list[str] = Field(
-        default_factory=list,
-        description=(
-            "Bu soruda kullanilan ana sayilabilir nesnelerin Turkce isimleri. "
-            "Ornek: ['elma', 'sepet'] veya ['kitap', 'raf', 'ogrenci']. "
-            "Nesne gecmisine kaydedilir; ayni sablonun sonraki uretimlerinde tekrar secilmez."
-        ),
-    )
 
     # --- Zorluk ---
     difficulty_level: str = Field(
@@ -156,10 +148,6 @@ class BatchValidation(BaseModel):
     reference_compliance: bool = Field(
         default=True,
         description="Referans soru tanimlarina yapisal uyum (baglamli YAML'larda)"
-    )
-    numeric_consistency_check: bool = Field(
-        default=True,
-        description="Senaryo sayilari ile visual_elements sayilari ve dogru cevap birebir tutarli mi?"
     )
     overall_status: Literal["gecerli", "revizyon_gerekli"] = Field(
         description="Genel durum"
@@ -299,4 +287,33 @@ class VisualQuestionSolution(VisualQuestionSolutionLLM):
     matches_expected: bool = Field(
         default=False,
         description="Cozucunun cevabi beklenen dogru cevapla uyusur mu? (chain tarafindan hesaplanir)"
+    )
+
+
+# ---------------------------------------------------------------------------
+# Chain (opsiyonel): Turk Lirasi Sadakat Dogrulama
+# ---------------------------------------------------------------------------
+
+class CurrencyVerification(BaseModel):
+    """Uretilen gorseldeki Turk Lirasi banknot/madeni paralarinin referans
+    gorsellerle ne kadar birebir oldugunu dogrulayan chain'in ciktisi.
+
+    Pipeline sadece real_currency=true olan YAML'lar icin bu chain'i calistirir.
+    """
+
+    all_match: bool = Field(
+        description=(
+            "Tum para birimleri referanslarla kabul edilebilir duzeyde eslesiyor mu? "
+            "Kucuk stil farklari tolere edilir; portre, renk kodu veya rakam yanlisi ise false."
+        )
+    )
+    issues: list[str] = Field(
+        default_factory=list,
+        description="Bulunan sadakat sorunlarinin ayrintili listesi"
+    )
+    missing_denominations: list[str] = Field(
+        default_factory=list,
+        description=(
+            "Senaryoda beklenen ama gorselde eksik/yanlis cizilmis para birimi id'leri."
+        ),
     )

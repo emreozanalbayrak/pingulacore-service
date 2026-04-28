@@ -37,10 +37,6 @@ Soru tipi: {context_type}
 
 {validation_constraints}
 
-## ÖNEMLİ: SEÇENEK ETİKETLERİ
-
-Şıkların sırası (A, B, C...) rastgele karıştırılmıştır. Doğrulama yaparken etiketlere (A, B, C) değil, **şıkların içeriğine (değerlerine)** bakarak değerlendir. `correct_answer` alanı hangi etiketi gösteriyorsa, o etiketin karşısındaki değerin matematiksel/mantıksal olarak doğru olup olmadığını kontrol et.
-
 ## GÖREV
 
 Yukarıdaki üretilen soruyu, doğrulama kriterlerindeki her maddeyi tek tek kontrol ederek değerlendir.
@@ -86,16 +82,6 @@ def _build_check_areas(template: ParsedTemplate) -> str:
         f"'görselde', 'şekilde', 'tabloda', 'şemada', 'yandaki', 'yukarıdaki' gibi açık bir "
         f"görsel referansı içeriyorsa soru mutlaka ana görselle birlikte sunulabilecek yapıda mı? "
         f"Görsel olmadan askıda kalan bir ifade veya eksik bırakılmış bir veri var mı?"
-    )
-    idx += 1
-
-    areas.append(
-        f"{idx}. **Sayısal tutarlılık** (numeric_consistency_check): "
-        f"Senaryo metnindeki sayısal değerler (nesne adetleri, grup büyüklükleri, miktarlar) "
-        f"ile visual_elements / scene_elements'teki sayılar BİREBİR uyuşuyor mu? "
-        f"Örneğin senaryo '5 kasa' diyorsa görselde de 5 kasa olmalı, 4 veya 6 olamaz. "
-        f"Aynı şekilde doğru cevap, senaryo ve görseldeki sayılarla matematiksel olarak tutarlı mı? "
-        f"Herhangi bir tutarsızlık varsa bu alan false olmalı."
     )
     idx += 1
 
@@ -151,7 +137,6 @@ def _build_check_areas(template: ParsedTemplate) -> str:
 
     # Paragraf kisitlari
     paragraph = template.format_spec.get("paragraph", {})
-    if not isinstance(paragraph, dict): paragraph = {}
     if paragraph.get("word_count_min") or paragraph.get("sentence_count_min"):
         areas.append(
             f"{idx}. **Paragraf kısıtları**: Senaryo metni kelime ve cümle sayısı "
