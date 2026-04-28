@@ -1,0 +1,135 @@
+meta:
+  id: grafik_arastirma_senaryo
+  ad: Grafik + Araştırma Senaryosu
+  sinif_seviyesi: 5
+  aciklama: Sütun grafiği ve araştırma senaryosu üzerinden araştırma sorusu, cevaplanamayacak soru ve grafik yorumu
+  kaynak: kaynak-soru-kokleri.md
+  frequency: Medium
+context:
+  type: grafik_arastirma
+  question_count: 3
+  question_count_min: 2
+  question_count_max: 3
+  generation:
+    word_count_min: 120
+    word_count_max: 200
+    structure:
+    - Bir karakter (öğrenci) bir konuyu araştırıyor olmalı (2-3 cümle senaryo)
+    - Araştırma sonuçlarını ÇUBUK GRAFİĞİ (bar chart) formatında sun — KESINLIKLE <table> KULLANMA!
+    - Grafik <div class="chart"> HTML yapısı ile oluşturulmalı
+    - 4-6 veri satırı olmalı, çubuk genişlikleri orantılı (en büyük değer width:100%, diğerleri oranla)
+    - Grafik başlığını grafiğin üzerinde düz metin olarak yaz
+    - Veriler arasında karşılaştırma yapılabilecek anlamlı farklar olmalı
+    - Senaryoda araştırmanın amacı ve konusu açıkça belirtilmeli
+    kurallar:
+    - 5. sınıf seviyesinde, günlük hayat veya okul konusuyla ilgili araştırma
+    - 'KRİTİK — SENARYO KAPSAMI: Senaryo sadece DURUMU ve MERAKı anlatsın, CEVAPLARI vermesin!'
+    - Detaylı bilgiler ve veriler SADECE tablo/grafikte olmalı — senaryo bunları içermemeli
+    - Soruların cevabı senaryodan değil tablo/grafikten çıkarılmalı
+    - Sayısal veriler gerçekçi ve tutarlı olmalı
+    - Araştırma konusu merak uyandırıcı ve çocuklara uygun olmalı
+    - Grafikteki verilerle cevaplanabilecek ve cevaplanamayacak sorular olmalı
+    - Araştırma sorusu verilerden çıkarılabilir olmalı
+    - KESINLIKLE <table> etiketi KULLANMA — veriyi SADECE çubuk grafik olarak sun
+    - Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)
+  questions:
+  - slot: 1
+    type: arastirma_sorusu
+    soru_kokleri:
+    - <b>…Öğrenci…'nin araştırma sorusu aşağıdakilerden hangisi olabilir?</b>
+    - <b>Bu araştırmanın temel sorusu aşağıdakilerden hangisidir?</b>
+    - <b>…Araştırma Konusu… ile ilgili yapılan bu yayının araştırma sorusu aşağıdakilerden hangisi olabilir?</b>
+    - <b>...Arastirma konusu... ile ilgili yapilan bu yayinin arastirma sorusu asagidakilerden hangisi olabilir?</b>
+    options_style: question_sentence
+    word_count_min: 5
+    word_count_max: 18
+    beceri:
+      katman: KB3
+      bilesenler:
+      - sorgulama
+      - cikarim_yapma
+      surec_bileseni: problemi_yapilandirma
+  - slot: 2
+    type: cevaplanamayacak_soru
+    soru_kokleri:
+    - <b>Aşağıdakilerden hangisi bu araştırmada <u>cevaplanamayacak</u> bir sorudur?</b>
+    - <b>Grafikteki verilere göre aşağıdaki sorulardan hangisine cevap <u>verilemez</u>?</b>
+    - <b>Aşağıdakilerden hangisi bu araştırmaya göre cevaplandırılabilecek bir soru <u>değildir</u>?</b>
+    options_style: question_sentence
+    word_count_min: 5
+    word_count_max: 18
+    beceri:
+      katman: KB3
+      bilesenler:
+      - degerlendirme
+      - mantiksal_denetleme
+      surec_bileseni: problemi_yapilandirma
+  - slot: 3
+    type: grafik_yorumu
+    soru_kokleri:
+    - <b>Grafikteki verilere göre aşağıdakilerden hangisi söylenebilir?</b>
+    - <b>Araştırma sonuçlarına göre aşağıdakilerden hangisi doğrudur?</b>
+    - <b>Sunulan verilerden hangisi iddiayı desteklemek için bir kanıt niteliği <u>taşımaz</u>?</b>
+    options_style: complete_sentence
+    word_count_min: 8
+    word_count_max: 22
+    beceri:
+      katman: KB2
+      bilesenler:
+      - yorumlama
+      - cikarim_yapma
+      surec_bileseni: bilgiyi_cikartma
+header_template: 1-3. soruları aşağıdaki araştırma ve grafiğe göre cevaplayınız.
+format:
+  type: llm_generated_html
+  description: Araştırma senaryosu + grafik verileri üzerinden 3 soru
+  paragraph:
+    required: true
+    word_count_min: 120
+    word_count_max: 200
+    sentence_count_min: 3
+    sentence_count_max: 10
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 5
+    word_count_max: 22
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Araştırma konusu ve grafik verileriyle desteklenen cevap
+  kurallar:
+  - 'KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI'
+  - Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI
+  - Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil
+  - 'YASAK: Tablodaki değeri aynen şıkka yazmak (örn: ''yalıtımı azdır'' tabloda yazıyorsa şıkta aynen yazmamalı)'
+  - Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli
+  - Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı
+  - Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı
+  - Araştırma sorusunda doğru cevap senaryodaki araştırmanın amacını yansıtan soru olmalı
+  - Cevaplanamayacak soruda doğru cevap grafikteki verilerle CEVAPLANAMAYAN soru olmalı
+  - Grafik yorumunda doğru cevap tablodaki sayısal verilerle doğrudan desteklenmeli
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: ''teleskop'' → ''mercekli araç'' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: VERI_CARPITMA
+    aciklama: Grafikteki veriyi yanlış yorumlayan veya çarpıtan ifade sunma
+    ornek: En yüksek değeri en düşük gibi gösterme veya sıralamayı yanlış verme
+  - ad: KAPSAM_DISI_SORU
+    aciklama: Konuyla ilgili görünen ama araştırma kapsamı dışında soru sunma
+    ornek: Araştırma verileriyle cevaplanabilir gibi görünen ama farklı veri gerektiren soru
+  - ad: YANLIS_NEDEN_SONUC
+    aciklama: Verilerdeki korelasyonu neden-sonuç ilişkisi gibi sunma
+    ornek: İki veri arasındaki ilişkiyi kesin neden-sonuç olarak gösterme
+use_shared_strategies: false

@@ -1,0 +1,185 @@
+# templates/bolum4/metin_ici_karsilastirma_soylenebilir.yaml
+# Bolum 4.1 - Ozel Bolum: Metin Ici Karsilastirma (Soylenebilir)
+#
+# STANDART FORMAT
+# Karsilastirmali metin verilir, ogrenci metinden DESTEKLENEN yargiyi bulur
+# correct_type: matches — dogru cevap metinden cikarilabilir
+
+meta:
+  id: "metin_ici_karsilastirma_soylenebilir"
+  ad: "Metin İçi Karşılaştırma - Söylenebilir"
+  sinif_seviyesi: 5
+  aciklama: "Metinde karşılaştırılan unsurlardan hangi yargının çıkarılabileceğini buldurur"
+  frequency: "Medium (~30% of comparison questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Karşılaştırmalı paragraf + soru kökü + 4 yargı seçeneği (1 söylenebilir)"
+
+  paragraph:
+    required: true
+    word_count_min: 50
+    word_count_max: 90
+    sentence_count_min: 3
+    sentence_count_max: 6
+    stil: "karsilastirmali_metin"
+    kurallar:
+      - "En az iki kişi, eser, varlık veya durum açık biçimde karşılaştırılmalı"
+      - "Karşılaştırma en az iki eksende kurulmalı (konu, karakter, dil, amaç, davranış, tutum)"
+      - "Hem ortaklık hem farklılık metinde yer almalı"
+      - "Tek doğru çıkarım üretmeye elverişli olmalı"
+      - "Karşılaştırma sinyalleri metinde bulunmalı"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 8
+    word_count_max: 25
+    style: "complete_sentence"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metinde karşılaştırılan unsurlar dikkate alındığında aşağıdakilerden hangisi söylenebilir?</b>"
+  - "<b>Metne göre aşağıdaki yargılardan hangisine ulaşılabilir?</b>"
+  - "<b>Karşılaştırılan unsurlar bakımından aşağıdakilerden hangisi doğrudur?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metindeki karşılaştırmadan doğrudan ya da güvenli biçimde çıkarılabilen tek yargı"
+  kurallar:
+    - "KRITIK: Dogru secenekte paragraftaki hicbir cumle kelimesi kelimesine TEKRARLANMAMALI — es anlamli sozcuklerle yeniden ifade edilmeli"
+    - "Paragraftaki ifadelerle en az %40 kelime farkliligi olmali — kopyala-yapistir YASAK"
+    - "Ayni anlam korunmali ama farkli sozcukler ve cumle yapilari kullanilmali"
+    - "Metinden doğrudan desteklenen bir yargı olmalı"
+    - "Doğru seçenek paragraftaki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI — eş anlamlı sözcüklerle yeniden ifade edilmeli"
+    - "Paragraftaki ifadelerle en az %40 kelime farklılığı olmalı — kopyala-yapıştır YASAK"
+    - "Aynı anlam korunmalı ama farklı sözcükler ve cümle yapıları kullanılmalı"
+    - "Açık ama aşırı bariz olmamalı"
+    - "8-25 kelime, tam bir cümle formatında olmalı"
+    - "Yorum katmadan karşılaştırmadan çıkan bir sonuç olmalı"
+  ornekler:
+    - paragraf: "Roman, köy hayatını ayrıntılı biçimde anlatırken hikâye şehirdeki yalnızlığı işler. Her iki eserde de kahramanlar arayış içindedir."
+      dogru: "Her iki eserin kahramanları da bir arayış içinde olsa da farklı mekânları konu edinmektedir."
+      neden: "Metinde açıkça verilen ortaklık (arayış) ve farklılık (köy-şehir) birleştirilmiş"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI (CUSTOM — karsilastirma soylenebilir icin ozel)
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "KISMI_DOGRUYU_GENELLEME"
+    bilisssel_hata_kategorisi: "asiri_genelleme"
+    aciklama: "Metindeki tek bir bilgiyi alıp kapsamını genişletir."
+    nasil_olusturulur: |
+      Metindeki tek bir doğru bilgiyi alıp onu gereğinden fazla genelleştiren yargı yaz.
+      Örnek: Bir kahraman köy ağzıyla konuşuyor → "Her iki kitapta da kahramanlar köy ağzıyla konuşmaktadır."
+      Öğrenci kısmi doğruluğa aldanabilir.
+    kategori: "scope"
+
+  - ad: "EKSEN_KAYDIRMA"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metindeki karşılaştırma bir alandadır; seçenek başka alana hüküm verir."
+    nasil_olusturulur: |
+      Metindeki karşılaştırma belirli bir alan üzerinden yapılmışken, seçenek başka bir alan hakkında kesin hüküm kurar.
+      Örnek: Dil ve konu karşılaştırması var, seçenek zaman geçirme alışkanlığı hakkında hüküm kuruyor.
+      Bu seçenek yanlış olur çünkü o alanda karşılaştırma yoktur.
+    kategori: "content"
+
+  - ad: "KARSITLIK_UYDURMA"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Metinde yalnızca fark var; seçenek bunu daha sert karşıtlığa dönüştürür."
+    nasil_olusturulur: |
+      Metindeki nüanslı bir farkı, kesin ve sert bir karşıtlık olarak sunan yargı yaz.
+      Öğrenci farklılık gördüğü için karşıtlığı da kabul edebilir.
+      Ama metin sert bir zıtlık kurmuyor, sadece fark belirtiyor.
+    kategori: "semantic"
+
+  - ad: "METIN_DISI_TAMAMLAMA"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Öğrencinin genel bilgisini kullanarak boşluk doldurmasına yol açar."
+    nasil_olusturulur: |
+      Öğrencinin dünya bilgisiyle doğru gibi duran ama metinde söylenmeyen bir yargı yaz.
+      Metin bunu desteklemez; öğrenci genel kültürle tamamlama yapabilir.
+      Örnek: Metinde yazar isimleri var, öğrenci yazarlar hakkında bilgi ekleyebilir.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ETIKETI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB3"
+  bilesenler: ["karsilastirma", "cikarim"]
+  surec_bileseni: "karar_verme"
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Karşılaştırılacak iki unsur seç"
+      details: |
+        İki eser, kişi, düşünce, dönem veya yer seç.
+        Karşılaştırma eksenlerini belirle (en az 2):
+        konu, karakter, dil, amaç, davranış, özellik, tutum, sonuç.
+
+    - step: 2
+      action: "Karşılaştırmalı metin yaz (50-90 kelime)"
+      details: |
+        - En az bir benzerlik/ortaklık ve en az bir belirgin fark
+        - 3-6 cümle, akıcı ve bilgilendirici
+        - Karşılaştırma sinyalleri açıkça yerleştirilmeli
+
+    - step: 3
+      action: "1 doğru yargı + 3 çeldirici yargı oluştur"
+      details: |
+        Doğru yargı: doğrudan desteklenen çıkarım
+        Çeldiriciler:
+        - 1 aşırı genelleme
+        - 1 eksen kaydırma
+        - 1 metin dışı çıkarım
+        Her çeldirici metne yakın ama hatalı olmalı.
+
+    - step: 4
+      action: "Seçenekleri rastgele sırala"
+      details: "A-B-C-D seçeneklerini rastgele sırala"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayısı 50-90 arasında mı?"
+    - "Karşılaştırılan iki unsur açık mı?"
+    - "Karşılaştırma en az iki yönden kurulmuş mu?"
+    - "Metin tek doğru çıkarım üretmeye elverişli mi?"
+
+  correct_answer:
+    - "8-25 kelime tam cümle mi?"
+    - "Metinden güvenli biçimde çıkarılabiliyor mu?"
+    - "Fazla bariz mi, yoksa dengeli mi?"
+
+  distractors:
+    - "3 seçenek metinden gerçekten desteklenmiyor mu?"
+    - "Yanlış seçenekler metne yeterince yakın mı?"
+    - "Tüm seçenekler aynı formatta ve soyutluk düzeyinde mi?"

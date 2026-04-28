@@ -1,0 +1,117 @@
+meta:
+  id: anlatici_dil_tablo
+  ad: Anlatıcı + Dil Özellikleri Tablosu
+  sinif_seviyesi: 5
+  aciklama: +/- tablo ile metinlerde hangi anlatıcı türü ve dil/anlatım özellikleri var — eşleştirme ve farklılık
+  kaynak: kaynak-soru-kokleri.md
+  frequency: Medium
+context:
+  type: anlatici_dil_tablo
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 100
+    word_count_max: 180
+    structure:
+    - 'Bir senaryo oluştur: Öğretmen sınıfta anlatıcı türleri ve dil özelliklerini işliyor'
+    - '4 metin (isimli: Öğrenci İsmi 1, Öğrenci İsmi 2, vb. veya başlıklı) kısaca tanıtılmış'
+    - 'HTML tablosu ekle: satırlar metinler, sütunlar özellikler (1. Kişi Anlatıcı, 3. Kişi Anlatıcı, Kişileştirme, Sebep-Sonuç Cümlesi, Karşılaştırma)'
+    - Tabloda + (var) ve - (yok) işaretleri olmalı
+    - Her metinde anlatıcı türü belirgin olmalı (1. veya 3. kişi, ikisi birden + olamaz)
+    - Metinler arasında dil özellikleri farklılıkları olmalı — her birinin profili benzersiz
+    kurallar:
+    - '5. sınıf seviyesinde, anlatıcı ve dil özellikleri: 1. Kişi Anlatıcı, 3. Kişi Anlatıcı, Kişileştirme, Sebep-Sonuç Cümlesi, Karşılaştırma'
+    - 'KRİTİK — SENARYO KAPSAMI: Senaryo sadece DURUMU ve MERAKı anlatsın, CEVAPLARI vermesin!'
+    - Detaylı bilgiler ve veriler SADECE tablo/grafikte olmalı — senaryo bunları içermemeli
+    - Soruların cevabı senaryodan değil tablo/grafikten çıkarılmalı
+    - Tablo <table>, <tr>, <th>, <td> etiketleriyle oluşturulmalı
+    - Bir metinde 1. Kişi + ise 3. Kişi - olmalı (veya tersi) — ikisi aynı anda + olamaz
+    - + ve - işaretleri anlamlı ve tutarlı olmalı
+    - Her metnin dil profili diğerlerinden farklı olmalı
+    - Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)
+  questions:
+  - slot: 1
+    type: metin_eslestirme
+    soru_kokleri:
+    - <b>Aşağıdaki metinlerden hangisi …Metin…'e ait bir bölüm olabilir?</b>
+    - <b>Tabloya göre aşağıdakilerden hangisi …Metin…'den alınmış olabilir?</b>
+    - <b>Aşağıdakilerden hangisi …Öğrenci…'nin yazdığı bir metinden alınmış olabilir?</b>
+    - <b>Asagidakilerden hangisi ...Ogrenci...nin yazdigi bir metinden alinmis olabilir?</b>
+    options_style: mini_paragraph
+    word_count_min: 20
+    word_count_max: 45
+    beceri:
+      katman: KB2
+      bilesenler:
+      - siniflandirma
+      - karsilastirma
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 2
+    type: anlatici_farkliligi
+    soru_kokleri:
+    - <b>…Öğrenci…'nün yazdığı metindeki anlatıcıyı değiştirecek olursak hangi metne ulaşabiliriz?</b>
+    - <b>...Ogrenci...nun yazdigi metindeki anlaticiyi degistirecek olursak hangi metne ulasabiliriz?</b>
+    options_style: concept
+    word_count_min: 10
+    word_count_max: 45
+    beceri:
+      katman: KB2
+      bilesenler:
+      - karsilastirma
+      - analiz
+      surec_bileseni: bilgiyi_cikartma
+header_template: 1-2. soruları aşağıdaki senaryo ve tabloya göre cevaplayınız.
+format:
+  type: llm_generated_html
+  description: +/- tablo üzerinden anlatıcı ve dil özellikleri eşleştirme ve karşılaştırma soruları
+  paragraph:
+    required: true
+    word_count_min: 100
+    word_count_max: 180
+    sentence_count_min: 3
+    sentence_count_max: 10
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 1
+    word_count_max: 45
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Tablodaki +/- bilgileriyle uyumlu metin bölümü veya dil profili karşılaştırması
+  kurallar:
+  - 'KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI'
+  - Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI
+  - Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil
+  - 'YASAK: Tablodaki değeri aynen şıkka yazmak (örn: ''yalıtımı azdır'' tabloda yazıyorsa şıkta aynen yazmamalı)'
+  - Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli
+  - Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı
+  - Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı
+  - Metin eşleştirme sorusunda doğru cevap metnin + aldığı özellikleri taşıyan, - aldığı özellikleri İÇERMEYEN bölüm
+  - Farklılık sorusunda doğru cevap +/- profili diğerlerinden en çok farklılık gösteren metin
+  - 1. Kişi anlatıcı metinde 'ben/biz' zamirleri, 3. Kişi anlatıcı metinde 'o/onlar' kullanılmalı
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: ''teleskop'' → ''mercekli araç'' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: ANLATICI_KARISTIRMA
+    aciklama: 1. kişi anlatıcı metne 3. kişi anlatıcı bölüm sunma veya tersi
+    ornek: 1. Kişi Anlatıcı + olan metne 'O şehre doğru yola çıktı' gibi 3. kişi bölüm eşleştirme
+  - ad: KISMI_UYUM
+    aciklama: Bazı dil özelliklerini doğru yansıtan ama en az birini yanlış içeren metin
+    ornek: Deyim kullanan ama devrik cümle kullanmayan metne devrik cümleli bölüm önerme
+  - ad: BENZER_PROFIL
+    aciklama: Farklılık sorusunda profili az farklı olan metni öne çıkarma
+    ornek: Sadece 1 sütunda farklı olan metni en farklı gibi gösterme
+use_shared_strategies: false

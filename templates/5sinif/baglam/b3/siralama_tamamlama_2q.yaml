@@ -1,0 +1,105 @@
+meta:
+  id: siralama_tamamlama_2q
+  ad: "Sıralama + Cümle Tamamlama (2 Soru)"
+  sinif_seviyesi: 5
+  aciklama: "Karışık sıralı numaralı cümleler — sıralama ve son cümle tamamlama soruları"
+  kaynak: baglamb3sorukoku.md
+  frequency: Medium
+
+context:
+  type: siralama_tamamlama_2q
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 80
+    word_count_max: 140
+    structure:
+    - "Bir karakter (Türkçe isimli) bir konu hakkında karışık sıradaki cümlelere ulaşır (2-3 cümle senaryo)"
+    - "4-5 cümle Roma rakamıyla (I. II. III. IV. V.) numaralandırılmış olarak verilir"
+    - "Cümleler <br> ile alt alta yazılır"
+    - "Cümleler anlamlı bir paragraf oluşturacak şekilde tasarlanmalı ama KARIŞIK sırada sunulmalı"
+    - "Son cümle çıkarılabilir yapıda olmalı — tamamlama sorusu sorulabilmeli"
+    - "Senaryo: Karakter \"...kütüphanede/okulda/evde...\" bir bilim insanının cümlelerine ulaşır"
+    - "YASAK: HTML tablosu (<table>) EKLEME — sadece numaralı cümleler yaz"
+    kurallar:
+    - "Senaryo 5. sınıf seviyesinde, günlük hayattan olmalı"
+    - "Karakter ismi Türkçe olmalı"
+    - "4-5 cümle birbirine bağlı, anlamlı bir paragraf oluşturmalı"
+    - "Doğru sıralama tek ve net olmalı"
+    - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+  - slot: 1
+    type: siralama
+    soru_kokleri:
+    - "<b>…Karakter… numaralanmış cümlelerden anlamlı bir paragraf oluşturduğunda doğru sıralama hangisi olur?</b>"
+    - "<b>…Karakter…'in oluşturduğu anlamlı metnin doğru sıralaması aşağıdakilerden hangisidir?</b>"
+    - "<b>…Karakter…'in oluşturduğu metinde hangisi baştan ikinci sırada yer alır?</b>"
+    options_style: roman_numeral_combination
+    word_count_min: 3
+    word_count_max: 12
+    beceri:
+      katman: KB2
+      bilesenler: [yapilandirma, siralama]
+      surec_bileseni: bilgiyi_yapilandirma
+
+  - slot: 2
+    type: cumle_tamamlama
+    soru_kokleri:
+    - "<b>Buna göre aşağıdakilerden hangisi paragrafın son cümlesi olabilir?</b>"
+    - "<b>Paragrafın tamamlanmadığını farkeden \"...Karakter...\" bu metne aşağıdaki cümlelerden hangisini eklemiş olabilir?</b>"
+    - "<b>\"...Karakter...\" tarafından paragrafın son cümlesinin eksik olduğu fark edilmiştir. Aşağıdakilerden hangisi paragrafın son cümlesi olabilir?</b>"
+    options_style: complete_sentence
+    word_count_min: 8
+    word_count_max: 22
+    beceri:
+      katman: KB2
+      bilesenler: [yapilandirma, tamamlama]
+      surec_bileseni: bilgiyi_yapilandirma
+
+header_template: "1-2. soruları aşağıdaki numaralanmış cümlelere göre cevaplayınız."
+
+format:
+  type: llm_generated_html
+  description: "Numaralı cümleler üzerinden sıralama ve cümle tamamlama soruları"
+  paragraph:
+    required: true
+    numbered_sentences: true
+    word_count_min: 80
+    word_count_max: 140
+    sentence_count_min: 4
+    sentence_count_max: 8
+  stem:
+    required: true
+  options:
+    count: 4
+    labels: [A, B, C, D]
+    word_count_min: 3
+    word_count_max: 22
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+
+dogru_cevap:
+  tanim: "Doğru sıralama veya uygun tamamlama cümlesi"
+  kurallar:
+  - "KRİTİK: Doğru cevap metindeki tek bir cümleden direkt okunaMAMALI — çıkarım gerektirmeli"
+  - "Öğrenci doğru cevaba ulaşmak için numaralı cümlelerin mantıksal sırasını ANLAMALI"
+  - "Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri doğru olmalı"
+  - "Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı"
+  - "Sıralama sorusunda doğru cevap mantıksal akışı doğru yansıtan Roma rakamı dizisi olmalı"
+  - "Tamamlama sorusunda doğru cevap metnin anlam bütünlüğünü koruyan TAM cümle olmalı"
+  - "NOT: Tamamlama sorusunda seçenekler metindeki cümlelere benzer olabilir — bu normaldir"
+  - "BİLİMSEL TERİM KORUMASI: Bilimsel terimler değiştirilmemeli"
+
+distractors:
+  stratejiler:
+  - ad: YAKIN_SIRALAMA
+    aciklama: "Doğru sıralamaya çok yakın ama 1-2 cümle yer değiştirmiş"
+  - ad: KONUYLA_ILGILI_AMA_AKISA_UYMAYAN
+    aciklama: "Aynı konuda ama metnin anlam akışını bozan tamamlama cümlesi"
+  - ad: TERS_AKIS
+    aciklama: "Neden-sonuç ilişkisini ters çeviren sıralama"
+
+use_shared_strategies: false

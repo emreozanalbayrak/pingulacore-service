@@ -1,0 +1,123 @@
+# Pattern: ["dogrudan_detay", "baslik", "acik_benzetme"] (referans satir 452)
+# Orta duzey, 3 soru: dogrudan_detay + baslik + acik_benzetme
+
+meta:
+  id: metin_inceleme_sinif2_orta_detay_baslik_benzetme_3q
+  ad: "2. Sinif - Metin Inceleme (Orta) - Detay + Baslik + Acik Benzetme"
+  sinif_seviyesi: 2
+  aciklama: "Orta baglam — 3 soru: dogrudan_detay + baslik + acik_benzetme"
+  frequency: "Medium"
+
+context:
+  type: metin_inceleme_sinif2_orta_detay_baslik_benzetme_3q
+  question_count: 3
+  question_count_min: 3
+  question_count_max: 3
+  generation:
+    word_count_min: 52
+    word_count_max: 74
+    image_type: "illustration"
+    structure:
+      - "5-6 kisa cumle, tek baskin konu/olay etrafinda."
+      - "Metinde acik detay bilgi bulunmali (slot 1 icin)."
+      - "Metnin tamami uygun baslikla kapsanabilir olmali (slot 2 icin)."
+      - "Slot 3 ACIK BENZETME icin metinde 'gibi' kelimesiyle veya dogrudan benzetme ifadesi BULUNMALIDIR."
+      - "Ornek: 'kar gibi beyaz', 'yildizlar gibi parlak', 'aslan gibi cesur'."
+    kurallar:
+      - "2. sinif duzeyinde, sade ve gunluk hayata yakin metin."
+      - "Karakter ismi Turkce olmali."
+      - "Tek baskin konu, dis bilgi gerektirmeyen icerik."
+      - "Benzetme acik ve tek olmali, asiri mecazli olmamali."
+      - "Turkce karakterler dogru kullanilmali."
+
+      - "Tablo/grafik/sayi listesi KULLANMA — sadece akici Turkce anlatim. Gorsel ayrica illustrasyon olarak uretilecek."
+  questions:
+    - slot: 1
+      type: dogrudan_detay
+      soru_kokleri:
+        - "<b>Bu metne gore asagidakilerden hangisi dogrudur?</b>"
+        - "<b>Bu metne gore asagidakilerden hangisi soylenebilir?</b>"
+        - "<b>Asagidakilerden hangisi metinde verilen bilgilerden biridir?</b>"
+        - "<b>Bu metne gore asagidakilerden hangisi yanlistir?</b>"
+      options_style: complete_sentence
+      word_count_min: 2
+      word_count_max: 8
+      beceri:
+        katman: KB1
+        bilesenler: [acik_bilgi_okuma]
+        surec_bileseni: bilgiyi_okuma
+
+    - slot: 2
+      type: baslik
+      soru_kokleri:
+        - "<b>Bu metne getirilebilecek <u>en uygun</u> baslik asagidakilerden hangisidir?</b>"
+        - "<b>Bu metnin basligi asagidakilerden hangisi olabilir?</b>"
+        - "<b>Asagidakilerden hangisi bu metne baslik olmaya <u>en uygundur</u>?</b>"
+        - "<b>Bu metne verilebilecek <u>en uygun</u> baslik hangisidir?</b>"
+      options_style: short_phrase
+      word_count_min: 1
+      word_count_max: 5
+      beceri:
+        katman: KB1
+        bilesenler: [baslik_eslestirme]
+        surec_bileseni: metni_anlama
+
+    - slot: 3
+      type: acik_benzetme
+      soru_kokleri:
+        - "<b>Bu metne gore neye benzetilmistir?</b>"
+        - "<b>Metindeki benzetmeye gore asagidakilerden hangisi dogrudur?</b>"
+        - "<b>Bu metinde hangi varliga benzetilmistir?</b>"
+      options_style: short_phrase
+      word_count_min: 1
+      word_count_max: 4
+      beceri:
+        katman: KB2
+        bilesenler: [benzetme_fark_etme]
+        surec_bileseni: metni_yorumlama
+
+header_template: "1-3. sorulari asagidaki metne gore cevaplayiniz."
+
+format:
+  type: llm_generated_html
+  description: "3 baglam sorusu (orta): detay + baslik + acik benzetme"
+  paragraph:
+    required: true
+    word_count_min: 52
+    word_count_max: 74
+    sentence_count_min: 5
+    sentence_count_max: 6
+    stil: "bilgilendirici_veya_oykusel"
+    background_color: "#f8f0e0"
+  stem:
+    required: true
+  options:
+    count: 3
+    labels: [A, B, C]
+    word_count_min: 1
+    word_count_max: 8
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+
+dogru_cevap:
+  tanim: "Metinden acikca cikarilabilen dogru cevap"
+  kurallar:
+    - "Slot 1: dogru cevap metindeki acik bilgiye dayanmali."
+    - "Slot 2: dogru cevap metnin tamamini kapsamali."
+    - "Slot 3: dogru cevap metindeki acik benzetmenin nesnesi olmali."
+distractors:
+  stratejiler:
+    - ad: METNE_YAKIN_AMA_YANLIS
+      aciklama: "Metne yakin gorunur ama acik bilgiye uymayan secenek"
+    - ad: COK_GENIS_BASLIK
+      aciklama: "Baslik sorusunda cok genel secenek"
+    - ad: YANLIS_BENZETME
+      aciklama: "Benzetme sorusunda metinde gecmeyen veya yanlis nesne"
+
+use_shared_strategies: false
+
+beceri:
+  katman: KB2
+  bilesenler: [baglam_okuma, benzetme_fark_etme]
+  surec_bileseni: metni_anlama

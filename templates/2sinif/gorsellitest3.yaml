@@ -1,0 +1,172 @@
+meta:
+  id: "haftalik_ders_programindan_ulasilabileni_belirleme"
+  ad: "Haftalık Ders Programından Ulaşılabileni Belirleme"
+  ders: "Türkçe"
+  sinif_seviyesi: 2
+  tema: "Veri Okuma ve Yorumlama"
+  model: "TYMM"
+  format_turu: "llm_generated_html"
+  aciklama: "Haftalık ders programındaki gün ve ders bilgilerini okuyup ulaşılabilen ifadeyi seçtiren 3 seçenekli soru formatı"
+  frequency: "orta"
+
+context:
+  type: haftalik_ders_programi_ulasilabilir
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    image_type: "tablo_gorseli"
+    word_count_min: 8
+    word_count_max: 25
+    structure:
+      - "Önce 1-2 cümlelik kısa bir giriş verilir (kimin ders programı, hangi sınıf vb.)."
+      - "Ardından Pazartesi-Cuma günleri sütunlarda, ders saatleri satırlarda olacak şekilde haftalık ders programı tablosu verilir."
+      - "Her hücrede bir ders adı bulunur."
+    kurallar:
+      - "Bağlam metni YALNIZCA tablonun ne hakkında olduğunu anlatan 1-2 cümle olmalıdır."
+      - "Metin tablonun içeriğini AÇIKLAMAMALI; cevabı ima etmemelidir."
+      - "Soru SADECE tabloya bakılarak çözülmeli; metin çözüme katkı sağlamamalıdır."
+      - "Ders adları kısa ve 2. sınıf öğrencisinin tanıyacağı dersler olmalıdır."
+      - "Tablo en az 5 gün (P-S) ve en az 4 ders saati içermelidir."
+      - "Tablo sade, düzenli ve 2. sınıf seviyesine uygun olmalıdır."
+
+  questions:
+    - slot: 1
+      type: haftalik_programdan_ulasilabilir
+      soru_kokleri:
+        - "<b>Bu ders programından hareketle aşağıdakilerden hangisine <u>ulaşılabilir</u>?</b>"
+        - "<b>Programa göre aşağıdakilerden hangisi <u>doğrudur</u>?</b>"
+        - "<b>Verilen ders programına göre aşağıdakilerden hangisi <u>söylenebilir</u>?</b>"
+        - "<b>Aşağıdakilerden hangisi programa göre <u>doğrudur</u>?</b>"
+      options_style: kisa_yargi
+      word_count_min: 4
+      word_count_max: 14
+      slot_rules:
+        - "Her seçenek tablodaki GERÇEK ders adlarını, GERÇEK sayıları ve GERÇEK gün bilgilerini içermelidir."
+        - "Hiçbir seçenek tabloya bakmadan doğrulanabilir genel bilgi içermemelidir."
+        - "Doğru cevap tabloya bakılarak kesin olarak doğrulanabilmelidir."
+        - "Yanlış seçenekler de tabloya dayalı olmalı; tabloya göre yanlış olduğu görülmelidir."
+        - "Seçenekler şu tiplerden olmalıdır: haftalık frekans sayımı / günlük tekrar kontrolü / günlük çeşitlilik / iki ders karşılaştırması."
+      secenek_ornekleri:
+        - "Hafta boyunca toplam on ders Türkçe dersi işlenecektir. (haftalık frekans sayımı)"
+        - "Programa göre her gün matematik dersi işlenecektir. (günlük tekrar kontrolü)"
+        - "Programa göre cuma günü dört farklı ders işlenecektir. (günlük çeşitlilik)"
+        - "Beden eğitimi ve oyun ders saati ile hayat bilgisi ders saati eşittir. (iki ders karşılaştırması)"
+      beceri:
+        katman: KB1
+        bilesenler: [tablo_okuma, gun_ders_eslestirme, sayma, karsilastirma]
+        surec_bileseni: bilgiyi_okuma
+
+format:
+  type: "llm_generated_html"
+  description: "Kısa giriş + haftalık ders programı tablosu + tek soru + 3 seçenek"
+
+  paragraph:
+    required: true
+    word_count_min: 8
+    word_count_max: 25
+    sentence_count_min: 1
+    sentence_count_max: 2
+
+  visual:
+    required: true
+    count: 1
+    description: "Günler sütunlarda, ders saatleri satırlarda, hücrelerde ders adlarının yer aldığı haftalık ders programı tablosu"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 4
+    word_count_max: 14
+    style: "kisa_yargi"
+    correct_count: 1
+    correct_type: "matches"
+
+gorsel:
+  required: true
+  tur: "haftalik_ders_programi_tablosu"
+  amac: "Öğrencinin gün, ders saati ve ders adı ilişkisini okuyup sayma ve karşılaştırma yapmasını sağlamak"
+  kurallar:
+    - "Tabloda en az 5 gün (Pazartesi-Cuma) bulunmalıdır."
+    - "Her gün için en az 4 ders saati bulunmalıdır."
+    - "Ders adları çocukların tanıyacağı biçimde kısa yazılmalıdır."
+    - "Gün başlıkları açıkça seçilmelidir."
+    - "Satır ve sütun yapısı net olmalıdır."
+    - "Görsel sade, düzenli ve 2. sınıf seviyesine uygun olmalıdır."
+    - "Görsel süsleyici değil, çözüm için zorunlu olmalıdır."
+
+olculen_beceri:
+  tanim: "Haftalık ders programındaki gün ve ders bilgilerini okuyup sayma, karşılaştırma ve sınıflama yapma"
+  bilesenler:
+    - "tablo_okuma"
+    - "gun_ders_eslestirme"
+    - "sayma"
+    - "karsilastirma"
+    - "dogru_yargiyi_belirleme"
+
+dogru_cevap:
+  tanim: "Programdaki ders bilgileriyle açıkça desteklenen ifade"
+  kurallar:
+    - "Doğru cevap YALNIZCA tabloya bakılarak doğrulanabilen seçenek olmalıdır."
+    - "Her seçenek tablodaki gerçek ders adlarını ve gerçek sayıları kullanmalıdır."
+    - "Doğru cevap dikkatli tablo okuma ile bulunmalıdır."
+    - "Genel bilgiyle çözülebilen hiçbir seçenek yazılmamalıdır."
+
+distractors:
+  stratejiler:
+    - ad: "HAFTALIK_FREKANS_HATASI"
+      aciklama: "Bir dersin haftalık kaç kez işlendiğini yanlış vererek sayım hatası oluşturma"
+      ornek: "Hafta boyunca toplam on ders Türkçe dersi işlenecektir. (gerçekte farklı bir sayı)"
+    - ad: "HER_GUN_YANILGISI"
+      aciklama: "Bir ders çoğu gün varsa her gün varmış gibi ya da hiç olmadığı gün varmış gibi gösterme"
+      ornek: "Programa göre her gün matematik dersi işlenecektir. (bir gün yoksa yanlış)"
+    - ad: "GUNLUK_CESITLILIK_HATASI"
+      aciklama: "Belirli bir günde kaç farklı ders işlendiğini yanlış saydırma"
+      ornek: "Programa göre cuma günü dört farklı ders işlenecektir. (gerçek sayı farklıysa)"
+    - ad: "IKI_DERS_KARSILASTIRMA_HATASI"
+      aciklama: "İki dersin haftalık ders saatini karşılaştıran ama yanlış olan seçenek"
+      ornek: "Beden eğitimi ve oyun ders saati ile hayat bilgisi ders saati eşittir. (eşit değilse yanlış)"
+
+use_shared_strategies: false
+
+tymm_uyum_kurallari:
+  - "2. sınıf seviyesine uygun kısa ve açık cümleler kullanılmalıdır."
+  - "Üst metin yalnızca 1-2 cümlelik giriş olmalı; tablonun içeriğini açıklamamalıdır."
+  - "TÜM seçenekler yalnızca tablodan doğrulanabilir veya çürütülebilir olmalıdır."
+  - "Genel bilgiyle çözülebilen hiçbir seçenek yazılmamalıdır."
+  - "Soruda yalnızca tablo okuma, sayma ve basit karşılaştırma beklenmelidir."
+  - "Ders programı çocukların anlayacağı kadar sade olmalıdır."
+  - "Ulaşılabilir / doğrudur ifadesi açık ve belirgin olmalıdır."
+  - "Görsel olmadan doğru cevap kesinleşmemelidir."
+  - "Seçenekler aynı temsil düzeyinde, yani hepsi yargı cümlesi biçiminde olmalıdır."
+  - "3 seçenekli yapıda iki çeldirici de güçlü olmalıdır."
+
+izinli_icerikler:
+  - "Türkçe"
+  - "Matematik"
+  - "Hayat Bilgisi"
+  - "İngilizce"
+  - "Müzik"
+  - "Görsel Sanatlar"
+  - "Beden Eğitimi"
+  - "Serbest Etkinlik"
+  - "haftalık ders programı"
+  - "gün ve ders saati ilişkisi"
+
+yasakli_icerikler:
+  - "karmaşık çizelgeler"
+  - "çarpma, bölme, oran gerektiren yapı"
+  - "birden fazla doğru seçenek"
+  - "metinden çözülebilen yapı"
+  - "2. sınıf düzeyini aşan analiz"
+  - "görselde okunamayan yoğun tablo"
+
+ornek_sablon:
+  ust_metin: "Aşağıda bir sınıfın haftalık ders programı verilmiştir."
+  gorsel: "Günler ve ders saatlerinden oluşan, hücrelerde ders adlarının yazdığı haftalık program tablosu"
+  soru_koku: "Bu ders programından hareketle aşağıdakilerden hangisine ulaşılabilir?"
+  secenekler:
+    A: "Hafta boyunca toplam on ders Türkçe dersi işlenecektir."
+    B: "Programa göre her gün matematik dersi işlenecektir."
+    C: "Programa göre cuma günü dört farklı ders işlenecektir."
+  not: "Seçenekler tablodaki gerçek ders adlarını ve gerçek sayıları kullanmalıdır. Genel ifadeler yasaktır."

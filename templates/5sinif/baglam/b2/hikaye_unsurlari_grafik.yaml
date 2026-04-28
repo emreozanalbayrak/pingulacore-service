@@ -1,0 +1,105 @@
+# Hikaye Unsurları — Grafik görselli
+# Hikâye + karakter özellik tablosu → AI sütun grafiğine dönüşür
+
+meta:
+  id: "hikaye_unsurlari_grafik"
+  ad: "Hikâye Unsurları — Grafik Görselli"
+  sinif_seviyesi: 5
+  aciklama: "Hikâye + karakter verisi tablosu → AI grafik görseli, hikâye unsurları soruları"
+  frequency: "Medium"
+
+context:
+  type: "hikaye_unsurlari_grafik"
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 120
+    word_count_max: 180
+    image_type: "sutun_grafigi"
+    structure:
+      - "Kısa bir hikâye/öykü oluştur (4-6 cümle)"
+      - "Hikâyede yer, zaman, kişiler ve olay açıkça bulunabilir olmalı"
+      - "En az 3 karakter olmalı"
+      - "Hikâyede bir yarışma, karşılaştırma veya ölçüm durumu olmalı"
+      - "Ardından karakterlerin performansını gösteren bir HTML tablosu ekle:"
+      - "<table><tr><th>Karakter</th><th>Puan/Süre/Skor</th></tr><tr><td>İsim</td><td>sayısal değer</td></tr>...</table>"
+      - "En az 3, en fazla 5 karakter"
+      - "Değerler sayısal olmalı (puan, süre, mesafe vb.)"
+      - "KRİTİK: Senaryoda sayısal değerleri YAZMA — veriler sadece tabloda olmalı"
+      - "NOT: Bu tablo AI tarafından sütun grafiğine dönüştürülecektir"
+    kurallar:
+      - "5. sınıf seviyesinde, okul veya günlük hayattan"
+      - "Hikâye unsurları (yer, zaman, kişi, olay) açıkça belirlenebilir olmalı"
+      - "Karakterlerin isimleri Türkçe olmalı"
+      - "Mekân ve zaman dilimi somut olarak belirtilmeli"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+    - slot: 1
+      type: "unsur_etkilesim"
+      soru_kokleri:
+        - "<b>Aşağıdakilerden hangisi okuduğunuz hikâyedeki olay, yer, zaman ve şahıs kadrosu arasındaki etkileşimi doğru biçimde yansıtmaktadır?</b>"
+        - "<b>Hikâye ve grafikteki veriler birlikte değerlendirildiğinde aşağıdakilerden hangisine ulaşılabilir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 8
+      word_count_max: 25
+      beceri:
+        katman: "KB2"
+        bilesenler: ["cikarim_yapma", "karsilastirma"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+    - slot: 2
+      type: "grafik_hikaye_cikarim"
+      soru_kokleri:
+        - "<b>Hikâye ve grafik birlikte değerlendirildiğinde aşağıdakilerden hangisine ulaşılır?</b>"
+        - "<b>Grafikteki veriler ve hikâyedeki olaylar birlikte incelendiğinde aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 5
+      word_count_max: 20
+      beceri:
+        katman: "KB3"
+        bilesenler: ["cikarim_yapma", "karsilastirma"]
+        surec_bileseni: "problemi_yapilandirma"
+
+header_template: "1-2. soruları aşağıdaki bilgilere göre birbirinden bağımsız olarak cevaplayınız."
+
+format:
+  type: "llm_generated_html"
+  paragraph:
+    required: true
+    word_count_min: 120
+    word_count_max: 180
+    sentence_count_min: 4
+    sentence_count_max: 10
+  stem:
+    required: true
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 20
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+dogru_cevap:
+  tanim: "Hikâye ve grafikteki verilerden doğru belirlenen unsur veya çıkarım"
+  kurallar:
+    - "HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer"
+    - "Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK"
+    - "BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ. Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı"
+    - "Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı"
+
+distractors:
+  stratejiler:
+    - ad: "YANLIS_UNSUR"
+      aciklama: "Hikâyede geçmeyen bir unsuru doğruymuş gibi sunma"
+    - ad: "VERI_CARPITMA"
+      aciklama: "Grafikteki değeri yanlış okuma veya aktarma"
+    - ad: "KAPSAM_KAYDIRMA"
+      aciklama: "Doğru unsuru genişleterek veya daraltarak sunma"
+
+use_shared_strategies: false

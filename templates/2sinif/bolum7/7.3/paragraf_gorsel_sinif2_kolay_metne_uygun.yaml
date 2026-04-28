@@ -1,0 +1,87 @@
+# Pattern: metne_uygun_gorsel (referans zorluk_duzeyleri.kolay.tercih_edilen_varyantlar[0])
+# Kolay duzey, 1 soru: metne uygun gorseli secme
+
+meta:
+  id: paragraf_gorsel_sinif2_kolay_metne_uygun
+  ad: "2. Sinif - Paragraf-Gorsel Iliskisi (Kolay) - Metne Uygun Gorsel"
+  sinif_seviyesi: 2
+  aciklama: "Kolay duzey — metin + 3 gorsel secenek, metne uygun gorseli secme"
+  frequency: "Medium"
+
+format:
+  type: llm_generated_html
+  description: "Kisa metin + soru koku + 3 gorsel secenek (kolay, metne uygun gorsel)"
+
+  paragraph:
+    required: true
+    word_count_min: 38
+    word_count_max: 52
+    sentence_count_min: 4
+    sentence_count_max: 4
+    stil: "bilgilendirici_veya_oykusel"
+    background_color: "#e8f8e8"
+    kurallar:
+      - "Metnin konusu cok acik olmalidir."
+      - "Metin ile dogru gorsel arasindaki bag gorunur olmalidir."
+      - "Metin tek baskin konu, olay, durum veya yer etrafinda kurulmalidir."
+      - "Metin 2. sinif ogrencisinin anlayabilecegi kadar sade, acik ve somut olmalidir."
+      - "Metin gorsellere cevrilebilecek net icerik tasimalidir."
+      - "Metin dis bilgi gerektirmemelidir."
+      - "Metin yalniz basina dogru gorseli kesin olarak sectirmemelidir."
+      - "Metin ana dusunce, gizli mesaj veya soyut yorum gerektirmemelidir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 3
+    labels: [A, B, C]
+    word_count_min: 15
+    word_count_max: 50
+    style: "image_description"
+    image_style: "photo"
+    correct_count: 1
+    correct_type: "matches"
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Asagidaki gorsellerden hangisi metne uygundur?</b>"
+  # KULLANILDI: - "<b>Metinle uyumlu olan gorsel hangisidir?</b>"
+  # KULLANILDI: - "<b>Bu parçaya uygun görsel aşağıdakilerden hangisidir?</b>"
+  - "<b>Aşağıdaki görsellerden hangisi metinle ilişkilendirilebilir?</b>"
+  # KULLANILDI: - "<b>Metnin içeriğine uygun olan görsel hangisidir?</b>"
+
+dogru_cevap:
+  tanim: "Metindeki konu, dusunce veya acik anlam ile en dogru iliskiyi kuran gorsel"
+  kurallar:
+    - "Dogru cevap metnin baskin icerigiyle uyumlu olmalidir."
+    - "Dogru cevap metinde anlatilanlari en iyi karsilayan gorsel olmalidir."
+    - "Dogru cevap yalniz metinden secilememelidir, gorsel inceleme gerektirmelidir."
+    - "Dogru cevap yalniz gorsele bakilarak da secilememelidir; metin destegi gerektirmelidir."
+    - "Dogru gorsel 2. sinif ogrencisinin iliski kurabilecegi aciklikta olmalidir."
+    - "1 gorsel metinle acik uyumlu olmalidir."
+    - "2 gorsel uyumsuz ya da daha zayif iliskili olmalidir."
+
+celdirici_stratejileri:
+  - ad: "YAKIN_AMA_TAM_UYUSMAYAN"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma"
+    aciklama: "Metinle ayni genel alanda durur ama asil konuya tam uymaz"
+    nasil_olusturulur: |
+      Metnin konusuyla ayni alan icinde ama tam uyusmayan bir gorsel tasviri olustur.
+      Kolay duzey: bu gorsel acikca tam uymadigi belli olmali.
+    kategori: "semantic"
+
+  - ad: "ILGISIZ_GORSEL"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metinle acik iliski kurmayan daha uzak gorsel"
+    nasil_olusturulur: |
+      Metinle acik bag kurmayan, farkli alandan bir gorsel tasviri olustur.
+      Kolay duzey: bu gorsel belirgin bicimde ilgisiz olmali.
+    kategori: "content"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB1"
+  bilesenler: [gorsel_metin_eslestirme, iliskili_gorsel_secme]
+  surec_bileseni: "metni_anlama"

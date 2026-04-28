@@ -1,0 +1,193 @@
+# templates/bolum4/yuzey_anlam_dogrudan_yargi.yaml
+# Bolum 4.1 - Ozel Bolum: Yuzey Anlam - Dogrudan Yargiyi Bulma
+#
+# STANDART FORMAT
+# Paragraf verilir, ogrenci metnin acik anlamini / yuzey anlamini bulur
+# correct_type: matches — dogru cevap metnin acik anlamini karsilar
+
+meta:
+  id: "yuzey_anlam_dogrudan_yargi"
+  ad: "Yüzey Anlam - Doğrudan Yargıyı Bulma"
+  sinif_seviyesi: 5
+  aciklama: "Verilen metnin açıkça söylediği düşünceyi, yani yüzey anlamını buldurur"
+  frequency: "High (~50% of surface meaning questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Bilgilendirici/açıklayıcı paragraf + soru kökü + 4 yargı seçeneği"
+
+  paragraph:
+    required: true
+    word_count_min: 50
+    word_count_max: 90
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "bilgilendirici"
+    kurallar:
+      - "Tek baskın düşünce etrafında kurulmuş bilgilendirici veya açıklayıcı metin"
+      - "Ana yargıyı taşıyan 3-5 açık destek cümlesi içermeli"
+      - "Metin yoruma fazla açık olmamalı, açık anlam doğrudan seçilebilmeli"
+      - "Derin anlam aranmaz, yüzey anlam sorusu olduğu için doğrudan ifade edilmeli"
+      - "Bir alışkanlığın yararları, bir davranışın sonucu, bir kavramın özelliği gibi konular"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 8
+    word_count_max: 25
+    style: "complete_sentence"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Metnin yüzey anlamı aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metinde açıkça anlatılan düşünce aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metinde doğrudan anlatılmak istenen aşağıdakilerden hangisidir?</b>"
+  - "<b>Metinde açıkça vurgulanan düşünce aşağıdakilerden hangisidir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metindeki açık anlamı en doğru ve kapsayıcı biçimde karşılayan yargı"
+  kurallar:
+    - "KRITIK: Dogru secenekte paragraftaki hicbir cumle kelimesi kelimesine TEKRARLANMAMALI — es anlamli sozcuklerle yeniden ifade edilmeli"
+    - "Paragraftaki ifadelerle en az %40 kelime farkliligi olmali — kopyala-yapistir YASAK"
+    - "Ayni anlam korunmali ama farkli sozcukler ve cumle yapilari kullanilmali"
+    - "Metni yorumlamadan yeniden karşılayan kapsayıcı bir cümle olmalı"
+    - "Doğru seçenek paragraftaki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI — eş anlamlı sözcüklerle yeniden ifade edilmeli"
+    - "Paragraftaki ifadelerle en az %40 kelime farklılığı olmalı — kopyala-yapıştır YASAK"
+    - "Aynı anlam korunmalı ama farklı sözcükler ve cümle yapıları kullanılmalı"
+    - "Metin dışı bilgi gerektirmemeli"
+    - "8-25 kelime, tam bir cümle formatında olmalı"
+    - "Metnin bütününü kapsamalı, detaya takılmamalı"
+  ornekler:
+    - paragraf: "Satranç oynamak kişiye farklı yönlerden bakma, pes etmeme, olumlu-olumsuz yönleri fark etme, kurallara uyma gibi birçok beceri kazandırır."
+      dogru: "Satranç oynamak kişilik gelişimini farklı alanlarda destekler."
+      neden: "Metnin açıkça söylediği ana düşünce: satrancın çok yönlü katkısı"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI (CUSTOM — yuzey anlam dogrudan yargi icin ozel)
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "DARALTMA_TUZAGI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metindeki geniş yargıyı gereğinden fazla daraltır."
+    nasil_olusturulur: |
+      Metnin genel mesajını tek bir ayrıntıya indirgeyen yargı yaz.
+      Örnek: Metin satrancın birçok katkısını anlatır, seçenek bunu tek bir ayrıntıya indirger.
+      Öğrenci doğru bir ayrıntı gördüğü için bunu ana anlam sanabilir.
+    kategori: "scope"
+
+  - ad: "METIN_DISI_YORUM"
+    bilisssel_hata_kategorisi: "asiri_genelleme"
+    aciklama: "Metinden hareketle yapılabilecek bir yorum ekler ama bu açık anlam değildir."
+    nasil_olusturulur: |
+      Metinde söylenenlerden mantıklı görünen ama açıkça ifade edilmeyen bir yorum yaz.
+      Metin "sosyal ilişkiler kurabilmeyi sağlar" der, seçenek bunu farklı bir nedenselliğe taşır.
+      Yüzey anlamdan derin anlama kayma hatasını test eder.
+    kategori: "cognitive"
+
+  - ad: "AYRINTIYI_ANA_YARGI_SANMA"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Metindeki destekleyici bir ayrıntı, sanki temel düşünceymiş gibi sunulur."
+    nasil_olusturulur: |
+      Metindeki bir destek cümlesini veya ayrıntıyı ana yargı gibi sunan seçenek yaz.
+      Örnek: "Satranç belli bir yaştan sonra bilinçli oynanan bir oyundur" — metinde böyle bir vurgu yoktur.
+      Ayrıntı ile ana anlam arasındaki farkı test eder.
+    kategori: "content"
+
+  - ad: "NEDEN_SONUC_KAYDIRMASI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metindeki neden-sonuç ilişkisi başka yönde kurulmuş gibi gösterilir."
+    nasil_olusturulur: |
+      Metindeki nedensellik ilişkisini ters çeviren veya farklı bir yapıda sunan yargı yaz.
+      Örnek: Metinde satranç → sosyal beceri, seçenekte toplum uyumu → sağlıklı ilişki gibi ters yapı.
+      Neden-sonuç ilişkisini doğru okuma becerisini test eder.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ETIKETI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["anlama", "belirleme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Metnin açık ana yargısını belirle"
+      details: |
+        Tek bir merkez düşünce seç:
+        - Bir alışkanlığın yararları
+        - Bir davranışın sonucu
+        - Bir kavramın özelliği
+        - Bir etkinliğin katkısı
+        - Bir durumun açık etkisi
+
+    - step: 2
+      action: "Bilgilendirici paragraf yaz (50-90 kelime)"
+      details: |
+        - Ana yargıyı taşıyan 3-5 açık destek cümlesi
+        - 4-7 cümle, akıcı ve bilgilendirici
+        - Yüzey anlamı doğrudan seçilebilir olmalı
+
+    - step: 3
+      action: "Doğru cevap = metni kapsayıcı biçimde karşılayan yargı"
+      details: |
+        - Metni toparlayan, kapsayıcı, yorum katmayan
+        - Metnin açık anlamını yeniden ifade eden cümle
+
+    - step: 4
+      action: "3 çeldirici yargı oluştur"
+      details: |
+        - 1 daraltma (detaya indirgeyen)
+        - 1 ayrıntıyı ana yargı yapma
+        - 1 metin dışı yorum veya neden-sonuç kaydırması
+        Her çeldirici metne yakın ama eksik/hatalı olmalı.
+
+    - step: 5
+      action: "Seçenekleri rastgele sırala"
+      details: "A-B-C-D seçeneklerini rastgele sırala"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayısı 50-90 arasında mı?"
+    - "Tek baskın açık anlam var mı?"
+    - "Metin yoruma fazla açık mı?"
+    - "Destekleyici cümleler ana yargıyla uyumlu mu?"
+
+  correct_answer:
+    - "8-25 kelime tam cümle mi?"
+    - "Metindeki yüzey anlamı gerçekten karşılıyor mu?"
+    - "Metin dışına taşmadan kurulmuş mu?"
+
+  distractors:
+    - "Yanlış seçenekler metne yakın ama eksik/yorumlu mu?"
+    - "Aşırı bariz alakasız seçenek var mı?"
+    - "Tüm seçenekler aynı formatta ve soyutluk düzeyinde mi?"

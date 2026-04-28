@@ -1,0 +1,148 @@
+# Referans: akisi_bozan_cumle_sinif3_referans.yaml → zorluk_duzeyleri.zor
+# Zor duzey — hangi_cumle_akisi_bozar varyanti (numaralanmis cumle, akisi bozan)
+
+meta:
+  id: "hangi_cumle_akisi_bozar_sinif3_zor"
+  ad: "3. Sinif - Akisi Bozan Cumle / Hangi Cumle Akisi Bozar (Zor)"
+  sinif_seviyesi: 3
+  aciklama: "Zor duzey — hangi_cumle_akisi_bozar: Hangi Cumle Akisi Bozar. 4 secenekli, gorselli, numaralanmis cumle."
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Gorsel + numaralanmis kisa metin + soru koku + 4 numara secenegi (zor)"
+
+  paragraph:
+    required: true
+    word_count_min: 65
+    word_count_max: 90
+    sentence_count_min: 5
+    sentence_count_max: 6
+    stil: "numaralanmis_yanyana_akis_bozan"
+    background_color: "#fce8e8"
+    kurallar:
+      - "Metin 3. sinif ogrencisinin anlayabilecegi kadar acik, sade ve akici olmalidir."
+      - "Cumleler ayni konu, olay ya da bilgi alani etrafinda kurulmalidir."
+      - "Yalniz 1 cumle acik bicimde dusuncenin akisini bozmalidir."
+      - "Akisi bozan cumle, cogunlukla konu disina cikmali veya acik olay sirasini bozmalidir."
+      - "Akisi bozan cumle cikarildiginda kalan cumleler anlamli bir butun olusturmalidir."
+      - "Metin dis bilgi gerektirmemelidir."
+      - "Soru paragraf butunlugu teorisini derinlemesine olcmemelidir."
+      - "Gizli mantik kusuru, ince uslup farki, cok ortuk bag kopuklugu gibi 4. sinifa kayan zorluklar kullanilmamalidir."
+      - "Metinde acik konu birligi veya acik olay akisi bulunmalidir."
+      - "3. sinif duzeyinde akisi bozan cumle acik bicimde fark edilebilir olmalidir."
+      - "Cumleler (1), (2), (3), (4) (ve gerekirse (5)) seklinde parantezli rakamlarla numaralandirilmalidir."
+      - "Cumleler ayni paragraf icinde YANYANA akici bicimde yazilmalidir; her cumle parantezli numarasiyla baslar (ornek: (1) Ali okula gitti. (2) Okulda arkadasini gordu. (3) ...). Cumleler arasinda <br> KULLANILMAZ, sadece normal bosluk birakilir. Cumleler alt alta degil, tek paragrafta arka arkaya yazilir."
+      - "Akisi bozan cumle tema alanina yakin ama metnin asil odagina aykiri olabilir."
+      - "Zor duzeyde bile bag kopuklugu acik kalmalidir; ince uslup farkina dayanmamalidir."
+      - "Olay sirasi bozuluyorsa bu bozulma dikkatli okuyunca net anlasilmalidir."
+      - "Akisi bozan cumle konu disina cikan acik bir bilgi olabilir."
+      - "Akisi bozan cumle olay sirasini ters ceviren belirgin bir cumle olabilir."
+      - "Akisi bozan cumle metnin genel alanina yakin gorunse de ana odagi desteklememelidir."
+      - "Dogru cevap yalniz dil bilgisi hatasi tasiyan cumle olmamalidir; sorun anlam akisiyla ilgili olmalidir."
+      - "Kalan cumleler kendi icinde dogal ve tutarli bicimde okunabilmelidir."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  visual:
+    required: true
+    description: "Metnin ana icerigini destekleyen islevsel gorsel"
+    placement: "paragraph_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illustrasyon"
+      - "tek sahneli fotograf benzeri cizim"
+      - "tek olay veya tek varlik odakli sahne"
+      - "numaralanmis metnin ana konusunu destekleyen sade konu gorseli"
+    kurallar:
+      - "Her soru icin gorsel zorunludur."
+      - "Gorsel metnin ana icerigiyle acik uyumlu olmalidir."
+      - "Gorsel sus olmamali, baglami desteklemelidir."
+      - "Gorsel tek basina dogru cevabi vermemelidir."
+      - "Gorsel ve metin birlikte degerlendirildiginde ana konu daha netlesebilir."
+      - "Gorsel dikkat dagitici gereksiz ayrintilar icermemelidir."
+    yasaklar:
+      - "dekoratif ve metinden bagimsiz gorsel"
+      - "cok sahneli karmasik kolaj"
+      - "grafik, tablo veya infografik yogunlugu tasiyan tasarim"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir (hangi_cumle_akisi_bozar varyanti)"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 3
+    style: "number_option"
+    correct_count: 1
+    correct_type: "does_not_belong"
+    kurallar:
+      - "3. sinifta her soru 4 secenekli olmalidir."
+      - "Secenekler yalniz cumle numarasi biciminde verilmelidir (1, 2, 3, 4, 5)."
+      - "Yalniz 1 secenek dogru olmalidir."
+      - "Birden fazla makul dogru secenek olusmamalidir."
+      - "3 yanlis secenegin en az 2'si metne yakin gorunmelidir."
+      - "Yanlis seceneklerden biri yardimci ayrinti, biri ana konuyu destekleyen bilgi, biri olay akisinda dogal duran cumle olmalidir."
+
+soru_kokleri:
+  - "<b>Bu metinde numaralanmis cumlelerden hangisi dusuncenin akisini <u>bozmaktadir</u>?</b>"
+  # KULLANILDI: - "<b>Numaralanmis cumlelerden hangisi metnin anlam butunlugunu <u>bozmaktadir</u>?</b>"
+  # KULLANILDI: - "<b>Bu metinde hangi numarali cumle akisi <u>bozmaktadir</u>?</b>"
+  - "<b>Asagidaki metinde numaralanmis cumlelerden hangisi konu butunlugune uygun <u>degildir</u>?</b>"
+  - "<b>Bu parcadaki numaralanmis cumlelerden hangisi dusuncenin akisini <u>bozar</u>?</b>"
+
+dogru_cevap:
+  tanim: "Metnin acik konu, olay veya bilgi akisini bozan tek cumle ya da bu cumlenin bulundugu tek bolum"
+  kurallar:
+    - "Dogru cevap metnin genel akisiyla acik bicimde uyusmamalidir."
+    - "Dogru cevap konu disina cikan ya da acik siralamayi bozan cumle olmalidir."
+    - "Dogru cevap cikarildiginda kalan metin dogal bicimde okunabilmelidir."
+    - "Dogru cevap dis bilgi gerektirmemelidir."
+    - "Dogru cevap 3. sinif ogrencisinin dikkatli okuyarak bulabilecegi aciklikta olmalidir."
+
+celdirici_stratejileri:
+  - ad: "ANA_KONUYU_DESTEKLEYEN_CUMLE"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metnin ana konusunu acikca destekleyen cumleyi yanlis aday gibi sunma"
+    nasil_olusturulur: |
+      Metnin ana konusuna acikca bagli olan bir cumleyi celdirici olarak sun.
+    kategori: "semantic"
+
+  - ad: "YARDIMCI_AYRINTIYI_ILGISIZMIS_GIBI_GOSTERME"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metne ait yardimci bilgiyi akisi bozan cumle gibi gostermeye calisma"
+    nasil_olusturulur: |
+      Metne ait yardimci bir ayrintiyi akisi bozan cumle gibi sun.
+    kategori: "cognitive"
+
+  - ad: "OLAY_SIRASINDA_YAKIN_AMA_DOGRU_CUMLE"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Olay akisina uygun olsa da ogrenciye karisik gelebilecek cumle"
+    nasil_olusturulur: |
+      Olay sirasinda dogal duran ama ilk bakista tereddut uyandirabilecek cumleyi celdirici sun.
+    kategori: "cognitive"
+
+  - ad: "TEMA_BAGLANTILI_DOGRU_CUMLE"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Konu alanina yakin ve aslinda akisi destekleyen cumleyi celdirici yapma"
+    nasil_olusturulur: |
+      Temayla yakindan ilgili ama ana odagi destekleyen cumleyi celdirici sun.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["akis_bozan_cumle_belirleme", "konu_butunlugu_takibi"]
+  surec_bileseni: "metni_anlama"
+
+sinif3_ek_kurallar:
+  yasak_alanlar:
+    - "Gizli mantik kusuru aratma YASAK"
+    - "Dolayli bag kopuklugu aratma YASAK"
+    - "Uslup farkliligi uzerinden eleme yaptirma YASAK"
+    - "Birden fazla cumlenin tartismali bicimde akisi bozabildigi yapi YASAK"
+    - "Metin disi dunya bilgisi gerektiren konu disilik YASAK"
+    - "Ince bag kopukluklari yorumlatma (4. sinif) YASAK"
+    - "Yazar uslubundan hareketle akis bozuklugu buldurma (4. sinif) YASAK"
+    - "Birden fazla cumlenin tartismali bicimde elenebildigi yapi (4. sinif) YASAK"

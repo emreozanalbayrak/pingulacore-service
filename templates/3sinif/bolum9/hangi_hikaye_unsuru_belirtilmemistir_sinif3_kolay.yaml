@@ -1,0 +1,124 @@
+# Kaynak: hikaye_unsurlari_sinif3_referans.yaml → zorluk_duzeyleri.kolay
+# Kolay duzey — hangi_hikaye_unsuru_belirtilmemistir varyanti
+# Yapi: metinde 3 unsur acikca var, 1 unsur tamamen yok. Ogrenci olmayan unsuru bulur.
+
+meta:
+  id: "hangi_hikaye_unsuru_belirtilmemistir_sinif3_kolay"
+  ad: "3. Sinif - Hikaye Unsurlari / Hangi Hikaye Unsuru Belirtilmemistir (Kolay)"
+  sinif_seviyesi: 3
+  aciklama: "Kolay duzey — metinde 3 unsur acikca verilir, 1 unsur TAMAMEN yoktur. Cocuk olmayan unsuru kolayca fark eder."
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Oykuleyici metin + soru koku + 3 unsur adi secenegi (kolay)"
+
+  paragraph:
+    required: true
+    word_count_min: 38
+    word_count_max: 60
+    sentence_count_min: 4
+    sentence_count_max: 5
+    stil: "kisa_oykuleyici_metin"
+    background_color: "#e8f8e8"
+    kurallar:
+      - "Paragraf OYKULEYICI anlatim biciminde kurulmalidir (bir olay yasanir)."
+      - "★★★ KRITIK ★★★ Paragrafta 4 hikaye unsurundan TAM OLARAK 3 TANESI acikca verilmelidir."
+      - "★★★ KRITIK ★★★ 4 unsurdan 1 TANESI TAMAMEN YOK OLMALIDIR — hicbir ima, ipucu veya dolayli atif OLMAMALIDIR."
+      - "Kisi unsuru: Isim veya unvan ile acikca verilebilir (ornek: 'Ayse', 'Dede', 'Ogretmen')."
+      - "Zaman unsuru: Acik zaman ifadesi (ornek: 'sabah', 'yaz', 'hafta sonu', 'bayram gunu')."
+      - "Mekan unsuru: Acik yer ifadesi (ornek: 'bahce', 'okul', 'mutfak')."
+      - "Olay unsuru: Acik bir eylem/durum (ornek: 'oyun oynadi', 'ekmek yaptilar')."
+      - "Paragraf 3. sinif ogrencisinin anlayabilecegi kadar acik, sade ve akici olmalidir."
+      - "Paragraf dis bilgi gerektirmemelidir."
+      - "Paragrafta hikaye unsurlarinin TANIMINI veya ACIKLAMASINI yapma — sadece hikayeyi anlat."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  visual:
+    required: true
+    description: "Metnin ana olayini veya kahramanini destekleyen islevsel gorsel"
+    placement: "paragraph_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illustrasyon"
+      - "tek olay veya tek kahraman odakli sahne"
+      - "hikayenin gectigi ortami destekleyen sade gorsel"
+    kurallar:
+      - "Her soru icin gorsel zorunludur."
+      - "Gorsel metnin ana icerigiyle acik uyumlu olmalidir."
+      - "Gorsel tek basina dogru cevabi acikca vermemelidir."
+      - "Gorsel dikkat dagitici gereksiz ayrintilar icermemelidir."
+    yasaklar:
+      - "dekoratif ve metinden bagimsiz gorsel"
+      - "cok sahneli karmasik kolaj"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 1
+    word_count_max: 1
+    style: "element_label"
+    correct_count: 1
+    correct_type: "does_not_belong"
+    kurallar:
+      - "3. sinifta her soru 3 secenekli olmalidir."
+      - "★★★ KRITIK FORMAT — SADECE 4 HIKAYE UNSURU ★★★"
+      - "Secenekler SADECE su 4 kelimeden secilir (TEK KELIME): Zaman, Mekan, Kişi, Olay."
+      - "3 secenek = 4 unsurdan 3 tanesi. 4. unsur secenekler disinda kalir."
+      - "Ornek format (dogru): A) Zaman  B) Mekan  C) Kişi"
+      - "★★★ MUTLAK YASAKLAR ★★★"
+      - "YASAK: 'Sorun', 'Catisma', 'Tema', 'Anlatici', 'Olay orgusu', 'Duygu' — bunlar hikaye unsuru DEGILDIR."
+      - "YASAK: Somut icerik ('Cumartesi sabahi', 'Ali', 'Bahcede' gibi) — sadece unsur adi yazilacak."
+      - "YASAK: Parantez, aciklama, ornek ('Kişi (Ali)', 'Zaman: sabah' gibi)."
+      - "★★★ SEMANTIK KURALLAR ★★★"
+      - "Dogru secenek: 3 secenek arasindan metinde BULUNMAYAN 1 tanesidir."
+      - "2 yanlis secenek: metinde acikca bulunan 2 unsur (unsur adlari)."
+
+soru_kokleri:
+  - "<b>Bu metinde asagidaki hikaye unsurlarindan hangisi <u>yoktur</u>?</b>"
+  # KULLANILDI: - "<b>Bu metinde asagidaki hikaye unsurlarindan hangisine <u>yer verilmemistir</u>?</b>"
+  - "<b>Bu metinde asagidaki hikaye unsurlarindan hangisi <u>kullanilmamistir</u>?</b>"
+  - "<b>Parcada asagidaki hikaye unsurlarindan hangisi <u>belirtilmemistir</u>?</b>"
+
+dogru_cevap:
+  tanim: "Paragrafta HIC VERILMEYEN, hicbir imasi bile olmayan tek unsur"
+  mantik: "INVERSE — 2 yanlis secenek metinde acikca bulunan 2 unsur, dogru cevap metinde TAMAMEN YOK olan unsur"
+  kurallar:
+    - "Dogru cevap metinde HICBIR yerde gecmeyen unsurdur."
+    - "Dogru cevap icin metinde hicbir ipucu, ima veya dolayli atif olmamalidir."
+    - "3. sinif ogrencisi dikkatli okuyunca olmayan unsuru kolayca bulabilmelidir."
+
+celdirici_stratejileri:
+  - ad: "ACIKCA_VAR_UNSUR"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metinde acikca bulunan unsur — dogru cevap olamaz"
+    nasil_olusturulur: |
+      Metinde acikca verilen 2 unsuru secenek olarak koy.
+      Bu secenekler yanlis — cunku metinde varlar, 'yok' olamazlar.
+      Ogrenci metinde bu unsurlarin oldugunu gorerek elemeli.
+    kategori: "content"
+
+  - ad: "DIGER_MEVCUT_UNSUR"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metinde ikinci bir mevcut unsur — yine dogru cevap olamaz"
+    nasil_olusturulur: |
+      Metinde olan baska bir unsuru secenek olarak koy.
+      Ogrenci 'bu da var' diyerek elemeli.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB1"
+  bilesenler: ["hikaye_unsurlari_bulma", "kisi_olay_yer_zaman_ayirt_etme"]
+  surec_bileseni: "metni_anlama"
+
+sinif3_ek_kurallar:
+  yasak_alanlar:
+    - "Anlatici bakis acisi analizi YASAK"
+    - "Catisma turleri analizi YASAK"
+    - "Karakter islevi analizi YASAK"
+    - "Cok katmanli olay cozumleme YASAK"

@@ -1,0 +1,149 @@
+meta:
+  id: "ipuclarindan_dogru_siralamayi_belirleme"
+  ad: "İpuçlarından Doğru Sıralamayı Belirleme"
+  ders: "Türkçe"
+  sinif_seviyesi: "2. Sınıf"
+  tema: "Mantık, Karşılaştırma ve Sıralama"
+  model: "TYMM"
+  format_turu: "llm_generated_html"
+  aciklama: "Kısa bir bağlam ve verilen ipuçlarından yararlanarak kişi ya da nesnelerin doğru sıralamasını seçtiren 3 seçenekli soru formatı"
+  frequency: "orta"
+
+context:
+  type: "siralama_ve_ipucu"
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 18
+    word_count_max: 45
+    structure:
+      - "Önce kısa bir bağlam verilir."
+      - "Bağlamda 4 ila 5 kişi ya da nesne arasında bir sıralama durumu bulunur."
+      - "Ardından sonuçla ilgili 2 kısa ipucu yazılır."
+      - "İpuçları doğrudan cevabı vermemeli, öğrenciyi düşünmeye yöneltmelidir."
+      - "Sonrasında sıralama seçenekleri verilir."
+    kurallar:
+      - "Bağlam 2. sınıf seviyesine uygun olmalıdır."
+      - "Kişi ya da nesne adları kısa ve ayırt edilebilir olmalıdır."
+      - "İpuçları sade, açık ve tek anlamlı olmalıdır."
+      - "Sıralama mantığı yalnızca ipuçları kullanılarak çözülebilmelidir."
+      - "Metin tek başına sonucu doğrudan söylememelidir."
+      - "Türkçe karakterler doğru kullanılmalıdır."
+
+format:
+  type: "llm_generated_html"
+  description: "Kısa bağlam + 2 ipucu + sıralama seçenekleri + tek soru"
+
+  paragraph:
+    required: true
+    word_count_min: 18
+    word_count_max: 45
+    sentence_count_min: 2
+    sentence_count_max: 4
+
+  visual:
+    required: true
+    count: 1
+    description: "Yarış, sıra, diziliş ya da karşılaştırma durumunu gösteren sade görsel"
+
+  stem:
+    required: true
+    sentence_count_min: 1
+    sentence_count_max: 1
+    soru_koku_ornekleri:
+      - "Buna göre yarışın sonucu hangi seçenekte doğru verilmiştir?"
+      - "Verilen bilgilere göre doğru sıralama hangi seçenektedir?"
+      - "İpuçlarına göre aşağıdaki sıralamalardan hangisi doğrudur?"
+      - "Aşağıdakilerden hangisi sonucu doğru göstermektedir?"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 4
+    word_count_max: 12
+    style: "ordered_sequence"
+    correct_count: 1
+    correct_type: "matches"
+
+gorsel:
+  required: true
+  tur: "siralama_durumu_gorseli"
+  amac: "Bağlamı desteklemek ve öğrenciyi sıralama fikrine hazırlamak"
+  kurallar:
+    - "Görsel sade ve çocuk seviyesine uygun olmalıdır."
+    - "Yarış, sıra ya da diziliş durumu açıkça anlaşılmalıdır."
+    - "Görsel süsleyici olabilir ancak çözümün esas kaynağı ipuçları olmalıdır."
+    - "İsimler ya da karakterler kolay ayırt edilebilir olmalıdır."
+    - "Görsel metinle uyumlu olmalıdır."
+
+olculen_beceri:
+  tanim: "İpuçlarını kullanarak kişi ya da nesnelerin doğru sıralamasını bulma"
+  bilesenler:
+    - "okudugunu_anlama"
+    - "mantik_yurutme"
+    - "karsilastirma"
+    - "siralama"
+    - "secenek_elemesi"
+
+dogru_cevap:
+  tanim: "Verilen tüm ipuçlarıyla tam uyumlu sıralama"
+  kurallar:
+    - "Doğru cevap tüm ipuçlarını aynı anda sağlamalıdır."
+    - "Yanlış seçenekler en az bir ipucuyla çelişmelidir."
+    - "İpuçları dikkatle değerlendirilmeden doğru cevap bulunamamalıdır."
+    - "Sıralama açık ve tek doğru olacak şekilde kurulmalıdır."
+
+distractors:
+  stratejiler:
+    - ad: "TEK_IPUCUNA_UYAN_SECENEK"
+      aciklama: "Bir ipucuna uyup diğerine uymayan sıralama sunma"
+      ornek: "Ceren’in yeri doğru, Burcu’nun yeri yanlış olan seçenek"
+    - ad: "YER_DEGISTIRME_YANILGISI"
+      aciklama: "İki kişinin yerini değiştirerek öğrenciyi yanıltma"
+      ornek: "2. ve 3. sıradaki kişileri yer değiştirme"
+    - ad: "YAKIN_SIRALAMA_CELDIRICISI"
+      aciklama: "Doğru sıralamaya çok benzeyen ama bir kişi hatalı yerleşmiş seçenek sunma"
+      ornek: "Sadece 1. ve 2. sırayı ters verme"
+    - ad: "IPUCUNU_TERS_YORUMLAMA"
+      aciklama: "'Geçebilseydi' ya da 'olurdu' gibi ifadeleri ters yorumlatacak seçenek verme"
+      ornek: "4. olurdu bilgisini 4. oldu gibi düşündürme"
+
+use_shared_strategies: false
+
+tymm_uyum_kurallari:
+  - "2. sınıf seviyesine uygun kısa ve açık cümleler kullanılmalıdır."
+  - "İpuçları tek anlamlı olmalıdır."
+  - "Karmaşık çok adımlı mantık yapılarından kaçınılmalıdır."
+  - "Sıralama 4 veya 5 kişi/nesne ile sınırlı tutulmalıdır."
+  - "Seçenekler aynı temsil düzeyinde, yani hepsi sıra dizisi biçiminde olmalıdır."
+  - "Görsel bağlamı desteklemeli, fakat cevap yalnızca görsele bakılarak bulunmamalıdır."
+  - "3 seçenekli yapıda iki çeldirici de güçlü olmalıdır."
+  - "Birden fazla doğru seçeneğe izin verilmemelidir."
+
+izinli_icerikler:
+  - "yarış sıralaması"
+  - "koşu sırası"
+  - "araba yarışı"
+  - "çocukların sıraya dizilmesi"
+  - "boy sıralaması"
+  - "hız karşılaştırması"
+  - "önünde-arkasında ilişkisi"
+  - "basit mantık ipuçları"
+
+yasakli_icerikler:
+  - "çok karmaşık mantık zincirleri"
+  - "6’dan fazla kişi/nesne"
+  - "birden fazla doğru sıralama"
+  - "yalnızca görselle çözülebilen yapı"
+  - "2. sınıf düzeyini aşan soyut mantık"
+  - "uzun ve dolaylı ipuçları"
+
+ornek_sablon:
+  ust_metin: "Kısa bağlam ve sonuçla ilgili iki ipucu"
+  gorsel: "Yarış ya da sıralama durumunu destekleyen sade görsel"
+  soru_koku: "Buna göre doğru sıralama hangi seçenektedir?"
+  secenekler:
+    A: "1. ... 2. ... 3. ... 4. ..."
+    B: "1. ... 2. ... 3. ... 4. ..."
+    C: "1. ... 2. ... 3. ... 4. ..."

@@ -1,0 +1,399 @@
+meta:
+  id: "gorsel_inceleme_sinif2_gorsel_zorunlu_uc_secenekli"
+  ad: "Görsel İnceleme"
+  sinif_seviyesi: 2
+  ders: "Türkçe"
+  bolum: "2. Sınıf Paragraf Soru Bankası"
+  alt_bolum: "7.2 Görsel İnceleme"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    2. sınıf öğrencisi için tek bir görseli dikkatle inceleyerek görselden
+    ulaşılabilen ve ulaşılamayan bilgileri ayırt ettirmeye yönelik,
+    görsel zorunlu ve 3 seçenekli standart soru üretim şablonu.
+  kullanim_notu: >
+    Bu şablonda soru görsel incelenmeden çözülememelidir. Doğru cevap,
+    görselde açıkça görülen bilgiye ya da görselden doğrudan çıkarılabilen
+    basit sonuca dayanmalıdır. Harici 2. Sınıf TYMM Ortak Kuralları ile birlikte
+    doğrulanmalıdır.
+
+format:
+  type: "llm_generated_html"
+  description: "Tek görsel + kısa soru kökü + 3 seçenek"
+
+  sadece_gorselle_cozum_gerekli: true
+  sadece_metinle_cozum_yasak: true
+
+  soru_varyanti:
+    allowed:
+      - "hangisi_dogrudur"
+      - "hangisi_yanlistir"
+      - "hangisi_soylenebilir"
+      - "hangisi_soylenemez"
+      - "hangi_bilgiye_ulasilabilir"
+      - "hangi_bilgiye_ulasilamaz"
+    default: "hangisi_soylenebilir"
+
+  visual:
+    required: true
+    description: "İncelenerek bilgi çıkarılabilecek tek ana görsel"
+    placement: "top"
+    visual_type_allowed:
+      - "tek sahneli günlük yaşam görseli"
+      - "oyun oynayan çocuklar sahnesi"
+      - "park / okul / ev / doğa sahnesi"
+      - "hayvan veya nesne düzeni"
+      - "basit etkinlik sahnesi"
+      - "insan ve nesne ilişkisi içeren sahne"
+    kurallar:
+      - "Görsel soru çözümünün ana ve zorunlu kaynağı olmalıdır."
+      - "Görsel tek bakışta anlaşılır ama dikkatli inceleme gerektirir olmalıdır."
+      - "Görselde en az 3 açık bilgi çıkarılabilir olmalıdır."
+      - "Görselde en az 1 ulaşılamayan bilgi alanı da bulunabilmelidir."
+      - "Kişi, nesne, hareket, sayı, yer veya mevsim gibi açık ipuçları bulunabilir."
+      - "Görsel sade olmalı, gereksiz süsleme içermemelidir."
+      - "Görseldeki karakterler ve nesneler ayırt edilebilir olmalıdır."
+      - "Görsel, seçenekleri ayırt etmede gerçekten etkili olmalıdır."
+      - "Doğru cevap görsel dikkatle incelenmeden bulunamamalıdır."
+    yasaklar:
+      - "dekoratif ama bilgi taşımayan görsel"
+      - "aşırı kalabalık ve karışık sahne"
+      - "tek bakışta tüm seçenekleri açıkça eleyen aşırı basit kurgu"
+      - "2. sınıf düzeyini aşan karmaşık infografik veya çoklu panel"
+      - "görsel dışında dış bilgi gerektiren sahne"
+
+  soru_metni:
+    required: true
+    length: "short"
+    kurallar:
+      - "Soru metni kısa olmalıdır."
+      - "Soru metni yalnız yönlendirme yapmalı, cevabı açıklamamalıdır."
+      - "Soru metni öğrenciyi görseli incelemeye yönlendirmelidir."
+      - "Soru metni görselde olmayan bilgileri açıklayarak ipucu vermemelidir."
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    correct_count: 1
+    style: "short_statement"
+    word_count_min: 3
+    word_count_max: 10
+    kurallar:
+      - "Her soruda 3 seçenek olmalıdır."
+      - "Seçenekler kısa, sade ve 2. sınıf düzeyinde olmalıdır."
+      - "Doğru seçenek görselden doğrudan doğrulanabilmelidir."
+      - "Yanlış seçenekler görselle çelişmeli ya da görselden çıkarılamayan bilgi içermelidir."
+      - "Seçenekler kendi aralarında biçimce paralel olmalıdır."
+      - "Sayı, kişi, nesne, yer, eylem veya mevsim odaklı ifadeler kullanılabilir."
+      - "Sadece kelime oyunu veya dil tuzağı içeren seçenekler kullanılmamalıdır."
+
+soru_kokleri:
+  hangisi_dogrudur:
+    - "Görselle ilgili verilen bilgilerden hangisi doğrudur?"
+    - "Aşağıdakilerden hangisi görsele göre doğrudur?"
+    - "Bu görselle ilgili aşağıdakilerden hangisi doğrudur?"
+    - "Görsele göre doğru olan ifade hangisidir?"
+    - "Aşağıdakilerden hangisi görselde görülmektedir?"
+
+  hangisi_yanlistir:
+    - "Görselle ilgili verilen bilgilerden hangisi yanlıştır?"
+    - "Aşağıdakilerden hangisi görsele göre yanlıştır?"
+    - "Bu görselle ilgili aşağıdakilerden hangisi doğru değildir?"
+    - "Görsele göre yanlış olan ifade hangisidir?"
+    - "Aşağıdakilerden hangisi görselde görülmemektedir?"
+
+  hangisi_soylenebilir:
+    - "Bu görselden hareketle aşağıdakilerden hangisi söylenebilir?"
+    - "Görsele göre aşağıdakilerden hangisi söylenebilir?"
+    - "Bu görsele bakılarak aşağıdakilerden hangisine ulaşılabilir?"
+    - "Aşağıdakilerden hangisi bu görsele uygun bir bilgidir?"
+    - "Görsel incelendiğinde aşağıdakilerden hangisi söylenebilir?"
+
+  hangisi_soylenemez:
+    - "Bu görselden hareketle aşağıdakilerden hangisi söylenemez?"
+    - "Görsele göre aşağıdakilerden hangisine ulaşılamaz?"
+    - "Bu görsele bakılarak aşağıdakilerden hangisi söylenemez?"
+    - "Aşağıdakilerden hangisi bu görselden çıkarılamaz?"
+    - "Görsel incelendiğinde aşağıdakilerden hangisine ulaşılamaz?"
+
+  hangi_bilgiye_ulasilabilir:
+    - "Bu görselden aşağıdaki sorulardan hangisinin cevabına ulaşabiliriz?"
+    - "Görsel incelendiğinde aşağıdaki bilgilerden hangisine ulaşılabilir?"
+    - "Bu görsel bize aşağıdakilerden hangisini gösterir?"
+    - "Aşağıdakilerden hangisi görselden öğrenilebilir?"
+
+  hangi_bilgiye_ulasilamaz:
+    - "Bu görselden aşağıdaki sorulardan hangisinin cevabına ulaşamayız?"
+    - "Görsel incelendiğinde aşağıdaki bilgilerden hangisine ulaşılamaz?"
+    - "Bu görsel bize aşağıdakilerden hangisini göstermez?"
+    - "Aşağıdakilerden hangisi görselden öğrenilemez?"
+
+beceri_odagi:
+  birincil_beceri:
+    - "Görselden bilgi çıkarma"
+  ikincil_beceriler:
+    - "Görseldeki açık ayrıntıları fark etme"
+    - "Görselden ulaşılabilen ve ulaşılamayan bilgiyi ayırt etme"
+    - "Sayı, kişi, nesne, yer, eylem ve ortam bilgilerini görselden okuma"
+    - "Basit görsel yorum yapma"
+
+dogru_cevap:
+  tanim: "Yalnız görsel dikkatle incelendiğinde doğrulanabilen doğru ifade veya doğru çıkarım"
+  kurallar:
+    - "Doğru cevap görselde açıkça görülen bilgiye dayanmalıdır."
+    - "Doğru cevap görselden doğrudan çıkarılabilen basit sonuç olabilir."
+    - "Doğru cevap dış bilgi gerektirmemelidir."
+    - "Doğru cevap yorumdan çok gözleme dayanmalıdır."
+    - "Doğru cevap 2. sınıf öğrencisinin görsele bakarak belirleyebileceği açıklıkta olmalıdır."
+    - "Söylenemez / ulaşılamaz sorularında doğru cevap, görselde gerçekten bulunmayan veya görselden çıkarılamayan bilgi olmalıdır."
+
+yanlis_secenek_stratejileri:
+  count_per_question: 2
+  strategy_pool:
+    - id: "gorselle_celisir"
+      tanim: "Görselde açıkça yanlış olan bilgi"
+      ornek_mantik:
+        - "görselde bir çocuk varken iki çocuk demek"
+        - "kış sahnesinde yaz mevsimi demek"
+        - "erkek yerine kız sayısını yanlış vermek"
+
+    - id: "ulasilamaz_bilgi"
+      tanim: "Görselden öğrenilemeyecek bilgi"
+      ornek_mantik:
+        - "çocukların kaç saat oynadığı"
+        - "köpeğin kime ait olduğu"
+        - "hangi çocuğun daha mutlu olduğu"
+
+    - id: "yakin_ama_yanlis_sayma"
+      tanim: "Görselde sayılabilir bir ögeyi bir eksik ya da bir fazla verme"
+      ornek_mantik:
+        - "3 çocuk yerine 4 çocuk"
+        - "1 kızak yerine 2 kızak"
+
+    - id: "kismi_dogru_kismi_yanlis"
+      tanim: "Bir kısmı görsele uyar gibi görünür ama tamamı doğru değildir"
+      ornek_mantik:
+        - "bir çocuk gözlük takıyor ve herkes resim yapıyor"
+        - "çocuklar parkta ve hepsi kız"
+
+  secim_kurali:
+    - "Her soruda 2 yanlış seçenek farklı stratejilerden seçilmelidir."
+    - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+    - "Zor düzeyde iki yanlış seçenek de dikkat gerektiren yakın hata taşımalıdır."
+
+soru_varyanti_kurallari:
+  hangisi_dogrudur:
+    kurallar:
+      - "Yalnız 1 seçenek görselle açıkça uyuşmalıdır."
+      - "Diğer 2 seçenek görselle çelişmeli ya da eksik/yanlış bilgi içermelidir."
+
+  hangisi_yanlistir:
+    kurallar:
+      - "2 seçenek görselle uyuşmalı, 1 seçenek açıkça yanlış olmalıdır."
+      - "Yanlış seçenek görselde kontrol edilebilir olmalıdır."
+
+  hangisi_soylenebilir:
+    kurallar:
+      - "Doğru seçenek görselden ulaşılabilen bilgi olmalıdır."
+      - "Yanlış seçeneklerden biri görselle çelişebilir, biri ise ulaşılamaz bilgi olabilir."
+
+  hangisi_soylenemez:
+    kurallar:
+      - "Doğru seçenek görselden ulaşılamayan bilgi olmalıdır."
+      - "Diğer 2 seçenek görselden doğrulanabilir olmalıdır."
+
+  hangi_bilgiye_ulasilabilir:
+    kurallar:
+      - "Seçenekler soru biçiminde ya da kısa bilgi biçiminde olabilir."
+      - "Doğru seçenek görselden cevaplanabilir olmalıdır."
+      - "Yanlış seçenekler görselden cevaplanamayan bilgi istemelidir."
+
+  hangi_bilgiye_ulasilamaz:
+    kurallar:
+      - "Doğru seçenek görselden cevaplanamayan soru ya da bilgi olmalıdır."
+      - "Diğer 2 seçenek görselden açıkça cevaplanabilir olmalıdır."
+
+zorluk_duzeyleri:
+  kolay:
+    visual:
+      detail_density: "low"
+      kurallar:
+        - "Görsel tek sahneli ve açık olmalıdır."
+        - "Sayı, kişi, nesne ve eylem bilgileri kolay seçilebilir olmalıdır."
+        - "Doğru cevap görselde açıkça görülen bilgiye dayanmalıdır."
+    preferred_variants:
+      - "hangisi_dogrudur"
+      - "hangisi_soylenebilir"
+      - "hangi_bilgiye_ulasilabilir"
+    distractors:
+      kurallar:
+        - "1 seçenek görselle açıkça çelişmelidir."
+        - "1 seçenek ulaşılamayan bilgi olabilir."
+        - "Yanlış seçenekler kolay elenebilir olmalıdır."
+    difficulty_note: >
+      Kolay düzeyde öğrenci görseldeki açık bilgileri fark ederek doğru seçeneği bulur.
+      Zorluk düşük tutulur.
+
+  orta:
+    visual:
+      detail_density: "medium"
+      kurallar:
+        - "Görselde birkaç farklı ayrıntı bulunabilir."
+        - "Doğru cevap için öğrenci sayma, karşılaştırma veya kısa yorum yapabilir."
+        - "Görsel hâlâ sade ve 2. sınıf düzeyinde olmalıdır."
+    preferred_variants:
+      - "hangisi_yanlistir"
+      - "hangisi_soylenebilir"
+      - "hangisi_soylenemez"
+      - "hangi_bilgiye_ulasilamaz"
+    distractors:
+      kurallar:
+        - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+        - "Yanlış seçenekler yakın sayma hatası veya ulaşılamayan bilgi içerebilir."
+    difficulty_note: >
+      Orta düzeyde öğrenci görseli daha dikkatli inceleyerek hangi bilginin çıkarılabildiğini
+      ya da çıkarılamadığını ayırt eder.
+
+  zor:
+    visual:
+      detail_density: "medium_high"
+      kurallar:
+        - "Görselde birden fazla kişi, nesne veya etkinlik olabilir."
+        - "Doğru cevap için öğrenci birden fazla ayrıntıyı birlikte düşünmelidir."
+        - "Zor düzeyde bile görsel karmaşık değil, yalnızca dikkat gerektirici olmalıdır."
+    preferred_variants:
+      - "hangisi_soylenemez"
+      - "hangisi_yanlistir"
+      - "hangi_bilgiye_ulasilamaz"
+    distractors:
+      kurallar:
+        - "2 yanlış seçenek de makul görünmelidir."
+        - "Yanlış seçeneklerden biri yakın sayma hatası, biri kısmi doğru-kısmi yanlış yapı taşıyabilir."
+        - "Doğru seçenek yalnız dikkatli görsel incelemeyle seçilebilmelidir."
+    difficulty_note: >
+      Zor düzey 2. sınıfta derin yorum zorluğu değildir.
+      Zorluk, görselden ulaşılabilen ve ulaşılamayan bilgileri dikkatle ayırt etme düzeyindedir.
+
+difficulty_selection_policy:
+  default: "Orta"
+  allowed_values: ["Kolay", "Orta", "Zor"]
+  hard_limits:
+    - "Tüm düzeylerde görsel zorunludur."
+    - "Tüm düzeylerde soru yalnız görselden çözülebilmelidir."
+    - "Tüm düzeylerde 3 seçenek kullanılmalıdır."
+    - "Zor düzey seçilse bile dış bilgi gerektiren yorum sorusu üretilemez."
+    - "Kolay düzeyde çok fazla ayrıntılı kalabalık görsel kullanılamaz."
+
+konu_alani:
+  izinli_ornekler:
+    - "parkta oynayan çocuklar"
+    - "sınıf içi etkinlik"
+    - "evde yapılan işler"
+    - "hayvanlar ve yavruları"
+    - "oyun alanı"
+    - "mevsim sahnesi"
+    - "bahçe veya doğa sahnesi"
+    - "okul bahçesi"
+    - "piknik alanı"
+    - "çocukların yaptığı etkinlikler"
+  kurallar:
+    - "Görsel 2. sınıf öğrencisinin kolayca gözlem yapabileceği kadar somut olmalıdır."
+    - "Görselden kişi, nesne, sayı, yer, eylem veya mevsim bilgisi çıkarılabilmelidir."
+    - "Görselden ulaşılamayan bilgiler de doğal olarak var olabilmelidir."
+    - "Görsel günlük yaşama yakın olmalıdır."
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "2. sınıfa uygun, bilgi çıkarılabilir tek ve açık bir görsel sahne seç"
+    - step: 2
+      action: "Görsel düzeni oluştur"
+      details:
+        - "Görsel çözümün ana kaynağı olsun"
+        - "Görselde birkaç açık bilgi bulunsun"
+        - "Görselde ulaşılamayan bazı bilgi alanları da doğal olarak bulunsun"
+    - step: 3
+      action: "Soru varyantını seç"
+      details:
+        - "hangisi_dogrudur"
+        - "hangisi_yanlistir"
+        - "hangisi_soylenebilir"
+        - "hangisi_soylenemez"
+        - "hangi_bilgiye_ulasilabilir"
+        - "hangi_bilgiye_ulasilamaz"
+    - step: 4
+      action: "Kısa soru kökünü seç"
+      details:
+        - "Yalnız görsele yönlendirme yap"
+        - "Cevabı açıklama"
+    - step: 5
+      action: "1 doğru ve 2 yanlış seçenek oluştur"
+      details:
+        - "Yanlışlardan biri görselle çelişebilir"
+        - "Yanlışlardan biri görselden ulaşılamayan bilgi içerebilir"
+        - "Gerekirse yakın sayma hatası kullan"
+    - step: 6
+      action: "Şıkları A-B-C olarak karıştır"
+    - step: 7
+      action: "Sorunun yalnız görsel üzerinden çözüldüğünü doğrula"
+      details:
+        - "Görsel kaldırıldığında soru çözülemiyor mu?"
+        - "Doğru cevap yalnız görselde doğrulanabiliyor mu?"
+
+validation_checklist:
+  visual_dependency:
+    - "Soru yalnız görsel incelenerek çözülebiliyor mu?"
+    - "Doğru cevap yalnız görseldeki bilgiye mi dayanıyor?"
+    - "Görsel kaldırıldığında soru çözülemez hâle geliyor mu?"
+    - "Dış bilgi gerekmiyor mu?"
+
+  visual:
+    - "Görsel zorunlu olarak var mı?"
+    - "Görsel tek bakışta anlaşılır mı?"
+    - "Görsel bilgi taşıyor mu?"
+    - "Görsel dekoratif kalmıyor mu?"
+    - "Görselde kişi/nesne/eylem ayrıntıları seçilebilir mi?"
+
+  stem:
+    - "Soru kökü kısa ve açık mı?"
+    - "Soru kökü görseli incelemeye yönlendiriyor mu?"
+    - "Soru kökü cevabı açıklamıyor mu?"
+
+  options:
+    - "Toplam 3 seçenek var mı?"
+    - "Doğru seçenek görselden doğrulanabiliyor mu?"
+    - "Yanlış seçenekler görselle çelişiyor ya da görselden çıkarılamayan bilgi mi içeriyor?"
+    - "Seçenekler kısa ve sade mi?"
+
+  difficulty:
+    - "Zorluk seçilen düzeye göre ayrıntı yoğunluğu ve çeldirici ayarı yapılmış mı?"
+    - "Zor düzey bile 2. sınıf sınırında mı?"
+    - "Kolay düzey gereksiz yere karmaşık değil mi?"
+
+hard_fail_rules:
+  - "Görsel yoksa"
+  - "Soru yalnız metin ya da dış bilgiyle çözülebiliyorsa"
+  - "Doğru cevap görselde doğrulanamıyorsa"
+  - "Seçenek sayısı 3 değilse"
+  - "İki veya daha fazla seçenek makul doğruysa"
+  - "Görsel 2. sınıf için fazla karmaşıksa"
+  - "Soru ana düşünce, mesaj veya soyut yorum sorusuna kayıyorsa"
+  - "Görsel ile seçenekler arasında açık bağ kurulamıyorsa"
+
+ornek_bicim_notlari:
+  - "Kış sahnesinde çocukların ne oynadığı, kaç kişi kızakla kaydığı, hangi mevsim olduğu gibi bilgiler görselden çıkarılabilir."
+  - "Köpeğin kime ait olduğu ya da çocukların kaç saat oynadığı gibi bilgiler görselden çıkarılamaz."
+  - "Bazı sorular doğru bilgiye, bazıları ulaşılamayan bilgiye odaklanabilir."
+  - "Bu bölümde temel amaç, görselden hangi bilgilere ulaşılabildiğini ayırt etmektir."
+
+output_contract:
+  required_fields:
+    - "soru_varyanti"
+    - "visual_description"
+    - "stem"
+    - "options"
+    - "answer"
+    - "difficulty"
+    - "scene_type"
+  answer_format:
+    - "answer yalnızca A/B/C olarak verilebilir"
+    - "difficulty yalnızca Kolay / Orta / Zor olabilir"

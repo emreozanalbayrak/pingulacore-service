@@ -1,0 +1,118 @@
+meta:
+  id: paragraf_turu_ozellik
+  ad: Paragraf Türü — Özellik Tablosu
+  sinif_seviyesi: 5
+  aciklama: 4 öğrenci metin yazar, özellikleri tabloda gösterilir — uyumlu metin ve paragraf türü soruları
+  kaynak: kaynak-soru-kokleri.md
+  frequency: Medium
+context:
+  type: paragraf_turu_ozellik
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 120
+    word_count_max: 200
+    structure:
+    - 'Bir senaryo oluştur: 4 öğrenci (isimli) birer paragraf yazmış'
+    - Her öğrencinin yazdığı paragrafın özellikleri bir tabloda gösterilmeli
+    - 'HTML tablosu ekle: satırlar öğrenciler, sütunlar paragraf özellikleri'
+    - 'Özellikler: Paragraf Türleri (Sıralı-Kronolojik, Betimleme, Öyküleme, Tanıtma), Konu Türü, Bakış Açısı (1./3. kişi)'
+    - Her öğrencinin paragraf türü tablodan çıkarılabilir olmalı
+    - Tablo bilgileri birbiriyle tutarlı ve çelişkisiz olmalı
+    kurallar:
+    - 5. sınıf seviyesinde, paragraf türleri ve özellikleri
+    - 'KRİTİK — SENARYO KAPSAMI: Senaryo sadece DURUMU ve MERAKı anlatsın, CEVAPLARI vermesin!'
+    - Detaylı bilgiler ve veriler SADECE tablo/grafikte olmalı — senaryo bunları içermemeli
+    - Soruların cevabı senaryodan değil tablo/grafikten çıkarılmalı
+    - Tablo <table>, <tr>, <th>, <td> etiketleriyle oluşturulmalı
+    - 4 öğrencinin metinleri birbirinden farklı türde olmalı
+    - Öğrenci isimleri Türkçe olmalı
+    - Özellikler açık ve net bir şekilde belirtilmeli
+    - Soruda/seçeneklerde/tabloda "anlatım biçimi" veya "anlatım biçimleri" söz öbekleri kullanılMAMALI.
+    - Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)
+  questions:
+  - slot: 1
+    type: ogrenci_metin_uyumu
+    soru_kokleri:
+    - <b>Tablodaki bilgilere göre aşağıdakilerden hangisi …Öğrenci…'nin yazdığı metinle uyumludur?</b>
+    - <b>…Öğrenci…'nin paragrafının özellikleri düşünüldüğünde aşağıdaki metinlerden hangisi ona ait olabilir?</b>
+    - <b>Bu tablodaki özellikler hangi öğrencinin metniyle uyumludur?</b>
+    options_style: mini_paragraph
+    word_count_min: 20
+    word_count_max: 45
+    beceri:
+      katman: KB2
+      bilesenler:
+      - siniflandirma
+      - karsilastirma
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 2
+    type: paragraf_turu_belirleme
+    soru_kokleri:
+    - <b>Tablodaki ve senaryodaki bilgilere göre …Öğrenci… hangi paragraf türünden faydalanmıştır?</b>
+    - <b>…Öğrenci…'nin kullandığı özellikler düşünüldüğünde hangi paragraf türüne örnek vermiştir?</b>
+    - <b>...Ogrenci... asagidaki paragraf turlerinin hangisinden faydalanmistir?</b>
+    options_style: concept
+    word_count_min: 10
+    word_count_max: 20
+    beceri:
+      katman: KB2
+      bilesenler:
+      - siniflandirma
+      - analiz
+      surec_bileseni: bilgiyi_cikartma
+header_template: 1-2. soruları aşağıdaki senaryo ve tabloya göre cevaplayınız.
+format:
+  type: llm_generated_html
+  description: Özellik tablosu üzerinden öğrenci-metin uyumu ve paragraf türü soruları
+  paragraph:
+    required: true
+    word_count_min: 120
+    word_count_max: 200
+    sentence_count_min: 3
+    sentence_count_max: 10
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 1
+    word_count_max: 45
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Tablodaki özelliklerle uyumlu metin veya doğru paragraf türü adı
+  kurallar:
+  - 'KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI'
+  - Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI
+  - Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil
+  - 'YASAK: Tablodaki değeri aynen şıkka yazmak (örn: ''yalıtımı azdır'' tabloda yazıyorsa şıkta aynen yazmamalı)'
+  - Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli
+  - Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı
+  - Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı
+  - Metin uyumu sorusunda doğru cevap öğrencinin tablodaki TÜM özelliklerini taşıyan metin
+  - Tür belirleme sorusunda doğru cevap tablodaki özelliklerin işaret ettiği paragraf türü
+  - Çeldiriciler bazı özellikleri taşıyan ama tamamını karşılamayan seçenekler olmalı
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: ''teleskop'' → ''mercekli araç'' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: OZELLIK_EKSIGI
+    aciklama: Bazı özellikleri taşıyan ama en az bir kritik özelliği eksik olan metin sunma
+    ornek: Doğru paragraf türünde ama yanlış bakış açısında metin
+  - ad: TUR_BENZERLIK
+    aciklama: Benzer ama farklı paragraf türünü doğru gibi sunma
+    ornek: Betimleyici yerine öyküleyici tür adını verme
+  - ad: TABLO_YANLIS_OKUMA
+    aciklama: Tablodaki bir özelliği yanlış yorumlayan metin sunma
+    ornek: 3. kişi anlatım yerine 1. kişi anlatımlı metin önerme
+use_shared_strategies: false

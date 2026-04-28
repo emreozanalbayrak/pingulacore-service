@@ -1,0 +1,116 @@
+meta:
+  id: hikaye_unsurlari_tablo_baglam
+  ad: Hikâye Unsurları +/- Tablo
+  sinif_seviyesi: 5
+  aciklama: +/- tablo ile 4 hikâye özetinde hangi unsurlar bulunuyor — eşleştirme ve farklılık
+  kaynak: kaynak-soru-kokleri.md
+  frequency: Medium
+context:
+  type: hikaye_unsurlari_tablo
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 100
+    word_count_max: 180
+    structure:
+    - 'Bir senaryo oluştur: Öğretmen sınıfta hikâye unsurlarını işliyor'
+    - '4 hikâye (isimli: Hikâye 1, Hikâye 2, vb. veya başlıklı) kısaca tanıtılmış'
+    - 'HTML tablosu ekle: satırlar hikâyeler, sütunlar unsurlar (Yer, Zaman, Kişi, Olay)'
+    - Tabloda + (bulunuyor) ve - (bulunmuyor/belirsiz) işaretleri olmalı
+    - Her hikâyede en az 3 unsur +, en az 1 unsur - olmalı
+    - Hikâyeler arasında unsur yapısı farklılıkları olmalı — her birinin profili benzersiz
+    kurallar:
+    - '5. sınıf seviyesinde, hikâye unsurları: Yer, Zaman, Kişi, Olay, Çatışma'
+    - 'KRİTİK — SENARYO KAPSAMI: Senaryo sadece DURUMU ve MERAKı anlatsın, CEVAPLARI vermesin!'
+    - Detaylı bilgiler ve veriler SADECE tablo/grafikte olmalı — senaryo bunları içermemeli
+    - Soruların cevabı senaryodan değil tablo/grafikten çıkarılmalı
+    - Tablo <table>, <tr>, <th>, <td> etiketleriyle oluşturulmalı
+    - + ve - işaretleri anlamlı ve tutarlı olmalı
+    - Her hikâye 1-2 cümlelik kısa özetle tanıtılmalı
+    - Hikâyelerin konuları farklı olmalı (okul, doğa, aile, macera gibi)
+    - Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)
+  questions:
+  - slot: 1
+    type: hikaye_eslestirme
+    soru_kokleri:
+    - <b>Tabloya göre aşağıdakilerden hangisi …Hikâye…'ye ait bir açıklama olabilir?</b>
+    - <b>Aşağıdaki açıklamalardan hangisi …Hikâye… ile uyumludur?</b>
+    - <b>Asagidakilerden hangisi ...Ogrenci...nin yazdigi hikayelerden biri olabilir?</b>
+    options_style: mini_paragraph
+    word_count_min: 20
+    word_count_max: 45
+    beceri:
+      katman: KB2
+      bilesenler:
+      - siniflandirma
+      - karsilastirma
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 2
+    type: unsur_eksik_farkliligi
+    soru_kokleri:
+    - <b>[Karakter_1] ile [Karakter_2]'nin yazılarında ortak olarak başvurulan hikaye unsurlarının özelliklerini taşıyan hikaye aşağıdakilerden hangisidir?</b>
+    - <b>…Öğrenci 1… ve …Öğrenci 2…'nin hikâyelerinde ortak olarak yer verilen hikâye unsurları dikkate alınarak bir hikâye yazılacak olursa, bu hikâye aşağıdakilerden hangisi olabilir?</b>
+    options_style: concept
+    word_count_min: 20
+    word_count_max: 45
+    beceri:
+      katman: KB2
+      bilesenler:
+      - karsilastirma
+      - analiz
+      surec_bileseni: bilgiyi_cikartma
+header_template: 1-2. soruları aşağıdaki senaryo ve tabloya göre cevaplayınız.
+format:
+  type: llm_generated_html
+  description: +/- tablo üzerinden hikâye unsuru eşleştirme ve karşılaştırma soruları
+  paragraph:
+    required: true
+    word_count_min: 100
+    word_count_max: 180
+    sentence_count_min: 3
+    sentence_count_max: 10
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 1
+    word_count_max: 45
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Tablodaki +/- bilgileriyle uyumlu hikâye açıklaması veya unsur yapısı karşılaştırması
+  kurallar:
+  - 'KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI'
+  - Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI
+  - Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil
+  - 'YASAK: Tablodaki değeri aynen şıkka yazmak (örn: ''yalıtımı azdır'' tabloda yazıyorsa şıkta aynen yazmamalı)'
+  - Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli
+  - Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı
+  - Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı
+  - Hikâye eşleştirme sorusunda doğru cevap hikâyenin + aldığı unsurları içeren, - aldığı unsurları İÇERMEYEN açıklama
+  - Farklılık sorusunda doğru cevap +/- profili diğerlerinden en çok farklılık gösteren hikâye
+  - Mini paragraf seçenekleri belirgin hikâye unsuru özellikleri taşımalı
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: ''teleskop'' → ''mercekli araç'' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: UNSUR_KARISTIRMA
+    aciklama: Hikâyede bulunmayan (-) bir unsuru içeren açıklama sunma
+    ornek: Çatışma unsuru olmayan hikâyeye çatışma eklenmiş açıklama önerme
+  - ad: KISMI_UYUM
+    aciklama: Bazı unsurları doğru yansıtan ama en az birini yanlış içeren açıklama
+    ornek: 3 unsuru doğru, 1 unsuru yanlış taşıyan hikâye açıklaması önerme
+  - ad: BENZER_PROFIL
+    aciklama: Farklılık sorusunda profili az farklı olan hikâyeyi öne çıkarma
+    ornek: Sadece 1 sütunda farklı olan hikâyeyi en farklı gibi gösterme
+use_shared_strategies: false

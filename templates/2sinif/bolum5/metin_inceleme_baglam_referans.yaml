@@ -1,0 +1,687 @@
+meta:
+  id: "metin_inceleme_baglam_sorulari_sinif2_gorselli_2li_3lu"
+  ad: "Metin İnceleme (Tamamen Bağlam Soruları – 2’li ve 3’lü Sorular)"
+  sinif_seviyesi: 2
+  ders: "Türkçe"
+  bolum: "2. Sınıf Paragraf Soru Bankası"
+  alt_bolum: "5. Metin İnceleme"
+  soru_turu: "çoktan seçmeli soru grubu"
+  aciklama: >
+    2. sınıf öğrencisi için tek bir metin ve tek bir görsel üzerinden,
+    aynı bağlama bağlı 2 veya 3 çoktan seçmeli soru üreten standart şablon.
+    Soru grubu; metnin genelini anlama, detay fark etme, karakter özelliği
+    ve sözcükte anlam gibi alt alanları slot mantığıyla birleştirir.
+  kullanim_notu: >
+    Bu şablon, harici olarak kullanılan 2. Sınıf TYMM Ortak Kuralları YAML'ı ile birlikte
+    doğrulanmalıdır. TYMM ortak kuralları bu şablonun içine gömülmemiştir.
+
+format:
+  type: "llm_generated_html"
+  description: "Soru grubu üst başlığı + görsel + tek metin + aynı metne bağlı 2 veya 3 soru"
+
+  question_group:
+    question_count_allowed: [2, 3]
+    numbering_mode: "consecutive"
+    group_header_required: true
+    group_header_templates:
+      iki_soru:
+        - "{n1} ve {n2}. soruları aşağıdaki metne göre cevaplayalım."
+        - "{n1}. ve {n2}. soruları aşağıdaki metne göre cevaplayınız."
+        - "Aşağıdaki metne göre {n1}. ve {n2}. soruları cevaplayınız."
+      uc_soru:
+        - "{n1}-{n3}. soruları aşağıdaki metne göre cevaplayalım."
+        - "{n1}, {n2} ve {n3}. soruları aşağıdaki metne göre cevaplayınız."
+        - "Aşağıdaki metne göre {n1}-{n3}. soruları cevaplayınız."
+    kurallar:
+      - "Tüm sorular aynı metne ve aynı görsele bağlı olmalıdır."
+      - "Soru grubu içindeki tüm sorular ortak bağlamdan beslenmelidir."
+      - "Her soru bağımsız cevaplanabilir olmalı ama aynı metinden çıkmalıdır."
+      - "Soru grubu içinde gereksiz tekrar olmamalıdır."
+      - "Slotlar birbirini tamamlamalı, aynı şeyi başka sözlerle tekrar etmemelidir."
+
+  passage:
+    required: true
+    text_modes:
+      - "simple_info"
+      - "short_narrative"
+    sentence_count_min: 4
+    sentence_count_max: 7
+    word_count_min: 42
+    word_count_max: 92
+    style: "simple_clear_primary_text"
+    kurallar:
+      - "Metin tek baskın konu, olay, kişi ya da durum etrafında kurulmalıdır."
+      - "Metin 2. sınıf öğrencisinin anlayabileceği kadar sade, somut ve açık olmalıdır."
+      - "Metin, aynı bağlam üzerinden en az 2 ve en fazla 3 soru üretmeye elverişli bilgi taşımalıdır."
+      - "Metinde en az 1 açık detay sorusu çıkarılabilecek net bilgi bulunmalıdır."
+      - "Metin, en az 1 genel anlama sorusu çıkarılabilecek açıklıkta olmalıdır."
+      - "3'lü soru grubunda metin, üçüncü slot için ek malzeme taşımalıdır."
+      - "Metin dış bilgi gerektirmemelidir."
+      - "Metin ana düşünce, ana duygu veya soyut mesaj çözümlemesine zorlamamalıdır."
+      - "Metin uzun ama dağınık olmamalı; her cümle soru üretimine katkı sağlamalıdır."
+      - "Yan bilgi olabilir ama ana bağlamı gölgelememelidir."
+      - "Metindeki kişi, olay, yer, zaman, özellik veya bilgi açıkça seçilebilir olmalıdır."
+
+  conditional_markup_rules:
+    kullan:
+      - "Slot 3 sözcükte anlam ise metinde altı çizili sözcük veya numaralanmış cümle yapısı eklenebilir."
+      - "Slot 3 benzetme ise metinde açık bir 'gibi' benzetmesi bulunmalıdır."
+      - "Slot 3 karakter özelliği ise metinde bu özelliği destekleyen açık davranış bulunmalıdır."
+      - "Slot 2 veya 3 'değinilmemiştir / söylenemez' ise metinde ayırt edilebilir açık bilgiler yer almalıdır."
+    yasak:
+      - "Gerekmiyorsa metin yapay biçimde numaralandırılmamalıdır."
+      - "Gerekmiyorsa altı çizili sözcük eklenmemelidir."
+      - "Aynı metne birden fazla gereksiz işaretleme yüklenmemelidir."
+
+  visual:
+    required: true
+    description: "Metnin ana bağlamını doğrudan destekleyen sade görsel"
+    placement: "passage_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illüstrasyon"
+      - "tek sahneli fotoğraf benzeri çizim"
+      - "tek kişi, tek varlık veya tek olay odaklı sahne"
+    kurallar:
+      - "Görsel metnin ana kişi, varlık, olay veya konusunu doğrudan desteklemelidir."
+      - "Görsel süs amaçlı olmamalı, bağlamı güçlendirmelidir."
+      - "Görsel tek bakışta anlaşılır olmalıdır."
+      - "Görsel tüm sorular için ortak bağlam desteği sunmalıdır."
+      - "Görsel, cevabı tamamen ele vermemeli ama metni anlamayı kolaylaştırmalıdır."
+      - "Görsel dikkat dağıtıcı gereksiz ayrıntılar içermemelidir."
+      - "Görsel yanlış seçeneği destekleyecek kadar yanıltıcı olmamalıdır."
+    yasaklar:
+      - "karmaşık kolaj"
+      - "çok sahneli kompozisyon"
+      - "grafik veya veri yoğun görsel"
+      - "metinle zayıf ilişkili dekoratif görsel"
+
+  slot_structure:
+    slot_1:
+      role: "temel bağlam anlama ve açık bilgi"
+      required_in:
+        - "2'li soru grubu"
+        - "3'lü soru grubu"
+      amac:
+        - "Metnin temel detayını veya açık bilgisini yoklar."
+        - "Okuyucunun metni dikkatli okuyup okumadığını ölçer."
+      allowed_families:
+        - "dogrudan_detay"
+        - "yer_zaman_kisi_olay"
+        - "metinden_dogrudan_ogrenilen_bilgi"
+        - "basit_acik_cikarsama"
+      kural:
+        - "Slot 1 sorusu metindeki açık bilgiye dayanmalıdır."
+        - "Cevap doğrudan metinden bulunabilmelidir."
+        - "Slot 1, 2. sınıf için giriş niteliğinde net bir soru olmalıdır."
+
+    slot_2:
+      role: "genel anlama veya seçici tarama"
+      required_in:
+        - "2'li soru grubu"
+        - "3'lü soru grubu"
+      amac:
+        - "Metnin genelini ya da seçici dikkat gerektiren bir yönünü yoklar."
+        - "Detayla genel bağlam arasındaki farkı ölçer."
+      allowed_families:
+        - "konu"
+        - "baslik"
+        - "deginilmemistir"
+        - "soylenemez"
+        - "metinden_ne_ogrendim"
+        - "uygun_bilgi_sectirme"
+      kural:
+        - "Slot 2, metnin tamamına bakmayı gerektirmelidir."
+        - "Slot 2, ana düşünce veya mesaj sorusuna dönüşmemelidir."
+        - "Değinilmemiştir / söylenemez türü kullanılırsa metinde ayırt edici açık bilgiler bulunmalıdır."
+
+    slot_3:
+      role: "ek bağlam kontrolü"
+      optional_in:
+        - "2'li soru grubu"
+      required_in:
+        - "3'lü soru grubu"
+      amac:
+        - "Aynı metin üzerinde ikinci katman ama yine 2. sınıf düzeyinde kontrol sağlar."
+      allowed_families:
+        - "karakter_ozelligi"
+        - "ozellik_ile_ilgili"
+        - "sozcukte_anlam_zit_anlam"
+        - "zitanlam_numarali_cumle"
+        - "acik_benzetme"
+        - "basit_neden_sonuc"
+        - "deginilmemistir"
+        - "soylenemez"
+      kural:
+        - "Slot 3, metnin açıkça desteklediği bir alt beceriye dayanmalıdır."
+        - "Karakter özelliği sorusu kullanılırsa özellik davranıştan açıkça çıkarılabilmelidir."
+        - "Sözcükte anlam sorusu kullanılırsa hedef sözcük metinde görünür biçimde işaretlenmiş olmalıdır."
+        - "Benzetme sorusu kullanılırsa benzetme açık biçimde metinde yer almalıdır."
+        - "Slot 3, 3. sınıf düzeyine kayan yorum ve analiz istememelidir."
+
+  options:
+    per_question_count: 3
+    labels: ["A", "B", "C"]
+    correct_count_per_question: 1
+    style: "short_option"
+    word_count_min: 1
+    word_count_max: 8
+    kurallar:
+      - "Her soru için 3 seçenek olmalıdır."
+      - "Her soru için yalnız 1 doğru cevap olmalıdır."
+      - "Seçenekler kısa, sade ve 2. sınıf düzeyinde olmalıdır."
+      - "Yanlış seçenekler metne yakın görünmeli ama dikkatli okuyunca elenebilmelidir."
+      - "Yanlış seçenekler metinde olmayan yeni ana olay veya baskın bilgi getirmemelidir."
+      - "Her soru kendi içinde bağımsız seçenek setine sahip olmalıdır."
+
+slot_families:
+
+  dogrudan_detay:
+    tanim: "Metindeki açık bilgiye dayalı soru"
+    uygun_slotlar: ["slot_1", "slot_2"]
+    stems:
+      - "Bu metne göre aşağıdakilerden hangisi doğrudur?"
+      - "Bu metne göre aşağıdakilerden hangisi söylenebilir?"
+      - "Metne göre aşağıdakilerden hangisi doğrudur?"
+      - "Aşağıdakilerden hangisi metinde verilen bilgilerden biridir?"
+      - "Metne göre aşağıdakilerden hangisi doğrudur?"
+      - "Bu metne göre aşağıdakilerden hangisi yanlıştır?"
+    rules:
+      - "Doğru cevap açık biçimde metinde yer almalıdır."
+      - "Yanlış seçenekler metne yakın ama yanlış olmalıdır."
+      - "Yanlış bilgi yükü çok fazla olmamalıdır."
+
+  yer_zaman_kisi_olay:
+    tanim: "Kim, ne, nerede, ne zaman, ne yaptı türü açık bilgi soruları"
+    uygun_slotlar: ["slot_1"]
+    stems:
+      - "Metne göre {person} nereye gitmiştir?"
+      - "Metne göre olay nerede geçmektedir?"
+      - "Metne göre bu olay ne zaman olmuştur?"
+      - "Metne göre aşağıdakilerden hangisi yapılmıştır?"
+      - "Metne göre {person} ne yapmıştır?"
+      - "Metne göre {entity} nerede bulunmaktadır?"
+      - "Metne göre {person} kime yardım etmiştir?"
+      - "Metne göre {person} neden {action} yapmıştır?"
+    rules:
+      - "Soru doğrudan açık ayrıntı ölçmelidir."
+      - "Cevap metnin tek bir bölümünden ya da iki açık bilgiden bulunabilmelidir."
+
+  metinden_dogrudan_ogrenilen_bilgi:
+    tanim: "Metnin verdiği temel bilgi veya öğrenme çıktısı"
+    uygun_slotlar: ["slot_1", "slot_2"]
+    stems:
+      - "Bu metinden aşağıdakilerden hangisini öğreniyoruz?"
+      - "Metne göre aşağıdakilerden hangisi öğrenilebilir?"
+      - "Bu metinde bize hangi bilgi verilmektedir?"
+      - "Bu metinde anlatılan bilgilerden biri hangisidir?"
+    rules:
+      - "Soru öğretici metinlerde daha uygundur."
+      - "Doğru cevap metindeki açık bilgiye dayanmalıdır."
+
+  basit_acik_cikarsama:
+    tanim: "Açık ipuçlarıyla bulunan çok basit çıkarım"
+    uygun_slotlar: ["slot_1", "slot_3"]
+    stems:
+      - "Metne göre aşağıdakilerden hangisi söylenebilir?"
+      - "Bu metne göre {person} için aşağıdakilerden hangisi söylenebilir?"
+      - "Metinde verilen bilgilere göre aşağıdakilerden hangisi doğrudur?"
+    rules:
+      - "Çıkarım, açık ipuçlarına dayanmalıdır."
+      - "Derin yorum, mesaj, ders veya ana düşünce istememelidir."
+
+  konu:
+    tanim: "Metnin ne hakkında olduğunu buldurma"
+    uygun_slotlar: ["slot_2"]
+    stems:
+      - "Bu metnin konusu aşağıdakilerden hangisidir?"
+      - "Bu metinde ele alınan konu aşağıdakilerden hangisidir?"
+      - "Bu metinde aşağıdakilerden hangisine değinilmiştir?"
+      - "Paragrafta anlatılan konu aşağıdakilerden hangisidir?"
+      - "Metinde en çok ne anlatılmaktadır?"
+    rules:
+      - "Konu sorusu ana düşünce sorusuna dönüşmemelidir."
+      - "Doğru cevap, metnin tamamında ne anlatıldığını karşılamalıdır."
+
+  baslik:
+    tanim: "Metne uygun başlık seçtirme"
+    uygun_slotlar: ["slot_2"]
+    stems:
+      - "Bu metne getirilebilecek en uygun başlık aşağıdakilerden hangisidir?"
+      - "Bu metnin başlığı aşağıdakilerden hangisi olabilir?"
+      - "Aşağıdakilerden hangisi bu metne başlık olmaya en uygundur?"
+      - "Bu metne verilebilecek en uygun başlık hangisidir?"
+    rules:
+      - "Başlık metnin tamamını kapsamalıdır."
+      - "Başlık seçimi konu düzeyinde kalmalıdır; ana fikir düzeyine çıkmamalıdır."
+
+  deginilmemistir:
+    tanim: "Metinde açıkça yer almayan bilgiyi seçtirme"
+    uygun_slotlar: ["slot_2", "slot_3"]
+    stems:
+      - "Bu metinde aşağıdakilerden hangisine değinilmemiştir?"
+      - "Metinde aşağıdakilerden hangisinden söz edilmemiştir?"
+      - "Bu metinde aşağıdakilerden hangisine yer verilmemiştir?"
+      - "Metne göre aşağıdakilerden hangisinden bahsedilmemiştir?"
+    rules:
+      - "Metinde diğer iki seçeneğin açık karşılığı bulunmalıdır."
+      - "Doğru cevap, gerçekten metinde yer almayan ama konu alanına yakın bir seçenek olmalıdır."
+      - "Soru belirsiz olmamalıdır."
+
+  soylenemez:
+    tanim: "Metne göre söylenemeyecek ya da çıkarılamayacak bilgiyi seçtirme"
+    uygun_slotlar: ["slot_2", "slot_3"]
+    stems:
+      - "Bu metne göre aşağıdakilerden hangisi söylenemez?"
+      - "Metne göre aşağıdakilerden hangisi çıkarılamaz?"
+      - "Aşağıdakilerden hangisi metne göre doğru değildir?"
+      - "Metindeki bilgilere göre aşağıdakilerden hangisi söylenemez?"
+    rules:
+      - "Doğru cevap, metnin desteklemediği seçenek olmalıdır."
+      - "Diğer iki seçenek metinden açıkça ya da çok açık çıkarımla desteklenmelidir."
+      - "Bu aile 2. sınıf için yalnız orta ve zor düzeyde tercih edilmelidir."
+
+  metinden_ne_ogrendim:
+    tanim: "Metnin bize verdiği temel bilgi ya da öğrenmeyi seçtirme"
+    uygun_slotlar: ["slot_2"]
+    stems:
+      - "Bu metinden ne öğreniyoruz?"
+      - "Bu metin bize ne anlatmaktadır?"
+      - "Bu metne göre aşağıdakilerden hangisi öğrenilir?"
+      - "Metinden öğrendiğimiz bilgi aşağıdakilerden hangisidir?"
+    rules:
+      - "Bu aile konu veya açık bilgi düzeyinde kalmalıdır."
+      - "Mesaj ve ders çıkarma düzeyine taşmamalıdır."
+
+  uygun_bilgi_sectirme:
+    tanim: "Metne uygun ifade seçtirme"
+    uygun_slotlar: ["slot_2"]
+    stems:
+      - "Metne göre aşağıdakilerden hangisi uygundur?"
+      - "Bu metne göre en uygun bilgi aşağıdakilerden hangisidir?"
+      - "Aşağıdakilerden hangisi metindeki bilgilerle uyumludur?"
+    rules:
+      - "Doğru cevap metnin geneline uygun olmalıdır."
+      - "Yanlış seçenekler açık uyumsuzluk taşımalıdır."
+
+  karakter_ozelligi:
+    tanim: "Kahramanın kişisel özelliğini buldurma"
+    uygun_slotlar: ["slot_3"]
+    stems:
+      - "Aşağıdakilerden hangisi metinde sözü edilen kahramanın kişisel özelliği olabilir?"
+      - "Aşağıdakilerden hangisi metinde sözü edilen kahramanın kişisel özelliği olamaz?"
+      - "Metne göre kahraman için aşağıdakilerden hangisi söylenebilir?"
+      - "Metindeki kişinin hangi özelliği ön plana çıkmaktadır?"
+    rules:
+      - "Özellik doğrudan davranıştan anlaşılmalıdır."
+      - "Kullanılacak özellikler 2. sınıf düzeyinde açık olmalıdır."
+      - "İzinli özellik havuzu: mutlu, üzgün, cesur, çalışkan, sabırlı, merhametli, dürüst, sorumluluk sahibi, azimli, korkak, sinirli."
+      - "İnce psikolojik ve soyut özellikler kullanılmamalıdır."
+
+  ozellik_ile_ilgili:
+    tanim: "Davranışı bir özelliğe bağlatma"
+    uygun_slotlar: ["slot_3"]
+    stems:
+      - "Metindeki bu davranış onun hangi özelliği ile ilgilidir?"
+      - "Metne göre {person} bu davranışı hangi özelliği sayesinde yapmıştır?"
+      - "Bu metne göre kahramanın yaptığı davranış aşağıdaki özelliklerden hangisi ile ilgilidir?"
+    rules:
+      - "Davranış ile özellik arasındaki bağ açık olmalıdır."
+      - "Tek ve baskın bir özellik hedeflenmelidir."
+
+  sozcukte_anlam_zit_anlam:
+    tanim: "Altı çizili sözcüğün zıt anlamını yoklama"
+    uygun_slotlar: ["slot_3"]
+    stems:
+      - "Metindeki altı çizili sözcüğün zıt anlamlısı hangi seçenekte doğru verilmiştir?"
+      - "Aşağıdaki kelimelerden hangisi, metindeki altı çizili kelimelerle zıt anlamlı değildir?"
+      - "Metindeki altı çizili sözcüğün zıt anlamı aşağıdakilerden hangisidir?"
+    rules:
+      - "Hedef sözcük 2. sınıf düzeyinde ve yaygın olmalıdır."
+      - "Zıt anlam ilişkisi açık ve tek olmalıdır."
+      - "Metinde yalnız gerekli sözcük altı çizilmelidir."
+      - "Bu aile daha çok bilgilendirici metinlerde ve orta/zor düzeyde kullanılmalıdır."
+
+  zitanlam_numarali_cumle:
+    tanim: "Numaralanmış cümlelerde zıt anlamlı sözcükleri fark ettirme"
+    uygun_slotlar: ["slot_3"]
+    stems:
+      - "Bu metinde numaralanmış cümlelerin hangisinde zıt anlamlı kelimeler bir arada kullanılmıştır?"
+      - "Numaralanmış cümlelerden hangisinde zıt anlamlı sözcükler vardır?"
+      - "Metindeki numaralanmış cümlelerden hangisinde karşıt anlamlı kelimeler birlikte kullanılmıştır?"
+    rules:
+      - "Bu aile kullanılırsa metindeki cümleler numaralanmalıdır."
+      - "Doğru seçenekte zıt anlam ilişkisi açık olmalıdır."
+      - "Diğer cümlelerde böyle bir ilişki bulunmamalıdır."
+
+  acik_benzetme:
+    tanim: "Metindeki açık benzetmeyi fark ettirme"
+    uygun_slotlar: ["slot_3"]
+    stems:
+      - "Bu metne göre {entity} neye benzetilmiştir?"
+      - "Metindeki benzetmeye göre aşağıdakilerden hangisi doğrudur?"
+      - "Bu metinde {entity} hangi varlığa benzetilmiştir?"
+    rules:
+      - "Benzetme açıkça 'gibi' ya da doğrudan benzetme ifadesi ile verilmelidir."
+      - "Yorum değil, doğrudan metinsel buluş olmalıdır."
+      - "Bu aile orta ve zor düzeyde daha uygundur."
+
+  basit_neden_sonuc:
+    tanim: "Metindeki açık neden-sonuç ilişkisini buldurma"
+    uygun_slotlar: ["slot_3", "slot_1"]
+    stems:
+      - "Bu olay neden olmuştur?"
+      - "Metne göre {person} neden {action} yapmıştır?"
+      - "Aşağıdakilerden hangisi bu durumun nedeni olabilir?"
+      - "Metne göre bu olaydan sonra ne olmuştur?"
+    rules:
+      - "Neden-sonuç ilişkisi metinde açık olmalıdır."
+      - "Çok aşamalı yorum gerektirmemelidir."
+
+slot_combination_policies:
+  ikili_soru_grubu:
+    required_slots: ["slot_1", "slot_2"]
+    allowed_patterns:
+      - ["yer_zaman_kisi_olay", "konu"]
+      - ["yer_zaman_kisi_olay", "baslik"]
+      - ["dogrudan_detay", "konu"]
+      - ["dogrudan_detay", "baslik"]
+      - ["dogrudan_detay", "deginilmemistir"]
+      - ["dogrudan_detay", "soylenemez"]
+      - ["dogrudan_detay", "metinden_ne_ogrendim"]
+      - ["dogrudan_detay", "uygun_bilgi_sectirme"]
+    kurallar:
+      - "İki sorulu grupta ilk soru çoğunlukla açık detay sorusu olmalıdır."
+      - "İkinci soru metnin geneline ya da seçici taramaya bakmalıdır."
+      - "Aynı beceriyi iki soruda tekrar etme."
+
+  uclu_soru_grubu:
+    required_slots: ["slot_1", "slot_2", "slot_3"]
+    allowed_patterns:
+      - ["yer_zaman_kisi_olay", "baslik", "karakter_ozelligi"]
+      - ["dogrudan_detay", "deginilmemistir", "ozellik_ile_ilgili"]
+      - ["dogrudan_detay", "soylenemez", "karakter_ozelligi"]
+      - ["dogrudan_detay", "baslik", "sozcukte_anlam_zit_anlam"]
+      - ["dogrudan_detay", "konu", "sozcukte_anlam_zit_anlam"]
+      - ["dogrudan_detay", "soylenemez", "zitanlam_numarali_cumle"]
+      - ["dogrudan_detay", "deginilmemistir", "acik_benzetme"]
+      - ["dogrudan_detay", "uygun_bilgi_sectirme", "basit_neden_sonuc"]
+    kurallar:
+      - "Üç sorulu grupta slot 1 açık detay, slot 2 genel/seçici, slot 3 alt beceri olmalıdır."
+      - "Slot 3 mutlaka metnin açıkça desteklediği özel bir alt alanı ölçmelidir."
+      - "Aynı soru grubunda iki farklı olumsuz kök mümkünse kullanılmamalıdır."
+      - "Slot 3, metni aşırı zorlaştırmamalıdır."
+
+zorluk_duzeyleri:
+  kolay:
+    question_group:
+      question_count_allowed: [2]
+      preferred_patterns:
+        - ["yer_zaman_kisi_olay", "konu"]
+        - ["dogrudan_detay", "baslik"]
+        - ["dogrudan_detay", "uygun_bilgi_sectirme"]
+    passage:
+      sentence_count_min: 4
+      sentence_count_max: 5
+      word_count_min: 42
+      word_count_max: 58
+      kurallar:
+        - "Metin tek kişi, tek olay ya da tek bilgi odağı etrafında kurulmalıdır."
+        - "Detay sorusunun cevabı metinde açık biçimde görünmelidir."
+        - "Konu veya başlık sorusu çok görünür olmalıdır."
+        - "Karakter özelliği, zıt anlam, benzetme gibi slot 3 aileleri kolay düzeyde kullanılmamalıdır."
+    visual:
+      kurallar:
+        - "Görsel ana bağlamı doğrudan desteklemelidir."
+        - "Görsel öğrencinin konu alanını hemen fark etmesine yardım etmelidir."
+    distractors:
+      kurallar:
+        - "Yanlış seçenekler kolay elenebilir olmalıdır."
+        - "Yanlış seçenekler metne çok yakın karmaşık çeldiriciler olmamalıdır."
+    difficulty_note: >
+      Kolay düzeyde soru grubu, metni anlama ve açık bilgiyi fark etme düzeyinde kalır.
+      Öğrenciden bir bağlamı takip etmesi beklenir, ama eleme baskısı düşüktür.
+
+  orta:
+    question_group:
+      question_count_allowed: [2, 3]
+      preferred_patterns:
+        - ["dogrudan_detay", "deginilmemistir"]
+        - ["dogrudan_detay", "baslik"]
+        - ["dogrudan_detay", "konu", "karakter_ozelligi"]
+        - ["dogrudan_detay", "uygun_bilgi_sectirme", "sozcukte_anlam_zit_anlam"]
+        - ["dogrudan_detay", "baslik", "acik_benzetme"]
+    passage:
+      sentence_count_min: 5
+      sentence_count_max: 6
+      word_count_min: 52
+      word_count_max: 74
+      kurallar:
+        - "Metinde 1 yan ayrıntı bulunabilir."
+        - "Slot 2 için genel bakış ya da seçici tarama gerektiren bilgi bulunmalıdır."
+        - "3'lü soru grubunda slot 3 metnin açık alt beceri malzemesine dayanmalıdır."
+        - "Soru grubu yine de 2. sınıf dil düzeyinde kalmalıdır."
+    visual:
+      kurallar:
+        - "Görsel metni desteklemeli ama tek başına tüm cevapları vermemelidir."
+    distractors:
+      kurallar:
+        - "En az bir yanlış seçenek ilk bakışta makul görünmelidir."
+        - "Değinilmemiştir / söylenemez sorularında diğer iki seçenek metinle açıkça desteklenmelidir."
+    difficulty_note: >
+      Orta düzeyde öğrenci aynı metin üzerinden hem detay hem genel bağlam hem de
+      basit alt becerileri kullanır. Ancak soru grubu yine de yorum ağırlıklı değildir.
+
+  zor:
+    question_group:
+      question_count_allowed: [3]
+      preferred_patterns:
+        - ["dogrudan_detay", "soylenemez", "karakter_ozelligi"]
+        - ["dogrudan_detay", "deginilmemistir", "ozellik_ile_ilgili"]
+        - ["dogrudan_detay", "soylenemez", "sozcukte_anlam_zit_anlam"]
+        - ["dogrudan_detay", "baslik", "zitanlam_numarali_cumle"]
+        - ["dogrudan_detay", "deginilmemistir", "acik_benzetme"]
+        - ["dogrudan_detay", "uygun_bilgi_sectirme", "basit_neden_sonuc"]
+    passage:
+      sentence_count_min: 6
+      sentence_count_max: 7
+      word_count_min: 66
+      word_count_max: 92
+      kurallar:
+        - "Metin 3 soru çıkaracak kadar zengin olmalıdır."
+        - "Metinde açık detay, genel bağlam ve alt beceri için ayrı dayanaklar bulunmalıdır."
+        - "Zor düzeyde bile her soru açık metin desteğine dayanmalıdır."
+        - "Zor düzey, 3. sınıf düzeyine kayan soyut yorum ve analiz istememelidir."
+    visual:
+      kurallar:
+        - "Görsel ana bağlamı desteklemeli ve tüm soru grubuna hizmet etmelidir."
+        - "Görsel yakın çeldiricilere doğal zemin hazırlayabilir ama karışık olmamalıdır."
+    distractors:
+      kurallar:
+        - "Yanlış seçenekler metne yakın ve makul görünmelidir."
+        - "Slot 2 ve slot 3'te özellikle yakın çeldiriciler kullanılabilir."
+        - "Aynı gruptaki üç soruda çeldirici mantıkları çeşitlendirilmelidir."
+    difficulty_note: >
+      Zor düzey 2. sınıfta derin yorum, mesaj, ana düşünce veya üst düzey analiz değildir.
+      Zorluk, tek metin üzerinden üç farklı ama açık bağlam sorusunu dikkatle çözme düzeyinde kalır.
+
+difficulty_selection_policy:
+  default: "Orta"
+  allowed_values: ["Kolay", "Orta", "Zor"]
+  hard_limits:
+    - "Tüm düzeylerde görsel zorunludur."
+    - "Tüm düzeylerde her soru 3 seçenekli olmalıdır."
+    - "Tüm düzeylerde metin 2. sınıf sözcük ve cümle düzeyini aşamaz."
+    - "Zor düzey seçilse bile soru grubu ana düşünce, ana duygu veya soyut mesaj çözümüne kayamaz."
+    - "Kolay düzeyde 3'lü soru grubu kullanılmamalıdır."
+    - "Zor düzeyde bile sorular yalnız metnin açık içeriği ve açık ipuçlarıyla çözülebilmelidir."
+
+konu_alani:
+  izinli_ornekler:
+    - "ünlü kişiler"
+    - "tarihi kahramanlar"
+    - "hayvanların özellikleri"
+    - "bitkiler ve doğa"
+    - "teknolojik ürünler"
+    - "şehirler ve yapılar"
+    - "günlük yaşam"
+    - "yardımlaşma"
+    - "okul yaşamı"
+    - "sanatçılar"
+    - "mucitler"
+    - "doğal oluşumlar"
+    - "seyahat ve yerler"
+    - "çocukların davranışları"
+  kurallar:
+    - "Konu 2. sınıf öğrencisinin anlayabileceği kadar somut ve açık olmalıdır."
+    - "Metin, aynı bağlamdan birden fazla soru çıkarılmasına uygun olmalıdır."
+    - "Konu görselle rahat desteklenebilen nitelikte olmalıdır."
+    - "Metin tarihî ya da bilimsel bilgi içerse bile sade anlatılmalıdır."
+    - "Konu ifadesi, başlık, karakter özelliği ve kelime anlamı birbirine karıştırılmamalıdır."
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "2. sınıfa uygun, görselle desteklenebilir tek ve açık bir bağlam seç"
+    - step: 2
+      action: "Seçilen bağlam için 4-7 cümlelik kısa ve sade metin oluştur"
+      details:
+        - "Tek baskın konu kur"
+        - "En az bir açık detay sorusu çıkar"
+        - "En az bir genel anlama sorusu çıkar"
+        - "3'lü yapı için gerekiyorsa karakter özelliği, zıt anlam, benzetme veya açık neden-sonuç malzemesi ekle"
+    - step: 3
+      action: "Metne uygun sade görsel tasarla"
+      details:
+        - "Ana kişi, varlık veya olayı göster"
+        - "Görsel tüm soru grubuna ortak destek sunsun"
+    - step: 4
+      action: "Soru grubu sayısını belirle"
+      details:
+        - "Kolay: 2 soru"
+        - "Orta: 2 veya 3 soru"
+        - "Zor: 3 soru"
+    - step: 5
+      action: "Slot kombinasyonunu zorluk düzeyine göre seç"
+      details:
+        - "Slot 1: detay"
+        - "Slot 2: genel/seçici"
+        - "Slot 3: alt beceri"
+    - step: 6
+      action: "Her slot için uygun soru ailesini ve soru kökünü seç"
+    - step: 7
+      action: "Her soru için 1 doğru ve 2 yanlış seçenek üret"
+      details:
+        - "Yanlış seçenekler metne yakın ama yanlış olsun"
+        - "Aynı soru grubunda birbirini tekrar eden çeldiricilerden kaçın"
+    - step: 8
+      action: "Soru numaralarını ve grup başlığını oluştur"
+    - step: 9
+      action: "Şıkları A-B-C olarak yerleştir"
+    - step: 10
+      action: "Harici TYMM ortak kuralları ile doğrulama yap"
+
+validation_checklist:
+  question_group:
+    - "Soru grubu 2 veya 3 sorudan mı oluşuyor?"
+    - "Tüm sorular aynı metne mi bağlı?"
+    - "Tüm sorular aynı görsele mi bağlı?"
+    - "Slot yapısı seçilen düzeye uygun mu?"
+    - "Aynı beceri gereksiz tekrar edilmemiş mi?"
+
+  passage:
+    - "Metin 4-7 cümle arasında mı?"
+    - "Metin seçilen zorluk düzeyinin kelime aralığında mı?"
+    - "Metin tek baskın bağlama sahip mi?"
+    - "Metin somut ve sade mi?"
+    - "Metinde en az bir açık detay var mı?"
+    - "Metinde en az bir genel anlama malzemesi var mı?"
+    - "3'lü grupta üçüncü slotu destekleyen açık malzeme var mı?"
+    - "Metinde dış bilgi gerektiren unsur var mı? Varsa reddet."
+
+  visual:
+    - "Görsel zorunlu olarak var mı?"
+    - "Görsel metnin ana bağlamıyla uyumlu mu?"
+    - "Görsel tek bakışta anlaşılır mı?"
+    - "Görsel destekleyici ama tüm cevapları ele vermiyor mu?"
+    - "Görsel dekoratif kalmıyor mu?"
+
+  slots:
+    - "Slot 1 açık detay sorusu mu?"
+    - "Slot 2 genel anlama veya seçici tarama sorusu mu?"
+    - "Slot 3 varsa metnin açık alt beceri malzemesine dayanıyor mu?"
+    - "Slot 3, 2. sınıf düzeyini aşıyor mu? Aşıyorsa reddet."
+
+  options:
+    - "Her soruda toplam 3 seçenek var mı?"
+    - "Her soruda yalnız 1 doğru seçenek var mı?"
+    - "Yanlış seçenekler metne yakın ama elenebilir mi?"
+    - "Değinilmemiştir / söylenemez sorularında doğru cevap gerçekten desteklenmiyor mu?"
+    - "Karakter özelliği sorularında doğru cevap davranışla açıkça destekleniyor mu?"
+    - "Zıt anlam sorularında hedef sözcük açık ve doğru mu?"
+
+  difficulty:
+    - "Kolay düzeyde yalnız 2 soru mu var?"
+    - "Zor düzeyde 3 soru var mı?"
+    - "Zor düzey bile 2. sınıf sınırında mı?"
+    - "Soru grubu ana düşünce, ana duygu veya yorum düzeyine kaymıyor mu?"
+
+hard_fail_rules:
+  - "Soru sayısı 2 ya da 3 değilse"
+  - "Görsel yoksa"
+  - "Sorular aynı metne bağlı değilse"
+  - "Herhangi bir soruda 3 seçenek yoksa"
+  - "Herhangi bir soruda iki veya daha fazla makul doğru seçenek varsa"
+  - "Metin 2. sınıf için fazla soyut veya karmaşıksa"
+  - "Soru grubu ana düşünce, ana duygu, mesaj veya üst düzey yorum sorusuna kayıyorsa"
+  - "Karakter özelliği sorusu açık davranış desteği olmadan kurulmuşsa"
+  - "Zıt anlam sorusu uygun işaretleme olmadan kurulmuşsa"
+  - "Değinilmemiştir / söylenemez sorusu belirsizse"
+  - "Görsel metinle uyumsuzsa"
+  - "Aynı slotta aynı beceri gereksiz biçimde tekrar ediyorsa"
+
+ornek_bicim_notlari:
+  - "Peribacaları örneğinde 2'li yapı; açık detay + başlık sorusu şeklindedir."
+  - "Temassız ödeme yüzüğü örneğinde 2'li yapı; sözcükte anlam + açık detay sorusu şeklindedir."
+  - "Panda karıncaları örneğinde 2'li yapı; özellik bilgisi + zıt anlamlı cümle sorusu şeklindedir."
+  - "Şerife Bacı örneğinde 3'lü yapı; açık detay + değinilmemiştir + özellik ile ilgili soru şeklindedir."
+  - "Salvador Dali örneğinde 3'lü yapı; açık benzetme + söylenemez + açık çıkarım sorusu şeklindedir."
+  - "Bu bölümde tüm sorular tek bir metnin farklı yönlerini yoklamalıdır."
+
+output_contract:
+  required_fields:
+    - "group_header"
+    - "passage"
+    - "visual_description"
+    - "question_count"
+    - "slot_1"
+    - "slot_2"
+    - "difficulty"
+    - "topic"
+  optional_fields:
+    - "slot_3"
+    - "passage_markup"
+  slot_output_format:
+    slot_1:
+      required_fields:
+        - "question_number"
+        - "family"
+        - "stem"
+        - "options"
+        - "answer"
+    slot_2:
+      required_fields:
+        - "question_number"
+        - "family"
+        - "stem"
+        - "options"
+        - "answer"
+    slot_3:
+      required_fields:
+        - "question_number"
+        - "family"
+        - "stem"
+        - "options"
+        - "answer"
+  answer_format:
+    - "Her slotta answer yalnızca A/B/C olarak verilebilir"
+    - "difficulty yalnızca Kolay / Orta / Zor olabilir"

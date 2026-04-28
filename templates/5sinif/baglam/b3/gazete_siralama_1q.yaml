@@ -1,0 +1,94 @@
+meta:
+  id: gazete_siralama_1q
+  ad: Gazete Haberi — Sıralama (1 Soru)
+  sinif_seviyesi: 5
+  aciklama: Gazete haberi formatında süreç/olay sıralaması sorusu
+  frequency: Medium
+context:
+  type: gazete_siralama_1q
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 60
+    word_count_max: 120
+    visual_format: newspaper
+    structure:
+    - Bir gazete haberi yaz — DÜZ METİN olarak
+    - 'İlk satır: Haberin başlığı. <b>Başlık</b> formatında yaz (kısa, max 5 kelime)'
+    - 'İkinci satır: Alt başlık (haberin tek cümlelik özeti)'
+    - 'Sonraki satırlar: Haber metni'
+    - Haber bir SÜRECİ veya OLAYLAR DİZİSİNİ anlatmalı
+    - Haber içinde 4 aşama/adım Roma rakamıyla (I. II. III. IV.) numaralandırılmış ve KARIŞIK sırada verilmeli
+    - Numaralı cümleler <br> ile alt alta yazılmalı
+    - 'NOT: Bu metin otomatik olarak gazete haberi formatına dönüştürülecektir'
+    kurallar:
+    - Senaryo 5. sınıf seviyesinde olmalı
+    - Gazete haberi gerçekçi olmalı
+    - 4 numaralı cümle birbirine bağlı, anlamlı bir süreç oluşturmalı ama karışık sırada sunulmalı
+    - Doğru sıralama tek ve net olmalı
+    - Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)
+  questions:
+  - slot: 1
+    type: siralama
+    soru_kokleri:
+    - <b>Haberdeki numaralı cümleler anlamlı bir sıraya konulduğunda doğru sıralama aşağıdakilerden hangisi olur?</b>
+    - <b>Gazete haberindeki numaralı adımların doğru sıralaması aşağıdakilerden hangisidir?</b>
+    - <b>Haberde anlatılan sürecin doğru sıralaması aşağıdakilerden hangisidir?</b>
+    options_style: short_phrase
+    word_count_min: 3
+    word_count_max: 12
+    beceri:
+      katman: KB2
+      bilesenler:
+      - yapilandirma
+      - siralama
+      surec_bileseni: bilgiyi_yapilandirma
+soru_kokleri:
+- <b>Haberdeki numaralı cümleler anlamlı bir sıraya konulduğunda doğru sıralama aşağıdakilerden hangisi olur?</b>
+- <b>Gazete haberindeki numaralı adımların doğru sıralaması aşağıdakilerden hangisidir?</b>
+- <b>Haberde anlatılan sürecin doğru sıralaması aşağıdakilerden hangisidir?</b>
+header_template: null
+format:
+  type: llm_generated_html
+  description: Gazete haberi formatında sıralama sorusu
+  paragraph:
+    required: true
+    numbered_sentences: true
+    word_count_min: 60
+    word_count_max: 120
+    sentence_count_min: 3
+    sentence_count_max: 8
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 3
+    word_count_max: 12
+    style: short_phrase
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Numaralı cümlelerin anlamlı süreç sırasına göre doğru dizilişi
+  kurallar:
+  - Doğru cevap tek ve net bir sıralama olmalı
+  - Sıralama mantıksal olarak tutarlı olmalı
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: teleskop → mercekli araç GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: YAKIN_SIRALAMA
+    aciklama: Doğru sıralamaya çok yakın ama 1-2 adımı yer değiştirmiş
+  - ad: TERS_SIRALAMA
+    aciklama: Bazı adımları ters çevirme
+  - ad: RASTGELE_SIRALAMA
+    aciklama: Tamamen yanlış sıralama
+use_shared_strategies: false

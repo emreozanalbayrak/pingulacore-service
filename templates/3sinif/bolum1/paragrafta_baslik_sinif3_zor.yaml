@@ -1,0 +1,165 @@
+# Referans: paragrafta_baslik_sinif3_referans.yaml → zorluk_duzeyleri.zor
+# Zor duzey — 3. sinif paragrafta baslik
+
+meta:
+  id: "paragrafta_baslik_sinif3_zor"
+  ad: "3. Sinif - Paragrafta Baslik (Zor)"
+  sinif_seviyesi: 3
+  aciklama: "Zor duzey — 3. sinif paragrafta baslik. 4 secenekli, gorselli."
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Gorsel + tek paragraf + soru koku + 4 baslik secenegi (zor)"
+
+  paragraph:
+    required: true
+    word_count_min: 72
+    word_count_max: 95
+    sentence_count_min: 6
+    sentence_count_max: 7
+    stil: "simple_clear_primary_text"
+    background_color: "#fce8e8"
+    kurallar:
+      - "Metin tek baskin konu veya tek baskin olay etrafinda kurulmalidir."
+      - "Metin 3. sinif ogrencisinin anlayabilecegi kadar acik, sade ve akici olmalidir."
+      - "Metin 2. sinifa gore biraz daha ayrintili olabilir; ancak dagnik olmamalidir."
+      - "Metnin tamami birlikte dusunuldugunde tek bir baslik en uygun olmalidir."
+      - "Metinde ana odak ile destekleyici ayrintilar arasinda acik iliski bulunmalidir."
+      - "Metin dis bilgi gerektirmemelidir."
+      - "Baslik secimi, yalniz ilk cumleye degil metnin butunune dayanmalidir."
+      - "Metin 3. sinif duzeyinde konu ile ana fikir arasindaki ayrimi zorlayabilecek kadar guclu olabilir; ancak baslik sorusu ana fikir sorusuna donusmemelidir."
+      - "Bilgilendirici metinlerde konu ve sonuc bolumleri uyumlu olmalidir."
+      - "Oykuleyici metinlerde olay akisi kisa ama izlenebilir olmalidir."
+      - "Metinde ana konu ile destekleyici ayrintilar birlikte bulunmalidir."
+      - "Yan odaklar celdirici uretimine malzeme verebilir."
+      - "Dogru baslik, metindeki butun bilgileri en iyi toplayan secenek olmalidir."
+      - "Zor duzeyde bile soru soyut yorum veya yazar niyeti cozumlemesine donusmemelidir."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  visual:
+    required: true
+    description: "Metnin ana icerigini dogrudan destekleyen islevsel gorsel"
+    placement: "paragraph_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illustrasyon"
+      - "tek sahneli fotograf benzeri cizim"
+      - "tek olay veya tek varlik odakli sahne"
+      - "bilgilendirici metni destekleyen konu gorseli"
+    kurallar:
+      - "Her soru icin gorsel zorunludur."
+      - "Gorsel metnin ana icerigiyle acik uyumlu olmalidir."
+      - "Gorsel sus olmamali, cozumde etkili destek sunmalidir."
+      - "Gorsel tek basina cevabi acikca vermemelidir."
+      - "Gorsel ile metin birlikte degerlendirildiginde dogru baslik daha netlesmelidir."
+      - "Gorsel dikkat dagitici gereksiz ayrintilar icermemelidir."
+      - "Gorsel yanlis basligi destekleyecek kadar yaniltici olmamalidir."
+      - "Gorsel 3. sinif duzeyinde konu, olay veya bilgi tahmini yapmaya elverisli olmalidir."
+    yasaklar:
+      - "dekoratif ve metinden bagimsiz gorsel"
+      - "cok sahneli karmasik kolaj"
+      - "grafik, tablo veya infografik yogunlugu tasiyan tasarim"
+      - "metnin asil odagini gizleyen karisik arka plan"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 5
+    style: "short_title"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "3. sinifta her soru 4 secenekli olmalidir."
+      - "Tum secenekler baslik biciminde olmalidir."
+      - "Secenekler kisa, sade ve 3. sinif duzeyinde olmalidir."
+      - "Dogru secenek metnin tamamini en iyi karsilamalidir."
+      - "Yanlis secenekler metne yakin gorunmeli ama dikkatli okuyunca elenebilmelidir."
+      - "Secenekler kendi aralarinda bicimce paralel olmalidir."
+      - "Ayni soruda birden fazla makul baslik olusmamalidir."
+      - "3 yanlis secenegin en az 2'si metne yakin gorunmelidir."
+      - "1 secenek fazla genel"
+      - "1 secenek yan odak veya dar ayrinti"
+      - "1 secenek tema icinde guclu ama yanlis vurgu"
+
+soru_kokleri:
+  - "<b>Bu metne verilebilecek <u>en uygun</u> baslik asagidakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Bu metnin basligi asagidakilerden hangisi olabilir?</b>"
+  # KULLANILDI: - "<b>Asagidakilerden hangisi bu metne <u>en uygun</u> basliktir?</b>"
+  # KULLANILDI: - "<b>Bu parcaya <u>en uygun</u> baslik hangisidir?</b>"
+  # KULLANILDI: - "<b>Metne verilebilecek <u>en uygun</u> baslik asagidakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Bu paragraf icin <u>en uygun</u> baslik asagidakilerden hangisidir?</b>"
+  - "<b>Asagidakilerden hangisi bu metnin basligi olmaya <u>en uygundur</u>?</b>"
+  - "<b>Bu metne getirilebilecek <u>en uygun</u> baslik hangisidir?</b>"
+  - "<b>Parcanin basligi asagidakilerden hangisi olabilir?</b>"
+
+dogru_cevap:
+  tanim: "Metnin tamamini en iyi karsilayan kisa baslik"
+  kurallar:
+    - "Dogru cevap metnin tek baskin konusunu veya baskin olayini yansitmalidir."
+    - "Dogru cevap metnin tamamina uygun olmalidir."
+    - "Dogru cevap cok genel olmamalidir."
+    - "Dogru cevap cok dar olmamalidir."
+    - "Dogru cevap yalniz tek ayrintiyi merkeze almamalidir."
+    - "Dogru cevap sade ve dogal olmalidir."
+    - "Dogru cevap 3. sinif duzeyinde biraz daha kapsayici olabilir; ancak soyut slogan gibi olmamalidir."
+    - "Dogru cevap genellikle 1-4 sozcuk arasinda olmalidir."
+    - "Dogru cevap gorselle de desteklenebilir nitelikte olmalidir."
+
+celdirici_stratejileri:
+  - ad: "COK_GENIS"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metinle iliskili ama odagi geregenden fazla genis baslik"
+    nasil_olusturulur: |
+      Metnin konusuyla ayni alan icinde ama cok genel bir baslik olustur.
+      Ornek: uzayda tarim hakkindaysa 'Uzay' veya 'Bilim' gibi cok genis baslik.
+    kategori: "semantic"
+
+  - ad: "COK_DAR"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metindeki tek ayrintiya odaklanan baslik"
+    nasil_olusturulur: |
+      Metinde gecen tek bir ayrintiyi baslik olarak sun.
+      Ornek: metinde bir alet geciyorsa sadece o aletin adi baslik olsun.
+    kategori: "cognitive"
+
+  - ad: "YAN_ODAK"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metindeki yardimci bilgiye yonelen ama ana odagi karsilamayan baslik"
+    nasil_olusturulur: |
+      Metnin yardimci bilgisine yonelik, ana konuyu karsilamayan baslik olustur.
+      Ornek: uzayda tarim metninde 'Astronotlarin Yemegi' yardimci odaklı baslik.
+    kategori: "semantic"
+
+  - ad: "TEMA_ICI_YANLIS_VURGU"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Ayni tema alaninda durur ama metnin asil icerigini tam karsilamaz"
+    nasil_olusturulur: |
+      Metnin alaniyla iliskili ama asil odagi karsilamayan bir baslik olustur.
+      Ornek: uzayda biber yetistirme hakkindaysa 'Uzay Yolculugu' gibi.
+    kategori: "semantic"
+
+  - ad: "MESAJLASTIRMA"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Konu yerine sonucu veya olumlu duyguyu baslıga donusturen secenek"
+    nasil_olusturulur: |
+      Konu yerine metnin verdiği sonucu veya olumlu duyguyu baslıga donusturen bir secenek olustur.
+      Ornek: 'Umut Veren Deney', 'Basariya Giden Yol', 'Bilimin Gucu'.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB1"
+  bilesenler: ["konu_belirleme", "baslik_eslestirme"]
+  surec_bileseni: "metni_anlama"
+
+sinif3_ek_kurallar:
+  yasak_alanlar:
+    - "Ana fikir / ana duygu odaklı sorular YASAK"
+    - "Yazar niyeti / ortuk mesaj cozumleme YASAK"
+    - "4. sinifa kayan asiri soyut yorum sorulari YASAK"

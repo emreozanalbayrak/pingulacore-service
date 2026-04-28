@@ -1,0 +1,279 @@
+# templates/beceri_masal_fabl.yaml
+# Kaynak: MEB Beceri Temelli Soru Bankasi - Masal/Fabl
+#
+# BECERI TEMELLI MASAL/FABL FORMATI
+# Masal veya fabl metni verilir, ogrenci ders/ogut cikarimina dayali soruyu cevaplar
+#
+# MANTIK: 1 secenekte dogru cevap, 4 secenekte yanlis cevaplar
+# Secenekler TAM CUMLE formatindadir (3-25 sozcuk)
+
+meta:
+  id: "beceri_masal_fabl"
+  ad: "Beceri Temelli - Masal/Fabl"
+  sinif_seviyesi: 5
+  aciklama: "Masal ve fabl metinleri uzerinden beceri temelli sorular"
+  kaynak: "MEB Beceri Temelli Soru Bankasi"
+  frequency: "~8% of beceri temelli questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Masal/fabl baglami + soru koku + 5 tam cumle secenek (beceri temelli)"
+
+  paragraph:
+    required: true
+    word_count_min: 100
+    word_count_max: 180
+    sentence_count_min: 5
+    sentence_count_max: 10
+    stil: "hikaye"
+    kurallar:
+      - "Masal veya fabl formati kullan"
+      - "Hayvan karakterler veya olaganustu unsurlar olabilir"
+      - "Bir ders veya ogut icersin"
+      - "Evrensel bir mesaj versin"
+      - "Baslangic, gelisme ve sonuc yapisi olmali"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 5
+    labels: ["A", "B", "C", "D", "E"]
+    word_count_min: 3
+    word_count_max: 25
+    style: "complete_sentence"
+    correct_type: "matches"
+    correct_count: 1
+
+  questions_per_context: 2
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ALANLARI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  context_type: "MASAL_FABL"
+  context_label: "Masal/Fabl"
+  skill_level: "KB2"
+  process_component: "Masal/fabl metninde ders/ogut cikarimi ve karakter davranisi analizi"
+  skill_areas:
+    - "anlama"
+    - "cikarimlama"
+    - "degerlendirme"
+    - "yorumlama"
+    - "neden_sonuc"
+  answer_key_explanation: true
+  question_patterns:
+    - "Bu masalin verdigi ders nedir?"
+    - "Hikayedeki karakterin hatasi nedir?"
+    - "Masalin vermek istedigi evrensel mesaj nedir?"
+    - "Karakter davranisinin neden-sonuc iliskisi nasil kurulmustur?"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # Anlam / Ders / Mesaj
+  - "<b>Bu masalın/fablın vermek istediği ders aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu hikâyeye göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Hikâyenin sonundan aşağıdaki çıkarımlardan hangisi yapılabilir?</b>"
+  - "<b>Hikâyeden aşağıdaki <u>çıkarımlardan hangisi yapılamaz</u>?</b>"
+  # Karakter / Olay Analizi
+  - "<b>Hikâyedeki karakterin temel hatası aşağıdakilerden hangisidir?</b>"
+  - "<b>Hikâyedeki ana karakterin davranışının nedeni aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu masalın/fablın ana düşüncesi aşağıdakilerden hangisidir?</b>"
+  # Değerlendirme
+  - "<b>Hikâyedeki olaylar düşünüldüğünde aşağıdakilerden hangisi en doğru değerlendirmedir?</b>"
+  - "<b>Bu masalın/fablın vermek istediği mesaj aşağıdakilerden hangisidir?</b>"
+  # Değişim Nedeni / Evrensel Mesaj / Alternatif Sıra (PDF kaynak)
+  - "<b>Hikâyedeki karakterin yaşadığı değişimin temel nedeni aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu masaldan/fabldan çıkarılabilecek evrensel mesaj aşağıdakilerden hangisidir?</b>"
+  - "<b>Hikâyedeki olayların farklı bir sırayla gerçekleşmesi durumunda aşağıdakilerden hangisi değişirdi?</b>"
+  - "<b>Bu masaldaki/fabldaki olaylar dikkate alındığında aşağıdakilerden hangisi en doğru değerlendirmedir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Masal/fabl icerigi ve mesajiyla uyumlu, ders/ogut cikarimina dayali cevap"
+  kurallar:
+    - "Hikaye icerigiyle desteklenmeli"
+    - "Evrensel mesaji dogru yansitmali"
+    - "Tam cumle formatinda olmali (3-25 sozcuk)"
+    - "Cikarimsal dusunme gerektirmeli"
+    - "Baglam olmadan cevaplanamaz olmali"
+    - "Ust duzey dusunme becerisi gerektirmeli"
+    - "Bilissel surec bilesenini hedeflemeli"
+  ornekler:
+    - hikaye: "Kaplumbaga ve tavsan yarisinda, tavsan cok hizli oldugu icin yolda uyumus. Kaplumbaga ise istikrarli bir sekilde yuruyerek yarisi kazanmis."
+      dogru: "Istikrarli ve sabirl calismak, yetenekten daha onemlidir"
+      neden: "Fablın temel mesaji azim ve istikrarin ustunlugudur"
+    - hikaye: "Acgozlu kopek, agzindaki kemigi suda kendi yansimisini gorunce buyuk sandigi kemige atlamis ve kendi kemigini de kaybetmis."
+      dogru: "Acgozluluk insanin elindekini de kaybetmesine neden olabilir"
+      neden: "Fablın dersi acgozlulugun zararlarina isaret eder"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM masal/fabl iceriğine gore en uygun 4 stratejiyi secer
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select a moral/lesson theme for the story"
+      details: "Evrensel bir ders verecek masal veya fabl temasi sec (dostluk, sabir, acgozluluk, calıskanlik vb.)"
+
+    - step: 2
+      action: "Generate story text (100-180 words) with characters and lesson"
+      details: |
+        Masal/fabl metninde:
+        - Hayvan karakterler veya olaganustu unsurlar olabilir
+        - Baslangic, gelisme ve sonuc yapisi olmali
+        - Bir ders veya ogut acikca cikarilabilmeli
+        - Evrensel bir mesaj vermeli
+
+    - step: 3
+      action: "Create correct answer as complete sentence"
+      details: |
+        Dogru cevap:
+        - Hikayenin vermek istedigi dersi/ogutu yansitmali
+        - Tam cumle formatinda olmali (3-25 sozcuk)
+        - Hikaye icerigiyle kanitlanabilir olmali
+
+    - step: 4
+      action: "Create 4 wrong answers using strategies"
+      details: |
+        Her yanlis secenek icin farkli strateji kullan:
+        - 1x hikayedeki bir detaydan turetilmis ama ana ders olmayan
+        - 1x temayla iliskili ama hikayede desteklenmeyen
+        - 1x karakterin davranisini yanlis yorumlayan
+        - 1x mantikli gorunen ama mesaji carpitan
+        Tum secenekler ayni formatta olmali (tam cumle, 3-25 sozcuk)
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D-E seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - konu: "Kaplumbaga ve tavsan yarisi"
+    dogru_cevap: "A"
+    secenekler:
+      A: "Istikrarli ve sabirl calismak yetenekten daha onemlidir"
+      B: "Hizli olmak her zaman basariyi getirir"
+      C: "Yarismalarda sans faktorü belirleyicidir"
+      D: "Kaplumbagalar tavsanlardan daha zekidir"
+      E: "Uyumak her zaman zararlidir"
+    dogru_cevap_icerigi: "Istikrarli ve sabirl calismak yetenekten daha onemlidir"
+    neden: "Fablın temel dersi azim ve istikrarin ustunlugu"
+
+  - konu: "Acgozlu kopek fabli"
+    dogru_cevap: "D"
+    secenekler:
+      A: "Kopekler suyu sevmez"
+      B: "Kemikler suda yuzebilir"
+      C: "Yansimalar gercek nesnelerden buyuk gorunur"
+      D: "Acgozluluk insanin elindekini de kaybetmesine neden olabilir"
+      E: "Su kenarina yaklasmamak gerekir"
+    dogru_cevap_icerigi: "Acgozluluk insanin elindekini de kaybetmesine neden olabilir"
+    neden: "Fablın dersi acgozlulugun zararlarina isaret eder"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  # Asama 0: Kimlik ve Olcme Niyeti
+  identity:
+    - "Soru bir beceriyi mi olcuyor, bilgi hatirlamayi mi?"
+    - "Hedef beceri seviyesi uygun mu?"
+    - "Surec bileseni dogru hedeflenmis mi?"
+
+  # Asama 1: Baglam Secimi
+  context:
+    - "Baglam olmadan soru cozulebilir mi? (Hayir olmali)"
+    - "Baglam fonksiyonel mi? (Dekoratif degil)"
+    - "Baglam cevabi dogrudan veriyor mu? (Vermemeli)"
+    - "Baglam otantik mi? (Gercek hayattan)"
+    - "Kelime sayisi 100-180 arasinda mi?"
+    - "Masal/fabl formati kullanilmis mi?"
+    - "Bir ders veya ogut iceriyor mu?"
+    - "Baslangic, gelisme ve sonuc yapisi var mi?"
+
+  # Asama 2: Soru ve Secenekler
+  question:
+    - "Soru koku net ve anlasilir mi?"
+    - "Cift olumsuz var mi? (Olmamali)"
+    - "Tek dogru cevap var mi?"
+
+  options:
+    - "Celdiriciler belirli bilissel hatalari temsil ediyor mu?"
+    - "Eleme yoluyla cevaplanabilir mi? (Olmamali)"
+    - "Format farkliligi ile dogru cevap belli oluyor mu? (Olmamali)"
+    - "Tum secenekler benzer uzunlukta mi?"
+    - "5 secenek var mi (A-B-C-D-E)?"
+
+  # Asama 3: Etik
+  ethics:
+    - "Cinsiyet/etnik onyargi var mi? (Olmamali)"
+    - "Yas grubuna uygun mu?"
+
+  # Asama 4: Dil
+  language:
+    - "Turkce dil bilgisi dogru mu?"
+    - "Sinif seviyesine uygun mu?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+
+  generation_rules:
+    - "Masal/fabl formatina uygun evrensel temaları tercih et"
+    - "Ahlaki ders iceren konular ideal"
+    - "Hayvan karakterlerle anlatilabilecek konulari sec"

@@ -1,0 +1,119 @@
+# Kaynak: yardimci_fikir_numarali_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.zor
+# 4. sinif yardimci fikir numarali — zor duzey
+
+meta:
+  id: "b12_yardimci_fikir_numarali_sinif4_zor"
+  ad: "4. Sinif - Yardimci Fikir Numarali (Zor)"
+  sinif_seviyesi: 4
+  aciklama: "Zor duzey — 4. sinif numarali yardimci fikir sorusu. numarali (1-2-3-4) ifadeler arasinda hangileri yardimci fikir olarak verilebilir?"
+  frequency: "High"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + numarali ifadeler + soru koku + 4 numarali kombinasyon secenegi (zor)"
+
+  paragraph:
+    required: true
+    word_count_min: 81
+    word_count_max: 100
+    background_color: "#fce8e8"
+    sentence_count_min: 6
+    sentence_count_max: 7
+    stil: "bilgilendirici"
+    kurallar:
+      - "Paragraftaki desteklenen ifadelerden en az 1'i acik bilgiye, en az 1'i anlamdan cikarima dayanmalidir."
+      - "Desteklenmeyen ifadeler, metindeki bilgi alanina cok yakin olmali; ancak ayrinti, kapsam veya neden-sonuc yonunden hatali olmalidir."
+      - "Paragraf, ayni konu icinde birden fazla iliskili bilgi sunarak secici okumayi zorunlu kilmalidir."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+      - "Dis bilgi gerektirmemelidir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    style: "roman_numeral_combination"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Secenekler Arap rakami ile numarali kombinasyon biciminde olmali (1 ve 2, 1 ve 3, 2 ve 3, vb.)."
+      - "Dogru kombinasyon yalnizca gercek yardimci fikirleri icermeli."
+      - "Yanlis kombinasyonlar ana fikri veya alakasiz ifadeleri icermeli."
+      - "Her numarali ifade (statement_I/II/III/IV) 5-10 kelime uzunlugunda olmalidir."
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Bu metinden,</b><br>{statements}<br><b>numaralanmış ifadelerden hangileri <u>çıkarılamaz</u>?</b>"
+  - "<b>Bu metinde,</b><br>{statements}<br><b>numaralanmış bilgilerden hangilerine <u>yer verilmemiştir</u>?</b>"
+  - "<b>Bu metinden</b> \"{topic}\" <b>ile ilgili,</b><br>{statements}<br><b>bilgilerinden hangilerine <u>ulaşılamaz</u>?</b>"
+  # KULLANILDI: - "<b>Bu metinde,</b><br>{statements}<br><b>maddelerinden hangileri ile ilgili bilgi <u>verilmemiştir</u>?</b>"
+  - "<b>Bu metinden,</b><br>{statements}<br><b>bilgilerinden hangilerine ulaşılabilir?</b>"
+  - "<b>Bu metinden</b> \"{topic}\" <b>ile ilgili,</b><br>{statements}<br><b>numaralanmış bilgilerden hangilerine ulaşılabilir?</b>"
+  - "<b>Bu metinde,</b><br>{statements}<br><b>yargılarından hangileri kesin olarak <u>çıkarılamaz</u>?</b>"
+  - "<b>Bu metinde,</b><br>{statements}<br><b>konularından hangileri ele alınmıştır?</b>"
+  - "<b>Bu metinden</b> \"{topic}\" <b>ile ilgili,</b><br>{statements}<br><b>yargılarından hangileri <u>çıkarılamaz</u>?</b>"
+  - "<b>Bu metinden hareketle</b> \"{topic}\" <b>ile ilgili,</b><br>{statements}<br><b>yargılarından hangilerine ulaşılabilir?</b>"
+  - "<b>Bu metinden hareketle,</b><br>{statements}<br><b>yargılarından hangileri kesin olarak söylenebilir?</b>"
+  - "<b>Bu metinden,</b><br>{statements}<br><b>yargılarından hangileri çıkarılabilir?</b>"
+  - "<b>Bu metne göre</b> \"{topic}\" <b>ile ilgili,</b><br>{statements}<br><b>yargılarından hangileri söylenebilir?</b>"
+  - "<b>Bu metne göre,</b><br>{statements}<br><b>yargılarından hangileri <u>yanlıştır</u>?</b>"
+
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metnin ana fikrini destekleyen yardimci fikirleri dogru sekilde gosteren kombinasyon"
+  kurallar:
+    - "Dogru secenek yalnizca gercek yardimci fikirleri icermeli."
+    - "Yardimci fikir olmayan ifadeler dogru secenek icerisinde olmamali."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+
+celdirici_stratejileri:
+  - ad: "GUCLU_DOLAYLI_CIKARIM"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Paragraftaki birden fazla bilgiden yapılabilen güçlü dolaylı çıkarım tuzağı"
+    nasil_olusturulur: |
+      En az 1 yanlış seçenek 2+ bilgiyi birleştiren dolaylı çıkarım olmalı.
+      En az 1 yanlış seçenek paragrafta farklı kelimelerle güçlü bağ kuran yeniden ifade olmalı.
+      Zor seviyede 3 yanlış seçeneğin tamamı metinden savunulabilir görünmeli; hiçbiri yüzeyde zayıf kalmamalı.
+    kategori: "cognitive"
+
+  - ad: "YENIDEN_IFADE_KUVVETLI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metindeki bilgiyi farklı kelimelerle güçlü biçimde yeniden sunan tuzak"
+    nasil_olusturulur: |
+      Paragraftaki bir yardımcı fikri çok farklı kelimelerle yeniden kur ama biraz kapsam kaydır.
+      Zor seviyede öğrenci yalnızca "bu metinde var mı?" diyerek değil, tam olarak ne söylendiğini değerlendirerek karar vermeli.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siniflandirma", "cikarim_yapma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

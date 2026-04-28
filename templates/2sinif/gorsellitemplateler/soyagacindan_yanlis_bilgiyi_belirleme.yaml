@@ -1,0 +1,152 @@
+meta:
+  id: "soyagacindan_yanlis_bilgiyi_belirleme"
+  ad: "Soy Ağacından Yanlış Bilgiyi Belirleme"
+  ders: "Türkçe"
+  sinif_seviyesi: "2. Sınıf"
+  tema: "Aile İlişkileri ve Görsel Okuma"
+  model: "TYMM"
+  format_turu: "llm_generated_html"
+  aciklama: "Soy ağacı görselindeki aile ilişkilerini okuyup verilen ifadelerden yanlış olanı seçtiren 3 seçenekli soru formatı"
+  frequency: "orta"
+
+context:
+  type: "soyagaci_gorseli"
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 10
+    word_count_max: 40
+    structure:
+      - "Önce kısa bir tanıtım cümlesi verilir."
+      - "Ardından bir aileye ait soy ağacı ya da ilişki şeması gösterilir."
+      - "Görselde en az 3 kuşak ya da 2 aile kolu bulunabilir."
+      - "Gerekirse görselin altında ilişkilere yardımcı 2-3 kısa açıklama yer alabilir."
+    kurallar:
+      - "Bağlam 2. sınıf seviyesine uygun olmalıdır."
+      - "İsimler kısa ve ayırt edilebilir olmalıdır."
+      - "Aile ilişkileri açık ve karışmayacak biçimde kurulmalıdır."
+      - "Görsel çözümün ana kaynağı olmalıdır."
+      - "Metin tek başına cevabı vermemelidir."
+      - "Türkçe karakterler doğru kullanılmalıdır."
+
+format:
+  type: "llm_generated_html"
+  description: "Kısa tanıtım + soy ağacı görseli + tek soru + 3 seçenek"
+
+  paragraph:
+    required: true
+    word_count_min: 10
+    word_count_max: 40
+    sentence_count_min: 1
+    sentence_count_max: 3
+
+  visual:
+    required: true
+    count: 1
+    description: "Kişilerin kutular içinde gösterildiği, aralarındaki aile ilişkilerini bağ çizgileriyle gösteren soy ağacı"
+
+  stem:
+    required: true
+    sentence_count_min: 1
+    sentence_count_max: 1
+    soru_koku_ornekleri:
+      - "Buna göre soy ağacı ile ilgili aşağıda verilen bilgilerden hangisi yanlıştır?"
+      - "Soy ağacına göre aşağıdakilerden hangisi doğru değildir?"
+      - "Verilen aile şemasına göre aşağıdakilerden hangisi yanlıştır?"
+      - "Aşağıdakilerden hangisi soy ağacına göre söylenemez?"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 4
+    word_count_max: 12
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "mismatch"
+
+gorsel:
+  required: true
+  tur: "soyagaci"
+  amac: "Öğrencinin aile bireyleri arasındaki ilişkileri okuyup yorumlamasını sağlamak"
+  kurallar:
+    - "Görselde en az 6 kişi bulunmalıdır."
+    - "Kişi kutuları açıkça ayrılmalıdır."
+    - "Bağlantı çizgileri karışmayacak biçimde düzenlenmelidir."
+    - "Farklı kuşaklar yukarıdan aşağıya açıkça gösterilmelidir."
+    - "İsimler okunabilir olmalıdır."
+    - "Görsel net, açık, anlaşılır ve 2. sınıf seviyesine uygun olmalıdır."
+    - "Görsel süsleyici değil, çözüm için zorunlu olmalıdır."
+
+olculen_beceri:
+  tanim: "Soy ağacındaki kişileri ve aile bağlarını okuyup doğru-yanlış değerlendirmesi yapma"
+  bilesenler:
+    - "gorsel_okuma"
+    - "aile_iliskilerini_anlama"
+    - "akrabalik_belirleme"
+    - "karsilastirma"
+    - "yanlis_bilgiyi_belirleme"
+
+dogru_cevap:
+  tanim: "Soy ağacındaki ilişkilere uymayan ifade"
+  kurallar:
+    - "Doğru cevap soy ağacına göre yanlış olan seçenek olmalıdır."
+    - "Yanlış olmayan seçenekler görselle açıkça doğrulanabilmelidir."
+    - "En az bir seçenek kardeş, çocuk ya da anne-baba ilişkisini sorgulamalıdır."
+    - "En az bir seçenek kuzen ya da akrabalık ilişkisini sorgulayabilir."
+    - "Doğru cevap dikkatli görsel okuma ile bulunmalıdır."
+
+distractors:
+  stratejiler:
+    - ad: "YAN_KOL_KARISTIRMA"
+      aciklama: "Ailenin iki farklı kolundaki kişileri kardeş ya da doğrudan kardeş çocuğu gibi göstermeye uygun ifade yazma"
+      ornek: "Farklı ebeveynlere bağlı çocukları kardeş sanma"
+    - ad: "KUSAK_HATASI"
+      aciklama: "Üst kuşak ve alt kuşaktaki kişileri yanlış bağlama"
+      ornek: "Büyükanne yerine anne deme"
+    - ad: "KUZEN_KARDES_YANILGISI"
+      aciklama: "Kuzen olan kişileri kardeş gibi ya da tersini düşündüren ifade sunma"
+      ornek: "Ege ile Çağan kardeştir."
+    - ad: "ES_ILISKISI_KARISTIRMA"
+      aciklama: "Evlilik bağını yanlış kişilere bağlayan seçenek yazma"
+      ornek: "Yakup ile Kübra evlidir."
+
+use_shared_strategies: false
+
+tymm_uyum_kurallari:
+  - "2. sınıf seviyesine uygun kısa ve açık cümleler kullanılmalıdır."
+  - "Akrabalık ilişkileri çocukların anlayacağı düzeyde verilmelidir."
+  - "Karmaşık ve çok katmanlı akrabalık adları aşırı çoğaltılmamalıdır."
+  - "Çözüm doğrudan soy ağacı görseline dayanmalıdır."
+  - "'Yanlıştır' ya da 'doğru değildir' ifadesi açık ve belirgin olmalıdır."
+  - "Görsel olmadan doğru cevap kesinleşmemelidir."
+  - "Seçenekler aynı temsil düzeyinde, yani hepsi aile ilişkisi bildiren cümleler olmalıdır."
+  - "3 seçenekli yapıda iki çeldirici de güçlü olmalıdır."
+
+izinli_icerikler:
+  - "anne"
+  - "baba"
+  - "çocuk"
+  - "kardeş"
+  - "dede"
+  - "anneanne / babaanne"
+  - "kuzen"
+  - "gelin / damat gibi temel aile bağları"
+  - "soy ağacı ve aile şeması"
+
+yasakli_icerikler:
+  - "çok karmaşık akrabalık zincirleri"
+  - "soyut ve uzun açıklamalar"
+  - "birden fazla doğru seçenek"
+  - "metinden çözülebilen yapı"
+  - "2. sınıf düzeyini aşan aile hukuku ya da soy bilgisi ayrıntıları"
+  - "okunması zor, aşırı kalabalık görsel"
+
+ornek_sablon:
+  ust_metin: "Aşağıda bir ailenin soy ağacı görseli verilmiştir."
+  gorsel: "Kişilerin kutular içinde ve bağ çizgileriyle gösterildiği aile şeması"
+  soru_koku: "Buna göre soy ağacı ile ilgili aşağıda verilen bilgilerden hangisi yanlıştır?"
+  secenekler:
+    A: "................................"
+    B: "................................"
+    C: "................................"

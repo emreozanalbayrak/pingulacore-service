@@ -1,0 +1,115 @@
+# Referans: metnin_bolumleri_giris_gelisme_sonuc_sinif3_referans.yaml → zorluk_duzeyleri.orta
+# Orta duzey — gelisme bolumu — Gelisme (Olamaz)
+
+meta:
+  id: "gelisme_olamaz_sinif3_orta"
+  ad: "3. Sinif - Metnin Bolumleri / Gelisme (Olamaz) (Orta)"
+  sinif_seviyesi: 3
+  aciklama: "Orta duzey — gelisme bolumu, gelisme (olamaz). 4 secenekli, gorselsiz."
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 4 secenek (orta, gelisme, gorselsiz)"
+
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 78
+    sentence_count_min: 5
+    sentence_count_max: 6
+    stil: "simple_clear_primary_text"
+    background_color: "#f8f0e0"
+    kurallar:
+      - "Metin 3. sinif ogrencisinin anlayabilecegi kadar acik, sade ve akici olmalidir."
+      - "Metin giris, gelisme ve sonuc mantigina uygun kurulmalidir."
+      - "Giris bolumu konuyu acmali, gelisme bolumu ayrintilari vermeli, sonuc bolumu anlami toparlamalidir."
+      - "Metin tek baskin konu veya tek kisa olay etrafinda kurulmalidir."
+      - "Metin dis bilgi gerektirmemelidir."
+      - "Bolumler arasi gecis anlamli ve dogal olmalidir."
+      - "Soru, paragrafin yapisini fark ettirmeli; ama 4. sinifa kayan ayrintili metin cozumlemesine donusmemelidir."
+      - "Metinde gelisme bolumu daha belirgin ayrintilar icerebilir."
+      - "Dogru secenegi bulmak icin metnin birkac cumlesi birlikte dusunulmelidir."
+      - "Giris ve sonuc arasindaki islev farki dikkat gerektirebilir."
+      - "Gelisme bolumu giriste acilan konuyu ayrintilandirmalidir."
+      - "Gelisme bolumunde ornek, aciklama, karsilastirma, neden-sonuc veya tanitici ayrintilar yer alabilir."
+      - "Gelisme cumlesi, giristen sonra dogal bicimde gelebilmelidir."
+      - "Gelisme bolumu sonuc gibi toparlayici olmamalidir."
+      - "Numaralanmış metin varyantinda gelisme bolumu acik bicimde belirlenebilir olmalidir."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  visual:
+    required: false
+    description: "Bu soru turunde gorsel kullanilmaz."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 3
+    word_count_max: 16
+    style: "sentence_option"
+    correct_count: 1
+    correct_type: "does_not_belong"
+    kurallar:
+      - "3. sinifta her soru 4 secenekli olmalidir."
+      - "Cümle secenekleri anlamli ve kurallı olmalidir."
+      - "Dogru secenek metnin bolum yapisina ve dusuncenin akisina tam uymalidir."
+      - "Yanlis secenekler metne yakin gorunmeli ama dusuncenin akisini bozmalidir."
+      - "Birden fazla makul dogru secenek olusmamalidir."
+      - "En az 1 yanlis secenek ilk bakista makul gorunmelidir."
+      - "Yanlis secenekler bolum islevini karistracak kadar yakin olabilir."
+
+soru_kokleri:
+  - "<b>Aşağıdakilerden hangisi bu metnin gelişme cümlesi <u>olamaz</u>?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metnin gelişme bölümü <u>olamaz</u>?</b>"
+
+dogru_cevap:
+  tanim: "Metnin bolum yapisina ve dusuncenin akisina tam uyan dogru cümle"
+  kurallar:
+    - "KRITIK PARAPHRASE: Dogru cevap paragraftaki cumleleri/ifadeleri AYNEN KULLANMA — paragraf kelimelerini es anlamli sozcuklerle degistir ve farkli cümle yapisiyla yeniden ifade et. En az %50 kelime farkliligi zorunlu. Paragrafa cok benzer secenekler FAIL olur."
+    - "Gelisme sorularinda dogru cevap konuya ayrinti, aciklama, ornek veya bilgi eklemelidir."
+    - "Dogru cevap metnin tamamiyla uyumlu olmalidir."
+    - "Dogru cevap dis bilgi gerektirmemelidir."
+    - "Dogru cevap 3. sinif ogrencisinin metni dikkatle okuyarak bulabilecegi aciklikta olmalidir."
+
+celdirici_stratejileri:
+  - ad: "GIRIS_TANITIMI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Ayrinti yerine yalniz konuyu acan baslangic cumlesi"
+    nasil_olusturulur: |
+      Gelisme ayrintisi yerine konuyu tanitan giris havasi tasiyan bir cümle olustur.
+    kategori: "semantic"
+
+  - ad: "SONUC_TOPARLAMASI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Ayrinti yerine metni kapatan sonuc cumlesi"
+    nasil_olusturulur: |
+      Gelisme ayrintisi yerine metni toparlayan, kapanis havasi tasiyan bir cümle olustur.
+    kategori: "semantic"
+
+  - ad: "YAN_AKISA_KAYAN_AYRINTI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metne yakin ama gelisme akisini tam desteklemeyen ayrinti"
+    nasil_olusturulur: |
+      Metnin konusuyla iliskili gorunen ama gelisme akisini dogrudan desteklemeyen bir ayrinti cümle olustur.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["metin_yapisi_ayirt_etme", "gelisme_bolumu_belirleme"]
+  surec_bileseni: "metni_anlama"
+
+sinif3_ek_kurallar:
+  yasak_alanlar:
+    - "Yazarin uslup tercihini veya niyetini yorumlatma YASAK"
+    - "Asiri soyut paragraf yapisi tartismalari YASAK"
+    - "Metin disi dunya bilgisi gerektiren secenekler YASAK"
+    - "Metnin orgutlenme bicimini ayrintili gerekceyle tartistirma (4. sinif) YASAK"
+    - "Birden fazla paragraf arasinda yapi karsilastirmasi yaptirma (4. sinif) YASAK"
+    - "Yazar tercihini ve bolum etkisini analiz ettirme (4. sinif) YASAK"

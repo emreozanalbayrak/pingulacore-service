@@ -1,0 +1,153 @@
+# templates/baglam/problem_cozme_senaryo.yaml
+# Bağlam Tipi: Bölüm 4.2 — Problem Çözme Senaryosu
+# Soru Sayısı: 3
+# Kaynak: kaynak-soru-kokleri.md — Bölüm 4.2 Tip B
+# Soru Tipleri: Ana problem + Çözüm önerisi + Uygun çözüm
+
+meta:
+  id: "problem_cozme_senaryo"
+  ad: "Problem Çözme Senaryosu"
+  sinif_seviyesi: 5
+  aciklama: "Bir karakter bir problemle karşılaşır — ana problemi belirleme ve çözüm önerme soruları"
+  kaynak: "kaynak-soru-kokleri.md"
+  frequency: "High"
+
+# ═══════════════════════════════════════════════════════════════
+# BAĞLAM KONFİGÜRASYONU
+# ═══════════════════════════════════════════════════════════════
+
+context:
+  type: "problem_cozme_senaryo"
+  question_count: 3
+  question_count_min: 2
+  question_count_max: 3
+  generation:
+    word_count_min: 100
+    word_count_max: 180
+    structure:
+      - "Bir karakter (isimli) günlük hayatta bir problemle karşılaşıyor (2-3 cümle)"
+      - "Problemin nedenleri ve etkileri açıkça anlatılmalı"
+      - "Karakter çözüm aramaya başlıyor — birkaç olası çözüm düşünüyor"
+      - "Metinde en az 2-3 farklı çözüm yolu ima edilmeli"
+      - "Problem somut ve 5. sınıf öğrencisinin anlayabileceği düzeyde olmalı"
+      - "Çözümlerin avantaj ve dezavantajları anlaşılır olmalı"
+    kurallar:
+      - "5. sınıf seviyesinde, günlük hayattan bir problem (çevre, sağlık, okul, aile)"
+      - "Problem açıkça tanımlanmalı ama çözüm tek yönlü olmamalı"
+      - "Birden fazla bakış açısıyla değerlendirilebilecek bir durum olmalı"
+      - "Karakter aktif çözüm arayan biri olmalı (pasif değil)"
+      - "Metinde kesin çözüm yerine olası çözümler sunulmalı"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+    - slot: 1
+      type: "ana_problem"
+      soru_kokleri:
+        - "<b>…Karakter…'ın karşılaştığı ana problem aşağıdakilerden hangisidir?</b>"
+        - "<b>Metne göre çözülmesi gereken asıl sorun aşağıdakilerden hangisidir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 8
+      word_count_max: 22
+      beceri:
+        katman: "KB2"
+        bilesenler: ["cikarim_yapma", "ozetleme"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+    - slot: 2
+      type: "cozum_onerisi"
+      soru_kokleri:
+        - "<b>Aşağıdakilerden hangisi bu probleme yönelik en uygun çözüm önerisidir?</b>"
+        - "<b>…Karakter… bu sorunu çözmek için aşağıdakilerden hangisini yapmalıdır?</b>"
+        - "<b>Aşağıdakilerden hangisi bu probleme yönelik kesin bir çözüm önerisidir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 8
+      word_count_max: 25
+      beceri:
+        katman: "KB3"
+        bilesenler: ["problem_cozme", "degerlendirme"]
+        surec_bileseni: "problemi_yapilandirma"
+
+    - slot: 3
+      type: "spesifik_cozum"
+      soru_kokleri:
+        - "<b>Metindeki bilgilere göre aşağıdaki çözüm önerilerinden hangisi <u>uygun değildir</u>?</b>"
+        - "<b>…Karakter…'ın durumu düşünüldüğünde aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+        - "<b>Aşağıdakilerden hangisi …Spesifik Problem… için en uygun çözüm önerisidir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 8
+      word_count_max: 25
+      beceri:
+        katman: "KB3"
+        bilesenler: ["degerlendirme", "mantiksal_denetleme"]
+        surec_bileseni: "problemi_yapilandirma"
+
+header_template: "1-3. soruları aşağıdaki metne göre cevaplayınız."
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Problem senaryosu üzerinden problem belirleme ve çözüm önerme soruları"
+
+  paragraph:
+    required: true
+    word_count_min: 100
+    word_count_max: 180
+    sentence_count_min: 5
+    sentence_count_max: 10
+
+  stem:
+    required: true
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 8
+    word_count_max: 25
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+# ═══════════════════════════════════════════════════════════════
+# DOĞRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Senaryodaki problemi doğru tanımlayan veya en uygun çözümü sunan cevap"
+  kurallar:
+    - "KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI"
+    - "Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI"
+    - "Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil"
+    - "YASAK: Tablodaki değeri aynen şıkka yazmak (örn: 'yalıtımı azdır' tabloda yazıyorsa şıkta aynen yazmamalı)"
+    - "Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli"
+
+    - "Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı"
+    - "Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı"
+    - "Ana problem sorusunda doğru cevap karakterin karşılaştığı asıl sorunu yansıtmalı"
+    - "Çözüm önerisi sorusunda doğru cevap metindeki verilerle uyumlu ve uygulanabilir olmalı"
+    - "Söylenemez sorusunda doğru cevap metinle ÇELIŞEN veya desteklenmeyen öneri olmalı"
+    - "HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer"
+    - "Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK"
+    - "BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: 'teleskop' → 'mercekli araç' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı"
+
+# ═══════════════════════════════════════════════════════════════
+# ÇELDİRİCİ STRATEJİLERİ
+# ═══════════════════════════════════════════════════════════════
+
+distractors:
+  stratejiler:
+    - ad: "YAN_PROBLEM"
+      aciklama: "Asıl problem yerine yan etkiyi veya belirtiyi ana problem olarak sunma"
+      ornek: "Sorunun nedenini değil sonucunu problem olarak gösterme"
+    - ad: "UYGULANAMAZ_COZUM"
+      aciklama: "Genel olarak doğru ama senaryoya uygulanamayan çözüm önerme"
+      ornek: "Mantıklı görünen ama karakterin durumuna uygun olmayan çözüm"
+    - ad: "ASIRI_BASIT_COZUM"
+      aciklama: "Problemi çözmeyen yüzeysel bir öneri sunma"
+      ornek: "Kök nedeni ele almayan, sadece belirtileri gizleyen çözüm"
+
+use_shared_strategies: false

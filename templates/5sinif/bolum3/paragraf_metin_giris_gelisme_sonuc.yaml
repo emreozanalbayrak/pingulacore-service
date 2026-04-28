@@ -1,0 +1,224 @@
+# templates/bolum3/paragraf_metin_giris_gelisme_sonuc.yaml
+# Bolum 3 - Yapi Yonu: Metin Giris/Gelisme/Sonuc Bolumu Tespiti
+#
+# GIRIS/GELISME/SONUC FORMATI
+# Paragraf YOK — seceneklerde mini paragraflar verilir
+# Ogrenci hangi mini paragrafin giris/gelisme/sonuc bolumune ait oldugunu belirler
+
+meta:
+  id: "paragraf_metin_giris_gelisme_sonuc"
+  ad: "Metin Giriş/Gelişme/Sonuç Bölümü Tespiti"
+  sinif_seviyesi: 5
+  aciklama: "Mini paragraflardan hangisinin giriş, gelişme veya sonuç bölümüne ait olduğunu belirleme"
+  frequency: "Medium (~20% of structure questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Soru kökü + 4 mini paragraf seçenek (paragraf yok)"
+
+  paragraph:
+    required: false
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+    kurallar:
+      - "Soru kökü SADECE tek bir soru cümlesi olmalı"
+      - "Soru kökünde Roma rakamı, paragraf metni veya ek açıklama BULUNMAMALI"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 15
+    word_count_max: 60
+    sentence_count_min: 2
+    sentence_count_max: 4
+    style: "mini_paragraph"
+    correct_count: 1
+    kurallar:
+      - |
+        SEÇENEK KURALLARI (KRİTİK!):
+        ★ Her seçenek bir mini paragraf olmalı (2-4 cümle, 15-60 kelime)
+        ★ Roma rakamı KULLANMA — seçeneklerde numaralama yok, sadece düz metin
+        ★ Seçenekler birbirinden bağımsız mini metinler olmalı
+        ★ Her seçenek farklı bir konudan veya farklı bir bakış açısından yazılmalı
+        ★ Tüm seçenekler benzer uzunlukta olmalı — doğru cevap uzunluk farkıyla belli olmamalı
+        ★ YASAK İFADELER — Aşağıdaki ifadeler HİÇBİR seçenekte kullanılmamalı çünkü hangi bölüme ait olduğunu çok belli eder:
+          — "Özetle", "Kısacası", "Sonuç olarak", "Sonuç itibarıyla", "Tüm bunlar gösteriyor ki"
+          — "Öncelikle", "İlk olarak", "Her şeyden önce"
+          — Bölümü doğrudan işaret eden bu tür kalıp ifadeler yerine içerikle (anlam, işlev) belli edilmeli
+        ★ Soru köküne göre seçenek formatı:
+        — "giriş bölümü olmaya en uygundur" → 4 mini paragraf, biri giriş niteliğinde
+        — "sonuç bölümüne aittir" → 4 mini paragraf, biri sonuç niteliğinde
+        — "hikâyenin sonuç bölümüne aittir" → 4 mini paragraf (hikâye üslubu), biri sonuç
+        — "gelişme bölümünde yer alamaz" → 4 mini paragraf, biri gelişme bölümüne ait değil
+        — "bölüm yay ayraç içinde yanlış verilmiştir" → 4 mini paragraf + parantez içinde (Giriş)/(Gelişme)/(Sonuç) etiketi, birinde etiket yanlış
+        — "sonuç bölümüne ait olamaz" → 4 mini paragraf, biri sonuç niteliğinde değil
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Aşağıdakilerden hangisi bir metnin giriş bölümü olabilir?</b>"
+  - "<b>Aşağıdakilerden hangisi bir metnin sonuç bölümüne aittir?</b>"
+  - "<b>Aşağıdakilerden hangisi bir metnin sonuç bölümüne ait <u>olamaz</u>?</b>"
+  - "<b>Aşağıdakilerden hangisi bir hikâyenin sonuç bölümüne aittir?</b>"
+  - "<b>Aşağıdakilerden hangisi bir araştırmanın sonuç bölümüne aittir?</b>"
+  - "<b>Aşağıdaki cümlelerden hangisi bir paragrafın giriş bölümü olmaya <b>en uygun</b>dur?</b>"
+  - "<b>Aşağıdakilerden hangisi bir metnin sonuç bölümü olmaya en uygundur?</b>"
+  - "<b>Bu cümlelerden hangisi metnin gelişme bölümünde yer alamaz?</b>"
+  - "<b>Aşağıdakilerin hangisinde metnin ait olduğu bölüm yay ayraç içinde <u>yanlış</u> verilmiştir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Soru köküne göre doğru bölüme ait olan veya olmayan mini paragrafı seçme"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Giriş niteliğindeki mini paragraf: Konuyu tanıtan, genel çerçeveyi çizen, okuyucuyu hazırlayan metin"
+    - "Gelişme niteliğindeki mini paragraf: Konuyu detaylandıran, örnekleyen, kanıtlarla destekleyen metin"
+    - "Sonuç niteliğindeki mini paragraf: Konuyu toparlayan, bir yargıya/sonuca varan, kapanış sağlayan metin"
+    - "Doğru cevap soru köküne göre değişir: giriş/sonuç tespiti, yanlış eşleşme bulma"
+    - "Her mini paragraf kendi içinde tutarlı ve anlamlı olmalı"
+    - "Doğru cevap bölüm özelliklerini açıkça taşımalı ama çok bariz olmamalı"
+    - |
+      ⛔ KESİNLİKLE YASAK İFADELER — Bu ifadeler bölümü doğrudan ele verir, HİÇBİR seçenekte KULLANMA:
+      — "Özetle", "Kısacası", "Sonuç olarak", "Sonuç itibarıyla", "Tüm bunlar gösteriyor ki"
+      — "Öncelikle", "İlk olarak", "Her şeyden önce", "Başlangıç olarak"
+      — "Daha sonra", "Ardından", "Bu süreçte" (gelişme işaretçileri)
+      Bölüm niteliğini İÇERİKLE (anlam, konu işleme biçimi) belli et, kalıp ifadelerle DEĞİL!
+  ornekler:
+    - soru_koku: "Aşağıdaki cümlelerden hangisi bir paragrafın giriş bölümü olmaya en uygundur?"
+      dogru: "Yıllarca süren bu çalışmadan sonra 1950'li yıllarda kunduzların tekrar çoğalabilmesi için korunaklı özel bölgeler yapmışlardır. Bu bölgelerde kunduz sayısının arttığı görülmüştür."
+      neden: "Genel bir bilgi vererek konuya giriş yapıyor, detaya girmeden çerçeve çiziyor"
+    - soru_koku: "Aşağıdakilerden hangisi bir hikâyenin sonuç bölümüne aittir?"
+      dogru: "Bekir Ağa; yaşadığı köye geri dönmüş, anlamış ki şehir hayatı ona göre değil. Ölene kadar köyünden, baba ocağından hiç dışarıya çıkmamış."
+      neden: "Hikâyede sonuca varılıyor, karakter kararını veriyor ve olay kapanıyor"
+    - soru_koku: "Aşağıdakilerin hangisinde metnin ait olduğu bölüm yay ayraç içinde yanlış verilmiştir?"
+      dogru: "Uçsuz bucaksız Kafdağı'nda gümüş gözlü bir dev yaşarmış. Gümüş gözlü dev diğer devler gibi hain ve acımasız değilmiş. Aksine altın gibi bir kalbi varmış. Herkese iyilik düşünür, herkesin yardımına koşarmış. (Giriş)"
+      neden: "Metin aslında gelişme veya giriş olabilir ama yanlış etiketlenmiş — öğrenci bölüm atamasını değerlendirmeli"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI (CUSTOM — giris/gelisme/sonuc icin ozel)
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "BOLUM_KARISTIRMA"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Giriş niteliğindeki mini paragrafı gelişme veya sonuç gibi, ya da tersini gösterme"
+    nasil_olusturulur: |
+      Bir mini paragrafın bölüm niteliğini yanlış yap.
+      Örneğin giriş niteliğindeki metni sonuç gibi göster veya gelişme niteliğindeki metni giriş gibi sun.
+      Öğrenci metnin işlevini doğru belirleyemezse yanılır.
+    kategori: "semantic"
+
+  - ad: "YAKIN_ISLEVLI_METIN_TUZAGI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Gelişme niteliğindeki mini paragrafı giriş veya sonuç gibi makul gösterme"
+    nasil_olusturulur: |
+      Gelişme bölümüne ait bir mini paragraf, tek başına okunduğunda giriş veya sonuç gibi görünebilir.
+      Bu metni yanlış bölüm için çeldirici olarak kullan.
+      Öğrenci metni tek başına değerlendirirse yanılır; bölüm özelliklerine dikkat etmesi gerekir.
+    kategori: "cognitive"
+
+  - ad: "ZAMAN_IFADESI_YANILGISI"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Zaman ifadesi içeren mini paragrafları yanlış bölüme atama"
+    nasil_olusturulur: |
+      'Sonunda', 'son olarak' gibi ifadeler taşıyan gelişme mini paragraflarını sonuç gibi göster.
+      Veya 'önce', 'ilk olarak' içeren gelişme mini paragraflarını giriş gibi sun.
+      Öğrenci yalnızca zaman ifadesine bakarsa yanılır.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ETIKETI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siralama", "yapilandirma", "siniflandirma"]
+  surec_bileseni: "metin_yapisini_analiz_etme"
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Soru kökünü seç"
+      details: |
+        Soru kökleri listesinden birini rastgele seç.
+        Soru kökü hangi bölümün sorulduğunu belirler:
+        - giriş bölümü olabilir / olmaya en uygun → giriş tespiti
+        - sonuç bölümüne aittir / olmaya en uygun → sonuç tespiti
+        - gelişme bölümünde yer alamaz → gelişme dışı tespit
+        - yay ayraç içinde yanlış → bölüm etiketleme
+
+    - step: 2
+      action: "4 farklı konuda mini paragraflar oluştur"
+      details: |
+        Her seçenek için farklı bir konuda mini paragraf yaz:
+        - Her mini paragraf 2-4 cümle, 15-60 kelime
+        - Mini paragraflar birbirinden bağımsız konularda olmalı
+        - Roma rakamı KULLANMA — düz metin
+        - Her mini paragraf belirgin bir bölüm niteliği taşımalı (giriş/gelişme/sonuç)
+        - 5. sınıf seviyesinde, doğa, bilim, toplum, hikâye veya günlük hayat konuları
+        - "yay ayraç" kökü seçildiyse her mini paragrafın sonuna parantez içinde bölüm adı ekle: (Giriş), (Gelişme), (Sonuç)
+
+    - step: 3
+      action: "Doğru cevabı belirle"
+      details: |
+        Soru köküne göre doğru mini paragrafı belirle:
+        - Pozitif kökler (olabilir, aittir, en uygun): Sorulan bölümün özelliklerini taşıyan mini paragraf
+        - Negatif kökler (olamaz, yer alamaz): Sorulan bölümün özelliklerini TAŞIMAYAN mini paragraf
+        - Yay ayraç kökü: Bölüm etiketi YANLIŞ olan mini paragraf
+
+    - step: 4
+      action: "3 çeldirici mini paragraf oluştur"
+      details: |
+        Her çeldirici makul görünmeli ama yanlış olmalı:
+        - Pozitif köklerde: Sorulan bölüme ait OLMAYAN ama ilk bakışta öyle görünen mini paragraflar
+        - Negatif köklerde: Sorulan bölüme ait olan mini paragraflar (doğru cevap ait olmayan)
+        - Yay ayraç kökünde: Bölüm etiketi DOĞRU olan mini paragraflar
+        Farklı stratejiler kullan: bölüm karıştırma, yakın işlevli metin tuzağı, zaman ifadesi yanılgısı
+
+    - step: 5
+      action: "Seçenekleri rastgele sırala"
+      details: |
+        1 doğru cevap ve 3 çeldirici oluşturulduktan sonra
+        seçenekleri A-B-C-D sırasına rastgele yerleştir.
+        Tüm seçenekler benzer uzunlukta olmalı.
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  options:
+    - "Her seçenek 2-4 cümle, 15-60 kelime mi?"
+    - "Seçeneklerde Roma rakamı kullanılmamış mı?"
+    - "Her seçenek farklı bir konuda mı?"
+    - "Mini paragraflar benzer uzunlukta mı?"
+    - "Yay ayraç kökünde her seçenekte (Giriş)/(Gelişme)/(Sonuç) etiketi var mı?"
+
+  correct_answer:
+    - "Doğru cevap soru köküne uygun mu?"
+    - "Doğru mini paragraf bölüm özelliklerini açıkça taşıyor mu?"
+
+  distractors:
+    - "Her çeldirici doğru cevaptan farklı mı?"
+    - "Çeldiriciler birbirinden de farklı mı?"
+    - "Çeldiriciler makul görünüyor ama yanlış mı?"
+    - "Yalnızca 1 doğru cevap var mı?"
+    - "Doğru cevap uzunluk farkıyla belli olmuyor mu?"

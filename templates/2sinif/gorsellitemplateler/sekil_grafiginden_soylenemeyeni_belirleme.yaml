@@ -1,0 +1,150 @@
+meta:
+  id: "sekil_grafiginden_soylenemeyeni_belirleme"
+  ad: "Şekil Grafiğinden Söylenemeyeni Belirleme"
+  ders: "Türkçe"
+  sinif_seviyesi: "2. Sınıf"
+  tema: "Veri Okuma ve Yorumlama"
+  model: "TYMM"
+  format_turu: "llm_generated_html"
+  aciklama: "Şekil grafiğinde verilen kişi sayılarından hareketle en çok, en az ve karşılaştırma yapıp söylenemeyen ifadeyi seçtiren 3 seçenekli soru formatı"
+  frequency: "orta"
+
+context:
+  type: "sekil_grafigi_veri_okuma"
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 10
+    word_count_max: 35
+    structure:
+      - "Önce kısa bir tanıtım cümlesi verilir."
+      - "Ardından bir sınıf, grup ya da topluluğa ait veriler şekil grafiği ile gösterilir."
+      - "Grafikte en az 4 kategori bulunur."
+      - "Her şeklin kaç kişiyi gösterdiği açıkça belirtilir."
+    kurallar:
+      - "Bağlam 2. sınıf seviyesine uygun ve günlük yaşama yakın olmalıdır."
+      - "Kategori adları kısa ve anlaşılır olmalıdır."
+      - "Grafik sade ve okunaklı olmalıdır."
+      - "Her şekil aynı değeri temsil etmelidir."
+      - "Metin tek başına cevabı vermemelidir."
+
+format:
+  type: "llm_generated_html"
+  description: "Kısa tanıtım + şekil grafiği + tek soru + 3 seçenek"
+
+  paragraph:
+    required: true
+    word_count_min: 10
+    word_count_max: 35
+    sentence_count_min: 1
+    sentence_count_max: 2
+
+  visual:
+    required: true
+    count: 1
+    description: "En az 4 kategori içeren, her şeklin aynı sayıyı gösterdiği sade şekil grafiği"
+
+  stem:
+    required: true
+    sentence_count_min: 1
+    sentence_count_max: 1
+    soru_koku_ornekleri:
+      - "Bu grafikten hareketle aşağıdakilerden hangisi söylenemez?"
+      - "Grafiğe göre aşağıdakilerden hangisi doğru değildir?"
+      - "Verilen şekil grafiğine göre aşağıdakilerden hangisine ulaşılamaz?"
+      - "Aşağıdakilerden hangisi grafiğe göre yanlıştır?"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 4
+    word_count_max: 14
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "mismatch"
+
+gorsel:
+  required: true
+  tur: "sekil_grafigi"
+  amac: "Öğrencinin şekilleri sayarak ya da karşılaştırarak veri okumasını sağlamak"
+  kurallar:
+    - "Grafikte en az 4 kategori bulunmalıdır."
+    - "Her kategori altında aynı türden tekrar eden şekiller yer almalıdır."
+    - "Her şeklin kaç kişiyi gösterdiği açıkça belirtilmelidir."
+    - "Kategoriler ve şekiller kolay sayılabilir olmalıdır."
+    - "Görsel sade, düzenli ve 2. sınıf seviyesine uygun olmalıdır."
+    - "Görsel süsleyici değil, çözüm için zorunlu olmalıdır."
+    - "Kısmi şekil kullanılacaksa anlamı açık olmalıdır; kullanılmaması tercih edilir."
+
+olculen_beceri:
+  tanim: "Şekil grafiğindeki verileri okuyup en çok, en az ve karşılaştırma yorumları yapma"
+  bilesenler:
+    - "grafik_okuma"
+    - "sekil_sayma"
+    - "karsilastirma"
+    - "en_cok_en_az_belirleme"
+    - "yanlis_yargiyi_belirleme"
+
+dogru_cevap:
+  tanim: "Grafikteki şekil sayılarıyla desteklenmeyen ifade"
+  kurallar:
+    - "Doğru cevap grafiğe göre söylenemeyen seçenek olmalıdır."
+    - "Yanlış olmayan seçenekler grafikten açıkça doğrulanabilmelidir."
+    - "En az bir seçenek en çok olan kategoriyi sorgulamalıdır."
+    - "En az bir seçenek en az olan kategoriyi ya da karşılaştırmayı sorgulamalıdır."
+    - "Doğru cevap dikkatli grafik okuma ile bulunmalıdır."
+
+distractors:
+  stratejiler:
+    - ad: "EN_COK_EN_AZ_KARISTIRMA"
+      aciklama: "Öğrencinin en fazla olanla en az olanı karıştırmasına uygun ifade yazma"
+      ornek: "En az olan grubu en çokmuş gibi verme"
+    - ad: "YAKIN_SAYI_YANILGISI"
+      aciklama: "Şekil sayıları birbirine yakın iki kategoriyi ters karşılaştırma"
+      ornek: "İşçi sayısı esnaftan fazladır."
+    - ad: "SEKIL_SAYISINI_YANLIS_OKUMA"
+      aciklama: "Öğrencinin şekilleri eksik ya da fazla saymasına açık ifade kurma"
+      ornek: "Çiftçi en azdır."
+    - ad: "DOGRU_GIBI_GORUNEN_YANLIS_IFADE"
+      aciklama: "İlk bakışta doğru sanılan ama grafikle uyuşmayan seçenek oluşturma"
+      ornek: "En fazla memur vardır."
+
+use_shared_strategies: false
+
+tymm_uyum_kurallari:
+  - "2. sınıf seviyesine uygun kısa ve açık cümleler kullanılmalıdır."
+  - "Grafikte yalnızca temel veri okuma ve karşılaştırma beklenmelidir."
+  - "Çarpma, bölme, oran gibi ileri işlemler gerektirilmemelidir."
+  - "Her şeklin temsil ettiği değer açıkça yazılmalıdır."
+  - "Söylenemez / doğru değildir ifadesi belirgin olmalıdır."
+  - "Görsel olmadan doğru cevap kesinleşmemelidir."
+  - "Seçenekler aynı temsil düzeyinde, yani hepsi yargı cümlesi biçiminde olmalıdır."
+  - "3 seçenekli yapıda iki çeldirici de güçlü olmalıdır."
+
+izinli_icerikler:
+  - "veli meslekleri"
+  - "öğrenci tercihleri"
+  - "oyuncak türleri"
+  - "sevilen meyveler"
+  - "kitap türleri"
+  - "kulüp üyeleri"
+  - "basit kişi sayıları"
+  - "şekil grafiği ile gösterilen veriler"
+
+yasakli_icerikler:
+  - "karmaşık çok adımlı işlemler"
+  - "oran ve yüzde yorumları"
+  - "birden fazla doğru seçenek"
+  - "metinden çözülebilen yapı"
+  - "aşırı kalabalık grafik"
+  - "2. sınıf düzeyini aşan veri analizi"
+
+ornek_sablon:
+  ust_metin: "Aşağıda ... ile ilgili bir şekil grafiği verilmiştir."
+  gorsel: "Kategoriler ve onları temsil eden tekrar eden şekillerden oluşan sade grafik"
+  soru_koku: "Bu grafikten hareketle aşağıdakilerden hangisi söylenemez?"
+  secenekler:
+    A: "................................"
+    B: "................................"
+    C: "................................"

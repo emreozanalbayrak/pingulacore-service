@@ -1,0 +1,191 @@
+# templates/capture2/metinde_duygu_sirali.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Metinde Duygu
+#
+# SIRALI DUYGU DEGISIMI FORMATI (tum duygu sorularinin ~%25'i)
+# Kahramanin yasadigi duygu degisimini siralamayi gerektirir
+# Secenekler IKILI DUYGU CIFTI formatindadir (Ornek: "Endise - Sevinc")
+
+meta:
+  id: "metinde_duygu_sirali"
+  ad: "Metinde Duygu (Duygu Değişimi)"
+  sinif_seviyesi: 5
+  aciklama: "Kahramanın yaşadığı duyguları sırasıyla belirleme"
+  kaynak: "data/metinde_duygu.pdf"
+  frequency: "Medium (~25% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Duygu değişimi içeren paragraf + soru kökü + ikili duygu seçenekleri"
+
+  paragraph:
+    required: true
+    word_count_min: 60
+    word_count_max: 110
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "oykuleyici"
+    kurallar:
+      - "Metin iki aşamadan oluşmalı."
+      - "İlk bölümde bir duygu (Örn: Endişe), ikinci bölümde farklı bir duygu (Örn: Sevinç) hakim olmalı."
+      - "Örn: 'Sınav sonucu açıklanacaktı, elleri titriyordu (Endişe)... Listede adını en başta görünce havalara uçtu (Sevinç).'"
+      - "Duygu isimleri metinde doğrudan geçmemeli, olaylar ve davranışlar üzerinden sezdirilmeli."
+      - "İki duygu arasındaki geçiş net ve anlaşılır olmalı."
+      - "Paragrafta konuyla ilgili AÇIKLAMA, TANIM veya EK BİLGİ verme! Paragraf SADECE hikâyeyi/olayı anlatsın"
+      - "YASAK: 'Duyular insanın çevresini algılamasını sağlar', 'Karakter özellikleri kişinin davranışlarını belirler' gibi ders kitabı açıklamaları"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 3
+    word_count_max: 8
+    style: "variable"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 2 varyasyon)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metnin kahramanı sırasıyla aşağıdaki duygulardan hangilerini yaşamıştır?</b>"
+  - "<b>Bu metinde bahsedilen kişi ve arkadaşının yaşadığı duygular aşağıdakilerin hangisinde sırasıyla verilmiştir?</b>"
+  - "<b>Yukarıdaki metne göre kahramanın yaşadığı duygu değişimi aşağıdakilerin hangisinde doğru sıralanmıştır?</b>"
+  - "<b>Bu metindeki kişinin duyguları hangi sırayla değişim göstermiştir?</b>"
+  - "<b>Metnin kahramanının baştan sona yaşadığı duygular aşağıdakilerin hangisinde sırasıyla verilmiştir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metnin akışına uygun sıradaki duygu çifti"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Iki duygu 'tire' ile ayrilmali (Ornek: 'Endişe - Sevinç')"
+    - "Siralama metnin kronolojik akisina uygun olmali"
+    - "Her iki duygu da metinde acikca sezdirilmis olmali"
+  ornekler:
+    - paragraf: "Sinav sonucu aciklanacakti, elleri titriyordu... Listede adini en basta gorunce havalara uctu."
+      dogru: "Endişe - Sevinç"
+      neden: "Ilk bolumde sinav kaygisi (endise), sonuc gorunce mutluluk (sevinc)"
+    - paragraf: "Arka arkaya gelen yenilgiler onu caresiz birakmisti... Sonunda kazaninca gozleri doldu."
+      dogru: "Çaresizlik - Mutluluk"
+      neden: "Ilk bolumde basarisizlik (caresizlik), kazaninca sevinc (mutluluk)"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI BILGILERI
+# ═══════════════════════════════════════════════════════════════
+# Celdiriciler yanlis duygu cifti kombinasyonlaridir
+# Sira ters olabilir veya yanlis duygular eslestirilir
+
+distractors:
+  notlar:
+    - "Siralamasi ters olan duygu cifti (Ornek: 'Sevinç - Endişe')"
+    - "Bir duygu dogru, digeri yanlis olan cift (Ornek: 'Endişe - Üzüntü')"
+    - "Her iki duygu da yanlis olan cift (Ornek: 'Korku - Pişmanlık')"
+    - "Tum secenekler ayni formatta olmali (duygu - duygu)"
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cozumleme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select two contrasting emotions"
+      details: |
+        Iki farkli duygu sec (zit veya farkli):
+        - Endise -> Sevinc
+        - Uzuntu -> Umut
+        - Korku -> Rahatlama
+        - Caresizlik -> Mutluluk
+        - Saskinlik -> Hayal kirikligi
+
+    - step: 2
+      action: "Generate two-phase paragraph (60-110 words)"
+      details: |
+        Paragrafta:
+        - Ilk bolumde birinci duygu hakim olmali
+        - Ikinci bolumde ikinci duygu hakim olmali
+        - Gecis net ve anlasilir olmali
+        - Duygu isimleri dogrudan gecmemeli
+        - Davranislar, beden dili, ic monolog ile duygu sezdirilmeli
+
+    - step: 3
+      action: "Set correct answer = emotion pair in order"
+      details: "Metnin akisina uygun siradaki duygu cifti (Ornek: 'Endişe - Sevinç')"
+
+    - step: 4
+      action: "Generate 3 distractors"
+      details: |
+        3 yanlis duygu cifti olustur:
+        - Sirasi ters (Sevinc - Endise)
+        - Bir duygu dogru, digeri yanlis (Endise - Uzuntu)
+        - Her iki duygu da yanlis (Korku - Pismanlik)
+        - Her biri 3-8 kelime, ayni formatta
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR (Sayfa 112-114)
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 112
+    konu: "Sinav sonucu beklemek"
+    paragraf: "Sınav sonucu açıklanacaktı, elleri titriyordu. Sınıfa girdiğinde karnesi elindeydi. Listede adını en başta görünce havalara uçtu."
+    dogru_cevap: "Endişe - Sevinç"
+    celdirici_1: "Sevinç - Endişe"
+    celdirici_2: "Korku - Üzüntü"
+    celdirici_3: "Endişe - Üzüntü"
+
+  - sayfa: 114
+    konu: "Yarisma heyecani"
+    paragraf: "Sahneye çıkmadan önce dizleri titriyordu. Sıra kendisine geldiğinde derin bir nefes aldı ve şarkısını söyledi. Alkışları duyunca yüzünde kocaman bir gülümseme belirdi."
+    dogru_cevap: "Heyecan - Mutluluk"
+    celdirici_1: "Korku - Şaşkınlık"
+    celdirici_2: "Mutluluk - Heyecan"
+    celdirici_3: "Heyecan - Rahatlama"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 60-110 arasinda mi?"
+    - "Cumle sayisi 4-7 arasinda mi?"
+    - "Oykuleyici bir uslupla mi yazilmis?"
+    - "Iki farkli duygu asamasi acikca ayirt edilebiliyor mu?"
+    - "Duygu isimleri metinde dogrudan gecmiyor mu?"
+    - "Duygular arasi gecis net mi?"
+
+  correct_answer:
+    - "3-8 kelime arasinda mi?"
+    - "Iki duygu tire ile ayrilmis mi?"
+    - "Siralama metnin kronolojik akisina uygun mu?"
+    - "Her iki duygu da metinde sezdiriliyor mu?"
+
+  distractors:
+    - "Her celdirici farkli bir duygu cifti mi?"
+    - "Celdiriciler 3-8 kelime arasinda mi?"
+    - "En az bir celdiricinin sirasi ters mi?"
+    - "Hicbiri dogru sirayla dogru duygu ciftini icermiyor mu?"
+    - "Tum secenekler ayni formatta mi? (duygu - duygu)"

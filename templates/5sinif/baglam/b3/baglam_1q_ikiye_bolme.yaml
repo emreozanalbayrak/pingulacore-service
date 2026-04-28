@@ -1,0 +1,129 @@
+# templates/baglam/baglam_1q_ikiye_bolme.yaml
+# Baglam Tipi: 1Q Ikiye Bolme (Bolum 3)
+# Soru Sayisi: 1
+# Kaynak: baglamb3sorukoku.md
+# Soru Tipleri: Metni iki paragrafa ayirma / cumle yeri degistirme
+
+meta:
+  id: "baglam_1q_ikiye_bolme"
+  ad: "1Q Baglam Ikiye Bolme"
+  sinif_seviyesi: 5
+  aciklama: "Numarali cumlelerden olusan metni iki paragrafa ayirma veya cumle yeri degistirme sorusu"
+  kaynak: "baglamb3sorukoku.md"
+  frequency: "Medium"
+
+# ======================================================================
+# BAGLAM KONFIGURASYONU
+# ======================================================================
+
+context:
+  type: "baglam_senaryo_1q"
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 60
+    word_count_max: 120
+    structure:
+      - "Bir karakter (Turkce isimli) numaralanmis cumlelerden olusan bir metin bulur (3-5 cumle senaryo)"
+      - "Metin I. II. III. IV. seklinde Roma rakamiyla numaralanmis 4 cumleden olusur"
+      - "Cumleler tek bir paragraf olacak sekilde yan yana yazilir"
+      - "Metin iki farkli paragrafa ayrilabilir olmali (konu gecisi net)"
+      - "Veya anlam butunlugu icin iki cumlenin yeri degistirilebilir olmali"
+      - "Senaryo: Ogrenci dergiden/kitaptan metin bulur, ogretmen ikiye bolmeyi ister"
+    kurallar:
+      - "Senaryo 5. sinif seviyesinde, gunluk hayattan olmali"
+      - "Karakter ismi Turkce olmali (Elif, Mert, Zeynep, Can vb.)"
+      - "Konu gecis noktasi net olmali"
+      - "Cumleler arasi mantiksal baglanti ve akis bulunmali"
+      - "Turkce karakterler dogru kullanilmali (s, i, g, u, o, c)"
+
+  questions:
+    - slot: 1
+      type: "ikiye_bolme"
+      soru_kokleri:
+        - "<b>Bu metni ikiye boldugunde ikinci paragrafi numaralanmis cumlelerden hangisiyle baslatmistir?</b>"
+      options_style: "short_phrase"
+      word_count_min: 1
+      word_count_max: 8
+      beceri:
+        katman: "KB2"
+        bilesenler: ["yapilandirma", "analiz"]
+        surec_bileseni: "bilgiyi_yapilandirma"
+
+soru_kokleri:
+  - "<b>Bu metni ikiye boldugunde ikinci paragrafi numaralanmis cumlelerden hangisiyle baslatmistir?</b>"
+  - "<b>Bu metnin anlam butunlugunu saglamak icin numaralanmis cumlelerden hangilerinin yeri degistirilmelidir?</b>"
+
+header_template: null
+
+# ======================================================================
+# FORMAT
+# ======================================================================
+
+format:
+  type: "llm_generated_html"
+  description: "1Q baglam senaryo uzerinden ikiye bolme / cumle yeri degistirme sorusu"
+
+  paragraph:
+    required: true
+    numbered_sentences: true
+    word_count_min: 60
+    word_count_max: 120
+    sentence_count_min: 3
+    sentence_count_max: 8
+
+  stem:
+    required: true
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 8
+    style: "short_phrase"
+    correct_count: 1
+    correct_type: "matches"
+
+# ======================================================================
+# DOGRU CEVAP KURALLARI
+# ======================================================================
+
+dogru_cevap:
+  tanim: "Metnin dogru bolunme noktasi veya yer degistirilecek cumle cifti"
+  kurallar:
+    - "KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI"
+    - "Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI"
+    - "Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil"
+    - "YASAK: Tablodaki değeri aynen şıkka yazmak (örn: 'yalıtımı azdır' tabloda yazıyorsa şıkta aynen yazmamalı)"
+    - "Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli"
+
+    - "Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı"
+    - "Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı"
+    - "Dogru secenek paragraftaki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Ikiye bolme sorusunda: konu gecis noktasi dogru belirlenmeli"
+    - "Yer degistirme sorusunda: iki cumlenin yeri degisince anlam butunlugu saglanmali"
+    - "Secenekler Roma rakamiyla ifade edilmeli (orn: III, veya I ve III)"
+    - "HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer"
+    - "Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK"
+    - "BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: 'teleskop' → 'mercekli araç' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı"
+
+# ======================================================================
+# CELDIRICI STRATEJILERI
+# ======================================================================
+
+distractors:
+  stratejiler:
+    - ad: "YANLIS_KESIM_NOKTASI"
+      aciklama: "Konu gecisinin olmadigi bir noktayi bolme yeri olarak sunma"
+      ornek: "Ayni alt konunun devam ettigi yerde kesme onerme"
+    - ad: "GEREKSIZ_DEGISIKLIK"
+      aciklama: "Zaten dogru yerde olan cumlelerin yerini degistirme onerisi"
+      ornek: "Anlam butunlugu olan iki cumleyi gereksiz yere yer degistirme"
+    - ad: "BUTUNLUGU_BOZAN"
+      aciklama: "Yer degistirince anlam akisini bozan cumle cifti sunma"
+      ornek: "Neden-sonuc iliskisi olan cumleleri ayirma onerisi"
+
+use_shared_strategies: false

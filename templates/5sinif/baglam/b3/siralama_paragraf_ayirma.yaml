@@ -1,0 +1,120 @@
+meta:
+  id: siralama_paragraf_ayirma
+  ad: Sıralama — Paragraf Ayırma
+  sinif_seviyesi: 5
+  aciklama: Numaralı cümlelerden oluşan metin verilir — paragraf başlangıcı ve son cümle tamamlama soruları
+  kaynak: kaynak-soru-kokleri.md
+  frequency: Medium
+context:
+  type: siralama_paragraf_ayirma
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 100
+    word_count_max: 180
+    structure:
+    - Bir konu hakkında 4-5 cümlelik bir metin oluştur
+    - Cümleleri I'den başlayan Roma rakamlarıyla numarala (I, II, III, IV, V)
+    - Metin aslında iki paragraf olarak düşünülebilir yapıda olmalı
+    - İlk 2-3 cümle bir alt konuyu, son 2-3 cümle ikinci alt konuyu ele almalı
+    - İki paragraf arasında net bir geçiş noktası olmalı
+    - Senaryoda bir "...öğretmen..." bu metni "...öğrencilere..." verip önce 'İki paragrafa ayırın' demiş olmalı sonra da 'Metne bir sonuç cümlesi ekleyin' demiş olmalı
+    - Senaryodaki öğretmen ve öğrenci değişkenleri yaratıcılıkla çeşitlendirilmeli
+    kurallar:
+    - 5. sınıf seviyesinde, bilgilendirici bir konu (fen, sosyal bilgiler, günlük hayat)
+    - Cümle numaralama I'den başlayan Roma rakamlarıyla (I, II, III…) yapılmalı
+    - İki paragraf arasındaki geçiş belirgin ama çok kolay olmayacak şekilde olmalı
+    - Metinde anlam bütünlüğü ve mantıksal akış olmalı
+    - Son cümle çıkarılabilir ve tamamlama sorusu sorulabilir yapıda olmalı
+    - Soruda KESİNLİKLE tablo olMAMALI
+    - Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)
+  questions:
+  - slot: 1
+    type: paragraf_baslangici
+    soru_kokleri:
+    - <b>Bu metin iki paragrafa ayrılacak olursa ikinci paragraf hangi cümleyle başlar?</b>
+    - <b>"...Öğretmen..." metni iki paragrafa ayırmak istediğinde ikinci paragrafın ilk cümlesi hangisi olmalıdır?</b>
+    - <b>Bu etkinliğe göre, "...Öğrenci..." bu metni ikiye böldüğünde ikinci paragrafı numaralanmış cümlelerden hangisiyle başlatmıştır?</b>
+    - <b>"...Ogrenci..." bu metni ikiye boldugunde ikinci parografi numaralandirilmis cumlelerden hangisiyle baslatmistir?</b>
+    options_style: roman_numeral_combination
+    word_count_min: 1
+    word_count_max: 4
+    slot_rules:
+    - "Seçenekler SADECE Roma rakamından oluşmalı: I, II, III, IV, V gibi. 'cümle' kelimesi EKLEME. Örnek: A) III  B) IV  C) II  D) V"
+    beceri:
+      katman: KB2
+      bilesenler:
+      - yapilandirma
+      - analiz
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 2
+    type: son_cumle_tamamlama
+    soru_kokleri:
+    - <b>Metne eklenen son cümle aşağıdakilerden hangisi olabilir?</b>
+    - <b>Bu metnin sonuna aşağıdaki cümlelerden hangisi eklenebilir?</b>
+    - <b>"...Öğrenci...", metnin sonuna bir cümle eklemek istemiştir. Aşağıdaki cümlelerden hangisini eklemiş olabilir?</b>
+    - <b>"...Ogrenci..." bu metne asagidaki cumlelerden hangisini eklemis olabilir?</b>
+    options_style: complete_sentence
+    word_count_min: 8
+    word_count_max: 22
+    beceri:
+      katman: KB2
+      bilesenler:
+      - cikarim_yapma
+      - yapilandirma
+      surec_bileseni: bilgiyi_cikartma
+header_template: 1-2. soruları aşağıdaki numaralanmış cümlelere göre cevaplayınız.
+format:
+  type: llm_generated_html
+  description: Numaralı cümlelerden oluşan metin üzerinden paragraf yapısı ve tamamlama soruları
+  paragraph:
+    required: true
+    word_count_min: 100
+    word_count_max: 180
+    sentence_count_min: 6
+    sentence_count_max: 10
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 2
+    word_count_max: 22
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Metnin yapısı ve anlam akışına göre paragraf başlangıcı veya tamamlama cümlesi
+  kurallar:
+  - 'KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI'
+  - Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI
+  - Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil
+  - 'YASAK: Tablodaki değeri aynen şıkka yazmak (örn: ''yalıtımı azdır'' tabloda yazıyorsa şıkta aynen yazmamalı)'
+  - Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli
+  - Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı
+  - Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı
+  - Paragraf başlangıcı sorusunda doğru cevap konunun değiştiği noktadaki cümle numarası
+  - Tamamlama sorusunda doğru cevap metnin anlam bütünlüğünü koruyan ve son paragrafı tamamlayan cümle
+  - Çeldiriciler konuyla ilgili ama yapısal olarak uyumsuz seçenekler olmalı
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: ''teleskop'' → ''mercekli araç'' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: YAKIN_GECIS_NOKTASI
+    aciklama: Doğru geçiş noktasına yakın ama yanlış cümleyi paragraf başlangıcı olarak sunma
+    ornek: Doğru cümleden bir önceki veya sonraki cümleyi başlangıç gibi gösterme
+  - ad: KONU_SAPMASI
+    aciklama: Konuyla ilgili ama metnin akışına uymayan tamamlama cümlesi sunma
+    ornek: Aynı genel konuda ama farklı alt konuya geçen bir cümle önerme
+  - ad: DETAY_TEKRARI
+    aciklama: Metinde zaten var olan bir bilgiyi farklı kelimelerle tekrarlayan cümle sunma
+    ornek: Yeni bilgi eklemeyen, sadece önceki cümleleri özetleyen ifade
+use_shared_strategies: false

@@ -1,0 +1,107 @@
+# Kaynak: hikaye_unsurlari_reverse_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.kolay
+# 4. sinif hikaye unsurlari reverse — kolay duzey
+
+meta:
+  id: "hikaye_unsurlari_reverse_sinif4_kolay"
+  ad: "Hikâye Unsurları (Metin Oluşturma) (Kolay)"
+  sinif_seviyesi: 4
+  aciklama: "Kolay duzey — verilen unsurları (yer, zaman, kişi, olay) içeren paragrafı bulma"
+  frequency: "Low"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Unsurlar listesi (oncul) + soru koku + 4 mini paragraf secenek (kolay)"
+
+  paragraph:
+    required: false  # Ana paragraf YOK - onculde unsurlar verilir
+    kurallar:
+      - "Dogru cevap ve celdiriciler 25-32 kelime araliginda tutulacak."
+      - "Mini-paragraflar tercihen 2 cumle olmali."
+      - "En az 1 celdiricide 2 unsur farkli olabilir; farklilik hizli fark edilebilir olmali."
+      - "Dogru cevap ile celdiriciler arasindaki ayrim daha belirgin olmali."
+    background_color: "#d4edda"
+
+  premises:
+    required: true
+    structure:
+      - "Yer: {location}"
+      - "Zaman: {time}"
+      - "Kisiler: {characters}"
+      - "Olay: {event}"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 15
+    word_count_max: 22
+    sentence_count_min: 2
+    sentence_count_max: 3
+    style: "mini_paragraph"
+    correct_count: 1
+    kurallar:
+      - "Seçeneklerdeki mini-paragraflarda hikâye unsurlarıyla ilgili AÇIKLAMA veya EK BİLGİ verme!"
+      - "Mini-paragraflar SADECE hikâyeyi anlatsın — unsur analizi veya tanımlaması YAPMA"
+      - "Kolay düzeyde farklar daha belirgin olmalı; doğru cevap tüm unsurları açıkça taşımalı"
+      - "En az 1 çeldiricide 2 unsur farklı olabilir; farklılık hızla fark edilebilir olmalı"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Aşağıdaki metinlerden hangisi bu hikâye unsurlarına uygun yazılmıştır?</b>"
+  - "<b>Yukarıda verilen hikâye unsurlarına uygun olan metin aşağıdakilerden hangisidir?</b>"
+  - "<b>Verilen hikâye unsurlarını içeren metin aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu hikâye unsurlarına göre oluşturulmuş metin aşağıdakilerden hangisidir?</b>"
+  - "<b>Aşağıdaki metinlerden hangisi yukarıdaki hikâye unsurlarıyla örtüşmektedir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Onculdeki tum unsurlari barindiran mini paragraf"
+  kurallar:
+    - "Verilen yer, zaman ve kisiler metinde acikca gecmeli"
+    - "Olay orgusu, verilen olay tanimiyla uyusmali"
+    - "Tum 4 unsur (Olay, Yer, Zaman, Kisi) paragrafta bulunmali"
+    - "25-32 kelime arasinda, 2 cumle olmali"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "BELIRGIN_UNSUR_FARKI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Öncüldeki unsurlardan belirgin şekilde sapan seçenekler — kolay elenebilir"
+    nasil_olusturulur: |
+      Öncüldeki yer, zaman, kişi ve olay çok açık ve somut seçilmeli.
+      Doğru cevap ve celdiriciler 25-32 kelime aralığında tutulmalı.
+      Mini-paragraflar tercihen 2 cümle olmalı.
+      En az 1 celdiricide 2 unsur farklı olabilir; farklılık öğrenci tarafından hızlı fark edilebilir olmalı.
+    kategori: "content"
+
+  - ad: "KOLAY_UYUMSUZ_MINI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Öncülle uyumsuzluğu belirgin olan mini-paragraf celdiriciler"
+    nasil_olusturulur: |
+      Yanlış seçenekler öncüldeki unsurlarla uyum içinde olmalı — öğrenci kolayca doğrulayabilmeli.
+      Kolay seviyede doğru cevabın öncülle uyumsuzluğu belirgin olmalı.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

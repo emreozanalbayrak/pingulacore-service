@@ -1,0 +1,134 @@
+# templates/2sinif/bolum2/paragrafin_konusu_sinif2_zor.yaml
+# 2. Sinif — Paragrafin Konusu — ZOR zorluk
+# Konu birkac bilgiye dagilmis, 2 yanlis secenek de metinle iliskili gorunur
+# NOT: Zor duzey bile ana dusunce duzeyine tasmamali!
+
+meta:
+  id: "paragrafin_konusu_sinif2_zor"
+  ad: "2. Sinif - Paragrafin Konusu (Zor)"
+  sinif_seviyesi: 2
+  aciklama: "Zor duzey — konu birkac bilgiye dagilmis, 2 yanlis secenek de metinle iliskili gorunur, 3 secenekli"
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 3 konu secenegi (zor)"
+
+  paragraph:
+    required: true
+    word_count_min: 52
+    word_count_max: 68
+    sentence_count_min: 5
+    sentence_count_max: 6
+    stil: "bilgilendirici_veya_oykusel"
+    background_color: "#fce8e8"
+    kurallar:
+      - "Konu acik kalmalidir fakat metin icinde birkac bilgiye dagilmis olabilir."
+      - "Metinde 1 yan ayrinti bulunabilir ve bu ayrinti celdirici uretimine malzeme verebilir."
+      - "Dogru konu ifadesi, metindeki tum bilgileri en iyi toplayan secenek olmalidir."
+      - "Zor duzeyde bile soru ana dusunce, ana duygu veya yorum sorusuna donusmemelidir."
+      - "Metin tek baskin konu etrafinda kurulmalidir."
+      - "Metin kisa, sade, somut ve gunluk yasama yakin olmalidir."
+      - "Cumleler kisa ve dogrudan olmalidir."
+      - "Metin dis bilgi gerektirmemelidir."
+      - "Paragrafin konusu 'Metinde ne anlatiliyor?' sorusuna verilecek cevapla belirlenebilmelidir."
+      - "2. sinif ogrencisinin anlayabilecegi sadelikte kelime hazinesi kullanilmalidir."
+      - "Metinde konu disina cikan yan olaylar sinirli tutulmalidir."
+      - "Metinde ve gorselde SADECE Turkce kullanilmalidir. Ingilizce kelime YASAK."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 2
+    word_count_max: 5
+    style: "topic_phrase"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Tum secenekler konu ifadesi biciminde olmalidir (2-5 sozcuk)."
+      - "Secenekler baslik gibi degil, konu ifadesi gibi aciklayici olmalidir."
+      - "Secenekler kisa, sade ve 2. sinif duzeyinde olmalidir."
+      - "Dogru secenek metnin tamaminda anlatilan ana konuyu karsilamalidir."
+      - "Dogru konu ifadesi tek ayrinti degil butun metin icin en uygun secenek olmalidir."
+      - "Dogru konu aciklayici, sade ve gereginden genis olmayan yapida olmalidir."
+      - "2 yanlis secenegin ikisi de metinle iliskili gorunmelidir."
+      - "1 yanlis secenek fazla genel olmalidir."
+      - "1 yanlis secenek metindeki yan unsur ya da tek ayrintidan uretilmis yakin celdirici olmalidir."
+      - "Tum secenekler bicimce paralel olmalidir."
+
+soru_kokleri:
+  - "<b>Bu metnin konusu asagidakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Bu metinde ele alinan konu asagidakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Bu metinde asagidakilerden hangisine deginilmistir?</b>"
+  # KULLANILDI: - "<b>Bu paragrafin konusu asagidakilerden hangisidir?</b>"
+  - "<b>Paragrafta anlatilan konu asagidakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Metinde hangi konudan soz edilmektedir?</b>"
+  - "<b>Bu metnin anlattigi konu asagidakilerden hangisidir?</b>"
+  - "<b>Asagidakilerden hangisi bu metnin konusudur?</b>"
+  - "<b>Bu metinde en cok ne anlatilmaktadir?</b>"
+  - "\"{topic}\" <b>ile ilgili bu metnin konusu asagidakilerden hangisidir?</b>"
+
+dogru_cevap:
+  tanim: "Metnin tamaminda anlatilan ana konuyu karsilayan en uygun ifade"
+  kurallar:
+    - "Dogru cevap metnin tek baskin konusunu yansitmalidir."
+    - "Dogru cevap baslik gibi yaratici degil, konu ifadesi gibi aciklayici olmalidir."
+    - "Dogru konu ifadesi tek ayrinti degil butun metin icin en uygun secenek olmalidir."
+    - "Dogru cevap aciklayici, sade ve gereginden genis olmayan yapida olmalidir."
+    - "Dogru cevap cok genel olmamalidir."
+    - "Dogru cevap cok dar olmamalidir."
+    - "Dogru cevap genellikle 2-5 sozcuk arasinda olmalidir."
+    - "Dogru secenek paragraftaki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farkliligi olmali"
+
+celdirici_stratejileri:
+  - ad: "COK_GENIS"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metinle iliskili ama odagi gereginden fazla genis konu"
+    nasil_olusturulur: |
+      Metnin konusuyla ayni alan icinde ama cok genel bir konu ifadesi olustur.
+      Zor duzey: bu secenek ilk bakista makul gorunmeli, sadece dikkatli dusununce genis oldugu anlasilmali.
+    kategori: "semantic"
+
+  - ad: "COK_DAR"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metindeki tek ayrintiya odaklanan konu"
+    nasil_olusturulur: |
+      Metindeki yan bir detaya veya tek bir cumledeki bilgiye odaklanan konu ifadesi olustur.
+      Zor duzey: bu secenek metinle dogrudan iliskili gorunmeli, sadece metnin TAMAMINI degil bir BOLUMUNU kapsamasi yuzunden yanlis olmali.
+    kategori: "cognitive"
+
+  - ad: "YANLIS_ODAK"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Metindeki yan bilgiye yonelen ama ana konu olmayan ifade"
+    nasil_olusturulur: |
+      Metinde gecen ama ana konu olmayan bir bilgiyi konu ifadesi haline getir.
+      Zor duzey: bu secenek metinle baglantili gorunmeli ama ana odagi kacirir.
+    kategori: "cognitive"
+
+  - ad: "ILISKILI_AMA_FARKLI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Ayni tema alaninda duran ama metnin gercek konusunu karsilamayan ifade"
+    nasil_olusturulur: |
+      Metnin alaniyla iliskili ama metnin asil konusundan farkli bir konu ifadesi olustur.
+      Zor duzey: bu secenek ayni konunun farkli bir yonune odaklanir, ogrenciyi yaniltabilir.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB1"
+  bilesenler: ["konu_belirleme"]
+  surec_bileseni: "metni_anlama"
+
+sinif2_ek_kurallar:
+  yasak_alanlar:
+    - "Ana dusunce / ana duygu odakli sorular YASAK"
+    - "Paragrafin ana dusuncesini bulma YASAK"
+    - "Metnin vermek istedigi mesaji bulma YASAK"
+    - "Cok katmanli ortuk anlam cozumleme YASAK"
+    - "Zor duzey bile ana dusunce duzeyine TASMAMALI"

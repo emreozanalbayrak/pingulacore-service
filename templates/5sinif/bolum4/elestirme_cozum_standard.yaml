@@ -1,0 +1,152 @@
+# templates/bolum4/elestirme_cozum_standard.yaml
+# Bolum 4.2 - Ozel Bolum: Elestirme ve Cozum Onerisi
+#
+# STANDART PROBLEM/COZUM FORMATI
+# Problem durumu tanımlayan metin verilir, ogrenci problem veya cozum onerisi belirler
+
+meta:
+  id: "elestirme_cozum_standard"
+  ad: "Eleştirme ve Çözüm Önerisi (Standart)"
+  sinif_seviyesi: 5
+  aciklama: "Problem belirleme ve çözüm önerisi değerlendirme"
+  frequency: "High (~50% of critique questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Problem tanımlayan paragraf + soru kökü + 4 cümle seçenek"
+
+  paragraph:
+    required: true
+    word_count_min: 60
+    word_count_max: 110
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "bilgilendirici"
+    kurallar:
+      - "Bir problem durumu tanımlayan metin"
+      - "Problem → araştırma → olası çözümler akışı"
+      - "Metinde açık bir sorun/ihtiyaç bulunmalı"
+      - "Çözüm önerilerini karşılaştıracak yeterli bilgi içermeli"
+      - "Problem 5. sınıf öğrencisinin anlayabileceği düzeyde olmalı"
+      - "Çevresel, toplumsal veya bilimsel bir problem olabilir"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 8
+    word_count_max: 25
+    style: "complete_sentence"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Metne göre çözülmesi gereken asıl problem aşağıdakilerden hangisidir?</b>"
+  - "<b>Aşağıdakilerden hangisi bu probleme yönelik en uygun çözüm önerisidir?</b>"
+  - "<b>Metindeki durumun çözümü için aşağıdakilerden hangisi yapılmalıdır?</b>"
+  - "<b>Bu araştırmanın sorusu aşağıdakilerden hangisi olabilir?</b>"
+  # Eleştiri tespiti ve çözüm süreci (ARI Paragraf 2025 kaynak)
+  - "<b>Yazarın bu metinde …Kişi…'yi eleştirdiği durum aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metinde bahsedilen sorunu çözmek için …Kişi…'nin nasıl bir yol izlemesi beklenir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metindeki probleme yönelik doğru tespit veya en uygun çözüm önerisi"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Metnin ana problemini doğru tespit etmeli veya en uygun çözümü sunmalı"
+    - "Metindeki bilgilerle desteklenmeli"
+    - "Pratik ve uygulanabilir olmalı"
+    - "8-25 kelime, tam bir cümle formatında olmalı"
+    - "Problemi doğrudan ele almalı, dolaylı değil"
+  ornekler:
+    - paragraf: "Son yıllarda şehirlerde plastik atık miktarı hızla artmaktadır. Okyanuslarda plastik adaları oluşmuş, deniz canlıları zarar görmektedir. Araştırmacılar plastiklerin doğada yüzlerce yıl çözünmediğini ortaya koymuştur."
+      dogru: "Plastik kullanımını azaltmak ve geri dönüşümü yaygınlaştırmak gerekmektedir."
+      neden: "Metindeki ana probleme (plastik kirliliği) doğrudan ve uygulanabilir çözüm"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# YAKIN_ANLAM, DETAY_TUZAGI, NEDEN_SONUC_TAKASI, KAPSAM_KAYDIRMA,
+# NICEL_GORUMLU_NITEL_ALDATMACASI
+
+beceri:
+  katman: "KB3"
+  bilesenler: ["problem_cozme", "degerlendirme"]
+  surec_bileseni: "karar_verme"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Problem durumu belirle"
+      details: |
+        Konuyla ilgili net bir problem tanımla:
+        - Çevresel (kirlilik, iklim, doğa tahribatı)
+        - Toplumsal (eğitim, sağlık, ulaşım)
+        - Bilimsel (enerji, kaynak, teknoloji)
+
+    - step: 2
+      action: "Problem anlatımı yaz (60-110 kelime)"
+      details: |
+        - Problem → kanıt/araştırma → sonuçlar akışı
+        - Metinde açık bir sorun/ihtiyaç belirtilmeli
+        - Çözüm önerilerini değerlendirecek bilgi içermeli
+
+    - step: 3
+      action: "Doğru cevap = problem tespiti veya en uygun çözüm"
+      details: |
+        - Metindeki ana problemi doğru tespit eden veya
+        - En uygun çözüm önerisini sunan cümle
+        - 8-25 kelime, tam cümle
+
+    - step: 4
+      action: "3 çeldirici oluştur"
+      details: |
+        - Kısmen doğru ama yetersiz çözümler
+        - Detaya takılan, ana problemi kaçıran öneriler
+        - Neden-sonuç karıştıran, kapsam kaydıran ifadeler
+
+    - step: 5
+      action: "Seçenekleri rastgele sırala"
+      details: "A-B-C-D seçeneklerini rastgele sırala"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayısı 60-110 arasında mı?"
+    - "Açık bir problem durumu var mı?"
+    - "Çözüm değerlendirmesi için yeterli bilgi var mı?"
+
+  correct_answer:
+    - "8-25 kelime tam cümle mi?"
+    - "Ana problemi doğru tespit ediyor mu veya en uygun çözümü sunuyor mu?"
+    - "Metindeki bilgilerle destekleniyor mu?"
+
+  distractors:
+    - "Konuyla ilgili ama eksik/yanlış çözümler mi?"
+    - "Her çeldirici farklı bir yanılgı türü mü?"
+    - "Tüm seçenekler aynı formatta mı?"

@@ -1,0 +1,143 @@
+# Kaynak: konu_standard_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.zor
+# 4. sinif konu standart — zor duzey
+
+meta:
+  id: "b12_konu_standard_sinif4_zor"
+  ad: "4. Sinif - Metinde Konu Standart (Zor)"
+  sinif_seviyesi: 4
+  aciklama: "Zor duzey — paragrafin ana konusunu belirleme. Zengin detaylar ve guclu celdiriciler; dogru cevap icin paragrafin tamami degerlendirilmeli."
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 4 kisa konu secenegi (zor)"
+
+  paragraph:
+    required: true
+    word_count_min: 75
+    word_count_max: 95
+    background_color: "#fce8e8"
+    sentence_count_min: 6
+    sentence_count_max: 7
+    stil: "bilgilendirici"
+    kurallar:
+      - "Paragraf tek konu etrafinda kalmali fakat daha zengin detay icermeli."
+      - "En az 2 yan detay celdirici uretimine uygun olmali."
+      - "Konu paragraf boyunca tutarli ama biraz daha ortuk bicimde islenebilir."
+      - "Dogru cevaba karar vermek icin paragrafin TAMAMINI degerlendirmek gerekebilir."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+      - "En az 2 yan detay celdirici uretimine malzeme olacak bicimde yazilmali."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 6
+    style: "topic_phrase"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Secenekler kisa isim tamlamasi biciminde olmali (2-5 kelime ideal)."
+      - "Dogru cevap ince genislik ayarini korumali."
+      - "Dogru secenek ebeveyn konuya kacmamali ve paragraftaki baskin detaya da inmemeli."
+      - "1 yakin_anlam celdirici ZORUNLU ve cok guclu olmali."
+      - "1 detay_tuzagi veya paragraftaki baskin alt boyut celdirici olmali."
+      - "1 iliskili_ama_farkli veya cok_genis/cok_dar celdirici olmali."
+      - "En az iki celdirici paragrafla kuvvetli semantik bag kurmali."
+      - "YASAK: Dogru cevabi yalniz kelime benzerligiyle belli eden zayif celdiriciler."
+      - "YASAK: Birden fazla secenegin esit derecede dogru olmasi."
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metinde aşağıdakilerden hangisi anlatılmaktadır?</b>"
+  - "<b>Bu metinde aşağıdakilerin hangisinden bahsedilmektedir?</b>"
+  - "<b>Bu metin aşağıdakilerin hangisinden bahsetmektedir?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metnin konusunu en iyi ifade eder?</b>"
+  - "<b>Bu metinde ele alınan konu aşağıdakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Bu metne konu olan durum aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metinde aşağıdakilerin hangisinden söz edilmektedir?</b>"
+  # KULLANILDI: - "<b>Bu metinde aşağıdakilerin hangisine değinilmektedir?</b>"
+  - "<b>Bu metinde aşağıdakilerin hangisine değinilmiştir?</b>"
+  - "<b>Bu metinde aşağıdakilerin hangisinden bahsedilmiştir?</b>"
+  # KULLANILDI: - "<b>Bu metinde aşağıdakilerden hangisine değinilmiştir?</b>"
+  - "<b>Bu metnin konusu aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metinde neden söz edilmektedir?</b>"
+  - "<b>Bu metinde</b> \"{topic}\" <b>ile ilgili aşağıdakilerden hangisine değinilmiştir?</b>"
+  - "<b>Bu metinde</b> \"{topic}\" <b>ile ilgili aşağıdakilerden hangisi anlatılmaktadır?</b>"
+  - "<b>Bu metinde</b> \"{topic}\" <b>ile ilgili anlatılan konu aşağıdakilerden hangisidir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Paragrafin tam ve oz konusu — ne eksik ne fazla"
+  kurallar:
+    - "Dogru secenek paragraftaki hicbir cumleyi kelimesi kelimesine tekrarlamamali."
+    - "Paragrafin ne hakkinda oldugunu ozetlemeli."
+    - "Ne cok genis ne cok dar olmali."
+    - "Kisa ve oz olmali (2-5 kelime ideal)."
+    - "Paragrafin TAMAMI hakkinda bilgi vermeli, sadece bir kismi degil."
+    - "Dogru cevap ince genislik ayarini korumali."
+    - "Dogru secenek ebeveyn konuya kacmamali ve paragraftaki baskin detaya da inmemeli."
+    - "Kelime sayisi bakimindan en uzun secenek olmamali."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "YAKIN_ANLAM"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Doğru cevaba semantik olarak çok yakın, güçlü anlam tuzağı"
+    nasil_olusturulur: |
+      Paragrafın gerçek konusuna çok benzeyen ama kapsamı biraz farklı bir ifade oluştur.
+      Zor seviyede bu yakınlık maksimum — öğrenci derin okuma yapmadan doğru sanabilmeli.
+      Yalnızca kapsam inceliğiyle (dar/geniş/kaymış) ayırt edilebilmeli.
+    kategori: "semantic"
+
+  - ad: "DETAY_TUZAGI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "En belirgin ayrıntıyı konu gibi sunan güçlü semantik tuzak"
+    nasil_olusturulur: |
+      Metindeki en güçlü yardımcı bilgiyi ana konu olarak sun.
+      Zor seviyede bu ayrıntı paragrafın büyük bir bölümünü kaplıyor gibi görünmeli.
+      Öğrenci konunun bütününü değerlendirerek bu seçeneği elemelidir.
+    kategori: "cognitive"
+
+  - ad: "KAPSAM_KAYDIRMA"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Aynı ana unsur korunup farklı boyut verilen güçlü celdirici"
+    nasil_olusturulur: |
+      Paragrafın konusuyla aynı ana unsuru kullanan ama farklı boyuta odaklanan bir ifade oluştur.
+      Zor seviyede iki seçenek yüzeyde çok benzer görünmeli.
+      Öğrenci hangi boyutun paragrafta gerçekten işlendiğini analiz etmelidir.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["ozetleme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "Ana fikir / yazar niyeti sorulari YASAK (konu ≠ ana fikir)"
+    - "5. sinifa kayan soyut yorum sorulari YASAK"
+    - "Birden fazla konuyu icerecek paragraflar YASAK"

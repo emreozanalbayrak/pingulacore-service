@@ -1,0 +1,100 @@
+meta:
+  id: baglam_1q_konu
+  ad: 1Q Baglam Konu
+  sinif_seviyesi: 5
+  aciklama: Gunluk hayattan bir senaryo uzerinden konu/problem belirleme sorusu
+  kaynak: baglamb1sorukoku.md
+  frequency: Medium
+context:
+  type: baglam_senaryo_1q
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 60
+    word_count_max: 120
+    structure:
+    - Bir karakter (Turkce isimli) gunluk hayattan bir durumla karsilasir (3-5 cumle)
+    - Karakter bir problem veya ilginc bir olayla yuz yuzedir
+    - Senaryo somut, 5. sinif seviyesinde ve anlasilir olmali
+    - Olayda net bir ana mesele/problem cikarilabilir olmali
+    kurallar:
+    - Senaryo 5. sinif seviyesinde, gunluk hayattan olmali
+    - Karakter ismi Turkce olmali (Elif, Mert, Zeynep, Can vb.)
+    - Problem veya durum acikca anlasilabilir olmali
+    - Turkce karakterler dogru kullanilmali (s, i, g, u, o, c)
+  questions:
+  - slot: 1
+    type: konu_problem
+    soru_kokleri:
+    - <b>Bu olayda anlatilmasi gereken asil mesele nedir?</b>
+    - <b>Bu metne gore ...Ozne...'nin yasadigi temel problem asagidakilerden hangisidir?</b>
+    - <b>Asagidakilerden hangisi ...'nin yasadigi problemi en iyi sekilde ozetlemektedir?</b>
+    - <b>Bu durumu aciklamak icin hangi soru sorulmalidir?</b>
+    options_style: short_phrase
+    word_count_min: 3
+    word_count_max: 12
+    beceri:
+      katman: KB2
+      bilesenler:
+      - anlama
+      - cikarim_yapma
+      surec_bileseni: bilgiyi_cikartma
+soru_kokleri:
+- <b>Bu olayda anlatilmasi gereken asil mesele nedir?</b>
+- <b>Bu metne gore ...Ozne...'nin yasadigi temel problem asagidakilerden hangisidir?</b>
+- <b>Asagidakilerden hangisi ...'nin yasadigi problemi en iyi sekilde ozetlemektedir?</b>
+header_template: null
+format:
+  type: llm_generated_html
+  description: 1Q baglam senaryo uzerinden konu/problem belirleme
+  paragraph:
+    required: true
+    word_count_min: 60
+    word_count_max: 120
+    sentence_count_min: 3
+    sentence_count_max: 8
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 3
+    word_count_max: 12
+    style: short_phrase
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Senaryodaki ana meseleyi/problemi en iyi ifade eden secenek
+  kurallar:
+  - 'KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI'
+  - Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI
+  - Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil
+  - 'YASAK: Tablodaki değeri aynen şıkka yazmak (örn: ''yalıtımı azdır'' tabloda yazıyorsa şıkta aynen yazmamalı)'
+  - Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli
+  - Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı
+  - Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı
+  - Dogru secenek paragraftaki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI
+  - Dogru cevap senaryonun ana meselesini/problemini kapsamli sekilde ifade etmeli
+  - Detayda degil, butunde odaklanmali
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: ''teleskop'' → ''mercekli araç'' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: DETAY_ODAK
+    aciklama: Senaryodaki bir detayi ana problem gibi sunma
+    ornek: Yan bir olayi temel mesele olarak gosterme
+  - ad: UST_KAVRAM_GENELLEME
+    aciklama: Cok genis/genel bir ifade kullanarak belirli problemi kaybetme
+    ornek: Spesifik problemi asiri genel bir kavramla ifade etme
+  - ad: NEDEN_SONUC_KARISTIRMA
+    aciklama: Problemin nedenini veya sonucunu problemin kendisi gibi sunma
+    ornek: Sonucu problem, problemi neden olarak gosterme
+use_shared_strategies: false

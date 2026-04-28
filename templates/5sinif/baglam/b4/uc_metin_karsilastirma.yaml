@@ -1,0 +1,139 @@
+# templates/baglam/uc_metin_karsilastirma.yaml
+# Bağlam Tipi: Bölüm 4.1 — Üç Metin Karşılaştırma
+# Soru Sayısı: 2
+# Kaynak: kaynak-soru-kokleri.md — Bölüm 4.1 Tip B
+# Soru Tipleri: Ortak nokta + Hayat görüşü çıkarımı
+
+meta:
+  id: "uc_metin_karsilastirma"
+  ad: "Üç Metin Karşılaştırma"
+  sinif_seviyesi: 5
+  aciklama: "Bir karakter tahtaya 3 kısa metin yazar — metinlerin ortak noktası ve çıkarım soruları"
+  kaynak: "kaynak-soru-kokleri.md"
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# BAĞLAM KONFİGÜRASYONU
+# ═══════════════════════════════════════════════════════════════
+
+context:
+  type: "uc_metin_karsilastirma"
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 3
+  generation:
+    word_count_min: 120
+    word_count_max: 200
+    structure:
+      - "Bir senaryo oluştur: bir karakter (öğretmen veya öğrenci) tahtaya/kağıda 3 kısa metin yazar"
+      - "Her metin 2-3 cümle olmalı ve numaralandırılmalı (1. Metin, 2. Metin, 3. Metin)"
+      - "3 metin farklı konulardaki kişiler/olaylar hakkında olmalı ama ortak bir derin mesaj/değer taşımalı"
+      - "Ortak nokta açıkça belirtilmemeli — metinler arasında çıkarım yapılarak bulunmalı"
+      - "Her metin somut bir örnek/olay anlatmalı (soyut değil)"
+      - "Metinlerin birinden 'keşke ben de böyle olsam' denilebilecek bir hayat görüşü çıkarılabilmeli"
+    kurallar:
+      - "5. sınıf seviyesinde, anlaşılır ve ilham verici konular"
+      - "3 metin birbiriyle ilişkili ama farklı alanlarda olmalı (ör: spor, bilim, sanat)"
+      - "Ortak değer/mesaj: azim, yardımseverlik, dürüstlük, çalışkanlık gibi evrensel değerler"
+      - "Metinler gerçekçi ve somut olmalı"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+    - slot: 1
+      type: "ortak_nokta"
+      soru_kokleri:
+        - "<b>Bu üç metnin ortak noktası aşağıdakilerden hangisidir?</b>"
+        - "<b>Bu metinlerin tümünde vurgulanan ortak değer aşağıdakilerden hangisidir?</b>"
+        - "<b>…Karakter…'in …Eylem…'i dikkate alındığında aşağıdakilerden hangisi …Durum…'un bir niteliğini tanımlar?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 5
+      word_count_max: 20
+      beceri:
+        katman: "KB3"
+        bilesenler: ["cikarim_yapma", "sentezleme"]
+        surec_bileseni: "problemi_yapilandirma"
+
+    - slot: 2
+      type: "hayat_gorusu"
+      soru_kokleri:
+        - '<b>"Keşke ben de … numaralı metindeki gibi olabilsem." diyen …Öğrenci…''nin hayat görüşü aşağıdakilerden hangisidir?</b>'
+        - '<b>…Öğrenci…, … numaralı metinden etkilenerek "Ben de böyle olmak istiyorum." demiştir. Bu öğrencinin benimsediği değer hangisidir?</b>'
+        - "<b>…Karakter…'in elde ettiği verilerden yola çıkarak yaptığı değerlendirmelerden hangisi doğrudur?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 5
+      word_count_max: 20
+      beceri:
+        katman: "KB3"
+        bilesenler: ["cikarim_yapma", "yorumlama"]
+        surec_bileseni: "problemi_yapilandirma"
+
+header_template: "1-2. soruları aşağıdaki metinlere göre cevaplayınız."
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "3 kısa metin karşılaştırması üzerinden ortak nokta ve çıkarım soruları"
+
+  paragraph:
+    required: true
+    word_count_min: 120
+    word_count_max: 200
+    sentence_count_min: 8
+    sentence_count_max: 14
+
+  stem:
+    required: true
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 5
+    word_count_max: 20
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+# ═══════════════════════════════════════════════════════════════
+# DOĞRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "3 metni kapsayan ortak değer/mesaj veya metinden çıkarılan hayat görüşü"
+  kurallar:
+    - "KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI"
+    - "Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI"
+    - "Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil"
+    - "YASAK: Tablodaki değeri aynen şıkka yazmak (örn: 'yalıtımı azdır' tabloda yazıyorsa şıkta aynen yazmamalı)"
+    - "Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli"
+
+    - "Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı"
+    - "Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı"
+    - "Ortak nokta sorusunda doğru cevap 3 metni de kapsayan evrensel değer/mesaj olmalı"
+    - "Hayat görüşü sorusunda doğru cevap belirtilen metindeki karakterin yaklaşımıyla tutarlı olmalı"
+    - "Doğru cevap metinlerin yüzey anlamından değil derin anlamından çıkarılmalı"
+    - "HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer"
+    - "Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK"
+    - "BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: 'teleskop' → 'mercekli araç' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı"
+
+# ═══════════════════════════════════════════════════════════════
+# ÇELDİRİCİ STRATEJİLERİ
+# ═══════════════════════════════════════════════════════════════
+
+distractors:
+  stratejiler:
+    - ad: "TEK_METNE_ODAKLANMA"
+      aciklama: "Sadece 1 metni kapsayan ama 3'ünü kapsamayan değer/mesaj sunma"
+      ornek: "3 metinden sadece birinde geçen detayı ortak nokta gibi gösterme"
+    - ad: "YUZEY_ANLAM_TUZAGI"
+      aciklama: "Metinlerin yüzey anlamından çıkarılan ama derin anlamla uyuşmayan yargı"
+      ornek: "Metinlerdeki somut olayları ortak nokta olarak sunma (derin değer yerine)"
+    - ad: "YAKIN_DEGER"
+      aciklama: "Doğru değere yakın ama tam karşılamayan bir hayat görüşü sunma"
+      ornek: "Çalışkanlık yerine 'rekabetçilik' gibi yakın ama farklı değer önerme"
+
+use_shared_strategies: false

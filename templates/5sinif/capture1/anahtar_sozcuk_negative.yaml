@@ -1,0 +1,233 @@
+# templates/anahtar_sozcuk_negative.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Metinde Anahtar Sozcuk
+#
+# NEGATIF ANAHTAR SOZCUK FORMATI (~%50 - 30 sorudan 15'i)
+# Paragraf verilir, ogrenci anahtar sozcuk OLMAYANIN hangisi oldugunu bulur
+#
+# MANTIK: 3 secenek gercek anahtar sozcuktur (yanlis), 1 tanesi degildir (dogru cevap)
+# Secenekler TEK KELIME formatindadir
+
+meta:
+  id: "anahtar_sozcuk_negative"
+  ad: "Metinde Anahtar Sozcuk (Negatif)"
+  sinif_seviyesi: 5
+  aciklama: "Paragrafin anahtar sozcugu OLMAYAN secenegi belirleme sorulari"
+  kaynak: "data/metinde_anahtar_sozcuk.pdf"
+  frequency: "~50% of anahtar sozcuk questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 4 tek kelime secenek (anahtar sozcuk olmayan)"
+
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 90
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "bilgilendirici"
+    kurallar:
+      - "Net bir ana konusu olmali ve bu konu etrafinda yogunlasmali"
+      - "Anahtar sozcukleri acikca belirlenebilir olmali"
+      - "3-4 onemli kavram/terim icermeli (bunlar anahtar sozcukler olacak)"
+      - "Konuyla TEMATIK AKRABALIGI olan ama anahtar statusunde olmayan 1-2 sozcuk MUTLAKA icermeli - bu sozcukler metinde acikca gecmeli ama ana ileti icin belirleyici olmamali"
+      - "Tekrar eden veya vurgulanan kavramlar net olmali"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 1
+    style: "single_keyword"
+    correct_type: "does_not_belong"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 5 varyasyon)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Aşağıdakilerden hangisi bu metnin anahtar sözcüklerinden birisi <u>olamaz</u>?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metnin anahtar sözcüklerinden biri <u>değildir</u>?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metnin anahtar sözcüklerinden <u>değildir</u>?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metnin anahtar sözcüğü <u>olamaz</u>?</b>"
+  - "<b>Aşağıdaki sözcüklerden hangisi bu metnin anahtar sözcüğü <u>olamaz</u>?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metnin anahtar sözcüklerinden biri <u>olamaz</u>?</b>"
+  # Topic-embedded varyasyonlar ({topic} → leaf topic, ör: "Yerçekimi kuvveti")
+  - "\"{topic}\" <b>ile ilgili bu metnin anahtar sözcüklerinden hangisi <u>olamaz</u>?</b>"
+  - "\"{topic}\" <b>konulu bu metinde aşağıdakilerden hangisi anahtar sözcük <u>değildir</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI (TERS MANTIK!)
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Paragrafin ana konusuyla dogrudan ilgili OLMAYAN, metinde gecse bile onemsiz/yuzeysel bir sozcuk"
+  mantik: "INVERSE - diger 3 secenek gercek anahtar sozcukler, dogru cevap anahtar sozcuk DEGIL"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Metinde MUTLAKA gecen ama anahtar sozcuk statusunde OLMAYAN bir sozcuk olmali"
+    - "Ana dusuncenin sadece BIR ADIM disinda - tematik akrabaligi olan ama ana iletiyle tam ortusmeyen bir kavram"
+    - "Ne tamamen alakasiz ne de gercek bir anahtar sozcuk - paragrafin ana konusuyla ayni ALANDA kalmali"
+    - "Ogrenci bu sozcugu metinde gorunce 'bu anahtar mi degil mi?' diye analiz etmek zorunda kalmali"
+    - "Tek kelime olmali ve diger seceneklerle ayni soyutluk/somutluk seviyesinde olmali"
+  ornekler:
+    - paragraf: "Gunes sistemimizdeki gezegenler farkli buyukluklere ve ozelliklere sahiptir. Dunyanin atmosferi canli yasami mumkun kilar. Mars ise kirmizi renkli yuzeyiyle dikkat ceker..."
+      dogru: "renk"
+      neden: "'renk' metinde geciyor (kirmizi renkli) ama metnin anahtar kavrami degil - anahtar kavramlar 'gezegen', 'atmosfer', 'yasam'"
+    - paragraf: "Depremler yer kabugunun hareketi sonucu olusur. Deprem sirasinda sakin kalmak ve saglam bir esyanin altina sigmak gerekir. Binalarin saglamligini artirmak icin celik takviye yapilir..."
+      dogru: "celik"
+      neden: "'celik' metinde geciyor (celik takviye) ama metnin ana konusu 'deprem' ve 'korunma' - celik sadece bir detay"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# Ters mantik sorularinda LLM:
+# - 3 "gercek anahtar sozcuk" secer (yanlis secenekler)
+# - 1 "anahtar olmayan ama iliskili sozcuk" secer (dogru cevap)
+# Strateji havuzu "anahtar olmayan" sozcugu secmek icin kullanilir
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cozumleme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic with identifiable keywords"
+      details: "Anahtar sozcukleri net olarak belirlenebilecek bir konu sec"
+
+    - step: 2
+      action: "Generate paragraph (55-90 words) with clear keywords"
+      details: |
+        Paragrafta:
+        - 3-4 net anahtar sozcuk olmali
+        - 1-2 yuzeysel/detay sozcuk de bulunmali
+        - Anahtar sozcukler tekrar etmeli veya vurgulanmali
+
+    - step: 3
+      action: "Identify 3 real keywords (distractors - wrong answers)"
+      details: |
+        Her biri TEK KELIME olmali:
+        - Paragrafin ana konusuyla dogrudan ilgili
+        - Metinde vurgulanan veya tekrarlanan
+        - Konuyu temsil eden kavramlar
+
+    - step: 4
+      action: "Identify 1 non-keyword (correct answer)"
+      details: |
+        TEK KELIME olmali:
+        - Metinde MUTLAKA gecen ama anahtar statusunde olmayan bir sozcuk
+        - Ana dusuncenin BIR ADIM disinda - tematik akrabaligi var ama ana ileti degil
+        - Diger seceneklerle ayni soyutluk/somutluk seviyesinde olmali
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from 5 variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 1
+    soru_no: 1
+    konu: "Uyku kalitesi"
+    dogru_cevap: "D"
+    secenekler:
+      A: "kalite"
+      B: "detay"
+      C: "havalandirma"
+      D: "uyku"
+    dogru_cevap_icerigi: "detay"
+    neden: "'detay' uyku kalitesinin anahtar sozcugu degil"
+
+  - sayfa: 2
+    soru_no: 3
+    konu: "Hakemin futboldaki rolu"
+    dogru_cevap: "C"
+    secenekler:
+      A: "hakem"
+      B: "kural"
+      C: "saha"
+      D: "adalet"
+    dogru_cevap_icerigi: "saha"
+    neden: "'saha' metinde geciyor ama hakemin KARARLARI anlatiliyor, saha anahtar degil - tematik akraba"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 55-90 arasinda mi?"
+    - "Net anahtar sozcukleri belirlenebilir mi?"
+    - "3-4 onemli kavram/terim iceriyor mu?"
+    - "1-2 yuzeysel detay sozcuk var mi?"
+
+  correct_answer:
+    - "Tek kelime mi?"
+    - "Metinde acikca gecen ama anahtar olmayan bir sozcuk mu?"
+    - "Ana dusuncenin bir adim disinda mi (tematik akrabalik var mi)?"
+    - "Diger seceneklerle ayni soyutluk/somutluk seviyesinde mi?"
+
+  distractors:
+    - "Her biri tek kelime mi?"
+    - "Hepsi gercek anahtar sozcuk mu?"
+    - "Paragrafin ana konusuyla dogrudan ilgililer mi?"
+    - "Tum secenekler (dogru dahil) ayni anlamsal agirlikta mi?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+
+  generation_rules:
+    - "Anahtar sozcukleri net olarak belirlenebilecek konulari tercih et"
+    - "Teknik terimler iceren konular ideal"
+    - "Paragrafta hem anahtar hem de yuzeysel sozcukler bulunabilecek konulari sec"

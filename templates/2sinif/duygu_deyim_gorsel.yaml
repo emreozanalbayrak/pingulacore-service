@@ -1,0 +1,130 @@
+meta:
+  id: "duygu_gorsellerinden_kullanilamayacak_deyimi_belirleme"
+  ad: "Duygu Görsellerinden Kullanılamayacak Deyimi Belirleme"
+  ders: "Türkçe"
+  sinif_seviyesi: 2
+  tema: "Söz Varlığı ve Görsel Okuma"
+  model: "TYMM"
+  format_turu: "llm_generated_html"
+  aciklama: "Yüz ifadelerinden anlaşılan duygularla ilgili deyimlerden, görseller için kullanılamayacak olanı seçtiren 3 seçenekli soru formatı"
+  frequency: "orta"
+
+visual_requirement: "answer_critical"
+visual_type: "scene"
+visual_spec:
+  scene_type: "yuz_ifadesi"
+  kisi_sayisi_min: 2
+  kisi_sayisi_max: 3
+  duygu_listesi: ["mutluluk", "öfke", "üzüntü", "şaşkınlık", "korku"]
+  aciklama: "2-3 farklı yüz ifadesini yan yana gösteren, temel duyguları açıkça yansıtan çizgi film tarzı çocuk portreleri"
+
+hide_paragraph_after_visual: true
+
+format:
+  type: "llm_generated_html"
+  description: "Duygu görselleri + 3 deyim seçeneği + kullanılamaz sorgusu"
+
+  paragraph:
+    required: false
+
+  visual:
+    required: true
+    count: 1
+    description: "2 ya da 3 farklı yüz ifadesi içeren, duyguları açıkça gösteren görsel grubu"
+
+  stem:
+    required: true
+    sentence_count_min: 1
+    sentence_count_max: 1
+    soru_koku_ornekleri:
+      - "Görsellerdeki kişilerin duyguları ile ilgili aşağıdaki deyimlerden hangisi kullanılmaz?"
+      - "Bu görseller için aşağıdaki deyimlerden hangisi uygun değildir?"
+      - "Verilen yüz ifadelerine göre aşağıdaki deyimlerden hangisi söylenemez?"
+      - "Aşağıdaki deyimlerden hangisi görsellerdeki duygularla uyuşmaz?"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 2
+    word_count_max: 6
+    style: "short_phrase"
+    correct_count: 1
+    correct_type: "mismatch"
+
+gorsel:
+  required: true
+  tur: "yuz_ifadesi_gorsel_grubu"
+  amac: "Öğrencinin duyguları yüz ifadelerinden ayırt etmesini sağlamak"
+  kurallar:
+    - "Görselde 2 ya da 3 kişi ya da aynı kişinin 2-3 farklı yüz ifadesi bulunmalıdır."
+    - "Duygular açıkça seçilebilir olmalıdır."
+    - "Mutluluk, öfke, korku, şaşkınlık, üzüntü gibi temel duygular tercih edilmelidir."
+    - "Görseller açık, anlaşılır ve çocuk seviyesine uygun olmalıdır."
+    - "Görsel süsleyici değil, çözüm için zorunlu olmalıdır."
+
+olculen_beceri:
+  tanim: "Yüz ifadelerinden duyguyu anlama ve bu duygularla uyuşan/uyuşmayan deyimi ayırt etme"
+  bilesenler:
+    - "gorsel_okuma"
+    - "duygu_tanima"
+    - "deyim_anlami"
+    - "eslestirme"
+    - "uygun_olmayan_ifadeyi_belirleme"
+
+dogru_cevap:
+  tanim: "Görsellerdeki duygularla uyuşmayan deyim"
+  kurallar:
+    - "Doğru cevap, görsellerdeki duygulardan hiçbirine uygun olmayan deyim olmalıdır."
+    - "Yanlış olmayan seçenekler, görselde görülen duygulardan en az biriyle ilişkilendirilebilir olmalıdır."
+    - "Deyimler gerçek anlamıyla değil, duygu anlatımı bakımından değerlendirilmelidir."
+    - "Doğru cevap yalnızca görsellere dikkat edilirse bulunmalıdır."
+
+distractors:
+  stratejiler:
+    - ad: "DUYGUYA_YAKIN_DEYIM"
+      aciklama: "Görsellerdeki duygulardan biriyle ilişkilendirilebilecek uygun deyim sunma"
+      ornek: "Mutluluktan havalara uçmak"
+    - ad: "BENZER_DUYGU_CAGRISIMI"
+      aciklama: "Başka bir güçlü duyguya uygun olup görsellerde de karşılığı bulunabilecek deyim sunma"
+      ornek: "Burnundan solumak"
+    - ad: "UYUSMAYAN_DEYIM"
+      aciklama: "Görsellerde görülmeyen bir duygu ya da duruma ait deyim sunma"
+      ornek: "Eli ayağına dolaşmak"
+    - ad: "YUZEYSEL_CAGRISIM"
+      aciklama: "İlk bakışta uygun sanılabilecek ama duyguyla tam örtüşmeyen deyim kullanma"
+      ornek: "Şaşkınlık ile korkuyu karıştıran ifade"
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Görsellerdeki kişilerin duyguları ile ilgili aşağıdaki deyimlerden hangisi <u>kullanılmaz</u>?</b>"
+  - "<b>Bu görseller için aşağıdaki deyimlerden hangisi <u>uygun değildir</u>?</b>"
+  - "<b>Verilen yüz ifadelerine göre aşağıdaki deyimlerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Aşağıdaki deyimlerden hangisi görsellerdeki duygularla <u>uyuşmaz</u>?</b>"
+
+use_shared_strategies: false
+
+tymm_uyum_kurallari:
+  - "2. sınıf seviyesine uygun kısa ve açık yapı kullanılmalıdır."
+  - "Görsellerde temel duygular açıkça seçilebilmelidir."
+  - "Deyimler çok ağır, çok soyut ya da yaş düzeyine uzak olmamalıdır."
+  - "Olumsuz soru kökü olan 'kullanılmaz' ifadesi açıkça belirtilmelidir."
+  - "Görsel olmadan doğru cevap kesinleşmemelidir."
+  - "Seçenekler aynı temsil düzeyinde, yani hepsi deyim biçiminde olmalıdır."
+  - "3 seçenekli yapıda iki çeldirici de güçlü olmalıdır."
+
+izinli_icerikler:
+  - "mutluluk"
+  - "üzüntü"
+  - "öfke"
+  - "şaşkınlık"
+  - "korku"
+  - "temel duygulara uygun yaygın deyimler"
+  - "kısa deyim ifadeleri"
+  - "yüz ifadesi görselleri"
+
+yasakli_icerikler:
+  - "çok soyut ya da nadir deyimler"
+  - "uzun açıklamalı seçenekler"
+  - "birden fazla doğru seçenek"
+  - "görselsiz çözülebilen yapı"
+  - "çocuk düzeyine uygun olmayan yoğun duygusal içerik"
+  - "karmaşık psikolojik açıklamalar"

@@ -1,0 +1,116 @@
+# Kaynak: konu_inverse_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.kolay
+# 4. sinif konu yer almaz — kolay duzey
+
+meta:
+  id: "b12_konu_inverse_sinif4_kolay"
+  ad: "4. Sinif - Metinde Konu (Yer Almaz) Kolay"
+  sinif_seviyesi: 4
+  aciklama: "Kolay duzey — verilen konuya ait OLMAYAN mini-paragrafi daha belirgin farklarla bulma."
+  frequency: "Low"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Konu kokte verilir, konuya uymayan mini-paragraf secilir (kolay)"
+
+  paragraph:
+    required: false
+
+  topic_in_stem:
+    required: true
+    description: "Konu soru kokune gomulur; acik ve somut olmali"
+
+  stem:
+    required: true
+    pattern: "{topic} konulu bir metin olusturulsa asagidakilerden hangisi bu metinde yer almaz?"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    type: "mini_paragraph"
+    word_count_min: 20
+    word_count_max: 32
+    background_color: "#e8f8e8"
+    sentence_count_min: 2
+    sentence_count_max: 2
+    correct_type: "does_not_belong"
+    correct_count: 1
+    kurallar:
+      - "3 uyan secenek konunun temel ve dogrudan yonlerini anlatmalidir."
+      - "Her uyan secenek konuya acik bicimde baglanmalidir; asiri dolayli baglar kullanilmamali."
+      - "Dogru cevap ayni genel alan icinde kalabilir ama secilen konuya acik uymamalidir."
+      - "Dogru cevapta sibling topic farki kolay fark edilir olmalidir."
+      - "Tamamen alakasiz olmamali; ama neden uymadigi hizlica anlasilmalidir."
+      - "3 uyan secenekten en az 2'si konuya dogrudan baglanmalidir."
+      - "Kolay duzeyde belirsizlikten zorluk uretilemez."
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # KULLANILDI: - "\"{topic}\" <b>konulu bir metin oluşturulsa aşağıdakilerden hangisi bu metinde <u>yer almaz</u>?</b>"
+  # KULLANILDI: - "<b>Aşağıdakilerden hangisi</b> \"{topic}\" <b>konulu bir metinden alınmış <u>olamaz</u>?</b>"
+  # KULLANILDI: - "\"{topic}\" <b>konulu bir bilimsel yazı yazıldığında aşağıdakilerden hangisi bu yazıda <u>yer almaz</u>?</b>"
+  - "\"{topic}\" <b>konusu işlenirken aşağıdakilerden hangisine <u>değinilmez</u>?</b>"
+  - "<b>Aşağıdakilerden hangisi</b> \"{topic}\" <b>konusuyla <u>ilişkilendirilemez</u>?</b>"
+  - "\"{topic}\" <b>hakkında yazılan bir metinde aşağıdakilerden hangisine <u>yer verilmez</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Verilen konuya AIT OLMAYAN mini-paragraf (ters mantik)"
+  mantik: "INVERSE — diger 3 secenek konuya uyar, dogru cevap UYMAZ"
+  kurallar:
+    - "Dogru secenek verilen konunun DISINDA bir icerik olmali."
+    - "Tamamen alakasiz degil; ayni genel alanda olabilir ama spesifik konuyla ilgili olmamali."
+    - "Ogrenci icin 'neden uymuyor?' sorusu acik olmalidir."
+    - "Sibling topic secimi: ana unsuru koru, sadece aspect/boyutu degistir."
+    - "IDEAL: ayni cisim/varlik, farkli bilimsel soru veya ozellik."
+    - "YASAK: Tamamen farkli cisim veya alan (cok acik elenir)."
+    - "Kelime sayisi bakimindan en uzun secenek olmamali."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "SIBLING_BELIRGIN"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Konudan belirgin şekilde ayrışan kardeş konu — kolay elenebilir doğru cevap"
+    nasil_olusturulur: |
+      Doğru cevap (konuya uymayan mini-paragraf) için aynı geniş alanda ama belirgin farklı odakta bir konu seç.
+      Kolay seviyede bu fark belirgin — öğrenci "bu farklı bir konudan bahsediyor" diyerek hızla bulmalı.
+      3 uyan seçenek konuya açıkça bağlı ve kısa (20-32 kelime) olmalı.
+    kategori: "semantic"
+
+  - ad: "UYGUN_PARAGRAF_DOGRUDAN"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Konuya doğrudan bağlanan 3 uyan seçenek — kolay ayırt edilebilir"
+    nasil_olusturulur: |
+      3 uyan mini-paragraf konunun temel ve doğrudan yönlerini anlatmalı.
+      Kolay seviyede her uyan seçenek konuya açıkça bağlanmalı — dolaylı bağlar kullanılmamalı.
+      Öğrenci konuya uyanları hızla tanıyıp uymayan tek seçeneği bulmalıdır.
+    kategori: "content"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siniflandirma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "Ana fikir / yardimci fikir sorulari YASAK"
+    - "5. sinifa kayan soyut yorum sorulari YASAK"
+    - "Dogru cevap cok acik alakasiz olmamali (zorluk belirsizlikten degil konu ayrimindan gelmeli)"

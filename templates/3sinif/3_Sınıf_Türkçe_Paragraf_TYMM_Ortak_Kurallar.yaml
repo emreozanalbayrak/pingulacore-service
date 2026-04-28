@@ -1,0 +1,206 @@
+tymm_ortak_kurallar:
+  meta:
+    id: "sinif3_turkce_paragraf_tymm_ortak_kurallar_v1"
+    ad: "3. Sınıf Türkçe Paragraf - TYMM Ortak Kurallar"
+    hedef_sinif: 3
+    kullanim_amaci: "3. sınıf paragraf soru bankasındaki tüm soru kalıplarının müfredata uygunluk, seviye uygunluğu ve 4. sınıfa taşma kontrolü için ortak doğrulama bloğu"
+
+  kaynak_politikasi:
+    ana_referans:
+      - "İlkokul Türkçe Dersi 3. Sınıf Türkiye Yüzyılı Maarif Modeli öğretim programı"
+      - "3. sınıf MEB Türkçe ders kitabı örnek etkinlik yapıları"
+    tasma_kontrol_referansi:
+      - "İlkokul Türkçe Dersi 4. Sınıf Türkiye Yüzyılı Maarif Modeli"
+    yorumlama_ilkesi:
+      - "Şüpheli durumlarda soru bir alt yorum düzeyine çekilmelidir."
+      - "Bir beceri 3. sınıfta yalnız bazı tema veya bağlamlarda görünüyorsa, tüm soru bankasının çekirdek ekseni yapılmamalıdır."
+      - "3. sınıf paragraf sorularında anlama + temel yorum + sınırlı gerekçelendirme ekseni korunmalıdır."
+      - "4. sınıfa özgü analiz, strateji seçimi, biçimsel özellik yorumu ve ayrıntılı gerekçelendirme düzeyi kullanılmamalıdır."
+
+  sinif_3_profil_ozeti:
+    temel_hedef:
+      - "Öğrencinin kısa ve orta uzunluktaki metinleri anlaması"
+      - "Başlık ve görsellerden metnin konusu, olayları ve içeriği hakkında tahmin yapması"
+      - "Metindeki karakter, olay, bilgi veya duyguları açıklaması"
+      - "Metnin konusunu bulması"
+      - "Metnin ana fikrini veya ana duygusunu bulması"
+      - "Metindeki olayların sırası ve devamı hakkında tahmin yapması"
+      - "Bağlamdan sözcük anlamı tahmini yapması"
+      - "Metne ilişkin düşüncesini açık ve kısa gerekçeyle ifade etmesi"
+      - "Metindeki açık iletilere sınırlı öneriler sunabilmesi"
+      - "Metni kendi ifadeleriyle kısa biçimde yazması veya anlatması"
+    temel_duzey_tanimi:
+      - "Somuttan yarı soyuta geçiş"
+      - "Tek baskın konu etrafında birkaç destekleyici bilgi"
+      - "Açık ipuçlarından çıkarım yapma"
+      - "Yüksek düzeyde fakat kontrollü görsel destek"
+      - "Tek metin içinde sınırlı gerekçelendirme"
+
+  metin_tasarim_kurallari:
+    zorunlu_ozellikler:
+      - "Metin 4 ila 8 cümle aralığında olmalıdır."
+      - "Metinde tek baskın konu veya tek baskın olay zinciri bulunmalıdır."
+      - "Metin çocuk dünyasına, okul yaşamına, aileye, doğaya, toplumsal yaşama veya temel bilgi alanlarına yakın olmalıdır."
+      - "Karakter, olay, bilgi ve duygu unsurları izlenebilir olmalıdır."
+      - "Metin ana fikir/ana duygu çıkarmaya uygun olabilir; ancak çok katmanlı yorum gerektirmemelidir."
+      - "Neden-sonuç ilişkisi varsa açık veya yarı açık olmalıdır."
+      - "Metinde yapılan tahmin, açık ipuçlarıyla desteklenebilir olmalıdır."
+      - "Sözcükler çoğunlukla sade, okul çağındaki öğrenciye tanıdık ve bağlamdan anlaşılabilir olmalıdır."
+    tercih_edilen_yapi:
+      - "Tek olaylı ya da iki aşamalı kısa anlatı"
+      - "Açık bilgi veren kısa bilgilendirici metin"
+      - "Başlık ve görselle desteklenen kısa metin"
+      - "Açık olay sıralı kısa anlatım"
+      - "Tek mesajı veya ana duyguyu görünür taşıyan kısa metin"
+    sinirlandirmalar:
+      - "Aynı metinde birden fazla eşit ağırlıklı ana düşünce hattı kurulamaz."
+      - "Aşırı uzun tasvirler ve konu dışı dolgu kullanılamaz."
+      - "Paralel olay örgüsü veya çok karakterli karmaşık yapı kullanılamaz."
+      - "Yoğun soyutluk, ideolojik alt metin veya tartışmalı çok katmanlı anlam kurulamaz."
+      - "Dış bilgi olmadan çözülemeyecek metinler kullanılamaz."
+      - "Metin, 4. sınıf düzeyinde biçimsel özellik yorumu gerektirecek şekilde kurgulanamaz."
+
+  izinli_soru_davranislari:
+    cekirdek:
+      - "Başlık ve görsellerden hareketle metnin konusu hakkında tahmin"
+      - "Başlık ve görsellerden hareketle metinde geçen olaylar veya bilgiler hakkında tahmin"
+      - "Metnin içeriği hakkında ilk görüş oluşturma"
+      - "Metindeki karakteri, olayı, bilgiyi veya duyguyu açıklama"
+      - "Metnin konusunu bulma"
+      - "Metnin ana fikrini veya ana duygusunu bulma"
+      - "Olayların sırası ve devamı hakkında tahmin"
+      - "Bağlamdan sözcük anlamı tahmini"
+      - "Metne ilişkin açık ve kısa düşünce belirtme"
+      - "Metindeki çok açık iletilere basit öneri sunma"
+      - "Okuduklarını veya dinlediklerini kendi ifadeleriyle kısa biçimde yazma"
+      - "Açık neden-sonuç ilişkisini söyleme"
+      - "Metin içindeki basit benzerlik ve farklılıkları fark etme"
+      - "Olay, nesne ve kişileri açık özelliklerine göre sınıflandırma"
+      - "Açık ipuçlarına dayalı çıkarım yapma"
+    sinirli_izinli:
+      - "Metindeki iletiye katılıp katılmadığını kısa ve doğrudan gerekçeyle söyleme"
+      - "Metindeki görüşe alternatif kısa öneri sunma"
+      - "Metin ile ön bilgi arasında açık karşılaştırma yapma"
+      - "Metindeki verilmek istenen mesajı açık ve görünürse belirleme"
+    sinirli_izinli_kosullari:
+      - "Gerekçe tek veya en fazla iki açık dayanağa bağlı olmalıdır."
+      - "Öneri, metindeki açık durumla doğrudan ilişkili olmalıdır."
+      - "Katılma-katılmama görevi, soyut tartışmaya dönüşmemelidir."
+      - "Mesaj soruları, ana fikirden ayrı ve yapay ikinci yorum katmanı oluşturmamalıdır."
+      - "Bu görevler çekirdek becerilerin önüne geçecek yoğunlukta kullanılmamalıdır."
+
+  gorsel_destek_kurallari:
+    izinli:
+      - "Başlık + görsel + metin kombinasyonu"
+      - "Tek sahneli veya sınırlı ayrıntılı görseller"
+      - "Açık olay sırası ima eden görseller"
+      - "Basit tablo, afiş, broşür veya işaret-sembol destekli okuma"
+      - "Metinle açık ilişki kuran eğitim amaçlı görseller"
+    yasak:
+      - "Yoğun veri işleme gerektiren grafikler"
+      - "Birden fazla katmanda okunması gereken karmaşık infografikler"
+      - "Biçimsel ve tanıtıcı özellik çözümlemesi gerektiren çok katmanlı belgeler"
+      - "Görselden bağımsız çözülemeyen, ancak metnin de yetmediği karma yapılar"
+      - "Yalnız görsel tasarım bilgisini ölçen sorular"
+
+  soru_koku_kurallari:
+    zorunlu:
+      - "Soru kökü açık ve tek baskın görevli olmalıdır."
+      - "Soru kökü, öğrenciden ne yapmasının beklendiğini doğrudan belirtmelidir."
+      - "Aynı soruda en fazla bir ana beceri ve bir yardımcı beceri yer almalıdır."
+      - "Gerekçelendirme isteniyorsa bu kısa ve açık dayanaklı olmalıdır."
+    yasak:
+      - "Aynı anda analiz, karşılaştırma, öneri ve gerekçelendirme isteyen çok yüklü kökler"
+      - "Yetişkin diliyle kurulmuş belirsiz yorum soruları"
+      - "Metin dışı genel kültür veya uzmanlık gerektiren kökler"
+      - "Biçimsel özellikten içerik yorumu isteyen kökler"
+      - "Günlük yaşam bağlantısını ayrıntılı açıklatma zorunluluğu"
+
+  secenek_ve_cevap_kurallari:
+    zorunlu:
+      - "Doğru cevap metindeki açık bilgiye, açık ipucuna veya görünür yoruma dayanmalıdır."
+      - "Yanlış seçenekler metne yakın ama dikkatli okuyunca elenebilir olmalıdır."
+      - "Yanlış seçenekler metinde bulunmayan ana olay veya ana tema eklememelidir."
+      - "Seçenekler 3. sınıf dil düzeyinde sade olmalıdır."
+      - "Ana fikir, ana duygu veya konu seçenekleri varsa birbirinden yapay değil anlamlı biçimde ayrılmalıdır."
+    yasak:
+      - "Birden fazla makul doğru seçenek"
+      - "Yalnız üslup veya ince ton farkıyla ayrılan seçenekler"
+      - "Aşırı soyut, birbirine çok yakın ve yetişkin düzeyi ayrım gerektiren çeldiriciler"
+      - "Metindeki açık temelden kopuk şıklar"
+      - "Metnin tümünü değil sadece küçük ayrıntıları ölçen baskın doğru cevaplar"
+
+  acikca_yasak_alanlar:
+    - "Biçimsel ve tanıtıcı özelliklerden hareketle içerik yorumu"
+    - "Metnin günlük yaşamla ilişkisini ayrıntılı ve sistematik açıklatma"
+    - "Metindeki karakter, olay, bilgi veya duyguları analiz ettirme"
+    - "Okuma veya yazma stratejisi seçtirme"
+    - "Yazma ortamı seçimi veya yazma sürecini değerlendirme"
+    - "Ayrıntılı yönerge yazdırma"
+    - "Bilginin kaynağını yazdırma veya kaynak güvenilirliği analizi"
+    - "Serbest yazma, yazma planı ve türe göre plan kurdurma"
+    - "Bağlama ögeleri, de/ki bağlaç etkisi gibi dilbilgisel anlam çözümlemeleri"
+    - "Çok katmanlı eleştirel tartışma"
+    - "Planlı, mantıksal ilişkilere göre uzun yapılandırılmış açıklama yazdırma"
+    - "Metni tür, amaç ve hedef kitle düzeyinde ayrıntılı çözümleme"
+
+  tasma_noktalari:
+    dorduncu_sinifa_kayar:
+      - "Soru, metnin günlük yaşamla bağlantısını açıklatıyorsa"
+      - "Soru, metnin biçimsel veya tanıtıcı özelliklerinden içerik yorumu yaptırıyorsa"
+      - "Soru, metindeki görüşe katılma veya katılmama kararını ayrıntılı ve sistematik gerekçelendirtıyorsa"
+      - "Soru, katılmadığı görüşe alternatif önerileri geliştirilmiş biçimde yazdırıyorsa"
+      - "Soru, karakter, olay, bilgi veya duyguları açıklatmak yerine analiz ettiriyorsa"
+      - "Soru, veri veya metin amacı üzerinden çıkarım yaptırıyorsa"
+      - "Soru, okuma tercihi, okuma stratejisi, yazma stratejisi veya yazma planı seçtiriyorsa"
+      - "Soru, ayrıntılı yönerge yazmayı veya kaynağı belirtmeyi gerektiriyorsa"
+      - "Soru, mantıksal ilişkileri planlı biçimde kurdurulan uzun yazılı açıklama gerektiriyorsa"
+
+  tema_bagimli_izinli_genislemeler:
+    kosul: "yalnız ilgili tema, öğrenme çıktısı veya bölüm hedefi açıkça destekliyorsa kullanılabilir"
+    alanlar:
+      - "Metindeki iletileri ön bilgileriyle karşılaştırma"
+      - "Doğruluk veya gerçeklik yönünden açık karşılaştırma"
+      - "Metindeki görüşe katılma/katılmama"
+      - "Alternatif öneri geliştirme"
+      - "Metindeki mesajı belirleme"
+      - "Karakterleri fiziksel, sosyal veya duygu durumu yönünden betimleme"
+      - "Gerçek ve mecaz anlamlı sözcükleri metinle ilişkilendirme"
+      - "Okuma amacına göre metin seçme"
+    sinirlama:
+      - "Bu alanlar tüm soru bankasının baskın omurgası hâline getirilemez."
+      - "Her tema bazlı genişleme, açık metin desteğine dayanmalıdır."
+      - "Bu alanlar 4. sınıf düzeyinde sistematik analiz veya uzun gerekçelendirmeye dönüştürülemez."
+      - "Ortak validation sırasında bu görevler ancak bölüm hedefi bunu açıkça belirtiyorsa onay almalıdır."
+
+  validation_checklist:
+    zorunlu_kontroller:
+      - "Metin 3. sınıf düzeyinde okunabilir uzunlukta mı?"
+      - "Metinde tek baskın konu veya tek baskın olay zinciri var mı?"
+      - "Soru açık ve yönetilebilir mi?"
+      - "Doğru cevap metindeki açık bilgiye, açık ipucuna veya görünür yoruma dayanıyor mu?"
+      - "Soru 4. sınıfa ait biçimsel özellik yorumu gerektirmiyor mu?"
+      - "Soru günlük yaşam bağlantısını ayrıntılı açıklatmaya zorlamıyor mu?"
+      - "Karakter, olay, bilgi veya duygular açıklatma düzeyinde mi; analiz düzeyine çıkmıyor mu?"
+      - "Gerekçe isteniyorsa kısa ve açık dayanaklı mı?"
+      - "Seçenekler 3. sınıf dil düzeyine uygun mu?"
+      - "Yanlış seçenekler metne yakın ama açıkça elenebilir mi?"
+      - "Görsel varsa metinle doğrudan ilişkili mi?"
+      - "Metin dışı özel bilgi gerekmiyor mu?"
+      - "Soru 4. sınıf taşma maddelerinden herhangi birine girmiyor mu?"
+    red_sebepleri:
+      - "Biçimsel/tanıtıcı özelliklerden içerik yorumu istiyorsa"
+      - "Metni günlük yaşamla ayrıntılı ilişkilendirme gerektiriyorsa"
+      - "Karakter, olay, bilgi veya duyguları analiz ettiriyorsa"
+      - "Okuma veya yazma stratejisi seçtiriyorsa"
+      - "Yazma planı, yazma ortamı, ayrıntılı yönerge veya kaynak yazdırıyorsa"
+      - "Metnin amacı veya verilerinden gelişmiş çıkarım yaptırıyorsa"
+      - "Birden fazla makul doğru cevap varsa"
+      - "Metin 3. sınıf için fazla soyut, uzun veya çok katmanlıysa"
+      - "Soru kökü aynı anda birden fazla üst düzey işlem gerektiriyorsa"
+      - "4. sınıfa ait taşma maddelerinden herhangi biri gerçekleşiyorsa"
+
+  uygulama_notu:
+    - "Bu ortak blok, soru özelindeki alan kurallarıyla birlikte çalıştırılmalıdır."
+    - "Soru özelindeki kural ile bu ortak blok çelişirse ortak blok önceliklidir."
+    - "Şüpheli durumda soru daha açık, daha kısa, daha az katmanlı ve daha az gerekçelendirme isteyen hâle getirilmelidir."

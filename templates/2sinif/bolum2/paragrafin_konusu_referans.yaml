@@ -1,0 +1,380 @@
+meta:
+  id: "paragrafin_konusu_sinif2_standart_gorselli_uc_secenekli"
+  ad: "Paragrafın Konusu"
+  sinif_seviyesi: 2
+  ders: "Türkçe"
+  bolum: "2. Sınıf Paragraf Soru Bankası"
+  alt_bolum: "2. Paragrafın Konusu"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    2. sınıf öğrencisi için kısa bir metinde ne anlatıldığını fark ettirip
+    paragrafın konusunu seçtirmeye yönelik, görsel destekli ve 3 seçenekli
+    standart soru üretim şablonu.
+  kullanim_notu: >
+    Bu şablon, harici olarak kullanılan 2. Sınıf TYMM Ortak Kuralları YAML'ı ile birlikte
+    doğrulanmalıdır. TYMM ortak kuralları bu şablonun içine gömülmemiştir.
+
+format:
+  type: "llm_generated_html"
+  description: "Görsel + tek paragraf + soru kökü + 3 konu seçeneği"
+
+  paragraph:
+    required: true
+    text_modes:
+      - "simple_info"
+      - "short_narrative"
+    sentence_count_min: 4
+    sentence_count_max: 6
+    word_count_min: 34
+    word_count_max: 68
+    style: "simple_clear_primary_text"
+    kurallar:
+      - "Metin tek baskın konu etrafında kurulmalıdır."
+      - "Metinde ne anlatıldığı 2. sınıf öğrencisi tarafından açıkça fark edilebilir olmalıdır."
+      - "Metin kısa, sade, somut ve günlük yaşama yakın olmalıdır."
+      - "Cümleler kısa ve doğrudan olmalıdır."
+      - "Metinde gereksiz yan olaylar ve dikkat dağıtıcı fazla ayrıntılar bulunmamalıdır."
+      - "Metin dış bilgi gerektirmemelidir."
+      - "Paragrafın konusu, metnin tamamına bakılarak bulunabilir olmalıdır."
+      - "Metin ana düşünce, ana duygu, ders veya mesaj buldurmaya kaymamalıdır."
+      - "Metin; düşünce, olay, varlık veya durum bakımından tek ana odakta toplanmalıdır."
+      - "Paragrafın konusu, 'Metinde ne anlatılıyor?' sorusuna verilecek cevapla belirlenebilmelidir."
+
+  visual:
+    required: true
+    description: "Paragrafın ana konusunu doğrudan destekleyen sade görsel"
+    placement: "paragraph_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illüstrasyon"
+      - "tek sahneli fotoğraf benzeri çizim"
+      - "tek varlık veya tek olay odaklı sahne"
+    kurallar:
+      - "Görsel paragrafın ana konusunu veya ana varlığını doğrudan desteklemelidir."
+      - "Görsel süs amaçlı olmamalı, anlamı desteklemelidir."
+      - "Görsel tek bakışta anlaşılır olmalıdır."
+      - "Görsel metne yardımcı olmalı, ama tek başına cevabı tamamen vermemelidir."
+      - "Görsel dikkat dağıtıcı gereksiz ayrıntılar içermemelidir."
+      - "Görsel ile paragraf arasında açık uyum bulunmalıdır."
+      - "Görsel yanlış konuyu destekleyecek kadar yanıltıcı olmamalıdır."
+    yasaklar:
+      - "karmaşık kolaj"
+      - "çok sahneli kompozisyon"
+      - "grafik veya veri yoğun görsel"
+      - "metinle zayıf ilişkili dekoratif görsel"
+
+  stem:
+    required: true
+    selection: "random_from_list"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    correct_count: 1
+    style: "short_topic_phrase"
+    word_count_min: 2
+    word_count_max: 5
+    kurallar:
+      - "Tüm seçenekler konu ifadesi biçiminde olmalıdır."
+      - "Seçenekler kısa, sade ve 2. sınıf düzeyinde olmalıdır."
+      - "Doğru seçenek metnin tamamında anlatılan ana konuyu karşılamalıdır."
+      - "Yanlış seçenekler metne yakın görünmeli ama dikkatli okuyunca elenebilmelidir."
+      - "Yanlış seçenekler yeni ana olay, yeni ana varlık veya metinde olmayan baskın bilgi eklememelidir."
+      - "Seçenekler kendi aralarında biçimce paralel olmalıdır."
+      - "Seçenekler başlık gibi değil, konu ifadesi gibi kurulmalıdır."
+
+soru_kokleri:
+  - "Bu metnin konusu aşağıdakilerden hangisidir?"
+  - "Bu metinde ele alınan konu aşağıdakilerden hangisidir?"
+  - "Bu metinde aşağıdakilerden hangisine değinilmiştir?"
+  - "Bu paragrafın konusu aşağıdakilerden hangisidir?"
+  - "Paragrafta anlatılan konu aşağıdakilerden hangisidir?"
+  - "Metinde hangi konudan söz edilmektedir?"
+  - "Bu metinde en çok ne anlatılmaktadır?"
+  - "Bu metnin anlattığı konu aşağıdakilerden hangisidir?"
+  - "Aşağıdakilerden hangisi bu metnin konusudur?"
+  - "\"{topic}\" ile ilgili bu metnin konusu aşağıdakilerden hangisidir?"
+
+topic_placeholder_rules:
+  kullanim_kosulu:
+    - "{topic} yalnızca metnin konusu çok açık, somut ve kısa biçimde söylenebiliyorsa kullanılmalıdır."
+    - "{topic} ifadesi 1-3 sözcük arasında tutulmalıdır."
+  yasaklar:
+    - "{topic} alanı ana düşünce, mesaj, ders veya soyut tema ile doldurulamaz."
+    - "{topic} alanı metnin tüm açıklamasını veren uzun ifade olamaz."
+
+beceri_odagi:
+  birincil_beceri:
+    - "Paragrafın konusunu bulma"
+  ikincil_beceriler:
+    - "Metinde ne anlatıldığını fark etme"
+    - "Ana konu ile ayrıntı arasındaki farkı ayırt etme"
+    - "Metnin bütününe bakarak doğru konu ifadesini seçme"
+
+dogru_cevap:
+  tanim: "Metnin tamamında anlatılan ana konuyu karşılayan en uygun ifade"
+  kurallar:
+    - "Doğru cevap metnin tek baskın konusunu yansıtmalıdır."
+    - "Doğru cevap başlık gibi yaratıcı değil, konu ifadesi gibi açıklayıcı olmalıdır."
+    - "Doğru cevap çok genel olmamalıdır."
+    - "Doğru cevap çok dar olmamalıdır."
+    - "Doğru cevap yalnız tek bir ayrıntıyı merkeze almamalıdır."
+    - "Doğru cevap sade ve doğrudan olmalıdır."
+    - "Doğru cevap genellikle 2-5 sözcük arasında tutulmalıdır."
+    - "Doğru cevap görselle de desteklenebilir nitelikte olmalıdır."
+
+yanlis_secenek_stratejileri:
+  count_per_question: 2
+  strategy_pool:
+    - id: "cok_genis"
+      tanim: "Metinle ilgili ama odağı gereğinden fazla geniş konu"
+      ornek_mantik:
+        - "Hayvanların yaşamı"
+        - "Doğadaki canlılar"
+        - "Bitkiler"
+        - "Gökyüzü olayları"
+
+    - id: "cok_dar"
+      tanim: "Metindeki tek ayrıntıya odaklanan konu"
+      ornek_mantik:
+        - "Yarasaların kulakları"
+        - "Mayıs ayında çıkan böcek"
+        - "Gece uçmak"
+        - "Sulak alanlar"
+
+    - id: "yanlis_odak"
+      tanim: "Metindeki yan bilgiye yönelen ama ana konu olmayan ifade"
+      ornek_mantik:
+        - "Mağaraların faydaları"
+        - "Böceklerin yaşamı"
+        - "Sivrisineğin yaşam alanı"
+        - "Gece avı"
+
+    - id: "iliskili_ama_farkli"
+      tanim: "Aynı tema alanında duran ama metnin gerçek konusunu karşılamayan ifade"
+      ornek_mantik:
+        - "Kuşların özellikleri"
+        - "Çiçeklerin büyümesi"
+        - "Deniz canlıları"
+        - "Orman hayvanları"
+
+  secim_kurali:
+    - "Her soruda 2 yanlış seçenek farklı stratejilerden seçilmelidir."
+    - "En az 1 yanlış seçenek metne yakın ama fazla genel ya da fazla dar olmalıdır."
+    - "Zor düzeyde iki yanlış seçenek de ilk bakışta makul görünmelidir."
+
+zorluk_duzeyleri:
+  kolay:
+    paragraph:
+      sentence_count_min: 4
+      sentence_count_max: 4
+      word_count_min: 34
+      word_count_max: 44
+      kurallar:
+        - "Konu ilk cümlede ya da çok açık biçimde verilmelidir."
+        - "Metin tek bilgi odaklı olmalıdır."
+        - "Ana konu çok görünür olmalıdır."
+        - "Yan bilgi kullanılmamalı ya da çok sınırlı olmalıdır."
+    visual:
+      kurallar:
+        - "Görsel doğrudan doğru konuyu desteklemelidir."
+        - "Görsel tek varlık veya tek olay odaklı olmalıdır."
+    dogru_cevap:
+      kurallar:
+        - "Doğru konu ifadesi metindeki ana varlığa veya ana olaya çok yakın olmalıdır."
+        - "Doğru cevap açıklayıcı ve doğrudan olmalıdır."
+    distractors:
+      kurallar:
+        - "1 seçenek çok genel olmalıdır."
+        - "1 seçenek çok dar ya da yan bilgiye dayalı olmalıdır."
+        - "Yanlış seçenekler kolay elenebilir olmalıdır."
+    difficulty_note: >
+      Kolay düzeyde öğrenci, metinde ne anlatıldığını açık biçimde görür ve
+      doğru konu ifadesini seçer.
+
+  orta:
+    paragraph:
+      sentence_count_min: 4
+      sentence_count_max: 5
+      word_count_min: 42
+      word_count_max: 56
+      kurallar:
+        - "Konu açık olmalıdır ancak metnin geneline bakmayı gerektirmelidir."
+        - "Metinde 1 veya 2 destekleyici ayrıntı bulunabilir."
+        - "Doğru konu ifadesi, metnin tümüne bakılarak seçilmelidir."
+        - "Küçük bir yan bilgi yer alabilir ama ana odağı gölgelememelidir."
+    visual:
+      kurallar:
+        - "Görsel ana konuyu desteklemeli, fakat tek başına cevabı tamamen vermemelidir."
+        - "Metin ve görsel birlikte değerlendirildiğinde doğru konu daha netleşmelidir."
+    dogru_cevap:
+      kurallar:
+        - "Doğru konu ifadesi metnin genel odağını kapsamalıdır."
+        - "Doğru cevap tek ayrıntıyı değil ana anlatılanı taşımalıdır."
+    distractors:
+      kurallar:
+        - "1 seçenek çok genel"
+        - "1 seçenek çok dar ya da yan odaklı"
+        - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+    difficulty_note: >
+      Orta düzeyde öğrenci metnin tamamına bakarak doğru konuyu seçmelidir.
+      Ancak soru yine de ana düşünce ya da mesaj düzeyine çıkmaz.
+
+  zor:
+    paragraph:
+      sentence_count_min: 5
+      sentence_count_max: 6
+      word_count_min: 52
+      word_count_max: 68
+      kurallar:
+        - "Konu açık kalmalıdır fakat metin içinde birkaç bilgiye dağılmış olabilir."
+        - "Metinde 1 yan ayrıntı bulunabilir ve bu ayrıntı çeldirici üretimine malzeme verebilir."
+        - "Doğru konu ifadesi, metindeki tüm bilgileri en iyi toplayan seçenek olmalıdır."
+        - "Zor düzeyde bile soru ana düşünce, ana duygu veya yorum sorusuna dönüşmemelidir."
+    visual:
+      kurallar:
+        - "Görsel ana konuyu desteklemelidir ama yakın bir çeldiriciye de zemin hazırlayabilecek doğal ayrıntılar içerebilir."
+        - "Görsel yine de karışık olmamalı ve 2. sınıf sadeliğini korumalıdır."
+    dogru_cevap:
+      kurallar:
+        - "Doğru konu ifadesi tek ayrıntı değil bütün metin için en uygun seçenek olmalıdır."
+        - "Doğru cevap açıklayıcı, sade ve gereğinden geniş olmayan yapıda olmalıdır."
+    distractors:
+      kurallar:
+        - "2 yanlış seçeneğin ikisi de metinle ilişkili görünmelidir."
+        - "1 seçenek fazla genel olmalıdır."
+        - "1 seçenek metindeki yan unsur ya da tek ayrıntıdan üretilmiş yakın çeldirici olmalıdır."
+    difficulty_note: >
+      Zor düzey 2. sınıfta gizli anlam, mesaj veya ana düşünce zorluğu değildir.
+      Zorluk, metnin tamamında anlatılan konuyu ayrıntı konularından ayırma düzeyinde kalır.
+
+difficulty_selection_policy:
+  default: "Orta"
+  allowed_values: ["Kolay", "Orta", "Zor"]
+  hard_limits:
+    - "Tüm düzeylerde paragraf 4-6 cümle arasında kalmalıdır."
+    - "Tüm düzeylerde görsel zorunludur."
+    - "Zor düzey seçilse bile soru ana düşünce, ana duygu veya mesaj sorusuna dönüşemez."
+    - "Kolay düzeyde gereksiz yakın çeldirici yükü oluşturulamaz."
+    - "Tüm düzeylerde metin 2. sınıf sözcük ve cümle düzeyini aşamaz."
+
+konu_alani:
+  izinli_ornekler:
+    - "hayvanların özellikleri"
+    - "bir canlının yaşamı"
+    - "doğadaki varlıklar"
+    - "çiçekler"
+    - "ağaçlar"
+    - "okul yaşamı"
+    - "arkadaşlık"
+    - "yardımlaşma"
+    - "temizlik"
+    - "oyunlar"
+    - "kitaplar"
+    - "mevsimler"
+    - "doğal olaylar"
+    - "sağlıklı yaşam"
+  kurallar:
+    - "Konu 2. sınıf öğrencisinin anlayabileceği kadar somut ve açık olmalıdır."
+    - "Bilgi metni seçilirse bilgiler temel ve kısa olmalıdır."
+    - "Öyküleyici metin seçilirse olay akışı sade olmalıdır."
+    - "Görselle rahat desteklenebilen konular tercih edilmelidir."
+    - "Konu ifadesi ile ana düşünce ifadesi karıştırılmamalıdır."
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "2. sınıfa uygun, görselle desteklenebilir tek ve açık bir konu seç"
+    - step: 2
+      action: "Seçilen konu için 4-6 cümlelik kısa ve sade paragraf oluştur"
+      details:
+        - "Tek baskın konu kur"
+        - "2. sınıf sözcük dağarcığında kal"
+        - "Metnin ne anlattığı açık olsun"
+    - step: 3
+      action: "Paragrafın ana içeriğiyle uyumlu görsel tasarımını belirle"
+      details:
+        - "Görsel ana konuya doğrudan bağlı olsun"
+        - "Görsel tek sahneli ve sade olsun"
+        - "Görsel yanlış konuları destekleyecek kadar yanıltıcı olmasın"
+    - step: 4
+      action: "Metnin tamamında anlatılan doğru konu ifadesini üret"
+      details:
+        - "Açıklayıcı ol"
+        - "Sade ol"
+        - "Çok genel ya da çok dar olma"
+    - step: 5
+      action: "Zorluk düzeyine uygun 2 çeldirici üret"
+      details:
+        - "Farklı çeldirici stratejileri kullan"
+        - "Metne yakın görün ama yanlış odakta kal"
+    - step: 6
+      action: "Soru kökünü listeden rastgele seç"
+    - step: 7
+      action: "Şıkları A-B-C olarak karıştır"
+    - step: 8
+      action: "Harici TYMM ortak kuralları ile doğrulama yap"
+
+validation_checklist:
+  paragraph:
+    - "Metin 4-6 cümle arasında mı?"
+    - "Metin seçilen zorluk düzeyinin kelime aralığında mı?"
+    - "Metin tek baskın konuya sahip mi?"
+    - "Metin somut ve sade mi?"
+    - "Metinde dış bilgi gerektiren unsur var mı? Varsa reddet."
+    - "Metin konu seçimini mi ölçüyor? Ana düşünce düzeyine kayıyorsa reddet."
+
+  visual:
+    - "Görsel zorunlu olarak var mı?"
+    - "Görsel paragrafın ana içeriğiyle uyumlu mu?"
+    - "Görsel tek bakışta anlaşılır mı?"
+    - "Görsel destekleyici ama yanıltıcı değil mi?"
+    - "Görsel dekoratif kalmıyor mu?"
+
+  stem:
+    - "Soru kökü konu seçimini açıkça istiyor mu?"
+    - "Soru kökü ek beceri yüklemiyor mu?"
+
+  options:
+    - "Toplam 3 seçenek var mı?"
+    - "Seçenekler konu ifadesi biçiminde mi?"
+    - "Seçenekler kısa ve sade mi?"
+    - "Doğru seçenek metnin tamamında anlatılan konuyu karşılıyor mu?"
+    - "Bir seçenek fazla genel mi?"
+    - "Bir seçenek fazla dar ya da yan odaklı mı?"
+
+  difficulty:
+    - "Zorluk seçilen düzeye göre paragraf ve çeldirici kuralları uygulanmış mı?"
+    - "Zor düzey bile 2. sınıf sınırında mı?"
+    - "Kolay düzey gereksiz yere karmaşık değil mi?"
+
+hard_fail_rules:
+  - "Seçenek sayısı 3 değilse"
+  - "Görsel yoksa"
+  - "Paragraf 4 cümleden kısa ya da 6 cümleden uzunsa"
+  - "Doğru cevap metnin konusu yerine ana düşüncesine dayanıyorsa"
+  - "Doğru cevap yalnız bir ayrıntıyı kapsıyorsa"
+  - "İki veya daha fazla seçenek makul doğruysa"
+  - "Metin 2. sınıf için fazla soyut veya karmaşıksa"
+  - "Soru ana düşünce, ana duygu, mesaj veya yorum sorusuna kayıyorsa"
+  - "Seçenekler başlık biçimine dönüşmüşse"
+  - "Görsel metinle uyumsuzsa"
+
+ornek_bicim_notlari:
+  - "Yarasalarla ilgili bir metinde doğru konu ifadesi 'Yarasaların özellikleri' olabilir."
+  - "Yanlış seçenekler 'Mağaraların faydaları' gibi yan odak ya da 'Böceklerin yaşamı' gibi yanlış odak taşıyabilir."
+  - "Mayıs sineğiyle ilgili bir metinde doğru konu ifadesi 'Mayıs sineğinin yaşam süresi' olabilir."
+  - "Seçenekler başlık değil, konu ifadesi taşımalıdır."
+  - "2. sınıf düzeyinde konu sorusu, 'Metinde ne anlatılıyor?' sorusuna cevap verir."
+
+output_contract:
+  required_fields:
+    - "paragraph"
+    - "visual_description"
+    - "stem"
+    - "options"
+    - "answer"
+    - "difficulty"
+    - "topic"
+  answer_format:
+    - "answer yalnızca A/B/C olarak verilebilir"
+    - "difficulty yalnızca Kolay / Orta / Zor olabilir"

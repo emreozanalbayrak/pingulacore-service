@@ -300,3 +300,58 @@ class AgentRunGetResponse(BaseModel):
 
 
 ExplorerTreeNode.model_rebuild()
+
+
+LegacyPipelineKind = Literal["geometry", "turkce"]
+
+
+class LegacyPipelineDescriptor(BaseModel):
+    kind: LegacyPipelineKind
+    label: str
+    enabled: bool
+    yaml_root: str
+    default_params: dict[str, Any] = Field(default_factory=dict)
+
+
+class LegacyPipelinesResponse(BaseModel):
+    pipelines: list[LegacyPipelineDescriptor]
+
+
+class LegacyYamlFilesResponse(BaseModel):
+    kind: LegacyPipelineKind
+    files: list[str] = Field(default_factory=list)
+
+
+class LegacyYamlUploadResponse(BaseModel):
+    kind: LegacyPipelineKind
+    yaml_path: str
+
+
+class LegacyRunRequest(BaseModel):
+    yaml_path: str
+    params: dict[str, Any] = Field(default_factory=dict)
+    stream_key: str | None = None
+
+
+class LegacyRunResponse(BaseModel):
+    run_id: str
+    pipeline_id: str
+    status: str
+    stream_key: str | None = None
+
+
+class LegacyOutputItem(BaseModel):
+    path: str
+    url: str
+    size: int
+
+
+class LegacyRunDetailResponse(BaseModel):
+    run_id: str
+    kind: LegacyPipelineKind
+    yaml_path: str
+    status: str
+    error: str | None = None
+    started_at: str
+    finished_at: str | None = None
+    outputs: list[LegacyOutputItem] = Field(default_factory=list)

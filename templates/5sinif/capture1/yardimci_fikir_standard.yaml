@@ -1,0 +1,249 @@
+# templates/yardimci_fikir_standard.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Metinde Yardimci Fikir
+#
+# KISA IFADE FORMATI (~%38 - 48 sorudan 18'i)
+# Paragraf verilir, ogrenci metinde deginilMEYEN yonu/ozelligi secer
+#
+# MANTIK: 3 secenek metinde gecen yon/ozellikler (yanlis), 1 tanesi metinde yok (dogru cevap)
+# Secenekler KISA IFADE formatindadir (2-8 kelime)
+
+meta:
+  id: "yardimci_fikir_standard"
+  ad: "Metinde Yardimci Fikir (Kisa Ifade)"
+  sinif_seviyesi: 5
+  aciklama: "Paragrafta deginilmeyen yonu/ozelligi belirleme sorulari - kisa ifade secenekler"
+  kaynak: "data/metinde_yardimci_fikir.pdf"
+  frequency: "~38% of yardimci fikir questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 4 kisa ifade secenek (metinde deginilmeyen)"
+
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 90
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "bilgilendirici"
+    kurallar:
+      - "Tek bir konu etrafinda 3-4 farkli yon/ozellik anlatilmali"
+      - "Her cumle konunun farkli bir yonunu ele almali"
+      - "Konuyla ilgili ama metinde deginilmeyen en az 1 yon kalmali"
+      - "Bilgilendirici ve ders kitabi tarzinda olmali"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 8
+    style: "short_phrase"
+    correct_type: "does_not_belong"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 6 varyasyon)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # "değinilmemiştir" (en yaygın)
+  - "<b>Bu metinden</b> \"{topic}\" <b>ile ilgili aşağıdakilerin hangisine <u>değinilmemiştir</u>?</b>"
+  - "<b>Bu metinde</b> \"{topic}\" <b>ile ilgili aşağıdakilerden hangisine <u>değinilmemiştir</u>?</b>"
+  - "<b>Bu metinde</b> \"{topic}\" <b>ile ilgili aşağıdakilerin hangisine <u>değinilmemiştir</u>?</b>"
+  - "<b>Bu metinde aşağıdakilerden hangisine <u>değinilmemiştir</u>?</b>"
+  # "ulaşılamaz"
+  - "<b>Bu metinden</b> \"{topic}\" <b>ile ilgili aşağıdakilerden hangisine <u>ulaşılamaz</u>?</b>"
+  - "<b>Bu metinden</b> \"{topic}\" <b>ile ilgili aşağıdakilerin hangisine <u>ulaşılamaz</u>?</b>"
+  # "dikkat çekilmemiştir" (özellik odaklı)
+  - "<b>Bu metinde</b> \"{topic}\"<b>'ün hangi özelliğine <u>dikkat çekilmemiştir</u>?</b>"
+  # POZİTİF varyasyonlar (söz edilmiştir, değinilmiştir)
+  - "<b>Bu metinde aşağıdakilerden hangisinden söz edilmiştir?</b>"
+  - "<b>Bu metinde</b> \"{topic}\" <b>ile ilgili olarak aşağıdakilerden hangisine değinilmiştir?</b>"
+  # Çoğul "metinlerde"
+  - "<b>Bu metinlerde</b> \"{topic}\" <b>ile ilgili aşağıdakilerden hangisine <u>değinilmemiştir</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI (TERS MANTIK!)
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Konuyla ilgili olabilecek ama paragrafta deginilMEMIS bir yon/ozellik"
+  mantik: "INVERSE - diger 3 secenek metinde gecen yonler, dogru cevap metinde yok"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Konuyla iliskili ve makul bir yon/ozellik olmali"
+    - "Paragrafta kesinlikle bahsedilmemis olmali"
+    - "Kisa ifade formatinda olmali (2-8 kelime)"
+    - "Diger seceneklerle ayni gramer yapida olmali (orn: '-ina/-ine' soneki)"
+  ornekler:
+    - paragraf: "Matruska bebekleri, ic ice bes ya da yedi bebekten olusan Rus oyuncaklaridir. Isimlerini Rusca'da 'anne' anlamina gelen 'Matrjona'dan alirlar. Her biri bir buyugunun icine yerlestirilen bu bebekler, aile birligini ve nesillerin devamini simgeler."
+      dogru: "Kim tarafından bulunduğu"
+      neden: "Metinde matruskalarin kim tarafindan icat edildigi anlatilmiyor"
+    - paragraf: "Kirpiler, tehlike aninda topak seklini alarak dikenli bir topa donusur. Bu savunma mekanizmasi onlari yirticilara karsi korur. Kirpilerin dikenleri aslinda sertlesmis killardir ve her birinin kendi kasi vardir."
+      dogru: "Beslenme şekillerine"
+      neden: "Metinde kirpilerin ne yedigi anlatilmiyor"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# Ters mantik sorularinda LLM:
+# - 3 "metinde gecen yon" secer (yanlis secenekler)
+# - 1 "metinde gecmeyen ama iliskili yon" secer (dogru cevap)
+# Strateji havuzu "metinde gecmeyen" yonu olusturmak icin kullanilir
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cikarim_yapma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic with multiple describable aspects"
+      details: "Birden fazla yonu/ozelligi anlatilabilecek bir konu sec"
+
+    - step: 2
+      action: "Generate paragraph (55-90 words) covering 3-4 aspects"
+      details: |
+        Paragrafta:
+        - Konunun 3-4 farkli yonu anlatilmali
+        - En az 1 onemli yon atlanmali (dogru cevap icin)
+        - Her yon acikca belirlenebilir olmali
+
+    - step: 3
+      action: "Extract 3 mentioned aspects (distractors - wrong answers)"
+      details: |
+        Her biri KISA IFADE olmali (2-8 kelime):
+        - Paragrafta acikca anlatilan yonler
+        - Ayni gramer yapida (orn: '-ina/-ine' soneki)
+
+    - step: 4
+      action: "Create 1 unmentioned aspect (correct answer)"
+      details: |
+        KISA IFADE olmali (2-8 kelime):
+        - Konuyla iliskili ama paragrafta YOK
+        - Diger seceneklerle ayni gramer yapida
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from 6 variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 1
+    soru_no: 1
+    konu: "Matruska bebekler"
+    paragraf: "Matruska bebekleri, ic ice bes ya da yedi bebekten olusan Rus oyuncaklaridir..."
+    soru_koku: "Bu metinden 'matruşka bebekler' ile ilgili aşağıdakilerin hangisine değinilmemiştir?"
+    secenekler:
+      A: "Kaç bebekten oluştuğu"
+      B: "İsmini nereden aldığı"
+      C: "Neyi ifade ettiği"
+      D: "Kim tarafından bulunduğu"
+    dogru_cevap: "D"
+    neden: "Metinde matruskalari kimin buldugu/icat ettigi anlatilmiyor"
+
+  - sayfa: 5
+    soru_no: 4
+    konu: "Kirpiler"
+    paragraf: "Kirpiler, tehlike aninda topak seklini alarak dikenli bir topa donusur..."
+    soru_koku: "Bu metinde 'kirpiler' ile ilgili aşağıdakilerin hangisine değinilmemiştir?"
+    secenekler:
+      A: "Fiziksel özelliklerine"
+      B: "Yaşam alanlarına"
+      C: "Beslenme şekillerine"
+      D: "Savunma yöntemlerine"
+    dogru_cevap: "C"
+    neden: "Metinde kirpilerin beslenme sekilleri anlatilmiyor"
+
+  - sayfa: 6
+    soru_no: 6
+    konu: "Anadolu Parsi"
+    paragraf: "Anadolu parsi, Turkiye'nin en buyuk kedigil turudur..."
+    soru_koku: "Bu metinde 'Anadolu parsı' ile ilgili aşağıdakilerden hangisine değinilmemiştir?"
+    secenekler:
+      A: "Yaşam alanlarına"
+      B: "Beslenme alışkanlıklarına"
+      C: "Üreme dönemlerine"
+      D: "Fiziksel özelliklerine"
+    dogru_cevap: "C"
+    neden: "Metinde ureme donemleri anlatilmiyor"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 55-90 arasinda mi?"
+    - "Konunun 3-4 farkli yonu anlatilmis mi?"
+    - "En az 1 onemli yon atlanmis mi?"
+
+  correct_answer:
+    - "2-8 kelime arasinda kisa ifade mi?"
+    - "Paragrafta kesinlikle gecmiyor mu?"
+    - "Konuyla iliskili ve makul bir yon mu?"
+    - "Diger seceneklerle ayni gramer yapida mi?"
+
+  distractors:
+    - "Her biri 2-8 kelime kisa ifade mi?"
+    - "Hepsi paragrafta acikca gecen yonler mi?"
+    - "Ayni gramer yapida mi?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+
+  generation_rules:
+    - "Birden fazla yonu/ozelligi anlatilabilecek konulari tercih et"
+    - "Fiziksel ozellikler, yasam alanlari, beslenme gibi bircok yonu olan konular ideal"
+    - "Paragrafta 3-4 yon anlatilip 1 onemli yon atlanabilecek konulari sec"

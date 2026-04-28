@@ -1,0 +1,119 @@
+# Kaynak: yardimci_fikir_standard_sinif4_zorluk_tam_eklenmis.yaml → zorluk_duzeyleri.kolay
+# 4. sinif yardimci fikir standart — kolay duzey
+
+meta:
+  id: "b12_yardimci_fikir_standard_sinif4_kolay"
+  ad: "4. Sinif - Yardimci Fikir Standart (Kolay)"
+  sinif_seviyesi: 4
+  aciklama: "Kolay duzey — 4. sinif kisa ifade yardimci fikir sorusu. Metnin yardimci dusuncesini en iyi yansitan kisa ifadeyi secme."
+  frequency: "High"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 4 kisa ifade secenegi (kolay)"
+
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 68
+    background_color: "#e8f8e8"
+    sentence_count_min: 4
+    sentence_count_max: 5
+    stil: "bilgilendirici"
+    kurallar:
+      - "Paragrafta anlatilan 3 yon/ozellik acik ve dogrudan secilebilir olmali."
+      - "Metinde deginilmeyen yon/ozellik belirgin ama yine de konuyla iliskili olmali."
+      - "Yanlis secenekler paragrafta acikca bulunan yonlerden secilmeli."
+      - "Dogruluk-yanlislik ayrimi hizli yapilabilir olmali."
+      - "Metin uzunlugu minimum banda yakin tutulmali."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+      - "Dis bilgi gerektirmemelidir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 5
+    word_count_max: 10
+    style: "short_phrase"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Secenekler kisa ifade biciminde olmali."
+      - "Dogru secenek metnin bir yardimci fikrini dogru yansitmali."
+      - "Celdirici secenekler ana fikri veya alakasiz konulari yansitmali."
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metne göre aşağıdakilerden hangisi söylenebilir?</b>"
+  - "<b>Bu metinden hareketle aşağıdakilerden hangisine ulaşılabilir?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metne göre doğrudur?</b>"
+  - "<b>Bu metinden aşağıdakilerden hangisi çıkarılabilir?</b>"
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metnin ana fikrini destekleyen yardimci fikri yansitan kisa ifade"
+  kurallar:
+    - "Dogru secenek metindeki bir yardimci fikri ifade etmeli."
+    - "Ana fikri degil, yardimci fikri yansitmali."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+
+celdirici_stratejileri:
+  - ad: "DOGRUDAN_CIKARILAMAYAN"
+    bilisssel_hata_kategorisi: "dis_bilgi_karisimi"
+    aciklama: "Metinde geçmeyen ama konuyla ilgili yardımcı fikir — kolay elenebilir"
+    nasil_olusturulur: |
+      Konuyla aynı alanda ama metinde açıkça yer almayan bir yardımcı fikri doğru seçenek gibi sun.
+      Kolay seviyede fark belirgin — paragrafı okuyan "bu metinde yok" diyerek hızla elemelidir.
+      Paragrafta anlatılan 3 yön açık ve doğrudan seçilebilir olmalı.
+    kategori: "content"
+
+  - ad: "YANLIS_YON"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Paragrafın anlattığı yönlerin dışında kalan özellik/yön ifadesi"
+    nasil_olusturulur: |
+      Konunun genel alanında ama paragrafın anlattığı yönlerin dışında kalan bir özellik/yön oluştur.
+      Kolay seviyede bu yönün paragrafta olmadığı belirgin olmalı.
+      Paragrafta deginilmeyen yön metinde belirgin ama konuyla ilişkili olmalı.
+    kategori: "cognitive"
+
+  - ad: "BENZER_KONU_KARISIMI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Benzer konudaki bilgiyi bu konuya aitmiş gibi sunan seçenek"
+    nasil_olusturulur: |
+      İlgili ama farklı bir konudaki yardımcı fikri bu konunun yardımcı fikrinden biriymişgibi sun.
+      Kolay seviyede bağlantı zayıf ve belirgin — doğruluk-yanlışlık ayrımı hızlı yapılabilir.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cikarim_yapma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

@@ -1,0 +1,182 @@
+# Kaynak: sozel_mantik_cok_eksenli_eslestirme_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.kolay
+# 4. sinif sözel mantık çok eksenli eşleştirme — kolay duzey
+
+meta:
+  id: "b12_sozel_mantik_cok_eksenli_eslestirme_sinif4_kolay"
+  ad: "Sözel Mantık ve Muhakeme - Çok Eksenli Eşleştirme Sorusu (Kolay)"
+  sinif_seviyesi: 4
+  aciklama: "Kolay duzey — az değişkenli, az eksenli çok eksenli eşleştirme sorusu. 4 kişi/nesne/birim, 2 kategori ekseni, 3 koşul, en fazla 1 dolaylı çıkarım, en fazla 1 güçlü çapraz ilişki."
+  frequency: "High"
+
+eslestirme_senaryolari:
+  - ad: "ogrenci_kurs_kat_eslestirmesi"
+    aciklama: "Öğrencilerin gittikleri kurs ve kursların bulunduğu katın eşleştirilmesi"
+    ornek_setup: "Dört öğrenci farklı kurslara gitmektedir ve her kurs farklı bir katta bulunmaktadır."
+
+  - ad: "cocuk_sehir_spor_eslestirmesi"
+    aciklama: "Çocukların yaşadıkları şehir ve yaptıkları sporun eşleştirilmesi"
+    ornek_setup: "Dört çocuktan her biri farklı bir şehirde yaşamakta ve farklı bir spor yapmaktadır."
+
+  - ad: "ogrenci_kulup_gun_eslestirmesi"
+    aciklama: "Öğrencilerin kulüp türü ve kulüp günüyle eşleştirilmesi"
+    ornek_setup: "Dört öğrenci farklı kulüplere katılmaktadır ve her kulüp haftanın farklı bir gününde yapılmaktadır."
+
+  - ad: "sporcu_branş_forma_rengi_eslestirmesi"
+    aciklama: "Sporcuların branşları ve forma renklerinin eşleştirilmesi"
+    ornek_setup: "Dört sporcu farklı branşlarda yarışmakta ve her biri farklı renkte forma giymektedir."
+
+  - ad: "ogrenci_proje_konu_salon_eslestirmesi"
+    aciklama: "Öğrencilerin proje konuları ve sunum salonlarının eşleştirilmesi"
+    ornek_setup: "Dört öğrenci farklı proje konularını farklı salonlarda sunacaktır."
+
+  - ad: "cocuk_enstruman_ogretmen_eslestirmesi"
+    aciklama: "Çocukların çaldıkları enstrümanlar ve ders aldıkları öğretmenlerin eşleştirilmesi"
+    ornek_setup: "Dört çocuk farklı enstrümanlar çalmakta ve her biri farklı bir öğretmenden ders almaktadır."
+
+  - ad: "ogrenci_kitap_turu_rozet_rengi_eslestirmesi"
+    aciklama: "Öğrencilerin seçtikleri kitap türleri ve rozet renklerinin eşleştirilmesi"
+    ornek_setup: "Dört öğrenci farklı kitap türlerini seçmiş ve her birine farklı renkte rozet verilmiştir."
+
+  - ad: "kampci_cadir_numarasi_etkinlik_eslestirmesi"
+    aciklama: "Kampçıların çadır numaraları ve katıldıkları etkinliklerin eşleştirilmesi"
+    ornek_setup: "Dört kampçı farklı numaralı çadırlarda kalmakta ve farklı etkinliklere katılmaktadır."
+
+  - ad: "ogrenci_bilim_alani_madalya_rengi_eslestirmesi"
+    aciklama: "Öğrencilerin yarıştıkları bilim alanı ve aldıkları madalya renginin eşleştirilmesi"
+    ornek_setup: "Dört öğrenci farklı bilim alanlarında yarışmış ve farklı renklerde madalya almıştır."
+
+  - ad: "cocuk_hayvan_turu_bakim_gunu_eslestirmesi"
+    aciklama: "Çocukların sorumlu oldukları hayvan türü ve bakım günlerinin eşleştirilmesi"
+    ornek_setup: "Dört çocuk farklı hayvan türlerinden sorumludur ve her biri bakımını farklı bir günde yapmaktadır."
+
+  - ad: "ogrenci_masa_numarasi_gorev_turu_eslestirmesi"
+    aciklama: "Öğrencilerin oturdukları masa numarası ve üstlendikleri görev türünün eşleştirilmesi"
+    ornek_setup: "Dört öğrenci farklı masalarda oturmakta ve her biri farklı bir görev üstlenmektedir."
+
+  - ad: "gezgin_ulke_ulasim_turu_eslestirmesi"
+    aciklama: "Gezginlerin gittikleri ülke ve kullandıkları ulaşım türünün eşleştirilmesi"
+    ornek_setup: "Dört gezgin farklı ülkelere gitmiş ve her biri farklı bir ulaşım türü kullanmıştır."
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Setup cümlesi + maddeli koşullar + soru kökü + 4 seçenekten oluşan çok eksenli eşleştirme sorusu (kolay)"
+
+  paragraph:
+    required: true
+    word_count_min: 35
+    word_count_max: 95
+    sentence_count_min: 2
+    sentence_count_max: 8
+    stil: "mantik_bulmacasi"
+
+    amac: >
+      Öğrencinin, kişi/nesne/birimleri birden fazla kategori ekseni üzerinde
+      verilen ilişkisel koşulları birlikte değerlendirerek gizli eşleştirme
+      tablosunu kurması gerekir. Kolay düzeyde değişken sayısı düşük tutulmuştur:
+      4 öğe, 2 eksen, 3 koşul, en fazla 1 dolaylı çıkarım, en fazla 1 güçlü çapraz ilişki.
+
+    kurallar:
+      - "Paragraf iki bölümden oluşur: (1) SETUP CÜMLESİ + (2) MADDELİ KOŞULLAR"
+      - "SETUP CÜMLESİ (1-2 cümle): Kimlerin/nelerin eşleştirileceğini, hangi kategori eksenlerinin bulunduğunu ve genel çerçeveyi tanıtır"
+      - "Kurgu kişi-merkezli, nesne-merkezli veya birim-merkezli olabilir; ancak yapı birden fazla kategori ekseni içermelidir"
+      - "Her öğe için her eksenden yalnızca bir değer geçerli olmalıdır"
+      - "MADDELİ KOŞULLAR 3 madde olmalıdır; her koşul • ile başlamalı ve <br> ile ayrılmalıdır"
+      - "FORMAT ŞEKLİ şu mantıkta olmalıdır: Setup cümlesi.<br>Bu eşleştirmeyle ilgili aşağıdaki bilgiler verilmektedir:<br>• Koşul 1<br>• Koşul 2<br>• Koşul 3"
+      - "YASAK: Düz paragraf yazma; mutlaka setup + • maddeli koşul yapısı kullanılmalıdır"
+      - "YASAK: <ul>, <li>, <ol> tag'leri kullanma; yalnızca • karakteri ve <br> kullanılmalıdır"
+      - "Kolay düzey: 4 kişi/nesne/birim ve 2 kategori ekseni kullanılmalıdır"
+      - "Kolay düzey: en fazla 1 koşul dolaylı çıkarım gerektirmelidir"
+      - "Kolay düzey: en fazla 1 güçlü çapraz ilişki bulunmalıdır"
+      - "Önce gizli doğru eşleştirme tablosu kurulmalı; ardından yalnızca bu tabloya götüren koşullar yazılmalıdır"
+      - "Koşullar arasında çelişki olmamalıdır"
+      - "Koşullar birden fazla tabloya izin vermemelidir"
+      - "Kişi kullanılacaksa Türk isimleri tercih edilmelidir (Ali, Ayşe, Ece, Baran, Defne vb.)"
+      - "Paragrafta hikâye unsurlarıyla ilgili AÇIKLAMA veya EK BİLGİ verme!"
+      - "Paragraf SADECE mantık bulmacasını anlatsın — unsur analizi veya tanımlaması YAPMA"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 3
+    word_count_max: 22
+    style: "complete_sentence"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu bilgilere göre aşağıdakilerden hangisi kesinlikle <u>doğrudur</u>?</b>"
+  - "<b>Bu bilgilere göre aşağıdakilerden hangisi kesinlikle <u>yanlıştır</u>?</b>"
+  - "<b>Bu bilgilere göre aşağıdakilerden hangisi kesinlikle <u>söylenebilir</u>?</b>"
+  - "<b>Bu bilgilere göre aşağıdakilerden hangisi kesinlikle <u>söylenemez</u>?</b>"
+  - "<b>Bu bilgilere göre aşağıdaki eşleştirmelerden hangisi <u>doğrudur</u>?</b>"
+  - "<b>Bu bilgilere göre aşağıdaki eşleştirmelerden hangisi <u>yanlıştır</u>?</b>"
+  - "<b>Bu bilgilere göre aşağıdakilerden hangisi verilen koşullara <u>uygundur</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: >
+    Doğru cevap, yalnızca verilen tüm koşullar birlikte değerlendirilip gizli
+    eşleştirme tablosu kurulduktan sonra mantıksal olarak kesin biçimde
+    belirlenebilen çıkarım önermesidir.
+  mantik: "Gizli eşleştirme tablosu kurulmadan doğru cevap belirlenememelidir."
+  kurallar:
+    - "Doğru cevap SADECE tüm koşullar birlikte değerlendirildiğinde ulaşılabilir olmalıdır"
+    - "Kolay düzeyde çözüm yolu kısa olmalıdır; öğrenci tek bir ana ara tablo kurarak sonuca ulaşabilmelidir"
+    - "Doğru cevap 3-22 kelime arasında olmalıdır"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "TEK_EKSEN_YORUMU"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "2 kategori ekseninden yalnızca birini dikkate alarak oluşturulan yanlış tablo"
+    nasil_olusturulur: |
+      2 eksenli tabloda yalnızca 1 ekseni doğru dolduran, diğer ekseni keyfi tamamlayan ama birinci eksen doğru göründüğünden cazip görünen bir seçenek sun.
+    kategori: "cognitive"
+
+  - ad: "DOLAYLIÇIKARIM_ATLAMA"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "En fazla 1 dolaylı çıkarım gerektiren kolay düzeyde bu adımı atlayan tablo"
+    nasil_olusturulur: |
+      3 koşulun hepsini doğrudan uygulayan ama 1 dolaylı çıkarımı atlayan; bu yüzden 1 öğenin kategorisini yanlış veren bir tablo oluştur.
+    kategori: "cognitive"
+
+  - ad: "ÇAPRAZ_ILISKI_KARMAŞASI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Tek bir güçlü çapraz ilişkiyi yanlış yönde uygulayan seçenek"
+    nasil_olusturulur: |
+      Bir öğenin iki eksendeki birlikte sınırını ters uygulayan (örn. her ikisini de 1. kategoriye atayan) ama geri kalan tablonun tutarlı göründüğü bir seçenek sun.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB3"
+  bilesenler: ["mantiksal_cikarim", "eslestirme", "degerlendirme", "sorgulama"]
+  surec_bileseni: "karar_verme"
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

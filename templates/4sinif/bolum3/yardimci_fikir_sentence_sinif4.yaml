@@ -1,0 +1,253 @@
+# Kaynak: 5sinif/capture1/yardimci_fikir_sentence.yaml — 4. sinif icin adapte edildi (sinif_seviyesi 5->4)
+# templates/yardimci_fikir_sentence.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Metinde Yardimci Fikir
+#
+# TAM CUMLE FORMATI (~%46 - 48 sorudan 22'si)
+# Paragraf verilir, ogrenci metinden CIKARILMAYACAK yargiyi secer
+#
+# MANTIK: 3 secenek metinden cikariabilecek yargilar (yanlis), 1 tanesi cikarilAmaz (dogru cevap)
+# Secenekler TAM CUMLE formatindadir (8-25 kelime)
+
+meta:
+  id: "yardimci_fikir_sentence_sinif4"
+  ad: "Metinde Yardimci Fikir (Tam Cumle)"
+  sinif_seviyesi: 4
+  aciklama: "Paragraftan cikarilaMIYACAK yargiyi belirleme sorulari - tam cumle secenekler"
+  kaynak: "data/metinde_yardimci_fikir.pdf"
+  frequency: "~46% of yardimci fikir questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 4 tam cumle secenek (metinden cikarilmayacak)"
+
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 100
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "bilgilendirici"
+    kurallar:
+      - "Konuyla ilgili birden fazla bilgi/yargi icermeli"
+      - "Metinden cikariabilecek 3 farkli sonuc/yargi olmali"
+      - "Bazi bilgiler dolayli olarak cikarim yapmaya musait olmali"
+      - "Bilgilendirici ve ders kitabi tarzinda olmali"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 8
+    word_count_max: 25
+    style: "complete_sentence"
+    correct_type: "does_not_belong"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 11 varyasyon)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # "çıkarılamaz"
+  - "<b>Bu metinden</b> \"{topic}\" <b>ile ilgili aşağıdakilerden hangisi <u>çıkarılamaz</u>?</b>"
+  - "<b>Bu metinden</b> \"{topic}\" <b>ile ilgili aşağıdakilerin hangisi <u>çıkarılamaz</u>?</b>"
+  - "<b>Bu metinden aşağıdakilerden hangisi <u>çıkarılamaz</u>?</b>"
+  # "söylenemez"
+  - "<b>Bu metinden hareketle</b> \"{topic}\" <b>için aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Bu metinden yola çıkılarak</b> \"{topic}\" <b>ile ilgili aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Bu metinden yola çıkılarak aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  # "ulaşılamaz"
+  - "<b>Bu metinden</b> \"{topic}\" <b>ile ilgili aşağıdakilerden hangisine <u>ulaşılamaz</u>?</b>"
+  - "<b>Bu metinden yola çıkılarak aşağıdakilerden hangisine <u>ulaşılamaz</u>?</b>"
+  # "bahsedilmemiştir"
+  - "<b>Bu metinde</b> \"{topic}\" <b>ile ilgili aşağıdakilerin hangisinden <u>bahsedilmemiştir</u>?</b>"
+  # "değinilmemiştir" (bazen tam cümle seçeneklerle de kullanılıyor)
+  - "<b>Bu metinde</b> \"{topic}\" <b>ile ilgili aşağıdakilerden hangisine <u>değinilmemiştir</u>?</b>"
+  - "<b>Bu metinde</b> \"{topic}\" <b>ile ilgili aşağıdakilerin hangisine <u>değinilmemiştir</u>?</b>"
+  # Çelişki ve uyum soruları
+  - "<b>Aşağıdakilerden hangisi bu metinde anlatılan tavır ile çelişir?</b>"
+  # POZİTİF varyasyonlar - metinden çıkarılabilir/söylenebilir olanı bul
+  - "<b>Aşağıdakilerden hangisi bu metinde sözü edilen araştırmanın sonuçlarından biridir?</b>"
+  - "<b>Bu metin ile ilgili aşağıdakilerden hangisi söylenebilir?</b>"
+  - "<b>Bu metinde anlatılanlar</b> \"{topic}\" <b>ile ilgili aşağıdakilerden hangisini destekler?</b>"
+  - "<b>Bu metinde sözü edilen kişi ile ilgili aşağıdakilerden hangisi kesin olarak söylenebilir?</b>"
+  - "<b>Bu metinde sözü edilen kişi ile ilgili aşağıdakilerden hangisi söylenebilir?</b>"
+  - "<b>Bu metinden aşağıdakilerden hangisi çıkarılabilir?</b>"
+  - "<b>Bu metinden aşağıdakilerden hangisine ulaşılabilir?</b>"
+  - "<b>Bu metinden aşağıdakilerin hangisine ulaşılabilir?</b>"
+  # "hareketle" ile pozitif/negatif karışık
+  - "<b>Bu metinden hareketle</b> \"{topic}\" <b>ile ilgili aşağıdakilerden hangisi <u>çıkarılamaz</u>?</b>"
+  - "<b>Bu metinden hareketle</b> \"{topic}\" <b>ile ilgili aşağıdakilerden hangisi söylenebilir?</b>"
+  - "<b>Bu metinden hareketle</b> \"{topic}\" <b>ile ilgili aşağıdakilerden hangisi kesin olarak söylenir?</b>"
+  - "<b>Bu metinden hareketle</b> \"{topic}\" <b>ile ilgili aşağıdakilerden hangisine ulaşılabilir?</b>"
+  - "<b>Bu metinden hareketle</b> \"{topic}\" <b>ile ilgili aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Bu metinden hareketle aşağıdakilerden hangisi söylenebilir?</b>"
+  - "<b>Bu metinden hareketle aşağıdakilerden hangisine <u>ulaşılamaz</u>?</b>"
+  # "metne göre" pozitif
+  - "<b>Bu metne göre</b> \"{topic}\" <b>ile ilgili aşağıdakilerden hangisi söylenebilir?</b>"
+  - "<b>Bu metne göre aşağıdakilerden hangisi kesindir?</b>"
+  # Tekrar - hareketle/ulaşılamaz
+  - "<b>Bu metinden hareketle</b> \"{topic}\" <b>ile ilgili aşağıdakilerden hangisine <u>ulaşılamaz</u>?</b>"
+  # "Böyle diyen biri" varyasyonları
+  - "<b>Böyle diyen biri ile ilgili aşağıdakilerden hangisi kesin olarak söylenebilir?</b>"
+  - "<b>Böyle diyen biri ile ilgili aşağıdakilerden hangisi söylenebilir?</b>"
+  - "<b>Böyle diyen biri ile ilgili aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  # "Düşüncelerini bu şekilde dile getiren" varyasyonları
+  - "<b>Düşüncelerini bu şekilde dile getiren biri ile ilgili aşağıdakilerden hangisi kesin olarak söylenebilir?</b>"
+  - "<b>Düşüncelerini bu şekilde dile getiren biri ile ilgili aşağıdakilerden hangisi söylenebilir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI (TERS MANTIK!)
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Paragraftan cikarilaMIYACAK, metinde desteklenmeyen bir yargi/sonuc"
+  mantik: "INVERSE - diger 3 secenek metinden cikariabilecek yargilar, dogru cevap cikarilAmaz"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Konuyla iliskili ama paragraftan desteklenmeyen bir yargi olmali"
+    - "Tam cumle formatinda olmali (ozne + yuklem)"
+    - "Makul gorunmeli ama paragraftaki bilgilerle kanitlanamamali"
+    - "8-25 kelime arasinda olmali"
+    - "Kelime sayisi bakimindan en uzun sik olmamali"
+  ornekler:
+    - paragraf: "Ilk legolar, 1949'da ortaya cikti. 1958 yilinda belirlenen boyutlari bugun hala ayni. Uretimde 0.002 mm'lik hata payi kabul ediliyor. Bu olcuye uymayan legolar hatali kabul edilip imha ediliyor."
+      dogru: "El becerisini geliştirme düşüncesi legoların ortaya çıkmasını sağlamıştır."
+      neden: "Metinde legolarin neden icat edildigi anlatilmiyor"
+    - paragraf: "Gentoo penguenleri, diger penguen turlerinden farkli olarak yuzme hizlari ile bilinir. Saatte 36 km hiza ulasabilirler. Antarktika yakinlarindaki adalarda yasarlar ve balikla beslenirler."
+      dogru: "Gentoo penguenleri diğer penguen türlerinden daha uzun yaşar."
+      neden: "Metinde omur suresi hakkinda bilgi yok"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# Ters mantik sorularinda LLM:
+# - 3 "metinden cikariabilecek yargi" olusturur (yanlis secenekler)
+# - 1 "metinden cikarilaMIYACAK ama iliskili yargi" olusturur (dogru cevap)
+# Strateji havuzu "desteklenmeyen yargi" olusturmak icin kullanilir
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cikarim_yapma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic with rich content potential"
+      details: "Birden fazla bilgi/yargi cikariabilecek bir konu sec"
+
+    - step: 2
+      action: "Generate paragraph (55-100 words) with multiple derivable conclusions"
+      details: |
+        Paragrafta:
+        - En az 3 farkli bilgi/yargi cikariabilmeli
+        - Hem dogrudan hem dolayli cikarimlar mumkun olmali
+        - Konuyla ilgili ama metinde olmayan yargilar da olmali
+
+    - step: 3
+      action: "Create 3 derivable judgments (distractors - wrong answers)"
+      details: |
+        Her biri TAM CUMLE olmali (8-25 kelime):
+        - 1x dogrudan cikarim (metinde acikca yaziyor)
+        - 1x dolayli cikarim (mantiksal sonuc)
+        - 1x acik cikarim (metindeki baska bir bilgi)
+
+    - step: 4
+      action: "Create 1 non-derivable judgment (correct answer)"
+      details: |
+        TAM CUMLE olmali (8-25 kelime):
+        - Konuyla iliskili ama metinde desteklenmeyen
+        - Makul gorunmeli ama kanitlanamamali
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from 11 variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 1
+    soru_no: 4
+    konu: "Legolar"
+    paragraf: "Ilk legolar, 1949'da ortaya cikti. 1958 yilinda belirlenen boyutlari bugun hala ayni..."
+    soru_koku: "Bu metinden 'legolar' ile ilgili aşağıdakilerden hangisi çıkarılamaz?"
+    secenekler:
+      A: "Lego boyutları 1958 yılından beri boyutunu korumaktadır."
+      B: "El becerisini geliştirme düşüncesi legoların ortaya çıkmasını sağlamıştır."
+      C: "Lego üretiminde çok küçük bir hata payı vardır."
+      D: "Belirlenen boyutlara uymayan legolar hatalı kabul edilmektedir."
+    dogru_cevap: "B"
+    neden: "Metinde legolarin neden icat edildigi bilgisi yok"
+
+  - sayfa: 8
+    soru_no: 6
+    konu: "Gentoo penguenleri"
+    paragraf: "Gentoo penguenleri, diger penguen turlerinden farkli olarak yuzme hizlari ile bilinir..."
+    soru_koku: "Bu metinden 'Gentoo penguenleri' ile ilgili aşağıdakilerden hangisine ulaşılamaz?"
+    secenekler:
+      A: "Saatte 36 km hıza ulaşabilirler."
+      B: "Antarktika yakınlarındaki adalarda yaşarlar."
+      C: "Balıkla beslenirler."
+      D: "Diğer penguen türlerinden daha uzun yaşar."
+    dogru_cevap: "D"
+    neden: "Metinde omur suresi hakkinda bilgi yok"
+
+  - sayfa: 6
+    soru_no: 7
+    konu: "Meşe ağaçları"
+    paragraf: "Mese agaclari yuzyillar boyunca yasayabilen dayanikli agaclardir..."
+    soru_koku: "Bu metinden hareketle 'meşe ağaçları' için aşağıdakilerden hangisi söylenemez?"
+    secenekler:
+      A: "Uzun ömürlü ağaçlardır."
+      B: "Dayanıklı bir yapıya sahiptirler."
+      C: "Meyvelerinden hayvanlar faydalanır."
+      D: "Tüm iklimlerde yetişebilirler."
+    dogru_cevap: "D"
+    neden: "Metinde iklim kosullari hakkinda bilgi yok"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 55-100 arasinda mi?"
+    - "En az 3 farkli bilgi/yargi cikariabilir mi?"
+    - "Hem dogrudan hem dolayli cikarimlar mumkun mu?"
+
+  correct_answer:
+    - "8-25 kelime tam cumle mi?"
+    - "Paragraftan cikarilamayacak bir yargi mi?"
+    - "Konuyla iliskili ve makul gorunuyor mu?"
+
+  distractors:
+    - "Her biri 8-25 kelime tam cumle mi?"
+    - "Hepsi paragraftan cikariabilecek yargilar mi?"
+    - "En az biri dolayli cikarim mi?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════

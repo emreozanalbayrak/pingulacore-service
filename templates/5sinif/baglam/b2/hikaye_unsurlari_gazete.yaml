@@ -1,0 +1,111 @@
+# Hikaye Unsurları — Gazete Haberi formatında
+# Hikaye bir gazete haberi olarak sunulur, unsur soruları sorulur
+
+meta:
+  id: "hikaye_unsurlari_gazete"
+  ad: "Hikâye Unsurları — Gazete Haberi"
+  sinif_seviyesi: 5
+  aciklama: "Hikâye gazete haberi formatında sunulur, unsur belirleme ve çıkarım soruları"
+  frequency: "Medium"
+
+context:
+  type: "hikaye_unsurlari_gazete"
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 120
+    word_count_max: 180
+    visual_format: "newspaper"
+    structure:
+      - "Gerçek bir GAZETE HABERİ yaz — DÜZ METİN olarak, HİKÂYE GİBİ DEĞİL"
+      - "İlk satır: Haberin başlığı. <b>Başlık</b> formatında yaz (kısa, dikkat çekici, gazete manşeti gibi)"
+      - "İkinci satır: Alt başlık (5N1K'nın özeti — kim, ne, nerede, ne zaman)"
+      - "Sonraki satırlar: HABER DİLİYLE yaz (3-5 cümle)"
+      - "KRİTİK — HABER DİLİ KURALLARI:"
+      - "  1) Ters piramit yapısı: En önemli bilgi BAŞTA, detaylar sonra"
+      - "  2) 3. tekil şahıs anlatım: 'Öğrenciler katıldı', 'Etkinlik düzenlendi' (hikâye anlatıcısı DEĞİL)"
+      - "  3) Nesnel ve resmî dil: 'heyecanla koştular' DEĞİL → 'etkinliğe yoğun ilgi gösterildi'"
+      - "  4) Alıntı kullanımı: En az 1 kişinin doğrudan sözü tırnak içinde verilmeli"
+      - "  5) Somut bilgiler: Tarih, yer adı, kurum adı, kişi sayısı gibi detaylar olmalı"
+      - "  6) 'Edinilen bilgilere göre...', 'Yapılan açıklamada...' gibi haber kalıpları kullan"
+      - "Hikâye unsurları (yer, zaman, kişiler, olay) haberin içinden çıkarılabilir olmalı"
+      - "NOT: Bu metin otomatik olarak gazete haberi formatına dönüştürülecektir"
+    kurallar:
+      - "5. sınıf seviyesinde, yerel bir olay/etkinlik haberi"
+      - "YASAK: Hikâye/öykü dili kullanmak — betimlemeler, iç monologlar, duygusal ifadeler"
+      - "Gazete haberi gerçekçi, nesnel ve resmî olmalı"
+      - "Haberde en az 2 kişi adı geçmeli (yetkili, öğrenci, öğretmen vb.)"
+      - "En az 1 doğrudan alıntı (tırnak içi söz) olmalı"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+    - slot: 1
+      type: "unsur_analiz"
+      soru_kokleri:
+        - "<b>Gazete haberindeki olay, yer, zaman ve kişi unsurları birlikte değerlendirildiğinde aşağıdakilerden hangisi doğrudur?</b>"
+        - "<b>Haberdeki bilgilere göre olayın unsurları hakkında aşağıdakilerden hangisi söylenebilir?</b>"
+        - "<b>Gazete haberindeki hikâye unsurları incelendiğinde aşağıdaki eşleştirmelerden hangisi doğrudur?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 6
+      word_count_max: 20
+      beceri:
+        katman: "KB2"
+        bilesenler: ["siniflandirma", "karsilastirma", "yorumlama"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+    - slot: 2
+      type: "unsur_cikarim"
+      soru_kokleri:
+        - "<b>Gazete haberine göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+        - "<b>Haberdeki unsurlar değerlendirildiğinde aşağıdaki çıkarımlardan hangisine <u>ulaşılamaz</u>?</b>"
+        - "<b>Gazete haberindeki bilgiler birlikte düşünüldüğünde aşağıdakilerden hangisi haberin içeriğiyle <u>çelişir</u>?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 6
+      word_count_max: 20
+      beceri:
+        katman: "KB3"
+        bilesenler: ["cikarim_yapma", "degerlendirme"]
+        surec_bileseni: "problemi_yapilandirma"
+
+header_template: "1-2. soruları aşağıdaki gazete haberine göre birbirinden bağımsız olarak cevaplayınız."
+
+format:
+  type: "llm_generated_html"
+  paragraph:
+    required: true
+    word_count_min: 120
+    word_count_max: 180
+    sentence_count_min: 4
+    sentence_count_max: 10
+  stem:
+    required: true
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 18
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+dogru_cevap:
+  tanim: "Gazete haberindeki hikâye unsurlarından doğru belirlenen veya çıkarılan bilgi"
+  kurallar:
+    - "HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer"
+    - "Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK"
+    - "BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ. Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı"
+    - "Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı"
+
+distractors:
+  stratejiler:
+    - ad: "YANLIS_UNSUR"
+      aciklama: "Hikâyede geçmeyen bir unsuru doğruymuş gibi sunma"
+    - ad: "UNSUR_KARISTIRMA"
+      aciklama: "Yer ile zamanı, kişi ile olayı karıştırma"
+    - ad: "KAPSAM_KAYDIRMA"
+      aciklama: "Doğru unsuru genişleterek veya daraltarak sunma"
+
+use_shared_strategies: false

@@ -1,0 +1,103 @@
+meta:
+  id: baglam_1q_siralama
+  ad: 1Q Baglam Siralama
+  sinif_seviyesi: 5
+  aciklama: Karisik sirali numarali cumlelerden dogru siralama bulma sorusu
+  kaynak: baglamb3sorukoku.md
+  frequency: Medium
+context:
+  type: baglam_senaryo_1q
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 60
+    word_count_max: 120
+    structure:
+    - Bir karakter (Turkce isimli) bir konu hakkinda karisik siradaki cumlelere ulasir (3-5 cumle senaryo)
+    - 4 cumle Roma rakamiyla (I. II. III. IV.) numaralandirilmis olarak verilir
+    - Cumleler <br> ile alt alta yazilir
+    - Cumleler anlamli bir paragraf olusturacak sekilde tasarlanmali ama karisik sirada sunulmali
+    - 'Senaryo: Karakter kutuphanede/okulda/evde bir bilim insaninin cumlelerine ulasir vb.'
+    kurallar:
+    - Senaryo 5. sinif seviyesinde, gunluk hayattan olmali
+    - Karakter ismi Turkce olmali (Elif, Mert, Zeynep, Can vb.)
+    - 4 cumle birbirine bagli, anlamli bir paragraf olusturmali
+    - Dogru siralama tek ve net olmali
+    - Turkce karakterler dogru kullanilmali (s, i, g, u, o, c)
+  questions:
+  - slot: 1
+    type: siralama
+    soru_kokleri:
+    - <b>...Karakter... numaralanmis cumlelerden anlamli bir paragraf olusturdugunda dogru siralama hangisi olur?</b>
+    - <b>...Karakter...'in olusturdugu anlamli metnin dogru siralamasi hangisidir?</b>
+    - <b>...Karakter...'in olusturdugu metinde hangisi bastan ikinci sirada yer alir?</b>
+    - <b>...Karakter...in olusturdugu anlamli metnin dogru siralamasi asagidakilerden hangisidir?</b>
+    options_style: roman_numeral_combination
+    word_count_min: 3
+    word_count_max: 12
+    beceri:
+      katman: KB2
+      bilesenler:
+      - yapilandirma
+      - siralama
+      surec_bileseni: bilgiyi_yapilandirma
+soru_kokleri:
+- <b>...Karakter... numaralanmis cumlelerden anlamli bir paragraf olusturdugunda dogru siralama hangisi olur?</b>
+- <b>...Karakter...'in olusturdugu anlamli metnin dogru siralamasi hangisidir?</b>
+- <b>...Karakter...'in olusturdugu metinde hangisi bastan ikinci sirada yer alir?</b>
+header_template: null
+format:
+  type: llm_generated_html
+  description: 1Q baglam senaryo uzerinden cumle siralama sorusu
+  paragraph:
+    required: true
+    numbered_sentences: true
+    word_count_min: 60
+    word_count_max: 120
+    sentence_count_min: 3
+    sentence_count_max: 8
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 3
+    word_count_max: 12
+    style: short_phrase
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Cumlelerin anlamli ve kuralli bir paragraf olusturacak dogru sirasi
+  kurallar:
+  - 'KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI'
+  - Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI
+  - Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil
+  - 'YASAK: Tablodaki değeri aynen şıkka yazmak (örn: ''yalıtımı azdır'' tabloda yazıyorsa şıkta aynen yazmamalı)'
+  - Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli
+  - Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı
+  - Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı
+  - Dogru secenek paragraftaki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI
+  - Dogru siralama mantiksal akis ve anlam butunlugu saglamali
+  - 'Siralama Roma rakami dizisi olarak verilmeli (orn: II - IV - I - III)'
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: ''teleskop'' → ''mercekli araç'' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: YAKIN_SIRALAMA
+    aciklama: Dogru siralamayla sadece 1 cumle yeri degisik olan siralama
+    ornek: Dogru sirada iki bitisik cumlenin yerini degistirme
+  - ad: TERS_AKIS
+    aciklama: Neden-sonuc veya giris-sonuc iliskisini ters cevirme
+    ornek: Sonuc cumlesini basa, giris cumlesini sona koyma
+  - ad: MANTIKLI_GORUNEN_YANLIS
+    aciklama: Ilk bakista makul gorunen ama anlam butunlugunu bozan siralama
+    ornek: Konu baglantisi olan ama kronolojik akisi bozan duzenleme
+use_shared_strategies: false

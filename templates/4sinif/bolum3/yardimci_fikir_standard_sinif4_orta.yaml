@@ -1,0 +1,118 @@
+# Kaynak: yardimci_fikir_standard_sinif4_zorluk_tam_eklenmis.yaml → zorluk_duzeyleri.orta
+# 4. sinif yardimci fikir standart — orta duzey
+
+meta:
+  id: "yardimci_fikir_standard_sinif4_orta"
+  ad: "4. Sinif - Yardimci Fikir Standart (Orta)"
+  sinif_seviyesi: 4
+  aciklama: "Orta duzey — 4. sinif kisa ifade yardimci fikir sorusu. Metnin yardimci dusuncesini en iyi yansitan kisa ifadeyi secme."
+  frequency: "High"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 4 kisa ifade secenegi (orta)"
+
+  paragraph:
+    required: true
+    word_count_min: 69
+    word_count_max: 80
+    background_color: "#f8f0e0"
+    sentence_count_min: 5
+    sentence_count_max: 6
+    stil: "bilgilendirici"
+    kurallar:
+      - "Paragrafta anlatilan 3-4 yon/ozellik bulunmali."
+      - "Metinde deginilmeyen yon/ozellik konuya yakin ve makul olmali."
+      - "Yanlis secenekler metindeki ifadelerin es anlamli veya yeniden kurulmus halleri olabilir."
+      - "Dogru cevap, yalnizca yuzeysel kelime eslestirmesiyle degil paragraf butunuyle ayirt edilmelidir."
+      - "Metin uzunlugu orta bantta tutulmali."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+      - "Dis bilgi gerektirmemelidir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 5
+    word_count_max: 10
+    style: "short_phrase"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Secenekler kisa ifade biciminde olmali."
+      - "Dogru secenek metnin bir yardimci fikrini dogru yansitmali."
+      - "Celdirici secenekler ana fikri veya alakasiz konulari yansitmali."
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metne göre aşağıdakilerden hangisi söylenebilir?</b>"
+  # KULLANILDI: - "<b>Bu metinden hareketle aşağıdakilerden hangisine ulaşılabilir?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metne göre doğrudur?</b>"
+  - "<b>Bu metinden aşağıdakilerden hangisi çıkarılabilir?</b>"
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metnin ana fikrini destekleyen yardimci fikri yansitan kisa ifade"
+  kurallar:
+    - "Dogru secenek metindeki bir yardimci fikri ifade etmeli."
+    - "Ana fikri degil, yardimci fikri yansitmali."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+
+celdirici_stratejileri:
+  - ad: "ES_ANLAMLI_MASKELEME"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metindeki yardımcı fikri eş anlamlı kelimelerle yeniden sunarak yanıltma"
+    nasil_olusturulur: |
+      Metinde geçen bir yardımcı fikri eş anlamlı kelimeler ve farklı ifade biçimiyle sun.
+      Orta seviyede bu seçenek makul görünmeli ama metindeki gerçek yönden biraz kaymalı.
+      Yanlış seçenekler metindeki ifadelerin eş anlamlı veya yeniden kurulmuş halleri olabilir.
+    kategori: "semantic"
+
+  - ad: "PARCALI_YANLIS"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metindeki iki bilgiyi karıştırarak oluşturulan yarı doğru seçenek"
+    nasil_olusturulur: |
+      Paragrafta geçen iki farklı bilgiyi birleştirerek ya da birisini eksik aktararak oluşturulan bir ifade sun.
+      Orta seviyede ilk bakışta doğru gibi görünmeli ama dikkatli okuyunca hatalı çıkmalı.
+    kategori: "cognitive"
+
+  - ad: "DOGRUDAN_CIKARILAMAYAN_MAKUL"
+    bilisssel_hata_kategorisi: "dis_bilgi_karisimi"
+    aciklama: "Konuyla ilgili ama metinde yer almayan, makul görünen yardımcı fikir"
+    nasil_olusturulur: |
+      Metinde açıkça yer almayan ama konuyla gerçekten ilgili olan bir yardımcı fikir oluştur.
+      Orta seviyede bu seçenek makul görünmeli — öğrenci metni dikkatli taramalıdır.
+    kategori: "content"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cikarim_yapma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

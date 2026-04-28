@@ -1,0 +1,124 @@
+# Pattern: ["dogrudan_detay", "uygun_bilgi_sectirme", "basit_neden_sonuc"] (referans satir 483)
+# Zor duzey, 3 soru: dogrudan_detay + uygun_bilgi_sectirme + basit_neden_sonuc
+
+meta:
+  id: metin_inceleme_sinif2_zor_detay_uygunbilgi_neden_sonuc_3q
+  ad: "2. Sinif - Metin Inceleme (Zor) - Detay + Uygun Bilgi + Basit Neden-Sonuc"
+  sinif_seviyesi: 2
+  aciklama: "Zor baglam — 3 soru: dogrudan_detay + uygun_bilgi_sectirme + basit_neden_sonuc"
+  frequency: "Medium"
+
+context:
+  type: metin_inceleme_sinif2_zor_detay_uygunbilgi_neden_sonuc_3q
+  question_count: 3
+  question_count_min: 3
+  question_count_max: 3
+  generation:
+    word_count_min: 66
+    word_count_max: 92
+    image_type: "illustration"
+    structure:
+      - "6-7 kisa cumle, tek baskin konu/olay etrafinda."
+      - "Slot 1 icin metinde acik detay bilgi bulunmali."
+      - "Slot 2 icin metnin geneline uygun bilginin secilebilmesi gerekli."
+      - "Slot 3 BASIT NEDEN-SONUC icin metinde ACIK bir neden-sonuc iliskisi BULUNMALIDIR."
+      - "Ornek: 'cunku', 'bu yuzden', 'bundan dolayi' gibi acik baglayicilarla veya dogrudan anlatilan."
+      - "Neden-sonuc iliskisi tek adimli ve acik olmali, cok asamali yorum gerektirmemeli."
+    kurallar:
+      - "2. sinif duzeyinde, sade ama zengin metin."
+      - "Karakter ismi Turkce olmali."
+      - "Tek baskin konu, dis bilgi gerektirmeyen icerik."
+      - "Zor duzeyde bile yorum/analiz YASAK."
+      - "Turkce karakterler dogru kullanilmali."
+
+      - "Tablo/grafik/sayi listesi KULLANMA — sadece akici Turkce anlatim. Gorsel ayrica illustrasyon olarak uretilecek."
+  questions:
+    - slot: 1
+      type: dogrudan_detay
+      soru_kokleri:
+        - "<b>Bu metne gore asagidakilerden hangisi dogrudur?</b>"
+        - "<b>Bu metne gore asagidakilerden hangisi soylenebilir?</b>"
+        - "<b>Asagidakilerden hangisi metinde verilen bilgilerden biridir?</b>"
+        - "<b>Bu metne gore asagidakilerden hangisi yanlistir?</b>"
+      options_style: complete_sentence
+      word_count_min: 2
+      word_count_max: 8
+      beceri:
+        katman: KB1
+        bilesenler: [acik_bilgi_okuma]
+        surec_bileseni: bilgiyi_okuma
+
+    - slot: 2
+      type: uygun_bilgi_sectirme
+      soru_kokleri:
+        - "<b>Metne gore asagidakilerden hangisi uygundur?</b>"
+        - "<b>Bu metne gore <u>en uygun</u> bilgi hangisidir?</b>"
+        - "<b>Asagidakilerden hangisi metindeki bilgilerle uyumludur?</b>"
+      options_style: complete_sentence
+      word_count_min: 2
+      word_count_max: 8
+      beceri:
+        katman: KB1
+        bilesenler: [uygun_bilgi_sectirme]
+        surec_bileseni: metni_anlama
+
+    - slot: 3
+      type: basit_neden_sonuc
+      soru_kokleri:
+        - "<b>Bu olay neden olmustur?</b>"
+        - "<b>Asagidakilerden hangisi bu durumun nedeni olabilir?</b>"
+        - "<b>Metne gore bu olaydan sonra ne olmustur?</b>"
+      options_style: complete_sentence
+      word_count_min: 2
+      word_count_max: 8
+      beceri:
+        katman: KB2
+        bilesenler: [neden_sonuc]
+        surec_bileseni: metni_yorumlama
+
+header_template: "1-3. sorulari asagidaki metne gore cevaplayiniz."
+
+format:
+  type: llm_generated_html
+  description: "3 baglam sorusu (zor): detay + uygun bilgi + basit neden-sonuc"
+  paragraph:
+    required: true
+    word_count_min: 66
+    word_count_max: 92
+    sentence_count_min: 6
+    sentence_count_max: 7
+    stil: "oykusel"
+    background_color: "#fce8e8"
+  stem:
+    required: true
+  options:
+    count: 3
+    labels: [A, B, C]
+    word_count_min: 2
+    word_count_max: 8
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+
+dogru_cevap:
+  tanim: "Metinden acikca cikarilabilen dogru cevap"
+  kurallar:
+    - "Slot 1: dogru cevap metindeki acik bilgiye dayanmali."
+    - "Slot 2: dogru cevap metnin geneline uygun olmali."
+    - "Slot 3: neden-sonuc iliskisi metinde acik olmali, tek adimli yorum yeterli olmali."
+    - "Yanlis secenekler metne yakin ve makul gorunmeli (zor duzey)."
+distractors:
+  stratejiler:
+    - ad: YAKIN_CELDIRICI
+      aciklama: "Dogru cevaba cok yakin ama dikkatli okuyunca elenebilen secenek"
+    - ad: METNE_YAKIN_AMA_YANLIS
+      aciklama: "Metne yakin gorunur ama acik bilgiye uymayan secenek"
+    - ad: TERS_NEDEN_SONUC
+      aciklama: "Neden-sonuc iliskisini ters kuran secenek"
+
+use_shared_strategies: false
+
+beceri:
+  katman: KB2
+  bilesenler: [baglam_okuma, neden_sonuc]
+  surec_bileseni: metni_yorumlama

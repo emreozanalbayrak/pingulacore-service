@@ -12,4 +12,23 @@ dependencies = [
     "pyyaml>=6.0.3",
     "sqlalchemy>=2.0.49",
     "uvicorn>=0.44.0",
+    # Vendored legacy pipelines (geometry pomodoro + turkce agentic)
+    "langchain",
+    "langchain-core",
+    "langchain-google-genai",
+    "langgraph",
+    "google-genai",
+    "pydantic",
+    "python-dotenv",
+    "pymupdf",
+    "playwright",
+    "pillow",
+    "img2pdf",
+    "pdf2image",
+    "pyphen",
 ]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*", "pomodoro*", "utils*", "src*", "agentic*"]
+exclude = ["frontend*", "legacy_runners*", "ortak*", "templates*", "meb_books*", "data*", "configs*", "konular*"]

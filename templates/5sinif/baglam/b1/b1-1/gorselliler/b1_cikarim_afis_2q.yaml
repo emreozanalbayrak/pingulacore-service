@@ -1,0 +1,108 @@
+# B1.1 — 2Q Afiş (Çıkarım + Sonuç)
+# Görsel: afis (AI afiş görseli üretilecek)
+# Soru Tipleri: Çıkarım + Sonuç — B1.1 soru kökleri
+
+meta:
+  id: "b1_cikarim_afis_2q"
+  ad: "2Q Afiş — Çıkarım/Sonuç"
+  sinif_seviyesi: 5
+  aciklama: "Senaryo + AI afiş görseli üzerinden çıkarım ve sonuç soruları"
+  kaynak: "baglamb1sorukoku.md"
+  frequency: "Medium"
+
+context:
+  type: "b1_cikarim_afis_2q"
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 80
+    word_count_max: 140
+    image_type: "afis"
+    structure:
+      - "KONUYA GİRİŞ yapan kısa bir senaryo oluştur (4-6 cümle)"
+      - "Senaryo konunun GENEL ÇERÇEVESİNİ çizsin — detaylı bilgileri afiş görseli verecek"
+      - "Senaryoda bir veya birkaç karakter olmalı (isimli)"
+      - "KRİTİK — SENARYO AFİŞİ ANLATMAMALI: Senaryo afişin içeriğini, görselini veya detaylarını TANIMLAMAZ"
+      - "YASAK: 'Aşağıdaki afiş...', 'İnfografikte görüldüğü gibi...' gibi görsele referans veren ifadeler"
+      - "YASAK: HTML tablosu (<table>) EKLEME — sadece düz metin yaz"
+      - "YASAK: Metne BAŞLIK koyma — ne konu başlığı ne numara"
+    kurallar:
+      - "KRİTİK — BAŞLIK YASAĞI: Metin ve görsellere konunun ana fikrini veren başlık KOYMA! Nötr başlık kullan"
+      - "5. sınıf seviyesinde, anlaşılır senaryo"
+      - "Senaryo konuya GİRİŞ yapmalı — afişi ANLATMAMALI"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+    - slot: 1
+      type: "cikarim"
+      soru_kokleri:
+        - "<b>Bu görselde anlatılan durumun temel nedeni aşağıdakilerden hangisidir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 5
+      word_count_max: 18
+      beceri:
+        katman: "KB3"
+        bilesenler: ["cikarim_yapma", "neden_sonuc"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+    - slot: 2
+      type: "sonuc"
+      soru_kokleri:
+        - "<b>Bu bilgilere göre aşağıdakilerden hangisi söylenebilir?</b>"
+        - "<b>…Özne…'nin ulaştığı bilgilerle ilgili aşağıdakilerden hangisi söylenebilir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 5
+      word_count_max: 20
+      beceri:
+        katman: "KB3"
+        bilesenler: ["cikarim_yapma", "degerlendirme"]
+        surec_bileseni: "problemi_yapilandirma"
+
+header_template: "1-2. soruları aşağıdaki bilgilere göre birbirinden bağımsız olarak cevaplayınız."
+
+format:
+  type: "llm_generated_html"
+  description: "2Q afiş görseli üzerinden çıkarım ve sonuç"
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 140
+    sentence_count_min: 4
+    sentence_count_max: 6
+  stem:
+    required: true
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 5
+    word_count_max: 20
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+dogru_cevap:
+  tanim: "Afiş ve senaryodan doğru çıkarılan neden veya sonuç"
+  kurallar:
+    - "KRİTİK: Doğru cevap metindeki tek bir cümleden direkt okunaMAMALI"
+    - "Öğrenci doğru cevaba ulaşmak için senaryoyu ve afiş görselini birlikte değerlendirmeli"
+    - "Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil"
+    - "HATALI YAKLASIM: Metinde geçen bir cümlenin AYNEN seçeneklerde kullanılması YASAK"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin ANLAMCA ÖZDESİ olmalı"
+    - "En az %40 kelime farklılığı olmalı"
+    - "BİLİMSEL TERİM KORUMASI: Teknik terimler değiştirilmemeli"
+    - "Doğru şık en uzun şık OLMAMALI"
+
+distractors:
+  stratejiler:
+    - ad: "NEDEN_SONUC_KARISTIRMA"
+      aciklama: "Durumun nedenini sonuçla karıştırma"
+      ornek: "Sonucu neden, nedeni sonuç olarak gösterme"
+    - ad: "DETAY_ODAK"
+      aciklama: "Afişin bir detayını genel sonuç gibi sunma"
+      ornek: "Yan bir bilgiyi temel çıkarım olarak gösterme"
+    - ad: "GENELLEME_HATASI"
+      aciklama: "Verilen bilgilerden çıkarılamayacak genelleme yapma"
+      ornek: "Metnin kapsamı dışında bir yargıya ulaşma"
+
+use_shared_strategies: false

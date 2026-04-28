@@ -1,0 +1,197 @@
+# Kaynak: 5sinif/capture2/metinde_karakter_karsilastirma.yaml — 4. sinif icin adapte edildi (sinif_seviyesi 5->4)
+# templates/capture2/metinde_karakter_karsilastirma.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Metinde Karakter
+#
+# COKLU KARSILASTIRMA FORMATI (tum karakter sorularinin ~%15'i)
+# Birden fazla karakterin ozelliklerini tablo/liste halinde belirleme
+# Secenekler YAPISAL LISTE formatindadir (Ornek: "Arif: Bencil, Guven: Adaletli")
+
+meta:
+  id: "metinde_karakter_karsilastirma_sinif4"
+  ad: "Metinde Karakter (Çoklu Karşılaştırma)"
+  sinif_seviyesi: 4
+  aciklama: "Metindeki birden fazla karakterin özelliklerini tablo/liste halinde belirleme"
+  kaynak: "data/metinde_karakter.pdf"
+  frequency: "Low (~15% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Çok karakterli paragraf + soru kökü + tablo seçenekler"
+
+  paragraph:
+    required: true
+    word_count_min: 70
+    word_count_max: 120
+    sentence_count_min: 4
+    sentence_count_max: 8
+    stil: "oykuleyici"
+    kurallar:
+      - "En az 2 veya 3 farklı karakterden bahsedilmeli (Örn: Arif, Güven, Nagehan)."
+      - "Her karakterin belirgin ve farklı bir özelliği olmalı (Biri bencil, biri adaletli, biri merhametli)."
+      - "Karakterlerin özellikleri doğrudan söylenmemeli, davranışlar üzerinden sezdirilmeli."
+      - "Her karakter için en az 1-2 cümle ayrılmalı."
+      - "Karakterler isim ile tanıtılmalı."
+      - "Paragrafta konuyla ilgili AÇIKLAMA, TANIM veya EK BİLGİ verme! Paragraf SADECE hikâyeyi/olayı anlatsın"
+      - "YASAK: 'Duyular insanın çevresini algılamasını sağlar', 'Karakter özellikleri kişinin davranışlarını belirler' gibi ders kitabı açıklamaları"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 8
+    word_count_max: 20
+    style: "structured_list"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 2 varyasyon)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metinde bahsedilen kişiler için aşağıdakilerden hangisi söylenebilir?</b>"
+  - "<b>Bu metindeki karakterlerin özellikleri aşağıdakilerin hangisinde doğru verilmiştir?</b>"
+  - "<b>Bu metne göre kişilerin karakter özellikleri aşağıdakilerin hangisinde doğru eşleştirilmiştir?</b>"
+  - "<b>Yukarıdaki metinde bahsedilen kişilerin özellikleri ile ilgili aşağıdakilerden hangisi doğrudur?</b>"
+  - "<b>Bu metindeki kişiler ve özellikleri dikkate alındığında aşağıdakilerden hangisi söylenebilir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Tüm karakterlerin özelliklerinin doğru eşleştiği seçenek"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Her karakterin ozelligi metindeki davranislariyla ortusmeli"
+    - "Tum karakter-ozellik eslestirmeleri ayni anda dogru olmali"
+    - "Secenekte karakterler ve ozellikleri yapisal formatta sunulmali"
+    - "Format: 'Karakter1: Ozellik1<br>Karakter2: Ozellik2<br>Karakter3: Ozellik3' (her karakter AYRI SATIRDA, <br> ile ayir, virgul ile AYIRMA!)"
+  ornekler:
+    - paragraf: "Arif her zaman kendi çıkarını düşünür, kimseyle paylaşmazdı. Güven ise sınıfta herkese eşit davranır, kimseyi kayırmazdı. Nagehan yaralı bir kediyi bile tedavi ettirmekten geri durmazdı."
+      dogru: "Arif: Bencil<br>Güven: Adaletli<br>Nagehan: Merhametli"
+      neden: "Arif paylasmazdı (bencil), Guven esit davranirdi (adaletli), Nagehan yarali kediye yardim etti (merhametli)"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI BILGILERI
+# ═══════════════════════════════════════════════════════════════
+# Celdiriciler karakter-ozellik eslestirmelerinde hata iceren seceneklerdir
+# En az bir karakterin ozelligi yanlis atanmis olmali
+
+distractors:
+  notlar:
+    - "En az bir karakterin özelliği yanlış atanmış olmalı (Örn: Arif: Adaletli yerine Arif: Bencil)"
+    - "Özellikler karıştırılabilir (Arif'in özelliği Güven'e, Güven'inki Nagehan'a atanabilir)"
+    - "Bazı çeldiricilerde 2 karakter doğru, 1 yanlış olabilir (ince hata)"
+    - "Tüm seçenekler aynı yapısal formatta olmalı"
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["karsilastirma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select 2-3 characters with distinct traits"
+      details: |
+        2 veya 3 karakter sec, her birine farkli bir ozellik ata:
+        - Ornek: Arif (Bencil), Guven (Adaletli), Nagehan (Merhametli)
+        - Ozellikler birbirinden acikca farkli olmali
+        - Benzer/yakin ozelliklerden kacinilmali
+
+    - step: 2
+      action: "Generate multi-character paragraph (70-120 words)"
+      details: |
+        Paragrafta:
+        - Her karakter ismiyle tanitilmali
+        - Her karakter icin en az 1-2 cumle ayrilmali
+        - Ozellikler dogrudan soylenmemeli, davranislar uzerinden sezdirilmeli
+        - Ornek: Bencil icin "Kimseyle paylasmazdi", Adaletli icin "Herkese esit davranirdi"
+
+    - step: 3
+      action: "Set correct answer = all correct matches"
+      details: |
+        Dogru cevap tum karakter-ozellik eslestirmelerini dogru icermeli:
+        Format: "Karakter1: Ozellik1<br>Karakter2: Ozellik2<br>Karakter3: Ozellik3" (her karakter ayri satirda)
+
+    - step: 4
+      action: "Generate 3 distractors with incorrect matches"
+      details: |
+        3 yanlis eslestirme olustur:
+        - Celdirici 1: Ozellikleri karistir (Arif: Adaletli, Guven: Bencil)
+        - Celdirici 2: Bir ozelligi yanlis at (Arif: Bencil, Guven: Merhametli, Nagehan: Adaletli)
+        - Celdirici 3: Tum eslestirmeleri karistir
+        - Her secenekte tum karakterler yer almali
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR (Sayfa 117, 120)
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 117
+    konu: "Uc karakter karsilastirma"
+    paragraf: "Arif her zaman kendi çıkarını düşünür, kimseyle paylaşmazdı. Güven ise sınıfta herkese eşit davranır, kimseyi kayırmazdı. Nagehan yaralı bir kediyi bile tedavi ettirmekten geri durmazdı."
+    dogru_cevap: "Arif: Bencil<br>Güven: Adaletli<br>Nagehan: Merhametli"
+    secenekler:
+      A: "Arif: Bencil<br>Güven: Adaletli<br>Nagehan: Merhametli"
+      B: "Arif: Adaletli<br>Güven: Merhametli<br>Nagehan: Bencil"
+      C: "Arif: Merhametli<br>Güven: Bencil<br>Nagehan: Adaletli"
+      D: "Arif: Bencil<br>Güven: Merhametli<br>Nagehan: Adaletli"
+    neden: "Arif kimseyle paylasmaz (bencil), Guven herkese esit davranir (adaletli), Nagehan yarali kediye yardim eder (merhametli)"
+
+  - sayfa: 120
+    konu: "Iki karakter karsilastirma"
+    paragraf: "Elif her sabah erkenden kalkıp odasını toplardı. Defterlerini düzenler, çantasını hazırlardı. Mert ise her sabah annesinin uyarmasına rağmen geç kalırdı. Ödevlerini hep son güne bırakırdı."
+    dogru_cevap: "Elif: Düzenli<br>Mert: Sorumsuz"
+    secenekler:
+      A: "Elif: Düzenli<br>Mert: Sorumsuz"
+      B: "Elif: Titiz<br>Mert: Tembel"
+      C: "Elif: Sorumsuz<br>Mert: Düzenli"
+      D: "Elif: Sabırlı<br>Mert: Sabırsız"
+    neden: "Elif erkenden kalkip odasini toplar (duzenli), Mert gec kalir ve odevleri erteler (sorumsuz)"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 70-120 arasinda mi?"
+    - "Cumle sayisi 4-8 arasinda mi?"
+    - "Oykuleyici bir uslupla mi yazilmis?"
+    - "En az 2-3 farkli karakter var mi?"
+    - "Her karakterin farkli ve belirgin bir ozelligi var mi?"
+    - "Ozellikler dogrudan soylenmemis mi?"
+    - "Davranislar uzerinden sezdirilmis mi?"
+    - "Her karakter isimle tanitilmis mi?"
+
+  correct_answer:
+    - "8-20 kelime arasinda yapisal liste mi?"
+    - "Tum karakter-ozellik eslestirmeleri dogru mu?"
+    - "Paragraftaki davranislarla ortusuyur mu?"
+    - "'Karakter: Ozellik' formatinda mi?"
+
+  distractors:
+    - "Her celdiricilde en az bir eslestirme yanlis mi?"
+    - "Celdiriciler 8-20 kelime arasinda mi?"
+    - "Tum secenekler ayni yapisal formatta mi?"
+    - "Tum karakterler her secenekte yer aliyor mu?"
+    - "Hatalar makul ve ince mi (tamamen sacma degil)?"

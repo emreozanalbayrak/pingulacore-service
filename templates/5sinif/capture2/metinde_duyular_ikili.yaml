@@ -1,0 +1,191 @@
+# templates/capture2/metinde_duyular_ikili.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Bolum 2 - Metinde Duyular
+#
+# IKILI/UCLU GRUP DUYULAR FORMATI (tum duyu sorularinin ~%25'i)
+# Betimleyici paragraf verilir, ogrenci metinde yer alan duyulari gruplar halinde belirler
+#
+# Secenekler duyu gruplari seklindedir: "Gorme - Isitme" veya "Koklama - Tatma - Dokunma"
+# Dogru cevap = Paragraftaki duyularin tam listesi
+
+meta:
+  id: "metinde_duyular_ikili"
+  ad: "Metinde Duyular (İkili/Üçlü Gruplar)"
+  sinif_seviyesi: 5
+  aciklama: "Metinde yer alan duyuları gruplar halinde belirleme"
+  kaynak: "data/metinde_duyular.pdf"
+  frequency: "Medium (~25% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Paragraf + soru kökü + grup seçenekler"
+
+  paragraph:
+    required: true
+    word_count_min: 50
+    word_count_max: 100
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "betimleyici"
+    kurallar:
+      - "Metin belirgin şekilde 2 veya 3 duyuya odaklanmalı."
+      - "Kullanilan her duyu icin en az 1 net ifade olmali."
+      - "Kullanilmayan duyular hicbir sekilde ima edilmemeli."
+      - "Betimleyici/tasvirci anlatim kullanilmali."
+      - "Paragrafta konuyla ilgili AÇIKLAMA, TANIM veya EK BİLGİ verme! Paragraf SADECE hikâyeyi/olayı anlatsın"
+      - "YASAK: 'Duyular insanın çevresini algılamasını sağlar', 'Karakter özellikleri kişinin davranışlarını belirler' gibi ders kitabı açıklamaları"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 10
+    style: "variable"
+    correct_count: 1
+    kurallar:
+      - "Duyular için SADECE basit, bilinen kelimeleri kullan: görme, işitme, dokunma, tatma, koklama"
+      - "YASAK: 'temas' (dokunma yerine), 'görme yetisi' (görme yerine), 'işitsel algı' (işitme yerine) gibi karmaşık ifadeler"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 3 varyasyon, Sayfa 103-104)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metinde aşağıdaki duyulardan hangilerine yer verilmiştir?</b>"
+  - "<b>Bu metinde aşağıdaki duyulardan hangileri ile ilgili ayrıntılara yer verilmiştir?</b>"
+  - "<b>Bu metinde; I. Görme II. İşitme III. Koklama duyularından hangilerine ait ayrıntılara yer verilmiştir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metindeki duyuların tam listesi"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Paragrafta acikca gecen tum duyulari icerir"
+    - "Paragrafta gecmeyen hicbir duyu dahil edilmez"
+    - "Duyu grubu ' - ' ile ayrilir (Ornek: 'Görme - İşitme')"
+    - "Gruptaki duyular paragraftaki duyu ifadeleriyle birebir uyusmali"
+  ornekler:
+    - paragraf: "Kuşların ötüşü kulağıma geliyordu. Gökyüzündeki bulutlar pamuk gibi beyazdı."
+      dogru: "Görme - İşitme"
+      neden: "Gorme (beyaz bulutlar) ve isitme (kuslarin otusu) var"
+    - paragraf: "Mis gibi çiçek kokusu burnuma geldi. Yaprakların hışırtısı duyuluyordu. Sıcak güneş yüzümü yakıyordu."
+      dogru: "İşitme - Koklama - Dokunma"
+      neden: "Isitme (hisirti), koklama (cicek kokusu), dokunma (sicak gunes) var"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM:
+# - Dogru duyu grubunu belirler (dogru cevap)
+# - 3 yanlis duyu grubu olusturur (celdiriciler)
+# Celdiriciler: Eksik duyu, fazla duyu, veya yanlis duyu iceren gruplar
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siniflandirma", "karsilastirma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic suitable for sensory description"
+      details: "Betimleyici anlatima uygun bir konu sec (doga, mekan, etkinlik vb.)"
+
+    - step: 2
+      action: "Choose 2 or 3 senses to include"
+      details: |
+        5 duyudan 2 veya 3 tanesini sec:
+        - Gorme, Isitme, Koklama, Dokunma, Tatma
+        - Secilen duyular paragrafta acikca islenecek
+        - Secilenler disindaki duyular paragrafta hic gecmemeli
+
+    - step: 3
+      action: "Generate descriptive paragraph (50-100 words)"
+      details: |
+        Paragrafta:
+        - Secilen 2-3 duyu icin NET ifadeler olmali
+        - Her duyu icin en az 1 acik ornek olmali
+        - Kullanilmayan duyular hicbir sekilde ima edilmemeli
+
+    - step: 4
+      action: "Set correct answer = included senses group"
+      details: |
+        Dogru cevap, paragraftaki duyularin grubu:
+        - Ornek: "Görme - İşitme" veya "Koklama - Tatma - Dokunma"
+        - ' - ' ile ayrilmis
+
+    - step: 5
+      action: "Generate 3 incorrect sense groups (distractors)"
+      details: |
+        3 yanlis duyu grubu olustur:
+        - 1x eksik duyu (dogru gruptaki bir duyuyu cikar)
+        - 1x fazla duyu (paragrafta olmayan bir duyu ekle)
+        - 1x yanlis duyu (bir duyuyu baska biriyle degistir)
+
+    - step: 6
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR (Sayfa 103-104)
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 103
+    konu: "Doga tasviri"
+    paragraf: "Kuşların ötüşü kulağıma geliyordu. Gökyüzündeki bulutlar pamuk gibi beyazdı. Rüzgâr yüzümü okşuyordu."
+    dogru_cevap: "Görme - İşitme - Dokunma"
+    celdirici_1: "Görme - İşitme"
+    celdirici_2: "Görme - İşitme - Koklama"
+    celdirici_3: "İşitme - Dokunma"
+    neden: "Gorme (beyaz bulutlar), isitme (kuslarin otusu), dokunma (ruzgar yuzumu) var"
+
+  - sayfa: 104
+    konu: "Cicek bahcesi"
+    paragraf: "Mis gibi çiçek kokusu burnuma geldi. Yaprakların hışırtısı duyuluyordu."
+    dogru_cevap: "İşitme - Koklama"
+    celdirici_1: "Görme - Koklama"
+    celdirici_2: "İşitme - Koklama - Dokunma"
+    celdirici_3: "Görme - İşitme - Koklama"
+    neden: "Isitme (hisirti) ve koklama (cicek kokusu) var, gorme ve dokunma yok"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 50-100 arasinda mi?"
+    - "Belirgin sekilde 2 veya 3 duyuya mi odaklanmis?"
+    - "Her duyu icin en az 1 net ifade var mi?"
+    - "Kullanilmayan duyular ima edilmemis mi?"
+
+  correct_answer:
+    - "Paragraftaki tum duyulari icerir mi?"
+    - "Paragrafta olmayan duyu dahil edilmemis mi?"
+    - "Duyu gruplari ' - ' ile ayrilmis mi?"
+    - "2-10 kelime arasinda mi?"
+
+  distractors:
+    - "Her celdirici farkli bir hata turu mu? (eksik/fazla/yanlis)"
+    - "Celdiriciler makul gorunuyor mu?"
+    - "Tum secenekler ayni gramer yapida mi? (duyu grubu)"
+    - "Hicbiri dogru cevapla ayni degil mi?"

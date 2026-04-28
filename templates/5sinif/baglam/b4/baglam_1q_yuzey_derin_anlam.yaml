@@ -1,0 +1,128 @@
+# templates/baglam/baglam_1q_yuzey_derin_anlam.yaml
+# Baglam Tipi: 1Q Yuzey/Derin Anlam (Bolum 4.1)
+# Soru Sayisi: 1
+# Kaynak: baglamb4sorukoku.md
+# Soru Tipleri: Nitelik/degerlendirme/ortak nokta cikarimi
+
+meta:
+  id: "baglam_1q_yuzey_derin_anlam"
+  ad: "1Q Baglam Yuzey Derin Anlam"
+  sinif_seviyesi: 5
+  aciklama: "Senaryo uzerinden derin anlam, nitelik belirleme veya ortak nokta cikarimi sorusu"
+  kaynak: "baglamb4sorukoku.md"
+  frequency: "Medium"
+
+# ======================================================================
+# BAGLAM KONFIGURASYONU
+# ======================================================================
+
+context:
+  type: "baglam_senaryo_1q"
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 60
+    word_count_max: 120
+    structure:
+      - "Bir karakter (Turkce isimli) gunluk hayattan bir durumla karsilasir (3-5 cumle)"
+      - "Karakter bir olay, bilgi veya durum hakkinda gozlem yapar veya veri toplar"
+      - "Senaryo somut, 5. sinif seviyesinde ve anlasilir olmali"
+      - "Yuzeysel anlamin otesinde derin bir cikarim yapilabilir olmali"
+      - "Veya birden fazla bilginin ortak noktasi cikarilabilir olmali"
+    kurallar:
+      - "Senaryo 5. sinif seviyesinde, gunluk hayattan olmali"
+      - "Karakter ismi Turkce olmali (Elif, Mert, Zeynep, Can vb.)"
+      - "Derin anlam veya ortak nokta cikarimina uygun bir icerik olmali"
+      - "Turkce karakterler dogru kullanilmali (s, i, g, u, o, c)"
+
+  questions:
+    - slot: 1
+      type: "yuzey_derin_anlam"
+      soru_kokleri:
+        - "<b>...Karakter...'in ...Eylem...'i dikkate alindiginda hangisi bir niteligini tanimlar?</b>"
+        - "<b>...Karakter...'in elde ettigi verilerden yola cikarak yaptigi degerlendirmelerden hangisi dogrudur?</b>"
+        - "<b>...Karakter...'nin buldugu bu bilgilerin ortak noktasi hangisidir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 8
+      word_count_max: 22
+      beceri:
+        katman: "KB3"
+        bilesenler: ["cikarim_yapma", "degerlendirme", "sentezleme"]
+        surec_bileseni: "bilgiyi_yorumlama"
+
+soru_kokleri:
+  - "<b>...Karakter...'in ...Eylem...'i dikkate alindiginda hangisi bir niteligini tanimlar?</b>"
+  - "<b>...Karakter...'in elde ettigi verilerden yola cikarak yaptigi degerlendirmelerden hangisi dogrudur?</b>"
+  - "<b>...Karakter...'nin buldugu bu bilgilerin ortak noktasi hangisidir?</b>"
+
+header_template: null
+
+# ======================================================================
+# FORMAT
+# ======================================================================
+
+format:
+  type: "llm_generated_html"
+  description: "1Q baglam senaryo uzerinden yuzey/derin anlam cikarimi sorusu"
+
+  paragraph:
+    required: true
+    word_count_min: 60
+    word_count_max: 120
+    sentence_count_min: 3
+    sentence_count_max: 8
+
+  stem:
+    required: true
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 8
+    word_count_max: 22
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+# ======================================================================
+# DOGRU CEVAP KURALLARI
+# ======================================================================
+
+dogru_cevap:
+  tanim: "Senaryodaki verilerin derin analizi veya ortak noktasi"
+  kurallar:
+    - "KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI"
+    - "Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI"
+    - "Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil"
+    - "YASAK: Tablodaki değeri aynen şıkka yazmak (örn: 'yalıtımı azdır' tabloda yazıyorsa şıkta aynen yazmamalı)"
+    - "Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli"
+
+    - "Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı"
+    - "Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı"
+    - "Dogru secenek paragraftaki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Dogru cevap yuzeysel tekrar degil, derin bir cikarim/nitelik tanimlamasi olmali"
+    - "Metindeki bilgilerin sentezi veya ust duzey yorumu olmali"
+    - "HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer"
+    - "Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK"
+    - "BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: 'teleskop' → 'mercekli araç' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı"
+
+# ======================================================================
+# CELDIRICI STRATEJILERI
+# ======================================================================
+
+distractors:
+  stratejiler:
+    - ad: "YUZEY_TEKRAR"
+      aciklama: "Metindeki bir ifadeyi yuzeysel olarak tekrarlama, derin anlam cikarimi yapmama"
+      ornek: "Metinden dogrudan alinmis bir cumleyi hafifce degistirip sunma"
+    - ad: "YANLIS_NITELEME"
+      aciklama: "Durumu/olayi yanlis bir nitelikle tanimlama"
+      ornek: "Olumlu bir gelismeyi olumsuz olarak niteleme veya tam tersi"
+    - ad: "KISMI_ORTAK_NOKTA"
+      aciklama: "Bilgilerin sadece bir kismiyla ortusen, tumunu kapsamayan cikarim"
+      ornek: "Iki bilginin ortak noktasini bulurken ucuncuyu disarida birakma"
+
+use_shared_strategies: false

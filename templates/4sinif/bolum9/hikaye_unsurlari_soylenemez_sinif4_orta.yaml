@@ -1,0 +1,102 @@
+# Kaynak: hikaye_unsurlari_soylenemez_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.orta
+# 4. sinif hikaye unsurlari soylenemez — orta duzey
+
+meta:
+  id: "hikaye_unsurlari_soylenemez_sinif4_orta"
+  ad: "Hikâye Unsurları (Söylenemez) (Orta)"
+  sinif_seviyesi: 4
+  aciklama: "Orta duzey — hikâye unsurları hakkında yapılan yanlış çıkarımı bulma"
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Paragraf + soru koku + cumle seklinde secenekler (orta)"
+
+  paragraph:
+    required: true
+    word_count_min: 66
+    word_count_max: 82
+    sentence_count_min: 5
+    sentence_count_max: 6
+    stil: "oykuleyici"
+    kurallar:
+      - "Oykuleyici bir metin olmali (olay orgusu, karakter, mekan vb.)"
+      - "Hikaye unsurlari (Olay, Yer, Zaman, Kisi) hakkinda cikarim yapilabilir olmali"
+      - "En az 3 unsur acikca bulunmali"
+      - "Anlatici bakis acisi (1. tekil, 3. tekil vb.) belirgin olmali"
+      - "Metinle celisen yargi makul gorunmeli ama metinle denetlenince elenebilmeli"
+      - "En az bir celdirici anlamsal olarak metne yakin gorunmeli"
+      - "Paragrafta hikâye unsurlarıyla ilgili AÇIKLAMA veya EK BİLGİ verme!"
+      - "Paragraf SADECE hikâyeyi anlatsın — unsur analizi veya tanımlaması YAPMA"
+    background_color: "#fdf6e3"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 5
+    word_count_max: 20
+    style: "complete_sentence"
+    correct_type: "does_not_belong"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metindeki hikâye unsurları ile ilgili olarak hangisi <u>söylenemez</u>?</b>"
+  - "<b>Bu metnin hikâye unsurları ile ilgili aşağıdakilerden hangisi yanlıştır?</b>"
+  - "<b>Bu metnin hikâye unsurları dikkate alındığında aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Yukarıdaki metne göre hikâye unsurları ile ilgili aşağıdaki yargılardan hangisi <u>doğru değildir</u>?</b>"
+  - "<b>Bu metindeki hikâye unsurları hakkında aşağıdakilerden hangisine <u>ulaşılamaz</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metinle celisen yargi"
+  mantik: "INVERSE - diger 3 secenek metinden cikariabilecek dogru yargilar, dogru cevap metinle celisiyor"
+  kurallar:
+    - "Hikaye unsurlari hakkinda metinle celisen bir yargi olmali"
+    - "Tam cumle formatinda olmali (ozne + yuklem)"
+    - "Makul gorunmeli ama paragraftaki bilgilerle celismeli"
+    - "5-20 kelime arasinda olmali"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "MAKUL_GORÜNEN_SOYLENEMEZ"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "İlk bakışta makul görünen ama metinden çıkarılamayan seçenek"
+    nasil_olusturulur: |
+      Doğru cevap konuyla ilgili ama metinde açıkça yer almayan bir bilgi içermeli.
+      Orta seviyede bu seçenek ilk bakışta makul görünmeli — öğrenci metni dikkatli taramalıdır.
+      En az 1 yanlış seçenek doğruya yakın görünmeli.
+    kategori: "semantic"
+
+  - ad: "DOLAYLI_DESTEK_TUZAGI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metinden dolaylı ama gerçekte desteklenmeyen çıkarım"
+    nasil_olusturulur: |
+      Metindeki bazı ipuçlarından dolaylı yolla çıkarılabiliyormuş gibi görünen ama gerçekte desteklenmeyen bir bilgi seç.
+      Orta seviyede öğrenci dikkatli metin taraması yapmalıdır.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

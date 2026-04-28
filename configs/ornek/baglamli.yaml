@@ -1,0 +1,47 @@
+# Baglamli (Context) Soru Ornekleri
+# Her context template'den 1'er grup, toplam 6 grup (~15 soru)
+# Calistir: python3 -m agentic -c config_ornek_baglamli.yaml -v
+
+topics_file: ../../konular/ornek/ornek_konular.txt
+subject: "Fen Bilimleri"
+grade: 5
+
+models:
+  paragraph_writer: gemini-3-pro-preview
+  question_crafter: gemini-3-pro-preview
+  validator: gemini-3-flash-preview
+
+validation:
+  max_fix_iterations: 3
+  required_checks:
+    - question_format
+    - grade_level
+    - distractors
+    - turkish
+
+image_generation:
+  enabled: false
+
+output:
+  dir: ../../output/ornek_baglamli
+
+parallel_workers: 2
+
+context_generation_plan:
+  # Bolum 1 baglam template'leri
+  - topics: "1"
+    template: basit_senaryo_12
+  - topics: "2"
+    template: senaryo_tablo
+  - topics: "3"
+    template: arastirma_senaryo
+
+  # Bolum 3 baglam template'leri
+  - topics: "4"
+    template: siralama_ogrenci_senaryo
+
+  # Bolum 4 baglam template'leri
+  - topics: "5"
+    template: problem_cozme_senaryo
+  - topics: "6"
+    template: uc_metin_karsilastirma

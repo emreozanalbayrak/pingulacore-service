@@ -1,0 +1,285 @@
+# templates/bolum6/sozel_mantik_standard.yaml
+# Bolum 6 - Sozel Mantik ve Muhakeme
+#
+# ARI FORMAT: Setup cümlesi + maddeli koşullar (•) + mantıksal çıkarım
+# 15 farklı senaryo tipi: sıralama, eşleştirme, dairesel düzen, kategori vb.
+
+meta:
+  id: "sozel_mantik_standard_sinif3"
+  ad: "3. Sınıf Sözel Mantık ve Muhakeme (Arı Format)"
+  sinif_seviyesi: 3
+  aciklama: "Günlük yaşam bağlamında sözel ipuçlarından mantıksal çıkarım — kişi, nesne, zaman, yer, kategori, sıra ilişkilerini çözme"
+  frequency: "High (~12 questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Setup cümlesi + maddeli koşullar + soru kökü + 4 seçenek"
+
+  paragraph:
+    required: true
+    word_count_min: 30
+    word_count_max: 65
+    sentence_count_min: 2
+    sentence_count_max: 8
+    stil: "mantik_bulmacasi"
+    kurallar:
+      - "Paragraf iki bölümden oluşur: (1) SETUP CÜMLESİ + (2) MADDELİ KOŞULLAR"
+      - "SETUP CÜMLESİ (1-2 cümle): Senaryoyu tanıtır — kimler/neler var, nasıl bir düzen/sıralama/dağılım yapılacak"
+      - "MADDELİ KOŞULLAR (3 madde): Her koşul • ile başlar, <br> ile ayrılır"
+      - "FORMAT ŞEKLİ: Setup cümlesi.<br>Bu düzenle ilgili aşağıdaki bilgiler verilmektedir:<br>• Koşul 1<br>• Koşul 2<br>• Koşul 3"
+      - "Koşullar somut ve kesin olmalı — belirsizlik, çelişki veya birden fazla çözüm OLMAMALI"
+      - "Koşullar birlikte değerlendirildiğinde tek bir doğru sonuç çıkmalı"
+      - "3. sınıf seviyesinde — 3 öğe/kişi, 3 koşul yeterli"
+      - "Kişi adları Türk isimleri olmalı (Ali, Ayşe, Zehra, Baran, Defne vb.)"
+      - "YASAK: Düz paragraf yazma — MUTLAKA setup + • maddeli koşul formatı kullan"
+      - "YASAK: <ul>, <li>, <ol> tag'leri kullanma — sadece • karakteri ve <br> kullan"
+      - "Önce gizli bir doğru çözüm (çözüm tablosu/yerleşim) oluştur, sonra bu çözüme uygun ipuçları yaz"
+      - "Soru metni gizli düzeni doğrudan söylememeli — öğrencinin çözebileceği kadar ipucu vermeli"
+      - "Koşullar; aynı olma, farklı olma, önce-sonra, hemen önce-hemen sonra, arasında X kişi bulunma, karşısında olma, sağında-solunda olma, belirli gruba ait olma, belirli kategoride kişi sayısı gibi ilişkiler içerebilir"
+      - "'sonra' ve 'hemen sonra', 'aynı' ve 'farklı' gibi kavramlar arasındaki fark net olmalı"
+      - "Bağlamlar öğrencinin aşina olduğu günlük yaşam durumlarından seçilmeli: okul, kurs, kantin, apartman, sıra, mağaza, lokanta, tatil planı, turnuva, vardiya, ders programı"
+
+  visual:
+    required: true
+    description: "Mantık sorusu tipini simgeleyen soyut sembolik ikon (sıralama, eşleştirme veya dağılım şeması)"
+    placement: "paragraph_right_or_top"
+    visual_type_allowed:
+      - "soru işaretli boş ızgara veya slot şeması"
+      - "ok ve düğüm bağlantısından oluşan soyut mantık diyagramı"
+      - "numaralı boş kutu dizisi sembolü"
+      - "çapraz eşleştirme ok şeması"
+    kurallar:
+      - "Görsel senaryo içeriğini (kişileri, nesneleri veya konumlarını) tasvir etmemelidir"
+      - "Görsel yalnızca soru tipini simgeleyen soyut/sembolik bir ikon veya şema olmalıdır"
+      - "Görsel bulmacayı çözmede ipucu vermemeli; doğru cevabı ima etmemelidir"
+      - "Görsel sade, temiz ve dikkat dağıtmayan bir ikon olmalıdır"
+      - "Görsel içinde kişi adı, konum bilgisi veya bulmacaya ait sayısal veri bulunmamalıdır"
+      - "Tablo veya ızgara görseli kullanılacaksa hücreler boş ya da soru işaretli olmalıdır"
+    yasaklar:
+      - "Senaryo sahnesi — kişileri, nesneleri veya konumlarını gösteren illüstrasyon"
+      - "Bulmacadaki sıra, yerleşim veya eşleşmeleri ele veren gerçekçi tasvir"
+      - "Fotoğraf benzeri sahne görüntüsü"
+      - "Puzzle içeriğine dair somut nesne görseli (sandalye, masa, kişi silueti vb.)"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 3
+    word_count_max: 18
+    style: "complete_sentence"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (15 farklı kalıptan türetilmiş)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # Doğru/yanlış çıkarım
+  - "<b>Bu bilgilere göre aşağıdakilerden hangisi kesinlikle <u>doğrudur</u>?</b>"
+  # KULLANILDI: - "<b>Bu bilgilere göre aşağıdakilerden hangisi kesinlikle <u>yanlıştır</u>?</b>"
+  # KULLANILDI: - "<b>Bu bilgilere göre aşağıdakilerden hangisi kesinlikle <u>söylenebilir</u>?</b>"
+  # KULLANILDI: - "<b>Bu bilgilere göre aşağıdakilerden hangisi kesinlikle <u>söylenemez</u>?</b>"
+  # Sıralama
+  - "<b>Bu bilgilere göre doğru sıralama aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu bilgilere göre aşağıdakilerden hangisinin sıradaki yeri kesin olarak bilinebilir?</b>"
+  # Konum / yer
+  - "<b>Bu bilgilere göre aşağıdakilerden hangisi belirtilen yerde bulunabilir?</b>"
+  - "<b>Bu bilgilere göre hangi kişilerin arasındadır?</b>"
+  # Eşleştirme / kategori
+  - "<b>Bu bilgilere göre aşağıdaki eşleştirmelerden hangisi <u>doğrudur</u>?</b>"
+  - "<b>Bu bilgilere göre aşağıdaki eşleştirmelerden hangisi <u>yanlıştır</u>?</b>"
+  # Uygunluk/koşul tespiti (ARI Paragraf 2025 kaynak)
+  - "<b>Bu bilgilere göre aşağıdakilerden hangisinin özellikleri belirtilen koşullara uygundur?</b>"
+  - "<b>Bu bilgilere göre aşağıdakilerden hangisi …belirtilen yerde… oturabilir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Verilen koşullardan mantıksal olarak kesinlikle çıkarılabilen veya çıkarılamayan sonuç. Öğrenciden doğrudan işlem değil, koşulları birlikte değerlendirerek kesin doğru/kesin yanlış/olabilir/olamaz/söylenebilir/söylenemez türünde sonuca ulaşması beklenir."
+  kurallar:
+    - "Doğru cevap SADECE verilen koşullardan mantıksal çıkarımla ulaşılabilmeli"
+    - "Pozitif köklerde: Koşullardan KESİNLİKLE çıkan sonuç"
+    - "Negatif köklerde (yanlıştır/söylenemez): Koşullardan çıkarılamayan veya koşullarla çelişen ifade"
+    - "Sıralama köklerinde: Tek doğru sıralama — koşullar birden fazla sıralamaya izin vermemeli"
+    - "Eşleştirme köklerinde: Kesin doğru/yanlış eşleşme"
+    - "Çıkarım tahmine değil, mantıksal zincire dayanmalı"
+    - "Sorunun tek bir doğru cevabı olmalı — belirsizlik YASAK"
+    - "3-18 kelime, duruma göre tam cümle veya kısa ifade"
+    - "Kelime sayısı bakımından en uzun şık olmamalı"
+
+# ═══════════════════════════════════════════════════════════════
+# SENARYO TIPLERI (LLM bunlardan birini seçer)
+# ═══════════════════════════════════════════════════════════════
+
+senaryo_tipleri:
+  - tip: "dogrusal_siralama"
+    aciklama: "Kişiler/nesneler bir sıra/kuyruk/dizilimde yer alır"
+    kosul_turleri: ["önce/sonra", "hemen önce/hemen sonra", "arada X kişi var", "başta/sonda"]
+    ornek_setup: "Ali, Ayşe, Mehmet, Zeynep ve Burak bir sırada beklemektedir."
+
+  - tip: "dairesel_duzen"
+    aciklama: "Kişiler yuvarlak masa/daire etrafında oturur"
+    kosul_turleri: ["karşısında", "sağında/solunda", "yanında", "arasında"]
+    ornek_setup: "Üç arkadaş yuvarlak bir masanın etrafında oturmaktadır."
+
+  - tip: "kategori_eslestirme"
+    aciklama: "Kişiler birden fazla kategori/özellik ile eşleştirilir"
+    kosul_turleri: ["aynı grupta", "farklı grupta", "belirli kategoride", "çapraz ilişki"]
+    ornek_setup: "Üç öğrenci, müzik, resim ve spor kurslarından birine yazılacaktır."
+
+  - tip: "kategori_dagilimi"
+    aciklama: "Kişiler sınırlı sayıda gruba/yere dağıtılır"
+    kosul_turleri: ["grupta en az/en çok X kişi", "aynı grupta", "farklı grupta", "belirli grupta"]
+    ornek_setup: "Üç öğrenci iki gruba ayrılacaktır."
+
+  - tip: "zaman_dizisi"
+    aciklama: "Öğeler belirli gün/zaman sırasına yerleştirilir"
+    kosul_turleri: ["ardışık günlerde", "bir gün önce/sonra", "belirli günde", "aynı anda"]
+    ornek_setup: "Haftanın üç günü boyunca her gün farklı bir etkinlik yapılacaktır."
+
+  - tip: "iki_boyutlu_yerlesim"
+    aciklama: "Kişiler satır-sütun, kat-daire gibi 2 boyutlu düzende yer alır"
+    kosul_turleri: ["üstünde/altında", "karşısında", "belirli numarada", "tek/çift numara"]
+    ornek_setup: "Üç katlı bir apartmanda her katta iki daire bulunmaktadır."
+
+  - tip: "secim_eslesme"
+    aciklama: "Her kişi bir kategori/renk/tür seçer"
+    kosul_turleri: ["aynı seçim", "farklı seçim", "belirli seçim", "seçen kişi sayısı"]
+    ornek_setup: "Üç arkadaştan her biri kırmızı, mavi veya yeşil renklerden birini seçmiştir."
+
+  - tip: "cok_ozellik_eslestirme"
+    aciklama: "Kişiler birden fazla özellik kümesinden birer değer alır"
+    kosul_turleri: ["özellik-kişi eşleşmesi", "grup karşılaştırma", "çapraz ilişki"]
+    ornek_setup: "Üç çocuktan her biri farklı bir şehirde yaşamakta ve farklı bir spor yapmaktadır."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "MANTIKSAL_TERSINE_CEVIRME"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Koşuldaki ilişkiyi tersine çevirerek yanlış sonuç çıkarma"
+    nasil_olusturulur: |
+      Koşullardaki önce/sonra, sağ/sol, üst/alt gibi yön ilişkisini tersine çevir.
+      Örnek: "Ali, Ayşe'den önce" → çeldirici: "Ayşe, Ali'den öndedir"
+
+  - ad: "EKSIK_KOSUL_CIKARIMI"
+    bilisssel_hata_kategorisi: "asiri_genelleme"
+    aciklama: "Verilmeyen bir koşulu varsayarak yanlış sonuca ulaşma"
+    nasil_olusturulur: |
+      Koşullarda belirtilmeyen bir ilişkiyi kesinmiş gibi göster.
+      Örnek: Koşullar A-B sırasını verir ama C'nin yeri belirsiz → çeldirici: "C kesinlikle sondadır"
+
+  - ad: "KISMI_DEGERLENDIRME"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Bazı koşulları dikkate alıp diğerlerini atlayarak yanlış çıkarım"
+    nasil_olusturulur: |
+      Sadece 1-2 koşula bakarak sonuç çıkar, diğer koşulları görmezden gel.
+      Tüm koşullar birlikte değerlendirildiğinde bu sonuç yanlış çıkar.
+
+  - ad: "OLASI_HATA_BAZLI_CELDIRICI"
+    bilisssel_hata_kategorisi: "tipik_ogrenci_hatasi"
+    aciklama: "Öğrencilerin sıkça yaptığı mantık hatalarına dayalı çeldirici"
+    nasil_olusturulur: |
+      Yanlış seçenekler rastgele değil, olası öğrenci hatalarına dayalı mantıklı çeldiriciler olmalı.
+      Öğrencinin 'sonra' ile 'hemen sonra' farkını karıştırması, koşulları eksik okuması,
+      ya da yön ilişkisini yanlış yorumlaması gibi tipik hatalara dayalı seçenekler üret.
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ETIKETI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB3"
+  bilesenler: ["mantiksal_cikarim", "degerlendirme", "sorgulama"]
+  surec_bileseni: "karar_verme"
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Senaryo tipi seç"
+      details: |
+        Aşağıdaki tiplerden birini seç (her üretimde FARKLI tip):
+        - Doğrusal sıralama (kuyruk, sıra, dizilim)
+        - Dairesel düzen (yuvarlak masa, halka)
+        - Kategori eşleştirme (kişi-özellik-grup)
+        - Kategori dağılımı (gruplara ayırma)
+        - Zaman dizisi (gün sırası, program)
+        - İki boyutlu yerleşim (kat-daire, satır-sütun)
+        - Seçim eşleşme (renk, tür, ürün seçimi)
+        - Çok özellik eşleştirme (kişi × şehir × spor)
+
+    - step: 2
+      action: "Setup cümlesi yaz (1-2 cümle)"
+      details: |
+        - Senaryoyu tanıt: kimler/neler var, nasıl bir düzen
+        - 3 öğe/kişi yeterli (3. sınıf seviyesi)
+        - Türk isimleri kullan
+
+    - step: 3
+      action: "Maddeli koşullar oluştur (3 madde)"
+      details: |
+        - Her koşul • ile başlar
+        - Koşullar birlikte TEK bir çözüme götürmeli
+        - Koşullar arasında çelişki OLMAMALI
+        - Her koşul açık ve kesin olmalı
+        - <br> ile ayrılmalı
+
+    - step: 4
+      action: "Doğru cevap = mantıksal çıkarım"
+      details: |
+        - Tüm koşulları birlikte değerlendirerek kesin sonuca ulaş
+        - Sıralama köklerinde: tam sıralama ver
+        - Doğru/yanlış köklerinde: kesin doğru veya kesin yanlış önerme
+        - 3-18 kelime
+
+    - step: 5
+      action: "3 çeldirici oluştur"
+      details: |
+        - Mantıksal tersine çevirme
+        - Eksik koşul varsayımı
+        - Kısmi değerlendirme (bazı koşulları atlama)
+        - Çeldiriciler makul görünmeli ama mantıksal olarak geçersiz olmalı
+
+    - step: 6
+      action: "Seçenekleri rastgele sırala"
+      details: "A-B-C-D seçeneklerini rastgele sırala"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Setup cümlesi + maddeli koşul formatında mı (• ile)?"
+    - "3 koşul maddesi var mı?"
+    - "Koşullar arasında çelişki yok mu?"
+    - "Koşullar tek bir çözüme götürüyor mu?"
+    - "3. sınıf seviyesinde mi?"
+
+  correct_answer:
+    - "3-18 kelime mi?"
+    - "Tüm koşullardan mantıksal olarak çıkarılabiliyor mu?"
+    - "Tek doğru cevap mı (belirsizlik yok mu)?"
+
+  distractors:
+    - "Her çeldirici farklı bir mantık hatası içeriyor mu?"
+    - "Çeldiriciler makul görünüyor ama mantıksal olarak geçersiz mi?"
+    - "Tüm seçenekler aynı formatta mı?"

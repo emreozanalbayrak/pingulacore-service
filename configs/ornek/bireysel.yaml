@@ -1,0 +1,60 @@
+# Bireysel (Standalone) Soru Ornekleri
+# Her template'den 1'er soru, toplam 12 soru
+# Calistir: python3 -m agentic -c config_ornek_bireysel.yaml -v
+
+topics_file: ../../konular/ornek/ornek_konular.txt
+subject: "Fen Bilimleri"
+grade: 5
+questions_per_topic: 1
+
+models:
+  paragraph_writer: gemini-3-flash-preview
+  question_crafter: gemini-3-flash-preview
+  validator: gemini-3-flash-preview
+
+validation:
+  max_fix_iterations: 3
+  required_checks:
+    - question_format
+    - grade_level
+    - distractors
+    - turkish
+
+image_generation:
+  enabled: false
+
+output:
+  dir: ../../output/ornek_bireysel
+
+parallel_workers: 2
+
+generation_plan:
+  # Capture1 — Bolum 1 (6 farkli template)
+  - topics: "1"
+    template: konu_standard
+  - topics: "2"
+    template: konu_inverse
+  - topics: "3"
+    template: ana_fikir_standard
+  - topics: "4"
+    template: baslik_standard
+  - topics: "5"
+    template: anahtar_sozcuk_negative
+  - topics: "6"
+    template: yardimci_fikir_standard
+  - topics: "7"
+    template: soru_cevap_standard
+
+  # Capture2 — Bolum 2 (3 farkli template)
+  - topics: "8"
+    template: dusunceyi_gelistirme_standard
+  - topics: "9"
+    template: hikaye_unsurlari_tablo
+  - topics: "10"
+    template: metinde_duygu_standard
+
+  # Bolum 3-4 (2 farkli template)
+  - topics: "11"
+    template: paragraf_siralama_siralama
+  - topics: "12"
+    template: yuzey_derin_anlam_standard

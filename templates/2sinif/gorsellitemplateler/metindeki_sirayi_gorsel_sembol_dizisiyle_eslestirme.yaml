@@ -1,0 +1,148 @@
+meta:
+  id: "metindeki_sirayi_gorsel_sembol_dizisiyle_eslestirme"
+  ad: "Metindeki Sırayı Görsel/Sembol Dizisiyle Eşleştirme"
+  ders: "Türkçe"
+  sinif_seviyesi: "2. Sınıf"
+  tema: "Okuduğunu Anlama ve Görsel Okuma"
+  model: "TYMM"
+  format_turu: "llm_generated_html"
+  aciklama: "Metindeki olayların ya da durumların sırasını okuyup bunu görsel/sembol dizisiyle eşleştirmeye dayalı 3 seçenekli soru formatı"
+  frequency: "orta"
+
+context:
+  type: "metin_sembol_sira_eslestirme"
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 35
+    word_count_max: 90
+    structure:
+      - "Önce kısa bir günlük, anlatı ya da olay metni oluşturulur."
+      - "Metinde 4 ila 6 adımlı açık bir sıra bulunur."
+      - "Her adım bir sembolle gösterilebilecek kadar somut olmalıdır."
+      - "Metindeki olaylar sırayla ilerlemelidir."
+      - "Ardından bu sırayı temsil eden sembol dizileri seçeneklerde verilir."
+    kurallar:
+      - "Metin 2. sınıf seviyesine uygun, kısa ve anlaşılır olmalıdır."
+      - "Olaylar açık zaman sırası taşımalıdır."
+      - "Her olay bir sembol ya da basit görselle temsil edilebilir olmalıdır."
+      - "Sıralama yalnızca metin dikkatle okunursa çözülebilmelidir."
+      - "Seçeneklerde aynı semboller kullanılabilir; fark sırada olmalıdır."
+      - "Türkçe karakterler doğru kullanılmalıdır."
+
+format:
+  type: "llm_generated_html"
+  description: "Kısa olay metni + sembol dizili 3 seçenek + doğru sıra eşleştirmesi"
+
+  paragraph:
+    required: true
+    word_count_min: 35
+    word_count_max: 90
+    sentence_count_min: 4
+    sentence_count_max: 8
+
+  visual:
+    required: true
+    count: 3
+    description: "Her seçenekte aynı olayları temsil eden sembollerin farklı sıralarla verilmiş dizisi"
+
+  stem:
+    required: true
+    sentence_count_min: 1
+    sentence_count_max: 1
+    soru_koku_ornekleri:
+      - "Metinde anlatılan olayların sırası hangi seçenekte doğru verilmiştir?"
+      - "Metindeki sıraya göre doğru sembol dizisi hangi seçenektedir?"
+      - "Günlükte anlatılan hava durumu sırası hangi seçenekte verilmiştir?"
+      - "Metindeki anlatıma göre semboller hangi sırada olmalıdır?"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    style: "symbol_sequence"
+    correct_count: 1
+    correct_type: "matches_order"
+
+gorsel:
+  required: true
+  tur: "sembol_dizisi"
+  amac: "Metindeki olay sırasını görsel olarak temsil etmek"
+  kurallar:
+    - "Her seçenek aynı olay kümesini içermelidir."
+    - "Seçenekler yalnızca sıra bakımından farklılaşmalıdır."
+    - "Semboller açık, sade ve çocuk seviyesine uygun olmalıdır."
+    - "Her seçenekte 4 ila 6 sembol bulunmalıdır."
+    - "Semboller kolay ayırt edilebilir olmalıdır."
+    - "Görsel süsleyici değil, çözüm için zorunlu olmalıdır."
+    - "Aynı olay için tüm seçeneklerde aynı sembol kullanılmalıdır."
+
+olculen_beceri:
+  tanim: "Metindeki olay sırasını anlama ve bunu sembol dizisiyle eşleştirme"
+  bilesenler:
+    - "okudugunu_anlama"
+    - "siralama"
+    - "gorsel_eslestirme"
+    - "detay_takibi"
+    - "sira_karsilastirma"
+
+dogru_cevap:
+  tanim: "Metindeki olayların sırasıyla tamamen uyuşan sembol dizisi"
+  kurallar:
+    - "Doğru cevap metindeki olay sırasını tam olarak yansıtmalıdır."
+    - "Yanlış seçeneklerde olayların kendisi doğru olabilir ama sıra yanlış olmalıdır."
+    - "Doğru cevap yalnızca metin dikkatle okunarak bulunmalıdır."
+    - "En az bir çeldirici yalnızca iki sembolün yerini değiştirerek oluşturulmalıdır."
+    - "En az bir çeldirici başlangıç ya da bitiş sırasını bozmalıdır."
+
+distractors:
+  stratejiler:
+    - ad: "YAKIN_SIRA_HATASI"
+      aciklama: "Doğru dizide yalnızca iki sembolün yerini değiştirerek yanıltma"
+      ornek: "Bulutlu ve yağmurlu sembollerinin yer değiştirmesi"
+    - ad: "SON_ADIM_YANILGISI"
+      aciklama: "İlk semboller doğru, son semboller yanlış sırada verme"
+      ornek: "Şimşekli havadan sonra güneş yerine yağmur verme"
+    - ad: "BASLANGIC_YANILGISI"
+      aciklama: "Metnin başlangıcını yanlış yorumlatacak dizilim kurma"
+      ornek: "Güneşli yerine parçalı bulutlu ile başlatma"
+    - ad: "AYNI_OGELER_FARKLI_SIRA"
+      aciklama: "Tüm semboller aynı kalır, sadece sıra değişir"
+      ornek: "Seçeneklerin hepsinde aynı hava sembolleri bulunur"
+
+use_shared_strategies: false
+
+tymm_uyum_kurallari:
+  - "2. sınıf seviyesine uygun kısa ve açık cümleler kullanılmalıdır."
+  - "Metin somut ve günlük yaşamdan olmalıdır."
+  - "Olay sırası açık biçimde izlenebilmelidir."
+  - "Her adım kolay anlaşılır bir sembolle gösterilebilmelidir."
+  - "Görsel olmadan doğru cevap kesinleşmemelidir."
+  - "Seçenekler aynı olay kümesini içermeli, fark yalnızca sırada olmalıdır."
+  - "3 seçenekli yapıda iki çeldirici de güçlü olmalıdır."
+  - "Çok uzun, soyut ya da çıkarımı belirsiz metinler kullanılmamalıdır."
+
+izinli_icerikler:
+  - "hava durumu değişimleri"
+  - "gün içindeki olay sırası"
+  - "sabah-öğle-akşam düzeni"
+  - "basit günlük rutinler"
+  - "ışık, yağmur, bulut, güneş gibi somut durumlar"
+  - "çocukların anlayabileceği semboller"
+
+yasakli_icerikler:
+  - "karmaşık zaman atlamaları"
+  - "aynı anda olan çok fazla olay"
+  - "tek başına sembollerden çözülebilen yapı"
+  - "fazla soyut anlatımlar"
+  - "birden fazla doğru seçenek"
+  - "çok uzun paragraflar"
+
+ornek_sablon:
+  ust_metin: "Kısa anlatı ya da günlük metni"
+  gorsel: "Her seçenekte sembollerle verilmiş sıra dizisi"
+  soru_koku: "Metindeki sıraya göre doğru sembol dizisi hangi seçenektedir?"
+  secenekler:
+    A: "Sembol dizisi"
+    B: "Sembol dizisi"
+    C: "Sembol dizisi"

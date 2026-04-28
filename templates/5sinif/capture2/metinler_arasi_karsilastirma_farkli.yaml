@@ -1,0 +1,191 @@
+# templates/capture2/metinler_arasi_karsilastirma_farkli.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Bolum 2 - Metinler Arasi Karsilastirma
+#
+# ORTAK OLMAYAN FORMATI (tum metinler arasi karsilastirma sorularinin ~%40'i)
+# Iki metin verilir, ogrenci iki metnin ORTAK OLMAYAN ozelligini secer
+#
+# ONEMLI: TERS MANTIK - 3 secenek her iki metinde de var, 1 secenek sadece birinde var
+# Metinler benzer konulari islemeli ama detaylarda ayrismali
+
+meta:
+  id: "metinler_arasi_karsilastirma_farkli"
+  ad: "Metinler Arası Karşılaştırma (Ortak Olmayan)"
+  sinif_seviyesi: 5
+  aciklama: "İki metin arasındaki farkı veya ortak olmayan özelliği belirleme"
+  kaynak: "data/metinler_arasi_karsilastirma.pdf"
+  frequency: "Medium (~40% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "İki metin + soru kökü + seçenekler"
+
+  paragraph:
+    required: true
+    count: 2
+    labels: ["1. Metin", "2. Metin"]
+    word_count_min: 35
+    word_count_max: 65
+    stil: "bilgilendirici"
+    kurallar:
+      - "Metinler benzer konuları işlemeli ancak detaylarda ayrışmalı."
+      - "Örn: Biri gece avlanır, diğeri gündüz. Biri otçul, diğeri etçil."
+      - "Her iki metinde en az 3 ortak bilgi bulunmalı (yanlis secenekler icin)."
+      - "En az 1 belirgin fark olmali (dogru cevap icin)."
+      - "İki metin AYRI AYRI yazılmalı — düzyazı olarak birleştirilmemeli"
+      - "Her metnin başına '1. Metin' ve '2. Metin' etiketi konulmalı"
+      - "İki metin arasında boşluk bırakılmalı (<br><br> ile)"
+      - "Metinler devam eden tek paragraf gibi DEĞİL, birbirinden bağımsız iki ayrı metin bloğu olmalı"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+    kurallar:
+      - "Soru kökü MUTLAKA <b> tagi ile kalın yazılmalı"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 8
+    word_count_max: 25
+    style: "complete_sentence"
+    correct_type: "does_not_belong"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 3 varyasyon)
+# Sayfa 121-123
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metinlerde bahsedilen ... ile ilgili aşağıdakilerden hangisi ortak <u>değildir</u>?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metinlerde geçen ... ile ilgili ulaşılabilecek ortak bir bilgi <u>değildir</u>?</b>"
+  - "<b>Bu metinlerde bahsedilen ... için aşağıdakilerden hangisi söylenemez?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI (TERS MANTIK!)
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Sadece bir metin için geçerli olan veya metinlerde çelişen özellik"
+  mantik: "INVERSE - diger 3 secenek her iki metinde de ortak, dogru cevap ORTAK DEGIL"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Sadece bir metinde gecen veya metinler arasinda celisen bilgi olmali"
+    - "Tam cumle formatinda olmali (8-25 kelime)"
+    - "Ogrenci icin 'bu her ikisinde de var mi?' analizi yapmak zorunda kalmali"
+    - "Fark belirgin ama cok kolay degil olmali"
+    - "Kelime sayısı bakımından en uzun şık olmamalı"
+  ornekler:
+    - metin_1: "Baykuslar gece avlanir ve tek basina yasarlar."
+      metin_2: "Kartallar gunduz avlanir ve yuksek irtifalarda ucarak av arar."
+      dogru: "Her ikisi de gunduz saatlerinde avlanir."
+      neden: "Baykuslar gece avlanir, bu bilgi sadece kartallar icin gecerli"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# Celdiriciler: Her iki metinde de gecen ortak ozellikler (yanlis secenekler)
+
+distractors:
+  kurallar:
+    - "Her iki metinde de acikca gecen ortak ozellik (3 adet)"
+    - "Ortak ozellikler farkli acillardan ifade edilebilir"
+    - "Tam cumle formatinda olmali (8-25 kelime)"
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["karsilastirma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic with comparable but different entities"
+      details: "Benzer ama detaylarda ayrisan iki varlik sec (orn: iki kustur ama avlanma saatleri farkli)"
+
+    - step: 2
+      action: "Generate two paragraphs (35-65 words each)"
+      details: |
+        Her metin:
+        - Benzer konuyu islemeli
+        - En az 3 ortak ozellik icermeli
+        - En az 1 belirgin fark icermeli
+
+    - step: 3
+      action: "Identify the differing feature as correct answer"
+      details: |
+        Farkli ozellik:
+        - Sadece bir metin icin gecerli olan bilgi
+        - Veya metinlerde celisen bir bilgi
+        - Tam cumle formatinda (8-25 kelime)
+
+    - step: 4
+      action: "Generate 3 distractors from common features"
+      details: |
+        - 3x her iki metinde de gecen ortak ozellik
+        - Her biri farkli bir ortak yonu vurgulamali
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from variations"
+      details: "soru_kokleri listesinden rastgele sec, '...' yerine varliklarin adini yerlestir"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR (Sayfa 121-123)
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 121
+    konu: "Yirtici kuslar - Baykus ve Kartal"
+    metin_1: "Baykuslar gece avlanir, tek basina yasarlar, keskin goruse sahiptirler."
+    metin_2: "Kartallar gunduz avlanir, yuksek irtifalarda ucar, keskin goruse sahiptirler."
+    dogru_cevap: "Her ikisi de gündüz saatlerinde avlanır."
+    celdirici_1: "Keskin görüşe sahiptirler."
+    celdirici_2: "Yırtıcı kuşlar arasında yer alırlar."
+    celdirici_3: "Avlarını pençeleriyle yakalarlar."
+
+  - sayfa: 123
+    konu: "Hayvanlar - Otcul ve etcil"
+    metin_1: "Tavsan otlarla beslenir, hizli kosar."
+    metin_2: "Geyik yapraklarla beslenir, suruler halinde yasar."
+    dogru_cevap: "İkisi de sürüler hâlinde yaşar."
+    celdirici_1: "Otçul hayvanlardır."
+    celdirici_2: "Doğada hızlı hareket edebilirler."
+    celdirici_3: "Memeli hayvanlar arasında yer alırlar."
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Her iki metin de 35-65 kelime arasinda mi?"
+    - "Metinler benzer konulari isliyor mu?"
+    - "En az 3 ortak ozellik var mi?"
+    - "En az 1 belirgin fark var mi?"
+
+  correct_answer:
+    - "8-25 kelime arasinda mi?"
+    - "Sadece bir metin icin gecerli mi veya metinlerde celisiyor mu?"
+    - "Tam cumle formatinda mi?"
+
+  distractors:
+    - "Her celdirici her iki metinde de gecen ortak bir ozellik mi?"
+    - "Celdiriciler dogrulanabilir mi?"
+    - "Hicbiri dogru cevapla karistirilabilir degil mi?"
+    - "Tum secenekler ayni gramer yapida mi? (tam cumle)"

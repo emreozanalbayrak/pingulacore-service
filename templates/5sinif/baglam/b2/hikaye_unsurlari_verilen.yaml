@@ -1,0 +1,140 @@
+# templates/baglam/hikaye_unsurlari_verilen.yaml
+# Bağlam Tipi: Bölüm 2 — Unsurlar Verilir → Metin Bulunur
+# Soru Sayısı: 2
+# Kaynak: kaynak-soru-kokleri.md — Bölüm 2
+# Soru Tipleri: Metin bulma + Unsur uyumsuzluk
+
+meta:
+  id: "hikaye_unsurlari_verilen"
+  ad: "Hikâye Unsurları — Unsurdan Metne"
+  sinif_seviyesi: 5
+  aciklama: "Yer/zaman/kişi/olay listesi verilir — hangi metin uyar ve hangi unsur uyumsuz"
+  kaynak: "kaynak-soru-kokleri.md"
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# BAĞLAM KONFİGÜRASYONU
+# ═══════════════════════════════════════════════════════════════
+
+context:
+  type: "hikaye_unsurlari_verilen"
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 80
+    word_count_max: 140
+    structure:
+      - "Bir hikâye unsurları listesi oluştur: Yer, Zaman, Kişiler, Olay formatında"
+      - "Her unsur açık ve somut olmalı (ör: Yer: Köydeki değirmen, Zaman: Sonbahar akşamı)"
+      - "En az 4 unsur belirtilmeli (yer, zaman, kişiler, olay)"
+      - "Unsurlar bir hikâye için tutarlı ve anlamlı bir bütün oluşturmalı"
+      - "Unsurlardan en az bir tanesi detaylı verilmeli (kişiler için isim ve özellik gibi)"
+      - "Kısa bir senaryo cümlesiyle sunulabilir: 'Bir öğretmen tahtaya şu unsurları yazmıştır:'"
+    kurallar:
+      - "5. sınıf seviyesinde, günlük hayattan veya doğadan unsurlar"
+      - "Unsurlar madde madde veya liste formatında sunulmalı"
+      - "Her unsur açık ve tek anlamlı olmalı"
+      - "Unsurlar arasında mantıksal tutarlılık olmalı"
+      - "Kişi isimleri Türkçe olmalı"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+    - slot: 1
+      type: "metin_bulma"
+      soru_kokleri:
+        - "<b>Verilen unsurlara uygun metin aşağıdakilerden hangisidir?</b>"
+        - "<b>Bu unsurlarla yazılabilecek hikâye aşağıdakilerden hangisidir?</b>"
+        - "<b>Bu hikâye unsurları dikkate alınarak yazılan bir hikâye aşağıdakilerden hangisi olabilir?</b>"
+      options_style: "mini_paragraph"
+      word_count_min: 25
+      word_count_max: 45
+      beceri:
+        katman: "KB2"
+        bilesenler: ["sentezleme", "eslestirme"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+    - slot: 2
+      type: "unsur_uyumsuzluk"
+      soru_kokleri:
+        - "<b>Verilen unsurlara aşağıdakilerden hangisi eklenseydi hikâyeyle <u>uyumsuz</u> olurdu?</b>"
+        - "<b>Aşağıdaki unsurlardan hangisi bu hikâyeye <u>uygun değildir</u>?</b>"
+        - "<b>Bu hikâye unsurlarından yer ve zaman unsuru değiştirildiğinde aşağıdaki hikâyelerden hangisi ortaya çıkar?</b>"
+      options_style: "short_phrase"
+      word_count_min: 2
+      word_count_max: 8
+      beceri:
+        katman: "KB3"
+        bilesenler: ["degerlendirme", "mantiksal_denetleme"]
+        surec_bileseni: "problemi_yapilandirma"
+
+header_template: "1-2. soruları aşağıdaki hikâye unsurlarına göre cevaplayınız."
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Verilen hikâye unsurları üzerinden metin bulma ve uyumsuzluk soruları"
+
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 140
+    sentence_count_min: 3
+    sentence_count_max: 8
+
+  stem:
+    required: true
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 45
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+# ═══════════════════════════════════════════════════════════════
+# DOĞRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Verilen unsurlarla tam uyumlu metin veya unsurlarla çelişen ek unsur"
+  kurallar:
+    - "KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI"
+    - "Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI"
+    - "Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil"
+    - "YASAK: Tablodaki değeri aynen şıkka yazmak (örn: 'yalıtımı azdır' tabloda yazıyorsa şıkta aynen yazmamalı)"
+    - "Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli"
+
+    - "Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı"
+    - "Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı"
+    - "Metin bulma sorusunda doğru cevap TÜM verilen unsurları içeren ve onlarla tutarlı metin olmalı"
+    - "Uyumsuzluk sorusunda doğru cevap hikâyenin bütünlüğünü ve mantığını bozan unsur olmalı"
+    - "Çeldiriciler çoğu unsuru karşılayan ama en az birinde sapan metinler olmalı"
+    - "HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer"
+    - "Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK"
+    - "BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: 'teleskop' → 'mercekli araç' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı"
+
+# ═══════════════════════════════════════════════════════════════
+# ÇELDİRİCİ STRATEJİLERİ
+# ═══════════════════════════════════════════════════════════════
+
+distractors:
+  stratejiler:
+    - ad: "UNSUR_SAPMA"
+      aciklama: "Çoğu unsuru karşılayan ama 1 unsurda belirgin sapma gösteren metin sunma"
+      ornek: "Yer ve kişileri doğru yansıtan ama zamanı değiştiren metin önerme"
+    - ad: "YER_ZAMAN_KARISTIRMA"
+      aciklama: "Yer veya zaman unsurunu değiştirerek uyumsuz ama mantıklı görünen seçenek sunma"
+      ornek: "Köy yerine şehir, sonbahar yerine yaz gibi yakın değişiklik yapma"
+    - ad: "MANTIKLI_AMA_DESTEKSIZ"
+      aciklama: "Mantıklı görünen ama verilen unsurlarla desteklenmeyen çıkarım sunma"
+      ornek: "Unsurlardan çıkarılamayacak ama konuyla ilgili bir ek unsur önerme"
+
+use_shared_strategies: false

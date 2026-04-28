@@ -1,0 +1,128 @@
+# templates/baglam/baglam_1q_baslik.yaml
+# Baglam Tipi: 1Q Baslik Belirleme
+# Soru Sayisi: 1
+# Kaynak: baglamb1sorukoku.md
+# Soru Tipleri: Baslik secme
+
+meta:
+  id: "baglam_1q_baslik"
+  ad: "1Q Baglam Baslik"
+  sinif_seviyesi: 5
+  aciklama: "Gunluk hayattan bir senaryo/afiş uzerinden baslik belirleme sorusu"
+  kaynak: "baglamb1sorukoku.md"
+  frequency: "Medium"
+
+# ======================================================================
+# BAGLAM KONFIGURASYONU
+# ======================================================================
+
+context:
+  type: "baglam_senaryo_1q"
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 60
+    word_count_max: 120
+    structure:
+      - "Bir karakter (Turkce isimli) gunluk hayattan bir durumla karsilasir (3-5 cumle)"
+      - "Hikaye/senaryo/afiş net bir ana fikir ve mesaj icermeli"
+      - "Senaryo somut, 5. sinif seviyesinde ve anlasilir olmali"
+      - "Metne/afişe uygun yaratici bir baslik cikarilabilir olmali"
+    kurallar:
+      - "KRİTİK — BAŞLIK YASAĞI: Metin ve görsellere/afişlere herhangi bir başlık KOYMA!"
+      - "Senaryo 5. sinif seviyesinde, gunluk hayattan olmali"
+      - "Karakter ismi Turkce olmali (Elif, Mert, Zeynep, Can vb.)"
+      - "Hikaye/senaryonun/afişin net bir temasi olmali"
+      - "Hikaye/senaryo/metin ve afiş aynı bilgiyi tekrarlaMAMALI. Durumun farklı yönlerini ele almalı."
+      - "Hikaye/senaryo/metin, afişteki bilgileri anlatMAMALI."
+      - "Turkce karakterler dogru kullanilmali (s, i, g, u, o, c)"
+
+  questions:
+    - slot: 1
+      type: "baslik"
+      soru_kokleri:
+        - "<b>Bu hikayeye baslik olarak asagidakilerden hangisi gelebilir?</b>"
+        - "<b>Bu afisin basligi asagidakilerden hangisi olabilir?</b>"
+      options_style: "headline_title"
+      word_count_min: 2
+      word_count_max: 6
+      beceri:
+        katman: "KB2"
+        bilesenler: ["anlama", "sentezleme"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+soru_kokleri:
+  - "<b>Bu hikayeye baslik olarak asagidakilerden hangisi gelebilir?</b>"
+  - "<b>Bu afisin basligi asagidakilerden hangisi olabilir?</b>"
+
+header_template: null
+
+# ======================================================================
+# FORMAT
+# ======================================================================
+
+format:
+  type: "llm_generated_html"
+  description: "1Q baglam senaryo/afis uzerinden baslik belirleme sorusu"
+
+  paragraph:
+    required: true
+    word_count_min: 60
+    word_count_max: 120
+    sentence_count_min: 3
+    sentence_count_max: 8
+
+  stem:
+    required: true
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 6
+    style: "headline_title"
+    correct_count: 1
+    correct_type: "matches"
+
+# ======================================================================
+# DOGRU CEVAP KURALLARI
+# ======================================================================
+
+dogru_cevap:
+  tanim: "Senaryonun ana fikrini/temasini en iyi yansitan yaratici baslik"
+  kurallar:
+    - "KRİTİK: Doğru cevap tablodaki/afişteki tek bir hücreden veya metindeki tek bir cümleden direkt sonucu bulaMAMALI"
+    - "Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki/afişteki veriyi YORUMLAMALI"
+    - "Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil"
+    - "YASAK: Tablodaki değeri aynen şıkka yazmak (örn: 'yalıtımı azdır' tabloda yazıyorsa şıkta aynen yazmamalı)"
+    - "Şıklar senaryoda ve tablodaki/afişteki verilerden yargı veya karşılaştırma içermeli"
+
+    - "Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı"
+    - "Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı"
+    - "Dogru secenek paragraftaki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Baslik metnin ana fikrini kapsamali, detaylara takili kalmamali"
+    - "Yaratici ve cekici bir baslik olmali"
+    - "HATALI YAKLASIM: Metinde/tabloda/grafikte/afişte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer"
+    - "Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK"
+    - "BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: 'teleskop' → 'mercekli araç' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı"
+
+# ======================================================================
+# CELDIRICI STRATEJILERI
+# ======================================================================
+
+distractors:
+  stratejiler:
+    - ad: "DETAY_BASLIGI"
+      aciklama: "Metindeki bir detayi baslik yapma, ana fikri kaybetme"
+      ornek: "Yan bir olayi baslik olarak sunma"
+    - ad: "GENIS_BASLIK"
+      aciklama: "Cok genel bir baslik verme, metnin ozgulugunu yansitmama"
+      ornek: "Herhangi bir metne uyabilecek kadar genel bir baslik"
+    - ad: "ILISKISIZ_BASLIK"
+      aciklama: "Konuyla ilgili gorunen ama metnin ana fikrine uymayan baslik"
+      ornek: "Ayni alandaki farkli bir konuyu cagristiran baslik"
+
+use_shared_strategies: false

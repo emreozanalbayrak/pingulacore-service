@@ -1,0 +1,278 @@
+# templates/beceri_gezi_yazisi.yaml
+# Kaynak: MEB Beceri Temelli Soru Bankasi - Gezi Yazisi
+#
+# BECERI TEMELLI GEZI YAZISI FORMATI
+# Gezi yazisi metni verilir, ogrenci mekan ve duygu betimlemelerine dayali soruyu cevaplar
+#
+# MANTIK: 1 secenekte dogru cevap, 4 secenekte yanlis cevaplar
+# Secenekler TAM CUMLE formatindadir (3-20 sozcuk)
+
+meta:
+  id: "beceri_gezi_yazisi"
+  ad: "Beceri Temelli - Gezi Yazisi"
+  sinif_seviyesi: 5
+  aciklama: "Gezi yazisi metinleri uzerinden beceri temelli sorular"
+  kaynak: "MEB Beceri Temelli Soru Bankasi"
+  frequency: "~7% of beceri temelli questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Gezi yazisi baglami + soru koku + 5 tam cumle secenek (beceri temelli)"
+
+  paragraph:
+    required: true
+    word_count_min: 100
+    word_count_max: 160
+    sentence_count_min: 5
+    sentence_count_max: 9
+    stil: "hikaye"
+    kurallar:
+      - "Bir yerin ziyaretini anlatan metin olustur"
+      - "Mekan betimlemesi yap"
+      - "Duyusal ayrintilar icersin"
+      - "Kulturel veya dogal ozellikleri vurgula"
+      - "Yazarin kisisel izlenimleri yer alsin"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 5
+    labels: ["A", "B", "C", "D", "E"]
+    word_count_min: 3
+    word_count_max: 20
+    style: "complete_sentence"
+    correct_type: "matches"
+    correct_count: 1
+
+  questions_per_context: 2
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ALANLARI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  context_type: "GEZI_YAZISI"
+  context_label: "Gezi Yazisi"
+  skill_level: "KB2"
+  process_component: "Gezi yazisinda mekan betimleme, duyusal ayrintilar ve izlenim analizi"
+  skill_areas:
+    - "anlama"
+    - "cikarimlama"
+    - "sentez"
+    - "yorumlama"
+    - "degerlendirme"
+  answer_key_explanation: true
+  question_patterns:
+    - "Yazarin ziyaret ettigi yerin ozelligi nedir?"
+    - "Metin hangi duyguyu yansitmaktadir?"
+    - "Yazarin izlenimleri nasil degerlendirilir?"
+    - "Metindeki duyusal ayrintilar neyi gosterir?"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # Anlam / Çıkarım
+  - "<b>Bu gezi yazısına göre aşağıdakilerden hangisi doğrudur?</b>"
+  - "<b>Bu metne göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Gezi yazısından aşağıdaki <u>çıkarımlardan hangisi yapılamaz</u>?</b>"
+  # Mekan / Duyusal Detay
+  - "<b>Yazarın ziyaret ettiği yerin en belirgin özelliği aşağıdakilerden hangisidir?</b>"
+  - "<b>Yazarın bu yerle ilgili izlenimi aşağıdakilerden hangisidir?</b>"
+  - "<b>Metinde hangi duyusal ayrıntılara yer verildiği düşünüldüğünde aşağıdakilerden hangisi doğrudur?</b>"
+  # Değerlendirme
+  - "<b>Gezi yazısının bütününden aşağıdakilerden hangisi çıkarılabilir?</b>"
+  - "<b>Metindeki bilgilere göre ziyaret edilen yerin öne çıkan yönü aşağıdakilerden hangisidir?</b>"
+  # Değinilmeme / Etkilenme / Genelleme (PDF kaynak)
+  - "<b>Yazarın gezi yazısındaki anlatımından çıkarılabilecek en doğru sonuç aşağıdakilerden hangisidir?</b>"
+  - "<b>Gezi yazısında ziyaret edilen yerin hangi özelliğine <u>değinilmemiştir</u>?</b>"
+  - "<b>Metindeki betimlemeler dikkate alındığında yazarın en çok etkilendiği unsur aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu gezi yazısından hareketle aşağıdaki genellemelerden hangisi yapılabilir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Gezi yazisi icerigiyle uyumlu, mekan ve duygu betimlemelerine dayali cevap"
+  kurallar:
+    - "Metin icerigiyle desteklenmeli"
+    - "Mekan ve duygu betimlemelerini dogru yansitmali"
+    - "Tam cumle formatinda olmali (3-20 sozcuk)"
+    - "Yazarin izlenimlerini dogru aktarmali"
+    - "Baglam olmadan cevaplanamaz olmali"
+    - "Ust duzey dusunme becerisi gerektirmeli"
+    - "Bilissel surec bilesenini hedeflemeli"
+  ornekler:
+    - gezi: "Kapadokya'ya vardigimizda ilk dikkatimizi ceken peri bacalari oldu. Dogal kayalarin binlerce yillik erozyon sonucu sekillenmesi hayranlık vericiydi..."
+      dogru: "Yazar Kapadokya'nin dogal guzelliklerinden etkilenmistir"
+      neden: "Metinde hayranlık ifadesi ve doga betimlemeleri bunu destekler"
+    - gezi: "Efes Antik Kenti'nde yuruyus yaparken tarihin icinde kayboldum. Celsus Kutuphanesi'nin goruntusu nefes kesiciydi..."
+      dogru: "Efes'in tarihi dokusu yazari derinden etkilemistir"
+      neden: "Metindeki ifadeler yazarin tarihi atmosferden etkilendigini gosterir"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM gezi yazisi iceriğine gore en uygun 4 stratejiyi secer
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select a location/destination suitable for travel writing"
+      details: "Turkiye'den veya dunya'dan ilgi cekici bir yer sec (tarihi, dogal, kulturel)"
+
+    - step: 2
+      action: "Generate travel text (100-160 words) with vivid descriptions"
+      details: |
+        Gezi yazisinda:
+        - Mekan betimlemesi olmali (gorsel, isitsel, kokusal)
+        - Yazarin kisisel izlenimleri yer almali
+        - Kulturel veya dogal ozellikler vurgulanmali
+        - Duyusal ayrintilar icermeli
+
+    - step: 3
+      action: "Create correct answer as complete sentence"
+      details: |
+        Dogru cevap:
+        - Metindeki betimleme ve izlenimlere dayanmali
+        - Tam cumle formatinda olmali (3-20 sozcuk)
+        - Metin icerigiyle kanitlanabilir olmali
+
+    - step: 4
+      action: "Create 4 wrong answers using strategies"
+      details: |
+        Her yanlis secenek icin farkli strateji kullan:
+        - 1x metindeki bir detaydan genelleme yapan
+        - 1x yerle iliskili ama metinde desteklenmeyen
+        - 1x yazarin duygusunu yanlis yorumlayan
+        - 1x mantikli gorunen ama metinle celisen
+        Tum secenekler ayni formatta olmali (tam cumle, 3-20 sozcuk)
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D-E seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - konu: "Kapadokya gezisi"
+    dogru_cevap: "C"
+    secenekler:
+      A: "Kapadokya yalnizca turizm icin olusturulmus yapay bir alandir"
+      B: "Yazar peri bacalarini begenmedigi icin hayal kirikligina ugramistir"
+      C: "Yazar Kapadokya'nin dogal guzelliklerinden etkilenmistir"
+      D: "Kapadokya'daki kayalar son yillarda sekillenmistir"
+      E: "Yazar daha once Kapadokya'yi ziyaret etmistir"
+    dogru_cevap_icerigi: "Yazar Kapadokya'nin dogal guzelliklerinden etkilenmistir"
+    neden: "Metindeki hayranlık ifadesi ve betimleme bunu destekler"
+
+  - konu: "Efes Antik Kenti gezisi"
+    dogru_cevap: "A"
+    secenekler:
+      A: "Efes'in tarihi dokusu yazari derinden etkilemistir"
+      B: "Yazar Efes'e bilimsel arastirma yapmak icin gitmistir"
+      C: "Celsus Kutuphanesi gunumuzde hala kutupahne olarak kullanilmaktadir"
+      D: "Yazar gezisi sirasinda yorulmus ve kizgindir"
+      E: "Efes Antik Kenti yalnizca Romalilara aittir"
+    dogru_cevap_icerigi: "Efes'in tarihi dokusu yazari derinden etkilemistir"
+    neden: "Metindeki ifadeler yazarin tarihi atmosferden etkilendigini gosterir"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  # Asama 0: Kimlik ve Olcme Niyeti
+  identity:
+    - "Soru bir beceriyi mi olcuyor, bilgi hatirlamayi mi?"
+    - "Hedef beceri seviyesi uygun mu?"
+    - "Surec bileseni dogru hedeflenmis mi?"
+
+  # Asama 1: Baglam Secimi
+  context:
+    - "Baglam olmadan soru cozulebilir mi? (Hayir olmali)"
+    - "Baglam fonksiyonel mi? (Dekoratif degil)"
+    - "Baglam cevabi dogrudan veriyor mu? (Vermemeli)"
+    - "Baglam otantik mi? (Gercek hayattan)"
+    - "Kelime sayisi 100-160 arasinda mi?"
+    - "Mekan betimlemesi yapilmis mi?"
+    - "Duyusal ayrintilar var mi?"
+    - "Yazarin kisisel izlenimleri yer aliyor mu?"
+
+  # Asama 2: Soru ve Secenekler
+  question:
+    - "Soru koku net ve anlasilir mi?"
+    - "Cift olumsuz var mi? (Olmamali)"
+    - "Tek dogru cevap var mi?"
+
+  options:
+    - "Celdiriciler belirli bilissel hatalari temsil ediyor mu?"
+    - "Eleme yoluyla cevaplanabilir mi? (Olmamali)"
+    - "Format farkliligi ile dogru cevap belli oluyor mu? (Olmamali)"
+    - "Tum secenekler benzer uzunlukta mi?"
+    - "5 secenek var mi (A-B-C-D-E)?"
+
+  # Asama 3: Etik
+  ethics:
+    - "Cinsiyet/etnik onyargi var mi? (Olmamali)"
+    - "Yas grubuna uygun mu?"
+
+  # Asama 4: Dil
+  language:
+    - "Turkce dil bilgisi dogru mu?"
+    - "Sinif seviyesine uygun mu?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+
+  generation_rules:
+    - "Gezi yazisina uygun mekan ve destinasyon konulari tercih et"
+    - "Tarihi, dogal ve kulturel mekanlar ideal"
+    - "Betimleme ve izlenim aktarimina uygun konulari sec"

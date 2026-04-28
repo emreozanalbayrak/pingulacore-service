@@ -1,0 +1,235 @@
+# templates/soru_cevap_negative.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Metinde Soru ve Cevap
+#
+# NEGATIF SORU-CEVAP FORMATI (~%29 - 24 sorudan 7'si)
+# Paragraf verilir, ogrenci cevabi OLMAYAN soruyu secer
+#
+# MANTIK: 3 secenek paragrafin cevapladigi sorular (yanlis), 1 tanesi cevaplanmayan (dogru)
+# Secenekler SORU CUMLESI formatindadir (4-15 kelime, '?' ile biter)
+#
+# FARK: Standard'dan farki ters mantik + "yoktur" altini cizili
+
+meta:
+  id: "soru_cevap_negative"
+  ad: "Metinde Soru ve Cevap (Negatif)"
+  sinif_seviyesi: 5
+  aciklama: "Paragrafta cevabi olmayan soruyu belirleme sorulari"
+  kaynak: "data/metinde_soru_cevap.pdf"
+  frequency: "~29% of soru_cevap questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 4 soru cumlesi secenek (cevabi olmayan)"
+
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 100
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "bilgilendirici"
+    kurallar:
+      - "Birden fazla soruya cevap verecek sekilde zengin icerik olmali"
+      - "En az 3 farkli bilgi/soru icin cevap icermeli"
+      - "Konuyla iliskili ama paragrafta cevaplanmayan en az 1 soru icin alan birakmali"
+      - "Her cumle farkli bir bilgi vermeli"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 4
+    word_count_max: 15
+    style: "question_sentence"
+    correct_type: "does_not_belong"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 3 varyasyon)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metinde aşağıdaki sorulardan hangisinin cevabı <u>yoktur</u>?</b>"
+  - "<b>Bu metinde aşağıdaki sorulardan hangilerinin cevapları <u>yoktur</u>?</b>"
+  - "<b>Bu metinde</b> \"{topic}\" <b>ile ilgili aşağıdaki sorulardan hangisinin cevabı <u>yoktur</u>?</b>"
+  - "\"{topic}\" <b>ile ilgili bu metinde aşağıdaki soruların hangisinin cevabı <u>yoktur</u>?</b>"
+  - "<b>Aşağıdaki sorulardan hangisinin cevabı bu metinde <u>bulunmaz</u>?</b>"
+  - "<b>Bu metne göre aşağıdaki sorulardan hangisi <u>cevaplanamaz</u>?</b>"
+  - "<b>Aşağıdaki sorulardan hangisine bu metinden yola çıkarak cevap <u>verilemez</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI (TERS MANTIK!)
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Konuyla iliskili ama paragrafta cevabi OLMAYAN bir soru"
+  mantik: "INVERSE - diger 3 secenek paragrafin cevapladigi sorular, dogru cevap cevaplanmayan soru"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Konuyla iliskili ve makul bir soru olmali"
+    - "Paragrafta kesinlikle cevaplanmamis olmali"
+    - "Soru cumlesi formatinda olmali ('?' ile bitmeli)"
+    - "Diger seceneklerle ayni gramer yapida olmali"
+    - "4-15 kelime uzunlugunda olmali"
+    - "Kelime sayisi bakimindan en uzun sik olmamali"
+  ornekler:
+    - paragraf: "Kaplumbagalar dunyanin en eski surungen turlerinden biridir. Kabuklari kemik ve keratinden olusur. Kara kaplumbagalari genellikle otculdur, deniz kaplumbagalari ise hem bitki hem hayvan yer. Bazi turler 100 yildan fazla yasayabilir."
+      dogru: "Kaplumbağalar yumurtalarını nereye bırakır?"
+      neden: "Paragrafta yumurtlama yeri anlatilmiyor"
+    - paragraf: "Gunes sistemimizdeki en buyuk gezegen Jupiterdir. Yuzeyinde dev bir kirmizi leke bulunur. Bu leke aslinda yuzyillardir devam eden dev bir firtina sistemidir. Jupiter'in 80'den fazla uydusu vardir."
+      dogru: "Jüpiter Güneş'e ne kadar uzaktır?"
+      neden: "Paragrafta mesafe bilgisi yok"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI (TERS MANTIK - 4 tip)
+# ═══════════════════════════════════════════════════════════════
+
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# Ters mantik sorularinda LLM:
+# - 3 "paragrafin cevapladigi soru" olusturur (yanlis secenekler)
+# - 1 "paragrafta cevabi OLMAYAN ama iliskili soru" olusturur (dogru cevap)
+# Strateji havuzu "cevaplanmayan" soruyu olusturmak icin kullanilir
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cikarim_yapma", "mantiksal_denetleme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic with multiple answerable questions"
+      details: "Birden fazla soruya cevap iceren zengin bir konu sec"
+
+    - step: 2
+      action: "Generate paragraph (55-100 words) answering 3+ questions"
+      details: |
+        Paragrafta:
+        - En az 3 farkli soruya cevap veren bilgiler olmali
+        - Konuyla iliskili ama cevaplanmayan sorular icin alan birakmali
+        - Her cumle farkli bir bilgi vermeli
+
+    - step: 3
+      action: "Extract 3 answered questions (distractors - wrong answers)"
+      details: |
+        Her biri soru cumlesi olmali (4-15 kelime):
+        - Paragrafta acikca cevaplanan sorular
+        - '?' ile bitmeli
+        - Ayni gramer yapida
+
+    - step: 4
+      action: "Create 1 unanswered question (correct answer)"
+      details: |
+        Soru cumlesi olmali (4-15 kelime):
+        - Konuyla iliskili ama paragrafta CEVAPLANMAYAN
+        - Diger seceneklerle ayni gramer yapida
+        - '?' ile bitmeli
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from 3 variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 2
+    soru_no: 3
+    konu: "Kaplumbagalar"
+    paragraf: "Kaplumbagalar dunyanin en eski surungen turlerinden biridir. Kabuklari kemik ve keratinden olusur..."
+    soru_koku: "Bu metinde aşağıdaki sorulardan hangisinin cevabı yoktur?"
+    secenekler:
+      A: "Kaplumbağaların kabuğu neden oluşur?"
+      B: "Kaplumbağalar ne ile beslenir?"
+      C: "Kaplumbağalar yumurtalarını nereye bırakır?"
+      D: "Kaplumbağalar ne kadar yaşayabilir?"
+    dogru_cevap: "C"
+    neden: "Yumurtlama yeri paragrafta anlatilmiyor"
+
+  - sayfa: 4
+    soru_no: 8
+    konu: "Jupiter"
+    paragraf: "Gunes sistemimizdeki en buyuk gezegen Jupiterdir. Yuzeyinde dev bir kirmizi leke bulunur..."
+    soru_koku: "Bu metinde aşağıdaki sorulardan hangisinin cevabı yoktur?"
+    secenekler:
+      A: "Güneş sistemindeki en büyük gezegen hangisidir?"
+      B: "Jüpiter'in yüzeyinde ne bulunur?"
+      C: "Jüpiter Güneş'e ne kadar uzaktır?"
+      D: "Jüpiter'in kaç uydusu vardır?"
+    dogru_cevap: "C"
+    neden: "Mesafe bilgisi paragrafta yok"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 55-100 arasinda mi?"
+    - "En az 3 farkli soruya cevap veriyor mu?"
+    - "Cevaplanmayan soru icin alan var mi?"
+
+  correct_answer:
+    - "4-15 kelime arasinda soru cumlesi mi?"
+    - "'?' ile bitiyor mu?"
+    - "Paragrafta kesinlikle cevaplanmiyor mu?"
+    - "Konuyla iliskili ve makul bir soru mu?"
+
+  distractors:
+    - "Her biri 4-15 kelime soru cumlesi mi?"
+    - "Hepsi '?' ile bitiyor mu?"
+    - "Hepsi paragrafin cevapladigi sorular mi?"
+    - "Ayni gramer yapida mi?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+
+  generation_rules:
+    - "Birden fazla soruya cevap veren zengin konulari tercih et"
+    - "Konuyla iliskili ama cevaplanmayan sorular icin uygun konulari sec"
+    - "Paragrafta en az 3 farkli bilgi olabilecek konulari sec"

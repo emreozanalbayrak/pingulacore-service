@@ -1,0 +1,129 @@
+meta:
+  id: problem_sureci_senaryo
+  ad: Problem Süreci Senaryosu
+  sinif_seviyesi: 5
+  aciklama: Problem → Araştırma → Çözüm → Uygulama → Sonuç akışında karar, çözüm ve çıkarım soruları
+  kaynak: kaynak-soru-kokleri.md
+  frequency: Medium
+context:
+  type: problem_sureci
+  question_count: 3
+  question_count_min: 2
+  question_count_max: 3
+  generation:
+    word_count_min: 120
+    word_count_max: 200
+    structure:
+    - Bir karakter (isimli) bir problemle karşılaşıyor → araştırma yapıyor → çözüm buluyor → uyguluyor → sonuç alıyor
+    - 'Metin 5 aşamalı süreci yansıtmalı: Problem → Araştırma → Çözüm → Uygulama → Sonuç'
+    - Her aşama en az 1-2 cümleyle anlatılmalı
+    - Süreçteki kararların nedenleri açıkça belirtilmeli
+    - Uygulama sonucunda olumlu veya olumsuz bir sonuç elde edilmeli
+    - Farklı çözüm alternatifleri de ima edilmeli (hangisinin seçildiği belli olmalı)
+    kurallar:
+    - 5. sınıf seviyesinde, günlük hayattan bir problem çözme süreci
+    - Sürecin her aşaması net ve takip edilebilir olmalı
+    - Karakterin neden bu çözümü seçtiği anlaşılır olmalı
+    - Süreçte mantıksal bir akış olmalı — atlanmış adım olmamalı
+    - Alternatif çözümler karşılaştırılabilir olmalı
+    - Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)
+  questions:
+  - slot: 1
+    type: karar_nedeni
+    soru_kokleri:
+    - <b>…Karakter… aşağıdakilerden hangisinin sonucunda bu kararı almıştır?</b>
+    - <b>…Karakter…'ı bu çözümü uygulamaya yönelten temel neden aşağıdakilerden hangisidir?</b>
+    - <b>...Karakter..., asagidakilerden hangisi sonucunda bu karari almistir?</b>
+    options_style: complete_sentence
+    word_count_min: 8
+    word_count_max: 22
+    beceri:
+      katman: KB2
+      bilesenler:
+      - cikarim_yapma
+      - cozumleme
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 2
+    type: cozum_uygunlugu
+    soru_kokleri:
+    - <b>Aşağıdaki çözüm önerilerinden hangisi …Karakter…'ın durumuna en uygunudur?</b>
+    - <b>…Karakter… farklı bir çözüm arasaydı aşağıdakilerden hangisi en uygun olurdu?</b>
+    - <b>…Karakter…, problemin çözümü için …Karakter 2…'den çözüm önerileri istemiştir. Aşağıdakilerden hangisi problemin çözümüne yönelik uygun bir öneridir?</b>
+    - <b>...Karakter..., problemin cozumu icin ...Karakter 2...den cozum onerileri istemistir. Asagidakilerden hangisi uygun bir oneridir?</b>
+    options_style: complete_sentence
+    word_count_min: 8
+    word_count_max: 25
+    beceri:
+      katman: KB3
+      bilesenler:
+      - problem_cozme
+      - degerlendirme
+      surec_bileseni: problemi_yapilandirma
+  - slot: 3
+    type: soylenemez
+    soru_kokleri:
+    - <b>Bu metne göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>
+    - <b>…Karakter…'ın yaşadığı süreçle ilgili aşağıdakilerden hangisi <u>doğru değildir</u>?</b>
+    options_style: complete_sentence
+    word_count_min: 8
+    word_count_max: 25
+    beceri:
+      katman: KB3
+      bilesenler:
+      - degerlendirme
+      - mantiksal_denetleme
+      surec_bileseni: problemi_yapilandirma
+header_template: 1-3. soruları aşağıdaki metne göre cevaplayınız.
+format:
+  type: llm_generated_html
+  description: Problem süreci senaryosu üzerinden karar, çözüm ve çıkarım soruları
+  paragraph:
+    required: true
+    word_count_min: 120
+    word_count_max: 200
+    sentence_count_min: 6
+    sentence_count_max: 12
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 8
+    word_count_max: 25
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Problem sürecindeki kararları ve çıkarımları doğru yansıtan cevap
+  kurallar:
+  - 'KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI'
+  - Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI
+  - Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil
+  - 'YASAK: Tablodaki değeri aynen şıkka yazmak (örn: ''yalıtımı azdır'' tabloda yazıyorsa şıkta aynen yazmamalı)'
+  - Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli
+  - Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı
+  - Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı
+  - Karar nedeni sorusunda doğru cevap karakterin çözümü seçme gerekçesini yansıtmalı
+  - Çözüm uygunluğu sorusunda doğru cevap senaryodaki koşullarla uyumlu olmalı
+  - Söylenemez sorusunda doğru cevap metinle ÇELIŞEN veya desteklenmeyen ifade olmalı
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: ''teleskop'' → ''mercekli araç'' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: SUREC_ATLAMA
+    aciklama: Süreçteki bir aşamayı atlayarak yanlış neden-sonuç ilişkisi kurma
+    ornek: Araştırma aşamasını atlayıp problemi doğrudan sonuçla ilişkilendirme
+  - ad: ALTERNATIF_CARPITMA
+    aciklama: Seçilmeyen alternatif çözümü doğru gibi sunma
+    ornek: Karakterin reddettiği çözümü en uygun seçenek olarak gösterme
+  - ad: SONUC_KARISTIRMA
+    aciklama: Sürecin sonucunu yanlış aktarma veya abartma
+    ornek: Kısmi başarıyı tam başarı gibi veya tam tersi gösterme
+use_shared_strategies: false

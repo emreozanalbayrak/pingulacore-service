@@ -1,0 +1,101 @@
+meta:
+  id: baglam_1q_akis_bozan
+  ad: 1Q Baglam Akisi Bozan Cumle
+  sinif_seviyesi: 5
+  aciklama: Numarali cumlelerden olusan metinde akisi bozan cumleyi bulma sorusu
+  kaynak: baglamb3sorukoku.md
+  frequency: Medium
+context:
+  type: baglam_senaryo_1q
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 60
+    word_count_max: 120
+    structure:
+    - Bir karakter (Turkce isimli) numaralanmis cumlelerden olusan bir metin bulur (3-5 cumle senaryo)
+    - "Metin (I) (II) (III) (IV) şeklinde parantezli Roma rakamıyla numaralanmış 4 cümleden oluşur — parantez ZORUNLU"
+    - "Numaralı cümleler senaryodan AYRI bir paragrafta olmalı — önce senaryo, sonra <br><br> ile ayrılmış numaralı cümleler paragrafı"
+    - 3 cumle ayni konu etrafinda tutarli bir metin olustururken 1 cumle akisi bozar
+    - Akisi bozan cumle konuyla iliskili ama farkli bir yonden bahseden cumle olmali
+    - 'Senaryo: Karakter dergide/kitapta bir yazi bulur, akisi bozan cumleyi cikaracak'
+    kurallar:
+    - Senaryo 5. sinif seviyesinde, gunluk hayattan olmali
+    - Karakter ismi Turkce olmali (Elif, Mert, Zeynep, Can vb.)
+    - Akisi bozan cumle konuyla tamamen ilgisiz OLMAMALI, farkli bir yon olmali
+    - Diger 3 cumle anlam ve konu butunlugu icinde olmali
+    - Turkce karakterler dogru kullanilmali (s, i, g, u, o, c)
+  questions:
+  - slot: 1
+    type: akis_bozan
+    soru_kokleri:
+    - <b>...Karakter...'in metinden cikardigi, metnin akisini bozan cumle hangisidir?</b>
+    - <b>...Karakter...'in buldugu yazida konunun farkli bir yonunden bahseden cumle hangisidir?</b>
+    - <b>...Karakter...in buldugu yazida konunun farkli bir yonunden bahseden numaralandirilmis cumle hangisidir?</b>
+    - <b>Bu metnin anlam butunlugunu saglamak icin numaralanmis cumlelerden hangilerinin yeri degistirilmelidir?</b>
+    options_style: roman_numeral_combination
+    word_count_min: 1
+    word_count_max: 6
+    beceri:
+      katman: KB2
+      bilesenler:
+      - analiz
+      - degerlendirme
+      surec_bileseni: bilgiyi_yapilandirma
+soru_kokleri:
+- <b>...Karakter...'in metinden cikardigi metnin akisini bozan cumle hangisidir?</b>
+- <b>...Karakter...'in buldugu yazida konunun farkli bir yonunden bahseden cumle hangisidir?</b>
+header_template: null
+format:
+  type: llm_generated_html
+  description: 1Q baglam senaryo uzerinden akisi bozan cumle bulma sorusu
+  paragraph:
+    required: true
+    numbered_sentences: true
+    word_count_min: 60
+    word_count_max: 120
+    sentence_count_min: 3
+    sentence_count_max: 8
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 1
+    word_count_max: 6
+    style: short_phrase
+    correct_count: 1
+    correct_type: does_not_belong
+dogru_cevap:
+  tanim: Metnin anlam akisini bozan, konunun farkli bir yonunden bahseden cumle
+  kurallar:
+  - 'KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI'
+  - Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI
+  - Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil
+  - 'YASAK: Tablodaki değeri aynen şıkka yazmak (örn: ''yalıtımı azdır'' tabloda yazıyorsa şıkta aynen yazmamalı)'
+  - Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli
+  - Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı
+  - Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı
+  - Dogru secenek paragraftaki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI
+  - Dogru cevap (akisi bozan cumle) konuyla tamamen ilgisiz OLMAMALI
+  - Farkli bir alt konudan veya farkli bir aciyla bahseden cumle olmali
+  - Secenekler Roma rakami ile ifade edilmeli (I, II, III veya IV)
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: ''teleskop'' → ''mercekli araç'' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: AKISA_UYAN_CUMLE
+    aciklama: Metnin ana akisina uyan, konuyla tutarli cumleyi sunma
+    ornek: Metnin konu butunlugunu saglayan cumleyi akis bozan gibi gosterme
+  - ad: BAGLAYICI_CUMLE
+    aciklama: Iki cumle arasinda kopru gorevi goren, kilit cumleyi sunma
+    ornek: Gecis cumlesi olan, cikarilinca anlasilmazlik yaratan cumle
+use_shared_strategies: false

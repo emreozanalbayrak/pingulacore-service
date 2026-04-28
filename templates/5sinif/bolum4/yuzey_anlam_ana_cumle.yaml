@@ -1,0 +1,189 @@
+# templates/bolum4/yuzey_anlam_ana_cumle.yaml
+# Bolum 4.1 - Ozel Bolum: Yuzey Anlam - Ana Cumleyi Bulma
+#
+# NUMARALANMIS CUMLELER FORMATI
+# Numaralanmis cumlelerden metnin yuzey anlamini tasiyan ana cumle secilir
+# Secenekler Roma rakamlari: I, II, III, IV
+
+meta:
+  id: "yuzey_anlam_ana_cumle"
+  ad: "Yüzey Anlam - Ana Cümleyi Bulma"
+  sinif_seviyesi: 5
+  aciklama: "Numaralanmış cümlelerden hangisinin metnin açık ve temel anlamını taşıdığını buldurur"
+  frequency: "Medium (~30% of surface meaning questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Numaralanmış cümlelerden oluşan paragraf + soru kökü + 4 Roma rakamı seçenek"
+
+  paragraph:
+    required: true
+    word_count_min: 40
+    word_count_max: 80
+    sentence_count_min: 4
+    sentence_count_max: 5
+    numbered_sentences: true
+    stil: "bilgilendirici"
+    kurallar:
+      - "Metin 4 veya 5 numaralanmış cümleden oluşmalı"
+      - "Numaralanmış cümleler yan yana yazılmalı ve tek bir paragraf oluşturmalı"
+      - "Yalnızca 1 cümle ana yüzey anlamı (merkez düşünce) taşımalı"
+      - "Diğer cümleler destekleyici, açıklayıcı, örneklendirici ya da ayrıntı verici olmalı"
+      - "Ana cümle diğerlerini kapsayacak kadar genel olmalı"
+      - "Örnek cümle ana cümle gibi görünmemelidir"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 1
+    style: "short_phrase"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metindeki numaralanmış cümlelerin hangisi metnin yüzey anlamı olabilir?</b>"
+  - "<b>Numaralanmış cümlelerden hangisi metnin açık anlamını taşımaktadır?</b>"
+  - "<b>Bu metnin yüzey anlamını en iyi karşılayan cümle hangisidir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metnin açık, genel ve kapsayıcı ana düşüncesini taşıyan numaralı cümle"
+  kurallar:
+    - "KRITIK: Dogru secenekte paragraftaki hicbir cumle kelimesi kelimesine TEKRARLANMAMALI — es anlamli sozcuklerle yeniden ifade edilmeli"
+    - "Paragraftaki ifadelerle en az %40 kelime farkliligi olmali — kopyala-yapistir YASAK"
+    - "Ayni anlam korunmali ama farkli sozcukler ve cumle yapilari kullanilmali"
+    - "Metnin tamamını karşılayan kapsayıcı cümle olmalı"
+    - "Doğru seçenek paragraftaki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI — eş anlamlı sözcüklerle yeniden ifade edilmeli"
+    - "Paragraftaki ifadelerle en az %40 kelime farklılığı olmalı — kopyala-yapıştır YASAK"
+    - "Aynı anlam korunmalı ama farklı sözcükler ve cümle yapıları kullanılmalı"
+    - "Diğer cümleleri toparlayabilmeli, metnin omurgası olmalı"
+    - "Seçenek Roma rakamı formatında: I, II, III veya IV"
+    - "Fazla dar veya fazla özel olmamalı"
+  ornekler:
+    - paragraf: "(I) Okulda yapılan etkinlikler öğrencilerin gelişimini destekler. (II) Ders içi faaliyetler akademik başarıyı artırır. (III) Ders dışı etkinlikler sosyal becerileri güçlendirir. (IV) Örneğin tiyatro kulübü hem özgüveni hem iletişimi geliştirir."
+      dogru: "I"
+      neden: "I numaralı cümle diğerlerini kapsayan genel yargı; II, III destekleyici, IV örneklendirici"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI (CUSTOM — ana cumle bulma icin ozel)
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "DESTEKLEYICI_CUMLEYI_ANA_CUMLE_SANMA"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Bir cümle ana düşünceyi destekler ama tek başına metnin merkezi değildir."
+    nasil_olusturulur: |
+      Ana düşünceyi genişleten veya destekleyen bir cümleyi metne yerleştir.
+      Bu cümle ana yargıyla ilgili görünür ama tek başına metnin tamamını kapsamaz.
+      Öğrenci destek ile merkez arasındaki farkı ayırt etmelidir.
+    kategori: "cognitive"
+
+  - ad: "ORNEK_CUMLEYI_ANA_YARGI_SANMA"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Örnek veren cümle, öğrenciyi yanıltabilir."
+    nasil_olusturulur: |
+      Somut ve çarpıcı bir örnek cümleyi metne yerleştir.
+      Örnek cümle etkileyici ve aklıda kalıcı olduğu için ana cümle gibi algılanabilir.
+      Ama örnek her zaman daha dar kapsamlıdır.
+    kategori: "content"
+
+  - ad: "AYRINTIYI_MERKEZ_SANMA"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metindeki alt başlıklardan biri, sanki ana anlammış gibi algılanabilir."
+    nasil_olusturulur: |
+      Metnin bir alt konusunu veya detayını veren cümleyi metne yerleştir.
+      Bu cümle kendi içinde doğru ve önemli görünür ama metnin bütününü kapsamaz.
+      Ayrıntı ile genel yargı arasındaki hiyerarşiyi test eder.
+    kategori: "scope"
+
+  - ad: "KAPSAM_DARALTMA"
+    bilisssel_hata_kategorisi: "asiri_genelleme"
+    aciklama: "Ana düşüncenin bir bölümünü söyleyen cümle, tüm metni karşılamaz."
+    nasil_olusturulur: |
+      Metnin ana düşüncesinin yalnızca bir boyutunu kapsayan cümle yaz.
+      Örnek: Sadece ders içi faaliyetlerden söz eden cümle, oysa metin genel gelişim çerçevesi kuruyorsa.
+      Bu cümle doğru ama eksik olduğu için ana anlam olamaz.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ETIKETI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["anlama", "siniflandirma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Tek bir ana açık anlam belirle"
+      details: |
+        Metnin merkez cümlesini belirle.
+        Bu cümle metnin omurgası olacak.
+
+    - step: 2
+      action: "Diğer cümleleri işlevsel dağıt"
+      details: |
+        Kalan cümleler şu rollerden birini taşımalı:
+        - Açıklama
+        - Neden / Sonuç
+        - Örnek
+        - Ayrıntı / Kapsam genişletme
+        Toplam 4-5 numaralı cümle.
+
+    - step: 3
+      action: "Ana cümleyi kapsayıcı tut"
+      details: |
+        Doğru cümle:
+        - Diğer cümleleri toparlayabilmeli
+        - Metnin omurgası olmalı
+        - Çok dar olmamalı
+
+    - step: 4
+      action: "Seçenekleri Roma rakamlarıyla sun"
+      details: |
+        A) I  B) II  C) III  D) IV
+        Doğru cümlenin konumu rastgele belirlensin.
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Metin 4 veya 5 numaralanmış cümleden oluşuyor mu?"
+    - "Tek bir ana yüzey anlam var mı?"
+    - "Ana cümle açıkça seçilebiliyor mu?"
+    - "Diğer cümleler destek/açıklama/örnek işlevinde mi?"
+
+  correct_answer:
+    - "Doğru cümle metnin tamamını karşılıyor mu?"
+    - "Fazla dar veya fazla özel değil mi?"
+    - "Diğer cümleler bu cümleye bağlı mı?"
+
+  distractors:
+    - "Yanlış cümleler konuya ilgili ama merkezi değil mi?"
+    - "Örnek cümle ana cümle kadar güçlü mü?"
+    - "Seçenekler arasında belirsizlik var mı?"

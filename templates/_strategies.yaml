@@ -1,0 +1,941 @@
+# templates/_strategies.yaml
+# Merkezi çeldirici strateji havuzu — 30 kognitif çeldirici stratejisi
+#
+# Template'ler use_shared_strategies: true ayarıyla bu havuzu kullanır.
+# LLM, paragraf içeriğine göre en uygun stratejileri seçer.
+# Bir şıkta birden fazla strateji KOMBİNE edilebilir.
+#
+# Her strateji `templates` listesi ile hangi template'lerde kullanılacağını belirtir.
+# Boş `templates` listesi = tüm template'lerde kullanılabilir.
+#
+# YAML anchors (&genel, &genel_ve_inverse, &tablo) tekrar eden template
+# listelerini DRY tutar. _template_groups strategy_loader tarafından yok sayılır.
+
+# ═══════════════════════════════════════════════════════════════
+# TEMPLATE GRUPLARI (YAML anchor tanımları — loader tarafından yok sayılır)
+# ═══════════════════════════════════════════════════════════════
+
+_template_groups:
+  genel: &genel
+    # capture1
+    - konu_standard
+    - baslik_standard
+    - ana_fikir_standard
+    - anahtar_sozcuk_positive
+    - anahtar_sozcuk_negative
+    - yardimci_fikir_standard
+    - yardimci_fikir_sentence
+    - yardimci_fikir_numarali
+    - soru_cevap_standard
+    - soru_cevap_negative
+    - soru_cevap_numarali
+    # capture2
+    - dusunceyi_gelistirme_standard
+    - dusunceyi_gelistirme_negative
+    - dusunceyi_gelistirme_sentence_analysis
+    - dusunceyi_gelistirme_multiple
+    - hikaye_unsurlari_tablo
+    - hikaye_unsurlari_soylenemez
+    - hikaye_unsurlari_yoktur
+    - hikaye_unsurlari_reverse
+    - metinde_dil_ve_anlatim_soylenemez
+    - metinde_dil_ve_anlatim_soylenir
+    - metinde_dil_ve_anlatim_yargilar
+    - metinde_duygu_standard
+    - metinde_duygu_soylenemez
+    - metinde_duygu_sirali
+    - metinde_duyular_negative
+    - metinde_duyular_ikili
+    - metinde_duyular_sentence
+    - metinde_karakter_ozellik
+    - metinde_karakter_yakinilan
+    - metinde_karakter_karsilastirma
+    - metinler_arasi_karsilastirma_ortak
+    - metinler_arasi_karsilastirma_farkli
+    - metinler_arasi_karsilastirma_oncullu
+    - anlatici_turleri_standard
+    - anlatici_turleri_farkli_olan
+    - anlatici_konumu
+    # bolum3
+    - paragraf_siralama_cumle_tamamlama
+    # bolum4
+    - yuzey_derin_anlam_standard
+    - yuzey_derin_anlam_soylenemez
+    - elestirme_cozum_standard
+    - elestirme_cozum_negative
+    - paragraf_turu_standard
+    - metin_ici_karsilastirma
+    # bolum4.2
+    - cozumleme_yorumlama_standard
+    # beceri
+    - beceri_senaryo
+    - beceri_hikaye
+    - beceri_afis
+    - beceri_tablo
+    - beceri_infografik
+    - beceri_diyalog
+    - beceri_siir
+    - beceri_bilgilendirici
+    - beceri_mektup
+    - beceri_biyografi
+    - beceri_roportaj
+    - beceri_gezi_yazisi
+    - beceri_masal_fabl
+    - beceri_sosyal_medya
+    - beceri_metinler_arasi
+    # baglam b1_1
+    - baglam_1q_konu
+    - baglam_1q_ana_fikir
+    - baglam_1q_yardimci_fikir
+    - baglam_bilgi_tablo
+    - baglam_cikarim
+    - coklu_gorus
+    - senaryo_anket
+    - pasta_grafik_senaryo
+    - grafik_arastirma_senaryo
+    # baglam b1_2
+    - baglam_1q_baslik
+    - baglam_1q_soru_cevap
+    - basit_senaryo_12
+    - afisli_senaryo_12
+    # baglam b2
+    - dgy_senaryo
+    - dgy_tablo
+    - hikaye_unsurlari_senaryo
+    - hikaye_unsurlari_tablo_baglam
+    - hikaye_unsurlari_verilen
+    - anlatici_dil_tablo
+    - anlatici_donusum
+    - duygu_karakter_hikaye
+    - duygu_duyular_senaryo
+    - metinler_arasi_baglam
+    - metinler_arasi_baglam_2q
+    # baglam b3
+    - baglam_1q_siralama
+    - baglam_1q_cumle_tamamlama
+    - baglam_1q_ikiye_bolme
+    - baglam_1q_akis_bozan
+    - siralama_ogrenci_senaryo
+    - siralama_paragraf_ayirma
+    - siralama_baglam_3q
+    - siralama_baglam_4q
+    # baglam b4
+    - baglam_1q_yuzey_derin_anlam
+    - uc_metin_karsilastirma
+    - hikaye_karsilastirma
+    - problem_cozme_senaryo
+    - problem_sureci_senaryo
+    - problem_cozme_2q
+    - paragraf_turu_ozellik
+    # baglam b5-b6
+    - arastirma_senaryo
+    - gorselli_baglam_senaryo
+    - sozel_mantik_baglam_2q
+
+  genel_ve_inverse: &genel_ve_inverse
+    # capture1
+    - konu_standard
+    - baslik_standard
+    - ana_fikir_standard
+    - anahtar_sozcuk_positive
+    - anahtar_sozcuk_negative
+    - yardimci_fikir_standard
+    - yardimci_fikir_sentence
+    - yardimci_fikir_numarali
+    - soru_cevap_standard
+    - soru_cevap_negative
+    - soru_cevap_numarali
+    # capture1 inverse
+    - konu_inverse
+    - baslik_inverse
+    # capture2
+    - dusunceyi_gelistirme_standard
+    - dusunceyi_gelistirme_negative
+    - dusunceyi_gelistirme_sentence_analysis
+    - dusunceyi_gelistirme_multiple
+    - hikaye_unsurlari_tablo
+    - hikaye_unsurlari_soylenemez
+    - hikaye_unsurlari_yoktur
+    - hikaye_unsurlari_reverse
+    - metinde_dil_ve_anlatim_soylenemez
+    - metinde_dil_ve_anlatim_soylenir
+    - metinde_dil_ve_anlatim_yargilar
+    - metinde_duygu_standard
+    - metinde_duygu_soylenemez
+    - metinde_duygu_sirali
+    - metinde_duyular_negative
+    - metinde_duyular_ikili
+    - metinde_duyular_sentence
+    - metinde_karakter_ozellik
+    - metinde_karakter_yakinilan
+    - metinde_karakter_karsilastirma
+    - metinler_arasi_karsilastirma_ortak
+    - metinler_arasi_karsilastirma_farkli
+    - metinler_arasi_karsilastirma_oncullu
+    - anlatici_turleri_standard
+    - anlatici_turleri_farkli_olan
+    - anlatici_konumu
+    # bolum3
+    - paragraf_siralama_cumle_tamamlama
+    # bolum4
+    - yuzey_derin_anlam_standard
+    - yuzey_derin_anlam_soylenemez
+    - elestirme_cozum_standard
+    - elestirme_cozum_negative
+    - paragraf_turu_standard
+    - metin_ici_karsilastirma
+    # bolum4.2
+    - cozumleme_yorumlama_standard
+    # beceri
+    - beceri_senaryo
+    - beceri_hikaye
+    - beceri_afis
+    - beceri_tablo
+    - beceri_infografik
+    - beceri_diyalog
+    - beceri_siir
+    - beceri_bilgilendirici
+    - beceri_mektup
+    - beceri_biyografi
+    - beceri_roportaj
+    - beceri_gezi_yazisi
+    - beceri_masal_fabl
+    - beceri_sosyal_medya
+    - beceri_metinler_arasi
+    # baglam b1_1
+    - baglam_1q_konu
+    - baglam_1q_ana_fikir
+    - baglam_1q_yardimci_fikir
+    - baglam_bilgi_tablo
+    - baglam_cikarim
+    - coklu_gorus
+    - senaryo_anket
+    - pasta_grafik_senaryo
+    - grafik_arastirma_senaryo
+    # baglam b1_2
+    - baglam_1q_baslik
+    - baglam_1q_soru_cevap
+    - basit_senaryo_12
+    - afisli_senaryo_12
+    # baglam b2
+    - dgy_senaryo
+    - dgy_tablo
+    - hikaye_unsurlari_senaryo
+    - hikaye_unsurlari_tablo_baglam
+    - hikaye_unsurlari_verilen
+    - anlatici_dil_tablo
+    - anlatici_donusum
+    - duygu_karakter_hikaye
+    - duygu_duyular_senaryo
+    - metinler_arasi_baglam
+    - metinler_arasi_baglam_2q
+    # baglam b3
+    - baglam_1q_siralama
+    - baglam_1q_cumle_tamamlama
+    - baglam_1q_ikiye_bolme
+    - baglam_1q_akis_bozan
+    - siralama_ogrenci_senaryo
+    - siralama_paragraf_ayirma
+    - siralama_baglam_3q
+    - siralama_baglam_4q
+    # baglam b4
+    - baglam_1q_yuzey_derin_anlam
+    - uc_metin_karsilastirma
+    - hikaye_karsilastirma
+    - problem_cozme_senaryo
+    - problem_sureci_senaryo
+    - problem_cozme_2q
+    - paragraf_turu_ozellik
+    # baglam b5-b6
+    - arastirma_senaryo
+    - gorselli_baglam_senaryo
+    - sozel_mantik_baglam_2q
+
+  tablo: &tablo
+    - beceri_tablo
+    - beceri_infografik
+    - senaryo_tablo
+    - senaryo_anket
+    - grafik_arastirma_senaryo
+    - baglam_bilgi_tablo
+    - paragraf_turu_tablo
+    - pasta_grafik_senaryo
+    - dgy_tablo
+    - hikaye_unsurlari_tablo_baglam
+    - anlatici_dil_tablo
+    - gorselli_baglam_senaryo
+    - senaryo_infografik
+
+  baglam_senaryo: &baglam_senaryo
+    # b1
+    - baglam_1q_konu
+    - baglam_1q_ana_fikir
+    - baglam_1q_yardimci_fikir
+    - baglam_1q_baslik
+    - baglam_1q_soru_cevap
+    - baglam_bilgi_tablo
+    - baglam_cikarim
+    - coklu_gorus
+    - senaryo_anket
+    - pasta_grafik_senaryo
+    - grafik_arastirma_senaryo
+    - basit_senaryo_12
+    - afisli_senaryo_12
+    # b2
+    - dgy_senaryo
+    - dgy_tablo
+    - hikaye_unsurlari_senaryo
+    - hikaye_unsurlari_tablo_baglam
+    - hikaye_unsurlari_verilen
+    - anlatici_dil_tablo
+    - anlatici_donusum
+    - duygu_karakter_hikaye
+    - duygu_duyular_senaryo
+    - metinler_arasi_baglam
+    - metinler_arasi_baglam_2q
+    # b3
+    - baglam_1q_siralama
+    - baglam_1q_cumle_tamamlama
+    - baglam_1q_ikiye_bolme
+    - baglam_1q_akis_bozan
+    - siralama_ogrenci_senaryo
+    - siralama_paragraf_ayirma
+    - siralama_baglam_3q
+    - siralama_baglam_4q
+    # b4
+    - baglam_1q_yuzey_derin_anlam
+    - uc_metin_karsilastirma
+    - hikaye_karsilastirma
+    - problem_cozme_senaryo
+    - problem_sureci_senaryo
+    - problem_cozme_2q
+    - paragraf_turu_tablo
+    - paragraf_turu_ozellik
+    # b5-b6
+    - arastirma_senaryo
+    - senaryo_tablo
+    - gorselli_baglam_senaryo
+    - senaryo_infografik
+    - sozel_mantik_baglam_2q
+
+  baglam_siralama: &baglam_siralama
+    - baglam_1q_siralama
+    - baglam_1q_cumle_tamamlama
+    - baglam_1q_ikiye_bolme
+    - baglam_1q_akis_bozan
+    - siralama_ogrenci_senaryo
+    - siralama_paragraf_ayirma
+    - siralama_baglam_3q
+    - siralama_baglam_4q
+
+  baglam_problem: &baglam_problem
+    - problem_cozme_senaryo
+    - problem_sureci_senaryo
+    - problem_cozme_2q
+
+  baglam_hikaye_unsur: &baglam_hikaye_unsur
+    - hikaye_unsurlari_senaryo
+    - hikaye_unsurlari_tablo_baglam
+    - hikaye_unsurlari_verilen
+    - duygu_karakter_hikaye
+    - duygu_duyular_senaryo
+    - hikaye_karsilastirma
+    - basit_senaryo_12
+    - afisli_senaryo_12
+
+# ═══════════════════════════════════════════════════════════════
+# 17 ÇELDİRİCİ STRATEJİSİ
+# ═══════════════════════════════════════════════════════════════
+
+strategies:
+
+  # ───────────────────────────────────────────────────────────
+  # 1. KAVRAM YANILGISI (eski: YAKIN_ANLAM + ES_ANLAMLI_MASKELEME)
+  # ───────────────────────────────────────────────────────────
+  kavram_yanilgisi:
+    ad: "KAVRAM_YANILGISI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metindeki bir kavramın anlamını bilinçli olarak kaydır veya yanlış bağlamda kullan"
+    nasil_olusturulur: |
+      Metindeki merkezi kavramı tespit et. Kavramın anlamını kaydır ama metne referansını koru.
+      Kavramı yanlış düzeyde genelleştir, değeri davranışa indir veya davranışı değere yükselt.
+      Aynı kavram ailesinden kelimeler kullan (denge → uyum → düzen).
+      Kaydırma yapılırken tanım/işlev/değer katmanlarından birini seç.
+      Kavram kaydırırken aynı kökten kelime kullanmak başarılı olur.
+    kacinilacaklar: |
+      Metinde hiç geçmeyen karşıt kavramlar kullanma.
+      Aşırı zıtlık oluşturma.
+      Kavramı tamamen değiştirme; sadece anlam kaydır.
+      Metin dışına çıkma.
+    kategori: "semantic"
+    bilissel_hata: "kavram_karisikligi"
+    templates: *genel_ve_inverse
+
+  # ───────────────────────────────────────────────────────────
+  # 2. EKSİK ANALİZ (eski: DETAY_TUZAGI)
+  # ───────────────────────────────────────────────────────────
+  eksik_analiz:
+    ad: "EKSIK_ANALIZ"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metnin tamamı yerine sadece bir bölümünü analiz ederek genelleme yap"
+    nasil_olusturulur: |
+      Metni parçalara ayır ve en baskın ama tekil temayı seç.
+      Bu temayı tüm metnin değeri gibi yaz.
+      Seçilen paragrafın anahtar kelimesini aynen koru.
+      "Tümünde" sorularda genelleme dili kullan.
+      Diğer metinleri tamamen dışlamayacak kadar nötr kal.
+    kacinilacaklar: |
+      Ana mesajla açık çelişki oluşturma.
+      Diğer paragrafları tamamen yok sayma — nötr kal.
+    kategori: "content"
+    bilissel_hata: "eksik_analiz"
+    templates: *genel
+
+  # ───────────────────────────────────────────────────────────
+  # 3. HATALI GENELLEME (eski: OLASILIK_KESINLIK_CELISKISI)
+  # ───────────────────────────────────────────────────────────
+  hatali_genelleme:
+    ad: "HATALI_GENELLEME"
+    bilisssel_hata_kategorisi: "asiri_genelleme"
+    aciklama: "Metindeki kısmi doğruyu tüm duruma yayarak veya mutlaklık ekleyerek genelleştir"
+    nasil_olusturulur: |
+      Metindeki doğru ifadeyi al ve kapsamını genişlet veya mutlaklık kelimesi ekle.
+      Yumuşak mutlaklık kelimeleri tercih et: çoğunlukla, büyük ölçüde, genellikle, öncelikle.
+      Kapsayıcılık hatası oluştur: kısmi doğruyu evrensel kural gibi sun.
+    kacinilacaklar: |
+      Tam mutlaklık (her zaman, tamamen) çok barizse zayıflar.
+      Bariz mantık hatası oluşturma — hata ince olmalı.
+    kategori: "logical"
+    bilissel_hata: "asiri_genelleme"
+    templates: *genel
+
+  # ───────────────────────────────────────────────────────────
+  # 4. VERİ YANLIŞ YORUMLAMA (eski: NEDEN_SONUC_TAKASI + YANLIS_UYGULAMA)
+  # ───────────────────────────────────────────────────────────
+  veri_yanlis_yorumlama:
+    ad: "VERI_YANLIS_YORUMLAMA"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Metindeki olayı, davranışı veya sonucu yanlış anlamlandır"
+    nasil_olusturulur: |
+      Metindeki neden-sonuç zincirini çıkar ve zinciri ters yaz.
+      Sonuçtan değer üret: "Bu durum, ... değerini gösterir." kalıbı.
+      Nedeni amaç gibi yaz. Amaç-sonuç ilişkisini ters çevir.
+      Yanlış yorum mutlaka metinde var olan veriye dayanmalı.
+      En az bir doğru veri ifadesi korunmalı.
+    kacinilacaklar: |
+      Veri zinciri ters çevrilirken ara bağlantı tamamen kopmamalı.
+      Zinciri tamamen ters çevirirsen metin dışına kayabilir.
+      Bağlantı kelimelerini koru.
+    kategori: "inference"
+    bilissel_hata: "yanlis_cikarim"
+    templates: *genel
+
+  # ───────────────────────────────────────────────────────────
+  # 5. AŞIRI ÇIKARIM (yeni)
+  # ───────────────────────────────────────────────────────────
+  asiri_cikarim:
+    ad: "ASIRI_CIKARIM"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Metinde ima edilen düşünceyi açıkça söylenmiş gibi kesin hükme dönüştür"
+    nasil_olusturulur: |
+      Metindeki dolaylı ifadeyi bul ve kesin yargı cümlesine dönüştür.
+      İma edilen duygu veya sonuç büyütülmeli ama yeni veri eklenmemeli.
+      Kesinlik artırılırken metin dili korunmalı.
+      "Bu da gösterir ki..." yapısı kullan. Örtük mesajı açık hükme çevir.
+    kacinilacaklar: |
+      Yeni bilgi ekleme — sadece var olan ima büyütülmeli.
+      Metinde hiç olmayan bir sonuç uydurma.
+    kategori: "inference"
+    bilissel_hata: "yanlis_cikarim"
+    templates: *genel
+
+  # ───────────────────────────────────────────────────────────
+  # 6. KAPSAM DARALTMA (yeni)
+  # ───────────────────────────────────────────────────────────
+  kapsam_daraltma:
+    ad: "KAPSAM_DARALTMA"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metnin tümü yerine tek unsur üzerinden değer yazarak daralt"
+    nasil_olusturulur: |
+      Tek aktör seç ve o aktörün işlevini soyutlaştır.
+      Diğer unsurları görmezden gel ama çelişme yaratma.
+      "Temel", "esas", "asıl" gibi merkezleştirici kelimeler kullan.
+      Daraltılan unsur ana kavram ailesinden bir kelime içermelidir.
+    kacinilacaklar: |
+      Ana kavram ailesinden kelime eksikse şık yüzeysel görünür.
+      Diğer unsurlarla açık çelişki oluşturma.
+    kategori: "scope"
+    bilissel_hata: "eksik_analiz"
+    templates: *genel
+
+  # ───────────────────────────────────────────────────────────
+  # 7. KISMİ DOĞRUYU MERKEZE ALMA (eski: KISMI_DOGRU)
+  # ───────────────────────────────────────────────────────────
+  kismi_dogruyu_merkeze_alma:
+    ad: "KISMI_DOGRUYU_MERKEZE_ALMA"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metindeki yan mesajı ana mesaj halinde yazarak öne çıkar"
+    nasil_olusturulur: |
+      Metindeki yan faydayı seç ve ana değer gibi yaz.
+      Soyut düzeyi koru — yan mesaj ana mesaj yapılırken merkez kavram örtük olarak bulunmalı.
+      Anahtar değer kelimesini koru.
+    kacinilacaklar: |
+      Tamamen detay kelimesi üzerine kurulmamalı.
+      Merkez kavram örtük olarak bile yoksa çeldirici zayıf kalır.
+    kategori: "content"
+    bilissel_hata: "eksik_analiz"
+    templates: *genel
+
+  # ───────────────────────────────────────────────────────────
+  # 8. AMAÇ SONUÇ KARIŞTIRMASI (yeni — NEDEN_SONUC_TAKASI'ndan ayrıştı)
+  # ───────────────────────────────────────────────────────────
+  amac_sonuc_karistirmasi:
+    ad: "AMAC_SONUC_KARISTIRMASI"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Sonucu amaç gibi yazarak neden-sonuç ilişkisini karıştır"
+    nasil_olusturulur: |
+      "...olur" ifadesini al ve "...için çalışır" şekline çevir.
+      Amaç gibi yazarken "için" kalıbını kullan.
+      Sonucu niyet gibi göster.
+    kacinilacaklar: |
+      Zincir tamamen koparılmamalı.
+      Bağlantı kelimelerini koru.
+    kategori: "logical"
+    bilissel_hata: "yanlis_cikarim"
+    templates: *genel
+
+  # ───────────────────────────────────────────────────────────
+  # 9. DEĞERİ EYLEME İNDİRME (yeni)
+  # ───────────────────────────────────────────────────────────
+  degeri_eyleme_indirme:
+    ad: "DEGERI_EYLEME_INDIRME"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Soyut değeri somut davranışa indirgeyerek derin anlamı kaybet"
+    nasil_olusturulur: |
+      Ana değeri seç, değer kelimesini kaldır ve yerine fiil + somut eylem koy.
+      Soyutluk seviyesini bir kademe düşür. Yapısal paralelliği koru.
+      Davranışı değere yükseltirken soyut bir isim ekle (erdem, ilke, anlayış).
+    kacinilacaklar: |
+      İki kademe veya daha fazla düşürme — sadece bir kademe.
+      Anlam çökertilmemeli, sadece soyutluk azalmalı.
+    kategori: "semantic"
+    bilissel_hata: "kavram_karisikligi"
+    templates: *genel
+
+  # ───────────────────────────────────────────────────────────
+  # 10. AŞIRI SOYUTLAMA (eski: UST_KAVRAM)
+  # ───────────────────────────────────────────────────────────
+  asiri_soyutlama:
+    ad: "ASIRI_SOYUTLAMA"
+    bilisssel_hata_kategorisi: "asiri_genelleme"
+    aciklama: "Metindeki bağlam korunmadan kavramları gereğinden fazla genişlet"
+    nasil_olusturulur: |
+      Bağlam genişletilir, ölçek büyütülür, kavram alanı genişletilir.
+      Metnin özgün içeriği silikleşir ama merkez kavram korunmalı.
+      Sadece ölçek büyütülmelidir — evrensel, belirsiz ve aşırı kapsayıcı ifade oluştur.
+    kacinilacaklar: |
+      Merkez kavram tamamen kaybolmamalı.
+      Evrenselleştirme metnin konusuyla ilişkisini tamamen koparmamalı.
+    kategori: "scope"
+    bilissel_hata: "asiri_genelleme"
+    templates: *genel_ve_inverse
+
+  # ═══════════════════════════════════════════════════════════
+  # TABLO-SPESİFİK STRATEJİLER (11-13)
+  # ═══════════════════════════════════════════════════════════
+
+  # ───────────────────────────────────────────────────────────
+  # 11. KRİTER KAYDIRMA (yeni — tablo-spesifik)
+  # ───────────────────────────────────────────────────────────
+  kriter_kaydirma:
+    ad: "KRITER_KAYDIRMA"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Tablodaki bir kriteri başka bir kriter gibi yorumla veya tek ölçütü tüm değerlendirme gibi sun"
+    nasil_olusturulur: |
+      Tablodaki bir kriteri seç ve onu genel güvenlik/başarı/uygunluk gibi sun.
+      Tek kriteri merkeze al ama tüm tabloyu temsil ediyormuş gibi yaz.
+      Ölçütler arası sınırı bilinçli olarak sil.
+    kacinilacaklar: |
+      Diğer kriterleri tamamen yok sayma — ima düzeyinde varmış gibi bırak.
+    kategori: "inference"
+    bilissel_hata: "yanlis_cikarim"
+    templates: *tablo
+
+  # ───────────────────────────────────────────────────────────
+  # 12. NİCEL ABARTI (eski: NICEL_GORUMLU_NITEL_ALDATMACASI)
+  # ───────────────────────────────────────────────────────────
+  nicel_abarti:
+    ad: "NICEL_ABARTI"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Tablodaki sayısal farkları olduğundan büyük veya küçük göstererek yanlış değerlendirme oluştur"
+    nasil_olusturulur: |
+      Tablodaki puanlardan birini seç ve niteliksel ifadeyle yorumla.
+      Orta düzey puanları aşırı olumlu veya aşırı olumsuz göster.
+      Örnek: 4 puan="oldukça yüksek", 3 puan="yeterli", 2 puan="ciddi risk barındıran".
+      Mutlaklık eklerken yumuşak dil kullan.
+    kacinilacaklar: |
+      "Her zaman", "tamamen" gibi sert mutlaklıklar zayıflatır.
+      "Oldukça", "büyük ölçüde", "genellikle" tercih edilmeli.
+      Puan yorumu tabloyla tamamen ters düşmemeli.
+    kategori: "inference"
+    bilissel_hata: "yanlis_cikarim"
+    templates: *tablo
+
+  # ───────────────────────────────────────────────────────────
+  # 13. EN İYİYİ EN KÖTÜ GÖSTERME (yeni — tablo-spesifik)
+  # ───────────────────────────────────────────────────────────
+  en_iyiyi_en_kotu_gosterme:
+    ad: "EN_IYIYI_EN_KOTU_GOSTERME"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Tablodaki en yüksek/düşük puanı yanlış kriterle ilişkilendirerek sıralama hatası oluştur"
+    nasil_olusturulur: |
+      Tablodaki en yüksek puanı belirle.
+      Bu puanı ait olmadığı başka bir kriterle eşleştir.
+      Genel başarı ifadesi kullanarak tek ölçütü genelleştir.
+      Çeldirici kendi içinde mantıklı görünmelidir.
+    kacinilacaklar: |
+      Sıralama tamamen ters çevrilmemeli.
+      Yanlışlık kriter-karışması üzerinden kurulmalı.
+    kategori: "inference"
+    bilissel_hata: "yanlis_cikarim"
+    templates: *tablo
+
+  # ═══════════════════════════════════════════════════════════
+  # GENEL STRATEJİLER (14-17)
+  # ═══════════════════════════════════════════════════════════
+
+  # ───────────────────────────────────────────────────────────
+  # 14. NEDENSELLİK ZİNCİRİ ATLAMASI (yeni)
+  # ───────────────────────────────────────────────────────────
+  nedensellik_zinciri_atlamasi:
+    ad: "NEDENSELLIK_ZINCIRI_ATLAMASI"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Metindeki neden-sonuç zincirindeki ara halkayı atlayarak doğrudan uç sonuca git"
+    nasil_olusturulur: |
+      Metindeki zinciri çıkar: A → B → C. Çeldiricide A → C yaz.
+      Ara bağlantıyı yok say. Bilimsel süreç, çevre etkisi, ekosistem zinciri
+      sorularında etkilidir.
+    kacinilacaklar: |
+      Tamamen uydurma ilişki kurma — zincirin başı ve sonu gerçek olmalı.
+    kategori: "logical"
+    bilissel_hata: "yanlis_cikarim"
+    templates: *genel
+
+  # ───────────────────────────────────────────────────────────
+  # 15. KOŞUL SİLME (eski: SARTLI_DOGRULUK_TUZAGI)
+  # ───────────────────────────────────────────────────────────
+  kosul_silme:
+    ad: "KOSUL_SILME"
+    bilisssel_hata_kategorisi: "asiri_genelleme"
+    aciklama: "Koşula bağlı verilen durumu koşulsuz ve genel bir durum gibi sun"
+    nasil_olusturulur: |
+      Metindeki "olabilir", "bazı durumlarda", "uzun sürede" gibi koşullu ifadeleri al.
+      Bu ifadeleri sil veya kesin hükme çevir.
+      Örnek: "Orman yangınlarına sebep olabilir." → "Orman yangınlarına sebep olur."
+    kacinilacaklar: |
+      Tam mutlaklık değil, kontrollü kesinlik kullan.
+      "Her zaman" yerine yumuşak kesinlik tercih et.
+    kategori: "logical"
+    bilissel_hata: "asiri_genelleme"
+    templates: *genel
+
+  # ───────────────────────────────────────────────────────────
+  # 16. KAPSAM KAYDIRMA (güncellendi)
+  # ───────────────────────────────────────────────────────────
+  kapsam_kaydirma:
+    ad: "KAPSAM_KAYDIRMA"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metindeki özgül bağlamı koruyarak odağı farklı ölçeğe kaydır"
+    nasil_olusturulur: |
+      Tanıdık özneyi koru ama yüklemi metnin kapsamı dışına kaydır.
+      Sadece bir ölçek yukarı kaydır: Orman → tüm doğa, Atık → çevresel davranış.
+      Özne tanınır ama iddia/kapsam metinde yok.
+    kacinilacaklar: |
+      Tam aşırı soyutlama değil — sadece bir ölçek yukarı kaydır, iki kademe büyütme yapma.
+      Bağlam genişler ama tamamen evrenselleşmemeli.
+    kategori: "cognitive"
+    bilissel_hata: "eksik_analiz"
+    templates: *genel_ve_inverse
+
+  # ───────────────────────────────────────────────────────────
+  # 17. KİŞİSEL ÖNYARGI TUZAĞI (yeni)
+  # ───────────────────────────────────────────────────────────
+  kisisel_onyargi_tuzagi:
+    ad: "KISISEL_ONYARGI_TUZAGI"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Öğrencinin doğru kabul ettiği toplumsal değerlere hitap ederek metinden kopar"
+    nasil_olusturulur: |
+      Metinde geçmese bile reddedilmesi güç, etik bir ifadeyi çeldirici olarak kullan.
+      Örnek: "Çevreyi korumak her bireyin görevidir" — metinde yok ama öğrenci
+      bu "yüce değere" kapılıp yanlış şıkka yönelebilir.
+      Duygu testi: öğrenci metinde bulamasa bile etik değere kapılmalı.
+    kacinilacaklar: |
+      Değer ifadesi tamamen metinle alakasız olmamalı — konu alanıyla tematik bağ koru.
+      Çok bariz propaganda dili kullanma.
+    kategori: "cognitive"
+    bilissel_hata: "yuzeysel_okuma_hatasi"
+    templates: *genel
+
+  # ═══════════════════════════════════════════════════════════
+  # BAĞLAM-SPESİFİK STRATEJİLER (18-30)
+  # ═══════════════════════════════════════════════════════════
+
+  # ───────────────────────────────────────────────────────────
+  # 18. VERİ ÇARPITMA (bağlam — tablo/grafik)
+  # ───────────────────────────────────────────────────────────
+  veri_carpitma:
+    ad: "VERI_CARPITMA"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Tablo, grafik veya anketteki bir veriyi yanlış aktararak veya çarpıtarak sunma"
+    nasil_olusturulur: |
+      Tablodaki veya grafikteki gerçek bir değeri al ve hafifçe değiştir.
+      Olumsuz özelliği olumlu gibi veya olumluyu olumsuz gibi sun.
+      Yüzde veya sayısal veriyi yakın ama yanlış bir değerle değiştir.
+      Grafikteki sıralamayı koru ama değerleri kaydır.
+      Çarpıtma inandırıcı olmalı — tamamen uydurma değil, hafif kayma.
+    kacinilacaklar: |
+      Tabloyla tamamen çelişen veri uydurma — hafif kayma yeterli.
+      Birden fazla veriyi aynı anda çarpıtma — tek hata yeterli.
+      Grafikteki en belirgin veriyi çarpıtma — orta düzey veri daha etkili.
+    kategori: "inference"
+    bilissel_hata: "yanlis_cikarim"
+    templates: *tablo
+
+  # ───────────────────────────────────────────────────────────
+  # 19. CEVABI VAR (bağlam — negatif kök)
+  # ───────────────────────────────────────────────────────────
+  cevabi_var:
+    ad: "CEVABI_VAR"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Negatif köklü sorularda bağlamda cevabı açıkça OLAN bilgiyi çeldirici olarak sun"
+    nasil_olusturulur: |
+      'Hangisinin cevabı yoktur?' tipinde bağlamda açıkça cevaplanan soruyu seçenek yap.
+      Cevabı bağlamın farklı bölümlerinden (senaryo, tablo, grafik) al.
+      Her çeldirici farklı bir bilgi kaynağından gelsin.
+      Soru formülasyonu doğal ve merak uyandırıcı olmalı.
+    kacinilacaklar: |
+      Cevabı çok bariz olan soruları seçme — orta düzey zorluk.
+      Tüm çeldiricileri aynı bilgi kaynağından alma.
+    kategori: "cognitive"
+    bilissel_hata: "yuzeysel_okuma_hatasi"
+    templates: *baglam_senaryo
+
+  # ───────────────────────────────────────────────────────────
+  # 20. METINDE VAR (bağlam — "yok" sorusu)
+  # ───────────────────────────────────────────────────────────
+  metinde_var:
+    ad: "METINDE_VAR"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "'Metinde hangisine yer verilmemiştir?' tipinde aslında bağlamda değinilen bilgiyi çeldirici sun"
+    nasil_olusturulur: |
+      Bağlamda (senaryo, diyalog, tablo) açıkça geçen bir bilgiyi seçenek yap.
+      Bilgiyi biraz farklı sözcüklerle ifade et — birebir kopyalama.
+      Her çeldirici bağlamın farklı bir bölümünden gelsin.
+      Öğrenci dikkatli okumadıysa bu bilgiyi "yok" sanabilmeli.
+    kacinilacaklar: |
+      Bağlamın ilk cümlesindeki en belirgin bilgiyi alma — daha gizli detaylar etkili.
+      Bilgiyi birebir kopyalama — eş anlamlı sözcüklerle yeniden yaz.
+    kategori: "cognitive"
+    bilissel_hata: "yuzeysel_okuma_hatasi"
+    templates: *baglam_senaryo
+
+  # ───────────────────────────────────────────────────────────
+  # 21. YANLIŞ SORU (bağlam — anket/araştırma)
+  # ───────────────────────────────────────────────────────────
+  yanlis_soru:
+    ad: "YANLIS_SORU"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Bağlamdaki anket veya araştırmada sorulmamış bir soruyu sorulmuş gibi sunma"
+    nasil_olusturulur: |
+      Anket/araştırma konusuyla ilgili ama bağlamda hiç sorulmamış bir soru üret.
+      Soru bağlamın temasına uygun olmalı — tamamen alakasız değil.
+      Anketin sorduğu sorulara yakın formülasyon kullan.
+      Öğrenci bağlamı dikkatli okumadıysa bu sorunun sorulduğunu sanabilmeli.
+    kacinilacaklar: |
+      Bağlamın temasından tamamen kopuk soru üretme.
+      Anketin formatına uymayan soru stili kullanma.
+    kategori: "cognitive"
+    bilissel_hata: "yanlis_cikarim"
+    templates:
+      - senaryo_anket
+      - pasta_grafik_senaryo
+      - grafik_arastirma_senaryo
+      - baglam_1q_soru_cevap
+
+  # ───────────────────────────────────────────────────────────
+  # 22. KAPSAM DIŞI SORU (bağlam — araştırma)
+  # ───────────────────────────────────────────────────────────
+  kapsam_disi_soru:
+    ad: "KAPSAM_DISI_SORU"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Bağlamın konusuyla ilgili görünen ama araştırma/senaryo kapsamı dışında kalan soruyu sun"
+    nasil_olusturulur: |
+      Bağlamın ana konusuyla aynı alanda ama farklı alt konuda bir soru üret.
+      Soru makul ve araştırılabilir olmalı — ama bu bağlamda cevaplanamaz.
+      Öğrenci konuyla ilgili olduğu için bağlamda olduğunu sanabilmeli.
+      Kapsam kayması bir ölçek olmalı — tamamen farklı alan değil.
+    kacinilacaklar: |
+      Tamamen farklı bir alandan soru getirme — tematik bağ koru.
+      Çok bariz kapsam dışı soru kullanma — ince sınır etkili.
+    kategori: "scope"
+    bilissel_hata: "eksik_analiz"
+    templates: *baglam_senaryo
+
+  # ═══════════════════════════════════════════════════════════
+  # SIRALAMA-SPESİFİK STRATEJİLER (23-25)
+  # ═══════════════════════════════════════════════════════════
+
+  # ───────────────────────────────────────────────────────────
+  # 23. BİTİŞİK CÜMLE TAKASI (sıralama)
+  # ───────────────────────────────────────────────────────────
+  bitisik_cumle_takasi:
+    ad: "BITISIK_CUMLE_TAKASI"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Doğru sıralamada yan yana olan iki cümlenin yerini değiştirerek yakın ama yanlış sıralama oluştur"
+    nasil_olusturulur: |
+      Doğru sıralamadaki ardışık iki cümleyi yer değiştir.
+      Geçiş sözcükleri hâlâ mantıklı görünecek çifti seç.
+      Öğrenci akışa odaklanırsa farkı kaçırabilmeli.
+      En etkili takas: orta bloktaki 2. ve 3. cümleler.
+    kacinilacaklar: |
+      Giriş ve kapanış cümlelerini takas etme — çok bariz olur.
+      Birden fazla takas yapma — tek takas yeterli.
+    kategori: "structural"
+    bilissel_hata: "yanlis_cikarim"
+    templates: *baglam_siralama
+
+  # ───────────────────────────────────────────────────────────
+  # 24. YAKIN BÖLME NOKTASI (sıralama — ikiye bölme)
+  # ───────────────────────────────────────────────────────────
+  yakin_bolme_noktasi:
+    ad: "YAKIN_BOLME_NOKTASI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Doğru bölme noktasının bir cümle öncesini veya sonrasını öner"
+    nasil_olusturulur: |
+      Doğru bölme noktasını belirle, bir cümle kaydır.
+      Kaydırılan noktada da kısmi bir konu geçişi olmalı.
+      Öğrenci yüzeysel okumayla geçiş sözcüğüne takılabilmeli.
+    kacinilacaklar: |
+      İki veya daha fazla cümle kaydırma — yakınlık önemli.
+      Paragrafın en başını veya en sonunu bölme noktası yapma.
+    kategori: "structural"
+    bilissel_hata: "eksik_analiz"
+    templates: *baglam_siralama
+
+  # ───────────────────────────────────────────────────────────
+  # 25. GEÇİŞ SÖZCÜĞÜ ALDATMACASI (sıralama)
+  # ───────────────────────────────────────────────────────────
+  gecis_sozcugu_aldatmacasi:
+    ad: "GECIS_SOZCUGU_ALDATMACASI"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Geçiş sözcüklerine (ancak, bu nedenle, ayrıca) dayanarak yanlış sıra/konum öner"
+    nasil_olusturulur: |
+      Geçiş sözcüğü içeren cümleyi seç ve farklı konuma yerleştir.
+      Geçiş sözcüğü yüzeysel olarak yeni konumda da mantıklı görünmeli.
+      İçerik bağlantısı değil sözcük bağlantısı üzerine kur.
+    kacinilacaklar: |
+      Geçiş sözcüğü olmayan cümleyi kullanma.
+      Tamamen anlamsız konuma yerleştirme.
+    kategori: "structural"
+    bilissel_hata: "yuzeysel_okuma_hatasi"
+    templates: *baglam_siralama
+
+  # ═══════════════════════════════════════════════════════════
+  # PROBLEM ÇÖZME STRATEJİLERİ (26-28)
+  # ═══════════════════════════════════════════════════════════
+
+  # ───────────────────────────────────────────────────────────
+  # 26. YAN PROBLEM (problem çözme)
+  # ───────────────────────────────────────────────────────────
+  yan_problem:
+    ad: "YAN_PROBLEM"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Ana problem yerine bağlamda geçen yan bir problemi çözüm gerektiren asıl sorun gibi sun"
+    nasil_olusturulur: |
+      Bağlamdaki yan etkiyi veya ikincil sorunu tespit et.
+      Bu yan sorunu ana problem formülasyonuyla yaz.
+      Öğrenci detaya odaklanırsa ana problemi kaçırabilmeli.
+    kacinilacaklar: |
+      Bağlamda hiç geçmeyen problem uydurma.
+      Çok küçük bir detayı problem yapma — yan sorun bile olsa belirgin olmalı.
+    kategori: "content"
+    bilissel_hata: "eksik_analiz"
+    templates: *baglam_problem
+
+  # ───────────────────────────────────────────────────────────
+  # 27. UYGULANAMAZ ÇÖZÜM (problem çözme)
+  # ───────────────────────────────────────────────────────────
+  uygulanamaz_cozum:
+    ad: "UYGULANAMAZ_COZUM"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Genel olarak doğru görünen ama bağlamdaki kısıtlarla uygulanamayan çözüm öner"
+    nasil_olusturulur: |
+      Bağlamdaki kısıtları (bütçe, zaman, konum, yaş) tespit et.
+      Bu kısıtları görmezden gelen ama teorik olarak doğru çözüm yaz.
+      Çözüm makul ve bilinen bir yöntem olmalı — ama bu senaryoda işe yaramaz.
+    kacinilacaklar: |
+      Tamamen uydurma çözüm yazma — gerçek ama uygulanamaz olmalı.
+      Kısıtı çok bariz yapma.
+    kategori: "inference"
+    bilissel_hata: "yanlis_cikarim"
+    templates: *baglam_problem
+
+  # ───────────────────────────────────────────────────────────
+  # 28. SÜREÇ ATLAMA (problem çözme)
+  # ───────────────────────────────────────────────────────────
+  surec_atlama:
+    ad: "SUREC_ATLAMA"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Problem çözme sürecinde bir adımı atlayarak doğrudan sonuca git"
+    nasil_olusturulur: |
+      Bağlamdaki çözüm sürecini adımlara ayır.
+      Ara adımı atla ve sonucu doğrudan nedene bağla.
+      Atlanan adım kritik olmalı ama yüzeysel okumada fark edilmemeli.
+    kacinilacaklar: |
+      İlk veya son adımı atlama — orta adım daha etkili.
+      Tüm süreci değiştirme — sadece bir adım atla.
+    kategori: "logical"
+    bilissel_hata: "yanlis_cikarim"
+    templates: *baglam_problem
+
+  # ═══════════════════════════════════════════════════════════
+  # HİKÂYE UNSUR / KARAKTER STRATEJİLERİ (29-30)
+  # ═══════════════════════════════════════════════════════════
+
+  # ───────────────────────────────────────────────────────────
+  # 29. UNSUR KARIŞTIRMA (hikâye unsurları)
+  # ───────────────────────────────────────────────────────────
+  unsur_karistirma:
+    ad: "UNSUR_KARISTIRMA"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Hikâyedeki unsurları (karakter, mekân, zaman, olay) birbiriyle karıştırarak sun"
+    nasil_olusturulur: |
+      Bir karakterin özelliğini başka karaktere ata.
+      Bir mekânda geçen olayı başka mekâna taşı.
+      Zaman dilimlerini karıştır (önceki olayı sonraki gibi sun).
+      Karıştırma tek boyutlu olmalı — karakter VEYA mekân VEYA zaman.
+    kacinilacaklar: |
+      Birden fazla unsuru aynı anda karıştırma — tek karışıklık yeterli.
+      Hikâyede hiç olmayan unsur uydurma.
+    kategori: "cognitive"
+    bilissel_hata: "kavram_karisikligi"
+    templates: *baglam_hikaye_unsur
+
+  # ───────────────────────────────────────────────────────────
+  # 30. DUYGU/DUYU KARIŞTIRMA (karakter/duygu)
+  # ───────────────────────────────────────────────────────────
+  duygu_duyu_karistirma:
+    ad: "DUYGU_DUYU_KARISTIRMA"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Karakterin duygusunu yakın ama farklı bir duyguyla veya duyusunu başka bir duyuyla değiştir"
+    nasil_olusturulur: |
+      Metindeki duyguyu tespit et ve yakın duyguyla değiştir (üzüntü→hayal kırıklığı, sevinç→heyecan).
+      Duyuyu farklı duyuyla karıştır (görme→işitme, tatma→koklama).
+      Değiştirme ince olmalı — öğrenci ayırt edememeli.
+      Bağlamdaki ipuçlarıyla çelişen ama makul görünen duygu seç.
+    kacinilacaklar: |
+      Tamamen zıt duygu kullanma (sevinç→öfke) — yakın duygu etkili.
+      Bağlamla hiç ilişkisi olmayan duygu/duyu seçme.
+    kategori: "cognitive"
+    bilissel_hata: "kavram_karisikligi"
+    templates: *baglam_hikaye_unsur

@@ -1,0 +1,138 @@
+# templates/2sinif/bolum7/7.8/sozel_mantik_aile_iliski_sinif2_kolay_1q.yaml
+# 2. Sinif — Basit Aile Iliskileri Yorumlama — KOLAY zorluk
+# En fazla 4 kisi, anne-baba-cocuk duzeyi, tek adimli yorum
+
+meta:
+  id: "sozel_mantik_aile_iliski_sinif2_kolay"
+  ad: "2. Sinif - Basit Aile Iliskileri Yorumlama (Kolay)"
+  sinif_seviyesi: 2
+  aciklama: "Kolay duzey — en fazla 4 kisi, anne-baba-cocuk iliskisi, tek adimli yorum, 3 secenekli gorselli soru"
+  frequency: "Medium"
+
+context:
+  type: sozel_mantik_aile_iliski_sinif2_kolay
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    image_type: "soyagaci"
+    word_count_min: 15
+    word_count_max: 35
+    structure:
+      - "Basit aile semasi gorseli + kisa bilgi bloku (1-2 cumle)."
+      - "En fazla 4 kisi kullanilmalidir."
+      - "Anne-baba-cocuk iliskisi duzeyinde kalinmalidir."
+      - "Cocuk sayisi veya kardeslik gibi tek adimli yorum olmalidir."
+    kurallar:
+      - "2. sinif duzeyinde, sade ve anlasilir icerik."
+      - "Yalniz temel aile iliskileri kullanilmalidir (anne, baba, cocuk, kardes)."
+      - "Gorsel soru cozumunun zorunlu kaynaklarindan biri olmalidir."
+      - "Bilgi bloku tek basina cevabi vermemelidir."
+      - "Soru yalniz gorselle veya yalniz metinle cozulememeli, ikisi birlikte gerekmelidir."
+      - "Turkce karakterler dogru kullanilmalidir."
+      - "Kayin akrabaligi (kayinbaba, kayinvalide, eniste, gelin) YASAK."
+      - "Kuzen, dayi, hala, teyze, amca zorunlu kilinmamalidir."
+
+  questions:
+    - slot: 1
+      type: aile_iliski_yorumlama
+      soru_kokleri:
+        - "<b>Buna göre aile şeması ile ilgili aşağıdakilerden hangisi doğrudur?</b>"
+        - "<b>Aile şemasına göre aşağıdakilerden hangisi söylenebilir?</b>"
+      options_style: kisa_yargi
+      word_count_min: 2
+      word_count_max: 8
+      beceri:
+        katman: KB1
+        bilesenler: [aile_iliskisi_yorumlama, gorsel_takip]
+        surec_bileseni: bilgiyi_okuma
+
+header_template: "Asagidaki soruyu aile semasina ve bilgilere gore cevaplayiniz."
+
+format:
+  type: llm_generated_html
+  description: "Gorselli soru (kolay): aile semasi + bilgi bloku + 3 secenek"
+  paragraph:
+    required: true
+    word_count_min: 15
+    word_count_max: 35
+    sentence_count_min: 1
+    sentence_count_max: 2
+    stil: "bilgi_bloku"
+    background_color: "#e8f8e8"
+    kurallar:
+      - "Bilgi bloku yalniz temel aile iliskilerini aciklayan kisa cumleler icermelidir."
+      - "Izinli iliski alani: anne, baba, cocuk, kardes."
+      - "Ipuclari kisa ve dogrudan olmalidir."
+      - "Bilgi bloku tek basina cevabi vermemelidir."
+      - "En fazla 4 kisi kullanilmalidir."
+      - "Cocuk sayisi veya kardeslik gibi tek adimli yorum yeterlidir."
+      - "2. sinif ogrencisinin anlayabilecegi sadelikte olmalidir."
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 2
+    word_count_max: 8
+    style: "kisa_yargi"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Secenekler temel aile iliskisi veya cocuk sayisi gibi acik bilgiler icermelidir."
+      - "Yalniz bir secenek tum gorsel ve bilgilerle uyumlu olmalidir."
+      - "Yanlis secenekler temel bir iliski hatasi tasimalidir."
+      - "Secenekler kendi aralarinda bicimce paralel olmalidir."
+      - "Yanlis secenekler kolay elenebilir olmalidir."
+
+soru_kokleri:
+  - "<b>Buna göre aile şeması ile ilgili aşağıdakilerden hangisi doğrudur?</b>"
+  - "<b>Aile şemasına göre aşağıdakilerden hangisi söylenebilir?</b>"
+
+dogru_cevap:
+  tanim: "Gorsel ve bilgi blokundan acikca cikarilabilen dogru aile iliskisi bilgisi"
+  kurallar:
+    - "Dogru cevap gorsel ve bilgi blokundaki acik bilgiye dayanmalidir."
+    - "Dogru cevap tek adimli yorum ile ulasilabilir olmalidir."
+    - "Yanlis secenekler kolay elenebilir olmalidir."
+
+celdirici_stratejileri:
+  - ad: "ILISKI_HATASI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Aile iliskisini yanlis yorumlayan secenek"
+    nasil_olusturulur: |
+      Gorseldeki bir kisiyi yanlis aile rolunde gosteren secenek olustur.
+      Kolay duzey: hata acikca belli olmalidir.
+    kategori: "semantic"
+
+  - ad: "SAYI_HATASI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Cocuk veya kardes sayisini yanlis veren secenek"
+    nasil_olusturulur: |
+      Gorseldeki kisi sayisini yanlis belirten secenek olustur.
+      Kolay duzey: sayi hatasi acikca gorulmelidir.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+visual_requirement: "answer_critical"
+visual_type: "logic_diagram"
+visual_spec:
+  diagram_type: "family_tree"
+  max_kisi: 6
+  nesil_sayisi: 2
+  izinli_iliskiler: ["anne", "baba", "cocuk", "kardes", "dede", "nine", "torun"]
+  aciklama: "Basit aile agaci: 2-3 nesil, portreler + isimler + baglanti cizgileri"
+
+beceri:
+  katman: KB1
+  bilesenler: [aile_iliskisi_yorumlama, gorsel_takip]
+  surec_bileseni: bilgiyi_okuma
+
+sinif2_ek_kurallar:
+  yasak_alanlar:
+    - "Kayin akrabaligi (kayinbaba, kayinvalide, eniste, gelin) YASAK"
+    - "Kuzen, dayi, hala, teyze, amca zinciri YASAK"
+    - "Cok kusakli karmasik genis aile YASAK"
+    - "Cok adimli iliski cozumu YASAK"

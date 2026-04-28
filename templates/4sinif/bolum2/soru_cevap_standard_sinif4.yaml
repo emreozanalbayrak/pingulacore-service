@@ -1,0 +1,215 @@
+# Kaynak: 5sinif/capture1/soru_cevap_standard.yaml — 4. sinif icin adapte edildi (sinif_seviyesi 5->4)
+# templates/soru_cevap_standard.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Metinde Soru ve Cevap
+#
+# STANDART SORU-CEVAP FORMATI (~%58 - 24 sorudan 14'u)
+# Paragraf verilir, ogrenci paragrafin hangi soruya cevap oldugunu secer
+#
+# SORU-CEVAP vs ANA FIKIR FARKI:
+# - Ana Fikir = Yazar NE SOYLEMEK ISTIYOR (mesaj odakli, tam cumle)
+# - Soru-Cevap = Bu metin HANGI SORUYA CEVAP (soru cumlesi formatinda secenekler)
+#
+# Ornek:
+# - Ana Fikir: "Duzenli spor yapmak saglik icin onemlidir." (yargi cumlesi)
+# - Soru-Cevap: "Spor yapmanin sagliga etkileri nelerdir?" (soru cumlesi)
+
+meta:
+  id: "soru_cevap_standard_sinif4"
+  ad: "Metinde Soru ve Cevap (Standart)"
+  sinif_seviyesi: 4
+  aciklama: "Paragrafin hangi soruya cevap oldugunu belirleme sorulari"
+  kaynak: "data/metinde_soru_cevap.pdf"
+  frequency: "~58% of soru_cevap questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 4 soru cumlesi secenek"
+
+  paragraph:
+    required: true
+    word_count_min: 50
+    word_count_max: 105
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "bilgilendirici"
+    kurallar:
+      - "Belirli bir soruya net cevap verecek sekilde yapilandirilmali"
+      - "Paragrafin neyi anlattigi/cevapladigi acik olmali"
+      - "2-4 destekleyici bilgi icermeli"
+      - "Paragrafin konusu dar ve odakli olmali"
+      - "Konuyla iliskili ama cevaplanmayan sorular icin alan birakmali"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 4
+    word_count_max: 15
+    style: "question_sentence"
+    correct_type: "matches"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 7 varyasyon)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metin aşağıdaki sorulardan hangisine cevap olarak söylenmiştir?</b>"
+  - "<b>Bu metin aşağıdaki sorulardan hangisine cevap olarak yazılmıştır?</b>"
+  - "<b>Bu metin aşağıdaki sorulardan hangisine cevap olarak yazılmış olabilir?</b>"
+  - "<b>Bu metin aşağıdaki sorulardan hangisine cevap vermek için yazılmıştır?</b>"
+  - "<b>Bu metin aşağıdaki soruların hangisine cevap olarak yazılmıştır?</b>"
+  - "<b>Bu metin aşağıdaki sorulardan hangisine cevap vermek amacıyla yazılmıştır?</b>"
+  - "<b>Bu röportajda konuğa aşağıdaki sorulardan hangisi sorulmuş olabilir?</b>"
+  # Topic-embedded varyasyonlar ({topic} → leaf topic, ör: "Yerçekimi kuvveti")
+  - "\"{topic}\" <b>ile ilgili bu metin aşağıdaki sorulardan hangisine cevap olarak yazılmıştır?</b>"
+  - "\"{topic}\" <b>konulu bu metin aşağıdaki sorulardan hangisine cevap vermek için yazılmıştır?</b>"
+  # Duygu ve açıklama odaklı
+  - "<b>Bu metinde aşağıdaki duygulardan hangisine yer verilmiştir?</b>"
+  - "<b>Bu metinde aşağıdakilerden hangisi açıklanmıştır?</b>"
+  # Neden-sonuç ilişkileri
+  - "<b>Bu metinde söz edilen değişim neye bağlıdır?</b>"
+  - "<b>Bu metinde sözü edilen gözlemin sonucu aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metinde sözü edilen olay aşağıdakilerden hangisini destekler?</b>"
+  # Anlama ve çıkarım
+  - "<b>Bu metinden</b> \"{topic}\" <b>ile ilgili aşağıdakilerden hangisine kesin olarak ulaşılır?</b>"
+  - "<b>Bu metni okuyan biri aşağıdakilerden hangisini anlamış olur?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Paragrafin butunuyle cevap verdigi soru cumlesi"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Paragrafin TUMUNU kapsayan bir soru olmali"
+    - "Soru cumlesi formatinda olmali (soru eki '?' ile bitmeli)"
+    - "Paragraftaki bilgilerin COGUNLUGU bu soruya cevap vermeli"
+    - "Ne cok genis ne cok dar olmali"
+    - "4-15 kelime uzunlugunda olmali"
+    - "Kelime sayisi bakimindan en uzun sik olmamali"
+  ornekler:
+    - paragraf: "Spor, insan sagligi icin cok onemlidir. Duzenli egzersiz kalp ve damar sagligini korur, bagirsak hareketlerini duzenler. Ayrica stresi azaltarak ruh sagligina da katkida bulunur. Gunde en az 30 dakika fiziksel aktivite oneriliyor."
+      dogru: "Spor yapmanın sağlığa etkileri nelerdir?"
+    - paragraf: "Aricilik, bal arisi kolonilerinin bakimi ve bal uretimi ile ilgilenen bir ugrastir. Arilar, ciceklerden topladiklari nektari kovandaki peteklerde bala donusturur. Aricilar ozel kiyafetler giyerek kovanlara yaklasir ve bal hasadi yapar."
+      dogru: "Bal nasıl üretilir?"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM paragraf iceriğine gore en uygun 3 stratejiyi secer
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cikarim_yapma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic that can answer a specific question"
+      details: "Belirli bir soruya cevap olusturabilecek bir konu sec"
+
+    - step: 2
+      action: "Generate paragraph (55-100 words) answering a specific question"
+      details: |
+        Paragrafta:
+        - Acik bir soruya cevap veriliyor olmali
+        - 2-4 destekleyici bilgi icermeli
+        - Konu dar ve odakli olmali
+
+    - step: 3
+      action: "Create correct answer (question that paragraph answers)"
+      details: |
+        Soru cumlesi formatinda (4-15 kelime):
+        - Paragrafin TUMUNU kapsayan soru
+        - '?' ile bitmeli
+        - Ne cok genis ne cok dar
+
+    - step: 4
+      action: "Generate 3 distractors using strategies"
+      details: |
+        Her biri soru cumlesi olmali (4-15 kelime, '?' ile biter):
+        - 1x yakin_soru (ZORUNLU! dogru soruya cok yakin ama kapsamı farkli)
+        - 1x detay_sorusu (paragraftaki bir detayla ilgili soru)
+        - 1x genis_kapsamli VEYA iliskili_ama_farkli
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from 7 variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 1
+    soru_no: 1
+    konu: "Sporun saglga etkileri"
+    paragraf: "Spor, insan sagligi icin cok onemlidir. Duzenli egzersiz kalp ve damar sagligini korur..."
+    soru_koku: "Bu metin aşağıdaki sorulardan hangisine cevap olarak söylenmiştir?"
+    secenekler:
+      A: "Spor yapmanın sağlığa etkileri nelerdir?"
+      B: "Günde kaç dakika egzersiz yapılmalıdır?"
+      C: "En popüler spor dalları hangileridir?"
+      D: "Sağlıklı yaşam için neler yapılmalıdır?"
+    dogru_cevap: "A"
+    neden: "Paragraf sporun sagliga etkilerini anlatiyor"
+
+  - sayfa: 3
+    soru_no: 5
+    konu: "Bal uretimi"
+    paragraf: "Aricilik, bal arisi kolonilerinin bakimi ve bal uretimi ile ilgilenen bir ugrastir..."
+    soru_koku: "Bu metin aşağıdaki sorulardan hangisine cevap olarak yazılmıştır?"
+    secenekler:
+      A: "Arı türleri arasındaki farklar nelerdir?"
+      B: "Bal nasıl üretilir?"
+      C: "Arıcılar hangi kıyafetleri giyerler?"
+      D: "Hayvancılık sektörü nasıl geliştirilmelidir?"
+    dogru_cevap: "B"
+    neden: "Paragraf bal uretim surecini anlatiyor"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 55-100 arasinda mi?"
+    - "Belirli bir soruya net cevap veriyor mu?"
+    - "2-4 destekleyici bilgi var mi?"
+
+  correct_answer:
+    - "4-15 kelime arasinda soru cumlesi mi?"
+    - "'?' ile bitiyor mu?"
+    - "Paragrafin tumunu kapsayan bir soru mu?"
+
+  distractors:
+    - "Her biri 4-15 kelime soru cumlesi mi?"
+    - "Hepsi '?' ile bitiyor mu?"
+    - "Her biri farkli bir strateji kullaniyor mu?"
+    - "Hicbiri paragrafin asil cevapladigi soru degil mi?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════

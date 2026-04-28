@@ -1,0 +1,204 @@
+# templates/capture2/dusunceyi_gelistirme_standard.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Bolum 2 - Dusunceyi Gelistirme Yollari
+#
+# STANDART DUSUNCEYI GELISTIRME FORMATI (tum dusunceyi gelistirme sorularinin ~%60'i)
+# Paragraf verilir, ogrenci hangi dusunceyi gelistirme yolunun kullanildigini secer
+#
+# TEKNIKLER:
+# - Tanimlama: "Bu nedir?" sorusuna cevap ("...denir", "...dir")
+# - Karsilastirma: Iki varlik/kavram arasinda kiyaslama ("daha", "en", "ise")
+# - Benzetme: Somutlastirma ("gibi", "sanki", "andiran", "tipki")
+# - Orneklendirme: Soyuttan somuta gecis ("ornegin", "mesela", "bunlar arasinda")
+
+meta:
+  id: "dusunceyi_gelistirme_standard"
+  ad: "Düşünceyi Geliştirme Yolları (Standart)"
+  sinif_seviyesi: 5
+  aciklama: "Paragrafta ağırlıklı olarak kullanılan düşünceyi geliştirme yolunu belirleme"
+  kaynak: "data/dusunceyi_gelistirme_yollari.pdf"
+  frequency: "High (~60% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Bilgilendirici/Öyküleyici paragraf + soru kökü + 4 kavramsal seçenek"
+
+  paragraph:
+    required: true
+    word_count_min: 45
+    word_count_max: 95
+    sentence_count_min: 3
+    sentence_count_max: 6
+    stil: "bilgilendirici"
+    kurallar:
+      - "Metin, aşağıda belirtilen tekniklerden biri üzerine kurgulanmalıdır."
+      - "Tanımlama için: 'Bu nedir?' sorusuna cevap veren '...denir' veya '...dir' ile biten net cümleler kullanılmalı. (Örn: 'Stres... doğal tepkidir.')"
+      - "Karşılaştırma için: İki varlık veya kavramın 'en, daha, kadar, ise, göre' gibi ifadelerle kıyaslanması gerekir. (Örn: 'Baykal Gölü... Hazar Denizi ise...')"
+      - "Benzetme için: 'Gibi, sanki, andıran, tıpkı' edatlarıyla somutlaştırma yapılmalı. (Örn: 'Güneşin bir fırın gibi ortalığı kasıp kavurduğu...')"
+      - "Örneklendirme için: Soyut bir yargıdan sonra 'örneğin, mesela, bunlar arasında' gibi geçişlerle somut örnekler sıralanmalı. (Örn: 'Ağaçların budanmasının pek çok nedeni vardır. Bunlar arasında...')"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 3
+    style: "concept"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 4 varyasyon)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metinde kullanılan düşünceyi geliştirme yolu aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metnin anlatımında aşağıdaki düşünceyi geliştirme yollarının hangisinden yararlanılmıştır?</b>"
+  - "<b>Bu metinde aşağıdaki düşünceyi geliştirme yollarından hangisi kullanılmıştır?</b>"
+  - "<b>Bu metnin anlatımında aşağıdakilerden hangisine başvurulmuştur?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Paragrafta baskın olan teknik"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Tanımlama: Bir kavramın ne olduğunun açıklandığı cümleler."
+    - "Benzetme: Zayıf olanın güçlü olana benzetilmesi."
+    - "Karşılaştırma: Üstünlük, eşitlik veya farklılık ilgisi."
+    - "Örneklendirme: Düşünceyi somutlamak için verilen örnekler."
+  ornekler:
+    - paragraf: "Stres, vücudun tehlike algıladığı durumlarda gösterdiği doğal bir tepkidir. Kalp atış hızının artması, kasların gerilmesi gibi belirtilerle kendini gösterir."
+      dogru: "Tanımlama"
+      neden: "Stres kavraminin ne oldugu aciklanmis, '...dir' ile biten tanimlama cumlesi kullanilmis"
+    - paragraf: "Baykal Golu dunyanin en derin goludur. Hazar Denizi ise yuzolcumu bakimindan en buyuk goldur."
+      dogru: "Karşılaştırma"
+      neden: "'en derin', 'ise', 'en buyuk' ifadeleriyle iki gol kiyaslanmis"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM paragraf iceriğine gore en uygun 3 stratejiyi secer
+# Celdiriciler: Tanimlama, Orneklendirme, Benzetme, Karsilastirma,
+# Tanik Gosterme (nadiren), Sayisal Verilerden Yararlanma (nadiren)
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siniflandirma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic from konular/ folder"
+      details: "Dusunceyi gelistirme yollarindan birine uygun konu sec"
+
+    - step: 2
+      action: "Select ONE dominant technique"
+      details: |
+        4 ana teknikten birini sec:
+        - Tanimlama
+        - Karsilastirma
+        - Benzetme
+        - Orneklendirme
+
+    - step: 3
+      action: "Generate paragraph (45-95 words) using that technique"
+      details: |
+        Paragrafta:
+        - Secilen teknik BASKIN olmali
+        - Teknige ozgu belirtecler mutlaka bulunmali
+        - Tanimlama: "...dir", "...denir" ifadeleri
+        - Karsilastirma: "daha", "en", "ise", "gore" ifadeleri
+        - Benzetme: "gibi", "sanki", "andiran" ifadeleri
+        - Orneklendirme: "ornegin", "mesela", "bunlar arasinda" ifadeleri
+
+    - step: 4
+      action: "Set correct answer = dominant technique"
+      details: "Paragrafta agirlikli kullanilan teknik dogru cevaptir"
+
+    - step: 5
+      action: "Generate 3 distractors from other techniques"
+      details: |
+        Diger 3 tekniği celdirici olarak kullan:
+        - Her biri 1-3 kelimelik kavram adi
+        - Ornek: Tanimlama, Benzetme, Karsilastirma, Orneklendirme
+        - Nadiren: Tanik Gosterme, Sayisal Verilerden Yararlanma
+
+    - step: 6
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 85
+    konu: "Stres ve etkileri"
+    paragraf: "Stres, vücudun tehlike algıladığı durumlarda gösterdiği doğal bir tepkidir..."
+    dogru_cevap: "Tanımlama"
+    celdirici_1: "Benzetme"
+    celdirici_2: "Karşılaştırma"
+    celdirici_3: "Örneklendirme"
+
+  - sayfa: 87
+    konu: "Goller ve ozellikleri"
+    paragraf: "Baykal Gölü dünyanın en derin gölüdür. Hazar Denizi ise yüzölçümü bakımından en büyük göldür..."
+    dogru_cevap: "Karşılaştırma"
+    celdirici_1: "Tanımlama"
+    celdirici_2: "Benzetme"
+    celdirici_3: "Örneklendirme"
+
+  - sayfa: 89
+    konu: "Gunes ve sicakligi"
+    paragraf: "Güneşin bir fırın gibi ortalığı kasıp kavurduğu yaz günlerinde..."
+    dogru_cevap: "Benzetme"
+    celdirici_1: "Tanımlama"
+    celdirici_2: "Karşılaştırma"
+    celdirici_3: "Örneklendirme"
+
+  - sayfa: 90
+    konu: "Agac budama nedenleri"
+    paragraf: "Ağaçların budanmasının pek çok nedeni vardır. Bunlar arasında hastalıklı dalların temizlenmesi..."
+    dogru_cevap: "Örneklendirme"
+    celdirici_1: "Tanımlama"
+    celdirici_2: "Benzetme"
+    celdirici_3: "Karşılaştırma"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 45-95 arasinda mi?"
+    - "Tek bir baskin teknik kullanilmis mi?"
+    - "Teknige ozgu belirtecler (gibi, daha, ...dir, ornegin vb.) var mi?"
+    - "Teknik acikca belirlenebilir mi?"
+
+  correct_answer:
+    - "1-3 kelime kavram adi mi?"
+    - "Paragraftaki baskin teknikle uyusmali"
+    - "Teknik dogru teshis edilmis mi?"
+
+  distractors:
+    - "Her celdirici farkli bir teknik adi mi?"
+    - "Celdiriciler 1-3 kelime kavram adi mi?"
+    - "Hicbiri paragraftaki baskin teknikle uyusmuyor mu?"
+    - "Tum secenekler ayni gramer yapida mi? (kavram adi)"

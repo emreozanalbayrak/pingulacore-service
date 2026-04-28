@@ -1,0 +1,221 @@
+meta:
+  id: "infografikte_coklu_yargi_sayisi_belirleme"
+  ad: "İnfografikte Çoklu Yargı Sayısı Belirleme"
+  sinif_seviyesi: [2. Sinif]
+  aciklama: "İnfografik ya da bilgi posterinde verilen oran ve açıklamalardan hareketle kaç yargıya ulaşılabildiğini sorgulayan soru formatı"
+
+format:
+  type: "infografik_maddeli_yargi_sayma"
+  description: "Kısa veri tanıtımı + infografik + maddeli yargılar + kaç tanesine ulaşılabilir sorgusu + sayısal seçenekler"
+
+yapi_iskeleti:
+  soru_bilesenleri:
+    - "kisa_gorsel_tanitimi"
+    - "infografik_veya_bolmeli_veri_alani"
+    - "maddeli_yargilar"
+    - "soru_koku"
+    - "sayisal_secenekler"
+
+  soru_akisi:
+    - "Önce görselde hangi konuya ait verilerin verildiği kısa bir cümleyle açıklanır."
+    - "İnfografikte ürünler, oranlar, kullanım ya da satış bilgileri birlikte sunulur."
+    - "Ardından madde işaretli 4-6 yargı verilir."
+    - "Öğrenciden bu yargılardan kaç tanesine ulaşılabildiği sorulur."
+    - "Seçenekler sayı biçiminde sunulur."
+
+veri_alani:
+  tanim: "Görselde nicel ve açıklayıcı bilgi verilen temel unsurlar"
+  ornekler:
+    - "tarımsal ürünler"
+    - "satış türleri"
+    - "kullanım alanları"
+    - "üretim oranları"
+    - "ürün kategorileri"
+    - "pazarlama biçimleri"
+
+yapi_turu:
+  tanim: "Birden fazla bilgi grubunun birlikte verildiği görsel düzen"
+  ornekler:
+    - "infografik"
+    - "bilgi posteri"
+    - "bölmeli veri görseli"
+    - "tanıtım panosu"
+    - "oran destekli görsel açıklama"
+
+veri_turu:
+  tanim: "Görselde verilen nicel ya da kuralsal bilgi"
+  ornekler:
+    - "oran"
+    - "yüzde"
+    - "tamamı kullanılır"
+    - "çoğunluğu satılır"
+    - "tamamı iç pazarda kalır"
+    - "belirli alanda değerlendirilir"
+
+gorsel_alani:
+  required: true
+  gorsel_turleri:
+    - "infografik"
+    - "oran_destekli_poster"
+    - "coklu_bilgi_paneli"
+    - "kategori_bolmeli_gorsel"
+
+  gorsel_kurallari:
+    - "Görsel çözüm için zorunlu olmalıdır."
+    - "Ana başlıklar ve alt başlıklar açıkça ayrılmalıdır."
+    - "Oranlar ve açıklamalar okunabilir olmalıdır."
+    - "Görsel süsleyici değil, bilgi taşıyıcı olmalıdır."
+    - "Birden fazla yargının test edilmesine elverişli bilgi içermelidir."
+
+kisa_gorsel_tanitimi:
+  required: true
+  sentence_count_min: 1
+  sentence_count_max: 2
+  amac: "Görselde hangi verilerin sunulduğunu tanıtmak"
+  sablon_ornekleri:
+    - "Aşağıdaki görselde üretim ve satış ile ilgili bazı bilgiler verilmiştir."
+    - "Aşağıdaki infografikte çeşitli ürünlere ait oranlar ve kullanım alanları gösterilmiştir."
+    - "Aşağıdaki bilgi posterinde bazı kategoriler ve bunlara ait açıklamalar yer almaktadır."
+
+yargi_yapisi:
+  required: true
+  item_count_min: 4
+  item_count_max: 6
+  style: "bullet_list"
+  amac: "Öğrencinin her yargıyı bağımsız değerlendirip toplam doğru sayıya ulaşmasını sağlamak"
+
+  yargi_turleri:
+    - kod: "dogrudan_oran_okuma"
+      aciklama: "Görselde verilen oranlardan doğrudan çıkarılabilen yargı"
+    - kod: "karsilastirma_yargisi"
+      aciklama: "İki oran ya da iki ürün arasında büyüklük ilişkisi kuran yargı"
+    - kod: "kullanim_alani_yargisi"
+      aciklama: "Bir ürünün nasıl kullanıldığına ya da nereye satıldığına ilişkin yargı"
+    - kod: "dolayli_cikarim"
+      aciklama: "Verilen açıklamalar birleştirilerek ulaşılan yargı"
+    - kod: "veri_disi_yargi"
+      aciklama: "Görselde bulunmayan gelir, miktar ya da kesin satış bilgisi içeren yargı"
+
+  kurallar:
+    - "Toplam 4 ila 6 yargı bulunmalıdır."
+    - "En az iki yargı doğrudan görselden test edilebilir olmalıdır."
+    - "En az bir yargı karşılaştırma gerektirmelidir."
+    - "En az bir yargı veri dışı olmalıdır."
+    - "Doğru yargı sayısı yalnızca tüm maddeler tek tek incelenerek bulunabilmelidir."
+
+soru_koku:
+  required: true
+  hedef: "Kaç yargıya ulaşılabildiğini sorgulamak"
+  sablon_ornekleri:
+    - "yargılarından kaç tanesine ulaşılabilir?"
+    - "ifadelerinden kaç tanesi görsele göre doğrudur?"
+    - "verilen bilgilerden kaçına kesin olarak ulaşılır?"
+    - "aşağıdaki yargılardan kaç tanesi çıkarılabilir?"
+
+ogrenci_gorevi:
+  - "Görseldeki oran ve açıklamaları doğru okumak"
+  - "Her maddeyi bağımsız olarak değerlendirmek"
+  - "Karşılaştırma gerektiren maddeleri dikkatle çözmek"
+  - "Veri dışı yargıları elemek"
+  - "Toplam doğru yargı sayısını belirlemek"
+
+secenek_yapisi:
+  type: "sayisal_sonuc"
+  secenek_sayisi: 4
+  secenek_bicimi:
+    - "1"
+    - "2"
+    - "3"
+    - "4"
+    - "5"
+
+  kurallar:
+    - "Seçenekler sayı biçiminde olmalıdır."
+    - "Seçenekler, yargı sayısına uygun olmalıdır."
+    - "Doğru cevap yalnızca tüm maddeler tek tek kontrol edilerek bulunabilmelidir."
+    - "Yüzeysel okuma ile bulunmamalıdır."
+
+dogru_cevap_mantigi:
+  - "Her yargı yalnızca görselde verilen oran ve açıklamalara göre test edilir."
+  - "Doğrudan verilen oranlar doğrudan kullanılabilir."
+  - "İki ürünün oranları karşılaştırılarak büyüklük ilişkisi kurulabilir."
+  - "Bir ürünün kullanım ya da satış alanı, yalnızca görselde açıkça söylendiği ölçüde değerlendirilebilir."
+  - "Gelirin yüksekliği gibi miktar ya da sonuç bilgileri görselde açıkça yoksa kesin sonuca ulaşılamaz."
+  - "Doğru cevap, doğru olan tüm yargıların sayısıdır."
+
+celdirici_stratejileri:
+  - kod: "tek_maddeyi_atlama"
+    aciklama: "Öğrencinin maddelerden birini değerlendirmeden toplam sayıya karar vermesi"
+  - kod: "karsilastirma_hatasi"
+    aciklama: "İki yüzde arasındaki ilişkiyi yanlış yorumlaması"
+  - kod: "veri_disi_sonucu_kabul_etme"
+    aciklama: "Gelir, toplam miktar ya da pazar sonucu gibi verilmeyen bilgiyi doğru sanması"
+  - kod: "aciklamayi_eksik_okuma"
+    aciklama: "Tamamı, çoğunluğu, iç pazar, ihracat gibi ifadeleri gözden kaçırması"
+  - kod: "dogru_sayi_hesabinda_hata"
+    aciklama: "Maddeleri doğru değerlendirse bile toplam doğru sayıyı yanlış belirlemesi"
+
+zorluk_kademeleri:
+  kolay:
+    ozellikler:
+      - "Yargılar açık ve belirgin biçimde ayrışır."
+      - "Doğru yargı sayısı kolay hesaplanır."
+      - "Veri dışı yargı belirgindir."
+  orta:
+    ozellikler:
+      - "Bir veya iki yargı karşılaştırma gerektirir."
+      - "Açıklamalar dikkatli okunmalıdır."
+      - "Toplam doğru sayıyı bulmak için sistemli ilerlemek gerekir."
+  zor:
+    ozellikler:
+      - "Birden fazla yargı ilk bakışta doğru görünebilir."
+      - "Dolaylı çıkarım ve veri dışı yorum ayrımı daha incedir."
+      - "Yanlış seçenekler toplam doğru sayıda hata yapmaya yöneltir."
+
+uretim_mantigi:
+  adimlar:
+    - "Önce bir ana konuya ait infografik veri yapısı kurulur."
+    - "Görselde oranlar ve açıklayıcı kullanım/satış bilgileri birlikte verilir."
+    - "Ardından 4-6 maddelik yargı listesi hazırlanır."
+    - "Yargıların bir kısmı doğrudan, bir kısmı karşılaştırmalı, en az biri veri dışı olacak biçimde dengelenir."
+    - "Her yargı tek tek test edilerek doğru olanların sayısı belirlenir."
+    - "Seçeneklere bu sayıya uygun sayısal sonuçlar yazılır."
+
+dogrulama_kontrol_listesi:
+  gorsel:
+    - "Oranlar ve açıklamalar açıkça okunabiliyor mu?"
+    - "Ana ve alt başlıklar net mi?"
+    - "Görsel çözüm için gerçekten gerekli mi?"
+
+  yargilar:
+    - "Toplam 4-6 yargı var mı?"
+    - "En az iki yargı doğrudan görselden test edilebiliyor mu?"
+    - "En az bir yargı veri dışı mı?"
+    - "Yargılar tek tek değerlendirilebilir mi?"
+
+  secenekler:
+    - "Seçenekler sayı biçiminde mi?"
+    - "Doğru sayı tek ve tartışmasız mı?"
+    - "Yanlış seçenekler makul mü?"
+
+  soru_koku:
+    - "Kaç tanesine ulaşılabilir yapısı açık mı?"
+    - "Soru kökü ile yargı ve seçenek yapısı uyumlu mu?"
+
+ornek_sablon:
+  soru_govdesi: |
+    Aşağıdaki görselde ................................ verilmiştir.
+
+    Bu görselden hareketle,
+    - ................................
+    - ................................
+    - ................................
+    - ................................
+
+    yargılarından kaç tanesine ulaşılabilir?
+
+  secenekler:
+    A: "1"
+    B: "2"
+    C: "3"
+    D: "4"

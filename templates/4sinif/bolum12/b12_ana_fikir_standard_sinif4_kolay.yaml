@@ -1,0 +1,125 @@
+# Kaynak: ana_fikir_standard_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.kolay
+# 4. sinif ana fikir standart — kolay duzey
+
+meta:
+  id: "b12_ana_fikir_standard_sinif4_kolay"
+  ad: "4. Sinif - Ana Fikir Standart (Kolay)"
+  sinif_seviyesi: 4
+  aciklama: "Kolay duzey — 4. sinif ana fikir sorusu. Metnin ana fikrini en iyi yansitan cumleyi secme."
+  frequency: "High"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 4 tam cumle secenegi (kolay)"
+
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 68
+    background_color: "#e8f8e8"
+    sentence_count_min: 4
+    sentence_count_max: 5
+    stil: "bilgilendirici"
+    kurallar:
+      - "Ana fikir veya yazar mesaji oldukca acik olmalidir."
+      - "Destekleyici bilgiler sinirli sayida ve dogrudan olmalidir."
+      - "Paragraf, ana fikri ilk 1-2 cumlede sezdirebilir."
+      - "Yazarin tutumu belirgin olmalidir."
+      - "Dis bilgi gerektirmemelidir."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 5
+    word_count_max: 10
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Tum secenekler tam cumle biciminde olmali."
+      - "Secenekler 4. sinif duzeyinde olmali."
+      - "Dogru secenek metnin ana fikrini en kapsamli ve dogru bicimde yansitmali."
+      - "Celdirici secenekler yardimci fikir, cok genis yorum veya cok dar yorum icermeli."
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metnin ana fikri aşağıdakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Aşağıdakilerden hangisi bu metnin ana fikridir?</b>"
+  # KULLANILDI: - "<b>Bu metinde verilmek istenen <u>asıl</u> mesaj aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metnin ana düşüncesi aşağıdakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Aşağıdakilerden hangisi bu metni <u>en kapsamlı</u> biçimde özetlemektedir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metnin tamamini kapsayan, ana dusunceyi dogru ve eksiksiz yansitan cumle"
+  kurallar:
+    - "Dogru secenek metnin ana mesajini dogrudan ve acik bicimde yansitmalidir."
+    - "Secenek ne cok genel ne de cok ayrinti odakli olmamalidir."
+    - "Ana fikir kolayca ayirt edilebilir olmalidir."
+    - "Dogru secenek metindeki hicbir cumleyi kelimesi kelimesine tekrarlamamali."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+
+celdirici_stratejileri:
+  - ad: "DETAY_TUZAGI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Paragraftaki basit bir ayrıntıyı ana fikir gibi sunan belirgin tuzak"
+    nasil_olusturulur: |
+      Metinde geçen tek bir destekleyici bilgiyi veya örneği paragrafın ana mesajıymış gibi göster.
+      Kolay: ayrıntı odaklı olduğu açıkça belli olmalı. Dikkatli okuyan hemen elemelidir.
+      "Sadece ... olduğu belirtilmiştir" tarzında dar bir yargı kullan. Tam cümle, 5-10 kelime.
+    kategori: "content"
+
+  - ad: "COK_GENIS_MESAJ"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Paragrafın mesajını aşırı genelleştiren, ders niteliğinde kolay elenebilir yargı"
+    nasil_olusturulur: |
+      Paragrafın gerçek mesajından çok daha geniş veya soyut bir hayat dersi niteliğinde yargı oluştur.
+      Kolay: "Bu paragrafın konusu bu kadar geniş değil" hissi açıkça verilmeli.
+      Örnek kalıp: "... önemlidir / değerli bir kazanımdır" gibi evrensel genellemeler.
+      Tam cümle, 5-10 kelime.
+    kategori: "semantic"
+
+  - ad: "PARAGRAFTA_OLMAYAN_YAKIN"
+    bilisssel_hata_kategorisi: "dis_bilgi_karisimi"
+    aciklama: "Konuyla ilgili ama paragrafta hiç geçmeyen bilgi — kolay fark edilebilir"
+    nasil_olusturulur: |
+      Paragrafın konusuyla aynı alanda ama metinde açıkça yer almayan bir yargı oluştur.
+      Kolay: bağlantı zayıf, paragrafı okuyan öğrenci "bu metinde yok" diyebilmelidir.
+      Tam cümle, 5-10 kelime.
+    kategori: "content"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cikarim_yapma", "ozetleme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

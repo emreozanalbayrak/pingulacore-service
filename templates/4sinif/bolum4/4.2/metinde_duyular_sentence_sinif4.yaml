@@ -1,0 +1,186 @@
+# Kaynak: 5sinif/capture2/metinde_duyular_sentence.yaml — 4. sinif icin adapte edildi (sinif_seviyesi 5->4)
+# templates/capture2/metinde_duyular_sentence.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Bolum 2 - Metinde Duyular
+#
+# CUMLE ANALIZI DUYULAR FORMATI (tum duyu sorularinin ~%15'i)
+# Ana paragraf YOK, seceneklerde 4 cumle verilir
+# Ogrenci cumlelerdeki duyu ifadelerini analiz eder
+#
+# ONEMLI: Bu formatta secenekler cumledir, ana paragraf yoktur
+
+meta:
+  id: "metinde_duyular_sentence_sinif4"
+  ad: "Metinde Duyular (Cümle Analizi)"
+  sinif_seviyesi: 4
+  aciklama: "Seçeneklerdeki cümlelerde duyu analizi yapma"
+  kaynak: "data/metinde_duyular.pdf"
+  frequency: "Low (~15% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Soru kökü + 4 cümle seçenek"
+
+  paragraph:
+    required: false  # Ana paragraf YOK
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 8
+    word_count_max: 25
+    style: "complete_sentence"
+    correct_count: 1
+    kurallar:
+      - "Duyular için SADECE basit, bilinen kelimeleri kullan: görme, işitme, dokunma, tatma, koklama"
+      - "YASAK: 'temas' (dokunma yerine), 'görme yetisi' (görme yerine), 'işitsel algı' (işitme yerine) gibi karmaşık ifadeler"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 2 varyasyon, Sayfa 104-106)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Aşağıdaki cümlelerin hangisinde işitme duyusuna dair bir ayrıntıya <u>yer verilmemiştir</u>?</b>"
+  - "<b>Aşağıdaki metinlerin hangisinde yay ayraç içinde verilen duyuya ait bir ayrıntıya <u>yer verilmemiştir</u>?</b>"
+  - "<b>Aşağıdaki cümlelerin hangisinde görme duyusuna ait bir ifadeye <u>yer verilmemiştir</u>?</b>"
+  - "<b>Aşağıdaki cümlelerin hangisinde dokunma duyusuna ilişkin bir ayrıntıya <u>rastlanmaz</u>?</b>"
+  - "<b>Aşağıdaki cümlelerin hangisinde koklama duyusunu yansıtan bir ifadeye <u>yer verilmemiştir</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "İstenen duyu kriterini sağlayan/sağlamayan cümle"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Soru 'yer verilmemistir' diyorsa: dogru cevap istenen duyuyu ICERMEYEN cumle"
+    - "Diger 3 cumle istenen duyuyu ICERMELI"
+    - "Duyu ifadeleri net ve belirgin olmali"
+    - "Cumle tam ve anlamli olmali (8-25 kelime)"
+  ornekler:
+    - soru: "Aşağıdaki cümlelerin hangisinde işitme duyusuna dair bir ayrıntıya yer verilmemiştir?"
+      secenekler:
+        A: "Kuşların cıvıltısı ormanın sessizliğini bozuyordu. (İşitme var)"
+        B: "Kıpkırmızı güller bahçenin her yerini kaplamıştı. (İşitme YOK - Doğru Cevap)"
+        C: "Rüzgârın uğultusu pencereden içeri giriyordu. (İşitme var)"
+        D: "Çocukların kahkahaları parkta yankılanıyordu. (İşitme var)"
+      dogru: "B"
+      neden: "B seceneginde gorme duyusu var (kipkirmizi) ama isitme duyusu yok"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM:
+# - 3 cumle istenen duyuyu icerir (celdiriciler)
+# - 1 cumle istenen duyuyu ICERMEZ (dogru cevap)
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cozumleme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select target sense from stem"
+      details: |
+        Soru kokunden hedef duyuyu belirle:
+        - Gorme, Isitme, Koklama, Dokunma, Tatma
+        - Ornek: "isitme duyusuna dair" → hedef duyu = isitme
+
+    - step: 2
+      action: "Generate 3 sentences containing the target sense (distractors)"
+      details: |
+        Her biri 8-25 kelimelik tam cumle:
+        - Hedef duyuyu ACIKCA icermeli
+        - Farkli konular/ortamlar anlatmali
+        - Duyu ifadesi net ve belirgin olmali
+        - Ornek (isitme): "Kuslarin civiltisi ormani dolduruyordu."
+
+    - step: 3
+      action: "Generate 1 sentence WITHOUT the target sense (correct answer)"
+      details: |
+        8-25 kelimelik tam cumle:
+        - Hedef duyuyu ICERMEMELI
+        - Baska bir duyu icermeli (dikkat dagitmak icin)
+        - Cumle yapisi diger seceneklerle benzer olmali
+        - Ornek (isitme yok): "Kipkirmizi guller bahcenin her yerini kaplamisti."
+
+    - step: 4
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR (Sayfa 104-106)
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 104
+    konu: "Isitme duyusu analizi"
+    soru_koku: "Aşağıdaki cümlelerin hangisinde işitme duyusuna dair bir ayrıntıya yer verilmemiştir?"
+    secenekler:
+      A: "Kuşların cıvıltısı ormanın sessizliğini bozuyordu."
+      B: "Kıpkırmızı güller bahçenin her yerini kaplamıştı."
+      C: "Rüzgârın uğultusu pencereden içeri giriyordu."
+      D: "Çocukların kahkahaları parkta yankılanıyordu."
+    dogru_cevap: "B"
+    neden: "B seceneginde gorme duyusu var ama isitme duyusu yok"
+
+  - sayfa: 105
+    konu: "Yay ayracli duyu analizi"
+    soru_koku: "Aşağıdaki metinlerin hangisinde yay ayraç içinde verilen duyuya ait bir ayrıntıya yer verilmemiştir?"
+    secenekler:
+      A: "Mis gibi çiçek kokusu burnuma geldi. (Koklama) - uygun"
+      B: "Sıcak kumların üzerinde yürümek zordu. (Dokunma) - uygun"
+      C: "Rengarenk kelebekler bahçede uçuşuyordu. (İşitme) - UYGUN DEĞİL"
+      D: "Ekşi limon suyu dilimi yaktı. (Tatma) - uygun"
+    dogru_cevap: "C"
+    neden: "C seceneginde gorme duyusu var ama yay ayracta 'Isitme' yazilmis, isitme duyusu yok"
+
+  - sayfa: 106
+    konu: "Koklama duyusu analizi"
+    soru_koku: "Aşağıdaki cümlelerin hangisinde koklama duyusuna dair bir ayrıntıya yer verilmemiştir?"
+    secenekler:
+      A: "Ekmek fırınının önünden geçerken mis gibi kokular burnumu doldurdu."
+      B: "Taze kesilmiş çimenlerin kokusu bahçeye yayılmıştı."
+      C: "Denizin dalgaları kayalara çarparak köpürüyordu."
+      D: "Lavanta tarlalarının büyüleyici kokusu her yeri sarmıştı."
+    dogru_cevap: "C"
+    neden: "C seceneginde gorme duyusu var ama koklama duyusu yok"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Ana paragraf YOK - sadece seceneklerde cumle var"
+
+  correct_answer:
+    - "8-25 kelimelik tam cumle mi?"
+    - "Hedef duyuyu icermiyor mu?"
+    - "Baska bir duyu iceriyor mu? (dikkat dagitmak icin)"
+    - "Cumle yapisi diger seceneklerle benzer mi?"
+
+  distractors:
+    - "Her celdirici hedef duyuyu acikca iceriyor mu?"
+    - "Her biri 8-25 kelimelik tam cumle mi?"
+    - "Farkli konular/ortamlar anlatiyor mu?"
+    - "Duyu ifadeleri net ve belirgin mi?"
+    - "Tum secenekler ayni gramer yapida mi? (tam cumle)"

@@ -1,0 +1,126 @@
+# templates/2sinif/bolum6/metin_turleri_sinif2_orta.yaml
+# 2. Sinif — Metin Turleri — ORTA zorluk
+# Tur acik ama yakin tur karisikligi olabilir, 1 yanlis secenek ilk bakista makul
+
+meta:
+  id: "metin_turleri_sinif2_orta"
+  ad: "2. Sinif - Metin Turleri (Orta)"
+  sinif_seviyesi: 2
+  aciklama: "Orta duzey — tur acik ama yakin tur karisikligi olabilir, bilgilendirici/oykuleyici/siir tercih edilir, 3 secenekli"
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Kisa metin + soru koku + 3 metin turu secenegi (orta)"
+
+  paragraph:
+    required: true
+    word_count_min: 10
+    word_count_max: 48
+    sentence_count_min: 3
+    sentence_count_max: 6
+    stil: "bilgilendirici_veya_oykuleyici_veya_siir_veya_masal"
+    background_color: "#f8f0e0"
+    kurallar:
+      - "Metin BILGILENDIRICI METIN, OYKULEYICI METIN, SIIR veya MASAL turunde olmalidir."
+      - "Masal ise 'Bir varmis bir yokmus' gibi acik giris ve olagustu unsur bulunmalidir."
+      - "Tur acik olmalidir ancak yakin bir turle karistirilabilir yuzey benzerligi tasiyabilir."
+      - "Bilgilendirici ve oykuleyici metin ayrimi yapilabilir olmalidir."
+      - "Hayvan veya doga icerikli metinlerde masal celdiricisi kullanilabilir."
+      - "Siir yine acik dize duzeninde kalmalidir. Her dize ayri satirda, <br> ile ayrilmali."
+      - "Metin 2. sinif ogrencisinin anlayabilecegi kadar sade, somut ve acik olmalidir."
+      - "Metin dis bilgi gerektirmemelidir."
+      - "Tur ayirt etme, metnin gorunur ozelliklerinden yapilabilmelidir."
+      - "Metin, turu belirsizlestirecek kadar karma yapida olmamalidir."
+      - "2. sinif ogrencisinin anlayabilecegi sadelikte kelime hazinesi kullanilmalidir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 1
+    word_count_max: 3
+    style: "concept"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Tum secenekler metin turu adi biciminde olmalidir."
+      - "Secenekler kisa, sade ve 2. sinif duzeyinde olmalidir."
+      - "Dogru secenek metnin gorunur tur ozelliklerini karsilamalidir."
+      - "Yanlis secenekler yakin ama yanlis turlerden secilmelidir."
+      - "Secenekler kendi aralarinda bicimce paralel olmalidir."
+      - "En az 1 yanlis secenek ilk bakista makul gorunmelidir."
+      - "Yanlis secenekler yakin tur karisikligi yaratabilir."
+      - "Kullanilabilecek metin turleri: bilgilendirici metin, oykuleyici metin, siir, masal, hikaye. Hep ayni 3 tur tekrarlanmamali."
+
+soru_kokleri:
+  - "<b>Bu metnin turu asagidakilerden hangisidir?</b>"
+  - "<b>Asagidakilerden hangisi bu metnin turudur?</b>"
+  - "<b>Bu metin hangi ture girer?</b>"
+  - "<b>Bu yazinin turu asagidakilerden hangisidir?</b>"
+  - "<b>Bu metin asagidaki turlerden hangisine ornektir?</b>"
+  - "<b>Bu metnin turunu asagidakilerden hangisi gosterir?</b>"
+  - "<b>Asagidakilerden hangisi bu metnin turunu soyler?</b>"
+  - "<b>Bu metin hangi turdedir?</b>"
+  - "<b>Bu parca hangi metin turune ornektir?</b>"
+  - "<b>Bu yazi asagidaki metin turlerinden hangisidir?</b>"
+  - "<b>Metnin turu asagidakilerden hangisi olabilir?</b>"
+  - "<b>Bu metin icin <u>en uygun</u> tur hangisidir?</b>"
+
+dogru_cevap:
+  tanim: "Metnin gorunur ve acik ozelliklerini en dogru karsilayan metin turu"
+  kurallar:
+    - "Dogru cevap metnin yapisina ve icerigine birlikte uyumlu olmalidir."
+    - "Dogru cevap bicimsel ve iceriksel ipuclariyla bulunabilmelidir."
+    - "Dogru cevap soyut edebi analiz gerektirmemelidir."
+    - "Dogru cevap 2. sinif ogrencisinin metne bakarak ayirt edebilecegi aciklikta olmalidir."
+    - "Bilgilendirici metin secilecekse metin acikca bilgi verici olmalidir."
+    - "Oykuleyici metin secilecekse metinde acik olay akisi bulunmalidir."
+    - "Siir secilecekse metin acik dize duzeninde verilmelidir."
+
+celdirici_stratejileri:
+  - ad: "YAPIYA_YAKIN_AMA_ICERIKCE_YANLIS"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Bicimce yakin gorunur ama icerik olarak yanlis tur"
+    nasil_olusturulur: |
+      Metnin bicimce yakin gorunebilecegi ama icerik olarak yanlis olan turu sec.
+      Orta duzey: dikkatli okuyan ogrenci eleyebilir ama yuzeysel okuyan yanilabilir.
+    kategori: "semantic"
+
+  - ad: "ICERIGE_YAKIN_AMA_TURE_YANLIS"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Konu yakin oldugu icin cekici gorunur ama tur bakimindan yanlis"
+    nasil_olusturulur: |
+      Metnin konusuyla iliskili gorunen ama tur olarak yanlis olan secenegi sec.
+      Orta duzey: hayvan/doga icerikli metinlerde masal celdiricisi kullanilabilir.
+    kategori: "cognitive"
+
+  - ad: "SIIR_BICIMI_KARISTIRMA"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Kisa ve sade metni siir sanmaya yonelten secenek"
+    nasil_olusturulur: |
+      Kisa duz yazi icin siir secenegini celdirici olarak kullan.
+      Orta duzey: metin kisa oldugu icin siir gibi gorunebilir ama dize duzeni yoktur.
+    kategori: "cognitive"
+
+  - ad: "MASAL_OYKU_KARISTIRMA"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Olay var diye masal ile oykuleyici metni karistiran secenek"
+    nasil_olusturulur: |
+      Gercekci olay anlatiminda masal secenegini veya olagustu olayda oykuleyici metin secenegini celdirici olarak kullan.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB1"
+  bilesenler: ["metin_turu_ayirt_etme"]
+  surec_bileseni: "metni_anlama"
+
+sinif2_ek_kurallar:
+  yasak_alanlar:
+    - "Edebi analiz, tema cozumleme veya mesaj cikarma YASAK"
+    - "Tur belirsizligi olusturulamaz"

@@ -1,0 +1,130 @@
+# templates/2sinif/bolum7/7.9/sozel_mantik_kural_eleme_sinif2_kolay_kural2_1q.yaml
+# 2. Sinif — Sozel Mantik — Kural Tabanli Eleme — KOLAY (2 kural)
+# Gorsel zorunlu, bilgi bloku zorunlu, paragraf yok, 3 secenekli
+
+meta:
+  id: "sozel_mantik_kural_eleme_sinif2_kolay_kural2"
+  ad: "2. Sinif - Kural Tabanli Eleme (Kolay) - 2 Kural"
+  sinif_seviyesi: 2
+  aciklama: "Kolay duzey — gorsel + 2 kisa kural ile uygun secenegi bulma, 3 secenekli"
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Ana gorsel + 2 kural blogu + soru koku + 3 secenek (kolay)"
+
+  paragraph:
+    required: false
+
+  visual:
+    required: true
+    placement: "top"
+    detail_density: "low"
+    kurallar:
+      - "Gorsel soru cozumunun zorunlu kaynaklarindan biri olmalidir."
+      - "Gorsel somut ve cocuk duzeyine uygun olmalidir."
+      - "Sifre alani, kart dizisi, kutu dizisi, renkli sembol dizisi veya benzeri sade yapi kullanilabilir."
+      - "Gorsel tek basina cevabi vermemelidir."
+      - "Secenekler 3-4 karakter/oge ile sinirli tutulmalidir."
+    yasaklar:
+      - "buyuk-kucuk harf gibi soyut teknik ayrimlar zorunlu kilinmamalidir"
+      - "uzun kod dizileri"
+      - "5'ten fazla ogeli karmasik kurgu"
+
+  bilgi_bloku:
+    required: true
+    kural_sayisi: 2
+    kurallar:
+      - "En fazla 2 kural kullanilmalidir."
+      - "Kurallar cok somut olmalidir."
+      - "Kurallar kisa, acik ve dogrudan olmalidir."
+      - "Kurallar somut secim yapmaya yardimci olmalidir."
+      - "Izinli kural turleri: once/sonra, yan yana gelmeme, sayi toplami, renk sirasi, harf-rakam sayisi."
+      - "Yalniz bir secenek tum kurallari saglamalidir."
+      - "Sayi toplami kullanilacaksa en fazla tek bir toplam kurali olmalidir."
+    yasaklar:
+      - "3 ve uzeri kural"
+      - "birden fazla soyut dil kurali"
+      - "ust uste iki teknik dil islemi"
+      - "2. sinif duzeyini asan karmasik kombinasyon"
+
+  cift_kaynak_zorunlu: true
+  sadece_gorselle_cozum_yasak: true
+  sadece_metinle_cozum_yasak: true
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 1
+    word_count_max: 5
+    style: "short_phrase"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Secenekler kisa ve okunabilir olmalidir."
+      - "Her secenek tum kurallara gore degerlendirilebilir olmalidir."
+      - "Yanlis secenekler en az bir kurali bozmalidir."
+      - "Dogru secenek tum kurallari saglamalidir."
+      - "Secenek uzunlugu 3-4 karakter/oge ile sinirli tutulmalidir."
+      - "KRITIK: Secenekler paragraftaki kurallara uygun FORMAT'ta olmali. Paragrafta sifre/kod konusuluyorsa secenekler kod/sifre formatinda (ornek: Tr34, T5r2, t1R6)."
+      - "Eger paragraf harf-rakam kombinasyonu istiyorsa, 3 secenek de harf+rakam olmali — kelime VEYA sadece rakam YASAK (ornek: 'Masa' veya '1234' SECENEK OLAMAZ)."
+      - "Secenekler arasinda YAPI uyumu: tum secenekler ayni karakter sayisinda, ayni tipte (hepsi sifre, hepsi kart dizisi, hepsi renk dizilimi)."
+      - "Dogru secenek kurallari TAM saglamali. Yanlis secenekler tam olarak 1 kurali bozmali — digerlerine uymali."
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Buna göre aşağıdakilerden hangisi olabilir?</b>"
+  # KULLANILDI: - "<b>Verilen kurallara gore dogru secenek hangisidir?</b>"
+  # KULLANILDI: - "<b>Kurallara uygun olan seçenek aşağıdakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Buna göre aşağıdakilerden hangisi seçilebilir?</b>"
+
+dogru_cevap:
+  tanim: "Gorsel ve kurallarin birlikte degerlendirilmesiyle bulunan tek dogru secenek"
+  kurallar:
+    - "Dogru cevap tum kurallari saglamalidir."
+    - "Dogru cevap gorsel ile birlikte degerlendirildiginde tek secilecek secenek olmalidir."
+    - "Dogru cevap 2. sinif ogrencisinin bulabilecegi aciklikta olmalidir."
+    - "Soru yalniz metinle veya yalniz gorselle cozulememeli, ikisi birlikte gerekli olmalidir."
+
+celdirici_stratejileri:
+  - ad: "BIR_KURALI_BOZAN"
+    bilisssel_hata_kategorisi: "kural_karisikligi"
+    aciklama: "Bir kurala uyar ama diger kurali bozar"
+    nasil_olusturulur: |
+      Secenegi bir kurala uygun yap ama diger kuralda bariz hatali olsun.
+      Kolay duzey: kurali bozan taraf kolayca fark edilebilir olmalidir.
+    kategori: "rule_violation"
+
+  - ad: "GORSEL_UYUMSUZ"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Kurallara uyar gibi gorunur ama gorseldeki duzenle celisir"
+    nasil_olusturulur: |
+      Secenegi kurallara uyar gibi yap ama gorseldeki somut durumla celissin.
+      Kolay duzey: gorsel celiskisi acikca gorulebilir olmalidir.
+    kategori: "visual_conflict"
+
+use_shared_strategies: false
+
+visual_requirement: "answer_critical"
+visual_type: "logic_diagram"
+visual_spec:
+  diagram_type: "code_area"
+  aciklama: "Sifre alani, kart dizisi, renkli sembol dizisi gibi kurallarla eslesen gorsel"
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["kurala_uygun_secim", "eleme_yapma"]
+  surec_bileseni: "kural_uygulama"
+
+sinif2_ek_kurallar:
+  cift_kaynak_zorunlu: true
+  yasak_alanlar:
+    - "Buyuk-kucuk harf zorunlulugu YASAK"
+    - "Cok sayida soyut kural YASAK"
+    - "Uzun sifre ve uzun kod dizisi YASAK"
+    - "Kurallar arasinda dolayli iliski YASAK (3. sinifa kayar)"
+    - "Coklu olasilik tartismasi YASAK (4. sinifa kayar)"
+

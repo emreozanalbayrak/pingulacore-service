@@ -1,0 +1,53 @@
+# templates/_defaults.yaml
+# Shared defaults for all templates. Templates override only what differs.
+
+format:
+  type: "llm_generated_html"
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 90
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "bilgilendirici"
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    correct_count: 1
+
+  html_template: |
+    <div class="paragraph">{paragraph}</div>
+    {image_html}
+    <div class="question">{question}</div>
+    <div class="options">
+      <div class="option"><span class="option-letter">A)</span> {option_a}</div>
+      <div class="option"><span class="option-letter">B)</span> {option_b}</div>
+      <div class="option"><span class="option-letter">C)</span> {option_c}</div>
+      <div class="option"><span class="option-letter">D)</span> {option_d}</div>
+    </div>
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+      - name: "detay"
+        description: "Detay seviyesi (opsiyonel)"

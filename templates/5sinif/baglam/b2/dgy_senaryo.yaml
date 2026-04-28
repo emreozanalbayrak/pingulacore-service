@@ -1,0 +1,121 @@
+meta:
+  id: dgy_senaryo
+  ad: DGY Etkinliği Senaryosu
+  sinif_seviyesi: 5
+  aciklama: Öğretmen sınıfta DGY yollarını işliyor, öğrenciler metin üzerinde çalışıyor — DGY belirleme ve örnek eşleştirme
+  kaynak: kaynak-soru-kokleri.md
+  frequency: Medium
+context:
+  type: dgy_senaryo
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 100
+    word_count_max: 160
+    structure:
+    - 'Bir sınıf senaryosu oluştur: öğretmen düşünceyi geliştirme yollarını işliyor'
+    - Öğretmen öğrencilere bir metin veriyor veya tahtaya yazıyor
+    - "Metin içinde en az 2-3 farklı DGY yolu açıkça kullanılmış olmalı"
+    - "KRİTİK — SADECE şu 4 DGY yolu kullanılabilir: Tanımlama, Benzetme, Karşılaştırma, Örneklendirme. Başka DGY yolu (tanık gösterme, sayısal verilerden yararlanma vb.) KULLANMA"
+    - Her DGY yolu için metinde somut cümleler bulunmalı
+    - Öğrenciler metni inceleyerek DGY yollarını belirliyor
+    - Metin bir konu hakkında bilgi veren veya bir fikri açıklayan bir paragraf olmalı
+    - "YASAK: HTML tablosu (<table>) EKLEME — sadece düz metin yaz, tablo KULLANMA"
+    kurallar:
+    - 5. sınıf seviyesinde, günlük hayattan veya doğa/bilim konusuyla ilgili metin
+    - "Metinde SADECE şu 4 DGY yolu kullanılabilir: Tanımlama, Benzetme, Karşılaştırma, Örneklendirme — başka DGY yolu metinde KULLANMA"
+    - Metindeki her DGY yolu açıkça ayırt edilebilir olmalı
+    - Bazı DGY yolları metinde bulunmamalı — soru mantığı için gerekli
+    - Metinde "anlatım biçimleri" söz öbeği kullanılMAMALI.
+    - Soruda tablo kullanılMAMALI.
+    - Metin açıklayıcı anlatım türünde olmalı
+    - Soruda ve seçeneklerde kesinlikle "tanık gösterme" söz öbeği kullanılMAMALI.
+    - Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)
+  questions:
+  - slot: 1
+    type: dgy_belirleme
+    soru_kokleri:
+    - <b>Metinde aşağıdaki düşünceyi geliştirme yollarından hangisi kullanılmıştır?</b>
+    - <b>Bu metinde kullanılan düşünceyi geliştirme yolu aşağıdakilerden hangisidir?</b>
+    - <b>Bu etkinlikte hangi düşünceyi geliştirme yolunu örnekleyen bir metin <u>kullanılmamıştır</u>?</b>
+    options_style: concept
+    word_count_min: 1
+    word_count_max: 3
+    slot_rules:
+    - "KRİTİK: 4 seçenek SADECE şunlardan oluşmalı: Tanımlama, Benzetme, Karşılaştırma, Örneklendirme — başka DGY yolu seçenek OLAMAZ"
+    beceri:
+      katman: KB2
+      bilesenler:
+      - siniflandirma
+      - analiz
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 2
+    type: dgy_ornek_eslestirme
+    soru_kokleri:
+    - <b>Metindeki hangi cümle örneklendirme/tanımlama/karşılaştırma yöntemine örnektir?</b>
+    - <b>Aşağıdakilerden hangisi metindeki bir düşünceyi geliştirme yoluna örnek gösterilebilir?</b>
+    - <b>…Öğrenci… bu etkinlikte yer alsaydı ve bu metni okusaydı hangi düşünceyi geliştirme yolunu örneklemiş olurdu?</b>
+    - <b>...Ogrenci 4... bu etkinlige katilsaydi ve bu metni okusaydi hangi dusunceyi gelistirme yolunu orneklemis olurdu?</b>
+    options_style: complete_sentence
+    word_count_min: 8
+    word_count_max: 22
+    beceri:
+      katman: KB2
+      bilesenler:
+      - siniflandirma
+      - eslestirme
+      surec_bileseni: bilgiyi_cikartma
+header_template: 1-2. soruları aşağıdaki senaryoya göre cevaplayınız.
+format:
+  type: llm_generated_html
+  description: DGY etkinliği senaryosu üzerinden belirleme ve örnek eşleştirme soruları
+  paragraph:
+    required: true
+    word_count_min: 100
+    word_count_max: 160
+    sentence_count_min: 5
+    sentence_count_max: 10
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 1
+    word_count_max: 22
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Metinde gerçekten kullanılan DGY yolu veya doğru eşleşen cümle
+  kurallar:
+  - "KRİTİK: Doğru cevap metindeki tek bir cümleden direkt okunaMAMALI"
+  - "Öğrenci doğru cevaba ulaşmak için senaryodaki metni ANLAMALI ve DGY yollarını YORUMLAMALI"
+  - "Doğru şık bir YORUM veya ÇIKARIM içermeli — ham metin tekrarı değil"
+  - "DGY belirleme sorusunda seçenekler SADECE Tanımlama, Benzetme, Karşılaştırma, Örneklendirme olmalı"
+  - "Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri doğru olmalı"
+  - Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı
+  - DGY belirleme sorusunda doğru cevap metinde açıkça kullanılmış olan DGY yolu olmalı
+  - Örnek eşleştirme sorusunda doğru cevap belirtilen DGY yolunu gerçekten örnekleyen cümle olmalı
+  - Çeldiriciler metinde kullanılmamış DGY yolları veya farklı DGY'ye ait cümleler olmalı
+  - "HATALI YAKLASIM: Metinde geçen bir cümlenin AYNEN seçeneklerde kullanılması YASAK"
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - "Doğru seçenek metindeki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI"
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: ''teleskop'' → ''mercekli araç'' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: YAKIN_DGY
+    aciklama: Metindeki DGY yoluna yakın ama farklı bir DGY yolunu doğruymuş gibi sunma
+    ornek: Benzetme yerine karşılaştırma, örneklendirme yerine tanımlama önerme
+  - ad: CUMLE_KARISTIRMA
+    aciklama: Farklı bir DGY yoluna ait cümleyi sorulan DGY yolunun örneği gibi sunma
+    ornek: Tanımlama cümlesini örneklendirme örneği olarak gösterme
+  - ad: TANIM_TUZAGI
+    aciklama: DGY yolunun tanımını örnekle karıştırma — tanımı örnek gibi veya örneği tanım gibi sunma
+    ornek: Bir kavramın tanımını örneklendirme olarak sunma
+use_shared_strategies: false

@@ -1,0 +1,140 @@
+# templates/bolum4/elestirme_cozum_negative.yaml
+# Bolum 4.2 - Ozel Bolum: Elestirme ve Cozum Onerisi (Soylenemez)
+#
+# SOYLENEMEZ FORMATI (INVERSE)
+# Problem tanımlayan metin verilir, ogrenci soylenemez / cevaplanamayacak soruyu bulur
+# correct_type: does_not_belong — dogru cevap metinden DESTEKLENMEYEN
+
+meta:
+  id: "elestirme_cozum_negative"
+  ad: "Eleştirme ve Çözüm Önerisi (Söylenemez)"
+  sinif_seviyesi: 5
+  aciklama: "Problem metninden söylenemeyecek yargı veya cevaplanamayacak soruyu bulma"
+  frequency: "Medium (~30% of critique questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Problem paragrafı + soru kökü + 4 cümle seçenek (1 söylenemez)"
+
+  paragraph:
+    required: true
+    word_count_min: 60
+    word_count_max: 110
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "bilgilendirici"
+    kurallar:
+      - "Bir problem durumu tanımlayan metin"
+      - "Problem → araştırma → olası çözümler akışı"
+      - "Metinde açık bir sorun/ihtiyaç bulunmalı"
+      - "Metinden en az 3 farklı çıkarım/yargı yapılabilecek zenginlikte olmalı"
+      - "Problem 5. sınıf öğrencisinin anlayabileceği düzeyde olmalı"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 8
+    word_count_max: 25
+    style: "complete_sentence"
+    correct_type: "does_not_belong"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metne göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Aşağıdakilerden hangisi bu araştırmada <u>cevaplanamayacak</u> bir sorudur?</b>"
+  - "<b>Metindeki bilgilere göre aşağıdaki çözüm önerilerinden hangisi <u>uygun değildir</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI (TERS MANTIK)
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metinden desteklenmeyen yargı veya cevaplanamayacak soru"
+  mantik: "INVERSE - diğer 3 seçenek metinden desteklenir, doğru cevap desteklenmez"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Doğru cevap konuyla ilgili görünen ama metinde desteklenmeyen yargı olmalı"
+    - "Tamamen alakasız değil, konuyla bağlantılı ama metne dayanmayan"
+    - "Aşırı genelleme, yanlış nedensellik veya kapsam dışı çıkarım olabilir"
+    - "3 çeldirici metinden mantıksal olarak desteklenen yargılar olmalı"
+    - "8-25 kelime, tam bir cümle formatında olmalı"
+  ornekler:
+    - paragraf: "Son yıllarda şehirlerde plastik atık miktarı artmaktadır. Okyanuslarda plastik adaları oluşmuş, deniz canlıları zarar görmektedir."
+      dogru: "Plastik atıklar toprağı verimli hale getirmektedir."
+      neden: "Metin plastik atığın zararlı olduğunu söylüyor, verimli hale getirdiği çıkarılamaz"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# YAKIN_ANLAM, DETAY_TUZAGI, NEDEN_SONUC_TAKASI, KAPSAM_KAYDIRMA,
+# NICEL_GORUMLU_NITEL_ALDATMACASI
+
+beceri:
+  katman: "KB3"
+  bilesenler: ["problem_cozme", "degerlendirme"]
+  surec_bileseni: "karar_verme"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Problem durumu tanımlayan metin oluştur"
+      details: |
+        - Problem → kanıt → sonuçlar akışı
+        - Birden fazla çıkarım yapılabilecek zenginlikte
+        - 60-110 kelime, 4-7 cümle
+
+    - step: 2
+      action: "3 metinden desteklenen yargı belirle (çeldiriciler)"
+      details: |
+        - Metinden mantıksal olarak çıkarılabilir 3 yargı
+        - Problem tespiti, çözüm önerisi veya sonuç düzeyinde
+
+    - step: 3
+      action: "1 metinden desteklenmeyen yargı oluştur (doğru cevap)"
+      details: |
+        - Konuyla ilgili görünen ama metinde desteklenmeyen
+        - Aşırı genelleme, yanlış nedensellik veya kapsam dışı
+
+    - step: 4
+      action: "Seçenekleri rastgele sırala"
+      details: "A-B-C-D seçeneklerini rastgele sırala"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayısı 60-110 arasında mı?"
+    - "Açık bir problem durumu var mı?"
+    - "Birden fazla çıkarım yapılabilir mi?"
+
+  correct_answer:
+    - "8-25 kelime tam cümle mi?"
+    - "Gerçekten metinden desteklenmiyor mu?"
+    - "Konuyla ilgili ama metne dayanmıyor mu?"
+
+  distractors:
+    - "3 çeldirici metinden destekleniyor mu?"
+    - "Her çeldirici farklı bir çıkarım düzeyi mi?"
+    - "Tüm seçenekler aynı formatta mı?"

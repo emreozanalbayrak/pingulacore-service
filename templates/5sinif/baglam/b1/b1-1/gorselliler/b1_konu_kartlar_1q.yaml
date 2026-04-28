@@ -1,0 +1,96 @@
+# B1.1 — 1Q Arka Planlı Kart (Konu/Problem Belirleme)
+# Görsel: info_card (CSS renkli kart)
+# Soru Tipi: Konu/Problem — B1.1 soru kökleri
+
+meta:
+  id: "b1_konu_kartlar_1q"
+  ad: "1Q Arka Planlı Kart — Konu/Problem"
+  sinif_seviyesi: 5
+  aciklama: "Tek sütunlu renkli bilgi kartı üzerinden konu/problem belirleme sorusu"
+  kaynak: "baglamb1sorukoku.md"
+  frequency: "Medium"
+
+context:
+  type: "b1_konu_kartlar_1q"
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 100
+    word_count_max: 180
+    visual_format: "info_cards"
+    structure:
+      - "BİR TANE kısa bilgi metni oluştur"
+      - "Bu metine başlık KOYMA — sadece düz metin yaz"
+      - "KRİTİK: Metine HİÇBİR BAŞLIK yazma — ne konu başlığı ne numara ne 'Metin 1' gibi etiket. Direkt paragraf metniyle başla"
+      - "Metin 5-7 cümle olmalı"
+      - "YASAK: HTML tablosu (<table>) ekleme — sadece düz metin yaz"
+      - "NOT: Bu metin otomatik olarak renkli bilgi kartına dönüştürülecektir"
+      - "Metnin ele aldığı ana konu/problem net olarak çıkarılabilir olmalı"
+    kurallar:
+      - "KRİTİK — BAŞLIK YASAĞI: Metin ve görselde konunun ana fikrini veren başlık KOYMA! Nötr başlık kullan"
+      - "5. sınıf seviyesinde, anlaşılır bilgi metini"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+    - slot: 1
+      type: "konu_problem"
+      soru_kokleri:
+        - "<b>Bu metinde anlatılmak istenen asıl mesele aşağıdakilerden hangisidir?</b>"
+        - "<b>Bu metindeki bilgilere dayanılarak hangi çıkarım yapılabilir?</b>"
+        - "<b>Bu metine göre çözülmesi gereken asıl mesele nedir?</b>"
+      options_style: "short_phrase"
+      word_count_min: 3
+      word_count_max: 12
+      beceri:
+        katman: "KB2"
+        bilesenler: ["anlama", "cikarim_yapma"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+header_template: null
+
+format:
+  type: "llm_generated_html"
+  description: "1Q arka planlı kart üzerinden konu/problem belirleme"
+  paragraph:
+    required: true
+    word_count_min: 120
+    word_count_max: 200
+    sentence_count_min: 6
+    sentence_count_max: 12
+  stem:
+    required: true
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 3
+    word_count_max: 12
+    style: "short_phrase"
+    correct_count: 1
+    correct_type: "matches"
+
+dogru_cevap:
+  tanim: "Bilgi kartından çıkarılan ana konu/problem"
+  kurallar:
+    - "KRİTİK: Doğru cevap metindeki tek bir cümleden direkt okunaMAMALI"
+    - "Öğrenci doğru cevaba ulaşmak için metni değerlendirmeli"
+    - "Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil"
+    - "HATALI YAKLASIM: Metinde geçen bir cümlenin AYNEN seçeneklerde kullanılması YASAK"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin ANLAMCA ÖZDESİ olmalı"
+    - "En az %40 kelime farklılığı olmalı"
+    - "BİLİMSEL TERİM KORUMASI: Teknik terimler değiştirilmemeli"
+    - "Doğru şık en uzun şık OLMAMALI"
+
+distractors:
+  stratejiler:
+    - ad: "DETAY_ODAK"
+      aciklama: "Karttaki bir detayı ana mesele gibi sunma"
+      ornek: "Yan bir bilgiyi temel konu olarak gösterme"
+    - ad: "TEK_KART_ODAKLI"
+      aciklama: "Sadece kartın yan konusunu yansıtan, ana konuyu ihmal eden seçenek"
+      ornek: "Karttan çıkarılan dar kapsamlı ifade"
+    - ad: "UST_KAVRAM_GENELLEME"
+      aciklama: "Çok geniş/genel bir ifade kullanarak belirli konuyu kaybetme"
+      ornek: "Spesifik konuyu aşırı genel bir kavramla ifade etme"
+
+use_shared_strategies: false

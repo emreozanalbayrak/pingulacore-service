@@ -1,0 +1,121 @@
+# Pattern: ["dogrudan_detay", "deginilmemistir", "ozellik_ile_ilgili"] (referans satir 479)
+# Zor duzey, 3 soru: dogrudan_detay + deginilmemistir + ozellik_ile_ilgili
+
+meta:
+  id: metin_inceleme_sinif2_zor_detay_deginilmemistir_ozellik_3q
+  ad: "2. Sinif - Metin Inceleme (Zor) - Detay + Deginilmemistir + Ozellik Ile Ilgili"
+  sinif_seviyesi: 2
+  aciklama: "Zor baglam — 3 soru: dogrudan_detay + deginilmemistir + ozellik_ile_ilgili"
+  frequency: "Medium"
+
+context:
+  type: metin_inceleme_sinif2_zor_detay_deginilmemistir_ozellik_3q
+  question_count: 3
+  question_count_min: 3
+  question_count_max: 3
+  generation:
+    word_count_min: 66
+    word_count_max: 92
+    image_type: "illustration"
+    structure:
+      - "6-7 kisa cumle, tek baskin konu/olay etrafinda."
+      - "Slot 1 icin metinde acik detay bilgi bulunmali."
+      - "Slot 2 DEGINILMEMISTIR icin metinde ayirt edici acik bilgiler yer almali — diger 2 secenegin metinde gecmesi GEREKLI, dogru cevap metinde GECMEYEN secenek olmali."
+      - "Slot 3 icin metinde mutlaka KAHRAMAN/KISI olmali ve onun ACIK BIR DAVRANISI gorunur olmali — bu davranis tek bir ozellige baglanabilmeli."
+    kurallar:
+      - "2. sinif duzeyinde, sade ama zengin metin."
+      - "Karakter ismi Turkce olmali."
+      - "Ozellik havuzu: mutlu, uzgun, cesur, calişkan, sabirli, merhametli, durust, sorumluluk sahibi, azimli."
+      - "Davranis ile ozellik arasindaki bag acik olmali."
+      - "Zor duzeyde bile yorum/analiz YASAK."
+      - "Turkce karakterler dogru kullanilmali."
+
+      - "Tablo/grafik/sayi listesi KULLANMA — sadece akici Turkce anlatim. Gorsel ayrica illustrasyon olarak uretilecek."
+  questions:
+    - slot: 1
+      type: dogrudan_detay
+      soru_kokleri:
+        - "<b>Bu metne gore asagidakilerden hangisi dogrudur?</b>"
+        - "<b>Bu metne gore asagidakilerden hangisi soylenebilir?</b>"
+        - "<b>Asagidakilerden hangisi metinde verilen bilgilerden biridir?</b>"
+        - "<b>Bu metne gore asagidakilerden hangisi yanlistir?</b>"
+      options_style: complete_sentence
+      word_count_min: 2
+      word_count_max: 8
+      beceri:
+        katman: KB1
+        bilesenler: [acik_bilgi_okuma]
+        surec_bileseni: bilgiyi_okuma
+
+    - slot: 2
+      type: deginilmemistir
+      soru_kokleri:
+        - "<b>Bu metinde asagidakilerden hangisine <u>deginilmemistir</u>?</b>"
+        - "<b>Metinde asagidakilerden hangisinden soz <u>edilmemistir</u>?</b>"
+        - "<b>Bu metinde asagidakilerden hangisine yer <u>verilmemistir</u>?</b>"
+        - "<b>Metne gore asagidakilerden hangisinden bahsedilmemistir?</b>"
+      options_style: short_phrase
+      word_count_min: 1
+      word_count_max: 5
+      beceri:
+        katman: KB1
+        bilesenler: [secici_tarama, eleme]
+        surec_bileseni: metni_anlama
+
+    - slot: 3
+      type: ozellik_ile_ilgili
+      soru_kokleri:
+        - "<b>Metindeki bu davranis onun hangi ozelligi ile ilgilidir?</b>"
+        - "<b>Bu metne gore kahramanin yaptigi davranis asagidaki ozelliklerden hangisi ile ilgilidir?</b>"
+      options_style: short_phrase
+      word_count_min: 1
+      word_count_max: 3
+      beceri:
+        katman: KB2
+        bilesenler: [davranis_ozellik_baglama]
+        surec_bileseni: metni_yorumlama
+
+header_template: "1-3. sorulari asagidaki metne gore cevaplayiniz."
+
+format:
+  type: llm_generated_html
+  description: "3 baglam sorusu (zor): detay + deginilmemistir + ozellik ile ilgili"
+  paragraph:
+    required: true
+    word_count_min: 66
+    word_count_max: 92
+    sentence_count_min: 6
+    sentence_count_max: 7
+    stil: "oykusel"
+    background_color: "#fce8e8"
+  stem:
+    required: true
+  options:
+    count: 3
+    labels: [A, B, C]
+    word_count_min: 1
+    word_count_max: 8
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+
+dogru_cevap:
+  tanim: "Metinden acikca cikarilabilen dogru cevap"
+  kurallar:
+    - "Slot 1: dogru cevap metindeki acik bilgiye dayanmali."
+    - "Slot 2: dogru cevap metinde GERCEKTEN GECMEYEN secenek olmali."
+    - "Slot 3: davranis ile ozellik arasindaki bag acik olmali — tek ve baskin ozellik hedeflenmeli."
+    - "Yanlis secenekler metne yakin ve makul gorunmeli (zor duzey)."
+distractors:
+  stratejiler:
+    - ad: YAKIN_CELDIRICI
+      aciklama: "Dogru cevaba cok yakin ama dikkatli okuyunca elenebilen secenek"
+    - ad: METNE_YAKIN_AMA_YANLIS
+      aciklama: "Metne yakin gorunur ama acik bilgiye uymayan secenek"
+
+use_shared_strategies: false
+
+beceri:
+  katman: KB2
+  bilesenler: [baglam_okuma, davranis_ozellik]
+  surec_bileseni: metni_yorumlama

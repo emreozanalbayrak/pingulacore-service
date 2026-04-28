@@ -1,0 +1,415 @@
+meta:
+  id: "sekil_sembol_isaretler_sinif2_cift_kaynakli_gorsel_metin_uc_secenekli"
+  ad: "Şekil, Sembol ve İşaretler"
+  sinif_seviyesi: 2
+  ders: "Türkçe"
+  bolum: "2. Sınıf Paragraf Soru Bankası"
+  alt_bolum: "7.1 Şekil, Sembol ve İşaretler"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    2. sınıf öğrencisi için günlük hayatta kullanılan şekil, sembol ve işaretlerin
+    anlamlarını hem görsel hem de kısa metinsel bilgiler birlikte incelenerek
+    çözdüren, 3 seçenekli standart soru üretim şablonu.
+  kullanim_notu: >
+    Bu şablonda soru yalnız metin okunarak çözülemez. Yalnız görsele bakılarak da
+    çözülemez. Doğru cevap için hem görsel hem metin birlikte incelenmelidir.
+    Harici 2. Sınıf TYMM Ortak Kuralları ile birlikte doğrulanmalıdır.
+
+format:
+  tip: "llm_generated_html"
+  aciklama: "Ana görsel + kısa metinsel bilgi alanı + soru kökü + 3 seçenek"
+
+  cift_kaynak_zorunlu: true
+  sadece_gorselle_cozum_yasak: true
+  sadece_metinle_cozum_yasak: true
+
+  soru_varyanti:
+    izinli:
+      - "dogru_eslestirme"
+      - "eslestirme_sekli"
+      - "metin_ipucuyla_hangi_sembol"
+      - "metin_ipucuyla_hangi_anlam"
+      - "gorsel_metin_birlikte_sonuc"
+    varsayilan: "dogru_eslestirme"
+
+  gorsel:
+    gerekli: true
+    aciklama: "Sembollerin, işaretlerin veya şekillerin açık biçimde verildiği ana görsel alan"
+    konum: "ust"
+    izinli_gorsel_turleri:
+      - "2-3 sembollü eşleştirme alanı"
+      - "uyarı/işaret kartı"
+      - "erişilebilirlik sembolleri"
+      - "hava durumu sembolleri"
+      - "trafik işaretleri"
+      - "ambalaj işaretleri"
+      - "akıllı işaretler"
+    kurallar:
+      - "Görsel soru çözümünün zorunlu kaynaklarından biri olmalıdır."
+      - "Görsel tek başına doğru cevabı vermemelidir."
+      - "Semboller net, büyük ve tek bakışta ayırt edilebilir olmalıdır."
+      - "Görsel sade olmalı, gereksiz süsleme içermemelidir."
+      - "Eşleştirme sorularında her sembol açıkça ayrı konumda verilmelidir."
+      - "Şekiller, bağlantılar veya sembol ayrımları öğrencinin takip edebileceği kadar açık olmalıdır."
+      - "Görsel yanlış seçeneği destekleyecek kadar karışık olmamalıdır."
+      - "Renk kullanılıyorsa tek ayırt edici unsur yalnız renk olmamalıdır; biçim de farklı olmalıdır."
+    yasaklar:
+      - "yalnız görsele bakınca cevabın doğrudan seçilebildiği kurgu"
+      - "çok fazla sembol içeren yoğun pano"
+      - "birbirinden ayırt edilmesi çok zor ikonlar"
+      - "2. sınıf düzeyini aşan teknik ikon kümeleri"
+
+  metin_blogu:
+    gerekli: true
+    aciklama: "Görseldeki sembollerle ilişkili kısa açıklamalar, ipuçları veya anlam alanı"
+    uzunluk: "kısa"
+    kurallar:
+      - "Metin soru çözümünün zorunlu kaynaklarından biri olmalıdır."
+      - "Metin tek başına doğru cevabı vermemelidir."
+      - "Metin yalnız yönlendirme ve anlam alanı sağlamalıdır."
+      - "Metin kısa, sade ve 2. sınıf düzeyinde olmalıdır."
+      - "Metin görseldeki sembolleri anlamlandırmada gerekli olmalıdır."
+      - "Metin, öğrenciyi görseli incelemeye mecbur bırakmalıdır."
+      - "Metin ile görsel arasında açık ilişki bulunmalıdır."
+    yasaklar:
+      - "sembolü açıkça tarif ederek cevabı doğrudan verme"
+      - "görsel olmadan çözümü mümkün kılan tam açıklama"
+      - "uzun tanım paragrafları"
+      - "çok teknik terimler"
+
+  kaynaklar_arasi_bag_kurallari:
+    zorunlu:
+      - "Doğru cevap için görseldeki biçimsel bilgi ile metindeki açıklama birlikte kullanılmalıdır."
+      - "Görsel kaldırıldığında soru çözülememelidir."
+      - "Metin kaldırıldığında soru çözülememelidir."
+      - "Görsel ve metin birbirini tamamlamalıdır."
+      - "Her iki kaynak da çözümde gerçek işlev taşımalıdır."
+    yasak:
+      - "metnin sadece yönerge olduğu ve çözümün tamamen görselden çıktığı kurgu"
+      - "görselin sadece süs olduğu ve çözümün tamamen metinden çıktığı kurgu"
+      - "iki kaynaktan birinin işe yaramadığı yapılar"
+
+  soru_koku:
+    gerekli: true
+    secim: "listeden_rastgele"
+
+  secenekler:
+    sayi: 3
+    etiketler: ["A", "B", "C"]
+    dogru_sayisi: 1
+    stil_varyanta_gore:
+      dogru_eslestirme: "eslestirme_ifadesi"
+      eslestirme_sekli: "kucuk_baglanti_sekli"
+      metin_ipucuyla_hangi_sembol: "kisa_sembol_etiketi_veya_kucuk_sembol"
+      metin_ipucuyla_hangi_anlam: "kisa_anlam_ifadesi"
+      gorsel_metin_birlikte_sonuc: "kisa_birlesik_sonuc"
+    kelime_sayisi_min: 1
+    kelime_sayisi_max: 8
+    kurallar:
+      - "Her soruda 3 seçenek olmalıdır."
+      - "Doğru seçenek yalnız görsel ve metin birlikte kullanıldığında bulunabilmelidir."
+      - "Yanlış seçenekler görsel veya metinden birine kısmen uyabilir; fakat ikisine birden uymamalıdır."
+      - "Seçenekler 2. sınıf düzeyinde kısa ve sade olmalıdır."
+      - "Eşlestirme_sekli varyantında üç seçenek de biçimce paralel küçük eşleştirme şekilleri olmalıdır."
+      - "Seçenekler kendi aralarında açıkça karşılaştırılabilir olmalıdır."
+
+soru_kokleri:
+  dogru_eslestirme:
+    - "Görseldeki semboller ve metindeki anlamlar doğru eşleştirildiğinde aşağıdakilerden hangisi doğru olur?"
+    - "Şekiller ile verilen anlamlar doğru eşleştirildiğinde hangi seçenek oluşur?"
+    - "Görsel ve metindeki bilgiler birlikte düşünüldüğünde doğru eşleştirme hangisidir?"
+    - "Semboller ile açıklamalar doğru eşleştirildiğinde aşağıdakilerden hangisi seçilir?"
+    - "Görselde verilen şekiller ile metindeki ifadeler doğru eşleştirilirse hangi seçenek doğru olur?"
+
+  eslestirme_sekli:
+    - "Verilen semboller ve açıklamalar doğru eşleştirildiğinde aşağıdaki şekillerden hangisi oluşur?"
+    - "Görsel ve metindeki bilgiler doğru birleştirildiğinde hangi bağlantı şekli oluşur?"
+    - "Semboller ile anlamlar doğru çizgilerle eşleştirildiğinde hangi şekil ortaya çıkar?"
+    - "Şekiller ve açıklamalar birlikte incelendiğinde doğru eşleştirme şekli hangisi olur?"
+
+  metin_ipucuyla_hangi_sembol:
+    - "Metindeki açıklamaya ve görseldeki sembollere göre doğru sembol hangisidir?"
+    - "Verilen bilgiye göre görseldeki sembollerden hangisi seçilmelidir?"
+    - "Görsel ve metin birlikte düşünüldüğünde doğru işaret hangisidir?"
+    - "Açıklamaya uygun sembol aşağıdakilerden hangisidir?"
+
+  metin_ipucuyla_hangi_anlam:
+    - "Görseldeki sembol ve metindeki bilgilere göre bu işaret hangi anlama gelir?"
+    - "Şekle ve açıklamaya göre doğru anlam hangisidir?"
+    - "Görsel ile metin birlikte incelendiğinde bu sembol neyi gösterir?"
+    - "Aşağıdakilerden hangisi görseldeki işaretin metne uygun anlamıdır?"
+
+  gorsel_metin_birlikte_sonuc:
+    - "Görsel ve metindeki bilgiler birlikte değerlendirildiğinde aşağıdakilerden hangisi doğrudur?"
+    - "Şekil ile açıklama birlikte incelendiğinde hangi sonuca ulaşılır?"
+    - "Görsel ve metne göre doğru seçenek hangisidir?"
+    - "Aşağıdakilerden hangisi hem görsele hem de metne uygundur?"
+
+beceri_odagi:
+  birincil_beceri:
+    - "Şekil, sembol ve işaretleri hem görsel hem metin yardımıyla anlamlandırma"
+  ikincil_beceriler:
+    - "Görsel ayrıntıyı fark etme"
+    - "Metinsel ipucunu kullanma"
+    - "Sembol ile anlamı eşleştirme"
+    - "İki bilgi kaynağını birleştirerek sonuca ulaşma"
+
+dogru_cevap:
+  tanim: "Yalnız görsel ve metin birlikte incelendiğinde bulunabilen doğru anlam, doğru eşleştirme veya doğru şekil"
+  kurallar:
+    - "Doğru cevap görseldeki biçimsel bilgi ile metindeki açıklamanın birleşimine dayanmalıdır."
+    - "Doğru cevap yalnız metinden çıkarılamamalıdır."
+    - "Doğru cevap yalnız görselden çıkarılamamalıdır."
+    - "Doğru cevap 2. sınıf öğrencisinin iki kaynağı birlikte kullanarak bulabileceği açıklıkta olmalıdır."
+    - "Eşleştirme sorularında doğru cevap bağlantı düzenini tam yansıtmalıdır."
+
+yanlis_secenek_stratejileri:
+  count_per_question: 2
+  strateji_havuzu:
+    - id: "metne_yakin_gorsele_aykiri"
+      tanim: "Metindeki açıklamaya yakın görünür ama görseldeki sembole uymaz"
+
+    - id: "gorsele_yakin_metne_aykiri"
+      tanim: "Görseldeki sembole yakın görünür ama metindeki açıklamaya uymaz"
+
+    - id: "yanlis_eslestirme"
+      tanim: "Eşleştirmelerin bir veya iki bağlantısı yanlış olan seçenek"
+
+    - id: "ters_baglanti"
+      tanim: "Doğru eşleştirmeye yakın ama çizgi yönleri veya bağlantıları hatalı düzen"
+
+    - id: "gorsel_benzerlik_tuzagi"
+      tanim: "Biçimce yakın sembol kullanır ama metinsel anlamla uyuşmaz"
+
+  secim_kurali:
+    - "Her soruda 2 yanlış seçenek farklı stratejilerden seçilmelidir."
+    - "Yanlış seçeneklerden en az biri görsele yakın ama metne aykırı olmalıdır."
+    - "Yanlış seçeneklerden en az biri metne yakın ama görsele aykırı olmalıdır."
+    - "Zor düzeyde iki yanlış seçenek de dikkatli çift kaynak incelemesi gerektirmelidir."
+
+soru_varyanti_kurallari:
+  dogru_eslestirme:
+    kurallar:
+      - "2 veya 3 sembol ve 2 veya 3 anlam aynı düzende verilmelidir."
+      - "Öğrenci metindeki açıklamaları okuyup görseldeki sembollerle doğru ilişki kurmalıdır."
+      - "Ne görsel ne metin tek başına yeterli olmamalıdır."
+
+  eslestirme_sekli:
+    kurallar:
+      - "Doğru cevap bağlantı çizgilerinin oluşturduğu şekle dayanmalıdır."
+      - "Öğrenci metindeki anlamları okuyup görseldeki sembollerle eşleyerek şekli bulmalıdır."
+      - "Seçenek şekilleri birbirine yakın ama ayırt edilebilir olmalıdır."
+
+  metin_ipucuyla_hangi_sembol:
+    kurallar:
+      - "Metin kısa bir anlam ya da kullanım alanı vermelidir."
+      - "Görselde birden fazla sembol bulunmalı ve doğru sembol metin yardımıyla seçilmelidir."
+      - "Yalnız görsele bakarak seçim yapılamamalıdır."
+
+  metin_ipucuyla_hangi_anlam:
+    kurallar:
+      - "Sembol görselde verilmeli, metin ise anlam alanını daraltmalıdır."
+      - "Seçenekler arasında yalnız biri hem sembole hem metne uymalıdır."
+      - "Yalnız metni okuyarak doğru seçenek seçilememelidir."
+
+  gorsel_metin_birlikte_sonuc:
+    kurallar:
+      - "Görsel ve metin farklı parçalar halinde bilgi taşımalıdır."
+      - "Doğru sonuç bu iki parçanın birleştirilmesiyle çıkmalıdır."
+      - "Basit ama gerçek bir görsel-metin birlikte okuma görevi olmalıdır."
+
+zorluk_duzeyleri:
+  kolay:
+    gorsel:
+      sembol_sayisi_min: 2
+      sembol_sayisi_max: 2
+      kurallar:
+        - "Semboller birbirinden açıkça farklı olmalıdır."
+        - "Metin kısa ve sade olmalıdır."
+        - "Her iki kaynak birlikte kullanıldığında doğru cevap kolayca bulunabilmelidir."
+    tercih_edilen_varyantlar:
+      - "metin_ipucuyla_hangi_anlam"
+      - "metin_ipucuyla_hangi_sembol"
+    celdiriciler:
+      kurallar:
+        - "1 seçenek görsele yakın ama metne aykırı olmalıdır."
+        - "1 seçenek metne yakın ama görsele aykırı olmalıdır."
+    zorluk_notu: >
+      Kolay düzeyde öğrenci hem görseli hem metni kullanır; ancak ilişki çok açık kurulur.
+
+  orta:
+    gorsel:
+      sembol_sayisi_min: 2
+      sembol_sayisi_max: 3
+      kurallar:
+        - "Görselde 2 veya 3 sembol bulunabilir."
+        - "Metin kısa açıklamalar veya anlam alanı içermelidir."
+        - "Doğru cevap için öğrenci iki kaynağı birlikte değerlendirmelidir."
+    tercih_edilen_varyantlar:
+      - "dogru_eslestirme"
+      - "metin_ipucuyla_hangi_sembol"
+      - "metin_ipucuyla_hangi_anlam"
+    celdiriciler:
+      kurallar:
+        - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+        - "Yanlış seçenekler çift kaynaklı dikkat gerektirmelidir."
+    zorluk_notu: >
+      Orta düzeyde öğrenci görsel ayrıntı ile metinsel ipucunu birleştirerek çözüme gider.
+
+  zor:
+    gorsel:
+      sembol_sayisi_min: 3
+      sembol_sayisi_max: 3
+      kurallar:
+        - "Görselde 3 sembol ya da 3 anlam ilişkisi bulunmalıdır."
+        - "Metin sembolleri doğrudan tarif etmemeli, yalnız gerekli anlam alanını vermelidir."
+        - "Doğru cevap yakın seçenekler arasından çift kaynaklı dikkatle seçilmelidir."
+        - "Zor düzeyde bile 2. sınıf sadeliği korunmalıdır."
+    tercih_edilen_varyantlar:
+      - "eslestirme_sekli"
+      - "dogru_eslestirme"
+      - "gorsel_metin_birlikte_sonuc"
+    celdiriciler:
+      kurallar:
+        - "2 yanlış seçenek de görsel ve metnin yalnız bir kısmına uyabilir görünmelidir."
+        - "Doğru cevap ancak iki kaynağı tam birleştiren öğrenci tarafından bulunabilmelidir."
+    zorluk_notu: >
+      Zor düzeyde zorluk, hem görseli hem metni birlikte okuyup yakın seçenekleri ayırma düzeyindedir.
+
+zorluk_secim_politikasi:
+  varsayilan: "Orta"
+  izinli_degerler: ["Kolay", "Orta", "Zor"]
+  kesin_sinirlar:
+    - "Tüm düzeylerde görsel zorunludur."
+    - "Tüm düzeylerde metin zorunludur."
+    - "Tüm düzeylerde soru yalnız metinden çözülemez."
+    - "Tüm düzeylerde soru yalnız görselden çözülemez."
+    - "Tüm düzeylerde doğru cevap için hem görsel hem metin kullanılmalıdır."
+    - "Tüm düzeylerde 3 seçenek kullanılmalıdır."
+    - "Zor düzey seçilse bile semboller 2. sınıf düzeyini aşamaz."
+
+konu_alani:
+  izinli_ornekler:
+    - "trafik işaretleri"
+    - "özel gereksinimli bireyler için semboller"
+    - "hava durumu sembolleri"
+    - "ambalaj üzerindeki işaretler"
+    - "akıllı işaretler"
+    - "okul içi uyarı işaretleri"
+    - "yön gösteren işaretler"
+  kurallar:
+    - "Seçilen semboller 2. sınıf öğrencisinin ayırt edebileceği sadelikte olmalıdır."
+    - "Aynı soruda yalnız bir sembol ailesi kullanılmalıdır."
+    - "Metin ve görsel arasında açık ilişki kurulmalıdır."
+    - "İki kaynak birbirini tamamlamalıdır."
+
+uretim_mantigi:
+  adimlar:
+    - adim: 1
+      eylem: "2. sınıfa uygun ve çift kaynaklı çözüme elverişli sembol/işaret ailesi seç"
+    - adim: 2
+      eylem: "Görsel düzeni oluştur"
+      detaylar:
+        - "Görsel çözümün zorunlu kaynağı olsun"
+        - "Görsel tek başına yeterli olmasın"
+    - adim: 3
+      eylem: "Kısa metinsel açıklama bloğu oluştur"
+      detaylar:
+        - "Metin çözümün zorunlu kaynağı olsun"
+        - "Metin tek başına yeterli olmasın"
+        - "Metin ve görsel birbirini tamamlasın"
+    - adim: 4
+      eylem: "Soru varyantını seç"
+      detaylar:
+        - "dogru_eslestirme"
+        - "eslestirme_sekli"
+        - "metin_ipucuyla_hangi_sembol"
+        - "metin_ipucuyla_hangi_anlam"
+        - "gorsel_metin_birlikte_sonuc"
+    - adim: 5
+      eylem: "Soru kökünü seç"
+    - adim: 6
+      eylem: "1 doğru ve 2 yanlış seçenek oluştur"
+      detaylar:
+        - "Yanlışlardan biri metne yakın ama görsele aykırı olsun"
+        - "Yanlışlardan biri görsele yakın ama metne aykırı olsun"
+    - adim: 7
+      eylem: "Şıkları A-B-C olarak karıştır"
+    - adim: 8
+      eylem: "Çift kaynak zorunluluğunu doğrula"
+      detaylar:
+        - "Görsel kaldırıldığında soru çözülemiyor mu?"
+        - "Metin kaldırıldığında soru çözülemiyor mu?"
+        - "Her iki kaynak birlikte kullanıldığında doğru cevap tekleşiyor mu?"
+
+validation_checklist:
+  cift_kaynak_bagimliligi:
+    - "Soru yalnız metinden çözülemiyor mu?"
+    - "Soru yalnız görselden çözülemiyor mu?"
+    - "Doğru cevap için hem görsel hem metin gerçekten gerekli mi?"
+    - "Görsel kaldırıldığında doğru cevap belirsizleşiyor mu?"
+    - "Metin kaldırıldığında doğru cevap belirsizleşiyor mu?"
+    - "Görsel ve metin birbirini tamamlıyor mu?"
+
+  gorsel:
+    - "Görsel zorunlu olarak var mı?"
+    - "Semboller net ve ayırt edilebilir mi?"
+    - "Görsel tek bakışta anlaşılır mı?"
+    - "Görsel dekoratif kalmıyor mu?"
+    - "Görsel yanlış cevabı destekleyecek kadar karışık değil mi?"
+
+  metin_blogu:
+    - "Metin zorunlu olarak var mı?"
+    - "Metin kısa ve sade mi?"
+    - "Metin cevabı açıkça söylemiyor mu?"
+    - "Metin görseli anlamlandırmak için gerekli mi?"
+
+  soru_koku:
+    - "Soru kökü kısa ve açık mı?"
+    - "Soru kökü öğrenciyi hem görsele hem metne yönlendiriyor mu?"
+    - "Soru kökü cevabı açıklamıyor mu?"
+
+  secenekler:
+    - "Toplam 3 seçenek var mı?"
+    - "Seçenekler soru varyantına uygun mu?"
+    - "Doğru seçenek yalnız çift kaynakla doğrulanabiliyor mu?"
+    - "Bir yanlış seçenek metne yakın ama görsele aykırı mı?"
+    - "Bir yanlış seçenek görsele yakın ama metne aykırı mı?"
+
+  zorluk:
+    - "Zorluk seçilen düzeye göre sembol sayısı ve yakınlık ayarı yapılmış mı?"
+    - "Zor düzey bile 2. sınıf sınırında mı?"
+    - "Kolay düzey gereksiz yere karmaşık değil mi?"
+
+hard_fail_rules:
+  - "Görsel yoksa"
+  - "Metin yoksa"
+  - "Soru yalnız metin okunarak çözülebiliyorsa"
+  - "Soru yalnız görsel incelenerek çözülebiliyorsa"
+  - "Görsel ya da metinden biri dekoratif kalıyorsa"
+  - "Doğru cevap yalnız tek kaynaktan çıkarılabiliyorsa"
+  - "Seçenek sayısı 3 değilse"
+  - "İki veya daha fazla seçenek makul doğruysa"
+  - "Semboller 2. sınıf için fazla teknik veya karmaşıksa"
+  - "Eşleştirme şekilleri takip edilemeyecek kadar karışıksa"
+  - "Görsel ve metin birbiriyle uyumsuzsa"
+
+ornek_bicim_notlari:
+  - "Bu bölümde öğrenci sembole bakmalı, metindeki ipucunu okumalı ve ikisini birleştirerek cevap vermelidir."
+  - "Soru metni yalnızca yönerge vermemeli; kısa ama gerekli açıklama da içermelidir."
+  - "Doğru eşleştirme şekli soruluyorsa çizgilerin takibi görselden, anlamların doğruluğu metinden gelmelidir."
+  - "Temel amaç, görsel ve metni birlikte okuyarak sembolü doğru anlamlandırmaktır."
+
+output_contract:
+  required_fields:
+    - "soru_varyanti"
+    - "visual_description"
+    - "metin_blogu"
+    - "stem"
+    - "options"
+    - "answer"
+    - "difficulty"
+    - "symbol_family"
+  answer_format:
+    - "answer yalnızca A/B/C olarak verilebilir"
+    - "difficulty yalnızca Kolay / Orta / Zor olabilir"

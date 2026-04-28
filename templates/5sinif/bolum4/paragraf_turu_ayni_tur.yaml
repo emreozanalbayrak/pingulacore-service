@@ -1,0 +1,167 @@
+# templates/bolum4/paragraf_turu_ayni_tur.yaml
+# Bolum 4.3 - Ozel Bolum: Ayni Paragraf Turunu Bulma
+#
+# KALIP 4 — AYNI TUR FORMATI
+# Verilen paragrafla aynı türde olan metni seçeneklerden bulma
+# Kök paragraf + soru kökü + 4 mini-paragraf seçenek
+
+meta:
+  id: "paragraf_turu_ayni_tur"
+  ad: "Aynı Paragraf Türünü Bulma"
+  sinif_seviyesi: 5
+  aciklama: "Verilen paragrafla aynı türde olan metni seçeneklerden bulma"
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Kök paragraf + soru kökü + 4 mini-paragraf seçenek"
+
+  paragraph:
+    required: true
+    word_count_min: 50
+    word_count_max: 90
+    sentence_count_min: 3
+    sentence_count_max: 5
+    stil: "bilgilendirici veya oykuleyici"
+    kurallar:
+      - "Belirgin bir paragraf türüne ait kök metin oluştur"
+      - "Paragraf türleri: Betimleme, Öyküleme, Tanıtma, Sıralı-Kronolojik Metin"
+      - "Türe ait belirteçler metinde açıkça bulunmalı"
+      - "Paragraf türü doğrudan adıyla anılmamalı"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 25
+    word_count_max: 55
+    sentence_count_min: 2
+    sentence_count_max: 4
+    style: "mini_paragraph"
+    correct_count: 1
+    kurallar:
+      - "Her seçenek kısa bir paragraftır (2-4 cümle)"
+      - "1 seçenek kök paragrafla AYNI türde olmalı — doğru cevap"
+      - "3 seçenek kök paragraftan FARKLI türlerde olmalı"
+      - "Çeldirici seçenekler yakın türlerden seçilmeli"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Aşağıdakilerden hangisi yukarıdaki paragrafla aynı türdedir?</b>"
+  - "<b>Yukarıdaki paragrafla aynı türde olan metin aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu paragrafla aynı yazılış amacına sahip metin aşağıdakilerden hangisidir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Kök paragrafla aynı baskın türe sahip mini-paragraf"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Kök paragrafla aynı tür olmalı ama farklı konu"
+    - "25-55 kelime, 2-4 cümle formatında"
+    - "Türe ait belirteçler açıkça bulunmalı"
+  ornekler:
+    - kok_paragraf: "Güneş batarken gökyüzü turuncu ve mora boyandı. Denizden esen tatlı rüzgâr yüzümüzü okşuyordu."
+      kok_tur: "Betimleme"
+      dogru: "Bahçedeki çiçekler mis gibi kokuyordu. Arıların vızıltısı arasında yaprakların hışırtısı duyuluyordu."
+      neden: "Her ikisi de duyusal detaylarla izlenim uyandıran betimleme paragrafı"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI (CUSTOM — ayni tur icin ozel)
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "TUR_BENZERLIGI_TUZAGI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Doğru türe yüzeyde benzer görünen ama farklı türde paragraf"
+    nasil_olusturulur: |
+      Tanıtma paragrafına karşı hafif bilgi içeren ama aslında öyküleme olan seçenek.
+      Betimleme paragrafına karşı duyusal sözcükler içeren ama aslında tanıtma olan seçenek.
+    kategori: "semantic"
+
+  - ad: "IKINCIL_BELIRTEC_YANILMASI"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Paragrafta başka türe ait küçük izler bulunur ama baskın tür değişmez"
+    nasil_olusturulur: |
+      Çeldirici paragrafta kök paragrafın türüne ait 1-2 yüzey ipucu serpiştir.
+      Ama baskın tür farklı olmalı. Öğrenci yüzey ipucuna takılabilir.
+    kategori: "content"
+
+  - ad: "BASKIN_AMAC_KARISIKLIGI"
+    bilisssel_hata_kategorisi: "asiri_genelleme"
+    aciklama: "Öğrenci 'metinde ne var' yerine 'metin esas olarak ne yapıyor' diye düşünmeli"
+    nasil_olusturulur: |
+      Çeldirici paragraf birden fazla türe ait unsur barındırır ama baskın amacı
+      kök paragraftan farklıdır. Öğrenci baskın amacı belirleyemezse yanlış seçer.
+    kategori: "scope"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ETIKETI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siniflandirma", "karsilastirma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Kök paragrafın türünü seç ve paragrafı yaz"
+      details: |
+        4 türden birini seç ve 50-90 kelimelik kök paragraf oluştur.
+        Türe ait belirteçler açıkça bulunmalı.
+
+    - step: 2
+      action: "Aynı türde doğru seçenek paragrafı yaz"
+      details: |
+        Kök paragrafla aynı türde ama farklı konuda 25-55 kelimelik mini-paragraf.
+
+    - step: 3
+      action: "3 farklı türde çeldirici paragraf yaz"
+      details: |
+        Her biri farklı türde, yakın ama ayırt edilebilir mini-paragraflar.
+        Her çeldirici 25-55 kelime, 2-4 cümle.
+
+    - step: 4
+      action: "Seçenekleri rastgele sırala"
+      details: "A-B-C-D seçeneklerini rastgele sırala"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayısı 50-90 arasında mı?"
+    - "Belirgin bir paragraf türüne mi ait?"
+    - "Türe ait belirteçler açıkça var mı?"
+
+  correct_answer:
+    - "Doğru seçenek kök paragrafla aynı türde mi?"
+    - "Farklı konu ama aynı tür mü?"
+    - "25-55 kelime, 2-4 cümle mi?"
+
+  distractors:
+    - "Çeldiriciler farklı türlerde mi?"
+    - "Tüm seçenekler aynı formatta mı?"
+    - "Çeldiriciler 25-55 kelime arasında mı?"

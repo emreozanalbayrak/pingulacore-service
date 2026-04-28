@@ -1,0 +1,126 @@
+# Pattern: ["dogrudan_detay", "soylenemez", "karakter_ozelligi"] (referans satir 478)
+# Zor duzey, 3 soru: dogrudan_detay + soylenemez + karakter_ozelligi
+
+meta:
+  id: metin_inceleme_sinif2_zor_detay_soylenemez_karakter_3q
+  ad: "2. Sinif - Metin Inceleme (Zor) - Detay + Soylenemez + Karakter Ozelligi"
+  sinif_seviyesi: 2
+  aciklama: "Zor baglam — 3 soru: dogrudan_detay + soylenemez + karakter_ozelligi"
+  frequency: "Medium"
+
+context:
+  type: metin_inceleme_sinif2_zor_detay_soylenemez_karakter_3q
+  question_count: 3
+  question_count_min: 3
+  question_count_max: 3
+  generation:
+    word_count_min: 66
+    word_count_max: 92
+    image_type: "illustration"
+    structure:
+      - "6-7 kisa cumle, tek baskin konu/olay etrafinda."
+      - "Metin 3 soru cikaracak kadar zengin olmali."
+      - "Slot 1 icin metinde acik detay bilgi bulunmali."
+      - "Slot 2 SOYLENEMEZ icin metinde ayirt edici acik bilgiler yer almali — diger 2 secenek metinden cikarilabilir, dogru cevap CIKARILAMAYAN secenek olmali."
+      - "Slot 3 icin metinde mutlaka KAHRAMAN/KISI olmali ve onun ACIK DAVRANISI gorunur olmali."
+    kurallar:
+      - "2. sinif duzeyinde, sade ama zengin metin."
+      - "Karakter ismi Turkce olmali."
+      - "Karakter ozelligi havuzu: mutlu, uzgun, cesur, calişkan, sabirli, merhametli, durust, sorumluluk sahibi, azimli."
+      - "Zor duzeyde bile her soru acik metin destegine dayanmali — yorum/analiz YASAK."
+      - "Turkce karakterler dogru kullanilmali."
+
+      - "Tablo/grafik/sayi listesi KULLANMA — sadece akici Turkce anlatim. Gorsel ayrica illustrasyon olarak uretilecek."
+  questions:
+    - slot: 1
+      type: dogrudan_detay
+      soru_kokleri:
+        - "<b>Bu metne gore asagidakilerden hangisi dogrudur?</b>"
+        - "<b>Bu metne gore asagidakilerden hangisi soylenebilir?</b>"
+        - "<b>Asagidakilerden hangisi metinde verilen bilgilerden biridir?</b>"
+        - "<b>Bu metne gore asagidakilerden hangisi yanlistir?</b>"
+      options_style: complete_sentence
+      word_count_min: 2
+      word_count_max: 8
+      beceri:
+        katman: KB1
+        bilesenler: [acik_bilgi_okuma]
+        surec_bileseni: bilgiyi_okuma
+
+    - slot: 2
+      type: soylenemez
+      soru_kokleri:
+        - "<b>Bu metne gore asagidakilerden hangisi <u>soylenemez</u>?</b>"
+        - "<b>Metne gore asagidakilerden hangisi <u>cikarilamaz</u>?</b>"
+        - "<b>Asagidakilerden hangisi metne gore dogru <u>degildir</u>?</b>"
+        - "<b>Metindeki bilgilere gore asagidakilerden hangisi <u>soylenemez</u>?</b>"
+      options_style: complete_sentence
+      word_count_min: 2
+      word_count_max: 8
+      beceri:
+        katman: KB2
+        bilesenler: [secici_tarama, eleme]
+        surec_bileseni: metni_anlama
+
+    - slot: 3
+      type: karakter_ozelligi
+      soru_kokleri:
+        - "<b>Asagidakilerden hangisi metinde sozu edilen kahramanin kisisel ozelligi olabilir?</b>"
+        - "<b>Asagidakilerden hangisi metinde sozu edilen kahramanin kisisel ozelligi <u>olamaz</u>?</b>"
+        - "<b>Metne gore kahraman icin asagidakilerden hangisi soylenebilir?</b>"
+        - "<b>Metindeki kisinin hangi ozelligi on plana cikmaktadir?</b>"
+      options_style: short_phrase
+      word_count_min: 1
+      word_count_max: 3
+      beceri:
+        katman: KB2
+        bilesenler: [karakter_ozelligi, cikarim_yapma]
+        surec_bileseni: metni_yorumlama
+
+header_template: "1-3. sorulari asagidaki metne gore cevaplayiniz."
+
+format:
+  type: llm_generated_html
+  description: "3 baglam sorusu (zor): detay + soylenemez + karakter ozelligi"
+  paragraph:
+    required: true
+    word_count_min: 66
+    word_count_max: 92
+    sentence_count_min: 6
+    sentence_count_max: 7
+    stil: "oykusel"
+    background_color: "#fce8e8"
+  stem:
+    required: true
+  options:
+    count: 3
+    labels: [A, B, C]
+    word_count_min: 1
+    word_count_max: 8
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+
+dogru_cevap:
+  tanim: "Metinden acikca cikarilabilen dogru cevap"
+  kurallar:
+    - "Slot 1: dogru cevap metindeki acik bilgiye dayanmali."
+    - "Slot 2: dogru cevap metinden CIKARILAMAYAN secenek olmali, diger 2 secenek metinden acikca veya cok acik cikarimla DESTEKLENMELIDIR."
+    - "Slot 3: dogru cevap metindeki davranistan acikca cikarilabilen karakter ozelligi olmali."
+    - "Yanlis secenekler metne yakin ve makul gorunmeli (zor duzey)."
+    - "Ayni gruptaki uc soruda celdirici mantiklari cesitlendirilmelidir."
+distractors:
+  stratejiler:
+    - ad: YAKIN_CELDIRICI
+      aciklama: "Dogru cevaba cok yakin ama dikkatli okuyunca elenebilen secenek"
+    - ad: METNE_YAKIN_AMA_YANLIS
+      aciklama: "Metne yakin gorunur ama acik bilgiye uymayan secenek"
+    - ad: YANLIS_KARAKTER_OZELLIGI
+      aciklama: "Karakter sorusunda davranista yer almayan ozellik"
+
+use_shared_strategies: false
+
+beceri:
+  katman: KB2
+  bilesenler: [baglam_okuma, eleme, alt_beceri]
+  surec_bileseni: metni_yorumlama

@@ -1,0 +1,119 @@
+# templates/2sinif/baslik_sinif2_kolay.yaml
+# 2. Sinif — Paragrafta Baslik — KOLAY zorluk
+# Konu ilk cumlede cok acik, celdiriciler kolay elenebilir
+
+meta:
+  id: "paragrafta_baslik_sinif2_kolay"
+  ad: "2. Sinif - Paragrafta Baslik (Kolay)"
+  sinif_seviyesi: 2
+  aciklama: "Kolay duzey — konu ilk cumlede acik, celdiriciler kolay elenebilir, 3 secenekli"
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 3 baslik secenegi (kolay)"
+
+  paragraph:
+    required: true
+    word_count_min: 32
+    word_count_max: 40
+    sentence_count_min: 4
+    sentence_count_max: 4
+    stil: "bilgilendirici_veya_oykusel"
+    background_color: "#e8f8e8"
+    kurallar:
+      - "Konu ilk cumlede ya da cok acik bicimde verilmelidir."
+      - "Metin tek olayli veya tek bilgi odakli olmalidir."
+      - "Metindeki ana odak cok gorunur olmalidir."
+      - "Yan bilgi kullanilmamali ya da cok sinirli olmalidir."
+      - "Metin kisa, sade, somut ve gunluk yasama yakin olmalidir."
+      - "Cumleler kisa ve dogrudan olmalidir."
+      - "Metin ana dusunce, mesaj veya gizli anlam cozumlemeye zorlamamalidir."
+      - "Metin dis bilgi gerektirmemelidir."
+      - "2. sinif ogrencisinin anlayabilecegi sadelikte kelime hazinesi kullanilmalidir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 1
+    word_count_max: 4
+    style: "headline_title"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Tum secenekler baslik biciminde olmalidir (1-3 sozcuk)."
+      - "Secenekler kisa, sade ve 2. sinif duzeyinde olmalidir."
+      - "Dogru secenek metnin tamamini kapsamalidir."
+      - "Dogru baslik cogunlukla metindeki temel sozcuklerden biriyle kurulabilir."
+      - "Dogru baslik dogrudan adlandirma biciminde olmalidir."
+      - "1 yanlis secenek cok genel olmalidir."
+      - "1 yanlis secenek cok dar ya da tek ayrintiya dayali olmalidir."
+      - "Yanlis secenekler kolay elenebilir olmalidir."
+      - "Tum secenekler bicimce paralel olmalidir."
+
+soru_kokleri:
+  - "<b>Bu paragrafa <u>en uygun</u> baslik hangisidir?</b>"
+  # KULLANILDI: - "<b>Paragraf icin <u>en uygun</u> baslik asagidakilerden hangisidir?</b>"
+  - "<b>Yukaridaki paragrafin basligi hangisi olabilir?</b>"
+  - "<b>Bu metnin basligi asagidakilerden hangisi olabilir?</b>"
+  - "<b>Bu metne verilebilecek <u>en uygun</u> baslik asagidakilerden hangisidir?</b>"
+  - "<b>Bu metne <u>en uygun</u> baslik asagidakilerden hangisidir?</b>"
+  - "<b>Asagidakilerden hangisi bu metnin basligi olmaya <u>en uygundur</u>?</b>"
+  - "<b>Asagidakilerden hangisi bu metne baslik olmaya <u>en uygundur</u>?</b>"
+  - "<b>Bu metne getirilebilecek <u>en uygun</u> baslik asagidakilerden hangisidir?</b>"
+  # KULLANILDI: - "\"{topic}\" <b>ile ilgili yazilmis bu metne verilebilecek <u>en uygun</u> baslik asagidakilerden hangisidir?</b>"
+  # KULLANILDI: - "\"{topic}\" <b>konulu bu metne <u>en uygun</u> baslik asagidakilerden hangisidir?</b>"
+
+dogru_cevap:
+  tanim: "Metnin tamamini kapsayan en uygun kisa baslik"
+  kurallar:
+    - "Dogru cevap metnin tek baskin konusunu veya ana olayini yansitmalidir."
+    - "Dogru cevap metindeki konuya cok yakin ve acik olmalidir."
+    - "Dogru cevap cok genel olmamalidir."
+    - "Dogru cevap cok dar olmamalidir."
+    - "Dogru cevap sade ve dogrudan olmalidir."
+    - "Dogru cevap cocuk duzeyini asan mecazli veya soyut kullanim icermemelidir."
+    - "Dogru cevap genellikle 1-3 sozcuk arasinda olmalidir."
+    - "Dogru secenek paragraftaki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farkliligi olmali — ayni cumleyi kopyalayip yapistirma YASAK"
+
+celdirici_stratejileri:
+  - ad: "COK_GENIS"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metinle iliskili ama odagi gereginden fazla genis baslik"
+    nasil_olusturulur: |
+      Metnin konusuyla ayni alan icinde ama cok genel bir baslik olustur.
+      Ornegin metin aricilik hakkindaysa 'Hayvanlar' gibi cok genis bir baslik sec.
+      Kolay duzey: bu secenek acikca cok genis oldugu belli olmali.
+    kategori: "semantic"
+
+  - ad: "COK_DAR"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metindeki tek ayrintiya odaklanan baslik"
+    nasil_olusturulur: |
+      Metindeki yan bir detaya veya tek bir cumledeki bilgiye odaklanan baslik olustur.
+      Kolay duzey: bu secenek acikca sadece bir detaya odaklandigi belli olmali.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB1"
+  bilesenler: ["konu_belirleme", "baslik_eslestirme"]
+  surec_bileseni: "metni_anlama"
+
+sinif2_ek_kurallar:
+  metin_tasarim:
+    - "Metin 2 ila 4 kisa cumle araliginda olmalidir."
+    - "Metinde tek baskin konu veya tek baskin olay zinciri bulunmalidir."
+    - "Metin cocuk dunyasina ve gunluk yasama yakin olmalidir."
+  yasak_alanlar:
+    - "Ana fikir / ana duygu odakli sorular YASAK"
+    - "Paragrafin ana dusuncesini bulma YASAK"
+    - "Metnin vermek istedigi mesaji bulma YASAK"
+    - "Giris-gelisme-sonuc gibi bicimsel paragraf bolumleri YASAK"
+    - "Cok katmanli ortuk anlam cozumleme YASAK"

@@ -1,0 +1,146 @@
+# Kaynak: baslik_standard_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.kolay
+# 4. sinif baslik standart — kolay duzey
+
+meta:
+  id: "b12_baslik_standard_sinif4_kolay"
+  ad: "4. Sinif - Metinde Baslik Standart (Kolay)"
+  sinif_seviyesi: 4
+  aciklama: "Kolay duzey — 4. sinif paragrafta baslik. Konusu ve ilginc yonu acik metinlerde uygun baslik secimi."
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 4 baslik secenegi (kolay)"
+
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 65
+    sentence_count_min: 4
+    sentence_count_max: 5
+    background_color: "#e8f8e8"
+    stil: "bilgilendirici"
+    kurallar:
+      - "Tek ve net bir konu etrafinda olusturulmali."
+      - "Ilginc veya sasirtici bilgi acik ve dogrudan verilmeli."
+      - "Tek baskin aci olmali; yan odaklar minimum tutulmali."
+      - "Metafor malzemesi kullanilacaksa cok belirgin olmali."
+      - "Konu ilk 1-2 cumlede netlesmeli."
+      - "Dis bilgi gerektirmemelidir."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 6
+    style: "headline_title"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Tum secenekler baslik biciminde olmali."
+      - "Secenekler kisa, sade ve 4. sinif duzeyinde olmali."
+      - "Dogru secenek metnin ilginc yonunu dogrudan yakalamali."
+      - "Dogru secenek diger seceneklerden acikca daha iyi olmali."
+      - "Secenekler kendi aralarinda gramer yapisi bakimindan paralel olmali."
+      - "1 secenek cok genel (COK_GENIS)"
+      - "1 secenek cok dar (COK_DAR)"
+      - "1 secenek yanlis vurgu veya yan odak"
+      - "Yanlis secenekler kolay elinebilir olmali."
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Bu metnin başlığı aşağıdakilerden hangisi olabilir?</b>"
+  - "<b>Bu metne verilebilecek <u>en uygun</u> başlık aşağıdakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Bu metne <u>en uygun</u> başlık aşağıdakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Bu metne getirilebilecek <u>en uygun</u> başlık aşağıdakilerden hangisidir?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metnin başlığı olmaya <u>en uygundur</u>?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metne başlık olmaya <u>en uygundur</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metnin ilginc yonunu dikkat cekici sekilde karsilayan, gazete manseti tarzi baslik"
+  kurallar:
+    - "Dogru secenek paragraftaki hicbir cumleyi kelimesi kelimesine tekrarlamamali."
+    - "Gazete manseti tarzi olmali — kisa, vurucu, akilda kalici."
+    - "Metnin ilginc veya sasirtici yonunu one cikarmali."
+    - "Sadece konuyu tanimlamamali; yaratici bir ad vermeli."
+    - "Kolay duzeyde cok dolayli metafor kullanilmamali; daha anlasilir olmali."
+    - "Dogru cevap gorselle de desteklenebilir nitelikte olmali."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "COK_GENIS"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metinle iliskili ama odagi gereginden fazla genis baslik"
+    nasil_olusturulur: |
+      Metnin konusuyla ayni alan icinde ama cok genel bir baslik olustur.
+      Ornek: uzayda tarim hakkindaysa 'Uzay' veya 'Bilim' gibi cok genis baslik.
+    kategori: "semantic"
+
+  - ad: "COK_DAR"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metindeki tek ayrintiya odaklanan baslik"
+    nasil_olusturulur: |
+      Metinde gecen tek bir ayrintiyi baslik olarak sun.
+      Ornek: metinde bir alet geciyorsa sadece o aletin adi baslik olsun.
+    kategori: "cognitive"
+
+  - ad: "YAN_ODAK"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metindeki yardimci bilgiye yonelen ama ana odagi karsilamayan baslik"
+    nasil_olusturulur: |
+      Metnin yardimci bilgisine yonelik, ana konuyu karsilamayan baslik olustur.
+      Ornek: uzayda tarim metninde 'Astronotlarin Yemegi' gibi.
+    kategori: "semantic"
+
+  - ad: "TEMA_ICI_YANLIS_VURGU"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Ayni tema alaninda durur ama metnin asil icerigini tam karsilamaz"
+    nasil_olusturulur: |
+      Metnin alaniyla iliskili ama asil odagi karsilamayan bir baslik olustur.
+      Ornek: uzayda biber yetistirme hakkindaysa 'Uzay Yolculugu' gibi.
+    kategori: "semantic"
+
+  - ad: "MESAJLASTIRMA"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Konu yerine sonucu veya olumlu duyguyu baslıga donusturen secenek"
+    nasil_olusturulur: |
+      Konu yerine metnin verdigi sonucu veya olumlu duyguyu baslıga donusturen bir secenek olustur.
+      Ornek: 'Umut Veren Deney', 'Basariya Giden Yol', 'Bilimin Gucu'.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["ozetleme", "baslik_eslestirme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "Ana fikir / ana duygu odaklı sorular YASAK"
+    - "Yazar niyeti / ortuk mesaj cozumleme YASAK"
+    - "5. sinifa kayan asiri soyut yorum sorulari YASAK"
+    - "Metinde acikca gecmeyen bilgiye dayanan baslik YASAK"

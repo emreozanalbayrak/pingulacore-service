@@ -1,0 +1,93 @@
+meta:
+  id: baglam_1q_ana_fikir
+  ad: 1Q Baglam Ana Fikir
+  sinif_seviyesi: 5
+  aciklama: Gunluk hayattan bir senaryo uzerinden cikarim/ana fikir sorusu
+  kaynak: baglamb1sorukoku.md
+  frequency: Medium
+context:
+  type: baglam_senaryo_1q
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 60
+    word_count_max: 120
+    structure:
+    - Bir karakter (Turkce isimli) gunluk hayattan bir durumla karsilasir (3-5 cumle)
+    - Karakter veriler veya kanitlar toplayarak bir sonuca ulasir
+    - Senaryo somut, 5. sinif seviyesinde ve anlasilir olmali
+    - Verilerden cikarim yapmaya uygun olmali
+    kurallar:
+    - Senaryo 5. sinif seviyesinde, gunluk hayattan olmali
+    - Karakter ismi Turkce olmali (Elif, Mert, Zeynep, Can vb.)
+    - Metinde cikarim yapmaya yetecek veri/bilgi olmali
+    - Turkce karakterler dogru kullanilmali (s, i, g, u, o, c)
+  questions:
+  - slot: 1
+    type: ana_fikir_cikarim
+    soru_kokleri:
+    - <b>... verilerine dayanilarak hangi cikarim yapilabilir?</b>
+    - <b>Eldeki bu kanitlar bizi hangi sonuca ulastirir?</b>
+    - <b>Veriler arasindaki iliski dikkate alindiginda yapilabilecek en tutarli cikarim hangisidir?</b>
+    - <b>Veriler arasindaki iliski dikkate alindiginda olayla ilgili yapilabilecek en tutarli cikarim hangisidir?</b>
+    options_style: complete_sentence
+    word_count_min: 8
+    word_count_max: 22
+    beceri:
+      katman: KB2
+      bilesenler:
+      - cikarim_yapma
+      - degerlendirme
+      surec_bileseni: bilgiyi_cikartma
+soru_kokleri:
+- <b>... verilerine dayanilarak hangi cikarim yapilabilir?</b>
+- <b>Eldeki bu kanitlar bizi hangi sonuca ulastirir?</b>
+- <b>Veriler arasindaki iliski dikkate alindiginda yapilabilecek en tutarli cikarim hangisidir?</b>
+header_template: null
+format:
+  type: llm_generated_html
+  description: 1Q baglam senaryo uzerinden cikarim/ana fikir sorusu
+  paragraph:
+    required: true
+    word_count_min: 60
+    word_count_max: 120
+    sentence_count_min: 3
+    sentence_count_max: 8
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 8
+    word_count_max: 22
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Senaryodaki verilere dayanan en tutarli cikarim
+  kurallar:
+  - Dogru secenek paragraftaki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI
+  - Dogru cevap metindeki verilerin mantiksal sonucu olmali
+  - Cikarim dogrudan metinden desteklenebilir olmali
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: ''teleskop'' → ''mercekli araç'' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: ASIRI_GENELLEME
+    aciklama: Verilerden desteklenmeyen genis bir genelleme yapma
+    ornek: Sinirli veriden evrensel bir yargi cikarma
+  - ad: KISMI_DOGRULUK
+    aciklama: Verinin bir kismini dogru yorumlayip gerisini yanlis cikarma
+    ornek: Bir veriyi dogru okuyup ikincisini yanlis bagdastirma
+  - ad: TERS_CIKARIM
+    aciklama: Verilerden tam tersi bir sonuc cikarma
+    ornek: Artis gosteren veriyi azalis olarak yorumlama
+use_shared_strategies: false

@@ -1,0 +1,127 @@
+meta:
+  id: "7_7_siralama_sonucu_belirleme_sinif2"
+  ad: "7.7 Sıralama Sonucu Belirleme"
+  sinif_seviyesi: 2
+  ders: "Türkçe"
+  bolum: "2. Sınıf Paragraf Soru Bankası"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    Görselde verilen kişi, nesne veya araçların sıra düzeni ile
+    kısa ipuçlarını birlikte kullanarak doğru sıralamayı buldurmaya
+    yönelik, 3 seçenekli ve 2. sınıf düzeyine uyarlanmış standart şablon.
+
+format:
+  tip: "llm_generated_html"
+  aciklama: "Ana görsel + kısa bilgi/ipucu bloğu + soru kökü + 3 seçenek"
+
+  cift_kaynak_zorunlu: true
+  sadece_gorselle_cozum_yasak: true
+  sadece_metinle_cozum_yasak: true
+
+  gorsel:
+    gerekli: true
+    aciklama: "Sıralama yapılacak kişi, nesne veya araçların yer aldığı sade görsel"
+    kurallar:
+      - "Görsel soru çözümünün zorunlu kaynaklarından biri olmalıdır."
+      - "Görselde en fazla 4 kişi/nesne kullanılmalıdır."
+      - "Kolay düzeyde 3 kişi/nesne, orta ve zor düzeyde en fazla 4 kişi/nesne kullanılmalıdır."
+      - "Görselde kişi veya nesneler açıkça ayırt edilebilir olmalıdır."
+      - "Renk, konum ve yön bilgisi destekleyici olabilir."
+      - "Görsel tek başına doğru sıralamayı vermemelidir."
+    yasaklar:
+      - "5 ve üzeri kişi/nesne"
+      - "çok karışık sahne"
+      - "tek bakışta cevabı veren kurgu"
+
+  bilgi_bloku:
+    gerekli: true
+    aciklama: "Sıralama ile ilgili kısa ve doğrudan ipuçları"
+    ipucu_sayisi:
+      kolay: 2
+      orta: 2
+      zor: 3
+    kurallar:
+      - "İpuçları kısa, açık ve 2. sınıf düzeyinde olmalıdır."
+      - "İpuçları doğrudan karşılaştırma veya sıra bilgisi vermelidir."
+      - "Doğru cevap için en az iki ipucu birlikte kullanılmalıdır."
+      - "İpuçları çelişkili olmamalıdır."
+    yasaklar:
+      - "karşı-olgusal ağır yapı"
+      - "geçebilseydi, olsaydı, olurdu gibi çok soyut zincirler"
+      - "4 adımdan uzun eleme mantığı"
+
+  soru_koku:
+    gerekli: true
+    secim: "listeden_rastgele"
+
+  secenekler:
+    sayi: 3
+    etiketler: ["A", "B", "C"]
+    dogru_sayisi: 1
+    stil: "siralama_listesi"
+    kurallar:
+      - "Seçenekler sıralama biçiminde verilmelidir."
+      - "Her seçenekte tüm kişi/nesneler bulunmalıdır."
+      - "Yalnız bir seçenek tüm görsel ve ipuçlarıyla tam uyumlu olmalıdır."
+      - "Yanlış seçenekler kısmi uyum taşıyabilir ama en az bir ipucu ile çelişmelidir."
+
+soru_kokleri:
+  - "Buna göre doğru sıralama aşağıdakilerden hangisidir?"
+  - "Verilen bilgilere göre sonuç hangi seçenekte doğru verilmiştir?"
+  - "Buna göre birinci, ikinci, üçüncü ve dördüncü sıralama hangisidir?"
+
+beceri_odagi:
+  birincil_beceri:
+    - "Sıralama kurma"
+  ikincil_beceriler:
+    - "İpucu birleştirme"
+    - "Eleme yapma"
+    - "Görsel ve metin arasında bağ kurma"
+
+zorluk_duzeyleri:
+  kolay:
+    kurallar:
+      - "3 kişi/nesne kullanılmalıdır."
+      - "2 açık ipucu verilmelidir."
+      - "İpuçları 'X, Y'den önce' veya 'Z birinci değildir' gibi doğrudan olmalıdır."
+  orta:
+    kurallar:
+      - "4 kişi/nesne kullanılabilir."
+      - "2 ipucu verilir."
+      - "Doğru sıralama için iki ipucu birlikte kullanılmalıdır."
+  zor:
+    kurallar:
+      - "4 kişi/nesne kullanılabilir."
+      - "3 kısa ipucu kullanılabilir."
+      - "Yine de 2. sınıf için açık ve somut kalmalıdır."
+
+sinif_uygunluk_kurallari:
+  uygundur:
+    - "Görsel + kısa ipucu + somut sıra kurma yapısı varsa"
+    - "En fazla 4 kişi/nesne kullanılıyorsa"
+    - "İpuçları doğrudan karşılaştırma içeriyorsa"
+  yasaktir:
+    - "Karşı-olgusal ve soyut sıralama dili"
+    - "5 ve üzeri öğe"
+    - "Uzun eleme zinciri"
+  ucuncu_sinifa_kayar:
+    - "İpucu sayısı artar ve dolaylı yorum gerekirse"
+    - "Bir ipucu başka ipucunun yorumuna bağlıysa"
+  dorduncu_sinifa_kayar:
+    - "Birden fazla olası düzenin tartışılması istenirse"
+    - "Ayrıntılı gerekçelendirme veya açıklama yazdırılırsa"
+
+validation_checklist:
+  - "Soru yalnız görselle çözülemiyor mu?"
+  - "Soru yalnız metinle çözülemiyor mu?"
+  - "Yalnız bir doğru sıralama var mı?"
+  - "Öğe sayısı 4'ü geçmiyor mu?"
+  - "İpuçları 2. sınıf düzeyinde açık mı?"
+  - "Karşı-olgusal ağır yapı yok mu?"
+
+hard_fail_rules:
+  - "5 veya daha fazla öğe varsa"
+  - "İki veya daha fazla doğru seçenek varsa"
+  - "Soru yalnız metinden çözülebiliyorsa"
+  - "Soru yalnız görselden çözülebiliyorsa"
+  - "İpuçları çelişkiliyse"

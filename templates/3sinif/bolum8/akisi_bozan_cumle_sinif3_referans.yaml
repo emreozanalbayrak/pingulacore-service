@@ -1,0 +1,355 @@
+meta:
+  id: "akisi_bozan_cumle_sinif3_standart_gorselli_dort_secenekli"
+  ad: "Akışı Bozan Cümle"
+  sinif_seviyesi: 3
+  ders: "Türkçe"
+  bolum: "3. Sınıf Türkçe Paragraf Kitabı"
+  alt_bolum: "8. Akışı Bozan Cümle"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    3. sınıf öğrencisi için numaralanmış cümlelerden hangisinin metnin açık konu,
+    olay veya bilgi akışını bozduğunu buldurmaya yönelik, görsel destekli ve
+    4 seçenekli standart soru üretim şablonu.
+  kullanim_notu: >
+    Bu şablon, harici olarak kullanılan 3. Sınıf TYMM Ortak Kuralları YAML'ı,
+    3. sınıf öğretim programı ve 3. sınıf MEB Türkçe kitapları ile birlikte
+    doğrulanmalıdır.
+
+format:
+  type: "llm_generated_html"
+  description: "Görsel + numaralanmış kısa metin + soru kökü + 4 seçenek"
+
+  question_variant:
+    allowed:
+      - "hangi_cumle_akisi_bozar"
+      - "hangi_bolumde_akisi_bozan_cumle_var"
+    default: "hangi_cumle_akisi_bozar"
+
+  paragraph:
+    required: true
+    numbered_sentences_required: true
+    sentence_count_min: 4
+    sentence_count_max: 5
+    word_count_min: 40
+    word_count_max: 90
+    style: "simple_clear_primary_text"
+    kurallar:
+      - "Metin 3. sınıf öğrencisinin anlayabileceği kadar açık, sade ve akıcı olmalıdır."
+      - "Cümleler aynı konu, olay ya da bilgi alanı etrafında kurulmalıdır."
+      - "Yalnız 1 cümle açık biçimde düşüncenin akışını bozmalıdır."
+      - "Akışı bozan cümle, çoğunlukla konu dışına çıkmalı veya açık olay sırasını bozmalıdır."
+      - "Akışı bozan cümle çıkarıldığında kalan cümleler anlamlı bir bütün oluşturmalıdır."
+      - "Metin dış bilgi gerektirmemelidir."
+      - "Soru paragraf bütünlüğü teorisini derinlemesine ölçmemelidir."
+      - "Gizli mantık kusuru, ince üslup farkı, çok örtük bağ kopukluğu gibi 4. sınıfa kayan zorluklar kullanılmamalıdır."
+      - "Metinde açık konu birliği veya açık olay akışı bulunmalıdır."
+      - "Numaralanmış bölüm varyantında cümleler en fazla 2 kısa paragraf/blok hâlinde sunulabilir."
+      - "3. sınıf düzeyinde akışı bozan cümle açık biçimde fark edilebilir olmalıdır."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  akisi_bozan_cumle_tasarim_kurallari:
+    kurallar:
+      - "Akışı bozan cümle konu dışına çıkan açık bir bilgi olabilir."
+      - "Akışı bozan cümle olay sırasını ters çeviren belirgin bir cümle olabilir."
+      - "Akışı bozan cümle metnin genel alanına yakın görünse de ana odağı desteklememelidir."
+      - "Doğru cevap yalnız dil bilgisi hatası taşıyan cümle olmamalıdır; sorun anlam akışıyla ilgili olmalıdır."
+      - "Kalan cümleler kendi içinde doğal ve tutarlı biçimde okunabilmelidir."
+    yasaklar:
+      - "yalnız üslup farkı yüzünden seçilecek cümle"
+      - "yalnız noktalama veya dil bilgisi kusuru yüzünden seçilecek cümle"
+      - "birden fazla cümlenin aynı derecede akışı bozduğu yapı"
+      - "çok ince ve tartışmalı bağ kopukluğu"
+      - "okurun dünya bilgisine dayanarak çözmesi gereken konu dışılık"
+
+  visual:
+    required: true
+    description: "Metnin ana içeriğini destekleyen işlevsel görsel"
+    placement: "paragraph_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illüstrasyon"
+      - "tek sahneli fotoğraf benzeri çizim"
+      - "tek olay veya tek varlık odaklı sahne"
+      - "numaralanmış metnin ana konusunu destekleyen sade konu görseli"
+    kurallar:
+      - "Her soru için görsel zorunludur."
+      - "Görsel metnin ana içeriğiyle açık uyumlu olmalıdır."
+      - "Görsel süs olmamalı, bağlamı desteklemelidir."
+      - "Görsel tek başına doğru cevabı vermemelidir."
+      - "Görsel ve metin birlikte değerlendirildiğinde ana konu daha netleşebilir."
+      - "Görsel dikkat dağıtıcı gereksiz ayrıntılar içermemelidir."
+    yasaklar:
+      - "dekoratif ve metinden bağımsız görsel"
+      - "çok sahneli karmaşık kolaj"
+      - "grafik, tablo veya infografik yoğunluğu taşıyan tasarım"
+
+  stem:
+    required: true
+    selection: "random_from_list_by_variant"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    correct_count: 1
+    style_by_variant:
+      hangi_cumle_akisi_bozar: "number_option"
+      hangi_bolumde_akisi_bozan_cumle_var: "number_option_or_short_block_label"
+    kurallar:
+      - "3. sınıfta her soru 4 seçenekli olmalıdır."
+      - "Hangi cümle varyantında seçenekler yalnız cümle numarası biçiminde verilmelidir."
+      - "Hangi bölümde varyantında seçenekler bölüm numarası veya kısa blok etiketi biçiminde verilebilir."
+      - "Yalnız 1 seçenek doğru olmalıdır."
+      - "Birden fazla makul doğru seçenek oluşmamalıdır."
+
+soru_kokleri:
+  hangi_cumle_akisi_bozar:
+    - "Bu metinde numaralanmış cümlelerden hangisi düşüncenin akışını bozmaktadır?"
+    - "Numaralanmış cümlelerden hangisi metnin anlam bütünlüğünü bozmaktadır?"
+    - "Bu metinde hangi numaralı cümle akışı bozmaktadır?"
+    - "Aşağıdaki metinde numaralanmış cümlelerden hangisi konu bütünlüğüne uygun değildir?"
+    - "Bu parçadaki numaralanmış cümlelerden hangisi düşüncenin akışını bozar?"
+
+  hangi_bolumde_akisi_bozan_cumle_var:
+    - "Bu metinde numaralanmış bölümlerin hangisinde düşüncenin akışını bozan bir cümle vardır?"
+    - "Numaralanmış bölümlerin hangisinde akışı bozan cümle bulunmaktadır?"
+    - "Bu metnin hangi bölümünde anlam bütünlüğünü bozan bir cümle vardır?"
+    - "Aşağıdaki metinde numaralanmış bölümlerden hangisinde konu dışı bir cümle yer almaktadır?"
+    - "Bu parçada numaralanmış bölümlerden hangisinde düşüncenin akışı bozulmuştur?"
+
+beceri_odagi:
+  birincil_beceri:
+    - "Akışı bozan cümleyi bulma"
+  ikincil_beceriler:
+    - "Konu bütünlüğünü fark etme"
+    - "Olay sırasını izleme"
+    - "Aynı konuyu destekleyen cümleleri ayırt etme"
+    - "Konu dışına çıkan veya sıralamayı bozan cümleyi eleme"
+    - "Görsel ve metni birlikte değerlendirerek ana bağlamı anlama"
+
+dogru_cevap:
+  tanim: "Metnin açık konu, olay veya bilgi akışını bozan tek cümle ya da bu cümlenin bulunduğu tek bölüm"
+  kurallar:
+    - "Doğru cevap metnin genel akışıyla açık biçimde uyuşmamalıdır."
+    - "Doğru cevap konu dışına çıkan ya da açık sıralamayı bozan cümle olmalıdır."
+    - "Doğru cevap çıkarıldığında kalan metin doğal biçimde okunabilmelidir."
+    - "Doğru cevap dış bilgi gerektirmemelidir."
+    - "Doğru cevap 3. sınıf öğrencisinin dikkatli okuyarak bulabileceği açıklıkta olmalıdır."
+
+yanlis_secenek_stratejileri:
+  count_per_question: 3
+  strategy_pool:
+    - id: "ana_konuyu_destekleyen_cumle"
+      tanim: "Metnin ana konusunu açıkça destekleyen cümleyi yanlış aday gibi sunma"
+
+    - id: "yardimci_ayrintiyi_sanki_ilgisizmis_gibi_gosterme"
+      tanim: "Metne ait yardımcı bilgiyi akışı bozan cümle gibi göstermeye çalışma"
+
+    - id: "olay_sirasinda_yakin_ama_dogru_cumle"
+      tanim: "Olay akışına uygun olsa da öğrenciye karışık gelebilecek cümle"
+
+    - id: "metinle_tema_baglantili_ama_ana_odakta_dogru_olan_cumle"
+      tanim: "Konu alanına yakın ve aslında akışı destekleyen cümleyi çeldirici yapma"
+
+  secim_kurali:
+    - "Her soruda 3 yanlış seçenek farklı stratejilerden seçilmelidir."
+    - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+    - "Yanlış seçenekler gerçekten metne ait olmalı, açık saçma olmamalıdır."
+    - "Doğru cevap çok belirgin olsa bile diğer seçenekler tamamen rastgele olmamalıdır."
+
+zorluk_duzeyleri:
+  kolay:
+    paragraph:
+      sentence_count_min: 4
+      sentence_count_max: 4
+      word_count_min: 40
+      word_count_max: 58
+      kurallar:
+        - "Ana konu açık biçimde verilmelidir."
+        - "Akışı bozan cümle açık konu dışına çıkmalıdır."
+        - "Olay sırası varsa bozulma belirgin olmalıdır."
+    preferred_variants:
+      - "hangi_cumle_akisi_bozar"
+    distractors:
+      kurallar:
+        - "1 seçenek ana konuya çok açık biçimde bağlı olmalıdır."
+        - "1 seçenek yardımcı ayrıntı olmalıdır."
+        - "1 seçenek olay akışında doğal durmalıdır."
+    difficulty_note: >
+      Kolay düzeyde öğrenci konu dışına çıkan veya açık biçimde sıralamayı bozan cümleyi rahatça fark eder.
+
+  orta:
+    paragraph:
+      sentence_count_min: 4
+      sentence_count_max: 5
+      word_count_min: 50
+      word_count_max: 72
+      kurallar:
+        - "Akışı bozan cümle metnin tema alanına yakın görünebilir; ancak ana odağı desteklememelidir."
+        - "Kalan cümleler arasında açık bağ bulunmalıdır."
+        - "Öğrenci tüm cümleleri karşılaştırmak zorunda kalabilir."
+    preferred_variants:
+      - "hangi_cumle_akisi_bozar"
+      - "hangi_bolumde_akisi_bozan_cumle_var"
+    distractors:
+      kurallar:
+        - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+        - "Yanlış seçeneklerden biri yardımcı ayrıntı olmalıdır."
+        - "Yanlış seçeneklerden biri tema alanına yakın ama doğru bir cümle olmalıdır."
+    difficulty_note: >
+      Orta düzeyde öğrenci yalnız konu dışılığı değil, metni gerçekten destekleyip desteklemediğini de ayırt etmelidir.
+
+  zor:
+    paragraph:
+      sentence_count_min: 5
+      sentence_count_max: 5
+      word_count_min: 65
+      word_count_max: 90
+      kurallar:
+        - "Akışı bozan cümle tema alanına yakın ama metnin asıl odağına aykırı olabilir."
+        - "Bölüm bazlı varyant kullanılabilir."
+        - "Zor düzeyde bile bağ kopukluğu açık kalmalıdır; ince üslup farkına dayanmamalıdır."
+        - "Olay sırası bozuluyorsa bu bozulma dikkatli okuyunca net anlaşılmalıdır."
+    preferred_variants:
+      - "hangi_cumle_akisi_bozar"
+      - "hangi_bolumde_akisi_bozan_cumle_var"
+    distractors:
+      kurallar:
+        - "3 yanlış seçeneğin en az 2'si metne yakın görünmelidir."
+        - "Yanlış seçeneklerden biri yardımcı ayrıntı, biri ana konuyu destekleyen bilgi, biri olay akışında doğal duran cümle olmalıdır."
+    difficulty_note: >
+      Zor düzeyde öğrencinin konu dışına çıkan ya da açık akışı bozan cümleyi yakın görünen cümleler arasından ayırt etmesi beklenir; ancak görev hâlâ 3. sınıf sınırında kalır.
+
+difficulty_selection_policy:
+  default: "Orta"
+  allowed_values: ["Kolay", "Orta", "Zor"]
+  hard_limits:
+    - "Her soru 4 seçenekli olmalıdır."
+    - "Her soru için görsel zorunludur."
+    - "Metin en fazla 5 numaralı cümleden oluşmalıdır."
+    - "Zor düzey seçilse bile soru 4. sınıf düzeyinde gizli mantık kusuru, üslup tutarsızlığı veya çok örtük bağ kopukluğu ölçemez."
+    - "Kolay düzeyde akışı bozan cümle açık biçimde fark edilebilir olmalıdır."
+
+sinif_uygunluk_kurallari:
+  uygundur:
+    - "Cümlelerden biri açık biçimde konu dışına çıkıyorsa"
+    - "Cümlelerden biri olay sırasını belirgin biçimde bozuyorsa"
+    - "Akışı bozan cümle çıkarıldığında kalan metin açıkça bütünlük kazanıyorsa"
+    - "Soru açık ve somut akış bozulmasına dayanıyorsa"
+  yasaktir:
+    - "Gizli mantık kusuru aratma"
+    - "Dolaylı bağ kopukluğu aratma"
+    - "Üslup farklılığı üzerinden eleme yaptırma"
+    - "Birden fazla cümlenin tartışmalı biçimde akışı bozabildiği yapı"
+    - "Metin dışı dünya bilgisi gerektiren konu dışılık"
+  ucuncu_sinifa_kayar:
+    - "Çok açık konu dışı cümleyi bulma"
+    - "Basit olay sırasını bozan cümleyi ayırt etme"
+    - "Anlam bütünlüğünü bozan tek cümleyi fark etme"
+  dorduncu_sinifa_kayar:
+    - "İnce bağ kopukluklarını yorumlatma"
+    - "Yazar üslubundan hareketle akış bozukluğu buldurma"
+    - "Birden fazla cümlenin tartışmalı biçimde elenebildiği yapı kurma"
+
+konu_alani:
+  izinli_ornekler:
+    - "sanatçılar ve eserleri"
+    - "meyve ve yiyecekler"
+    - "hayvanlar"
+    - "bilim insanları"
+    - "teknoloji"
+    - "doğa ve çevre"
+    - "günlük yaşam olayları"
+    - "kısa bilgi verici metinler"
+  kurallar:
+    - "Konu 3. sınıf öğrencisinin anlayabileceği kadar somut ve açık olmalıdır."
+    - "Metin bir ana konu etrafında kurulmalıdır."
+    - "Akışı bozan cümle, ana konudan belirgin biçimde ayrılmalıdır."
+    - "Görselle desteklenebilen konular tercih edilmelidir."
+    - "Soru dış bilgi gerektirmeden çözülebilmelidir."
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "3. sınıfa uygun, tek ana konu etrafında kurulabilecek somut bir metin konusu seç"
+    - step: 2
+      action: "4 veya 5 cümlelik kısa ve açık bir metin oluştur"
+      details:
+        - "Ana konuyu kur"
+        - "3 veya 4 cümleyi ana konuya bağlı yaz"
+        - "1 cümleyi açık biçimde akışı bozacak şekilde yerleştir"
+    - step: 3
+      action: "Cümleleri numaralandır"
+      details:
+        - "Doğru cevap tek olsun"
+        - "Kalan cümleler birlikte tutarlı bir metin oluştursun"
+    - step: 4
+      action: "Metni destekleyen işlevsel görsel tasarla"
+      details:
+        - "Görsel ana konuyu desteklesin"
+        - "Görsel zorunlu olsun"
+        - "Görsel tek başına cevabı vermesin"
+    - step: 5
+      action: "Soru varyantını seç"
+      details:
+        - "hangi_cumle_akisi_bozar"
+        - "hangi_bolumde_akisi_bozan_cumle_var"
+    - step: 6
+      action: "1 doğru ve 3 yanlış seçenek oluştur"
+      details:
+        - "Yanlışlar metne ait ve makul olsun"
+        - "Bir yanlış yardımcı ayrıntı olsun"
+        - "Bir yanlış ana konuyu destekleyen cümle olsun"
+        - "Bir yanlış olay akışında doğal dursun"
+    - step: 7
+      action: "Soru kökünü listeden rastgele seç"
+    - step: 8
+      action: "Şıkları A-B-C-D olarak karıştır"
+    - step: 9
+      action: "Harici 3. Sınıf TYMM Ortak Kuralları ile doğrulama yap"
+
+validation_checklist:
+  paragraph:
+    - "Metin 4 veya 5 numaralı cümleden oluşuyor mu?"
+    - "Metin 3. sınıf düzeyinde açık ve sade mi?"
+    - "Yalnız 1 cümle akışı bozuyor mu?"
+    - "Akışı bozan cümle çıkarıldığında kalan cümleler tutarlı mı?"
+    - "Akış bozulması açık konu dışılık veya açık sıra bozukluğu mu?"
+    - "Metin dış bilgi gerektiriyor mu? Gerektiriyorsa reddet."
+
+  visual:
+    - "Görsel zorunlu olarak var mı?"
+    - "Görsel metnin ana konusu ile uyumlu mu?"
+    - "Görsel destekleyici ama tek başına cevap verici değil mi?"
+    - "Görsel dekoratif kalmıyor mu?"
+
+  stem:
+    - "Soru kökü seçilen varyanta uygun mu?"
+    - "Soru kökü açık ve 3. sınıf düzeyinde mi?"
+    - "Ekstra beceri yüklemiyor mu?"
+
+  options:
+    - "Toplam 4 seçenek var mı?"
+    - "Yalnız 1 doğru seçenek var mı?"
+    - "Yanlış seçenekler gerçekten metni destekleyebilir durumda mı?"
+    - "Birden fazla makul doğru seçenek oluşuyor mu? Oluşuyorsa reddet."
+
+  difficulty:
+    - "Zorluk seçilen düzeye göre metin ve çeldirici kuralları uygulanmış mı?"
+    - "Zor düzey bile 3. sınıf sınırında mı?"
+    - "4. sınıfa kayan ince bağ kopukluğu veya üslup ölçümü var mı?"
+
+hard_fail_rules:
+  - "Seçenek sayısı 4 değilse"
+  - "Görsel yoksa"
+  - "Metin 5 cümleden uzunsa"
+  - "İki veya daha fazla cümle aynı ölçüde akışı bozuyorsa"
+  - "Akış bozulması yalnız üslup farkına dayanıyorsa"
+  - "Akış bozulması yalnız dil bilgisi kusuruna dayanıyorsa"
+  - "Metin 3. sınıf için fazla soyut veya ağırsa"
+  - "Soru 4. sınıfa kayan ince paragraf çözümlemesine dönüşüyorsa"
+  - "Görsel metinle uyumsuzsa"
+
+ornek_bicim_notlari:
+  - "Saat yapan sanatçı metninde, İsviçre’de yapıldığına dair cümle ana konudan kopuyorsa akışı bozan cümle olabilir."
+  - "Kaju fıstığı metninde, tatlılardan söz eden cümle ana bilgi akışına uymuyorsa akışı bozabilir."
+  - "Bu bölümde amaç, çok açık biçimde konu dışına çıkan veya sırayı bozan cümleyi buldurmaktır."
+  - "Bu bölüm, paragraf oluşturma bölümünden farklıdır; burada cümleleri sıralamak değil, uygun olmayan cümleyi ayırt etmek esastır."

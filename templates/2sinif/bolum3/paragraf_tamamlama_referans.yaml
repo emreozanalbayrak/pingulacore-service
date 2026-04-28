@@ -1,0 +1,415 @@
+meta:
+  id: "paragraf_tamamlama_sinif2_standart_gorselli_uc_secenekli"
+  ad: "Paragraf Tamamlama"
+  sinif_seviyesi: 2
+  ders: "Türkçe"
+  bolum: "2. Sınıf Paragraf Soru Bankası"
+  alt_bolum: "3. Paragraf Tamamlama"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    2. sınıf öğrencisi için kısa bir paragrafta boş bırakılan yere,
+    düşüncenin akışına ve anlam bütünlüğüne en uygun ifadeyi seçtirmeye yönelik,
+    görsel destekli ve 3 seçenekli standart soru üretim şablonu.
+  kullanim_notu: >
+    Bu şablon, harici olarak kullanılan 2. Sınıf TYMM Ortak Kuralları YAML'ı ile birlikte
+    doğrulanmalıdır. TYMM ortak kuralları bu şablonun içine gömülmemiştir.
+
+format:
+  type: "llm_generated_html"
+  description: "Görsel + boşluklu tek paragraf + soru kökü + 3 tamamlama seçeneği"
+
+  paragraph:
+    required: true
+    text_modes:
+      - "simple_info"
+      - "short_narrative"
+    sentence_count_min: 4
+    sentence_count_max: 6
+    word_count_min: 34
+    word_count_max: 72
+    blank_count: 1
+    blank_marker: "_ _ _ _"
+    blank_position_allowed:
+      - "middle"
+      - "end"
+    style: "simple_clear_primary_text"
+    kurallar:
+      - "Metin tek baskın konu veya tek baskın olay etrafında kurulmalıdır."
+      - "Paragrafın anlam akışı 2. sınıf öğrencisi tarafından izlenebilir olmalıdır."
+      - "Boşluk, metnin anlam bütünlüğünü tamamlayan tek uygun ifadeyle doldurulabilir olmalıdır."
+      - "Boşluk öncesi ve sonrası arasında açık bağ bulunmalıdır."
+      - "Metin kısa, sade, somut ve günlük yaşama yakın olmalıdır."
+      - "Cümleler kısa ve doğrudan olmalıdır."
+      - "Paragrafta dış bilgi gerektiren boşluk kurulamaz."
+      - "Boşluk yalnızca konuya, olay akışına, neden-sonuç ilişkisine veya açık bilgiye dayalı olarak tamamlanmalıdır."
+      - "Metin ana düşünce, ana duygu, ders veya yorum sorusuna kaymamalıdır."
+      - "Paragraf, doğru seçeneği yalnızca düşüncenin akışına bakarak tekleyecek kadar açık olmalıdır."
+      - "Boşluk bir tam cümle, kısa cümle parçası veya yüklemli ifade ile doldurulabilir; ancak dil yapısı 2. sınıf düzeyini aşmamalıdır."
+
+  blank_design_rules:
+    zorunlu:
+      - "Boşluk, paragrafın akışında gerçek bir ihtiyaç oluşturmalıdır."
+      - "Boşluğun yeri değiştirildiğinde anlam bozulmalıdır."
+      - "Doğru seçenek yerleştirildiğinde paragraf doğal ve akıcı okunmalıdır."
+      - "Yanlış seçenekler yerleştirildiğinde anlam, akış veya bağ bozulmalıdır."
+    yasak:
+      - "Boşluk yalnızca dilbilgisel teknik bilgiyle çözülemez."
+      - "Boşluk yalnızca tek kelime eşleştirme oyunu hâline gelemez."
+      - "Boşluk için birden fazla güçlü doğru seçenek oluşturulamaz."
+      - "Boşluk, ana fikir veya gizli mesaj bulduracak yapı kuramaz."
+
+  visual:
+    required: true
+    description: "Paragrafın ana içeriğini veya boşlukla ilgili ana varlığı destekleyen sade görsel"
+    placement: "paragraph_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illüstrasyon"
+      - "tek sahneli fotoğraf benzeri çizim"
+      - "tek varlık veya tek olay odaklı sahne"
+    kurallar:
+      - "Görsel paragrafın ana konusu, ana varlığı veya temel olayını doğrudan desteklemelidir."
+      - "Görsel süs amaçlı olmamalı, anlamı desteklemelidir."
+      - "Görsel tek bakışta anlaşılır olmalıdır."
+      - "Görsel dikkat dağıtıcı gereksiz ayrıntılar içermemelidir."
+      - "Görsel ile paragraf arasında açık uyum bulunmalıdır."
+      - "Görsel doğru seçeneği tamamen ele vermemeli, yalnızca metni desteklemelidir."
+      - "Görsel yanlış seçeneği destekleyecek kadar yanıltıcı olmamalıdır."
+    yasaklar:
+      - "karmaşık kolaj"
+      - "çok sahneli kompozisyon"
+      - "grafik veya veri yoğun görsel"
+      - "metinle zayıf ilişkili dekoratif görsel"
+
+  stem:
+    required: true
+    selection: "random_from_list"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    correct_count: 1
+    style: "sentence_or_phrase_completion"
+    word_count_min: 2
+    word_count_max: 8
+    kurallar:
+      - "Seçenekler boşluğa yerleştirilebilir yapıda olmalıdır."
+      - "Doğru seçenek yerleştirildiğinde paragrafın anlamı ve akışı tamamlanmalıdır."
+      - "Yanlış seçenekler metne yakın görünmeli ama düşüncenin akışını bozmalıdır."
+      - "Yanlış seçenekler metinde olmayan yeni ana olay veya baskın bilgi getirmemelidir."
+      - "Seçenekler kısa, sade ve 2. sınıf düzeyinde olmalıdır."
+      - "Seçenekler kendi aralarında biçimce paralel olmalıdır."
+      - "Getirilemez / sürdürülemez köklerinde yalnız 1 seçenek akışı bozmalı, diğer 2 seçenek akışa uyabilir görünmelidir."
+      - "Getirilebilir / sürdürülebilir köklerinde yalnız 1 seçenek tam uyumlu olmalı, diğer 2 seçenek akışı bozmalıdır."
+
+soru_kokleri:
+  pozitif:
+    - "Bu parçada boş bırakılan yere düşüncenin akışına göre aşağıdakilerden hangisi getirilebilir?"
+    - "Bu metinde boş bırakılan yere düşüncenin akışına göre aşağıdakilerden hangisi getirilebilir?"
+    - "Bu parçada boş bırakılan yere aşağıdakilerden hangisi getirilmelidir?"
+    - "Bu metinde boş bırakılan yere aşağıdakilerden hangisi getirilmelidir?"
+    - "Bu paragraftaki boşluğa aşağıdakilerden hangisi yazılabilir?"
+    - "Bu paragrafta boş bırakılan yere en uygun ifade hangisidir?"
+    - "Bu metin düşüncenin akışına göre aşağıdakilerden hangisi ile sürdürülebilir?"
+    - "Bu paragraf aşağıdakilerden hangisi ile tamamlanabilir?"
+    - "Boş bırakılan yere aşağıdakilerden hangisi gelirse metin tamamlanmış olur?"
+    - "Paragrafın akışına göre boşluğa hangi ifade getirilmelidir?"
+    - "Bu metni tamamlayan en uygun ifade hangisidir?"
+    - "Aşağıdakilerden hangisi boş bırakılan yere uygun olur?"
+  negatif:
+    - "Bu parçada boş bırakılan yere düşüncenin akışına göre aşağıdakilerden hangisi getirilemez?"
+    - "Bu metinde boş bırakılan yere düşüncenin akışına göre aşağıdakilerden hangisi getirilemez?"
+    - "Bu metin düşüncenin akışına göre aşağıdakilerden hangisi ile sürdürülemez?"
+    - "Bu paragraftaki boşluğa aşağıdakilerden hangisi yazılamaz?"
+  selection_policy:
+    kolay:
+      - "pozitif kökler kullanılmalıdır."
+    orta:
+      - "çoğunlukla pozitif kökler kullanılmalıdır."
+      - "negatif kökler sınırlı sayıda kullanılabilir."
+    zor:
+      - "pozitif ve negatif kökler dengeli biçimde kullanılabilir."
+    ek_kural:
+      - "Negatif kök kullanıldığında soru kökü mümkün olduğunca açık yazılmalı; çift olumsuz yapılardan kaçınılmalıdır."
+
+beceri_odagi:
+  birincil_beceri:
+    - "Paragrafı anlam bütünlüğüne uygun biçimde tamamlama"
+  ikincil_beceriler:
+    - "Düşüncenin akışını izleme"
+    - "Açık neden-sonuç veya olay akışını fark etme"
+    - "Uygun ve uygunsuz ifadeyi ayırt etme"
+    - "Metnin öncesi ve sonrası arasında bağ kurma"
+
+dogru_cevap:
+  tanim: "Boş bırakılan yere getirildiğinde paragrafın anlamını ve akışını en uygun biçimde tamamlayan ifade"
+  kurallar:
+    - "Doğru cevap paragrafın konusu ile tam uyumlu olmalıdır."
+    - "Doğru cevap boşluk öncesi ve sonrası ile anlamca bağ kurmalıdır."
+    - "Doğru cevap yeni bir ana konu başlatmamalıdır."
+    - "Doğru cevap paragrafın akışını doğal hâle getirmelidir."
+    - "Doğru cevap sade ve doğrudan olmalıdır."
+    - "Doğru cevap 2. sınıf öğrencisinin anlayabileceği açıklıkta olmalıdır."
+    - "Doğru cevap dış bilgi gerektirmemelidir."
+    - "Pozitif kökte yalnız 1 seçenek tam uygun olmalıdır."
+    - "Negatif kökte yalnız 1 seçenek belirgin biçimde uygunsuz olmalıdır."
+
+yanlis_secenek_stratejileri:
+  count_per_question: 2
+  strategy_pool:
+    - id: "yanlis_odak"
+      tanim: "Metne yakın görünür ama ana konu yerine yan bilgiye yönelir"
+      ornek_mantik:
+        - "çöller, böcekler için uygun yerler değildir."
+        - "insanlar bu yüzden çok zorlanıyordu."
+        - "kulede yaşayan insanlar vardı."
+
+    - id: "anlam_kopuklugu"
+      tanim: "Boşluk öncesi ve sonrası ile anlam bağı kuramaz"
+      ornek_mantik:
+        - "bu yüzden herkes çok sevinmiştir."
+        - "orada başka canlılar da yaşamaktadır."
+        - "fakat bu olay çok eskiden olmuştur."
+
+    - id: "yanlis_neden_sonuc"
+      tanim: "Metindeki neden-sonuç ilişkisini ters ya da yanlış kurar"
+      ornek_mantik:
+        - "bu yüzden sorunu daha da büyütmüştür."
+        - "bundan dolayı hiç su içemez."
+        - "bu nedenle kule hiç eğilmemiştir."
+
+    - id: "iliskili_ama_farkli"
+      tanim: "Aynı alan içindedir ama boşluğu tam karşılamaz"
+      ornek_mantik:
+        - "çöller yalnızca bitkiler için uygundur."
+        - "sivrisinekler sulak yerlerde yaşar."
+        - "eskiden insanlar kıyafet dikerdi."
+
+  secim_kurali:
+    - "Her soruda 2 yanlış seçenek farklı stratejilerden seçilmelidir."
+    - "En az 1 yanlış seçenek metne yakın görünmelidir."
+    - "Zor düzeyde iki yanlış seçenek de ilk bakışta makul görünmelidir."
+
+zorluk_duzeyleri:
+  kolay:
+    paragraph:
+      sentence_count_min: 4
+      sentence_count_max: 4
+      word_count_min: 34
+      word_count_max: 46
+      blank_position_allowed:
+        - "end"
+      kurallar:
+        - "Boşluk paragrafın sonunda olmalıdır."
+        - "Doğru seçenek açık ve doğrudan bir tamamlayıcı olmalıdır."
+        - "Konu ve akış çok görünür olmalıdır."
+        - "Yan bilgi çok az olmalıdır."
+    visual:
+      kurallar:
+        - "Görsel ana varlığı veya ana olayı doğrudan göstermelidir."
+        - "Görsel metni anlamayı kolaylaştırmalıdır."
+    stem:
+      kurallar:
+        - "Pozitif kök kullanılmalıdır."
+    distractors:
+      kurallar:
+        - "1 seçenek açık anlam kopukluğu taşımalıdır."
+        - "1 seçenek yan odaklı veya yanlış sonuçlu olmalıdır."
+        - "Yanlış seçenekler kolay elenebilir olmalıdır."
+    difficulty_note: >
+      Kolay düzeyde öğrenci, metnin akışını izleyerek en uygun ifadeyi rahatça bulur.
+      Zorluk, yalnızca temel anlam bütünlüğünü fark etme düzeyindedir.
+
+  orta:
+    paragraph:
+      sentence_count_min: 4
+      sentence_count_max: 5
+      word_count_min: 42
+      word_count_max: 58
+      blank_position_allowed:
+        - "middle"
+        - "end"
+      kurallar:
+        - "Boşluk paragrafın ortasında ya da sonunda olabilir."
+        - "Doğru seçenek, metnin öncesi ve sonrasını birlikte düşünmeyi gerektirmelidir."
+        - "Metinde 1 destekleyici ayrıntı bulunabilir."
+        - "Küçük bir neden-sonuç veya olay akışı ilişkisi yer alabilir."
+    visual:
+      kurallar:
+        - "Görsel ana içeriği desteklemeli ama tek başına doğru cevabı tamamen vermemelidir."
+    stem:
+      kurallar:
+        - "Çoğunlukla pozitif kök kullanılmalıdır."
+        - "Negatif kök sınırlı olarak kullanılabilir."
+    distractors:
+      kurallar:
+        - "1 seçenek metne yakın ama yanlış odaklı olmalıdır."
+        - "1 seçenek akışta anlam kopukluğu ya da yanlış neden-sonuç taşımalıdır."
+        - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+    difficulty_note: >
+      Orta düzeyde öğrenci metnin hem öncesine hem sonrasına bakarak boşluğu tamamlar.
+      Ancak soru yine de yorum veya ana fikir sorusuna dönüşmez.
+
+  zor:
+    paragraph:
+      sentence_count_min: 5
+      sentence_count_max: 6
+      word_count_min: 54
+      word_count_max: 72
+      blank_position_allowed:
+        - "middle"
+        - "end"
+      kurallar:
+        - "Boşluk paragrafın ortasında ya da sona yakın yerde olabilir."
+        - "Doğru seçenek, metindeki birkaç bilgi parçasını birlikte düşünmeyi gerektirebilir."
+        - "Metinde 1 yan ayrıntı bulunabilir ve bu ayrıntı çeldirici üretimine malzeme verebilir."
+        - "Zor düzeyde bile boşluk ana düşünce veya mesajla tamamlatılamaz."
+    visual:
+      kurallar:
+        - "Görsel ana konuyu desteklemelidir ama yakın çeldiricilere doğal zemin hazırlayabilir."
+        - "Görsel yine de sade ve tek bakışta anlaşılır kalmalıdır."
+    stem:
+      kurallar:
+        - "Pozitif ve negatif kökler dengeli biçimde kullanılabilir."
+    distractors:
+      kurallar:
+        - "2 yanlış seçenek de metinle ilişkili görünmelidir."
+        - "1 seçenek yanlış neden-sonuç ya da yanlış akış kurmalıdır."
+        - "1 seçenek yakın ama uygunsuz odak taşımalıdır."
+    difficulty_note: >
+      Zor düzey 2. sınıfta gizli anlam veya soyut yorum zorluğu değildir.
+      Zorluk, düşüncenin akışına göre en uygun ifadeyi yakın seçeneklerden ayırma düzeyinde kalır.
+
+difficulty_selection_policy:
+  default: "Orta"
+  allowed_values: ["Kolay", "Orta", "Zor"]
+  hard_limits:
+    - "Tüm düzeylerde paragraf 4-6 cümle arasında kalmalıdır."
+    - "Tüm düzeylerde görsel zorunludur."
+    - "Zor düzey seçilse bile soru ana düşünce, ana duygu veya mesaj sorusuna dönüşemez."
+    - "Kolay düzeyde negatif kök kullanılmamalıdır."
+    - "Tüm düzeylerde metin 2. sınıf sözcük ve cümle düzeyini aşamaz."
+
+konu_alani:
+  izinli_ornekler:
+    - "hayvanların yaşamı"
+    - "doğadaki canlılar"
+    - "eski ve yeni araçlar"
+    - "ünlü yapılar"
+    - "günlük yaşam"
+    - "okul yaşamı"
+    - "yardımlaşma"
+    - "temizlik"
+    - "oyunlar"
+    - "doğal olaylar"
+    - "ulaşım araçları"
+    - "meslekler"
+    - "bitkiler"
+    - "su ve yaşam"
+  kurallar:
+    - "Konu 2. sınıf öğrencisinin anlayabileceği kadar somut ve açık olmalıdır."
+    - "Bilgi metni seçilirse bilgiler temel ve kısa olmalıdır."
+    - "Öyküleyici metin seçilirse olay akışı sade olmalıdır."
+    - "Boşluk, görselle de desteklenebilen açık bir bağ kurmalıdır."
+    - "Konu ifadesi ile ana düşünce karıştırılmamalıdır."
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "2. sınıfa uygun, görselle desteklenebilir tek ve açık bir konu seç"
+    - step: 2
+      action: "Seçilen konu için 4-6 cümlelik kısa ve sade paragraf oluştur"
+      details:
+        - "Tek baskın konu kur"
+        - "2. sınıf sözcük dağarcığında kal"
+        - "Boşluğun öncesi ve sonrası arasında açık bağ kur"
+    - step: 3
+      action: "Paragrafın ana içeriğiyle uyumlu görsel tasarımını belirle"
+      details:
+        - "Görsel ana konuya doğrudan bağlı olsun"
+        - "Görsel tek sahneli ve sade olsun"
+        - "Görsel metni desteklesin ama cevabı tamamen vermesin"
+    - step: 4
+      action: "Boşluğu en uygun biçimde tamamlayan doğru seçeneği üret"
+      details:
+        - "Akışı tamamlasın"
+        - "Anlam bütünlüğü kursun"
+        - "Yeni ana konu getirmesin"
+    - step: 5
+      action: "Zorluk düzeyine uygun 2 çeldirici üret"
+      details:
+        - "Farklı çeldirici stratejileri kullan"
+        - "Metne yakın görün ama akışı boz"
+    - step: 6
+      action: "Soru kökünü listeden rastgele seç"
+    - step: 7
+      action: "Şıkları A-B-C olarak karıştır"
+    - step: 8
+      action: "Harici TYMM ortak kuralları ile doğrulama yap"
+
+validation_checklist:
+  paragraph:
+    - "Metin 4-6 cümle arasında mı?"
+    - "Metin seçilen zorluk düzeyinin kelime aralığında mı?"
+    - "Metin tek baskın konuya sahip mi?"
+    - "Metin somut ve sade mi?"
+    - "Tek bir boşluk var mı?"
+    - "Boşluk öncesi ve sonrası arasında açık bağ var mı?"
+    - "Metinde dış bilgi gerektiren unsur var mı? Varsa reddet."
+    - "Metin boşluk tamamlama işini mi ölçüyor? Ana düşünce düzeyine kayıyorsa reddet."
+
+  visual:
+    - "Görsel zorunlu olarak var mı?"
+    - "Görsel paragrafın ana içeriğiyle uyumlu mu?"
+    - "Görsel tek bakışta anlaşılır mı?"
+    - "Görsel destekleyici ama yanıltıcı değil mi?"
+    - "Görsel dekoratif kalmıyor mu?"
+
+  stem:
+    - "Soru kökü boşluk tamamlama işini açıkça istiyor mu?"
+    - "Pozitif/negatif kök seçimi zorluk düzeyine uygun mu?"
+    - "Soru kökü ek beceri yüklemiyor mu?"
+
+  options:
+    - "Toplam 3 seçenek var mı?"
+    - "Seçenekler boşluğa yerleşebilir yapıda mı?"
+    - "Seçenekler kısa ve sade mi?"
+    - "Doğru seçenek akışı ve anlamı tamamlıyor mu?"
+    - "Yanlış seçeneklerden biri akışta anlam kopukluğu yaratıyor mu?"
+    - "Yanlış seçeneklerden biri yakın ama yanlış odak ya da yanlış sonuç taşıyor mu?"
+
+  difficulty:
+    - "Zorluk seçilen düzeye göre paragraf ve çeldirici kuralları uygulanmış mı?"
+    - "Zor düzey bile 2. sınıf sınırında mı?"
+    - "Kolay düzey gereksiz yere karmaşık değil mi?"
+
+hard_fail_rules:
+  - "Seçenek sayısı 3 değilse"
+  - "Görsel yoksa"
+  - "Paragraf 4 cümleden kısa ya da 6 cümleden uzunsa"
+  - "Boşluk sayısı 1 değilse"
+  - "Doğru cevap metnin ana düşüncesine dayanıyorsa"
+  - "İki veya daha fazla seçenek makul doğruysa"
+  - "Metin 2. sınıf için fazla soyut veya karmaşıksa"
+  - "Soru ana düşünce, ana duygu, mesaj veya yorum sorusuna kayıyorsa"
+  - "Seçenekler boşluğa dilbilgisel ve anlamsal olarak yerleşemiyorsa"
+  - "Görsel metinle uyumsuzsa"
+
+ornek_bicim_notlari:
+  - "Sis böceği örneğinde doğru seçenek, böceğin çölde yaşamını nasıl sürdürdüğünü anlatan akışı tamamlamalıdır."
+  - "Eski ütü örneğinde doğru seçenek, elektrik yaygınlaşınca sorunun ortadan kalktığını söyleyen tamamlayıcı ifadedir."
+  - "Pisa Kulesi örneğinde doğru seçenek, turistlerin kuleyi ziyaret etmesi gibi metnin akışına uyan bir ifadedir."
+  - "Yanlış seçenekler konuya yakın görünse de paragrafın öncesi ve sonrası ile doğal bağ kurmamalıdır."
+  - "2. sınıf düzeyinde boşluk, düşüncenin akışı ve anlam bütünlüğü ile tamamlanmalıdır."
+
+output_contract:
+  required_fields:
+    - "paragraph"
+    - "visual_description"
+    - "stem"
+    - "options"
+    - "answer"
+    - "difficulty"
+    - "topic"
+  answer_format:
+    - "answer yalnızca A/B/C olarak verilebilir"
+    - "difficulty yalnızca Kolay / Orta / Zor olabilir"

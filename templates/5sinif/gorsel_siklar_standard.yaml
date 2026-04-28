@@ -1,0 +1,106 @@
+# templates/gorsel_siklar_standard.yaml
+# Gorsel Siklar - Standart (Tasvir → Gorsel)
+#
+# Paragraf bir nesne/canli/kavram tasvir eder → 4 gorsel sik
+# Ornekler: dinozor, yaprak, cicek, resim teknigi, algida secicilik
+
+meta:
+  id: "gorsel_siklar_standard"
+  ad: "Gorsel Secenekli Soru (Standart)"
+  sinif_seviyesi: 5
+  aciklama: "Paragraf tasvir eder, ogrenci dogru gorseli secer"
+  kaynak: "options_with_images/"
+  frequency: "yeni soru tipi"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 4 gorsel secenek (tasvir → gorsel)"
+
+  paragraph:
+    required: true
+    word_count_min: 50
+    word_count_max: 100
+    sentence_count_min: 3
+    sentence_count_max: 7
+    stil: "bilgilendirici"
+    kurallar:
+      - "Belirli bir nesne, canli, kavram veya gorsel ogeleri TASVIR etmeli"
+      - "Fiziksel ozellikler agirlikli: renk, sekil, boyut, yapi, doku"
+      - "Gorsellere cevrilebilecek SOMUT ozellikler icermeli"
+      - "Hem dogru gorseli tanimlamaya hem de celdiricileri ayirt etmeye yetecek detay icermeli"
+      - "Soyut kavramlardan kacinmali, GORUNUR ozellikler uzerinde yogunlasmali"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 15
+    word_count_max: 50
+    style: "image_description"
+    image_style: "photo"
+    correct_count: 1
+    layout: "two_column"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metinde bahsedilen türü en iyi yansıtan görsel aşağıdakilerden hangisidir?</b>"
+  - "<b>Aşağıdaki görsellerden hangisi bu metinde anlatılanı örneklemektedir?</b>"
+  - "<b>Bu tarife göre aşağıdakilerden hangisi doğru olabilir?</b>"
+  - "<b>Buna göre aşağıdaki görsellerden hangisi metinde anlatılana örnek gösterilebilir?</b>"
+  - "<b>Bu metinde tasvir edilen aşağıdaki görsellerden hangisidir?</b>"
+  - "<b>Bu bilgilere göre sözü edilen aşağıdakilerden hangisidir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Paragraftaki TUM fiziksel/gorsel ozellikleri YANSITAN gorsel tasviri"
+  kurallar:
+    - "Paragrafta belirtilen HER fiziksel ozellik (renk, sekil, boyut, yapi) tasvire yansimali"
+    - "Tasvir somut ve gorsellestirilmeye uygun olmali"
+    - "Paragraftaki detaylara bire bir uyum saglanmali"
+  ornekler:
+    - paragraf_konusu: "Bes kollu, disli kenarli yesil yaprak"
+      dogru: "Bes loblu, testere disli kenarlari olan yesil bir yaprak, el seklinde damar yapisi"
+      neden_dogru: "Tum fiziksel ozellikler (bes kol, disli kenar, yesil renk) yansitilmis"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+use_shared_strategies: true
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["eslestirme", "gorsel_okuma"]
+  surec_bileseni: "bilgiyi_eslestirme"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+      - name: "alt_unite"
+      - name: "konu"
+      - name: "alt_konu"

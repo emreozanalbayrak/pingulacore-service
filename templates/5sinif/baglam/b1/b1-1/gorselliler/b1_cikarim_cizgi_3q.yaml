@@ -1,0 +1,119 @@
+# B1.1 — 3Q Çizgi Grafik (Değinilmemiş + Destekleyen + Sonuç)
+# Görsel: cizgi_grafigi (AI çizgi grafiğine dönüştürülecek)
+# Soru Tipleri: Değinilmemiş + Destekleyen + Sonuç — B1.1 soru kökleri
+
+meta:
+  id: "b1_cikarim_cizgi_3q"
+  ad: "3Q Çizgi Grafik — Değinilmemiş/Destekleyen/Sonuç"
+  sinif_seviyesi: 5
+  aciklama: "Senaryo + çizgi grafiği üzerinden 3 farklı çıkarım sorusu"
+  kaynak: "baglamb1sorukoku.md"
+  frequency: "Medium"
+
+context:
+  type: "b1_cikarim_cizgi_3q"
+  question_count: 3
+  question_count_min: 3
+  question_count_max: 3
+  generation:
+    word_count_min: 100
+    word_count_max: 160
+    image_type: "cizgi_grafigi"
+    structure:
+      - "Bir karakter (isimli) bir araştırma/gözlem yapmış, zaman içindeki değişimi kaydetmiştir (4-5 cümle)"
+      - "Senaryo hem metin bilgisi hem de grafik verisi içeren zengin bir bağlam oluşturmalı"
+      - "KRİTİK: Senaryoda sayısal değerleri YAZMA — veriler sadece tabloda olmalı"
+      - "Ardından verileri HTML tablosu olarak ekle: <table> ile, 2 sütun (Zaman | Değer), en az 5 satır"
+      - "Metin ve grafik birlikte bazı bilgileri verse de bazı bilgilere değinmemeli"
+      - "Grafikteki verilerde belirgin eğilimler ve desteklenebilir yargılar olmalı"
+      - "NOT: Bu tablo AI tarafından çizgi grafiğine dönüştürülecektir"
+    kurallar:
+      - "5. sınıf seviyesinde, zaman serisi verisi"
+      - "KRİTİK — SENARYO KAPSAMI: Senaryo durumu anlatsın ama tüm cevapları vermesin"
+      - "Metin ve grafik birbirini tamamlamalı — bazı bilgiler sadece metinde, bazıları sadece grafikte"
+      - "Değerler arasında karşılaştırma yapılabilir belirgin farklar olmalı"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+    - slot: 1
+      type: "deginilmemis"
+      soru_kokleri:
+        - "<b>Metin ve grafikte aşağıdaki bilgilerden hangisine değinilmemiştir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 5
+      word_count_max: 18
+      beceri:
+        katman: "KB3"
+        bilesenler: ["cikarim_yapma", "degerlendirme"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+    - slot: 2
+      type: "destekleyen"
+      soru_kokleri:
+        - "<b>Grafikteki verileri destekleyen ifade aşağıdakilerden hangisidir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 5
+      word_count_max: 20
+      beceri:
+        katman: "KB2"
+        bilesenler: ["grafik_okuma", "karsilastirma"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+    - slot: 3
+      type: "sonuc"
+      soru_kokleri:
+        - "<b>Metin ve grafikten ulaşılan sonuç aşağıdakilerden hangisidir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 5
+      word_count_max: 20
+      beceri:
+        katman: "KB3"
+        bilesenler: ["cikarim_yapma", "degerlendirme", "butunlestirme"]
+        surec_bileseni: "problemi_yapilandirma"
+
+header_template: "1-3. soruları aşağıdaki bilgilere göre cevaplayınız."
+
+format:
+  type: "llm_generated_html"
+  description: "3Q çizgi grafik üzerinden değinilmemiş, destekleyen ve sonuç soruları"
+  paragraph:
+    required: true
+    word_count_min: 100
+    word_count_max: 160
+    sentence_count_min: 4
+    sentence_count_max: 7
+  stem:
+    required: true
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 5
+    word_count_max: 20
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+dogru_cevap:
+  tanim: "Metin ve grafik verilerinden doğru çıkarılan bilgi veya yargı"
+  kurallar:
+    - "KRİTİK: Doğru cevap grafiği OKUYARAK ve YORUMLAYARAK bulunmalı — ham veri tekrarı değil"
+    - "Doğru cevap hem senaryoyu hem grafik verilerini birlikte değerlendirmeyi gerektirmeli"
+    - "Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı"
+    - "HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin AYNEN seçeneklerde kullanılması YASAK"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin ANLAMCA ÖZDESİ olmalı"
+    - "En az %40 kelime farklılığı olmalı"
+    - "BİLİMSEL TERİM KORUMASI: Teknik terimler değiştirilmemeli"
+
+distractors:
+  stratejiler:
+    - ad: "VERI_CARPITMA"
+      aciklama: "Grafikteki değeri yanlış okuma veya aktarma"
+      ornek: "Artış eğilimindeki bir veriyi azalış gibi sunma"
+    - ad: "YANLIS_KARSILASTIRMA"
+      aciklama: "Zaman noktalarını veya kategorileri yanlış karşılaştırma"
+      ornek: "İki farklı dönemdeki değerleri karıştırma"
+    - ad: "GENELLEME_HATASI"
+      aciklama: "Metin veya grafikte olmayan bir sonuca genelleme yapma"
+      ornek: "Verinin kapsamı dışında bir çıkarım sunma"
+
+use_shared_strategies: false

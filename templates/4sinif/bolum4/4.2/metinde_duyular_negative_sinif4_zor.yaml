@@ -1,0 +1,113 @@
+# Kaynak: metinde_duyular_negative_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.zor
+# 4. sinif metinde duyular negatif — zor duzey
+
+meta:
+  id: "metinde_duyular_negative_sinif4_zor"
+  ad: "Metinde Duyular - Yer Verilmeyen (Zor)"
+  sinif_seviyesi: 4
+  aciklama: "Zor duzey — metinde kullanılmayan duyuyu tespit etme."
+  frequency: "Very High"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Betimleyici paragraf + soru kökü + 4 duyu seçeneği (zor)"
+
+  paragraph:
+    required: true
+    word_count_min: 83
+    word_count_max: 100
+    background_color: "#fce8e8"
+    sentence_count_min: 6
+    sentence_count_max: 7
+    stil: "betimleyici"
+    kurallar:
+      - "Metin en az 3 farklı duyuya hitap eden net ifadeler içermelidir."
+      - "Paragrafta kullanılan 3 duyu metnin farklı yerlerine dağıtılabilir."
+      - "Haric tutulan duyu, tema çağrışımı yapabilecek ama metinde gerçekten yer almayan bir duyu olmalıdır."
+      - "Paragrafta konuyla ilgili AÇIKLAMA, TANIM veya EK BİLGİ verme! Paragraf SADECE hikâyeyi/olayı anlatsın."
+      - "YASAK: Ders kitabı açıklamaları yapma."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 2
+    style: "concept"
+    correct_type: "does_not_belong"
+    correct_count: 1
+    kurallar:
+      - "Duyular için SADECE basit, bilinen kelimeleri kullan: görme, işitme, dokunma, tatma, koklama"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Bu metinde aşağıdaki duyulardan hangisine ait bir ayrıntıya <u>yer verilmemiştir</u>?</b>"
+  # KULLANILDI: - "<b>Bu metinde aşağıdaki duyuların hangisinden faydalanılmamıştır?</b>"
+  - "<b>Bu parçada aşağıdaki duyuların hangisiyle ilgili bir ayrıntıya <u>yer verilmemiştir</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metinde örneği bulunmayan duyu"
+  mantik: "INVERSE - diger 3 secenek metinde bulunan duyular, dogru cevap buluNMAYAN duyu"
+  kurallar:
+    - "Metinde hicbir ornegi veya ifadesi bulunmayan duyu."
+    - "Diger 3 secenekteki duyular metinde acikca gecmeli."
+    - "Dogru cevap olarak secilen duyu, paragrafin hicbir cumlesinde ima bile edilmemeli."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI BILGILERI
+# ═══════════════════════════════════════════════════════════════
+
+distractors:
+  notlar:
+    - "3 celdirici metinde acikca bulunan duyular olmali"
+    - "Haric tutulan duyu, tema cagrisimiyla karistirilebilecek ama gercekte metinde olmayan bir duyu secilmeli"
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siniflandirma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+
+celdirici_stratejileri:
+  - ad: "DAGINIK_DUYU_TESPIT"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metne dağıtılmış duyuları sistematik tarama gerektiren güçlü tuzak"
+    nasil_olusturulur: |
+      Paragrafta kullanılan 3 duyu metnin farklı yerlerine dağıtılmış olabilir.
+      Zor seviyede öğrenci hangi duyuların gerçekten geçtiğini ayıklamalıdır.
+      Haric tutulan duyu tema çağrışımı yapabilecek ama metinde gerçekten yer almayan bir duyu olmalıdır.
+    kategori: "cognitive"
+
+  - ad: "TEMA_CAGRISIMLI_HARIC"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Tema çağrışımı yapan ama metinde gerçekte bulunmayan haric duyu tuzağı"
+    nasil_olusturulur: |
+      Paragrafın temasıyla çağrışım yapan ama açıkça metinde yer almayan bir duyuyu haric duyu olarak kullan.
+      Zor seviyede öğrenci yüzeysel kelime taraması değil, her ifadeyi metinle doğrulayarak bulmalıdır.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

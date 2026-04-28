@@ -1,0 +1,243 @@
+# templates/konu_standard.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Metinde Konu
+#
+# STANDART KONU FORMATI (tum konu sorularinin ~%93'u)
+# Paragraf verilir, ogrenci konuyu secer
+#
+# Konu = Metin NE HAKKINDA (icerik odakli)
+# Ana fikir = Yazar NE SOYLEMEK ISTIYOR (bundan farkli!)
+
+meta:
+  id: "konu_standard"
+  ad: "Metinde Konu (Standart)"
+  sinif_seviyesi: 5
+  aciklama: "Paragrafin ana konusunu belirleme sorulari"
+  kaynak: "data/metinde_konu.pdf"
+  frequency: "~93% of konu questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 4 kisa secenek"
+
+  paragraph:
+    required: true
+    word_count_min: 50
+    word_count_max: 95
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "bilgilendirici"
+    kurallar:
+      - "Tek ve net bir konu etrafinda olusturulmali"
+      - "Konuyu aciklayan 2-4 destekleyici bilgi icermeli"
+      - "Birden fazla konuya deginmemeli"
+      - "Konu bastan sona tutarli olmali"
+      - "Onemli detaylar icermeli (celdirici malzemesi olarak kullanilacak)"
+      - "Paragrafta gecen detaylar ana konuyu desteklemeli"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 6
+    style: "topic_phrase"  # Kisa isim tamlamalari, ornegin "Sisin olusumu"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 12 varyasyon)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metinde aşağıdakilerden hangisi anlatılmaktadır?</b>"
+  - "<b>Bu metinde aşağıdakilerin hangisinden bahsedilmektedir?</b>"
+  - "<b>Bu metin aşağıdakilerin hangisinden bahsetmektedir?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metnin konusunu en iyi ifade eder?</b>"
+  - "<b>Bu metinde ele alınan konu aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metne konu olan durum aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metinde aşağıdakilerin hangisinden söz edilmektedir?</b>"
+  - "<b>Bu metinde aşağıdakilerin hangisine değinilmektedir?</b>"
+  - "<b>Bu metinde aşağıdakilerin hangisine değinilmiştir?</b>"
+  - "<b>Bu metinde aşağıdakilerin hangisinden bahsedilmiştir?</b>"
+  - "<b>Bu metinde aşağıdakilerden hangisine değinilmiştir?</b>"
+  # Topic-embedded varyasyonlar ({topic} → leaf topic, ör: "Yerçekimi kuvveti")
+  - "<b>Bu metinde</b> \"{topic}\" <b>ile ilgili aşağıdakilerden hangisine değinilmiştir?</b>"
+  - "<b>Bu metinde</b> \"{topic}\" <b>ile ilgili aşağıdakilerden hangisi anlatılmaktadır?</b>"
+  - "<b>Bu metinde</b> \"{topic}\" <b>ile ilgili anlatılan konu aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metinde neden söz edilmektedir?</b>"
+  - "<b>Bu metnin konusu aşağıdakilerden hangisidir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Paragrafin tam ve oz konusu - ne eksik ne fazla"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Paragrafin ne hakkinda oldugunu ozetlemeli"
+    - "Ne cok genis ne cok dar olmali"
+    - "Paragrafa bakilmadan anlasilabilir olmali"
+    - "Paragraftaki tum icerikle uyumlu olmali"
+    - "Kisa ve oz olmali (2-5 kelime ideal)"
+    - "Paragrafin TAMAMI hakkinda bilgi vermeli, sadece bir kismi degil"
+    - "Kelime sayısı bakımından en uzun şık olmamalı"
+  ornekler:
+    - paragraf: "Ahtapotlarin savunma ve gizlenme yontemleri..."
+      dogru: "Ahtapotlarin savunma yontemleri"
+    - paragraf: "Sisin olusumu, atmosferdeki su buharinin..."
+      dogru: "Sisin olusumu"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM paragraf iceriğine gore en uygun 3 stratejiyi secer
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["ozetleme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI (konular/ klasorunden secilir)
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  # Hiyerarsik yapi: UNITE / ALT_UNITE / KONU / ALT_KONU / DETAY
+  # Ayirici: " / "
+  # Ornek: "GOKYUZUNDEKI KOMSULARIMIZ VE BIZ / Gokyuzundeki Komsumuz: Gunes / Gunes'in Yapisi ve Ozellikleri / Gunes'in bir yildiz olmasi"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite (orn: 'GOKYUZUNDEKI KOMSULARIMIZ VE BIZ')"
+      - name: "alt_unite"
+        description: "Alt unite (orn: 'Gokyuzundeki Komsumuz: Gunes')"
+      - name: "konu"
+        description: "Ana konu (orn: 'Gunes'in Yapisi ve Ozellikleri')"
+      - name: "alt_konu"
+        description: "Alt konu (orn: 'Gunes'in bir yildiz olmasi')"
+      - name: "detay"
+        description: "Detay seviyesi (opsiyonel)"
+
+  generation_rules:
+    - "Generator should parse the full topic path"
+    - "Paragraph should focus on the LEAF topic (last segment)"
+    - "Parent topics provide context for grounding"
+    - "If topic has sub-topics, paragraph should cover the broader topic"
+    - "If topic is a leaf, paragraph should be specific to that detail"
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic from konular/ folder (parse hierarchy)"
+      details: "Konu hiyerarsisini parse et, LEAF topic'i kullan"
+
+    - step: 2
+      action: "Generate paragraph (55-90 words) about LEAF topic"
+      details: "MEB PDF cache kullanarak mufredata dayali paragraf yaz"
+
+    - step: 3
+      action: "Extract correct answer (the topic phrase, 2-6 words)"
+      details: "Paragrafin ozetini cikart, kisa ve oz ifade olustur"
+
+    - step: 4
+      action: "Generate 3 distractors using strategies"
+      details: |
+        - 1x yakin_anlam (ZORUNLU! dogru cevaba cok yakin ama ince farkla yanlis)
+        - 1x detay_tuzagi (detail from paragraph)
+        - 1x cok_genis VEYA cok_dar VEYA iliskili_ama_farkli
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from 12 variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+  hierarchy_aware_distractor_generation:
+    description: |
+      Topic: "ISIGIN DUNYASI / Isigin Yayilmasi / Isigin Dogrusal Yayilmasi"
+
+      Distractor sources:
+        - cok_genis: Use parent "Isigin Yayilmasi" or grandparent "ISIGIN DUNYASI"
+        - iliskili_ama_farkli: Use sibling topics like:
+            * "ISIGIN DUNYASI / Isigin Yayilmasi / Isik Kaynagi"
+            * "ISIGIN DUNYASI / Isigin Yayilmasi / Isigin Izledigi Yol"
+        - detay_tuzagi: Extract from generated paragraph content
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 3
+    konu: "Ahtapotlarin savunma yontemleri"
+    dogru_cevap: "Ahtapotlarin savunma yontemleri"
+    celdirici_1: "Renk degistirebilen canlilar"  # detay_tuzagi
+    celdirici_2: "Deniz canlılarının hayatta kalma yöntemleri"  # cok_genis
+    celdirici_3: "Ahtapotlarin yasam alanlari"  # iliskili_ama_farkli
+
+  - sayfa: 5
+    konu: "Sisin olusumu"
+    dogru_cevap: "Sisin olusumu"
+    celdirici_1: "Su buhari"  # detay_tuzagi (cok_dar)
+    celdirici_2: "Hava olaylarinin cesitleri"  # cok_genis
+    celdirici_3: "Hava durumu tahminleri"  # iliskili_ama_farkli
+
+  - sayfa: 7
+    konu: "Karibularin ozellikleri"
+    dogru_cevap: "Karibularin ozellikleri"
+    celdirici_1: "Kutup bolgesindeki memeliler"  # cok_genis
+    celdirici_2: "Karibu boynuzlari"  # cok_dar
+    celdirici_3: "Karibularin goc davranislari"  # yakin_anlam
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 55-90 arasinda mi?"
+    - "Tek bir konu etrafinda mi yapilandirilmis?"
+    - "Destekleyici detaylar var mi?"
+    - "Konu tutarliligi saglanmis mi?"
+
+  correct_answer:
+    - "2-6 kelime arasinda mi?"
+    - "Paragrafin tamamini temsil ediyor mu?"
+    - "Ne cok genis ne cok dar mi?"
+
+  distractors:
+    - "Her celdirici farkli bir strateji kullaniyor mu?"
+    - "Celdiriciler makul gorunuyor mu?"
+    - "Hicbiri dogru cevapla karistirilabilir mi?"
+    - "Hepsi ayni gramer yapida mi? (isim tamlamasi)"

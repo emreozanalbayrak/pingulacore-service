@@ -1,0 +1,113 @@
+# Kaynak: metinde_duyular_negative_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.orta
+# 4. sinif metinde duyular negatif — orta duzey
+
+meta:
+  id: "b12_metinde_duyular_negative_sinif4_orta"
+  ad: "Metinde Duyular - Yer Verilmeyen (Orta)"
+  sinif_seviyesi: 4
+  aciklama: "Orta duzey — metinde kullanılmayan duyuyu tespit etme."
+  frequency: "Very High"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Betimleyici paragraf + soru kökü + 4 duyu seçeneği (orta)"
+
+  paragraph:
+    required: true
+    word_count_min: 66
+    word_count_max: 82
+    background_color: "#f8f0e0"
+    sentence_count_min: 5
+    sentence_count_max: 6
+    stil: "betimleyici"
+    kurallar:
+      - "Metin en az 3 farklı duyuya hitap eden net ifadeler içermelidir."
+      - "Paragrafta kullanılan duyuların bir kısmı doğrudan, bir kısmı bağlam üzerinden anlaşılabilir olabilir."
+      - "Doğru cevap için öğrenci metnin tamamını dikkatle taramalıdır."
+      - "Paragrafta konuyla ilgili AÇIKLAMA, TANIM veya EK BİLGİ verme! Paragraf SADECE hikâyeyi/olayı anlatsın."
+      - "YASAK: Ders kitabı açıklamaları yapma."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 2
+    style: "concept"
+    correct_type: "does_not_belong"
+    correct_count: 1
+    kurallar:
+      - "Duyular için SADECE basit, bilinen kelimeleri kullan: görme, işitme, dokunma, tatma, koklama"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Bu metinde aşağıdaki duyulardan hangisine ait bir ayrıntıya <u>yer verilmemiştir</u>?</b>"
+  # KULLANILDI: - "<b>Bu metinde aşağıdaki duyuların hangisinden faydalanılmamıştır?</b>"
+  # KULLANILDI: - "<b>Bu parçada aşağıdaki duyuların hangisiyle ilgili bir ayrıntıya <u>yer verilmemiştir</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metinde örneği bulunmayan duyu"
+  mantik: "INVERSE - diger 3 secenek metinde bulunan duyular, dogru cevap buluNMAYAN duyu"
+  kurallar:
+    - "Metinde hicbir ornegi veya ifadesi bulunmayan duyu."
+    - "Diger 3 secenekteki duyular metinde acikca gecmeli."
+    - "Dogru cevap olarak secilen duyu, paragrafin hicbir cumlesinde ima bile edilmemeli."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI BILGILERI
+# ═══════════════════════════════════════════════════════════════
+
+distractors:
+  notlar:
+    - "3 celdirici metinde acikca bulunan duyular olmali"
+    - "Haric tutulan duyu baska bir duyu ile yuzeysel olarak karistirilabilecek bir tema alaninda secilebilir"
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siniflandirma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+
+celdirici_stratejileri:
+  - ad: "KARISABILIR_HARIC_DUYU"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Başka bir duyu ile yüzeysel olarak karıştırılabilecek haric duyu"
+    nasil_olusturulur: |
+      Haric tutulan duyu başka bir duyu ile yüzeysel olarak karıştırılabilecek bir tema alanında seçilmeli.
+      Orta seviyede doğru cevap için öğrenci metnin tamamını dikkatle taramalıdır.
+      Bazı duyular bağlam üzerinden anlaşılabilir olabilir.
+    kategori: "semantic"
+
+  - ad: "DOLAYLI_DUYU_VARLIK"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Metinde dolaylı olarak anlaşılabilen ama gerçekte olmayan duyu"
+    nasil_olusturulur: |
+      Metindeki bazı ipuçları dolaylı yolla çağrıştırdığı ama gerçekte yer almadığı bir duyuyu seçenek olarak sun.
+      Orta seviyede öğrenci her duyunun gerçekten metinde olup olmadığını doğrulamalıdır.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

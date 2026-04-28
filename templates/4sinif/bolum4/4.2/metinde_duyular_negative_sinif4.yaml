@@ -1,0 +1,207 @@
+# Kaynak: 5sinif/capture2/metinde_duyular_negative.yaml — 4. sinif icin adapte edildi (sinif_seviyesi 5->4)
+# templates/capture2/metinde_duyular_negative.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Bolum 2 - Metinde Duyular
+#
+# NEGATIF DUYULAR FORMATI (tum duyu sorularinin ~%60'i)
+# Betimleyici paragraf verilir, ogrenci metinde YER VERILMEYEN duyuyu bulur
+#
+# MANTIK: 3 secenek metinde bulunan duyular (yanlis), 1 tanesi bulunmuyor (dogru cevap)
+# Secenekler tek kavram (duyu adi) formatindadir
+#
+# 5 DUYU:
+# - Gorme: Renkler, sekiller, isik
+# - Isitme: Sesler, gurultu, konusma
+# - Koklama: Koku ifadeleri
+# - Dokunma: Isi, doku, temas
+# - Tatma: Lezzet ifadeleri
+
+meta:
+  id: "metinde_duyular_negative_sinif4"
+  ad: "Metinde Duyular (Yer Verilmeyen)"
+  sinif_seviyesi: 4
+  aciklama: "Metinde kullanılmayan duyuyu tespit etme"
+  kaynak: "data/metinde_duyular.pdf"
+  frequency: "Very High (~60% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Betimleyici paragraf + soru kökü + 4 duyu seçeneği"
+
+  paragraph:
+    required: true
+    word_count_min: 50
+    word_count_max: 100
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "betimleyici"
+    kurallar:
+      - "Metin en az 3 farklı duyuya hitap eden net ifadeler içermelidir."
+      - "Görme: Renkler, şekiller, ışık (Örn: 'Kıpkırmızı elma', 'parlak güneş')."
+      - "İşitme: Sesler, gürültü, konuşma (Örn: 'Kuş cıvıltısı', 'arabanın kornası')."
+      - "Koklama: Koku ifadeleri (Örn: 'Mis gibi nane kokusu', 'yanık kokusu')."
+      - "Dokunma: Isı, doku, temas (Örn: 'Sıcak hava', 'sert zemin', 'yumuşak tüy')."
+      - "Tatma: Lezzet ifadeleri (Örn: 'Ekşi erik', 'tuzlu ayran')."
+      - "Paragrafta konuyla ilgili AÇIKLAMA, TANIM veya EK BİLGİ verme! Paragraf SADECE hikâyeyi/olayı anlatsın"
+      - "YASAK: 'Duyular insanın çevresini algılamasını sağlar', 'Karakter özellikleri kişinin davranışlarını belirler' gibi ders kitabı açıklamaları"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 2
+    style: "concept"
+    correct_type: "does_not_belong"
+    correct_count: 1
+    kurallar:
+      - "Duyular için SADECE basit, bilinen kelimeleri kullan: görme, işitme, dokunma, tatma, koklama"
+      - "YASAK: 'temas' (dokunma yerine), 'görme yetisi' (görme yerine), 'işitsel algı' (işitme yerine) gibi karmaşık ifadeler"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 3 varyasyon, Sayfa 103-105)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metinde aşağıdaki duyulardan hangisine ait bir ayrıntıya <u>yer verilmemiştir</u>?</b>"
+  - "<b>Bu metinde aşağıdaki duyuların hangisinden faydalanılmamıştır?</b>"
+  - "<b>Bu parçada aşağıdaki duyuların hangisiyle ilgili bir ayrıntıya <u>yer verilmemiştir</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI (TERS MANTIK!)
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metinde örneği bulunmayan duyu"
+  mantik: "INVERSE - diger 3 secenek metinde bulunan duyular, dogru cevap buluNMAYAN duyu"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Metinde hicbir ornegi veya ifadesi bulunmayan duyu"
+    - "Diger 3 secenekteki duyular metinde acikca gecmeli"
+    - "Dogru cevap olarak secilen duyu, paragrafin hicbir cumlesinde ima bile edilmemeli"
+  ornekler:
+    - paragraf: "Bahçedeki kıpkırmızı güller mis gibi kokuyordu. Kuşların cıvıltısı havayı doldurmuştu. Çimenlerin üzerinde yalınayak yürürken ayaklarım ıslanmıştı."
+      dogru: "Tatma"
+      neden: "Gorme (kipkirmizi), koklama (mis gibi), isitme (civiltisi), dokunma (islanmisti) var ama tatma yok"
+    - paragraf: "Sıcak çorbanın dumanı yükseliyordu. Kaşığı ağzına götürdüğünde tuzlu lezzeti hissetti. Mutfaktaki çatal bıçak sesleri devam ediyordu."
+      dogru: "Koklama"
+      neden: "Gorme (duman), tatma (tuzlu), isitme (sesler), dokunma (sicak) var ama koklama yok"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM:
+# - 3 duyuyu metinde acikca isler (yanlis secenekler)
+# - 1 duyuyu metinde hic kullanmaz (dogru cevap)
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siniflandirma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic suitable for sensory description"
+      details: "Betimleyici anlatima uygun bir konu sec (doga, yemek, mekan vb.)"
+
+    - step: 2
+      action: "Choose 3 senses to include and 1 to exclude"
+      details: |
+        5 duyudan 3 tanesini sec ve paragrafa dahil et:
+        - Gorme, Isitme, Koklama, Dokunma, Tatma
+        - Kalan 1 duyu paragrafta hic gecmemeli (dogru cevap olacak)
+        - 4. secenek icin duyulardan birini daha ekle (toplam 4 secenek)
+
+    - step: 3
+      action: "Generate descriptive paragraph (50-100 words)"
+      details: |
+        Paragrafta:
+        - Secilen 3 duyu icin NET ifadeler olmali
+        - Her duyu en az 1 acik ornek icermeli
+        - Haric tutulan duyu hicbir sekilde ima edilmemeli
+        - Betimleyici/tasvirci anlatim kullanilmali
+
+    - step: 4
+      action: "Set correct answer = excluded sense"
+      details: "Paragrafta hic gecmeyen duyu dogru cevaptir"
+
+    - step: 5
+      action: "Set 3 distractors = included senses"
+      details: |
+        Paragrafta acikca gecen 3 duyu celdirici olur:
+        - Her biri 1-2 kelimelik duyu adi
+        - Ornek: Görme, İşitme, Koklama, Dokunma, Tatma
+
+    - step: 6
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR (Sayfa 103-105)
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 103
+    konu: "Bahce tasviri"
+    paragraf: "Bahçedeki kıpkırmızı güller mis gibi kokuyordu. Kuşların cıvıltısı havayı doldurmuştu. Çimenlerin üzerinde yürürken ayaklarım ıslanmıştı."
+    dogru_cevap: "Tatma"
+    celdirici_1: "Görme"
+    celdirici_2: "İşitme"
+    celdirici_3: "Koklama"
+    neden: "Gorme (kipkirmizi), isitme (civiltisi), koklama (mis gibi), dokunma (islanmisti) var - tatma yok"
+
+  - sayfa: 104
+    konu: "Mutfak tasviri"
+    paragraf: "Sıcak çorbanın dumanı yükseliyordu. Kaşığı ağzına götürdüğünde tuzlu lezzeti hissetti. Mutfaktaki çatal bıçak sesleri devam ediyordu."
+    dogru_cevap: "Koklama"
+    celdirici_1: "Görme"
+    celdirici_2: "Tatma"
+    celdirici_3: "İşitme"
+    neden: "Gorme (duman), tatma (tuzlu), isitme (sesler), dokunma (sicak) var - koklama yok"
+
+  - sayfa: 105
+    konu: "Pazar yeri tasviri"
+    paragraf: "Tezgâhlardaki rengarenk meyveler göz alıyordu. Satıcıların bağırışları kulaklarda çınlıyordu. Taze ekmek kokusu burnuma geliyordu."
+    dogru_cevap: "Dokunma"
+    celdirici_1: "Görme"
+    celdirici_2: "İşitme"
+    celdirici_3: "Koklama"
+    neden: "Gorme (rengarenk), isitme (bagirislar), koklama (ekmek kokusu) var - dokunma ve tatma yok, dokunma secilir"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 50-100 arasinda mi?"
+    - "En az 3 farkli duyuya ait net ifadeler var mi?"
+    - "Her duyu icin en az 1 acik ornek var mi?"
+    - "Betimleyici/tasvirci anlatim kullanilmis mi?"
+    - "Haric tutulan duyu hicbir sekilde ima edilmemis mi?"
+
+  correct_answer:
+    - "1-2 kelimelik duyu adi mi?"
+    - "Paragrafta gercekten hic gecmiyor mu?"
+    - "Hicbir cumlede ima bile edilmemis mi?"
+
+  distractors:
+    - "Her celdirici paragrafta acikca gecen bir duyu mu?"
+    - "Her biri 1-2 kelimelik duyu adi mi?"
+    - "Paragraftaki duyu ifadeleri net ve belirgin mi?"
+    - "Tum secenekler ayni gramer yapida mi? (duyu adi)"

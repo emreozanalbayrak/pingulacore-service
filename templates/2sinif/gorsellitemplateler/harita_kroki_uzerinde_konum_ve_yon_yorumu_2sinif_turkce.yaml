@@ -1,0 +1,165 @@
+meta:
+  id: "harita_kroki_uzerinde_konum_ve_yon_yorumu_2sinif_turkce"
+  ad: "Harita/Kroki Üzerinde Konum ve Yön Yorumu"
+  ders: "Türkçe"
+  sinif_seviyesi: "2. Sınıf"
+  tema: "Görsel Okuma ve Yorumlama"
+  model: "TYMM"
+  format_turu: "llm_generated_html"
+  aciklama: "Harita ya da kroki üzerinde gösterilen yerlerin birbirine göre konumunu okuyup doğru ya da yanlış ifadeyi belirlemeye dayalı 3 seçenekli soru formatı"
+  frequency: "orta"
+
+context:
+  type: "harita_kroki_yon_okuma"
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 10
+    word_count_max: 35
+    structure:
+      - "Önce kısa bir tanıtım cümlesi verilir."
+      - "Ardından bir mahalle, okul çevresi ya da küçük yerleşim krokisi gösterilir."
+      - "Krokide 4 ila 6 yer işaretlenir."
+      - "Yön göstergesi olarak kuzey-güney-doğu-batı açıkça verilir."
+      - "Sonrasında yerlerle ilgili 3 ifade sunulur."
+    kurallar:
+      - "Metin 2. sınıf seviyesine uygun, kısa ve sade olmalıdır."
+      - "Yer adları çocukların anlayabileceği türden olmalıdır."
+      - "Görsel çözümün ana kaynağı olmalıdır."
+      - "Yön ilişkileri açık ve karışmayacak biçimde verilmelidir."
+      - "Ara yönler kullanılmamalıdır."
+      - "Metin tek başına cevabı vermemelidir."
+
+format:
+  type: "llm_generated_html"
+  description: "Kısa tanıtım + harita/kroki görseli + tek soru + 3 seçenek"
+
+  paragraph:
+    required: true
+    word_count_min: 10
+    word_count_max: 35
+    sentence_count_min: 1
+    sentence_count_max: 2
+
+  visual:
+    required: true
+    count: 1
+    description: "Kuzey, güney, doğu, batı yönleri gösterilmiş; 4 ila 6 yerin işaretlendiği sade kroki"
+
+  stem:
+    required: true
+    sentence_count_min: 1
+    sentence_count_max: 1
+    soru_koku_ornekleri:
+      - "Bu görsele göre aşağıdakilerden hangisi söylenemez?"
+      - "Krokiye göre aşağıdakilerden hangisi doğru değildir?"
+      - "Verilen haritaya göre aşağıdakilerden hangisi yanlıştır?"
+      - "Aşağıdakilerden hangisi görsele göre söylenebilir?"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 4
+    word_count_max: 12
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "mismatch"
+
+gorsel:
+  required: true
+  tur: "sade_harita_kroki"
+  amac: "Öğrencinin yerlerin birbirine göre yönünü okuyup doğru değerlendirme yapmasını sağlamak"
+  kurallar:
+    - "Görselde 4 ila 6 yer bulunmalıdır."
+    - "Yerler açıkça etiketlenmelidir."
+    - "Kuzey, güney, doğu ve batı yönleri açıkça gösterilmelidir."
+    - "Yerler birbirinden yeterince ayrılmış olmalıdır."
+    - "Görsel sade, temiz ve 2. sınıf seviyesine uygun olmalıdır."
+    - "Görsel süsleyici değil, çözüm için zorunlu olmalıdır."
+    - "Ara yönler ve karmaşık çoklu karşılaştırmalar kullanılmamalıdır."
+
+yon_bilgisi:
+  required: true
+  temel_yonler:
+    - "kuzey"
+    - "güney"
+    - "doğu"
+    - "batı"
+  kurallar:
+    - "Yön işareti görselde açıkça bulunmalıdır."
+    - "Öğrenci yalnızca temel yönleri kullanarak çözüm yapabilmelidir."
+    - "Üst-alt algısı yerine yön işaretine bakarak çözüm gerektirilmelidir."
+
+olculen_beceri:
+  tanim: "Krokideki yerleri ve yönleri okuyup verilen ifadelerden yanlış olanı ayırt etme"
+  bilesenler:
+    - "gorsel_okuma"
+    - "yon_bilgisi"
+    - "konum_karsilastirma"
+    - "dogru_yanlis_degerlendirme"
+    - "yanlis_bilgiyi_belirleme"
+
+dogru_cevap:
+  tanim: "Krokideki yerleşim ve yön bilgisiyle uyuşmayan ifade"
+  kurallar:
+    - "Doğru cevap görsele göre söylenemeyen seçenek olmalıdır."
+    - "Diğer seçenekler görselle açıkça doğrulanabilmelidir."
+    - "En az bir seçenek iki yer arasındaki yön ilişkisini sorgulamalıdır."
+    - "Doğru cevap yalnızca dikkatli harita okuma ile bulunmalıdır."
+    - "Yanlış seçenek yüzeysel bakışta doğru gibi görünebilir."
+
+distractors:
+  stratejiler:
+    - ad: "YON_TERS_CEVIRME"
+      aciklama: "Doğu yerine batı, kuzey yerine güney kullanarak yanıltma"
+      ornek: "Okul, parkın doğusundadır."
+    - ad: "REFERANS_NOKTASINI_KARISTIRMA"
+      aciklama: "Bir yerin kime göre konumlandığını yanlış verme"
+      ornek: "Market, hastanenin kuzeyindedir."
+    - ad: "UST_ALT_YANILGISI"
+      aciklama: "Öğrencinin yön işaretine bakmadan sadece sayfa düzenine göre karar vermesini sağlama"
+      ornek: "Üstte görünen yer kuzeydedir."
+    - ad: "YAKIN_KONUM_CELDIRICISI"
+      aciklama: "Birbirine yakın iki yer için yanlış ama makul yön ifadesi sunma"
+      ornek: "Kütüphane, okulun yanında ve batısındadır."
+
+use_shared_strategies: false
+
+tymm_uyum_kurallari:
+  - "2. sınıf seviyesine uygun kısa ve açık cümleler kullanılmalıdır."
+  - "Yalnızca temel yönler kullanılmalıdır."
+  - "Soruda görsel okuma ve basit yön bilgisi beklenmelidir."
+  - "Ara yönler, çok aşamalı çıkarımlar ve soyut yorumlar kullanılmamalıdır."
+  - "'Söylenemez' veya 'yanlıştır' ifadesi açık olmalıdır."
+  - "Görsel olmadan doğru cevap kesinleşmemelidir."
+  - "Seçenekler aynı temsil düzeyinde, yani hepsi yön/konum cümlesi biçiminde olmalıdır."
+  - "3 seçenekli yapıda iki çeldirici de güçlü olmalıdır."
+
+izinli_icerikler:
+  - "okul"
+  - "park"
+  - "market"
+  - "kütüphane"
+  - "hastane"
+  - "oyun alanı"
+  - "mahalle krokisi"
+  - "okul çevresi krokisi"
+  - "kuzey, güney, doğu, batı"
+
+yasakli_icerikler:
+  - "kuzeydoğu, kuzeybatı, güneydoğu, güneybatı"
+  - "çok karmaşık kroki"
+  - "birden fazla doğru seçenek"
+  - "metinden çözülebilen yapı"
+  - "2. sınıf düzeyini aşan konum mantığı"
+  - "çok uzun seçenekler"
+
+ornek_sablon:
+  ust_metin: "Aşağıda bazı yerlerin bulunduğu bir kroki verilmiştir."
+  gorsel: "Temel yön işareti bulunan ve yerlerin etiketlendiği açık ve anlaşılır kroki"
+  soru_koku: "Bu görsele göre aşağıdakilerden hangisi söylenemez?"
+  secenekler:
+    A: "................................"
+    B: "................................"
+    C: "................................"

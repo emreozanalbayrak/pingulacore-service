@@ -1,0 +1,157 @@
+# templates/bolum4/metin_ici_karsilastirma.yaml
+# Bolum 4.1 - Ozel Bolum: Metin Ici Karsilastirma
+#
+# METIN ICI KARSILASTIRMA FORMATI
+# Metin verilir, ogrenci metindeki unsurlari (kavram, olay, surec)
+# karsilastirarak dogru/yanlis yargiyi belirler
+
+meta:
+  id: "metin_ici_karsilastirma"
+  ad: "Metin İçi Karşılaştırma"
+  sinif_seviyesi: 5
+  aciklama: "Metin içindeki unsurları karşılaştırarak doğru yargıyı belirleme"
+  frequency: "Medium (~20% of B4.1 questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Karşılaştırmalı paragraf + soru kökü + 4 cümle seçenek"
+
+  paragraph:
+    required: true
+    word_count_min: 60
+    word_count_max: 110
+    sentence_count_min: 4
+    sentence_count_max: 8
+    stil: "bilgilendirici"
+    kurallar:
+      - "Metinde en az 2, en fazla 3 karşılaştırılabilir unsur (kavram, olay, süreç, durum) olmalı"
+      - "Her unsur için belirgin özellikler/sonuçlar aktarılmalı"
+      - "Unsurlar arasındaki benzerlik ve farklar dolaylı verilmeli, doğrudan karşılaştırma cümlesi yazılmamalı"
+      - "Her unsur için en az 1-2 cümle bilgi verilmeli"
+      - "5. sınıf seviyesinde bilgilendirici veya öyküleyici üslup"
+      - "Unsurlar birbiriyle ilişkili ama farklı yönleri olan kavramlar olmalı"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 8
+    word_count_max: 25
+    style: "complete_sentence"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metindeki unsurlar karşılaştırıldığında aşağıdakilerden hangisi <u>doğrudur</u>?</b>"
+  - "<b>Bu metne göre aşağıdaki karşılaştırmalardan hangisi <u>doğrudur</u>?</b>"
+  - "<b>Metindeki bilgilerden hareketle aşağıdaki karşılaştırmalardan hangisi yapılabilir?</b>"
+  - "<b>Bu metne göre aşağıdaki karşılaştırmalardan hangisi <u>yanlıştır</u>?</b>"
+  # Ortak nokta ve numaralı öncül formülasyonları (ARI Paragraf 2025 kaynak)
+  - "<b>Bu bilgilerin ortak noktası aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metindeki …unsurlar… karşılaştırıldığında numaralanmış ifadelerden hangilerine <u>ulaşılamaz</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metindeki unsurları doğru karşılaştıran yargı"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Pozitif soru köklerinde: Metinden desteklenen doğru karşılaştırma ifadesi"
+    - "Negatif soru köklerinde (yanlıştır): Metinle çelişen karşılaştırma ifadesi"
+    - "Karşılaştırma en az 2 unsur arasında olmalı"
+    - "Benzerlik, fark, üstünlük veya neden-sonuç ilişkisi üzerinden karşılaştırma yapılmalı"
+    - "8-25 kelime, tam bir cümle formatında olmalı"
+    - "Karşılaştırma metindeki bilgilere sadık kalmalı"
+  ornekler:
+    - paragraf: "Rüzgâr enerjisi, rüzgârın gücünü kullanarak elektrik üretir ve çevreye zarar vermez. Kömür ise yanarak enerji sağlar ancak havayı kirletir. Her iki kaynak da insanların enerji ihtiyacını karşılamak için kullanılır."
+      dogru: "Rüzgâr enerjisi kömüre göre çevreye daha az zarar veren bir enerji kaynağıdır."
+      neden: "Metinde rüzgâr 'çevreye zarar vermez', kömür 'havayı kirletir' denmiş — doğru karşılaştırma."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# KAVRAM_YANILGISI, EKSIK_ANALIZ, HATALI_GENELLEME,
+# VERI_YANLIS_YORUMLAMA, KAPSAM_KAYDIRMA uygun
+
+beceri:
+  katman: "KB3"
+  bilesenler: ["karsilastirma", "cikarim_yapma", "degerlendirme"]
+  surec_bileseni: "karar_verme"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Karşılaştırılabilir unsurları belirle"
+      details: |
+        Konuyla ilgili 2-3 karşılaştırılabilir unsur seç:
+        - Benzer kategoride ama farklı özellikleri olan kavramlar
+        - Aynı alandaki farklı süreçler, olaylar veya durumlar
+        - Örnek: yenilenebilir-yenilenemez enerji, göçebe-yerleşik yaşam, seri-paralel devre
+
+    - step: 2
+      action: "Karşılaştırmalı paragraf yaz (60-110 kelime)"
+      details: |
+        - Her unsur için belirgin özellikler/sonuçlar aktar
+        - Doğrudan karşılaştırma cümlesi yazma, öğrenci çıkarım yapmalı
+        - Her unsur için en az 1-2 cümle
+        - Benzerlikler ve farklar satır aralarında sezdirilmeli
+
+    - step: 3
+      action: "Doğru cevap = geçerli karşılaştırma yargısı"
+      details: |
+        - Pozitif: Metinden desteklenen doğru karşılaştırma
+        - Negatif (yanlıştır): Metinle çelişen karşılaştırma
+        - 8-25 kelime, tam cümle
+
+    - step: 4
+      action: "3 çeldirici karşılaştırma oluştur"
+      details: |
+        - Unsurların özelliklerini karıştıran karşılaştırmalar
+        - Metinde olmayan ilişki kuran karşılaştırmalar
+        - Doğru bilgiyi yanlış unsura atfeden karşılaştırmalar
+        - Benzerliği fark, farkı benzerlik gibi gösteren ifadeler
+
+    - step: 5
+      action: "Seçenekleri rastgele sırala"
+      details: "A-B-C-D seçeneklerini rastgele sırala"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayısı 60-110 arasında mı?"
+    - "En az 2 karşılaştırılabilir unsur var mı?"
+    - "Her unsur için yeterli bilgi verilmiş mi?"
+    - "Karşılaştırma doğrudan yapılmamış, çıkarıma bırakılmış mı?"
+
+  correct_answer:
+    - "8-25 kelime tam cümle mi?"
+    - "Karşılaştırma metinden destekleniyor mu?"
+    - "En az 2 unsur arasında karşılaştırma var mı?"
+
+  distractors:
+    - "Her çeldirici farklı bir karşılaştırma hatası mı?"
+    - "Özellikler yanlış unsura atfedilmiş mi?"
+    - "Tüm seçenekler aynı formatta mı?"

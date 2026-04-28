@@ -1,0 +1,153 @@
+# templates/bolum4/yuzey_derin_anlam_standard.yaml
+# Bolum 4.1 - Ozel Bolum: Yuzey ve Derin Anlam
+#
+# STANDART DERIN ANLAM FORMATI
+# Metin verilir, ogrenci metnin derin anlamini/mesajini cikarir
+
+meta:
+  id: "yuzey_derin_anlam_standard"
+  ad: "Yüzey ve Derin Anlam (Standart)"
+  sinif_seviyesi: 5
+  aciklama: "Metnin yüzey anlamının ardındaki derin mesajı/öğüdü çıkarma"
+  frequency: "High (~50% of deep meaning questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Öyküleyici paragraf + soru kökü + 4 cümle seçenek"
+
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 100
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "oykuleyici"
+    kurallar:
+      - "Yüzey anlamının ardında derin bir mesaj/öğüt içeren metin"
+      - "Somut olaylar üzerinden soyut anlam aktarılmalı"
+      - "Atasözü/deyim tarzı derin anlam olmalı ama doğrudan kullanma"
+      - "Öyküleyici üslup: karakter, olay, sonuç akışı"
+      - "Derin anlam doğrudan söylenmemeli, çıkarım gerektirmeli"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 8
+    word_count_max: 25
+    style: "complete_sentence"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metinden çıkarılabilecek en kapsamlı yargı aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metnin asıl vermek istediği mesaj aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu olaydan çıkarılacak en önemli sonuç aşağıdakilerden hangisidir?</b>"
+  - "<b>Metnin bütününden hareketle aşağıdaki değerlendirmelerden hangisi doğrudur?</b>"
+  # Yüzey/derin anlam spesifik formülasyonlar (ARI Paragraf 2025 kaynak)
+  - "<b>Metnin yüzey anlamı aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metindeki numaralanmış cümlelerin hangisi metnin yüzey anlamı olabilir?</b>"
+  - "<b>Metinden çıkarılabilecek derin anlam aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metnin derin anlamı aşağıdakilerden hangisidir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metnin derin anlamını/mesajını ifade eden yargı"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Metnin yüzeysel anlamından öte derin mesajı yakalmalı"
+    - "Somut olaylardan soyut çıkarım yapmalı"
+    - "Metnin bütününü kapsayan genel bir yargı olmalı"
+    - "8-25 kelime, tam bir cümle formatında olmalı"
+    - "Atasözü/deyim ruhunda ama orijinal ifade olmalı"
+  ornekler:
+    - paragraf: "Küçük karınca, yaz boyu yiyecek topladı. Ağustos böceği ise tüm yaz şarkı söyledi. Kış geldiğinde karınca sıcak yuvasında rahatça yaşarken ağustos böceği aç kaldı."
+      dogru: "Geleceği düşünerek çalışmak, geçici eğlencelerden daha değerlidir."
+      neden: "Yüzey: karınca-ağustos böceği hikayesi. Derin anlam: çalışkanlığın ve planlı olmanın önemi"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# YAKIN_ANLAM, DETAY_TUZAGI, NEDEN_SONUC_TAKASI,
+# SARTLI_DOGRULUK_TUZAGI, OLASILIK_KESINLIK_CELISKISI
+
+beceri:
+  katman: "KB3"
+  bilesenler: ["cikarim_yapma", "degerlendirme", "yorumlama"]
+  surec_bileseni: "karar_verme"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Derin mesaj belirle"
+      details: |
+        Bir atasözü veya öğüt düzeyinde derin mesaj belirle:
+        - Çalışkanlık, sabır, paylaşım, dürüstlük gibi evrensel değerler
+        - Doğa-insan ilişkisi, toplumsal yaşam gibi temalar
+
+    - step: 2
+      action: "Somut öykü yaz (55-100 kelime)"
+      details: |
+        Derin mesajı somut olaylarla anlatan öyküleyici metin:
+        - Karakter(ler) ve olay örgüsü
+        - Mesaj doğrudan söylenmemeli
+        - Öğrenci çıkarım yaparak ulaşmalı
+
+    - step: 3
+      action: "Doğru cevap = derin mesaj yargısı"
+      details: |
+        - Metnin bütününü kapsayan soyut yargı
+        - 8-25 kelime, tam cümle
+
+    - step: 4
+      action: "3 çeldirici yargı oluştur"
+      details: |
+        - Yüzey anlamında kalan yargılar
+        - Detaya takılan, neden-sonuç karıştıran çeldiriciler
+        - Konuyla ilgili ama metnin asıl mesajı olmayan ifadeler
+
+    - step: 5
+      action: "Seçenekleri rastgele sırala"
+      details: "A-B-C-D seçeneklerini rastgele sırala"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayısı 55-100 arasında mı?"
+    - "Öyküleyici üslup mu?"
+    - "Yüzey anlamının ardında derin mesaj var mı?"
+    - "Derin anlam doğrudan söylenmemiş mi?"
+
+  correct_answer:
+    - "8-25 kelime tam cümle mi?"
+    - "Metnin derin mesajını yakalıyor mu?"
+    - "Yüzey anlamından öte mi?"
+
+  distractors:
+    - "Konuyla ilgili ama derin mesaj değil mi?"
+    - "Her çeldirici farklı bir yanılgı türü mü?"
+    - "Tüm seçenekler aynı formatta mı?"

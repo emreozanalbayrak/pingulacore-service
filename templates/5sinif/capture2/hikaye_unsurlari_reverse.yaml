@@ -1,0 +1,237 @@
+# templates/capture2/hikaye_unsurlari_reverse.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Hikaye Unsurlari
+#
+# TERS/METIN OLUSTURMA FORMATI (tum hikaye unsurlari sorularinin ~%10'u)
+# Unsurlar oncul olarak verilir, ogrenci bu unsurlara UYGUN paragrafi secer
+#
+# ONEMLI: Bu ters mantik kullanir
+# - Olay, Yer, Zaman, Kisi unsurlari oncul olarak verilir
+# - 4 mini-paragraf secenegi sunulur
+# - 1 secenek tum unsurlara UYAR (dogru cevap)
+# - 3 secenek en az 1 unsurla CELISIR (yanlis secenekler)
+
+meta:
+  id: "hikaye_unsurlari_reverse"
+  ad: "Hikâye Unsurları (Metin Oluşturma)"
+  sinif_seviyesi: 5
+  aciklama: "Verilen unsurları (yer, zaman, kişi, olay) içeren paragrafı bulma"
+  kaynak: "data/hikaye_unsurlari.pdf"
+  frequency: "Low (~10% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Unsurlar listesi (oncul) + soru koku + 4 paragraf secenek"
+
+  paragraph:
+    required: false  # Ana paragraf YOK - onculde unsurlar verilir
+
+  premises:
+    required: true
+    structure:
+      - "Yer: {location}"
+      - "Zaman: {time}"
+      - "Kisiler: {characters}"
+      - "Olay: {event}"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 25
+    word_count_max: 50
+    sentence_count_min: 2
+    sentence_count_max: 3
+    style: "mini_paragraph"
+    correct_count: 1
+    kurallar:
+      - "Seçeneklerdeki mini-paragraflarda hikâye unsurlarıyla ilgili AÇIKLAMA veya EK BİLGİ verme! (Örn: 'Bu hikâyede mekân unsuru parkır' gibi açıklamalar YASAK)"
+      - "Mini-paragraflar SADECE hikâyeyi anlatsın — unsur analizi veya tanımlaması YAPMA"
+
+  # HTML template for LLM to fill (premises = unsurlar listesi)
+  html_template: |
+    <div class="paragraph">{paragraph}</div>
+    <div class="question">{question}</div>
+    <div class="options">
+      <div class="option"><span class="option-letter">A)</span> {option_a}</div>
+      <div class="option"><span class="option-letter">B)</span> {option_b}</div>
+      <div class="option"><span class="option-letter">C)</span> {option_c}</div>
+      <div class="option"><span class="option-letter">D)</span> {option_d}</div>
+    </div>
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 2 varyasyon)
+# ═══════════════════════════════════════════════════════════════
+
+# NOT: Unsurlar ayri liste olarak "paragraph" alanina yazilir
+# Soru koku basit kalir - unsurlar icermez
+soru_kokleri:
+  - "<b>Aşağıdaki metinlerden hangisi bu hikâye unsurlarına uygun yazılmıştır?</b>"
+  - "<b>Yukarıda verilen hikâye unsurlarına uygun olan metin aşağıdakilerden hangisidir?</b>"
+  - "<b>Verilen hikâye unsurlarını içeren metin aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu hikâye unsurlarına göre oluşturulmuş metin aşağıdakilerden hangisidir?</b>"
+  - "<b>Aşağıdaki metinlerden hangisi yukarıdaki hikâye unsurlarıyla örtüşmektedir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Onculdeki tum unsurlari barindiran paragraf"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Verilen yer, zaman ve kisiler metinde acikca gecmeli."
+    - "Olay orgusu, verilen olay tanimiyla uyusmali."
+    - "Tum 4 unsur (Olay, Yer, Zaman, Kisi) paragrafta bulunmali"
+    - "Unsurlar arasinda tutarlilik olmali"
+    - "25-50 kelime arasinda, 2-3 cumle olmali"
+    - "Kelime sayısı bakımından en uzun şık olmamalı"
+  ornekler:
+    - unsurlar:
+        yer: "sahil kasabasi"
+        zaman: "yaz tatili"
+        kisiler: "Ali ve dedesi"
+        olay: "balik tutmak"
+      dogru: "Ali, yaz tatilinde dedesinin yasadigi sahil kasabasina gitti. Dedesiyle birlikte her sabah erkenden kalkip denize acilarak balik tuttuler."
+    - unsurlar:
+        yer: "okul bahcesi"
+        zaman: "teneffus"
+        kisiler: "Ayse ve arkadaslari"
+        olay: "oyun oynamak"
+      dogru: "Teneffus zili caldigi anda Ayse ve arkadaslari okul bahcesine firladilar. Hep birlikte saklambaç oynayarak eglenceli vakit gecirdilar."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Celdiricilerde en az 1 unsur onculdekiyle uyusmuyor
+# Tipik hatalar:
+# - Farkli bir yer kullanma (sahil yerine dag)
+# - Farkli bir zaman kullanma (yaz yerine kis)
+# - Farkli bir olay anlatma (balik tutmak yerine yuzmek)
+# - Farkli kisiler kullanma
+
+distractors:
+  stratejiler:
+    - ad: "YER_DEGISIKLIGI"
+      aciklama: "Onculdeki yer yerine farkli bir mekan kullanilir"
+      ornek: "Unsurda 'sahil kasabasi' varken 'dag koyu' yazilir"
+    - ad: "ZAMAN_DEGISIKLIGI"
+      aciklama: "Onculdeki zaman yerine farkli bir zaman dilimi kullanilir"
+      ornek: "Unsurda 'yaz tatili' varken 'kis tatili' yazilir"
+    - ad: "OLAY_DEGISIKLIGI"
+      aciklama: "Onculdeki olay yerine farkli bir eylem/durum anlatilir"
+      ornek: "Unsurda 'balik tutmak' varken 'yuzme ogrenme' yazilir"
+  notlar:
+    - "Her celdiricide en az 1, en fazla 2 unsur farkli olmali"
+    - "Farkli olan unsur metinden acikca anlasilabilir olmali"
+    - "Celdiriciler kendi icinde tutarli ve akici olmali"
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["karsilastirma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Hikaye unsurlarini belirle (oncul)"
+      details: |
+        4 unsuru net olarak tanimla:
+        - Yer: Somut ve belirli bir mekan
+        - Zaman: Belirli bir zaman dilimi
+        - Kisiler: En az 1 karakter (isim ile)
+        - Olay: Belirli bir eylem veya durum degisimi
+
+    - step: 2
+      action: "Dogru cevap paragrafini olustur (25-50 kelime)"
+      details: |
+        Onculdeki TUM unsurlari barindiran mini-paragraf:
+        - Yer, Zaman, Kisiler ve Olay acikca gecmeli
+        - 2-3 cumle, akici ve tutarli
+        - Oykuleyici uslup
+
+    - step: 3
+      action: "3 celdirici paragraf olustur (25-50 kelime)"
+      details: |
+        Her celdiricide en az 1 unsur onculdekinden FARKLI olmali:
+        - Birinde Yer farkli
+        - Digerinde Zaman farkli
+        - Ucuncude Olay farkli
+        - Celdiriciler kendi icinde tutarli olmali
+
+    - step: 4
+      action: "Secenekleri rastgele sirala"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 5
+      action: "Soru kokunu sec"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 93
+    konu: "Hikaye unsurlari - Metin olusturma"
+    unsurlar:
+      yer: "sahil kasabasi"
+      zaman: "yaz tatili"
+      kisiler: "Ali ve dedesi"
+      olay: "balik tutmak"
+    dogru_cevap: "Ali, yaz tatilinde dedesinin yasadigi sahil kasabasina gitti. Dedesiyle birlikte her sabah denize acilarak balik tuttuler."
+    celdirici_1: "Ali, kis tatilinde dedesini ziyarete gitti. Birlikte kardan adam yaptilar."
+    celdirici_2: "Mehmet, yaz tatilinde amcasiyla sahilde yuzdu. Deniz kabugu topladilar."
+    celdirici_3: "Ali, yaz tatilinde dag evine gitti. Dedesiyle ormanda yuruyus yaptilar."
+
+  - sayfa: 97
+    konu: "Hikaye unsurlari - Metin olusturma (2)"
+    unsurlar:
+      yer: "okul bahcesi"
+      zaman: "teneffus"
+      kisiler: "Ayse ve arkadaslari"
+      olay: "oyun oynamak"
+    dogru_cevap: "Teneffuste Ayse arkadaslarini okul bahcesine cagirdi. Hep birlikte istasyon oynayarak eglendiler."
+    celdirici_1: "Ayse teneffuste sinifta kaldi ve kitabini okudu. Arkadaslari bahcede oynadi."
+    celdirici_2: "Teneffuste cocuklar parka gittiler. Ayse salincakta sallandi."
+    celdirici_3: "Ders sirasinda Ayse arkadaslarina not gecirdi. Ogretmen onlari uyardi."
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  premises:
+    - "4 unsur (Yer, Zaman, Kisiler, Olay) acik ve net mi?"
+    - "Unsurlar somut ve belirli mi?"
+    - "Unsurlar arasinda mantiksal tutarlilik var mi?"
+
+  correct_answer:
+    - "25-50 kelime, 2-3 cumle mi?"
+    - "Onculdeki TUM unsurlar paragrafta acikca geciyor mu?"
+    - "Paragraf oykuleyici ve akici mi?"
+
+  distractors:
+    - "Her celdiricide en az 1 unsur onculdekinden farkli mi?"
+    - "Farkli olan unsur acikca fark edilebilir mi?"
+    - "Farkli celdiricilerde farkli unsurlar mi degismis?"
+    - "Celdiriciler kendi icinde tutarli mi?"
+    - "25-50 kelime, 2-3 cumle formatinda mi?"
+
+  overall:
+    - "Ogrenci onculdeki unsurlari paragraflarda karsilastirabilir mi?"
+    - "Dogru cevap tum unsurlari acikca barindiyor mu?"
+    - "Celdiricilerdeki farkliliklar analiz gerektiriyor mu?"

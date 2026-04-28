@@ -1,0 +1,166 @@
+# Referans: paragrafin_konusu_sinif3_referans.yaml → zorluk_duzeyleri.zor
+# Zor duzey — 3. sinif paragrafin konusu
+
+meta:
+  id: "paragrafin_konusu_sinif3_zor"
+  ad: "3. Sinif - Paragrafin Konusu (Zor)"
+  sinif_seviyesi: 3
+  aciklama: "Zor duzey — 3. sinif paragrafin konusu. 4 secenekli, gorselli."
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Gorsel + tek paragraf + soru koku + 4 konu secenegi (zor)"
+
+  paragraph:
+    required: true
+    word_count_min: 74
+    word_count_max: 95
+    sentence_count_min: 6
+    sentence_count_max: 7
+    stil: "simple_clear_primary_text"
+    background_color: "#fce8e8"
+    kurallar:
+      - "Metin tek baskin konu etrafinda kurulmalidir."
+      - "Metinde ne anlatildigi 3. sinif ogrencisi tarafindan acikca fark edilebilir olmalidir."
+      - "Metin 2. sinifa gore biraz daha ayrintili olabilir; ancak dagilmamaliidir."
+      - "Cumleler acik, akici ve 3. sinif duzeyine uygun olmalidir."
+      - "Metinde yardimci ayrintilar bulunabilir; fakat ana konuyu golgelememelidir."
+      - "Metin dis bilgi gerektirmemelidir."
+      - "Paragrafin konusu, metnin tamamina bakilarak bulunabilir olmalidir."
+      - "Metin ana dusunce, ana duygu, mesaj veya ders buldurmaya kaymamalidir."
+      - "Metin; kisi, olay, varlik, durum veya surec bakimindan tek ana odaga toplanmalidir."
+      - "Paragrafin konusu, 'Metinde ne anlatiliyor?' sorusuna verilecek cevapla belirlenebilmelidir."
+      - "Bilgilendirici metinlerde konuya iliskin bilgiler duzenli verilmelidir."
+      - "Oykuleyici metinlerde olay cizgisi kisa ama acik olmalidir."
+      - "Konu acik kalmalidir fakat metin icinde birkac bilgiye dagilmis olabilir."
+      - "Metinde 1-2 yan ayrinti bulunabilir ve bunlar celdirici uretimine malzeme verebilir."
+      - "Dogru konu ifadesi, metindeki tum bilgileri en iyi toplayan secenek olmalidir."
+      - "Zor duzeyde bile soru ana dusunce, ana duygu veya yazar mesaji sorusuna donusmemelidir."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  visual:
+    required: true
+    description: "Paragrafin ana konusunu dogrudan destekleyen islevsel gorsel"
+    placement: "paragraph_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illustrasyon"
+      - "tek sahneli fotograf benzeri cizim"
+      - "tek olay veya tek varlik odakli sahne"
+      - "bilgilendirici metni destekleyen konu gorseli"
+    kurallar:
+      - "Her soru icin gorsel zorunludur."
+      - "Gorsel metnin ana konusunu acikca desteklemelidir."
+      - "Gorsel sus olmamali, cozumde etkili destek sunmalidir."
+      - "Gorsel tek basina cevabi tamamen vermemelidir."
+      - "Metin ve gorsel birlikte degerlendirildiginde dogru konu daha netlesmelidir."
+      - "Gorsel dikkat dagitici gereksiz ayrintilar icermemelidir."
+      - "Gorsel yanlis bir konu ifadesini destekleyecek kadar yaniltici olmamalidir."
+    yasaklar:
+      - "dekoratif ve metinden bagimsiz gorsel"
+      - "cok sahneli karmasik kolaj"
+      - "grafik, tablo veya infografik yogunlugu tasiyan tasarim"
+      - "metnin asil konusunu gizleyen karisik arka plan"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 6
+    style: "short_topic_phrase"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "3. sinifta her soru 4 secenekli olmalidir."
+      - "Tum secenekler konu ifadesi biciminde olmalidir."
+      - "Secenekler kisa, sade ve 3. sinif duzeyinde olmalidir."
+      - "Dogru secenek metnin tamaminda anlatilan ana konuyu karsilamalidir."
+      - "Yanlis secenekler metne yakin gorunmeli ama dikkatli okuyunca elenebilmelidir."
+      - "Yanlis secenekler yeni ana olay veya metinde olmayan baskin bilgi getirmemelidir."
+      - "Secenekler kendi aralarinda bicimce paralel olmalidir."
+      - "Secenekler baslik gibi degil, konu ifadesi gibi kurulmalidir."
+      - "Ayni soruda birden fazla makul dogru secenek olusmamalidir."
+      - "3 yanlis secenegin en az 2'si metne yakin gorunmelidir."
+      - "1 secenek fazla genel"
+      - "1 secenek yan unsur ya da dar ayrinti"
+      - "1 secenek ana fikir kaymasi veya tema icinde guclu ama yanlis vurgu"
+
+soru_kokleri:
+  - "<b>Bu metnin konusu asagidakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Bu metinde ele alinan konu asagidakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Bu metinde asagidakilerden hangisine deginilmistir?</b>"
+  # KULLANILDI: - "<b>Bu paragrafin konusu asagidakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Paragrafta anlatilan konu asagidakilerden hangisidir?</b>"
+  - "<b>Metinde hangi konudan soz edilmektedir?</b>"
+  - "<b>Bu metinde en cok ne anlatilmaktadir?</b>"
+  - "<b>Bu metnin anlattigi konu asagidakilerden hangisidir?</b>"
+  - "<b>Asagidakilerden hangisi bu metnin konusudur?</b>"
+  # KULLANILDI: - "<b>Bu metinde asil olarak hangi konudan bahsedilmektedir?</b>"
+
+dogru_cevap:
+  tanim: "Metnin tamaminda anlatilan ana konuyu karsilayan en uygun ifade"
+  kurallar:
+    - "Dogru cevap metnin tek baskin konusunu yansitmalidir."
+    - "Dogru cevap baslik gibi yaratici degil, konu ifadesi gibi aciklayici olmalidir."
+    - "Dogru cevap cok genel olmamalidir."
+    - "Dogru cevap cok dar olmamalidir."
+    - "Dogru cevap yalniz tek bir ayrintiyi merkeze almamalidir."
+    - "Dogru cevap sade ve dogrudan olmalidir."
+    - "Dogru cevap genellikle 2-6 sozcuk arasinda tutulmalidir."
+    - "Dogru cevap gorselle de desteklenebilir nitelikte olmalidir."
+    - "Dogru cevap konu ile ana fikir arasindaki siniri korumalidir."
+
+celdirici_stratejileri:
+  - ad: "COK_GENIS"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metinle ilgili ama odagi geregenden fazla genis konu"
+    nasil_olusturulur: |
+      Metnin konusuyla ayni alan icinde ama cok genel bir konu ifadesi olustur.
+      Ornek: boceklerin yasam donguusu ise 'Doga' veya 'Hayvanlar' gibi cok genis.
+    kategori: "semantic"
+
+  - ad: "COK_DAR"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metindeki tek ayrintiya odaklanan konu"
+    nasil_olusturulur: |
+      Metindeki tek bir ayrintiya dayali bir konu ifadesi olustur.
+    kategori: "cognitive"
+
+  - ad: "YAN_ODAK"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metindeki yardimci bilgiye yonelen ama ana konu olmayan ifade"
+    nasil_olusturulur: |
+      Metinde yalnizca bir ayrintiya odaklanan veya ana konu yerine yan bilgiye yonelen bir konu ifadesi olustur.
+    kategori: "cognitive"
+
+  - ad: "TEMA_ICI_YANLIS_VURGU"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Ayni tema alaninda duran ama metnin gercek konusunu tam karsilamayan ifade"
+    nasil_olusturulur: |
+      Metnin tema alaniyla iliskili ama asil konuyu karsilamayan bir ifade olustur.
+    kategori: "semantic"
+
+  - ad: "ANA_FIKIR_KAYMASI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Konu yerine metnin verdiği dusunce veya sonucu secen ifade"
+    nasil_olusturulur: |
+      Konu ifadesi yerine metnin mesaji, sonucu veya ogudu gibi bir ifadeye donusen bir secenek olustur.
+      Ornek: 'Sabir basari getirir' gibi mesaj seceneği.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB1"
+  bilesenler: ["konu_belirleme", "metni_anlama"]
+  surec_bileseni: "metni_anlama"
+
+sinif3_ek_kurallar:
+  yasak_alanlar:
+    - "Ana fikir / ana duygu odaklı sorular YASAK"
+    - "Yazar niyeti / ortuk mesaj cozumleme YASAK"
+    - "4. sinifa kayan asiri soyut yorum sorulari YASAK"

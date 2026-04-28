@@ -1,0 +1,171 @@
+# templates/bolum4/paragraf_turu_eslestirme.yaml
+# Bolum 4.3 - Ozel Bolum: Paragraf Turu Eslestirme (Reverse)
+#
+# REVERSE ESLESTIRME FORMATI
+# Paragraf turu ozellikleri oncul olarak verilir, ogrenci uygun paragraf secer
+# paragraph.required: false — oncul kullanilir
+# Secenekler mini_paragraph formatinda
+
+meta:
+  id: "paragraf_turu_eslestirme"
+  ad: "Paragraf Türü Eşleştirme (Reverse)"
+  sinif_seviyesi: 5
+  aciklama: "Paragraf türü özellikleri verilir, uygun paragrafı seçme"
+  frequency: "Medium (~30% of paragraph type questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Tür özellikleri (öncül) + soru kökü + 4 mini-paragraf seçenek"
+
+  paragraph:
+    required: false  # Öncül olarak tür özellikleri verilir
+
+  premises:
+    required: true
+    structure:
+      - "Paragraf türü: {type_name}"
+      - "Özellikler: {features}"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 25
+    word_count_max: 50
+    sentence_count_min: 2
+    sentence_count_max: 3
+    style: "mini_paragraph"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Yukarıda özellikleri verilen paragraf türüne uygun metin aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu paragraf türünün özelliklerini taşıyan metin aşağıdakilerden hangisidir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Öncüldeki paragraf türü özelliklerini taşıyan mini-paragraf"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Verilen tür özelliklerinin tamamını taşımalı"
+    - "Türe ait belirteçler metinde açıkça bulunmalı"
+    - "25-50 kelime, 2-3 cümle formatında olmalı"
+    - "Doğal ve akıcı bir metin olmalı"
+  ornekler:
+    - unsurlar:
+        tur: "Betimleyici"
+        ozellikler: "Duyusal detaylar, renk, koku, ses, dokunma"
+      dogru: "Bahçedeki kırmızı güller mis gibi kokuyordu. Arıların vızıltısı arasında serin bir rüzgâr tenimizi okşuyordu."
+      neden: "Görme (kırmızı), koklama (mis gibi), işitme (vızıltı), dokunma (serin rüzgâr) duyuları var"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI (CUSTOM — tur eslestirme icin ozel)
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "TUR_DEGISIKLIGI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Tamamen farklı tür örneği sunma"
+    nasil_olusturulur: |
+      Öncülde verilen türden açıkça farklı bir türde mini-paragraf yaz.
+      Örnek: Betimleyici tür istenirken Bilgilendirici metin.
+    kategori: "semantic"
+
+  - ad: "KISMI_UYUM"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Bazı özellikleri taşıyan ama farklı tür"
+    nasil_olusturulur: |
+      Öncüldeki bazı özellikleri taşıyan ama aslında farklı bir türe ait mini-paragraf yaz.
+      Öğrenci kısmi uyuma aldanabilir.
+      Örnek: Betimleyici istenirken hem betimleme hem olay içeren öyküleyici metin.
+    kategori: "cognitive"
+
+  - ad: "UST_KAVRAM_TURU"
+    bilisssel_hata_kategorisi: "asiri_genelleme"
+    aciklama: "Genel olarak benzer ama spesifik özellik eksik"
+    nasil_olusturulur: |
+      İstenen türe yakın ama belirteçleri eksik bir metin yaz.
+      Tür özellikleri kısmen karşılanır ama baskın tür farklıdır.
+    kategori: "scope"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ETIKETI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["karsilastirma", "siniflandirma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Paragraf türü ve özellikleri belirle (öncül)"
+      details: |
+        4 türden birini seç ve özelliklerini listele:
+        - Betimleme: Duyusal detaylar, renk, koku, ses
+        - Öyküleme: Olay, karakter, zaman akışı
+        - Tanıtma: Bir kavramı, kişiyi ya da nesneyi tanıtmak / açıklamak
+        - Sıralı-Kronolojik Metin: Bir süreci, aşamayı, yaşam akışını veya işlem basamaklarını sırayla vermek
+
+    - step: 2
+      action: "Doğru mini-paragraf yaz (25-50 kelime)"
+      details: |
+        - Öncüldeki TÜM özellikleri taşıyan metin
+        - 2-3 cümle, akıcı ve doğal
+        - Türe ait belirteçler açıkça bulunmalı
+
+    - step: 3
+      action: "3 çeldirici mini-paragraf yaz (25-50 kelime)"
+      details: |
+        Her çeldiricide farklı strateji:
+        - Tamamen farklı tür
+        - Kısmi uyum (bazı özellikler var)
+        - Yakın ama eksik tür
+
+    - step: 4
+      action: "Seçenekleri rastgele sırala"
+      details: "A-B-C-D seçeneklerini rastgele sırala"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  premises:
+    - "Paragraf türü ve özellikleri net mi?"
+    - "Özellikler türe özgü ve belirgin mi?"
+
+  correct_answer:
+    - "25-50 kelime, 2-3 cümle mi?"
+    - "Öncüldeki TÜM özellikleri taşıyor mu?"
+    - "Türe ait belirteçler var mı?"
+
+  distractors:
+    - "Her çeldirici farklı bir strateji kullanıyor mu?"
+    - "Çeldiriciler 25-50 kelime, 2-3 cümle mi?"
+    - "Kendi içinde tutarlı ve akıcı mı?"
+
+  overall:
+    - "Öğrenci öncüldeki özellikleri metinlerde karşılaştırabilir mi?"
+    - "Doğru cevap tüm özellikleri açıkça taşıyor mu?"

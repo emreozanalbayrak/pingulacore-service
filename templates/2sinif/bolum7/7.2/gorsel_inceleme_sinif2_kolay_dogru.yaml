@@ -1,0 +1,141 @@
+# templates/2sinif/bolum7/7.2/gorsel_inceleme_sinif2_kolay_dogru_1q.yaml
+# 2. Sinif — Gorsel Inceleme — KOLAY — hangisi_dogrudur varyanti
+# Gorsel zorunlu, paragraf yok, 3 secenekli
+
+meta:
+  id: "gorsel_inceleme_sinif2_kolay_dogru"
+  ad: "2. Sinif - Gorsel Inceleme (Kolay) - Hangisi Dogrudur"
+  sinif_seviyesi: 2
+  aciklama: "Kolay duzey — gorsel inceleme, hangisi dogrudur varyanti, 3 secenekli"
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Tek gorsel + kisa soru koku + 3 secenek (kolay, hangisi_dogrudur)"
+
+  paragraph:
+    required: true
+    word_count_min: 30
+    word_count_max: 60
+    sentence_count_min: 3
+    sentence_count_max: 5
+    stil: "gorsel_sahne_tasviri"
+    kurallar:
+      - "Bu paragraf gorselde gosterilecek sahneyi TASVIR eder."
+      - "Sahne bir gunluk yasam sahnesi olmalidir (park, okul, ev, doga)."
+      - "En az 3 somut bilgi icermelidir: kisi sayisi, nesne, eylem, yer, mevsim."
+      - "En az 1 bilgi gorselden CIKARILAMAMALI (soru icin gerekli)."
+      - "2. sinif ogrencisinin anlayabilecegi sade dil kullanilmalidir."
+      - "Soyut kavramlar ve dis bilgi gerektiren ifadeler YASAK."
+
+  visual:
+    required: true
+    placement: "top"
+    detail_density: "low"
+    kurallar:
+      - "Gorsel tek sahneli ve acik olmalidir."
+      - "Sayi, kisi, nesne ve eylem bilgileri kolay secilebilir olmalidir."
+      - "Dogru cevap gorselde acikca gorulen bilgiye dayanmalidir."
+      - "Gorsel soru cozumunun ana ve zorunlu kaynagi olmalidir."
+      - "Gorsel tek bakista anlasilir ama dikkatli inceleme gerektirir olmalidir."
+      - "Gorselde en az 3 acik bilgi cikarilabilir olmalidir."
+      - "Kisi, nesne, hareket, sayi, yer veya mevsim gibi acik ipuclari bulunabilir."
+      - "Gorsel sade olmali, gereksiz susleme icermemelidir."
+      - "Gorseldeki karakterler ve nesneler ayirt edilebilir olmalidir."
+    yasaklar:
+      - "dekoratif ama bilgi tasimayan gorsel"
+      - "asiri kalabalik ve karisik sahne"
+      - "tek bakista tum secenekleri acikca eleyen asiri basit kurgu"
+      - "2. sinif duzeyini asan karmasik infografik veya coklu panel"
+      - "gorsel disinda dis bilgi gerektiren sahne"
+    visual_type_allowed:
+      - "tek sahneli gunluk yasam gorseli"
+      - "oyun oynayan cocuklar sahnesi"
+      - "park / okul / ev / doga sahnesi"
+      - "hayvan veya nesne duzeni"
+      - "basit etkinlik sahnesi"
+      - "insan ve nesne iliskisi iceren sahne"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 3
+    word_count_max: 10
+    style: "short_statement"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Her soruda 3 secenek olmalidir."
+      - "Secenekler kisa, sade ve 2. sinif duzeyinde olmalidir."
+      - "Dogru secenek gorselden dogrudan dogrulanabilmelidir."
+      - "Yanlis secenekler gorsel ile celismeli ya da gorselden cikarilmayan bilgi icermelidir."
+      - "Secenekler kendi aralarinda bicimce paralel olmalidir."
+      - "Sayi, kisi, nesne, yer, eylem veya mevsim odakli ifadeler kullanilabilir."
+      - "Sadece kelime oyunu veya dil tuzagi iceren secenekler kullanilmamalidir."
+
+soru_kokleri:
+  - "<b>Görselle ilgili verilen bilgilerden hangisi doğrudur?</b>"
+  - "<b>Aşağıdakilerden hangisi görsele göre doğrudur?</b>"
+  - "<b>Bu görselle ilgili aşağıdakilerden hangisi doğrudur?</b>"
+  - "<b>Görsele göre doğru olan ifade hangisidir?</b>"
+  - "<b>Aşağıdakilerden hangisi görselde görülmektedir?</b>"
+
+soru_varyanti: "hangisi_dogrudur"
+
+soru_varyanti_kurallari:
+  - "Yalniz 1 secenek gorselle acikca uyusmalidir."
+  - "Diger 2 secenek gorselle celismeli ya da eksik/yanlis bilgi icermelidir."
+
+dogru_cevap:
+  tanim: "Yalniz gorsel dikkatle incelendiginde dogrulanabilen dogru ifade"
+  kurallar:
+    - "Dogru cevap gorselde acikca gorulen bilgiye dayanmalidir."
+    - "Dogru cevap gorselden dogrudan cikarilabilen basit sonuc olabilir."
+    - "Dogru cevap dis bilgi gerektirmemelidir."
+    - "Dogru cevap yorumdan cok gozleme dayanmalidir."
+    - "Dogru cevap 2. sinif ogrencisinin gorsele bakarak belirleyebilecegi aciklikta olmalidir."
+
+celdirici_stratejileri:
+  - ad: "GORSELLE_CELISIR"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Gorselde acikca yanlis olan bilgi"
+    nasil_olusturulur: |
+      Gorselde acikca gorulen bir bilginin tersini veya yanlisini sun.
+      Kolay duzey: bu secenek kolay elenebilir olmalidir.
+    kategori: "visual_conflict"
+
+  - ad: "ULASILAMAZ_BILGI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Gorselden ogrenilemeyecek bilgi"
+    nasil_olusturulur: |
+      Gorselden cikarilmasi mumkun olmayan bir bilgiyi secenek olarak sun.
+      Kolay duzey: ulasilamaz bilgi acikca gorselde bulunmayan turde olmalidir.
+    kategori: "scope_error"
+
+use_shared_strategies: false
+
+visual_requirement: "answer_critical"
+visual_type: "scene"
+visual_spec:
+  scene_type: "gunluk_yasam"
+  kisi_sayisi_min: 2
+  kisi_sayisi_max: 5
+  bilgi_sayisi_min: 3
+hide_paragraph_after_visual: true
+
+beceri:
+  katman: "KB1"
+  bilesenler: ["gorselden_bilgi_cikarma"]
+  surec_bileseni: "gorseli_anlama"
+
+sinif2_ek_kurallar:
+  sadece_gorselle_cozum_gerekli: true
+  sadece_metinle_cozum_yasak: true
+  yasak_alanlar:
+    - "Ana dusunce, mesaj veya soyut yorum sorusu YASAK"
+    - "Dis bilgi gerektiren soru YASAK"
+    - "Gorsel olmadan cozulebilir soru YASAK"

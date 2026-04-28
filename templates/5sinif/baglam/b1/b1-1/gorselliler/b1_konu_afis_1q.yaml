@@ -1,0 +1,96 @@
+# B1.1 — 1Q Afiş (Konu/Problem Belirleme)
+# Görsel: afis (AI afiş görseli üretilecek)
+# Soru Tipi: Konu/Problem — B1.1 soru kökleri
+
+meta:
+  id: "b1_konu_afis_1q"
+  ad: "1Q Afiş — Konu/Problem"
+  sinif_seviyesi: 5
+  aciklama: "Senaryo + AI afiş görseli üzerinden konu/problem belirleme sorusu"
+  kaynak: "baglamb1sorukoku.md"
+  frequency: "Medium"
+
+context:
+  type: "b1_konu_afis_1q"
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 80
+    word_count_max: 140
+    image_type: "afis"
+    structure:
+      - "KONUYA GİRİŞ yapan kısa bir senaryo oluştur (4-6 cümle)"
+      - "Senaryo konunun GENEL ÇERÇEVESİNİ çizsin — detaylı bilgileri afiş görseli verecek"
+      - "Senaryoda bir veya birkaç karakter olmalı (isimli)"
+      - "KRİTİK — SENARYO AFİŞİ ANLATMAMALI: Senaryo afişin içeriğini, görselini veya detaylarını TANIMLAMAZ"
+      - "YASAK: 'Aşağıdaki afiş...', 'İnfografikte görüldüğü gibi...' gibi görsele referans veren ifadeler"
+      - "YASAK: HTML tablosu (<table>) EKLEME — sadece düz metin yaz"
+      - "YASAK: Metne BAŞLIK koyma — ne konu başlığı ne numara"
+    kurallar:
+      - "KRİTİK — BAŞLIK YASAĞI: Metin ve görsellere konunun ana fikrini veren başlık KOYMA! Nötr başlık kullan"
+      - "5. sınıf seviyesinde, anlaşılır senaryo"
+      - "Senaryo konuya GİRİŞ yapmalı — afişi ANLATMAMALI"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+    - slot: 1
+      type: "konu_problem"
+      soru_kokleri:
+        - "<b>Bu görselde anlatılmak istenen asıl mesele aşağıdakilerden hangisidir?</b>"
+        - "<b>Bu metne göre çözülmesi gereken asıl mesele nedir?</b>"
+      options_style: "short_phrase"
+      word_count_min: 3
+      word_count_max: 12
+      beceri:
+        katman: "KB2"
+        bilesenler: ["anlama", "cikarim_yapma"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+header_template: null
+
+format:
+  type: "llm_generated_html"
+  description: "1Q afiş görseli üzerinden konu/problem belirleme"
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 140
+    sentence_count_min: 4
+    sentence_count_max: 6
+  stem:
+    required: true
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 3
+    word_count_max: 12
+    style: "short_phrase"
+    correct_count: 1
+    correct_type: "matches"
+
+dogru_cevap:
+  tanim: "Afiş ve senaryodan çıkarılan ana konu/problem"
+  kurallar:
+    - "KRİTİK: Doğru cevap metindeki tek bir cümleden direkt okunaMAMALI"
+    - "Öğrenci doğru cevaba ulaşmak için senaryoyu ve afiş görselini birlikte değerlendirmeli"
+    - "Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil"
+    - "HATALI YAKLASIM: Metinde geçen bir cümlenin AYNEN seçeneklerde kullanılması YASAK"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin ANLAMCA ÖZDESİ olmalı"
+    - "En az %40 kelime farklılığı olmalı"
+    - "BİLİMSEL TERİM KORUMASI: Teknik terimler değiştirilmemeli"
+    - "Doğru şık en uzun şık OLMAMALI"
+
+distractors:
+  stratejiler:
+    - ad: "DETAY_ODAK"
+      aciklama: "Senaryodaki bir detayı ana mesele gibi sunma"
+      ornek: "Yan bir bilgiyi temel konu olarak gösterme"
+    - ad: "UST_KAVRAM_GENELLEME"
+      aciklama: "Çok geniş/genel bir ifade kullanarak belirli konuyu kaybetme"
+      ornek: "Spesifik konuyu aşırı genel bir kavramla ifade etme"
+    - ad: "NEDEN_SONUC_KARISTIRMA"
+      aciklama: "Problemin nedenini veya sonucunu problemin kendisi gibi sunma"
+      ornek: "Sonucu problem, problemi neden olarak gösterme"
+
+use_shared_strategies: false

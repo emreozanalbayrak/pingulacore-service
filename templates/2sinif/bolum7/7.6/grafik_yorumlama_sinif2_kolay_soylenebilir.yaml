@@ -1,0 +1,116 @@
+# templates/2sinif/bolum7/7.6/grafik_yorumlama_sinif2_kolay_soylenebilir_1q.yaml
+# 2. Sinif — Grafik Yorumlama — KOLAY — grafikten_hangisi_soylenebilir
+# Grafik zorunlu, 3 secenekli, dogrudan okuma ile cozulebilir
+
+meta:
+  id: "grafik_yorumlama_sinif2_kolay_soylenebilir"
+  ad: "2. Sinif - Grafik Yorumlama (Kolay) - Soylenebilir"
+  sinif_seviyesi: 2
+  aciklama: "Kolay duzey — grafikten hangisi soylenebilir, 3 secenekli, dogrudan okuma"
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Istege bagli kisa baglam metni + ana grafik + soru koku + 3 secenek (kolay, soylenebilir)"
+
+  paragraph:
+    required: true
+    word_count_min: 8
+    word_count_max: 30
+    sentence_count_min: 1
+    sentence_count_max: 3
+    stil: "grafik_baglam"
+    background_color: "#e8f8e8"
+    kurallar:
+      - "Baglam metni varsa kisa, sade ve aciklayici olmalidir."
+      - "Baglam metni grafikteki sayilarin veya sembollerin neyi gosterdigini soyleyebilir."
+      - "Baglam metni dogru secenegi tek basina vermemelidir."
+      - "Baglam metni 2. sinif duzeyinde olmalidir."
+      - "Grafigi okumadan cevabi acikca veren aciklama YASAK."
+      - "Uzun ve karmasik paragraf YASAK."
+      - "Teknik grafik dili YASAK."
+      - "Ana grafik zorunludur. Grafik sade, okunabilir ve 2. sinif duzeyine uygun olmalidir."
+      - "Grafik basligi acikca verilmelidir."
+      - "Grafikte eksen veya kategori adlari acikca yazilmalidir."
+      - "Sayisal degerler veya gorsel semboller net bicimde takip edilebilir olmalidir."
+      - "Grafikte en az 3 veri noktasi bulunmalidir."
+      - "Grafik cok yogun ve karmasik olmamalidir."
+      - "Kolay duzey: Grafikte 3-4 kategori bulunmalidir."
+      - "Dogru cevap dogrudan okuma, en cok / en az bulma gibi acik gorevlerden gelmelidir."
+      - "Toplam gerektiren gorevler mumkunse kullanilmamalidir."
+      - "Sekil grafigi veya cok sade sutun grafik tercih edilmelidir."
+      - "Grafik tipi: basit sutun grafik, sekil grafigi, resimli grafik, renkli cubuk grafik veya tek degiskenli karsilastirma grafigi."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 3
+    word_count_max: 14
+    style: "short_phrase"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Secenekler kisa, sade ve 2. sinif duzeyinde olmalidir."
+      - "Dogru secenek grafige dayanmalidir."
+      - "Yanlis secenekler grafige yakin ama hatali olmalidir."
+      - "Secenekler kendi aralarinda bicimce paralel olmalidir."
+      - "1 secenek grafik ile desteklenmelidir (dogru cevap)."
+      - "2 secenek grafik ile desteklenmemelidir (yanlis cevaplar)."
+      - "Dogru secenek dogrudan okuma veya cok basit karsilastirma ile bulunmalidir."
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Grafiğe göre aşağıdakilerden hangisi söylenebilir?</b>"
+  # KULLANILDI: - "<b>Bu grafikten hareketle aşağıdakilerden hangisi söylenebilir?</b>"
+  # KULLANILDI: - "<b>Grafikteki bilgilere göre aşağıdakilerden hangisi doğrudur?</b>"
+  - "<b>Aşağıdakilerden hangisi grafiğe uygundur?</b>"
+  # KULLANILDI: - "<b>Grafik incelendiğinde aşağıdakilerden hangisi söylenebilir?</b>"
+
+dogru_cevap:
+  tanim: "Grafikte yer alan acik bilgiye veya grafikten dogrudan cikarilabilen basit sonuca dayanan dogru secenek"
+  kurallar:
+    - "Dogru cevap grafige dayanmalidir."
+    - "Dogru cevap dis bilgi gerektirmemelidir."
+    - "Dogru cevap 2. sinif ogrencisinin grafigi inceleyerek bulabilecegi aciklikta olmalidir."
+
+celdirici_stratejileri:
+  - ad: "YAKIN_SAYI_HATASI"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Grafikteki degere cok yakin ama yanlis sayi kullanma"
+    nasil_olusturulur: |
+      Grafikteki bir degeri yakin ama yanlis bir sayiyla degistir.
+      Ornek: 40 yerine 30 soylemek, 38 yerine 32 soylemek.
+    kategori: "cognitive"
+
+  - ad: "ULASILAMAZ_BILGI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Grafikte bulunmayan ayrintiyi sorma ya da soyleme"
+    nasil_olusturulur: |
+      Grafikte verilmeyen bir bilgiyi secenek olarak sun.
+      Ornek: hangi dersten soru cozdugu, sorulari hangi saatte cozdugu.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+visual_requirement: "answer_critical"
+visual_type: "pictograph"
+visual_spec:
+  grafik_tipi: "bar"
+  kategori_min: 3
+  kategori_max: 6
+hide_paragraph_after_visual: true
+
+beceri:
+  katman: "KB1"
+  bilesenler: ["grafik_okuma", "dogrudan_bilgi_cikarma"]
+  surec_bileseni: "bilgiyi_okuma"
+
+sinif2_ek_kurallar:
+  yasak_alanlar:
+    - "Ana dusunce / ana duygu odakli sorular YASAK"
+    - "Soyut yorum veya edebi analiz YASAK"
+    - "Dis bilgi gerektiren sorular YASAK"
+    - "Oran, yuzde veya ileri istatistik YASAK"

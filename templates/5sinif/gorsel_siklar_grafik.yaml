@@ -1,0 +1,104 @@
+# templates/gorsel_siklar_grafik.yaml
+# Gorsel Siklar - Grafik (Veri → Chart)
+#
+# Veri/kosullar verilir → 4 grafik seceneginden dogrusunu sec
+# Ornekler: bar chart (kus sayilari), pasta grafik
+
+meta:
+  id: "gorsel_siklar_grafik"
+  ad: "Gorsel Secenekli Soru (Grafik)"
+  sinif_seviyesi: 5
+  aciklama: "Veri/kosullar verilir, ogrenci dogru grafigi secer"
+  kaynak: "options_with_images/"
+  frequency: "yeni soru tipi"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Veri/kosul metni + soru koku + 4 grafik secenegi"
+
+  paragraph:
+    required: true
+    word_count_min: 30
+    word_count_max: 80
+    sentence_count_min: 2
+    sentence_count_max: 5
+    stil: "bilgilendirici"
+    kurallar:
+      - "Sayisal veri veya karsilastirma kosullari icermeli"
+      - "Madde imli liste seklinde kosullar verilebilir"
+      - "Kosullar NET ve COZULEBILIR olmali — birden fazla grafik eslesmemeli"
+      - "Kesin sayilar veya oransal iliskiler (buyuk/kucuk, fazla/az) belirtilmeli"
+      - "Veriler 3-5 kategori icermeli (grafik cubuk/dilim sayisi)"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 20
+    word_count_max: 60
+    style: "image_description"
+    image_style: "chart"
+    correct_count: 1
+    layout: "two_column"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Buna göre, bu verileri gösteren grafik aşağıdakilerden hangisi olabilir?</b>"
+  # KULLANILDI: - "<b>Bu bilgilere göre aşağıdaki grafiklerden hangisi doğru olabilir?</b>"
+  - "<b>Verilen bilgilere göre oluşturulabilecek grafik aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu koşullara uyan grafik aşağıdakilerden hangisidir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Paragraftaki TUM veri kosullarini saglayan grafik tasviri"
+  kurallar:
+    - "Paragraftaki her kosul (buyukluk/kucukluk iliskileri, oranlar) grafik tasviriyle TUTARLI olmali"
+    - "Eksen etiketleri ve cubuk/dilim sayilari veriyle eslesmeli"
+    - "Kesin sayilar verildiyse dogru yansitilmali"
+  ornekler:
+    - paragraf_konusu: "A > B > C siralamasi olan veri"
+      dogru: "A cubugu en yuksek, B orta, C en dusuk olan bar grafik"
+      neden_dogru: "Siralama kosulu saglanmis"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+use_shared_strategies: true
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["veri_okuma", "grafik_yorumlama"]
+  surec_bileseni: "bilgiyi_eslestirme"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+      - name: "alt_unite"
+      - name: "konu"
+      - name: "alt_konu"

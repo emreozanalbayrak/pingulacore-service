@@ -1,0 +1,153 @@
+meta:
+  id: "haftalik_ders_programindan_ulasilabileni_belirleme"
+  ad: "Haftalık Ders Programından Ulaşılabileni Belirleme"
+  ders: "Türkçe"
+  sinif_seviyesi: "2. Sınıf"
+  tema: "Veri Okuma ve Yorumlama"
+  model: "TYMM"
+  format_turu: "llm_generated_html"
+  aciklama: "Haftalık ders programındaki gün ve ders bilgilerini okuyup ulaşılabilen ifadeyi seçtiren 3 seçenekli soru formatı"
+  frequency: "orta"
+
+context:
+  type: "haftalik_ders_programi"
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 8
+    word_count_max: 25
+    structure:
+      - "Önce kısa bir tanıtım cümlesi verilir."
+      - "Ardından bir sınıfa ait haftalık ders programı tablo biçiminde gösterilir."
+      - "Günler sütunlarda, ders saatleri satırlarda yer alır."
+      - "Her hücrede bir ders adı bulunur."
+    kurallar:
+      - "Bağlam 2. sınıf seviyesine uygun olmalıdır."
+      - "Ders adları kısa ve tanıdık olmalıdır."
+      - "Program sade ve okunaklı olmalıdır."
+      - "Metin tek başına cevabı vermemelidir."
+      - "Görsel tablo çözümün ana kaynağı olmalıdır."
+
+format:
+  type: "llm_generated_html"
+  description: "Kısa tanıtım + haftalık ders programı tablosu + tek soru + 3 seçenek"
+
+  paragraph:
+    required: true
+    word_count_min: 8
+    word_count_max: 25
+    sentence_count_min: 1
+    sentence_count_max: 2
+
+  visual:
+    required: true
+    count: 1
+    description: "Günler sütunlarda, ders saatleri satırlarda ve hücrelerde ders adlarının yer aldığı haftalık ders programı"
+
+  stem:
+    required: true
+    sentence_count_min: 1
+    sentence_count_max: 1
+    soru_koku_ornekleri:
+      - "Bu ders programından hareketle aşağıdakilerden hangisine ulaşılabilir?"
+      - "Programa göre aşağıdakilerden hangisi doğrudur?"
+      - "Verilen ders programına göre aşağıdakilerden hangisi söylenebilir?"
+      - "Aşağıdakilerden hangisi programa göre doğrudur?"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 5
+    word_count_max: 16
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+gorsel:
+  required: true
+  tur: "haftalik_ders_programi_tablosu"
+  amac: "Öğrencinin gün, ders saati ve ders adı ilişkisini okuyup sayma ve karşılaştırma yapmasını sağlamak"
+  kurallar:
+    - "Tabloda en az 5 gün bulunmalıdır."
+    - "Her gün için en az 4 ders saati bulunmalıdır."
+    - "Ders adları çocukların tanıyacağı biçimde kısa yazılmalıdır."
+    - "Gün başlıkları açıkça seçilmelidir."
+    - "Satır ve sütun yapısı net olmalıdır."
+    - "Görsel sade, düzenli ve 2. sınıf seviyesine uygun olmalıdır."
+    - "Görsel süsleyici değil, çözüm için zorunlu olmalıdır."
+
+olculen_beceri:
+  tanim: "Haftalık ders programındaki gün ve ders bilgilerini okuyup sayma, karşılaştırma ve sınıflama yapma"
+  bilesenler:
+    - "tablo_okuma"
+    - "gun_ders_eslestirme"
+    - "sayma"
+    - "karsilastirma"
+    - "dogru_yargiyi_belirleme"
+
+dogru_cevap:
+  tanim: "Programdaki ders bilgileriyle açıkça desteklenen ifade"
+  kurallar:
+    - "Doğru cevap programdan doğrudan çıkarılabilen seçenek olmalıdır."
+    - "Yanlış seçenekler programla uyuşmamalıdır."
+    - "En az bir seçenek haftalık toplam ders sayısı ya da tekrar sayısı ile ilgili olabilir."
+    - "En az bir seçenek her gün yapılıp yapılmama durumunu sorgulamalıdır."
+    - "En az bir seçenek belirli bir günde kaç farklı ders işlendiğini sorgulayabilir."
+    - "Doğru cevap dikkatli tablo okuma ile bulunmalıdır."
+
+distractors:
+  stratejiler:
+    - ad: "YANLIS_TOPLAM"
+      aciklama: "Haftalık tekrar sayısını eksik ya da fazla saydıracak ifade yazma"
+      ornek: "Türkçe dersi toplam on kez işlenir."
+    - ad: "HER_GUN_YANILGISI"
+      aciklama: "Bir ders çoğu gün varsa her gün varmış gibi düşündürme"
+      ornek: "Her gün matematik işlenir."
+    - ad: "FARKLI_DERS_SAYISI_HATASI"
+      aciklama: "Bir günde tekrar eden dersleri farklı ders gibi saydırma ya da tersini yaptırma"
+      ornek: "Cuma günü dört farklı ders işlenir."
+    - ad: "YAKIN_OKUMA_HATASI"
+      aciklama: "Görseli yüzeysel okuyan öğrenciyi yanıltacak seçenek oluşturma"
+      ornek: "Pazartesi günü en çok İngilizce vardır."
+
+use_shared_strategies: false
+
+tymm_uyum_kurallari:
+  - "2. sınıf seviyesine uygun kısa ve açık cümleler kullanılmalıdır."
+  - "Soruda yalnızca tablo okuma, sayma ve basit karşılaştırma beklenmelidir."
+  - "Çok adımlı karmaşık işlem gerektirilmemelidir."
+  - "Ders programı çocukların anlayacağı kadar sade olmalıdır."
+  - "Ulaşılabilir / doğrudur ifadesi açık ve belirgin olmalıdır."
+  - "Görsel olmadan doğru cevap kesinleşmemelidir."
+  - "Seçenekler aynı temsil düzeyinde, yani hepsi yargı cümlesi biçiminde olmalıdır."
+  - "3 seçenekli yapıda iki çeldirici de güçlü olmalıdır."
+
+izinli_icerikler:
+  - "Türkçe"
+  - "Matematik"
+  - "Hayat Bilgisi"
+  - "İngilizce"
+  - "Müzik"
+  - "Görsel Sanatlar"
+  - "Beden Eğitimi"
+  - "Serbest Etkinlik"
+  - "haftalık ders programı"
+  - "gün ve ders saati ilişkisi"
+
+yasakli_icerikler:
+  - "karmaşık çizelgeler"
+  - "çarpma, bölme, oran gerektiren yapı"
+  - "birden fazla doğru seçenek"
+  - "metinden çözülebilen yapı"
+  - "2. sınıf düzeyini aşan analiz"
+  - "görselde okunamayan yoğun tablo"
+
+ornek_sablon:
+  ust_metin: "Aşağıda bir sınıfın haftalık ders programı verilmiştir."
+  gorsel: "Günler ve ders saatlerinden oluşan, hücrelerde ders adlarının yazdığı haftalık program tablosu"
+  soru_koku: "Bu ders programından hareketle aşağıdakilerden hangisine ulaşılabilir?"
+  secenekler:
+    A: "................................"
+    B: "................................"
+    C: "................................"

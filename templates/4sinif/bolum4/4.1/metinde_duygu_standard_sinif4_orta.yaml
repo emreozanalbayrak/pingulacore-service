@@ -1,0 +1,97 @@
+# Kaynak: metinde_duygu_standard_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.orta
+# 4. sinif metinde duygu standart — orta duzey
+
+meta:
+  id: "metinde_duygu_standard_sinif4_orta"
+  ad: "Metinde Duygu - Baskın Duygu (Orta)"
+  sinif_seviyesi: 4
+  aciklama: "Orta duzey — metindeki kahramanın içinde bulunduğu duygusal durumu belirleme."
+  frequency: "High"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Duygusal içerikli öyküleyici paragraf + soru kökü + duygu seçenekleri (orta)"
+
+  paragraph:
+    required: true
+    word_count_min: 56
+    word_count_max: 72
+    background_color: "#f8f0e0"
+    sentence_count_min: 4
+    sentence_count_max: 5
+    stil: "oykuleyici"
+    kurallar:
+      - "Duygu ismi metinde doğrudan geçmemeli (Örn: 'Çok üzüldü' yerine 'Gözleri doldu, başını önüne eğdi' denmeli)."
+      - "Olay veya durum, belirli bir duyguyu güçlü şekilde hissettirmeli."
+      - "Duygu birden fazla ipucuyla sezdirilmeli."
+      - "Paragrafta konuyla ilgili AÇIKLAMA, TANIM veya EK BİLGİ verme! Paragraf SADECE hikâyeyi/olayı anlatsın."
+      - "YASAK: Ders kitabı açıklamaları yapma."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 3
+    style: "concept"
+    correct_count: 1
+    correct_type: "matches"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Bu metinde bahsedilen kişinin hissettiği duygu aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu şiire hâkim olan duygu aşağıdakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Bu metinde aşağıdaki duygulardan hangisine yer verilmiştir?</b>"
+  # KULLANILDI: - "<b>Bu metne göre kahramanın aşağıdaki duygulardan hangisine sahip olması beklenir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metindeki durumu en iyi özetleyen duygu kavramı"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Duygu ismi metinde dogrudan gecmemeli, davranislardan cikarilmali"
+    - "1-3 kelimelik kisa kavram olmali"
+    - "Paragraftaki olaylarla birebir ortusmeli"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI BILGILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "YAKIN_DUYGU_TUZAGI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Doğru duyguya anlamsal olarak yakın, ilk bakışta doğru gibi görünen seçenek"
+    nasil_olusturulur: |
+      Metindeki asıl duyguya anlamsal olarak yakın ama tam örtüşmeyen bir duygu seç.
+      Orta seviyede en az 1 celdirici doğru duyguya yakın görünmeli — öğrenci tüm metni değerlendirerek ayırt etmeli.
+      Duygu birden fazla olay veya davranış ipucuyla desteklenmeli.
+    kategori: "semantic"
+
+  - ad: "KISMI_DUYGUSAL_IZLENIM"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metnin bir bölümüne dayanan kısmi duygusal yorum"
+    nasil_olusturulur: |
+      Paragrafın yalnızca bir bölümüne bakıldığında çıkarılabilecek ama bütünde yanlış olan bir duygu oluştur.
+      Orta seviyede bu seçenek makul görünmeli ama metnin tamamı değerlendirilince elenmeli.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

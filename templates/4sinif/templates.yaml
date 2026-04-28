@@ -1,0 +1,79 @@
+1- Paragrafın Başlığı
+baslik_standard.yaml
+ 
+2- Paragrafın Konusu
+konu_standard.yaml
+konu_inverse.yaml
+soru_cevap_standard.yaml
+ 
+3- Paragrafta Ana Düşünce – Yardımcı Düşünce
+yardimci_fikir_numarali.yaml
+yardimci_fikir_sentence.yaml
+yardimci_fikir_standard.yaml
+ana_fikir_standard.yaml
+ 
+4- Paragrafta Duyu-Duygu-Karakter
+4.1. PARAGRAFTA DUYGU
+metinde_duygu_soylenemez.yaml
+metinde_duygu_standard.yaml
+metinde_duygu_sirali.yaml
+4.2. PARAGRAFTA DUYULAR
+metinde_duyular_ikili.yaml
+metinde_duyular_negative.yaml
+metinde_duyular_sentence.yaml
+DUYULARIMIZ:
+Görme
+İşitme
+Koklama
+Tatma
+Dokunma
+Örnek:
+Köyde güneş doğmuş, her yer aydınlanmıştı. (Görme duyusu)
+Uzaklarda meleşen kuzuların sesi duyuluyordu. (İşitme duyusu)
+Hanımeli çiçeğinin kokusu odaya kadar geliyordu. (Koku duyusu)
+Taze köy domatesleri çok lezzetliydi. (Tatma duyusu)
+Serin bir rüzgâr sanki yüzümü okşuyordu. (Dokunma duyusu)
+4.3 Karakter
+metinde_karakter_ozellik.yaml
+metinde_karakter_yakinilan.yaml
+metinde_karakter_karsilastirma.yaml
+ 
+5- Metnin Bölümleri (giriş-gelişme-sonuç)
+paragraf_metin_giris_gelisme_sonuc.yaml
+paragraf_siralama_giris_gelisme_sonuc.yaml
+ 
+6- Paragraf Tamamlama
+paragraf_cumle_ekleme_basina.yaml
+paragraf_cumle_ekleme_ortaya.yaml
+paragraf_cumle_ekleme_sonuna.yaml
+ 
+7- Paragraf Oluşturma
+paragraf_siralama_siralama.yaml
+8- Akışı Bozan Cümle
+paragraf_siralama_akis_bozan.yaml
+9- Hikâye Unsurları
+hikaye_unsurlari_yoktur.yaml
+hikaye_unsurlari_soylenemez.yaml
+hikaye_unsurlari_reverse.yaml
+ 
+10- Görsel Okuma – Sözel Mantık
+Sözel Mantık:
+sozel_mantik_cok_eksenli_eslestirme_sorusu
+sozel_mantik_grup_uyelik_kesinligi_sorusu
+sozel_mantik_dairesel_duzen_sorusu
+sozel_mantik_duzen_sorusu
+sozel_mantik_kesin_sira_numarasi_sorgulama_sorusu
+sozel_mantik_kesin_yerlesim_eslestirme_sorusu
+Görsel Okuma:
+coklu_veri_panelsinde_ulasilabilir_bilgi_degerlendirme
+tematik_haritada_yapilabilir_yorum_degerlendirme
+harita_kroki_uzerinde_konum_ve_yon_yorumu
+gorsel_veride_kesin_cikarim_kumesi_belirleme
+coklu_kategorili_gorsel_veride_ulasilabilir_yargi_degerlendirme
+hiyerarsik_semada_ulasilabilir_bilgi_degerlendirme
+basari_grafiginde_dogru_yargiyi_belirleme
+kavram_tanimindan_gorsel_ornek_secme
+isaretli_bolge_haritasinda_dogru_yargiyi_belirleme
+coklu_sutun_grafiginde_dort_yargidan_dogru_kumesi_belirleme
+11- Genel Denemeler
+Her Temadan soru olacak şekilde karışık.

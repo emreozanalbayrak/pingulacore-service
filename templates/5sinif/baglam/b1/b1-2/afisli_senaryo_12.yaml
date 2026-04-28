@@ -1,0 +1,149 @@
+# templates/baglam/afisli_senaryo_12.yaml
+# Bağlam Tipi: Afişli Senaryo (1.2)
+# Soru Sayısı: 3
+# Kaynak: kadirhocasorukokleri.md — 1.2 "Afişli Senaryo"
+# Soru Tipleri: Başlık + Anahtar Sözcük + Soru-Cevap
+
+meta:
+  id: "afisli_senaryo_12"
+  ad: "Afişli Senaryo (1.2)"
+  sinif_seviyesi: 5
+  aciklama: "Bir afiş metni üzerinden başlık, anahtar sözcük ve soru-cevap soruları üretir"
+  kaynak: "kadirhocasorukokleri.md"
+  frequency: "Low"
+
+# ═══════════════════════════════════════════════════════════════
+# BAĞLAM KONFİGÜRASYONU
+# ═══════════════════════════════════════════════════════════════
+
+context:
+  type: "afisli_senaryo"
+  question_count: 3
+  question_count_min: 3
+  question_count_max: 3
+  generation:
+    word_count_min: 80
+    word_count_max: 150
+    structure:
+      - "Bir afiş/bilgi broşürü içeriği oluştur"
+      - "Afişte konu hakkında bilgilendirici maddeler veya kısa paragraflar olmalı"
+      - "Afiş belirli bir konu/etkinlik/kampanya hakkında olmalı"
+      - "İçerik HTML formatında sunulabilir (madde işaretleri, <b> etiketleri)"
+      - "Afişin net bir başlığı çıkarılabilir olmalı"
+      - "Afişte en az 2-3 anahtar sözcük belirgin olmalı"
+      - "Afişte bazı soruların cevabı verilirken bazılarının cevabı olmayacak şekilde yazılmalı"
+    kurallar:
+      - "KRİTİK — BAŞLIK YASAĞI: Metin ve görsellere konunun ana fikrini veren başlık KOYMA! 1. soruda en uygun başlık sorulacak — metin/görsel başlığı cevabı ele vermemeli. Nötr başlık kullan (ör: Metin 1, I. Metin)"
+      - "Afiş 5. sınıf seviyesinde ve anlaşılır olmalı"
+      - "Konu okul, sağlık, çevre, doğa gibi eğitim alanlarından olmalı"
+      - "Afiş gerçekçi ve bilgilendirici olmalı"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+    - slot: 1
+      type: "baslik"
+      soru_kokleri:
+        - "<b>Bu afişin başlığı aşağıdakilerden hangisi olabilir?</b>"
+      options_style: "headline_title"
+      word_count_min: 2
+      word_count_max: 6
+      beceri:
+        katman: "KB2"
+        bilesenler: ["ozetleme"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+    - slot: 2
+      type: "anahtar_sozcuk"
+      soru_kokleri:
+        - "<b>Bu afişteki anahtar sözcükler aşağıdakilerden hangileri olabilir?</b>"
+      options_style: "keyword_set"
+      word_count_min: 2
+      word_count_max: 8
+      beceri:
+        katman: "KB2"
+        bilesenler: ["cozumleme"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+    - slot: 3
+      type: "soru_cevap"
+      soru_kokleri:
+        - "<b>Bu afişte aşağıdaki sorulardan hangisinin cevabı <u>yoktur</u>?</b>"
+      options_style: "question_sentence"
+      word_count_min: 4
+      word_count_max: 15
+      beceri:
+        katman: "KB2"
+        bilesenler: ["cikarim_yapma", "mantiksal_denetleme"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+header_template: "1-3. soruları aşağıdaki afişe göre cevaplayınız."
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Afiş üzerinden başlık, anahtar sözcük, soru-cevap soruları"
+
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 150
+    sentence_count_min: 3
+    sentence_count_max: 8
+
+  stem:
+    required: true
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 15
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+# ═══════════════════════════════════════════════════════════════
+# DOĞRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Afişin içeriğine uygun başlık, anahtar sözcükler veya cevabı olmayan soru"
+  kurallar:
+    - "KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI"
+    - "Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI"
+    - "Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil"
+    - "YASAK: Tablodaki değeri aynen şıkka yazmak (örn: 'yalıtımı azdır' tabloda yazıyorsa şıkta aynen yazmamalı)"
+    - "Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli"
+
+    - "Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı"
+    - "Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı"
+    - "Başlık sorusunda doğru cevap afişin ana konusunu yansıtan kısa ifade olmalı"
+    - "Anahtar sözcük sorusunda doğru cevap afişte geçen ve anlam bütünlüğü sağlayan sözcükler olmalı"
+    - "Soru-cevap sorusunda doğru cevap afişte cevabı BULUNMAYAN soru olmalı"
+    - "Her soru farklı bir beceriyi ölçmeli"
+    - "HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer"
+    - "Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK"
+    - "BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: 'teleskop' → 'mercekli araç' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı"
+
+# ═══════════════════════════════════════════════════════════════
+# ÇELDİRİCİ STRATEJİLERİ
+# ═══════════════════════════════════════════════════════════════
+
+distractors:
+  stratejiler:
+    - ad: "YAKIN_BASLIK"
+      aciklama: "Ana konuyla ilişkili ama tam karşılamayan başlık"
+      ornek: "Afişin bir alt başlığını veya yan konusunu başlık olarak sunma"
+    - ad: "EKSIK_ANAHTAR"
+      aciklama: "Afişte geçen ama anahtar sözcük olmayan kelimeleri sunma"
+      ornek: "Yan bilgi kelimelerini anahtar sözcük gibi gösterme"
+    - ad: "CEVABI_VAR"
+      aciklama: "Soru-cevap sorusunda afişte cevabı OLAN soruyu çeldirici olarak sunma"
+      ornek: "Afişte cevaplanmış bir soruyu seçenek olarak verme"
+
+use_shared_strategies: false

@@ -1,0 +1,104 @@
+meta:
+  id: test_feature_table
+  ad: TEST — Özellik Tablosu (X işaretli)
+  sinif_seviyesi: 5
+  aciklama: Diyalog senaryosu + X işaretli karşılaştırma tablosu üzerinden 2 soru
+  frequency: Medium
+context:
+  type: test_feature_table
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 100
+    word_count_max: 200
+    visual_format: feature_table
+    structure:
+    - 'KRİTİK — HTML YAPISI: Aşağıdaki yapıyı BİREBİR takip et!'
+    - '1) Ortalanmış kalın başlık: <div style=''text-align:center; font-weight:bold; font-size:13px; margin-bottom:8px;''>BAŞLIK</div>'
+    - '2) Kısa senaryo paragrafı (2-3 cümle, text-indent:1.5em): Karakterlerin bir seçim yapması gerektiğini anlat'
+    - '3) Diyalog bölümü: <div class=''dialogue''> içinde her konuşmacı için <p><span class=''speaker''>İsim (Rol):</span> Konuşma metni</p>'
+    - 4) En az 3 farklı karakter konuşmalı, her biri farklı bir kriter/istek belirtmeli
+    - '5) Not satırı: <div class=''feature-note''>(Seçeneklerin sahip olduğu özellikler "X" ile gösterilmiştir.)</div>'
+    - '6) X işaretli tablo: <table class=''feature-table''>'
+    - '   Başlık satırı: <tr><th>Seçenek</th><th>Özellik1</th><th>Özellik2</th>...</tr>'
+    - '   En az 4 satır, en az 5 özellik sütunu'
+    - '   X işareti olan hücrelere: <span class=''check''>X</span>'
+    - '   Boş hücrelere: hiçbir şey yazma (boş <td></td>)'
+    - '   Hiçbir seçenek TÜM özelliklere sahip olmamalı — farklı kriterlere göre farklı seçenekler öne çıkmalı'
+    kurallar:
+    - Senaryo 5. sınıf seviyesinde, günlük hayattan bir karar verme durumu olmalı
+    - 'KRİTİK: Diyalogdaki her karakter farklı bir özelliğe önem vermeli'
+    - Tabloda en az 4 seçenek ve en az 5 özellik sütunu olmalı
+    - Hiçbir seçenek tüm özelliklere sahip olmamalı
+    - Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)
+  questions:
+  - slot: 1
+    type: tek_kriter
+    soru_kokleri:
+    - <b>Tablodaki bilgiler değerlendirildiğinde, [belirli_özellik] ve [belirli_özellik] birlikte sunan seçenek aşağıdakilerden hangisidir?</b>
+    - <b>Yalnızca [belirli_özellik] dikkate alındığında, aşağıdaki seçeneklerden hangisi uygun olur?</b>
+    options_style: short_phrase
+    word_count_min: 2
+    word_count_max: 8
+    beceri:
+      katman: KB2
+      bilesenler:
+      - cozumleme
+      - karsilastirma
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 2
+    type: coklu_kriter
+    soru_kokleri:
+    - <b>[karakter], tablodaki bilgilere göre isteklerini en çok karşılayan seçenek aşağıdakilerden hangisidir?</b>
+    - <b>Tüm aile bireylerinin istekleri birlikte düşünüldüğünde, en çok ortak noktayı sağlayan seçenek hangisidir?</b>
+    options_style: short_phrase
+    word_count_min: 2
+    word_count_max: 8
+    beceri:
+      katman: KB3
+      bilesenler:
+      - karar_verme
+      - karsilastirma
+      surec_bileseni: problemi_yapilandirma
+header_template: 1-2. soruları aşağıdaki bilgilere göre birbirinden bağımsız olarak cevaplayınız.
+format:
+  type: llm_generated_html
+  paragraph:
+    required: true
+    word_count_min: 100
+    word_count_max: 200
+    sentence_count_min: 3
+    sentence_count_max: 15
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 2
+    word_count_max: 8
+    style: short_phrase
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Tablodaki X işaretlerinden çıkarılan doğru karşılaştırma veya karar
+  kurallar:
+  - Doğru cevap tablodaki X işaretlerini doğru yorumlayarak ulaşılabilir olmalı
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ. Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: TEK_KRITER_YANILGISI
+    aciklama: Çoklu kriter sorusunda sadece tek kriterle en iyi olanı sunma
+  - ad: YANLIS_KARSILASTIRMA
+    aciklama: Tablodaki seçenekleri yanlış karşılaştırma
+  - ad: VERI_CARPITMA
+    aciklama: X işaretini olmayan yere varmış gibi gösterme
+use_shared_strategies: false

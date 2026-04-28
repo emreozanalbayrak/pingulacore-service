@@ -1,0 +1,139 @@
+# templates/bolum4/yuzey_derin_anlam_soylenemez.yaml
+# Bolum 4.1 - Ozel Bolum: Yuzey ve Derin Anlam (Soylenemez)
+#
+# SOYLENEMEZ FORMATI (INVERSE)
+# Metin verilir, ogrenci metinden CIKARILMAYACAK yargiyi bulur
+# correct_type: does_not_belong — dogru cevap metinden CIKARIMLANAMAZ
+
+meta:
+  id: "yuzey_derin_anlam_soylenemez"
+  ad: "Yüzey ve Derin Anlam (Söylenemez)"
+  sinif_seviyesi: 5
+  aciklama: "Metinden çıkarılamayacak yargıyı bulma"
+  frequency: "Medium (~30% of deep meaning questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Öyküleyici paragraf + soru kökü + 4 cümle seçenek (1 söylenemez)"
+
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 100
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "oykuleyici"
+    kurallar:
+      - "Yüzey anlamının ardında derin bir mesaj/öğüt içeren metin"
+      - "Somut olaylar üzerinden soyut anlam aktarılmalı"
+      - "Atasözü/deyim tarzı derin anlam olmalı ama doğrudan kullanma"
+      - "Öyküleyici üslup: karakter, olay, sonuç akışı"
+      - "Metinden en az 3 farklı çıkarım yapılabilecek zenginlikte olmalı"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 8
+    word_count_max: 25
+    style: "complete_sentence"
+    correct_type: "does_not_belong"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metinden hareketle aşağıdakilerden hangisine <u>ulaşılamaz</u>?</b>"
+  - "<b>Kahramanlar karşılaştırıldığında hangi yargıya <u>ulaşılamaz</u>?</b>"
+  - "<b>Bu metne göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI (TERS MANTIK)
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metinden çıkarılamayacak, desteklenmeyen yargı"
+  mantik: "INVERSE - diğer 3 seçenek metinden çıkarılabilir, doğru cevap çıkarılamaz"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Doğru cevap metinle ilgili görünen ama desteklenmeyen yargı olmalı"
+    - "Tamamen alakasız değil, konuyla ilgili ama metinden çıkarılamaz"
+    - "3 çeldirici metinden mantıksal olarak çıkarılabilir yargılar olmalı"
+    - "8-25 kelime, tam bir cümle formatında olmalı"
+  ornekler:
+    - paragraf: "Küçük karınca yaz boyu yiyecek topladı. Ağustos böceği tüm yaz şarkı söyledi. Kış geldiğinde karınca sıcak yuvasında yaşarken ağustos böceği aç kaldı."
+      dogru: "Sanat ve müzikle uğraşmak her zaman zararlıdır."
+      neden: "Metinde şarkı söylemek eleştirilmiyor, plansızlık eleştiriliyor. Sanatın zararlı olduğu çıkarılamaz."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# YAKIN_ANLAM, DETAY_TUZAGI, NEDEN_SONUC_TAKASI,
+# SARTLI_DOGRULUK_TUZAGI, OLASILIK_KESINLIK_CELISKISI
+
+beceri:
+  katman: "KB3"
+  bilesenler: ["cikarim_yapma", "degerlendirme"]
+  surec_bileseni: "karar_verme"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Derin mesajlı öyküleyici metin oluştur"
+      details: |
+        - Birden fazla çıkarım yapılabilecek zenginlikte metin
+        - Yüzey + derin anlam katmanları
+        - 55-100 kelime, 4-7 cümle
+
+    - step: 2
+      action: "3 metinden çıkarılabilir yargı belirle (çeldiriciler)"
+      details: |
+        - Metinden mantıksal olarak desteklenen 3 yargı
+        - Hem yüzey hem derin anlam düzeyinde
+
+    - step: 3
+      action: "1 metinden çıkarılamaz yargı oluştur (doğru cevap)"
+      details: |
+        - Konuyla ilgili görünen ama metinde desteklenmeyen yargı
+        - Aşırı genelleme, yanlış çıkarım veya kapsam dışı
+
+    - step: 4
+      action: "Seçenekleri rastgele sırala"
+      details: "A-B-C-D seçeneklerini rastgele sırala"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayısı 55-100 arasında mı?"
+    - "Öyküleyici üslup mu?"
+    - "Birden fazla çıkarım yapılabilir mi?"
+
+  correct_answer:
+    - "8-25 kelime tam cümle mi?"
+    - "Gerçekten metinden çıkarılamaz mı?"
+    - "Konuyla ilgili ama desteklenmiyor mu?"
+
+  distractors:
+    - "3 çeldirici metinden çıkarılabilir mi?"
+    - "Her çeldirici farklı bir çıkarım düzeyi mi?"
+    - "Tüm seçenekler aynı formatta mı?"

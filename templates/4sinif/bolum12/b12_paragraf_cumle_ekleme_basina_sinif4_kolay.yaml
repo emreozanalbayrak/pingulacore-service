@@ -1,0 +1,130 @@
+# Kaynak: paragraf_cumle_ekleme_basina_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.kolay
+# 4. sinif metne cumle ekleme (basina) — kolay duzey
+
+meta:
+  id: "b12_paragraf_cumle_ekleme_basina_sinif4_kolay"
+  ad: "Metne Cümle Ekleme (Başına) (Kolay)"
+  sinif_seviyesi: 4
+  aciklama: "Kolay duzey — paragrafın BAŞINA hangi tam cümlenin getirileceğini seçme"
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Paragraf (başında boşluk) + soru kökü + 4 tam cümle seçenek (kolay)"
+
+  paragraph:
+    required: true
+    background_color: "#d4edda"
+    word_count_min: 40
+    word_count_max: 52
+    sentence_count_min: 3
+    sentence_count_max: 3
+    stil: "bilgilendirici"
+    kurallar:
+      - |
+        ★★★ TEMEL KURAL (KRİTİK!) ★★★
+        Bu soru tipinde öğrenciden paragrafın BAŞINA hangi TAM CÜMLENİN getirileceği sorulur.
+        YASAK: Cümleyi yarıda kesip tamamlatmak! Bu bir cümle tamamlama sorusu DEĞİLDİR!
+        DOĞRU: Paragrafta bir cümle eksiktir ve o cümlenin tamamı seçeneklerde verilir.
+        ★ Paragraf 4 cümlelik bir bütün olarak PLANLANMALI (giriş-gelişme-sonuç akışıyla)
+        ★ 1. cümleyi çıkar, yerine "----" koy — kalan 3 cümle paragrafta kalır
+        ★ Çıkarılan cümle = doğru cevap (seçeneklerde tam cümle olarak verilir)
+        ★ Kalan 3 cümle paragrafta kalır ve kendi başına anlaşılır olmalı
+        ★ "----" işareti çıkarılan cümlenin yerini gösterir
+
+        ★★★ "----" PARAGRAFIN EN BAŞINDA OLMALI ★★★
+        ★ "----" paragrafın EN BAŞINDA olmalı — ilk karakter "----" olmalı
+        ★ "----" kesinlikle ortada veya sonda OLMAMALI!
+        ★ Format: "----" [2. cümle]. [3. cümle]. [4. cümle].
+
+        ★★★ SEÇENEKLERDEKİ CÜMLELER ★★★
+        ★ Her seçenek kendi başına TAM ve BAĞIMSIZ bir cümle olmalı
+        ★ YASAK: Yarım cümle, cümle parçası veya paragraftaki cümlenin devamı
+        ★ Her seçenek büyük harfle başlamalı ve nokta ile bitmeli
+      - "Paragraf düz metin olarak yazılmalı — Roma rakamı (I., II., III.) KULLANMA"
+      - "Paragraf kısa ve konu bakımından açık olmalı"
+      - "Giriş cümlesi paragrafın ana konusunu doğrudan tanıtmalı"
+      - "Çeldiriciler konuya yakın olsa da başa uyumsuzlukları belirgin olmalı"
+      - "Doğru cevap ile çeldiriciler arasındaki ayrım kolay fark edilebilir olmalı"
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+      - "Dis bilgi gerektirmemelidir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 6
+    word_count_max: 12
+    style: "complete_sentence"
+    correct_count: 1
+    kurallar:
+      - "Her seçenek TAM BİR CÜMLE olmalı — büyük harfle başlar, nokta ile biter"
+      - "YASAK: Yarım cümle, kelime grubu veya cümle parçası"
+      - "YASAK: Paragraftaki bir cümlenin devamı niteliğinde seçenek"
+      - "Her seçenek bağımsız okunduğunda kendi başına anlamlı olmalı"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metnin başına aşağıdaki cümlelerden hangisi getirilmelidir?</b>"
+  - "<b>Bu metnin başına düşüncenin akışına göre aşağıdakilerden hangisi getirilmelidir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Paragraftan çıkarılan ve paragrafın BAŞINA konulması gereken TAM CÜMLE"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Paragrafın ana konusuyla tutarlı olmalı"
+    - "Paragrafın giriş cümlesi olarak konuyu tanıtmalı"
+    - "Kendi başına TAM ve BAĞIMSIZ bir cümle olmalı — büyük harfle başlar, nokta ile biter"
+    - "8-22 kelime olmalı"
+    - "Paragraftaki bir cümlenin devamı veya parçası OLMAMALI"
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cikarim_yapma", "yapilandirma"]
+  surec_bileseni: "metin_yapisini_analiz_etme"
+
+
+celdirici_stratejileri:
+  - ad: "KONU_TANITICI_GIRIS"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Ana konuyu doğrudan tanıtan giriş cümlesi — kolay ayırt edilebilir"
+    nasil_olusturulur: |
+      Giriş cümlesi paragrafın ana konusunu doğrudan tanıtmalı.
+      Kolay seviyede celdiriciler konuya yakın olsa da başa uyumsuzlukları belirgin olmalı.
+      Doğru cevap ile celdiriciler arasındaki ayrım kolay fark edilebilir olmalı.
+    kategori: "content"
+
+  - ad: "UYUMSUZ_GIRIS_BELIRGIN"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Paragrafın başına uyumsuzluğu belirgin olan celdiriciler"
+    nasil_olusturulur: |
+      Yanlış seçenekler konuya yakın görünse de başa eklendiğinde uyumsuzlukları belirgin olmalı.
+      Kolay seviyede öğrenci hangi cümlenin doğal bir başlangıç oluşturduğunu hızlıca belirleyebilmeli.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

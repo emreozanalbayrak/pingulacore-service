@@ -1,0 +1,116 @@
+meta:
+  id: siralama_ogrenci_senaryo
+  ad: Sıralama — Öğrenci Cümle Tamamlama
+  sinif_seviyesi: 5
+  aciklama: Bir metin verilir, 4 öğrenci metin sonuna cümle önerir — doğru öneriyi ve öğrenci çıkarımını bulma
+  kaynak: kaynak-soru-kokleri.md
+  frequency: Medium
+context:
+  type: siralama_ogrenci
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 100
+    word_count_max: 180
+    structure:
+    - Öğrencilerin metin yazmasını gerektirecek 2-3 cümlelik bir etkinlik senaryosu oluştur. Bu bölümde sadece etkinliği anlat.
+    - Bir öğrencinin bir konu hakkında yazdığı varsayılan 3-4 cümlelik kısa bir paragraf oluştur
+    - "KRİTİK: Öğrencinin yazdığı paragraf metninin BAŞINA ve SONUNA tırnak işareti (\") koy — alıntı olduğu belli olsun"
+    - "Paragraf TAM cümlelerden oluşmalı — son cümlesi eksik bırakılmış gibi olmalı ama mevcut cümleler YARIM KALMAMALI"
+    - "YASAK: Cümleyi yarıda kesip '...' ile bırakmak — her cümle tam olmalı, sadece paragrafın devamı için bir cümle eklenecek"
+    - "Öğrencilerin önerdiği cümleler de TAM CÜMLE olmalı — kelime parçası veya yarım ifade YASAK"
+    - 4 öğrenci karakteri (isimli) oluştur, her biri paragrafın sonuna eklenecek bir cümle önersin
+    - 'Öğrenci önerileri DIKEY listelenmeli (her öğrenci ayrı satırda, <br> ile ayrılmış). Format: <b>Elif:</b> ''Önerilen cümle burada.''<br><b>Mehmet:</b> ''Önerilen cümle burada.'' (Markdown **isim**
+      KULLANMA, HTML <b>isim</b> kullan!)'
+    - Sadece 1 öğrencinin önerisi paragrafın anlam akışına uygun olmalı
+    - Diğer 3 öğrencinin önerileri konuyla ilgili ama akışa uymayan cümleler olmalı
+    - Her öğrencinin önerdiği cümle onun ilgi alanını/bakış açısını yansıtmalı
+    kurallar:
+    - 5. sınıf seviyesinde, günlük hayat veya fen/sosyal bilgilerle ilgili konu
+    - Paragraf bilgilendirici veya öyküleyici olabilir
+    - Öğrenci isimleri Türkçe olmalı (Elif, Mehmet, Ayşe, Can vb.)
+    - Doğru cümle paragrafın mantık akışını ve anlam bütünlüğünü tamamlamalı
+    - Yanlış cümleler konuyla ilişkili ama akışa uymayan, farklı alt konulara yönelen cümleler olmalı
+    - Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)
+  questions:
+  - slot: 1
+    type: dogru_cumle_secimi
+    soru_kokleri:
+    - <b>Hangi öğrenci paragrafın akışına uygun cümle eklemiştir?</b>
+    - <b>Paragrafı en doğru şekilde tamamlayan cümleyi hangi öğrenci önermiştir?</b>
+    - <b>Bu etkinliğe göre hangi öğrenci metnin sonuna düşüncenin akışına göre doğru bir cümle eklemiştir?</b>
+    - <b>Bu etkinlige gore hangi ogrenci metnin sonuna dusuncenin akisina gore dogru bir cumle eklemistir?</b>
+    options_style: concept
+    word_count_min: 1
+    word_count_max: 3
+    beceri:
+      katman: KB2
+      bilesenler:
+      - cikarim_yapma
+      - yapilandirma
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 2
+    type: ogrenci_cikarim
+    soru_kokleri:
+    - <b>Öğrencilerin önerdiği cümleler düşünüldüğünde …Öğrenci…'nin ilgi alanı hangi konuyla ilgilidir?</b>
+    - <b>…Öğrenci…'nin önerdiği cümleden hareketle onun ilgi alanı hakkında aşağıdakilerden hangisi söylenebilir?</b>
+    - <b>…Öğrenci…'nin ilgi alanı aşağıdaki bilim dallarından hangisi olabilir?</b>
+    - <b>…Karakter…'in merak ettiği konu aşağıdakilerden hangisidir?</b>
+    - <b>...Ogrenci...in ilgi alani asagidaki bilim dallarindan hangisi olabilir?</b>
+    options_style: short_phrase
+    word_count_min: 2
+    word_count_max: 8
+    beceri:
+      katman: KB2
+      bilesenler:
+      - cikarim_yapma
+      - degerlendirme
+      surec_bileseni: bilgiyi_cikartma
+header_template: 1-2. soruları aşağıdaki metne ve öğrenci önerilerine göre cevaplayınız.
+format:
+  type: llm_generated_html
+  description: Paragraf + öğrenci cümle önerileri üzerinden sıralama ve çıkarım soruları
+  paragraph:
+    required: true
+    word_count_min: 100
+    word_count_max: 180
+    sentence_count_min: 6
+    sentence_count_max: 12
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 1
+    word_count_max: 8
+    style: short_phrase
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Paragrafın anlam akışına uygun cümleyi öneren öğrenci veya çıkarım
+  kurallar:
+  - Cümle seçimi sorusunda doğru cevap paragrafın mantık akışını tamamlayan öğrencinin adı
+  - Çıkarım sorusunda doğru cevap öğrencinin önerisinden mantıksal olarak çıkarılabilecek ilgi alanı
+  - Çeldiriciler konuyla ilişkili ama yanlış çıkarımlar olmalı
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: ''teleskop'' → ''mercekli araç'' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: KISMI_UYUM
+    aciklama: Cümlesi kısmen uygun görünen ama akışı bozan öğrenciyi doğru gibi sunma
+    ornek: Konuyla ilgili ama paragrafın sonuç cümlesine uymayan öneri
+  - ad: YANLIS_CIKARIM
+    aciklama: Öğrencinin cümlesinden yanlış bir ilgi alanı çıkarma
+    ornek: Doğa cümlesi öneren öğrenciyi teknoloji ilgili gibi gösterme
+  - ad: DETAY_ODAKLI
+    aciklama: Paragraftaki bir detaya odaklanan ama bütünle uyumsuz cümleyi doğru gibi sunma
+    ornek: Ana fikir yerine yan detaya takılan öneriyi öne çıkarma
+use_shared_strategies: false

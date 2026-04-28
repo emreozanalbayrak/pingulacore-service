@@ -1,0 +1,118 @@
+# templates/2sinif/bolum7/7.6/grafik_yorumlama_sinif2_orta_soylenemez_1q.yaml
+# 2. Sinif — Grafik Yorumlama — ORTA — grafikten_hangisi_soylenemez
+# Grafik zorunlu, 3 secenekli, dogru cevap grafige aykiri bilgi
+
+meta:
+  id: "grafik_yorumlama_sinif2_orta_soylenemez"
+  ad: "2. Sinif - Grafik Yorumlama (Orta) - Soylenemez"
+  sinif_seviyesi: 2
+  aciklama: "Orta duzey — grafikten hangisi soylenemez, 3 secenekli, dogru cevap grafige aykiri"
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Istege bagli kisa baglam metni + ana grafik + soru koku + 3 secenek (orta, soylenemez)"
+
+  paragraph:
+    required: true
+    word_count_min: 8
+    word_count_max: 30
+    sentence_count_min: 1
+    sentence_count_max: 3
+    stil: "grafik_baglam"
+    background_color: "#f8f0e0"
+    kurallar:
+      - "Baglam metni varsa kisa, sade ve aciklayici olmalidir."
+      - "Baglam metni grafikteki sayilarin veya sembollerin neyi gosterdigini soyleyebilir."
+      - "Baglam metni dogru secenegi tek basina vermemelidir."
+      - "Baglam metni 2. sinif duzeyinde olmalidir."
+      - "Grafigi okumadan cevabi acikca veren aciklama YASAK."
+      - "Uzun ve karmasik paragraf YASAK."
+      - "Teknik grafik dili YASAK."
+      - "Ana grafik zorunludur. Grafik sade, okunabilir ve 2. sinif duzeyine uygun olmalidir."
+      - "Grafik basligi acikca verilmelidir."
+      - "Grafikte eksen veya kategori adlari acikca yazilmalidir."
+      - "Sayisal degerler veya gorsel semboller net bicimde takip edilebilir olmalidir."
+      - "Grafikte en az 3 veri noktasi bulunmalidir."
+      - "Grafik cok yogun ve karmasik olmamalidir."
+      - "Orta duzey: Grafikte 4-6 kategori bilgisi olabilir."
+      - "Dogru cevap icin basit karsilastirma veya kucuk toplam gerekebilir."
+      - "Sutun grafik, resimli grafik veya sade karsilastirma grafigi kullanilabilir."
+      - "Grafik tipi: basit sutun grafik, sekil grafigi, resimli grafik, renkli cubuk grafik veya tek degiskenli karsilastirma grafigi."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 3
+    word_count_max: 14
+    style: "short_phrase"
+    correct_count: 1
+    correct_type: "does_not_belong"
+    kurallar:
+      - "Secenekler kisa, sade ve 2. sinif duzeyinde olmalidir."
+      - "Dogru secenek grafige dayanmayan veya grafige aykiri bilgi olmalidir."
+      - "Yanlis secenekler (diger 2) grafik ile desteklenmelidir."
+      - "Secenekler kendi aralarinda bicimce paralel olmalidir."
+      - "2 secenek grafik ile desteklenmelidir."
+      - "1 secenek grafik ile desteklenmemelidir (dogru cevap)."
+      - "Dogru cevap grafikte yer almayan ya da grafige aykiri bilgi olmalidir."
+      - "En az 1 yanlis secenek ilk bakista makul gorunmelidir."
+      - "Yanlis secenekler yakin ama hatali karsilastirma icerebilir."
+
+soru_kokleri:
+  - "<b>Grafiğe göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Bu grafikten hareketle aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Grafikteki bilgilere göre aşağıdakilerden hangisi doğru <u>değildir</u>?</b>"
+  - "<b>Aşağıdakilerden hangisi grafiğe uygun <u>değildir</u>?</b>"
+  - "<b>Grafik incelendiğinde aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+
+dogru_cevap:
+  tanim: "Grafikten gercekten bulunamayan veya grafige aykiri olan bilgi"
+  kurallar:
+    - "Dogru cevap grafikte yer almayan ya da grafige aykiri bilgi olmalidir."
+    - "Dogru cevap dis bilgi gerektirmemelidir."
+    - "Dogru cevap 2. sinif ogrencisinin grafigi inceleyerek bulabilecegi aciklikta olmalidir."
+    - "Diger iki secenek grafikle acikca desteklenmelidir."
+
+celdirici_stratejileri:
+  - ad: "KISMI_DOGRU_KISMI_YANLIS"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Ifadenin bir kismi grafige uyar ama tamami yanlis olur"
+    nasil_olusturulur: |
+      Secenegin bir kismini grafige uygun, diger kismini hatali olustur.
+      Ornek: her gun matematik vardir ama Turkce yoktur.
+    kategori: "cognitive"
+
+  - ad: "YANLIS_KARSILASTIRMA"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "En cok, en az, daha fazla, esit gibi iliskileri yanlis kurma"
+    nasil_olusturulur: |
+      Grafikteki karsilastirma iliskisini yanlis yonde kur.
+      Ornek: isci veli sayisi esnaftan fazladir, haziran satisi ocaktan azdir.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+visual_requirement: "answer_critical"
+visual_type: "pictograph"
+visual_spec:
+  grafik_tipi: "bar"
+  kategori_min: 3
+  kategori_max: 6
+hide_paragraph_after_visual: true
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["grafik_okuma", "uygun_olmayani_ayirt_etme"]
+  surec_bileseni: "bilgiyi_yorumlama"
+
+sinif2_ek_kurallar:
+  yasak_alanlar:
+    - "Ana dusunce / ana duygu odakli sorular YASAK"
+    - "Soyut yorum veya edebi analiz YASAK"
+    - "Dis bilgi gerektiren sorular YASAK"
+    - "Oran, yuzde veya ileri istatistik YASAK"

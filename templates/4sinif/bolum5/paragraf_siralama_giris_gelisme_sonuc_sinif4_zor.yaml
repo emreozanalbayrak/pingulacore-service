@@ -1,0 +1,115 @@
+# Kaynak: paragraf_siralama_giris_gelisme_sonuc_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.zor
+# 4. sinif paragraf siralama giris/gelisme/sonuc — zor duzey
+
+meta:
+  id: "paragraf_siralama_giris_gelisme_sonuc_sinif4_zor"
+  ad: "Paragraf Sıralama (Giriş-Gelişme-Sonuç) (Zor)"
+  sinif_seviyesi: 4
+  aciklama: "Zor duzey — numaralı cümlelerden giriş, gelişme veya sonuç bölümünü tespit etme."
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Numaralı karışık cümleler + soru kökü + 4 sıralama seçeneği (zor)"
+
+  paragraph:
+    required: true
+    word_count_min: 30
+    word_count_max: 50
+    background_color: "#fce8e8"
+    sentence_count_min: 3
+    sentence_count_max: 3
+    numbered_sentences: true
+    stil: "bilgilendirici"
+    kurallar:
+      - "Tam 3 cümleden oluşsun: 1 giriş cümlesi, 1 gelişme cümlesi, 1 sonuç cümlesi."
+      - "Her cümle 13-20 kelime arasında olmalı."
+      - "Cümleler tek bir konu çevresinde yazılmalı."
+      - "Geçiş ilişkileri ince olmalı; sıralamayı anlamsal bağlantı kurarak çözmeyi gerektirmeli."
+      - "Cümleler doğal sıralarında okunduğunda tek ve akıcı bir paragraf oluşturmalı."
+      - "Orijinal paragraf oluşturulduktan sonra 3 cümleye 1, 2, 3 Arap rakamları RASTGELE atanmalı (gerçek sırası KARIŞTIRILMALI)."
+      - "FORMAT: '1. Cümle1.<br>2. Cümle2.<br>3. Cümle3.' (3 cümle, rakamlar karışık atanmış)"
+      - "★★★ SADECE ARAP RAKAMI (1, 2, 3) KULLAN — Roma rakamı (I, II, III) KESINLIKLE KULLANMA ★★★"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+    kurallar:
+      - "Soru kökü SADECE tek bir soru cümlesi olmalı."
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 3
+    word_count_max: 12
+    style: "short_phrase"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Her seçenek SADECE Arap rakamlarından oluşan sıralama dizisi olmalı."
+      - "FORMAT: '2 - 1 - 3' (Arap rakamları tire ile ayrılmış, 3 rakam)."
+      - "★★★ YASAK: Roma rakamı (I, II, III, IV, V) KESINLIKLE kullanmak. SADECE Arap rakamı."
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Numaralanmış bölümler giriş, gelişme ve sonuç olarak sıralanırsa doğru sıralama aşağıdakilerden hangisi olur?</b>"
+  - "<b>Aşağıdaki numaralanmış cümleler giriş, gelişme, sonuç olarak sıralandığında hangisi elde edilir?</b>"
+  - "<b>Bu numaralanmış cümlelerden paragraf oluşturulursa doğru sıralama aşağıdakilerden hangisidir?</b>"
+  - "<b>Numaralanmış cümleler giriş-gelişme-sonuç sırasına göre dizildiğinde aşağıdakilerden hangisi elde edilir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Cümlelerin doğru sırasını gösteren Arap rakamı dizisi"
+  kurallar:
+    - "Her cümle paragrafın doğal akışı içinde belirli bir işlev taşımalıdır."
+    - "Cümleler arasında doğru sıralamayı kurduracak ince anlam ilişkisi bulunmalıdır."
+    - "Doğru sıra bulunduğunda paragraf açıkça düzelmeli ve doğal bir bütün oluşturmalıdır."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "GUCLU_YAKIN_SIRALAR"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "En az 2 celdirici doğru sıraya semantik olarak yakın güçlü tuzak"
+    nasil_olusturulur: |
+      En az 2 celdirici doğru sıralamaya semantik olarak yakın ama mantıksal olarak hatalı olmalı.
+      Zor seviyede doğru sıra ortadaki ilişkiler dikkatle analiz edilmeden bulunamamalıdır.
+    kategori: "semantic"
+
+  - ad: "ORTA_BLOK_ANALIZI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Ortadaki bloku çözümlemeden doğru sıraya ulaşılamayan karmaşık yapı"
+    nasil_olusturulur: |
+      İlk ve son paragraf adayları tek bakışta kesinleşmemeli.
+      Doğru sıra ortadaki bloktaki ilişkiler dikkatle analiz edilmeden bulunamamalı.
+      Zor seviyede daha uzun ve yoğun paragraf bloğu kullan.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siralama", "yapilandirma"]
+  surec_bileseni: "metin_yapisini_analiz_etme"
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

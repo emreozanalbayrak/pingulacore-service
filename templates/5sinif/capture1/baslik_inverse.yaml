@@ -1,0 +1,253 @@
+# templates/baslik_inverse.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Metinde Baslik (Getirilemez Sorulari)
+#
+# TERS BASLIK FORMATI (tum baslik sorularinin ~%5'i)
+# Birden fazla baslik verilir, ogrenci UYGUN OLMAYAN paragrafi secer
+#
+# ONEMLI: Bu ters mantik kullanir
+# - Birden fazla baslik soru kokunde verilir
+# - 4 mini-paragraf secenegi sunulur
+# - 3 secenek basliklardan birine UYAR (yanlis secenekler)
+# - 1 secenek hicbir basliga UYMAZ (dogru cevap)
+
+meta:
+  id: "baslik_inverse"
+  ad: "Metinde Baslik (Getirilemez)"
+  sinif_seviyesi: 5
+  aciklama: "Verilen basliklara ait OLMAYAN paragrafi belirleme sorulari"
+  kaynak: "data/metinde_baslik.pdf"
+  frequency: "~5% of baslik questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Basliklar kokte verilir, uygun olmayan paragraf secilir"
+
+  paragraph:
+    required: false  # Bu formatta ana paragraf YOK!
+
+  titles_in_stem:
+    required: true
+    count: 3  # Genellikle 3 baslik verilir
+    description: "Basliklar soru kokune gomulur"
+
+  stem:
+    required: true
+    pattern: "{basliklar} Bu basliklardan hangisi asagidaki metinlerden herhangi birine getirilemez?"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    type: "mini_paragraph"
+    word_count_min: 20
+    word_count_max: 50
+    sentence_count_min: 2
+    sentence_count_max: 3
+    correct_type: "does_not_belong"  # TERS mantik!
+    correct_count: 1
+
+  # HTML template for LLM to fill (titles_paragraph = numbered title list)
+  html_template: |
+    <div class="paragraph">{titles_paragraph}</div>
+    <div class="question">{question}</div>
+    <div class="options">
+      <div class="option"><span class="option-letter">A)</span> {option_a}</div>
+      <div class="option"><span class="option-letter">B)</span> {option_b}</div>
+      <div class="option"><span class="option-letter">C)</span> {option_c}</div>
+      <div class="option"><span class="option-letter">D)</span> {option_d}</div>
+    </div>
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 3 varyasyon)
+# ═══════════════════════════════════════════════════════════════
+
+# NOT: Basliklar ayri numarali liste olarak "paragraph" alanina yazilir
+# Soru koku basit kalir - basliklar icermez
+soru_kokleri:
+  # Tum soru kokleri BOLD, onemli kelime (getirilemez vb.) UNDERLINED (PDF S.4 Q9, S.6 Q7)
+  - "<b>Aşağıdaki metinlerden hangisine bu başlıklardan herhangi biri <u>getirilemez</u>?</b>"
+  - "<b>Bu başlıklardan hangisi aşağıdaki metinlerden herhangi birine <u>getirilemez</u>?</b>"
+  - "<b>Aşağıdaki metinlerden hangisi bu başlıklardan herhangi birinin altına <u>yazılamaz</u>?</b>"
+  - "<b>Aşağıdaki metinlerden hangisi yukarıdaki başlıklarla <u>ilişkilendirilemez</u>?</b>"
+  - "<b>Yukarıdaki başlıklardan herhangi biri aşağıdaki metinlerden hangisine <u>uygun değildir</u>?</b>"
+  - "<b>Aşağıdaki metinlerden hangisi bu başlıkların hiçbiriyle <u>örtüşmez</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI (TERS MANTIK!)
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Verilen basliklarin HICBIRINE ait OLMAYAN mini-paragraf"
+  mantik: "INVERSE - diger 3 secenek basliklardan birine uyar, dogru cevap HICBIRINE UYMAZ"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Verilen 3 basligin HICBIRINE uygun olmamali"
+    - "Ayni genel alanda olabilir ama farkli konuda"
+    - "Tamamen alakasiz degil, mantikli bir 'yakin ama farkli' olmali"
+    - "Ogrenci icin 'neden uymuyor?' sorusu acik olmali"
+    - "Kelime sayısı bakımından en uzun şık olmamalı"
+  ornekler:
+    - basliklar:
+        - "Tavsanlarda Yasam Suresi"
+        - "Tavsanlarin Dogadaki Dusmanlari"
+        - "Tavsanlarin Beslenme Sekilleri"
+      dogru_cevap: "Tavsanlarin ureme ve yavru bakimi hakkinda paragraf"
+      neden: "Ureme konusu verilen basliklardan hicbirine uymuyor"
+    - basliklar:
+        - "Gunes Enerjisi"
+        - "Ruzgar Enerjisi"
+        - "Yenilenebilir Kaynaklar"
+      dogru_cevap: "Petrol ve dogalgaz hakkinda paragraf"
+      neden: "Fosil yakit, yenilenebilir enerji basliklarinin hicbirine uymaz"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# Ters sorularda LLM:
+# - 3 "basliklardan birine UYGUN" mini-paragraf olusturur (yanlis secenekler)
+# - 1 "hicbir basliga UYMAYAN" mini-paragraf olusturur (dogru cevap)
+# Strateji havuzu "basliga uymayan" paragrafi olusturmak icin kullanilir
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siniflandirma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select broad topic area"
+      details: "Birden fazla alt konusu olan genis bir alan sec (orn: Tavsanlar, Enerji, vb.)"
+
+    - step: 2
+      action: "Generate 3 related titles"
+      details: |
+        Ayni alandaki 3 farkli baslik olustur:
+        - Her baslik farkli bir alt konuya ait olmali
+        - Basliklar birbirini kapsamamali
+        - Ornek: "Tavsanlarin Beslenmesi", "Tavsanlarin Dusmanlari", "Tavsanlarin Yasam Suresi"
+
+    - step: 3
+      action: "Generate 3 mini-paragraphs matching titles (distractors)"
+      details: "Her baslik icin 25-45 kelimelik uygun paragraf yaz"
+
+    - step: 4
+      action: "Generate 1 mini-paragraph NOT matching any title (correct answer)"
+      details: |
+        Ayni genel alanda ama farkli bir konuda paragraf yaz:
+        - Verilen basliklardan HICBIRINE uymamali
+        - Tamamen alakasiz degil, "yakin ama farkli" olmali
+        - Ornek: "Tavsanlar" alaninda "ureme" konusu (basliklar beslenme, dusmanlar, yasam suresi ise)
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Build stem with titles embedded"
+      details: |
+        Soru kokunde 3 basligi yerlestir:
+        "Tavsanlarda Yasam Suresi", "Tavsanlarin Dusmanlari", "Tavsanlarin Beslenmesi"
+        Bu basliklardan hangisi asagidaki metinlerden herhangi birine getirilemez?
+
+  title_generation_rules:
+    description: |
+      Basliklar olusturulurken:
+      1. Ayni ana konunun farkli alt konulari olmali
+      2. Birbirini kapsamamali (orn: "Kuslar" ve "Kus Turleri" birbirini kapsar)
+      3. En az bir baslik disinda kalacak alt konu olmali
+
+      Ornek iyi set: "Tavsanlarin Beslenmesi", "Tavsanlarin Dusmanlari", "Tavsanlarin Yasam Suresi"
+      - Disarida kalan: Ureme, Davranislar, Habitat, vb.
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 4
+    soru_no: 9
+    basliklar:
+      - "Tavsanlarda Yasam Suresi"
+      - "Tavsanlarin Dogadaki Dusmanlari"
+      - "Tavsanlarin Beslenme Sekilleri"
+    dogru_cevap: "D"
+    dogru_cevap_icerigi: "Tavsanlarin ureme ozellikleri hakkinda (hicbir basliga uymuyor)"
+    neden: "Ureme konusu verilen 3 basliktan hicbirine dahil degil"
+
+  - sayfa: 5
+    soru_no: 10
+    basliklar:
+      - "Gunes Enerjisi"
+      - "Ruzgar Enerjisi"
+      - "Su Enerjisi"
+    dogru_cevap: "C"
+    dogru_cevap_icerigi: "Komur ve petrolun kullanimi (fosil yakit - yenilenebilir degil)"
+    neden: "Fosil yakitlar yenilenebilir enerji basliklarinin hicbirine uymaz"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  stem:
+    - "3 baslik soru kokune dogru yerlestirilmis mi?"
+    - "Basliklar birbirini kapsamamali"
+    - "Pattern dogru kullanilmis mi?"
+
+  fitting_options:
+    - "3 secenek basliklardan birine tam uyuyor mu?"
+    - "Her secenek farkli bir basliga mi ait?"
+    - "Kelime sayisi 25-45 arasinda mi?"
+    - "2-3 cumle iceriyor mu?"
+
+  correct_answer:
+    - "Basliklardan HICBIRINE uymuyor mu?"
+    - "Ayni genel alanda mi ama farkli alt konuda mi?"
+    - "Neden uymadigini anlamak kolay mi?"
+    - "Tamamen alakasiz degil, mantikli bir 'yakin ama farkli' mi?"
+
+  overall:
+    - "Ogrenci kolayca uyan secenekleri elemeli mi?"
+    - "Dogru cevap makul bir 'yakin ama farkli' secenek mi?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+
+  inverse_generation_rules:
+    - "En az 4 alt konusu olan genis bir alan sec"
+    - "3 baslik birbirinden farkli alt konular olmali"
+    - "1 alt konu basliklar disinda kalmali (dogru cevap icin)"
+    - "Tum 4 paragraf ayni genel alanda olmali (zorluk icin)"

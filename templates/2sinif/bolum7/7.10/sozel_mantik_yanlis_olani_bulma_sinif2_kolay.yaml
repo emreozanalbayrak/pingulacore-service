@@ -1,0 +1,112 @@
+# templates/2sinif/bolum7/7.10/sozel_mantik_yanlis_olani_bulma_sinif2_kolay_1q.yaml
+# 2. Sinif — Sira Belirleme / Yanlis Olani Bulma — KOLAY zorluk
+# 3 kisi/nesne, 2 acik ipucu, yanlis secenek belirgin
+
+meta:
+  id: "sozel_mantik_yanlis_olani_bulma_sinif2_kolay"
+  ad: "2. Sinif - Sira Belirleme / Yanlis Olani Bulma (Kolay)"
+  sinif_seviyesi: 2
+  aciklama: "Kolay duzey — 3 kisi/nesne, 2 acik ipucu, yanlis secenek belirgin bicimde ayirt edilebilir, gorsel + ipucu birlikte kullanilir, 3 secenekli"
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Ana gorsel + 2 kisa ipucu + soru koku + 3 kisa yargi secenegi (kolay)"
+
+  paragraph:
+    required: true
+    word_count_min: 10
+    word_count_max: 30
+    sentence_count_min: 2
+    sentence_count_max: 3
+    stil: "gorsel_ipucu_bilgi_bloku"
+    background_color: "#e8f8e8"
+    kurallar:
+      - "Metin, gorseldeki sira duzeniyle ilgili 2 kisa ipucu icermelidir."
+      - "Ipuclari kisa ve dogrudan olmalidir."
+      - "Dogru cevap icin ipuclarinin birlikte kullanilmasi gerekmelidir."
+      - "Yanlis secenegi elemek icin acik dayanak bulunmalidir."
+      - "Gorselde en fazla 3 kisi/nesne kullanilmalidir."
+      - "Sira veya konum gorselde acikca ayirt edilebilir olmalidir."
+      - "Gorsel tek basina butun sonucu vermemelidir."
+      - "Gorsel soru cozumunun zorunlu kaynaklarindan biri olmalidir."
+      - "Soru yalniz gorselle cozulememeli, yalniz metinle de cozulememelidir."
+      - "Cok soyut ve dolayli sira dili YASAK."
+      - "Uzun mantik zinciri YASAK."
+      - "Karsi-olgusal agir yapi YASAK."
+      - "5 ve uzeri kisi/nesne YASAK."
+      - "Cok kalabak sira duzeni YASAK."
+      - "Cok karisik arka plan YASAK."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 2
+    word_count_max: 8
+    style: "short_phrase"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Secenekler kisa yargilar biciminde olmalidir."
+      - "Iki secenek dogruya yakin olabilir ama yalniz biri yanlis olmalidir."
+      - "Dogru cevap, verilen bilgilerle uyusmayan tek secenek olmalidir."
+      - "Yanlis secenek belirgin bicimde yanlis olmalidir (kolay duzey)."
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Buna gore asagidakilerden hangisi <u>yanlistir</u>?</b>"
+  # KULLANILDI: - "<b>Verilen bilgilere göre aşağıdakilerden hangisi doğru <u>değildir</u>?</b>"
+  # KULLANILDI: - "<b>Buna göre aşağıdaki yargılardan hangisine <u>ulaşılamaz</u>?</b>"
+  - "<b>Görsel ve ipuçlarına göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+
+dogru_cevap:
+  tanim: "Gorsel ve ipuclarina gore yanlis olan tek yargi"
+  kurallar:
+    - "Dogru cevap (yanlis yargi), gorseldeki sira duzeni ve ipuculariyla celisen tek secenek olmalidir."
+    - "Diger iki secenek gorsel ve ipuculariyla tutarli olmalidir."
+    - "Yanlis secenek kolay duzey icin belirgin bicimde yanlis olmalidir."
+    - "Dogru cevabi bulmak icin dis bilgi gerektirmemelidir."
+
+celdirici_stratejileri:
+  - ad: "SIRA_KONUMU_DEGISTIRME"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Gorseldeki sira konumunu yanlis aktaran secenek"
+    nasil_olusturulur: |
+      Gorseldeki bir kisi/nesnenin konumunu yanlis veren yargi olustur.
+      Kolay duzey: yanlis konum acikca fark edilebilir olmali.
+    kategori: "content"
+
+  - ad: "IPUCU_CELISKISI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Ipucuyla celisen ama gorsele yakin gorunen secenek"
+    nasil_olusturulur: |
+      Gorsel olarak makul gorunen ama ipucuyla celisen yargi olustur.
+      Kolay duzey: celiski acik ve dogrudan olmali.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+visual_requirement: "answer_critical"
+visual_type: "scene"
+visual_spec:
+  scene_type: "sira_kuyruk"
+  kisi_sayisi_min: 3
+  kisi_sayisi_max: 4
+  aciklama: "Kaydirak, salincak veya kuyruk sahnesi — cocuklarin sira halinde dizilmesi, her birinin pozisyon numarasi gorsel uzerinde belirtili"
+
+beceri:
+  katman: "KB1"
+  bilesenler: ["sira_bilgisine_gore_yanlis_bulma", "eleme_yapma"]
+  surec_bileseni: "gorsel_ve_ipuclarini_birlikte_kullanma"
+
+sinif2_ek_kurallar:
+  yasak_alanlar:
+    - "5 ve uzeri oge YASAK"
+    - "Uzun ve dolayli sira zinciri YASAK"
+    - "Agir karsi-olgusal dil YASAK"
+    - "Soru yalniz gorselle cozulebiliyorsa YASAK"
+    - "Soru yalniz metinle cozulebiliyorsa YASAK"
+    - "Iki veya daha fazla secenek yanlissa YASAK"

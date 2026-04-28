@@ -1,0 +1,247 @@
+# templates/anahtar_sozcuk_positive.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Metinde Anahtar Sozcuk
+#
+# POZITIF ANAHTAR SOZCUK FORMATI (~%45 - 30 sorudan 13'u)
+# Paragraf verilir, ogrenci DOGRU anahtar sozcuk setini secer
+#
+# MANTIK: 1 secenekte dogru anahtar sozcuk seti, 3 secenekte yanlis setler
+# Secenekler SOZCUK SETI formatindadir (2-4 sozcuk, " - " ile ayrilmis)
+
+meta:
+  id: "anahtar_sozcuk_positive"
+  ad: "Metinde Anahtar Sozcuk (Pozitif)"
+  sinif_seviyesi: 5
+  aciklama: "Paragrafin dogru anahtar sozcuk setini belirleme sorulari"
+  kaynak: "data/metinde_anahtar_sozcuk.pdf"
+  frequency: "~45% of anahtar sozcuk questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 4 sozcuk seti secenek (dogru anahtar sozcuk seti)"
+
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 90
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "bilgilendirici"
+    kurallar:
+      - "Net bir ana konusu olmali ve bu konu etrafinda yogunlasmali"
+      - "Anahtar sozcukleri acikca belirlenebilir olmali"
+      - "2-4 onemli kavram/terim icermeli (bunlar anahtar sozcukler olacak)"
+      - "Konuyla iliskili ama anahtar olmayan detay sozcukler de icermeli"
+      - "Tekrar eden veya vurgulanan kavramlar net olmali"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 4
+    style: "keyword_set"
+    correct_type: "matches"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 6 varyasyon)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Aşağıdakilerden hangisi bu metnin anahtar sözcüğü olabilir?</b>"
+  - "<b>Aşağıdaki sözcüklerden hangisi bu metnin anahtar sözcüğü olabilir?</b>"
+  - "<b>Aşağıdaki kelimelerden hangisi bu metnin anahtar sözcüğü olabilir?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metnin anahtar sözcükleri olabilir?</b>"
+  - "<b>Aşağıdaki sözcüklerden hangisi bu metnin anahtar sözcükleri olabilir?</b>"
+  - "<b>Bu metnin anahtar sözcükleri aşağıdakilerin hangisinde doğru verilmiştir?</b>"
+  - "<b>Aşağıdakilerin hangisinde bu metnin anahtar sözcükleri doğru verilmiştir?</b>"
+  - "<b>Aşağıdakilerden hangisinde bu metnin anahtar sözcükleri doğru verilmiştir?</b>"
+  # Topic-embedded varyasyonlar ({topic} → leaf topic, ör: "Yerçekimi kuvveti")
+  - "\"{topic}\" <b>ile ilgili bu metnin anahtar sözcükleri aşağıdakilerin hangisinde doğru verilmiştir?</b>"
+  - "\"{topic}\" <b>konulu bu metnin anahtar sözcüğü aşağıdakilerden hangisi olabilir?</b>"
+  # İlişkilendirme ve kavram vurgulama soruları
+  - "<b>Aşağıdakilerden hangisi bu metinde yakınılan konu ile ilişkilendirilebilir?</b>"
+  - "<b>Aşağıdakilerden hangisi, bu metinde anlatılmak istenen düşünce ile aynı doğrultudadır?</b>"
+  - "<b>Bu metinde aşağıdaki kavramlardan hangisi vurgulanmaktadır?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Paragrafin gercek anahtar sozcuklerini iceren sozcuk seti"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Set icindeki tum sozcukler paragrafin ana konusuyla dogrudan ilgili olmali"
+    - "Sozcukler paragrafin ana mesajini/konusunu temsil etmeli"
+    - "2-4 sozcuk icermeli, ' - ' ile ayrilmali"
+    - "Tum sozcukler metinde vurgulanan veya tekrarlanan kavramlar olmali"
+  ornekler:
+    - paragraf: "Flas bellek, verilerin tasinmasi icin kullanilan kucuk boyutlu bir depolama aygıtidir. Bellek kapasitesi gigabayt cinsinden olculur ve veri aktarimi USB uzerinden yapilir..."
+      dogru: "bellek - veri"
+      neden: "Her iki sozcuk de flas bellek konusunun anahtar kavramlari"
+    - paragraf: "Dinozorlar milyonlarca yil once yasamislardir. Fosil kalintilari sayesinde dinozorlarin yumurtayla cogaldigi bilinmektedir..."
+      dogru: "dinozor - fosil - yumurta"
+      neden: "Uc sozcuk de paragrafin ana konusunu temsil ediyor"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM paragraf iceriğine gore en uygun 3 stratejiyi secer
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cozumleme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic with identifiable keywords"
+      details: "Anahtar sozcukleri net olarak belirlenebilecek bir konu sec"
+
+    - step: 2
+      action: "Generate paragraph (55-90 words) with clear keywords"
+      details: |
+        Paragrafta:
+        - 2-4 net anahtar sozcuk olmali
+        - Konuyla iliskili ama anahtar olmayan sozcukler de olmali
+        - Anahtar sozcukler tekrar etmeli veya vurgulanmali
+
+    - step: 3
+      action: "Create correct keyword set (2-4 words, ' - ' separated)"
+      details: |
+        Dogru set:
+        - Tum sozcukler gercek anahtar sozcuk olmali
+        - Paragrafin ana konusunu temsil etmeli
+        - ' - ' ile ayrilmali
+
+    - step: 4
+      action: "Create 3 wrong keyword sets using strategies"
+      details: |
+        Her yanlis set icin farkli strateji kullan:
+        - 1x detay_seti (metinde gecen ama anahtar olmayan sozcukler)
+        - 1x karisik_set (bir dogru + bir yanlis karisimi)
+        - 1x iliskili_set (konuyla iliskili ama anahtar olmayan)
+        Tum setler ayni formatta olmali (2-4 sozcuk, ' - ' ile ayrilmis)
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from 6 variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 3
+    soru_no: 5
+    konu: "Flas bellek ve veri depolama"
+    dogru_cevap: "A"
+    secenekler:
+      A: "bellek - veri"
+      B: "hizli - fotograf"
+      C: "kucuk - boyut"
+      D: "USB - bilgisayar"
+    dogru_cevap_icerigi: "bellek - veri"
+    neden: "Flas bellek konusunun gercek anahtar sozcukleri"
+
+  - sayfa: 5
+    soru_no: 2
+    konu: "Dinozorlarin fosil kalintilari"
+    dogru_cevap: "C"
+    secenekler:
+      A: "yuzyil - cogalma - garip"
+      B: "kesif - yil - surungen"
+      C: "dinozor - fosil - yumurta"
+      D: "buyuk - hayvan - tarih"
+    dogru_cevap_icerigi: "dinozor - fosil - yumurta"
+    neden: "Paragrafin ana konusunu temsil eden gercek anahtar sozcukler"
+
+  - sayfa: 7
+    soru_no: 4
+    konu: "LED lambalarin ozellikleri"
+    dogru_cevap: "D"
+    secenekler:
+      A: "akim - uygulamak - fazla - katman"
+      B: "isik - parlak - renkli"
+      C: "elektrik - kablo - priz"
+      D: "elektron - LED - enerji - isik"
+    dogru_cevap_icerigi: "elektron - LED - enerji - isik"
+    neden: "LED lambalarin gercek anahtar sozcukleri"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 55-90 arasinda mi?"
+    - "Net anahtar sozcukleri belirlenebilir mi?"
+    - "2-4 onemli kavram/terim iceriyor mu?"
+
+  correct_answer:
+    - "Set icindeki tum sozcukler gercek anahtar sozcuk mu?"
+    - "2-4 sozcuk iceriyor mu?"
+    - "' - ' ile ayrilmis mi?"
+    - "Paragrafin ana konusunu temsil ediyor mu?"
+
+  distractors:
+    - "Her set 2-4 sozcuk iceriyor mu?"
+    - "Hepsi ' - ' ile ayrilmis mi?"
+    - "Farkli stratejiler kullanilmis mi?"
+    - "Yanlis setler mantikli gorunuyor ama anahtar degil mi?"
+    - "Tum setler benzer uzunlukta mi?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+
+  generation_rules:
+    - "Anahtar sozcukleri net olarak belirlenebilecek konulari tercih et"
+    - "Teknik terimler iceren konular ideal"
+    - "2-4 anahtar sozcuk cikarilabilecek konulari sec"

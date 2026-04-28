@@ -1,0 +1,91 @@
+# Pattern: en_iyi_ifade_eden_gorsel (referans zorluk_duzeyleri.orta.tercih_edilen_varyantlar[1])
+# Orta duzey, 1 soru: metni en iyi ifade eden gorseli secme
+
+meta:
+  id: paragraf_gorsel_sinif2_orta_en_iyi_ifade
+  ad: "2. Sinif - Paragraf-Gorsel Iliskisi (Orta) - En Iyi Ifade Eden Gorsel"
+  sinif_seviyesi: 2
+  aciklama: "Orta duzey — metin + 3 gorsel secenek, metni en iyi ifade eden gorseli secme"
+  frequency: "Medium"
+
+format:
+  type: llm_generated_html
+  description: "Kisa metin + soru koku + 3 gorsel secenek (orta, en iyi ifade eden gorsel)"
+
+  paragraph:
+    required: true
+    word_count_min: 46
+    word_count_max: 64
+    sentence_count_min: 4
+    sentence_count_max: 5
+    stil: "bilgilendirici_veya_oykusel"
+    background_color: "#f8f0e0"
+    kurallar:
+      - "Metinde 1 yan ayrinti bulunabilir."
+      - "Dogru gorseli secmek icin metnin tamaminina bakmak gerekebilir."
+      - "Yanlis gorsellerden en az biri metne yakin gorunmelidir."
+      - "Metin tek baskin konu, olay, durum veya yer etrafinda kurulmalidir."
+      - "Metin 2. sinif ogrencisinin anlayabilecegi kadar sade, acik ve somut olmalidir."
+      - "Metin gorsellere cevrilebilecek net icerik tasimalidir."
+      - "Metin dis bilgi gerektirmemelidir."
+      - "Metin yalniz basina dogru gorseli kesin olarak sectirmemelidir."
+      - "Metin ana dusunce, gizli mesaj veya soyut yorum gerektirmemelidir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 3
+    labels: [A, B, C]
+    word_count_min: 15
+    word_count_max: 50
+    style: "image_description"
+    image_style: "photo"
+    correct_count: 1
+    correct_type: "matches"
+
+soru_kokleri:
+  - "<b>Metinde anlatılanları <u>en iyi</u> ifade eden görsel hangi seçenekte verilmiştir?</b>"
+  - "<b>Aşağıdaki görsellerden hangisi metni <u>en iyi</u> anlatmaktadır?</b>"
+  - "<b>Metne <u>en uygun</u> görsel aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu parçada anlatılanları <u>en iyi</u> yansıtan görsel hangisidir?</b>"
+
+dogru_cevap:
+  tanim: "Metnin ana icerigini en iyi karsilayan gorsel"
+  kurallar:
+    - "Dogru cevap metnin baskin icerigiyle uyumlu olmalidir."
+    - "Dogru cevap metinde anlatilanlari en iyi karsilayan gorsel olmalidir."
+    - "Dogru cevap yalniz metinden secilememelidir, gorsel inceleme gerektirmelidir."
+    - "Dogru cevap yalniz gorsele bakilarak da secilememelidir; metin destegi gerektirmelidir."
+    - "Dogru gorsel 2. sinif ogrencisinin iliski kurabilecegi aciklikta olmalidir."
+    - "1 gorsel metnin ana icerigini en iyi karsilamalidir."
+    - "1 gorsel yakin ama yan odakli olmalidir."
+    - "1 gorsel daha uzak veya kismi uyumlu olmalidir."
+    - "Dogru secim, metnin tamami dusunulerek yapilmalidir."
+    - "Gorseller ayni tema alaninda olabilir ama yalniz biri tam uyumlu olmalidir."
+    - "Dogru cevap icin hem metin hem gorseller dikkatle incelenmelidir."
+
+celdirici_stratejileri:
+  - ad: "YAKIN_AMA_TAM_UYUSMAYAN"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma"
+    aciklama: "Metinle ayni genel alanda durur ama asil konuya tam uymaz"
+    nasil_olusturulur: |
+      Metnin konusuyla ayni alan icinde ama tam uyusmayan bir gorsel tasviri olustur.
+      Orta duzey: en az 1 yanlis secenek ilk bakista makul gorunmeli.
+    kategori: "semantic"
+
+  - ad: "KISMI_DOGRU_KISMI_YANLIS"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metindeki bazi unsurlari tasir gibi gorunur ama butunu karsilamaz"
+    nasil_olusturulur: |
+      Metindeki bazi unsurlari iceren ama tam karsilamayan gorsel tasviri olustur.
+      Orta duzey: yanlis secenekler kismi uyum tasiyabilir.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB2"
+  bilesenler: [gorsel_metin_eslestirme, iliskili_gorsel_secme]
+  surec_bileseni: "metni_anlama"

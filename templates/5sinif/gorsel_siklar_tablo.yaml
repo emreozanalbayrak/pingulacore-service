@@ -1,0 +1,104 @@
+# templates/gorsel_siklar_tablo.yaml
+# Gorsel Siklar - Tablo (Paragraf → Tablo Gorseli)
+#
+# Paragraf bir olay/hikaye anlatir → 4 tablo seceneginden dogrusunu sec
+# Ornekler: hikaye unsurlari tablosu (Yer/Zaman/Olay/Kisi)
+
+meta:
+  id: "gorsel_siklar_tablo"
+  ad: "Gorsel Secenekli Soru (Tablo)"
+  sinif_seviyesi: 5
+  aciklama: "Paragraf olay/hikaye anlatir, ogrenci dogru tabloyu secer"
+  kaynak: "options_with_images/"
+  frequency: "yeni soru tipi"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Hikaye/olay paragrafi + soru koku + 4 tablo secenegi"
+
+  paragraph:
+    required: true
+    word_count_min: 60
+    word_count_max: 120
+    sentence_count_min: 4
+    sentence_count_max: 8
+    stil: "bilgilendirici"
+    kurallar:
+      - "Bir hikaye veya olay anlatimi olmali"
+      - "YER, ZAMAN, OLAY ve KISI bilgileri ACIKCA yer almali"
+      - "Celdiriciler icin yakin ama yanlis yoruma acik detaylar icermeli"
+      - "Tum tablo kategorileri (yer, zaman, olay, kisi) metinden cikarilabilir olmali"
+      - "Bazi detaylar belirsiz birakilmamali — her kategori icin NET bilgi olmali"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 30
+    word_count_max: 60
+    style: "image_description"
+    image_style: "table"
+    correct_count: 1
+    layout: "two_column"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metnin hikâye unsurları aşağıdakilerin hangisinde doğru olarak verilmiştir?</b>"
+  - "<b>Bu metindeki olayın unsurları aşağıdakilerin hangisinde doğru gösterilmiştir?</b>"
+  - "<b>Bu metne göre aşağıdaki tablolardan hangisi doğrudur?</b>"
+  - "<b>Bu hikâyenin unsurları aşağıdakilerin hangisinde doğru eşleştirilmiştir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Paragraftaki TUM unsurlari (yer, zaman, olay, kisi) dogru gosteren tablo tasviri"
+  kurallar:
+    - "Her tablo kategorisi (Yer, Zaman, Olay, Kisi) paragrafla BIR BIR eslesmeli"
+    - "Hicbir kategori yanlis veya eksik olmamali"
+    - "Degerler paragraftaki ifadelerle tutarli olmali"
+  ornekler:
+    - paragraf_konusu: "Sahil kasabasinda sonbaharda yasanan olay"
+      dogru: "Yer: Sahil kasabasi | Zaman: Sonbahar | Olay: Kasabaya yerlesmekten vazgecme | Kisi: Saffet Bey ve esi"
+      neden_dogru: "Tum unsurlar paragrafla birebir eslesiyor"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+use_shared_strategies: true
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["bilgi_cikartma", "eslestirme"]
+  surec_bileseni: "bilgiyi_eslestirme"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+      - name: "alt_unite"
+      - name: "konu"
+      - name: "alt_konu"

@@ -1,0 +1,122 @@
+meta:
+  id: "7_10_sira_belirleme_yanlisi_bulma_sinif2"
+  ad: "7.10 Sıra Belirleme / Yanlış Olanı Bulma"
+  sinif_seviyesi: 2
+  ders: "Türkçe"
+  bolum: "2. Sınıf Paragraf Soru Bankası"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    Görseldeki sıra düzeni ile kısa ipuçlarını birlikte kullanarak
+    hangi ifadenin yanlış olduğunu ya da hangi ifadenin söylenemeyeceğini
+    buldurmaya yönelik, 2. sınıfa uyarlanmış 3 seçenekli standart şablon.
+
+format:
+  tip: "llm_generated_html"
+  aciklama: "Ana görsel + kısa ipucu bloğu + soru kökü + 3 seçenek"
+
+  cift_kaynak_zorunlu: true
+  sadece_gorselle_cozum_yasak: true
+  sadece_metinle_cozum_yasak: true
+
+  gorsel:
+    gerekli: true
+    aciklama: "Sıra, kuyruk, kaydırak, oyun sırası, oturma düzeni gibi sade görsel"
+    kurallar:
+      - "Görselde en fazla 4 kişi/nesne kullanılmalıdır."
+      - "Sıra veya konum görselde açıkça ayırt edilebilmelidir."
+      - "Görsel tek başına bütün sonucu vermemelidir."
+      - "Görsel soru çözümünün zorunlu kaynaklarından biri olmalıdır."
+    yasaklar:
+      - "çok kalabalık sıra düzeni"
+      - "5 ve üzeri kişi/nesne"
+      - "çok karışık arka plan"
+
+  bilgi_bloku:
+    gerekli: true
+    aciklama: "Sıra ile ilgili kısa ipuçları"
+    ipucu_sayisi:
+      kolay: 2
+      orta: 2
+      zor: 3
+    kurallar:
+      - "İpuçları kısa ve doğrudan olmalıdır."
+      - "Doğru cevap için ipuçları birlikte kullanılmalıdır."
+      - "Yanlış seçeneği elemek için açık dayanak bulunmalıdır."
+    yasaklar:
+      - "çok soyut ve dolaylı sıra dili"
+      - "uzun mantık zinciri"
+      - "karşı-olgusal ağır yapı"
+
+  soru_koku:
+    gerekli: true
+    secim: "listeden_rastgele"
+
+  secenekler:
+    sayi: 3
+    etiketler: ["A", "B", "C"]
+    dogru_sayisi: 1
+    stil: "kisa_yargi"
+    kurallar:
+      - "Seçenekler kısa yargılar biçiminde olmalıdır."
+      - "İki seçenek doğruya yakın olabilir ama yalnız biri yanlış olmalıdır."
+      - "Doğru cevap, verilen bilgilerle uyuşmayan tek seçenek olmalıdır."
+
+soru_kokleri:
+  - "Buna göre aşağıdakilerden hangisi yanlıştır?"
+  - "Verilen bilgilere göre aşağıdakilerden hangisi doğru değildir?"
+  - "Buna göre aşağıdaki yargılardan hangisine ulaşılamaz?"
+  - "Görsel ve ipuçlarına göre aşağıdakilerden hangisi söylenemez?"
+
+beceri_odagi:
+  birincil_beceri:
+    - "Sıra bilgisine göre yanlış olanı bulma"
+  ikincil_beceriler:
+    - "Eleme yapma"
+    - "Sıra ilişkisi kurma"
+    - "Görsel ve ipuçlarını birlikte kullanma"
+
+zorluk_duzeyleri:
+  kolay:
+    kurallar:
+      - "3 kişi/nesne kullanılmalıdır."
+      - "2 açık ipucu verilmelidir."
+      - "Seçeneklerden biri belirgin biçimde yanlıştır."
+  orta:
+    kurallar:
+      - "4 kişi/nesne kullanılabilir."
+      - "2 ipucu verilmelidir."
+      - "Yanlış seçeneği bulmak için iki ipucunun birlikte kullanılması gerekebilir."
+  zor:
+    kurallar:
+      - "4 kişi/nesne kullanılabilir."
+      - "3 kısa ipucu kullanılabilir."
+      - "Yine de 2. sınıf için somut ve sade kalmalıdır."
+
+sinif_uygunluk_kurallari:
+  uygundur:
+    - "Sıra somut ve görsel olarak takip edilebiliyorsa"
+    - "İpucu sayısı sınırlıysa"
+    - "Seçenekler kısa ve açık yargılarsa"
+  yasaktir:
+    - "5 ve üzeri öğe"
+    - "uzun ve dolaylı sıra zinciri"
+    - "ağır karşı-olgusal dil"
+  ucuncu_sinifa_kayar:
+    - "Birden fazla örtük ipucu çözümü gerekiyorsa"
+  dorduncu_sinifa_kayar:
+    - "Yanlış seçeneğin neden yanlış olduğuna uzun açıklama istenirse"
+
+validation_checklist:
+  - "Öğe sayısı 4'ü geçmiyor mu?"
+  - "Soru yalnız görselle çözülemiyor mu?"
+  - "Soru yalnız metinle çözülemiyor mu?"
+  - "Yalnız bir seçenek yanlış mı?"
+  - "İpuçları açık ve 2. sınıf düzeyinde mi?"
+  - "Sıra kurmak için dış bilgi gerekmiyor mu?"
+
+hard_fail_rules:
+  - "5 veya daha fazla öğe varsa"
+  - "İki veya daha fazla seçenek yanlışsa"
+  - "Soru yalnız metinden çözülebiliyorsa"
+  - "Soru yalnız görselden çözülebiliyorsa"
+  - "İpuçları çelişkiliyse"

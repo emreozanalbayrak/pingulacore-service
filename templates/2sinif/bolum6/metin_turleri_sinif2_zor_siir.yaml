@@ -1,0 +1,88 @@
+# templates/2sinif/bolum6/metin_turleri_sinif2_zor_siir.yaml
+# 2. Sinif — Metin Turleri — ZOR — SIIR turu
+meta:
+  id: "metin_turleri_sinif2_zor_siir"
+  ad: "2. Sinif - Metin Turleri (Zor) - Siir"
+  sinif_seviyesi: 2
+  aciklama: "Zor — siir turu belirleme"
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Siir turu belirleme sorusu (zor)"
+
+  paragraph:
+    required: true
+    word_count_min: 40
+    word_count_max: 75
+    sentence_count_min: 6
+    sentence_count_max: 10
+    stil: "siir"
+    background_color: "#e8f8e8"
+    kurallar:
+      - "Metin MUTLAKA acik DIZE duzeninde SIIR olmalidir. Her dize ayri satirda, <br> ile ayrilmali."
+      - "ZORUNLU: En az 2 kita (bent) olmali; dizeler arasinda kafiye/uyak ACIKCA gorunmeli."
+      - "ZORUNLU: Ritim ve ses uyumu hissedilmeli; duz paragraf yazisi KESINLIKLE yazilmamalidir."
+      - "Siir 2. sinif ogrencisine yonelik somut bir konu icermeli (dogal, hayvan, mevsim, duygu vb.)."
+      - "Dize baslari buyuk harf ile baslamali."
+      - "Tur ayirt etme, metnin gorunur dize/kita yapisından yapilabilmelidir."
+      - "2. sinif ogrencisinin anlayabilecegi sadelikte kelime hazinesi kullanilmalidir."
+      - "Metin dis bilgi gerektirmemelidir."
+
+  stem:
+    required: true
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 1
+    word_count_max: 3
+    style: "concept"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Tum secenekler metin turu adi biciminde olmalidir."
+      - "Dogru secenek: şiir"
+      - "Yanlis secenekler: hikâye, öyküleyici metin"
+      - "Secenekler kendi aralarinda bicimce paralel olmalidir."
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Bu metnin turu asagidakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Asagidakilerden hangisi bu metnin turudur?</b>"
+  - "<b>Bu metin hangi ture girer?</b>"
+  # KULLANILDI: - "<b>Bu yazinin turu asagidakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Bu metin asagidaki turlerden hangisine ornektir?</b>"
+  # KULLANILDI: - "<b>Bu metnin turunu asagidakilerden hangisi gosterir?</b>"
+  - "<b>Asagidakilerden hangisi bu metnin turunu soyler?</b>"
+  # KULLANILDI: - "<b>Bu metin hangi turdedir?</b>"
+  - "<b>Bu yazi hangi metin turune ornektir?</b>"
+  - "<b>Bu yazi asagidaki turlerden hangisidir?</b>"
+  - "<b>Bu metin icin <u>en uygun</u> tur hangisidir?</b>"
+  - "<b>Bu yazinin turu asagidakilerden hangisi olabilir?</b>"
+
+dogru_cevap:
+  tanim: "Bu metnin turu: şiir"
+  kurallar:
+    - "Dogru cevap 'şiir' olmalidir."
+    - "Dogru cevap metnin gorunur dize/kita yapisından cikarilabilmelidir."
+
+celdirici_stratejileri:
+  - ad: "YAKIN_TUR"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Dogru ture yakin ama farkli bir metin turu"
+    nasil_olusturulur: |
+      Metne yakin gorunen ama tur olarak farkli secenegi sun.
+    kategori: "semantic"
+  - ad: "UZAK_TUR"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Metinden acikca farkli bir tur"
+    nasil_olusturulur: |
+      Acikca farkli turden bir secenek sun.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB1"
+  bilesenler: ["metin_turu_ayirt_etme"]
+  surec_bileseni: "metni_anlama"

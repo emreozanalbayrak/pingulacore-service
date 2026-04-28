@@ -20,6 +20,13 @@ import type {
   StandaloneAgentResponse,
   SubPipelineGetResponse,
   YamlToQuestionRunResponse,
+  LegacyPipelineKind,
+  LegacyPipelinesResponse,
+  LegacyYamlFilesResponse,
+  LegacyYamlUploadResponse,
+  LegacyRunRequest,
+  LegacyRunResponse,
+  LegacyRunDetailResponse,
 } from '../types'
 
 const JSON_HEADERS = {
@@ -243,4 +250,31 @@ export const api = {
       headers: JSON_HEADERS,
       body: JSON.stringify(payload),
     }),
+
+  listLegacyPipelines: () => apiFetch<LegacyPipelinesResponse>('/v1/legacy/pipelines'),
+
+  listLegacyYamlFiles: (kind: LegacyPipelineKind) =>
+    apiFetch<LegacyYamlFilesResponse>(`/v1/legacy/pipelines/${encodeURIComponent(kind)}/yaml-files`),
+
+  uploadLegacyYaml: (kind: LegacyPipelineKind, file: File) => {
+    const formData = new FormData()
+    formData.append('file', file)
+    return apiFetch<LegacyYamlUploadResponse>(
+      `/v1/legacy/pipelines/${encodeURIComponent(kind)}/yaml-upload`,
+      { method: 'POST', body: formData },
+    )
+  },
+
+  runLegacyPipeline: (kind: LegacyPipelineKind, payload: LegacyRunRequest) =>
+    apiFetch<LegacyRunResponse>(`/v1/legacy/pipelines/${encodeURIComponent(kind)}/run`, {
+      method: 'POST',
+      headers: JSON_HEADERS,
+      body: JSON.stringify(payload),
+    }),
+
+  getLegacyRun: (runId: string) =>
+    apiFetch<LegacyRunDetailResponse>(`/v1/legacy/runs/${encodeURIComponent(runId)}`),
+
+  getLegacyRunLogs: (runId: string) =>
+    apiFetch<PipelineLogEntryResponse[]>(`/v1/legacy/runs/${encodeURIComponent(runId)}/logs`),
 }

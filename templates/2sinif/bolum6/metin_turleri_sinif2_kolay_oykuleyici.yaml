@@ -1,0 +1,81 @@
+# 2. Sinif — Metin Turleri — KOLAY — OYKULEYICI
+meta:
+  id: "metin_turleri_sinif2_kolay_oykuleyici"
+  ad: "2. Sinif - Metin Turleri (Kolay) - Oykuleyici"
+  sinif_seviyesi: 2
+  aciklama: "Kolay duzey — Oykuleyici turu belirleme"
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Oykuleyici turu belirleme sorusu (kolay)"
+  paragraph:
+    required: true
+    word_count_min: 10
+    word_count_max: 48
+    sentence_count_min: 3
+    sentence_count_max: 6
+    stil: "oykuleyici"
+    background_color: "#e8f8e8"
+    kurallar:
+      - "Metin OYKULEYICI olmalidir — karakter, olay akisi ve mekan icermeli."
+      - "Metin 2. sinif ogrencisinin anlayabilecegi kadar sade, somut ve acik olmalidir."
+      - "Tur ayirt etme, metnin gorunur ozelliklerinden yapilabilmelidir."
+      - "2. sinif ogrencisinin anlayabilecegi sadelikte kelime hazinesi kullanilmalidir."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  stem:
+    required: true
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 1
+    word_count_max: 3
+    style: "concept"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Tum secenekler metin turu adi biciminde olmalidir."
+      - "Dogru secenek: öyküleyici metin"
+      - "Yanlis secenekler: bilgilendirici metin, şiir"
+      - "Secenekler kendi aralarinda bicimce paralel olmalidir."
+      - "Kullanilabilecek metin turleri: bilgilendirici metin, oykuleyici metin, siir, masal, hikaye."
+
+soru_kokleri:
+  - "<b>Bu metnin turu asagidakilerden hangisidir?</b>"
+  - "<b>Asagidakilerden hangisi bu metnin turudur?</b>"
+  - "<b>Bu metin hangi ture girer?</b>"
+  - "<b>Bu yazinin turu asagidakilerden hangisidir?</b>"
+  - "<b>Bu metin asagidaki turlerden hangisine ornektir?</b>"
+  - "<b>Bu metnin turunu asagidakilerden hangisi gosterir?</b>"
+  - "<b>Asagidakilerden hangisi bu metnin turunu soyler?</b>"
+  - "<b>Bu metin hangi turdedir?</b>"
+  - "<b>Bu parca hangi metin turune ornektir?</b>"
+  - "<b>Bu yazi asagidaki metin turlerinden hangisidir?</b>"
+  - "<b>Metnin turu asagidakilerden hangisi olabilir?</b>"
+  - "<b>Bu metin icin <u>en uygun</u> tur hangisidir?</b>"
+
+dogru_cevap:
+  tanim: "Bu metnin turu: öyküleyici metin"
+  kurallar:
+    - "Dogru cevap 'öyküleyici metin' olmalidir."
+    - "Dogru cevap metnin gorunur ozelliklerinden cikarilabilmelidir."
+
+celdirici_stratejileri:
+  - ad: "YAKIN_TUR"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Dogru ture yakin ama farkli bir metin turu"
+    nasil_olusturulur: "Metne yakin gorunen ama tur olarak farkli secenegi sun."
+    kategori: "semantic"
+  - ad: "UZAK_TUR"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Metinden acikca farkli bir tur"
+    nasil_olusturulur: "Acikca farkli turden bir secenek sun."
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB1"
+  bilesenler: ["metin_turu_ayirt_etme"]
+  surec_bileseni: "metni_anlama"

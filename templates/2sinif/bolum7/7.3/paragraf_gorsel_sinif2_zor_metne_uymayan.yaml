@@ -1,0 +1,87 @@
+# Pattern: metne_uymayan_gorsel (referans zorluk_duzeyleri.zor.tercih_edilen_varyantlar[2])
+# Zor duzey, 1 soru: metne uymayan gorseli secme
+
+meta:
+  id: paragraf_gorsel_sinif2_zor_metne_uymayan
+  ad: "2. Sinif - Paragraf-Gorsel Iliskisi (Zor) - Metne Uymayan Gorsel"
+  sinif_seviyesi: 2
+  aciklama: "Zor duzey — metin + 3 gorsel secenek, metne uymayan gorseli secme"
+  frequency: "Medium"
+
+format:
+  type: llm_generated_html
+  description: "Kisa metin + soru koku + 3 gorsel secenek (zor, metne uymayan gorsel)"
+
+  paragraph:
+    required: true
+    word_count_min: 58
+    word_count_max: 78
+    sentence_count_min: 5
+    sentence_count_max: 6
+    stil: "bilgilendirici_veya_oykusel"
+    background_color: "#fce8e8"
+    kurallar:
+      - "Metin acik kalmalidir ama dogru gorsel icin birkac cumleyi birlikte degerlendirmek gerekebilir."
+      - "Metinde ana konu ile yan ayrintilar birlikte bulunabilir."
+      - "Zor duzeyde bile soru soyut yoruma donusmemelidir."
+      - "Metin tek baskin konu, olay, durum veya yer etrafinda kurulmalidir."
+      - "Metin 2. sinif ogrencisinin anlayabilecegi kadar sade, acik ve somut olmalidir."
+      - "Metin gorsellere cevrilebilecek net icerik tasimalidir."
+      - "Metin dis bilgi gerektirmemelidir."
+      - "Metin yalniz basina dogru gorseli kesin olarak sectirmemelidir."
+      - "Metin ana dusunce, gizli mesaj veya soyut yorum gerektirmemelidir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 3
+    labels: [A, B, C]
+    word_count_min: 15
+    word_count_max: 50
+    style: "image_description"
+    image_style: "photo"
+    correct_count: 1
+    correct_type: "does_not_belong"
+
+soru_kokleri:
+  - "<b>Aşağıdaki görsellerden hangisi metne <u>uymaz</u>?</b>"
+  - "<b>Metinle <u>uyuşmayan</u> görsel hangisidir?</b>"
+  - "<b>Bu parçaya uygun <u>olmayan</u> görsel aşağıdakilerden hangisidir?</b>"
+  - "<b>Aşağıdaki görsellerden hangisi metinle <u>ilişkilendirilemez</u>?</b>"
+  - "<b>Metnin içeriğine <u>uymayan</u> görsel hangisidir?</b>"
+
+dogru_cevap:
+  tanim: "Metinle acik bicimde uyumsuz olan gorsel"
+  kurallar:
+    - "2 gorsel metinle iliskilendirilebilir olmalidir."
+    - "1 gorsel acik bicimde metne uyumsuz olmalidir."
+    - "Dogru cevap yalniz gorselden degil, metindeki konu okunarak belirlenmelidir."
+    - "Dogru gorsel 2. sinif ogrencisinin ayirt edebilecegi aciklikta olmalidir."
+    - "2 yanlis gorsel de ilk bakista makul gorunmelidir."
+
+celdirici_stratejileri:
+  - ad: "YAKIN_AMA_TAM_UYUSMAYAN"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma"
+    aciklama: "Metinle ayni genel alanda durur ama asil konuya tam uymaz — bu secenek YANLIS (metinle iliskili gorunur)"
+    nasil_olusturulur: |
+      Metnin konusuyla ayni alan icinde, iliskilendirilebilir bir gorsel tasviri olustur.
+      Zor duzey: her iki yanlis secenek de ilk bakista makul gorunmeli.
+      1 yanlis secenek ayni tema alaninda ama farkli vurgu tasimali.
+    kategori: "semantic"
+
+  - ad: "KISMI_DOGRU_KISMI_YANLIS"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metindeki bazi unsurlari tasir gibi gorunur ama butunu karsilamaz — bu secenek YANLIS (metinle iliskili gorunur)"
+    nasil_olusturulur: |
+      Metindeki bazi unsurlari iceren ama tam karsilamayan gorsel tasviri olustur.
+      Zor duzey: 1 yanlis secenek metindeki yan unsura dayali kismi uyum tasimali.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB2"
+  bilesenler: [gorsel_metin_eslestirme, ilgisiz_gorsel_ayirt_etme]
+  surec_bileseni: "metni_anlama"

@@ -1,0 +1,198 @@
+# Kaynak: 5sinif/capture2/hikaye_unsurlari_yoktur.yaml — 4. sinif icin adapte edildi (sinif_seviyesi 5->4)
+# templates/capture2/hikaye_unsurlari_yoktur.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Hikaye Unsurlari
+#
+# YOKTUR FORMATI (tum hikaye unsurlari sorularinin ~%60'i)
+# Oykuleyici paragraf verilir, ogrenci metinde OLMAYAN unsuru secer
+#
+# MANTIK: 3 secenek metinde acikca bulunan unsurlar (yanlis), 1 tanesi belirsiz/yok (dogru cevap)
+# Unsurlar: Olay, Yer, Zaman, Kisi
+# Secenekler KISA KAVRAM formatindadir (1-3 kelime)
+
+meta:
+  id: "hikaye_unsurlari_yoktur_sinif4"
+  ad: "Hikâye Unsurları (Hangisi Yoktur?)"
+  sinif_seviyesi: 4
+  aciklama: "Metinde olay, yer, zaman veya kişi unsurlarından hangisinin belirgin olmadığını tespit etme"
+  kaynak: "data/hikaye_unsurlari.pdf"
+  frequency: "Very High (~60% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Oykuleyici paragraf + soru koku + 4 kisa secenek"
+
+  paragraph:
+    required: true
+    word_count_min: 50
+    word_count_max: 100
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "oykuleyici"
+    kurallar:
+      - "Bir olay orgusu mutlaka bulunmalidir (bir durumdan baska bir duruma gecis)."
+      - "Siklarda 'Yoktur' cevabi olacak unsur (genellikle Zaman veya Yer) metinde belirsiz birakilmalidir."
+      - "Kisi/Sahis kadrosu belirgin olmalidir (isim veya unvan: 'Kemal', 'Bakkal', 'Teyze')."
+      - "Orn (Zaman Yok): 'Cocuklar parka kostular, oynadilar...' (Ne zaman? Belli degil)."
+      - "Orn (Yer Yok): 'Sabah erkenden kalkti, hazirlandi, hemen yola cikti...' (Nereden/Nereye? Belli degil)."
+      - "Paragrafta hikâye unsurlarıyla ilgili AÇIKLAMA veya EK BİLGİ verme! (Örn: 'Bu hikâyede mekân unsuru parkır', 'Olayın geçtiği yer şehirdir' gibi açıklamalar YASAK)"
+      - "Paragraf SADECE hikâyeyi anlatsın — unsur analizi veya tanımlaması YAPMA"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 3
+    style: "concept"
+    correct_type: "does_not_belong"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 3 varyasyon)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metinde aşağıdaki hikâye unsurlarından hangisi <u>yoktur</u>?</b>"
+  - "<b>Bu metinde aşağıdaki hikâye unsurlarından hangisine <u>yer verilmemiştir</u>?</b>"
+  - "<b>Bu metinde aşağıdaki hikâye unsurlarından hangisi ile ilgili bir bilgi <u>yoktur</u>?</b>"
+  # Kullanılmamıştır varyasyonu (ARI Paragraf 2025 kaynak)
+  - "<b>Bu metinde aşağıdaki hikâye unsurlarından hangisi <u>kullanılmamıştır</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI (TERS MANTIK!)
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metinde acikca belirtilmeyen veya belirsiz birakilan unsur"
+  mantik: "INVERSE - diger 3 secenek metinde acikca bulunan unsurlar, dogru cevap metinde belirsiz/yok"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Metinde NET olarak belirtilmeyen unsur olmali"
+    - "Belirsiz birakilan unsur icin metinde hicbir ipucu olmamali"
+    - "Ogrenci 'bu unsur metinde var mi?' diye analiz etmek zorunda kalmali"
+    - "Genellikle Zaman veya Yer unsurlari belirsiz birakilir"
+  ornekler:
+    - metin: "Kemal ve Suna sinava calistilar... Sinifa girdiklerinde..."
+      dogru: "Zaman"
+      neden: "Zaman net degil - ne zaman olduguyla ilgili bilgi yok"
+    - metin: "Genc kadin ruyasini kocasina anlatti... Aksami zor etti."
+      dogru: "Yer"
+      neden: "Yer belli degil - olaylarin nerede gectigi belirsiz"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI BILGILERI
+# ═══════════════════════════════════════════════════════════════
+# Secenekler sabit kavramlardir: Olay, Yer, Zaman, Kisi
+# Olay unsurunun her zaman mevcut olmasi beklenir (oykuleyici metinde olay orgusu sart)
+# Diger 3 unsurdan biri (genellikle Zaman veya Yer) belirsiz birakilir
+
+distractors:
+  sabit_secenekler:
+    - "Olay"
+    - "Kisi"
+    - "Zaman"
+    - "Yer"
+  notlar:
+    - "Olay her zaman vardir (oykuleyici metinde olay orgusu zorunlu)"
+    - "Kisi genellikle belirgindir (isim veya unvan ile)"
+    - "Zaman veya Yer genellikle belirsiz birakilan unsurdur"
+    - "Nadir durumlarda Kisi de belirsiz birakilabilir"
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cozumleme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Belirsiz birakilacak unsuru belirle"
+      details: "Genellikle Zaman veya Yer secilir. Olay ASLA belirsiz birakilmaz."
+
+    - step: 2
+      action: "Oykuleyici paragraf olustur (50-100 kelime)"
+      details: |
+        Paragrafta:
+        - Bir olay orgusu MUTLAKA olmali (durum degisimi)
+        - Secilen unsur (Zaman/Yer) kasitli olarak belirsiz birakilmali
+        - Diger unsurlar acik ve net olmali
+        - Kisi kadrosu belirgin olmali (isim veya unvan kullanimli)
+
+    - step: 3
+      action: "Secenekleri olustur (4 unsur)"
+      details: |
+        Sabit 4 secenek: Olay, Yer, Zaman, Kisi
+        - Dogru cevap: Metinde belirsiz birakilan unsur
+        - Diger 3: Metinde acikca bulunan unsurlar
+
+    - step: 4
+      action: "Secenekleri rastgele sirala"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 5
+      action: "Soru kokunu sec"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 91
+    konu: "Hikaye unsurlari - Zaman belirsiz"
+    metin: "Kemal ve Suna sinava calistilar. Derslerini bitirdiklerinde yorgun dusmuslerdi..."
+    dogru_cevap: "Zaman"
+    secenekler:
+      A: "Olay"
+      B: "Kisi"
+      C: "Zaman"
+      D: "Yer"
+    neden: "Metinde olaylarin ne zaman gerceklestigi belirtilmemistir"
+
+  - sayfa: 92
+    konu: "Hikaye unsurlari - Yer belirsiz"
+    metin: "Genc kadin ruyasini kocasina anlatti. Sabah erkenden yola ciktilar..."
+    dogru_cevap: "Yer"
+    secenekler:
+      A: "Olay"
+      B: "Yer"
+      C: "Zaman"
+      D: "Kisi"
+    neden: "Metinde olaylarin nerede gectigi belirtilmemistir"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 50-100 arasinda mi?"
+    - "Cumle sayisi 4-7 arasinda mi?"
+    - "Oykuleyici bir uslupla mi yazilmis?"
+    - "Bir olay orgusu var mi (durum degisimi)?"
+    - "Belirsiz birakilan unsur gercekten belirsiz mi?"
+    - "Diger unsurlar acik ve net mi?"
+
+  correct_answer:
+    - "1-3 kelime arasinda mi?"
+    - "Metinde gercekten belirsiz olan unsur mu?"
+    - "Olay hic belirsiz birakilmamis mi? (olay her zaman bulunmali)"
+
+  distractors:
+    - "Diger 3 unsur metinde acikca bulunuyor mu?"
+    - "Kisi kadrosu belirgin mi (isim veya unvan)?"
+    - "Tum secenekler ayni formatta mi (tek kavram)?"

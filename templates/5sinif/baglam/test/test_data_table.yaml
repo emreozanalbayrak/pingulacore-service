@@ -1,0 +1,99 @@
+meta:
+  id: test_data_table
+  ad: TEST — Basit Veri Tablosu
+  sinif_seviyesi: 5
+  aciklama: Senaryo + basit renkli veri tablosu üzerinden 2 soru
+  frequency: Medium
+context:
+  type: test_data_table
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 60
+    word_count_max: 120
+    visual_format: data_table
+    structure:
+    - 'KRİTİK — HTML YAPISI: Aşağıdaki yapıyı BİREBİR takip et!'
+    - '1) Kısa senaryo paragrafı (2-3 cümle): Bir ölçüm/kayıt yapıldığını anlat'
+    - '2) Basit veri tablosu: <table class=''data-table''>'
+    - '   Başlık satırı (mavi arka plan otomatik): <tr><th>Kategori</th><th>Değer</th></tr>'
+    - '   En az 5, en fazla 7 veri satırı'
+    - '   2 veya 3 sütun olabilir (kategori + 1-2 değer sütunu)'
+    - '   Değerler sayısal ve birimli olmalı (ör: 600 birim enerji, 45 km/s)'
+    - '   Zebra çizgili satırlar CSS tarafından otomatik yapılacak'
+    kurallar:
+    - Senaryo 5. sınıf seviyesinde olmalı
+    - Tablo verileri gerçekçi olmalı
+    - Değerler arasında karşılaştırma yapılabilir farklar olmalı
+    - Türkçe karakterler doğru kullanılmalı
+  questions:
+  - slot: 1
+    type: veri_okuma
+    soru_kokleri:
+    - <b>Tablodaki verilere göre aşağıdakilerden hangisi doğrudur?</b>
+    - <b>Tabloya göre en yüksek değere sahip olan aşağıdakilerden hangisidir?</b>
+    options_style: complete_sentence
+    word_count_min: 4
+    word_count_max: 15
+    beceri:
+      katman: KB2
+      bilesenler:
+      - tablo_okuma
+      - karsilastirma
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 2
+    type: veri_cikarim
+    soru_kokleri:
+    - <b>Tablodaki veriler karşılaştırıldığında aşağıdaki çıkarımlardan hangisine ulaşılır?</b>
+    - <b>Tabloya göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>
+    options_style: complete_sentence
+    word_count_min: 5
+    word_count_max: 18
+    beceri:
+      katman: KB3
+      bilesenler:
+      - cikarim_yapma
+      - yorumlama
+      surec_bileseni: problemi_yapilandirma
+header_template: 1-2. soruları aşağıdaki bilgilere göre birbirinden bağımsız olarak cevaplayınız.
+format:
+  type: llm_generated_html
+  paragraph:
+    required: true
+    word_count_min: 60
+    word_count_max: 120
+    sentence_count_min: 2
+    sentence_count_max: 5
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 4
+    word_count_max: 18
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Tablodaki verilerden doğru okunan veya çıkarılan bilgi
+  kurallar:
+  - Doğru cevap tablodaki verileri doğru yorumlamalı
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ. Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: VERI_CARPITMA
+    aciklama: Tablodaki değeri yanlış aktarma
+  - ad: YANLIS_KARSILASTIRMA
+    aciklama: Satırları yanlış karşılaştırma
+  - ad: GENELLEME_HATASI
+    aciklama: Tabloda olmayan genelleme yapma
+use_shared_strategies: false

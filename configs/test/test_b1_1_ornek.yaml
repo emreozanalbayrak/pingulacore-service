@@ -1,0 +1,33 @@
+topics_file: ../../konular/kadirhocaistekler/baglam/b1_1_turkce.txt
+subject: "Türkçe"
+grade: 5
+
+models:
+  paragraph_writer: gemini-3.1-pro-preview
+  question_crafter: gemini-3.1-pro-preview
+  validator: gemini-3-flash-preview
+
+grounding:
+  enabled: false
+
+validation:
+  max_fix_iterations: 3
+  required_checks:
+    - question_format
+    - grade_level
+    - distractors
+    - turkish
+
+image_generation:
+  enabled: false
+
+output:
+  dir: ../../output/test_b1_1_ornek
+
+context_generation_plan:
+  - topics: "1"
+    template: baglam_bilgi_tablo
+  - topics: "7"
+    template: coklu_gorus
+  - topics: "9"
+    template: senaryo_anket

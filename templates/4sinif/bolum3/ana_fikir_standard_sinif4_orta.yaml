@@ -1,0 +1,124 @@
+# Kaynak: ana_fikir_standard_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.orta
+# 4. sinif ana fikir standart — orta duzey
+
+meta:
+  id: "ana_fikir_standard_sinif4_orta"
+  ad: "4. Sinif - Ana Fikir Standart (Orta)"
+  sinif_seviyesi: 4
+  aciklama: "Orta duzey — 4. sinif ana fikir sorusu. Metnin ana fikrini en iyi yansitan cumleyi secme."
+  frequency: "High"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 4 tam cumle secenegi (orta)"
+
+  paragraph:
+    required: true
+    word_count_min: 65
+    word_count_max: 85
+    background_color: "#f8f0e0"
+    sentence_count_min: 5
+    sentence_count_max: 6
+    stil: "bilgilendirici"
+    kurallar:
+      - "Ana fikir acik olmali ancak tum paragraf okunmadan tam netlesmemeli."
+      - "2-4 destekleyici bilgi veya ornek icermelidir."
+      - "En az bir yardimci bilgi, celdirici olusturmaya elverisli olmalidir."
+      - "Yazarin tutumu veya degerlendirmesi paragraf boyunca hissedilmelidir."
+      - "Dis bilgi gerektirmemelidir."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 5
+    word_count_max: 10
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Tum secenekler tam cumle biciminde olmali."
+      - "Secenekler 4. sinif duzeyinde olmali."
+      - "Dogru secenek metnin ana fikrini en kapsamli ve dogru bicimde yansitmali."
+      - "Celdirici secenekler yardimci fikir, cok genis yorum veya cok dar yorum icermeli."
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metnin ana fikri aşağıdakilerden hangisidir?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metnin ana fikridir?</b>"
+  - "<b>Bu metinde verilmek istenen <u>asıl</u> mesaj aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metnin ana düşüncesi aşağıdakilerden hangisidir?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metni <u>en kapsamlı</u> biçimde özetlemektedir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metnin tamamini kapsayan, ana dusunceyi dogru ve eksiksiz yansitan cumle"
+  kurallar:
+    - "Dogru secenek paragrafin TAMAMINI kapsamalidir."
+    - "Dogru secenek yardimci bilgiyi degil, temel mesaji yansitmalidir."
+    - "Detay odakli ya da gereksiz ust duzey genellikte olmamalidir."
+    - "Dogru secenek metindeki hicbir cumleyi kelimesi kelimesine tekrarlamamali."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+
+celdirici_stratejileri:
+  - ad: "DETAY_TUZAGI_GUCLU"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Güçlü yardımcı bilgiyi ana fikir gibi sunan orta zorluklu tuzak"
+    nasil_olusturulur: |
+      Metindeki en güçlü yardımcı bilgiyi ana fikir gibi sun.
+      Orta seviyede ilk bakışta doğruya aday gibi görünmeli — tüm paragraf değerlendirilince elenmelidir.
+      Tam cümle, 5-10 kelime.
+    kategori: "content"
+
+  - ad: "KAPSAM_TUZAGI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Paragrafın mesajına çok yakın ama kapsamı biraz farklı yargı"
+    nasil_olusturulur: |
+      Paragrafın gerçek ana fikrine çok yakın ama kapsamı biraz geniş ya da dar olan bir yargı oluştur.
+      Orta seviyede fark anlaşılabilir ama hemen belli olmamalı.
+      Tam cümle, 5-10 kelime.
+    kategori: "semantic"
+
+  - ad: "YANLIS_SONUC"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Paragraftaki bilgileri farklı yorumlayarak ulaşılan yanlış çıkarım"
+    nasil_olusturulur: |
+      Paragraftaki bilgileri yorumlayarak yazarın kastetmediği bir sonuç yargısı oluştur.
+      Orta seviyede makul görünmeli ama paragrafın gerçek mesajını kaçırmalı.
+      Tam cümle, 5-10 kelime.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cikarim_yapma", "ozetleme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

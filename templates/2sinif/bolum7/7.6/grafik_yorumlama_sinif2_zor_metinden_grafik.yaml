@@ -1,0 +1,114 @@
+# templates/2sinif/bolum7/7.6/grafik_yorumlama_sinif2_zor_metinden_grafik_1q.yaml
+# 2. Sinif — Grafik Yorumlama — ZOR — metindeki_bilgileri_veren_grafik
+# Metin/veri listesi + grafik secenekleri zorunlu, 3 secenekli, coklu bilgi birlestirme
+
+meta:
+  id: "grafik_yorumlama_sinif2_zor_metinden_grafik"
+  ad: "2. Sinif - Grafik Yorumlama (Zor) - Metinden Grafik"
+  sinif_seviyesi: 2
+  aciklama: "Zor duzey — metindeki bilgileri veren grafik secme, 3 secenekli, coklu bilgi birlestirme"
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Metin veya veri listesi + 3 grafik secenegi + soru koku (zor, metinden grafik)"
+
+  paragraph:
+    required: true
+    word_count_min: 18
+    word_count_max: 56
+    sentence_count_min: 2
+    sentence_count_max: 5
+    stil: "veri_listesi_veya_aciklama"
+    background_color: "#fce8e8"
+    kurallar:
+      - "Metin veya liste grafikte hangi verilerin olmasi gerektigini anlatmalidir."
+      - "Bilgiler acik ve sade olmalidir."
+      - "Dogru grafigi secmek icin metin dikkatle okunmalidir."
+      - "Metin tek basina dogru cevabi soylememeli; grafik secenekleriyle karsilastirma gerektirmelidir."
+      - "Liste veya metin 2. sinif duzeyine uygun olmalidir."
+      - "Metin tipi: kisa aciklama metni, madde madde veri listesi veya kisi-sayi, gun-sayi, nesne-sayi iliskisi veren kisa bilgiler."
+      - "3 grafik secenegi zorunludur."
+      - "Her secenek grafik biciminde verilmelidir."
+      - "3 grafik de bicimce paralel olmalidir."
+      - "Dogru grafik metindeki bilgileri tam karsilamalidir."
+      - "Yanlis grafikler yakin ama hatali veri tasimalidir."
+      - "Grafik secenekleri 2. sinif duzeyinde okunabilir olmalidir."
+      - "Grafik secenekleri yalniz renk veya sekil farkiyla degil, veri farkiyla ayirt edilmelidir."
+      - "Zor duzey: Grafikte birden fazla kategori iliskisi bulunabilir."
+      - "Dogru cevap icin iki bilgiyi birlestirmek gerekebilir."
+      - "Zor duzey bile en fazla 2 adimli islem yapilmalidir."
+      - "Zor duzey de 2. sinif sadeligi korunmalidir."
+      - "Dogru cevap icin hem metin/liste hem grafik secenekleri birlikte incelenmelidir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 15
+    word_count_max: 50
+    style: "image_description"
+    image_style: "chart"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "3 grafik secenegi bulunmalidir."
+      - "1 grafik metindeki bilgileri tam karsilamalidir."
+      - "2 grafik yakin ama hatali veri tasimalidir."
+      - "Dogru cevap icin hem metin/liste hem grafik secenekleri birlikte incelenmelidir."
+      - "Yanlis grafikler de metne kismen benzeyebilir."
+      - "Grafik secenekleri birbirinden ayirt edilebilir olmalidir."
+      - "2 yanlis grafik de makul gorunmelidir."
+      - "1 yanlis grafik yakin karsilastirma hatasi icermelidir."
+      - "1 yanlis grafik kategori veya veri eslestirme hatasi icermelidir."
+
+soru_kokleri:
+  - "<b>Grafiklerden hangisi metindeki bilgileri içermektedir?</b>"
+  - "<b>Aşağıdaki grafiklerden hangisi metindeki bilgilere uygundur?</b>"
+  - "<b>Verilen bilgilere göre doğru grafik hangisidir?</b>"
+  - "<b>Metindeki bilgilere göre oluşturulan grafik aşağıdakilerden hangisidir?</b>"
+  - "<b>Aşağıdaki grafiklerden hangisi verilen bilgileri doğru göstermektedir?</b>"
+
+dogru_cevap:
+  tanim: "Metindeki bilgileri tam karsilayan grafik"
+  kurallar:
+    - "Dogru cevap metindeki bilgileri tam karsilayan grafik olmalidir."
+    - "Dogru cevap dis bilgi gerektirmemelidir."
+    - "Dogru cevap 2. sinif ogrencisinin metin ve grafikleri karsilastirarak bulabilecegi aciklikta olmalidir."
+    - "Dogru cevap icin hem metin/liste hem grafik secenekleri birlikte incelenmelidir."
+    - "Dogru cevap icin iki bilgiyi birlestirmek gerekebilir."
+
+celdirici_stratejileri:
+  - ad: "YANLIS_GRAFIK_ESLESMESI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metindeki bilgilerin bir kismini dogru, bir kismini yanlis gosteren grafik"
+    nasil_olusturulur: |
+      Grafik seceneginde metindeki verilerin bir kismini dogru, diger kismini yanlis goster.
+      Ornek: iki sutun dogru, bir sutun yanlis; bir kategori yeri degismis grafik.
+    kategori: "cognitive"
+
+  - ad: "YAKIN_SAYI_HATASI"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Grafikteki degere cok yakin ama yanlis sayi kullanma"
+    nasil_olusturulur: |
+      Grafik seceneginde bir degeri yakin ama yanlis bir sayiyla degistir.
+      Ornek: 40 yerine 30 gostermek, sirayla dogru ama son veri yanlis.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["grafik_okuma", "metin_grafik_eslestirme", "coklu_bilgi_birlestirme"]
+  surec_bileseni: "bilgiyi_yorumlama"
+
+sinif2_ek_kurallar:
+  yasak_alanlar:
+    - "Ana dusunce / ana duygu odakli sorular YASAK"
+    - "Soyut yorum veya edebi analiz YASAK"
+    - "Dis bilgi gerektiren sorular YASAK"
+    - "Oran, yuzde veya ileri istatistik YASAK"
+    - "2 adimdan fazla islem gerektiren yapi YASAK"

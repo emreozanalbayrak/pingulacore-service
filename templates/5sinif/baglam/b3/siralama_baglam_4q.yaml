@@ -1,0 +1,168 @@
+# templates/baglam/siralama_baglam_4q.yaml
+# Bağlam Tipi: Bölüm 3 — Yapı Bölümü (4Q)
+# Soru Sayısı: 4
+# Soru Tipleri: Sıralama + İkiye bölme + Tamamlama + Akışı bozan
+
+meta:
+  id: "siralama_baglam_4q"
+  ad: "Sıralama Bağlam (4 Soru)"
+  sinif_seviyesi: 5
+  aciklama: "Numaralı cümlelerden oluşan metin — sıralama, ikiye bölme, tamamlama ve akışı bozan cümle soruları"
+  kaynak: "kaynak-soru-kokleri.md"
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# BAĞLAM KONFİGÜRASYONU
+# ═══════════════════════════════════════════════════════════════
+
+context:
+  type: "siralama_baglam_4q"
+  question_count: 4
+  question_count_min: 4
+  question_count_max: 4
+  generation:
+    word_count_min: 120
+    word_count_max: 200
+    structure:
+      - "Bir konu hakkında 8-10 cümlelik bir metin oluştur"
+      - "Cümleleri 1'den başlayan Arap rakamlarıyla numarala (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)"
+      - "Cümleler mantıksal bir sıra izlemeli (neden-sonuç, zaman dizisi veya süreç)"
+      - "Cümleleri KARIŞIK sırada sun — doğru sıra 1-2-3-…-10 OLMAMALI"
+      - "Metin iki paragraf olarak düşünülebilir yapıda olmalı (net bir geçiş noktası)"
+      - "7 cümle tutarlı akış oluştursun, 1 cümle konuyla ilgili ama akışa uymasın"
+      - "Son cümle çıkarılabilir yapıda olmalı — tamamlama sorusu sorulabilmeli"
+      - "YASAK: HTML tablosu (<table>) EKLEME — sadece numaralı cümleler yaz, tablo KULLANMA"
+    kurallar:
+      - "5. sınıf seviyesinde, bilgilendirici bir konu (fen, sosyal bilgiler, günlük hayat)"
+      - "Cümle numaralama 1'den başlayan Arap rakamlarıyla (1, 2, 3…) yapılmalı"
+      - "8-10 cümle olmalı — 4 soru sorulabilecek kadar zengin içerik"
+      - "İkiye bölme noktası belirgin ama kolay olmayacak şekilde olmalı"
+      - "Akışı bozan cümle ince bir sapma olmalı"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+    - slot: 1
+      type: "siralama"
+      soru_kokleri:
+        - "<b>Numaralanmış cümleler anlamlı bir paragraf oluşturacak şekilde sıralandığında doğru sıralama aşağıdakilerden hangisidir?</b>"
+        - "<b>Bu cümleler anlamlı bir bütün oluşturacak şekilde sıralandığında doğru sıra hangisidir?</b>"
+        - "<b>…Karakter…'in oluşturduğu anlamlı metnin doğru sıralaması aşağıdakilerden hangisidir?</b>"
+        - "<b>…Karakter…'in oluşturduğu metinde hangisi baştan ikinci sırada yer alır?</b>"
+      options_style: "short_phrase"
+      word_count_min: 3
+      word_count_max: 12
+      beceri:
+        katman: "KB2"
+        bilesenler: ["siralama", "yapilandirma"]
+        surec_bileseni: "metin_yapisini_analiz_etme"
+
+    - slot: 2
+      type: "ikiye_bolme"
+      soru_kokleri:
+        - "<b>Bu metin iki paragrafa ayrılacak olursa ikinci paragraf hangi cümleyle başlar?</b>"
+        - "<b>Metin iki paragrafa bölündüğünde ikinci paragrafın ilk cümlesi hangisidir?</b>"
+      options_style: "short_phrase"
+      word_count_min: 2
+      word_count_max: 6
+      beceri:
+        katman: "KB2"
+        bilesenler: ["yapilandirma", "analiz"]
+        surec_bileseni: "metin_yapisini_analiz_etme"
+
+    - slot: 3
+      type: "tamamlama"
+      soru_kokleri:
+        - "<b>Bu metnin sonuna aşağıdaki cümlelerden hangisi eklenebilir?</b>"
+        - "<b>Metne eklenen son cümle aşağıdakilerden hangisi olabilir?</b>"
+        - "<b>Paragrafın son cümlesinin eksik olduğu fark edilmiştir. Aşağıdakilerden hangisi paragrafın son cümlesi olabilir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 8
+      word_count_max: 22
+      beceri:
+        katman: "KB2"
+        bilesenler: ["cikarim_yapma", "yapilandirma"]
+        surec_bileseni: "metin_yapisini_analiz_etme"
+
+    - slot: 4
+      type: "akis_bozan"
+      soru_kokleri:
+        - "<b>Numaralanmış cümlelerden hangisi metnin anlam akışını <u>bozmaktadır</u>?</b>"
+        - "<b>Bu cümlelerden hangisi metnin bütünlüğünü <u>bozmaktadır</u>?</b>"
+        - "<b>…Karakter…'in metinden çıkardığı metnin akışını bozan cümle aşağıdakilerden hangisidir?</b>"
+        - "<b>…Karakter…'in bulduğu yazıda konunun farklı bir yönünden bahseden numaralanmış cümle hangisidir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 8
+      word_count_max: 22
+      beceri:
+        katman: "KB2"
+        bilesenler: ["degerlendirme", "yapilandirma"]
+        surec_bileseni: "metin_yapisini_analiz_etme"
+
+header_template: "1-4. soruları aşağıdaki numaralanmış cümlelere göre cevaplayınız."
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Numaralı cümlelerden oluşan metin üzerinden sıralama, ikiye bölme, tamamlama ve akışı bozan soruları"
+
+  paragraph:
+    required: true
+    word_count_min: 120
+    word_count_max: 200
+    sentence_count_min: 8
+    sentence_count_max: 12
+
+  stem:
+    required: true
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 22
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+# ═══════════════════════════════════════════════════════════════
+# DOĞRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Doğru sıralama, paragraf başlangıcı, uygun tamamlama cümlesi veya akışı bozan cümle"
+  kurallar:
+    - "KRİTİK: Doğru cevap metindeki tek bir cümleden direkt okunaMAMALI — çıkarım gerektirmeli"
+    - "Öğrenci doğru cevaba ulaşmak için numaralı cümlelerin mantıksal sırasını ANLAMALI"
+    - "Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri doğru olmalı"
+    - "Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı"
+    - "Sıralama sorusunda doğru cevap mantıksal akışı doğru yansıtan sıralama olmalı"
+    - "İkiye bölme sorusunda doğru cevap alt konunun değiştiği noktadaki cümle numarası olmalı"
+    - "Tamamlama sorusunda doğru cevap metnin anlam bütünlüğünü koruyan cümle olmalı"
+    - "Akışı bozan sorusunda doğru cevap konuyla ilgili ama akışa uymayan cümle olmalı"
+    - "NOT: Tamamlama ve akışı bozan sorularında seçenekler metindeki cümlelere benzer olabilir — bu normaldir"
+    - "Sıralama şıklarında cümle numaraları (1-2-3-4...) kullanılmalı, uzun metin YASAK"
+    - "BİLİMSEL TERİM KORUMASI: Bilimsel terimler değiştirilmemeli"
+
+# ═══════════════════════════════════════════════════════════════
+# ÇELDİRİCİ STRATEJİLERİ
+# ═══════════════════════════════════════════════════════════════
+
+distractors:
+  stratejiler:
+    - ad: "BITISIK_CUMLE_TAKASI"
+      aciklama: "Doğru sırada bitişik iki cümlenin yerini değiştirerek yakın ama yanlış sıralama sunma"
+      ornek: "Doğru sıralama 'I-II-III-IV-V' ise 'I-III-II-IV-V' sunma"
+    - ad: "YAKIN_BOLME_NOKTASI"
+      aciklama: "Doğru bölme noktasına yakın ama yanlış cümleyi paragraf başlangıcı olarak sunma"
+      ornek: "Doğru cümleden bir önceki veya sonraki cümleyi başlangıç gibi gösterme"
+    - ad: "KONU_SAPMASI"
+      aciklama: "Konuyla ilgili ama metnin akışına uymayan tamamlama cümlesi sunma"
+      ornek: "Aynı genel konuda ama farklı alt konuya geçen bir cümle önerme"
+    - ad: "DETAY_TEKRARI"
+      aciklama: "Metinde zaten var olan bir bilgiyi farklı kelimelerle tekrarlayan cümle sunma"
+      ornek: "Yeni bilgi eklemeyen, sadece önceki cümleleri özetleyen ifade"
+
+use_shared_strategies: false

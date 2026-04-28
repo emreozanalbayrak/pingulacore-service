@@ -1,0 +1,114 @@
+# Kaynak: paragraf_metin_giris_gelisme_sonuc_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.orta
+# 4. sinif metin giris/gelisme/sonuc — orta duzey
+
+meta:
+  id: "b12_paragraf_metin_giris_gelisme_sonuc_sinif4_orta"
+  ad: "Metin Giriş/Gelişme/Sonuç Bölümü Tespiti (Orta)"
+  sinif_seviyesi: 4
+  aciklama: "Orta duzey — mini paragraflardan hangisinin giriş, gelişme veya sonuç bölümüne ait olduğunu belirleme."
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Soru kökü + 4 mini paragraf seçenek (orta)"
+
+  paragraph:
+    required: false
+    kurallar:
+      - "En az bir celdirici, bolum islevi bakimindan dogru secenege yakin gorunmeli."
+      - "Giris/gelisme/sonuc ayrimi icin birden fazla icerik ipucu birlikte calismali."
+      - "Yay ayrac kokunde yanlis etiket, metin dikkatle okununca fark edilmelidir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+    kurallar:
+      - "Soru kökü SADECE tek bir soru cümlesi olmalı."
+      - "Soru kökünde Roma rakamı, paragraf metni veya ek açıklama BULUNMAMALI."
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 24
+    word_count_max: 40
+    background_color: "#f8f0e0"
+    sentence_count_min: 2
+    sentence_count_max: 4
+    style: "mini_paragraph"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Her seçenek bir mini paragraf olmalı (2-4 cümle, 24-40 kelime)."
+      - "Roma rakamı KULLANMA — seçeneklerde numaralama yok, sadece düz metin."
+      - "Doğru mini paragrafın bölüm niteliği içerikten anlaşılmalı; çok bariz olmamalı."
+      - "En az bir çeldirici, bölüm işlevi bakımından doğru seçeneğe yakın görünmeli."
+      - "YASAK: 'Özetle', 'Kısacası', 'Sonuç olarak', 'Öncelikle', 'İlk olarak' gibi kalıp ifadeler."
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Aşağıdakilerden hangisi bir metnin giriş bölümü olabilir?</b>"
+  # KULLANILDI: - "<b>Aşağıdakilerden hangisi bir metnin sonuç bölümüne aittir?</b>"
+  # KULLANILDI: - "<b>Aşağıdakilerden hangisi bir metnin sonuç bölümüne ait <u>olamaz</u>?</b>"
+  # KULLANILDI: - "<b>Aşağıdakilerden hangisi bir hikâyenin sonuç bölümüne aittir?</b>"
+  # KULLANILDI: - "<b>Aşağıdaki cümlelerden hangisi bir paragrafın giriş bölümü olmaya en uygundur?</b>"
+  # KULLANILDI: - "<b>Aşağıdakilerden hangisi bir metnin sonuç bölümü olmaya en uygundur?</b>"
+  # KULLANILDI: - "<b>Bu cümlelerden hangisi metnin gelişme bölümünde yer alamaz?</b>"
+  - "<b>Aşağıdakilerin hangisinde metnin ait olduğu bölüm yay ayraç içinde <u>yanlış</u> verilmiştir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Soru köküne göre doğru bölüme ait olan veya olmayan mini paragrafı seçme"
+  kurallar:
+    - "Giriş niteliğindeki mini paragraf: Konuyu tanıtan, genel çerçeveyi çizen metin."
+    - "Gelişme niteliğindeki mini paragraf: Konuyu detaylandıran, örnekleyen metin."
+    - "Sonuç niteliğindeki mini paragraf: Konuyu toparlayan, bir yargıya/sonuca varan metin."
+    - "Doğru cevap bölüm özelliklerini açıkça taşımalı ama kalıp ifadelerle değil içerikle belli edilmeli."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "ICERIKTEN_ANLASILIR_BOLUM"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Bölüm niteliği içerikten anlaşılan, çok bariz olmayan seçenek yapısı"
+    nasil_olusturulur: |
+      Doğru mini paragrafın bölüm niteliği içerikten anlaşılmalı; çok bariz olmamalı.
+      En az 1 celdirici bölüm işlevi bakımından doğru seçeneğe yakın görünmeli.
+      Giriş/gelişme/sonuç ayrımı için birden fazla içerik ipucu birlikte çalışmalı.
+    kategori: "cognitive"
+
+  - ad: "YAKIN_BOLUM_ISLEVI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Sorulan bölüme işlev bakımından yakın görünen celdirici"
+    nasil_olusturulur: |
+      En az 1 celdirici sorulan bölüme işlev bakımından yakın görünmeli.
+      Orta seviyede öğrenci yalnızca kalıp ifadelere bakarak değil, içerik işleviyle karar vermelidir.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siralama", "yapilandirma", "siniflandirma"]
+  surec_bileseni: "metin_yapisini_analiz_etme"
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

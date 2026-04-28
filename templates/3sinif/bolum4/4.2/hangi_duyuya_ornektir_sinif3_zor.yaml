@@ -1,0 +1,160 @@
+# Referans: paragrafta_duyular_sinif3_referans.yaml → zorluk_duzeyleri.zor
+# Zor duzey — hangi_duyuya_ornektir varyanti
+
+meta:
+  id: "hangi_duyuya_ornektir_sinif3_zor"
+  ad: "3. Sinif - Paragrafta Duyular / Hangi Duyuya Ornektir (Zor)"
+  sinif_seviyesi: 3
+  aciklama: "Zor duzey — hangi_duyuya_ornektir: Hangi Duyuya Ornektir. 4 secenekli, gorselli."
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Gorsel + tek paragraf + soru koku + 4 duyu secenegi (zor)"
+
+  paragraph:
+    required: true
+    word_count_min: 40
+    word_count_max: 82
+    sentence_count_min: 4
+    sentence_count_max: 6
+    stil: "simple_clear_primary_text_alti_cizili"
+    background_color: "#fce8e8"
+    kurallar:
+      - "Metin 3. sinif ogrencisinin anlayabilecegi kadar acik, sade ve akici olmalidir."
+      - "Metinde en az 2, en fazla 4 farkli duyuya ait acik ipucu bulunmalidir."
+      - "Duyusal ayrintilar dogal cumle akisi icinde verilmelidir."
+      - "Metin tek baskin konu veya tek kisa olay etrafinda kurulmalidir."
+      - "Metindeki duyu ifadeleri dogrudan ya da cok acik baglamla anlasilmalidir."
+      - "Metin dis bilgi gerektirmemelidir."
+      - "Duyu sorusu, ana dusunce veya konu sorusuna donusmemelidir."
+      - "Metin 4. sinifa kayan soyut betimleme veya agir mecaz yogunlugu tasimamalidir."
+      - "Duyu ifadeleri olay, nesne, ortam veya teknoloji gibi somut baglamlara yerlestirilebilir."
+      - "Metinde 3 veya 4 farkli duyu bulunabilir."
+      - "Baskin duyu belirgin olmali; ancak diger duyular da celdiriciye malzeme verebilir."
+      - "Zor duzeyde bile agir mecaz ve soyut yorum kullanilmamalidir."
+      - "Metinde TAM 1 ifade <u> tagi ile alti cizilmelidir; bu ifade hedef duyuya acikca baglanmalidir."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  visual:
+    required: true
+    description: "Metindeki ana icerigi ve alti cizili ifadenin duyusal baglamini destekleyen islevsel gorsel"
+    placement: "paragraph_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illustrasyon"
+      - "tek sahneli fotograf benzeri cizim"
+      - "tek olay veya tek varlik odakli sahne"
+      - "duyusal baglami destekleyen sade konu gorseli"
+    kurallar:
+      - "Her soru icin gorsel zorunludur."
+      - "Gorsel metnin ana icerigiyle acik uyumlu olmalidir."
+      - "Gorsel sus olmamali, cozumde destek sunmalidir."
+      - "Gorsel tek basina dogru cevabi vermemelidir."
+      - "Gorsel ile metin birlikte degerlendirildiginde duyusal baglam daha netlesebilir."
+      - "Gorsel dikkat dagitici gereksiz ayrintilar icermemelidir."
+      - "Gorsel yanlis secenegi acikca isaret edecek kadar yaniltici olmamalidir."
+    yasaklar:
+      - "dekoratif ve metinden bagimsiz gorsel"
+      - "cok sahneli karmasik kolaj"
+      - "grafik, tablo veya infografik yogunlugu tasiyan tasarim"
+      - "duyu adlarini yaziyla etiketleyen gorsel"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir (hangi_duyuya_ornektir varyanti)"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 2
+    style: "sense_label"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "3. sinifta her soru 4 secenekli olmalidir."
+      - "Secenekler duyu adi biciminde olmalidir."
+      - "Izinli secenekler: Gorme, Isitme, Koklama, Tatma, Dokunma."
+      - "Dogru secenek metindeki duyusal ipuclariyla acikca desteklenmelidir."
+      - "Yanlis secenekler metne yakin gorunse de dikkatli okuyunca elenebilmelidir."
+      - "Birden fazla makul dogru secenek olusmamalidir."
+      - "3 yanlis secenegin en az 2'si metne yakin gorunmelidir."
+      - "Yakin duyu ve cagrisim duyusu birlikte kullanilabilir."
+      - "Baskin duyu sorularinda gercekten tek baskin alan bulunmalidir."
+
+soru_kokleri:
+  - "<b>Metindeki alti cizili ifade asagidaki duyulardan hangisine ornektir?</b>"
+  - "<b>Bu ifadede asagidaki duyulardan hangisine ait ayrinti vardir?</b>"
+  - "<b>Parcadaki bu soz asagidaki duyulardan hangisiyle ilgilidir?</b>"
+  - "<b>Asagidakilerden hangisi metindeki bu ayrintinin ilgili oldugu duyudur?</b>"
+  - "<b>Verilen ifade hangi duyuya ornek olur?</b>"
+
+duyu_havuzu:
+  izinli_duyular:
+    - "Gorme"
+    - "Isitme"
+    - "Koklama"
+    - "Tatma"
+    - "Dokunma"
+  kullanim_kurallari:
+    - "Her soruda dogru duyu metindeki acik ifadelerle desteklenmelidir."
+    - "Bir metinde tum duyularin bulunmasi gerekmez."
+    - "Duyular dogal anlatim icinde gecmelidir."
+    - "Duyularin ayirt edilmesi icin metinde yeterli ipucu bulunmalidir."
+    - "Tatma ve koklama birlikte kullanilacaksa metin bunlari ayirmayi gercekten desteklemelidir."
+
+dogru_cevap:
+  tanim: "Metindeki duyusal ipuclariyla acikca desteklenen dogru duyu secenegi"
+  kurallar:
+    - "KRITIK PARAPHRASE: Dogru cevap paragraftaki cumleleri/ifadeleri AYNEN KULLANMA — paragraf kelimelerini es anlamli sozcuklerle degistir ve farkli cumle yapisiyla yeniden ifade et. En az %50 kelime farkliligi zorunlu. Paragrafa cok benzer secenekler FAIL olur."
+    - "Dogru cevap metinde acikca bulunan duyu ayrintilarina dayanmalidir."
+    - "Dogru cevap tek bir sozcuge degil, baglama da dayanabilir."
+    - "Dogru cevap dis bilgi gerektirmemelidir."
+    - "Dogru cevap 3. sinif ogrencisinin dikkatli okuyarak bulabilecegi aciklikta olmalidir."
+    - "Hangi duyuya ornektir varyantinda hedef ifade yalniz bir duyuya acik bicimde baglanmalidir."
+
+celdirici_stratejileri:
+  - ad: "YAKIN_DUYU"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metne yakin gorunur ama baglamda desteklenmeyen duyu"
+    nasil_olusturulur: |
+      Metne yakin gorunen ama baglamda desteklenmeyen bir duyu sec.
+      Ornek: Gorme yerine dokunma, isitme yerine gorme.
+    kategori: "semantic"
+
+  - ad: "CAGRISIM_DUYUSU"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Konu alanindan cagrisim yoluyla gelebilecek ama metinde gecmeyen duyu"
+    nasil_olusturulur: |
+      Konu alanindan cagrisim yoluyla gelebilecek ama metinde gecmeyen bir duyu sec.
+      Ornek: Telefon metninde tatma, yemek metninde isitme.
+    kategori: "cognitive"
+
+  - ad: "YARDIMCI_IPUCUNU_BUYUTME"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Kisa bir ayrintiyi baskin duyu gibi gosteren secenek"
+    nasil_olusturulur: |
+      Metinde kisa bir ayrintidan cikarilabilen bir duyuyu baskin duyu gibi sun.
+    kategori: "cognitive"
+
+  - ad: "METIN_DISINA_TASMA"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Genel dunya bilgisine dayanarak secilebilecek ama metinde bulunmayan duyu"
+    nasil_olusturulur: |
+      Genel dunya bilgisine dayanarak secilebilecek ama metinde bulunmayan bir duyu sec.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB1"
+  bilesenler: ["duyu_belirleme", "duyusal_ayrinti_fark_etme"]
+  surec_bileseni: "metni_anlama"
+
+sinif3_ek_kurallar:
+  yasak_alanlar:
+    - "Agir mecazlarla gizlenmis duyu cozumlemeleri YASAK"
+    - "Duyu yerine soyut duygu veya ana fikir sorduran yapi YASAK"
+    - "Metin disi dunya bilgisi gerektiren secenekler YASAK"
+    - "Mecazli ve sembolik anlatimdan duyu cikarma (4. sinif) YASAK"
+    - "Duyusal ayrintinin anlatim teknigi icindeki islevini tartistirma (4. sinif) YASAK"

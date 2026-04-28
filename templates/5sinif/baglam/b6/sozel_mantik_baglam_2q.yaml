@@ -1,0 +1,105 @@
+meta:
+  id: sozel_mantik_baglam_2q
+  ad: Sözel Mantık Bağlam (2 Soru)
+  sinif_seviyesi: 5
+  aciklama: Kısa bilgi paragrafı ve mantıksal önermeler üzerinden doğru çıkarım ve söylenemez soruları
+  kaynak: kaynak-soru-kokleri.md
+  frequency: Medium
+context:
+  type: sozel_mantik_baglam_2q
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 80
+    word_count_max: 140
+    structure:
+    - Bir konu hakkında kısa bilgi paragrafı oluştur (3-5 cümle)
+    - Paragrafta birden fazla mantıksal ilişki olmalı (neden-sonuç, koşul, karşılaştırma)
+    - Bilgilerden kesin çıkarımlar yapılabilmeli
+    - Bazı çıkarımlar yapılamaz olmalı (söylenemez sorusu için)
+    - Bilgiler somut ve açık olmalı — belirsizlik olmamalı
+    kurallar:
+    - 5. sınıf seviyesinde, günlük hayat, doğa veya bilim konuları
+    - Paragraf bilgilendirici olmalı
+    - Mantıksal ilişkiler (neden-sonuç, koşul, genel kural + özel durum) açık olmalı
+    - Verilen bilgilerden hem çıkarılabilecek hem çıkarılamayacak sonuçlar olmalı
+    - Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)
+  questions:
+  - slot: 1
+    type: onerme_dogru
+    soru_kokleri:
+    - <b>Verilen bilgilere göre aşağıdakilerden hangisi kesinlikle doğrudur?</b>
+    - <b>Bu bilgilerden aşağıdaki sonuçlardan hangisine ulaşılabilir?</b>
+    - <b>Bu bilgi gorseline gore ...Icerik... ile ilgili asagidakilerden hangisi soylenebilir?</b>
+    options_style: complete_sentence
+    word_count_min: 8
+    word_count_max: 22
+    beceri:
+      katman: KB3
+      bilesenler:
+      - mantiksal_cikarim
+      - degerlendirme
+      surec_bileseni: karar_verme
+  - slot: 2
+    type: onerme_yanlis
+    soru_kokleri:
+    - <b>Verilen bilgilere göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>
+    - <b>Metindeki bilgilerden hareketle aşağıdakilerden hangisine <u>ulaşılamaz</u>?</b>
+    - <b>Bu gorseldeki ...Ozellik...e asagidaki aciklamalardan hangisi anlamca en yakindir?</b>
+    options_style: complete_sentence
+    word_count_min: 8
+    word_count_max: 22
+    beceri:
+      katman: KB3
+      bilesenler:
+      - mantiksal_cikarim
+      - degerlendirme
+      surec_bileseni: karar_verme
+header_template: 1-2. soruları aşağıdaki bilgilere göre cevaplayınız.
+format:
+  type: llm_generated_html
+  description: Bilgi paragrafı üzerinden mantıksal çıkarım soruları
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 140
+    sentence_count_min: 3
+    sentence_count_max: 6
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 8
+    word_count_max: 22
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Verilen bilgilerden mantıksal olarak kesinlikle çıkarılabilen veya çıkarılamayan sonuç
+  kurallar:
+  - Doğru çıkarım sorusunda doğru cevap verilen bilgilerden KESİNLİKLE çıkan mantıksal sonuç
+  - Söylenemez sorusunda doğru cevap verilen bilgilerden çıkarılamayan ifade
+  - Her iki durumda da çıkarım mantıksal zincire dayanmalı
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: ''teleskop'' → ''mercekli araç'' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: MANTIKSAL_TERSINE_CEVIRME
+    aciklama: Neden-sonuç ilişkisini tersine çevirerek yanlış sonuç çıkarma
+    ornek: Yağmur → toprak ıslandı' ilişkisini 'Toprak ıslandı → yağmur yağdı' şeklinde sunma
+  - ad: ASIRI_CIKARIM_MANTIK
+    aciklama: Verilen bilgilerden fazlasını çıkararak desteklenmeyen sonuca ulaşma
+    ornek: Tüm memeliler akciğerle solur → Tüm memeliler karada yaşar çıkarımı
+  - ad: KISMI_DOGRU_ONERME
+    aciklama: Kısmen doğru ama geçersiz bir önerme sunma
+    ornek: İlk yarısı metinle uyumlu ama ikinci yarısı desteklenmeyen ifade
+use_shared_strategies: false

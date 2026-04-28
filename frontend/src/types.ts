@@ -189,3 +189,57 @@ export interface ApiErrorShape {
   message: string
   detail: unknown
 }
+
+export type LegacyPipelineKind = 'geometry' | 'turkce'
+
+export interface LegacyPipelineDescriptor {
+  kind: LegacyPipelineKind
+  label: string
+  enabled: boolean
+  yaml_root: string
+  default_params: Record<string, unknown>
+}
+
+export interface LegacyPipelinesResponse {
+  pipelines: LegacyPipelineDescriptor[]
+}
+
+export interface LegacyYamlFilesResponse {
+  kind: LegacyPipelineKind
+  files: string[]
+}
+
+export interface LegacyYamlUploadResponse {
+  kind: LegacyPipelineKind
+  yaml_path: string
+}
+
+export interface LegacyRunRequest {
+  yaml_path: string
+  params?: Record<string, string | number | boolean>
+  stream_key?: string
+}
+
+export interface LegacyRunResponse {
+  run_id: string
+  pipeline_id: string
+  status: string
+  stream_key?: string | null
+}
+
+export interface LegacyOutputItem {
+  path: string
+  url: string
+  size: number
+}
+
+export interface LegacyRunDetailResponse {
+  run_id: string
+  kind: LegacyPipelineKind
+  yaml_path: string
+  status: string
+  error?: string | null
+  started_at: string
+  finished_at?: string | null
+  outputs: LegacyOutputItem[]
+}

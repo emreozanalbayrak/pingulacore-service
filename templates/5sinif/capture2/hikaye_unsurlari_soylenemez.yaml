@@ -1,0 +1,240 @@
+# templates/capture2/hikaye_unsurlari_soylenemez.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Hikaye Unsurlari
+#
+# SOYLENEMEZ FORMATI (tum hikaye unsurlari sorularinin ~%10'u)
+# Oykuleyici paragraf verilir, ogrenci hikaye unsurlari hakkinda YANLIS cikarimi bulur
+#
+# MANTIK: 3 secenek metinden cikariabilecek dogru yargilar (yanlis), 1 tanesi yanlis cikarim (dogru cevap)
+# Secenekler TAM CUMLE formatindadir (5-20 kelime)
+#
+# Ornek secenekler:
+# - "Olayi anlatan kisi metnin kahramanidir."
+# - "Metinde zaman kavrami belirsiz degildir."
+# - "Olayin gectigi yer bellidir."
+# - "Metinde olaganustu bir durumdan bahsedilmistir." (YANLIS → dogru cevap)
+
+meta:
+  id: "hikaye_unsurlari_soylenemez"
+  ad: "Hikâye Unsurları (Söylenemez)"
+  sinif_seviyesi: 5
+  aciklama: "Hikâye unsurları hakkında yapılan yanlış çıkarımı bulma"
+  kaynak: "data/hikaye_unsurlari.pdf"
+  frequency: "Medium (~10% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Paragraf + soru koku + cumle seklinde secenekler"
+
+  paragraph:
+    required: true
+    word_count_min: 50
+    word_count_max: 100
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "oykuleyici"
+    kurallar:
+      - "Oykuleyici bir metin olmali (olay orgusu, karakter, mekan vb.)"
+      - "Hikaye unsurlari (Olay, Yer, Zaman, Kisi) hakkinda cikarim yapilabilir olmali"
+      - "En az 3 unsur acikca bulunmali"
+      - "Metinden dogru ve yanlis cikarimlarin yapilabilecegi zenginlikte olmali"
+      - "Anlatici bakis acisi (1. tekil, 3. tekil vb.) belirgin olmali"
+      - "Paragrafta hikâye unsurlarıyla ilgili AÇIKLAMA veya EK BİLGİ verme! (Örn: 'Bu hikâyede mekân unsuru parkır', 'Olayın geçtiği yer şehirdir' gibi açıklamalar YASAK)"
+      - "Paragraf SADECE hikâyeyi anlatsın — unsur analizi veya tanımlaması YAPMA"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 5
+    word_count_max: 20
+    style: "complete_sentence"
+    correct_type: "does_not_belong"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 2 varyasyon)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metindeki hikâye unsurları ile ilgili olarak hangisi <u>söylenemez</u>?</b>"
+  - "<b>Bu metnin hikâye unsurları ile ilgili aşağıdakilerden hangisi yanlıştır?</b>"
+  - "<b>Bu metnin hikâye unsurları dikkate alındığında aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Yukarıdaki metne göre hikâye unsurları ile ilgili aşağıdaki yargılardan hangisi <u>doğru değildir</u>?</b>"
+  - "<b>Bu metindeki hikâye unsurları hakkında aşağıdakilerden hangisine <u>ulaşılamaz</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI (TERS MANTIK!)
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metinle celisen yargi"
+  mantik: "INVERSE - diger 3 secenek metinden cikariabilecek dogru yargilar, dogru cevap metinle celisiyor"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Hikaye unsurlari hakkinda metinle celisen bir yargi olmali"
+    - "Tam cumle formatinda olmali (ozne + yuklem)"
+    - "Makul gorunmeli ama paragraftaki bilgilerle celismeli"
+    - "5-20 kelime arasinda olmali"
+    - "Cikarim unsurlara yonelik olmali (olay, yer, zaman, kisi, anlatici vb.)"
+    - "Kelime sayısı bakımından en uzun şık olmamalı."
+  ornekler:
+    - metin: "Ben o gun parka gittim. Arkadaslarimla top oynadik... (1. tekil sahis - ben anlatimi)"
+      dogru: "Metin ucuncu kisi agziyla yazilmistir."
+      neden: "Metin 1. tekil sahis (ben) ile yazilmis, 3. kisi degil"
+    - metin: "Cocuklar sahilde oynuyordu. Bir anda hava karardi ve yagmur basladi..."
+      dogru: "Metinde olaganustu bir durumdan bahsedilmistir."
+      neden: "Metinde olaganustu bir durum yok, her sey dogal/gercekci"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Celdiriciler metinden DOGRU olarak cikariabilecek yargilardir
+# Tipik dogru yargilar:
+# - Anlatici bakis acisi hakkinda dogru bilgi
+# - Yer/Zaman unsurunun mevcut olup olmadigi hakkinda dogru bilgi
+# - Olay turu (gercekci/olaganustu) hakkinda dogru bilgi
+# - Kisi kadrosu hakkinda dogru bilgi
+
+distractors:
+  stratejiler:
+    - ad: "ANLATICI_CIKARIMI"
+      aciklama: "Anlatici bakis acisi hakkinda dogru bir yargi"
+      ornek: "Olayi anlatan kisi metnin kahramanidir."
+    - ad: "UNSUR_VARLIGI"
+      aciklama: "Bir unsurun metinde bulunup bulunmadigi hakkinda dogru yargi"
+      ornek: "Metinde zaman kavrami belirsiz degildir."
+    - ad: "OLAY_NITELIGI"
+      aciklama: "Olayin niteligi hakkinda dogru yargi"
+      ornek: "Metinde gercekci olaylar anlatilmaktadir."
+    - ad: "KISI_CIKARIMI"
+      aciklama: "Kisi kadrosu hakkinda dogru yargi"
+      ornek: "Metinde birden fazla karakter yer almaktadir."
+  notlar:
+    - "Celdiriciler (yanlis secenekler) metinden dogrulanabilir yargilar olmali"
+    - "Dogru cevap ise metinle acikca celisen bir yargi olmali"
+    - "Tum secenekler ayni formatta (tam cumle) olmali"
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cikarim_yapma", "mantiksal_denetleme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Oykuleyici paragraf olustur (50-100 kelime)"
+      details: |
+        Paragrafta:
+        - Olay orgusu, karakter, mekan ve/veya zaman acikca bulunmali
+        - Anlatici bakis acisi belirgin olmali (1. tekil, 3. tekil vb.)
+        - Metinden cikarim yapmaya musait zenginlikte olmali
+        - En az 3 hikaye unsuru acikca yer almali
+
+    - step: 2
+      action: "3 dogru yargi olustur (celdiriciler - yanlis secenekler)"
+      details: |
+        Her biri TAM CUMLE olmali (5-20 kelime):
+        - 1x anlatici bakis acisi hakkinda dogru yargi
+        - 1x unsur varligi/yoklugu hakkinda dogru yargi
+        - 1x olayin niteligi veya kisi kadrosu hakkinda dogru yargi
+        - Tumu metinden dogrulanabilir olmali
+
+    - step: 3
+      action: "1 yanlis yargi olustur (dogru cevap)"
+      details: |
+        TAM CUMLE olmali (5-20 kelime):
+        - Hikaye unsurlari hakkinda metinle celisen bir yargi
+        - Makul gorunmeli ama paragraftaki bilgilerle kanitlanamamali veya celismeli
+        - Ornek: Metin 1. tekil sahis ile yazilmisken "3. kisi agziyla yazilmistir" demek
+
+    - step: 4
+      action: "Secenekleri rastgele sirala"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 5
+      action: "Soru kokunu sec"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 91
+    konu: "Hikaye unsurlari - Soylenemez (anlatici)"
+    metin: "Ben o gun parka gittim. Arkadaslarimla top oynadik ve cok eglendik..."
+    soru_koku: "Bu metindeki hikaye unsurlari ile ilgili olarak hangisi soylenemez?"
+    secenekler:
+      A: "Olayi anlatan kisi metnin kahramanidir."
+      B: "Metinde zaman kavrami belirsiz degildir."
+      C: "Olayin gectigi yer bellidir."
+      D: "Metin ucuncu kisi agziyla yazilmistir."
+    dogru_cevap: "D"
+    neden: "Metin 1. tekil sahis (ben) ile yazilmis, 3. kisi degil"
+
+  - sayfa: 93
+    konu: "Hikaye unsurlari - Soylenemez (olaganustu)"
+    metin: "Cocuklar sahilde oynuyordu. Bir anda hava karardi ve yagmur basladi..."
+    soru_koku: "Bu metnin hikaye unsurlari ile ilgili asagidakilerden hangisi yanlistir?"
+    secenekler:
+      A: "Metinde birden fazla karakter yer almaktadir."
+      B: "Olayin gectigi mekan sahildir."
+      C: "Metinde olaganustu bir durumdan bahsedilmistir."
+      D: "Metinde zaman ve yer unsurlari bulunmaktadir."
+    dogru_cevap: "C"
+    neden: "Metinde olaganustu bir durum yok, her sey dogal/gercekci"
+
+  - sayfa: 94
+    konu: "Hikaye unsurlari - Soylenemez (hayal urunu)"
+    metin: "Kucuk Elif, annesinin elini tutarak okula gitti. Ogretmeni onu gulumseyerek karsiladi..."
+    soru_koku: "Bu metindeki hikaye unsurlari ile ilgili olarak hangisi soylenemez?"
+    secenekler:
+      A: "Olay bir okul ortaminda gecmektedir."
+      B: "Metinde anne ve cocuk karakterleri vardir."
+      C: "Kahramanlar hayal urunu varliklardir."
+      D: "Metinde gercekci olaylar anlatilmaktadir."
+    dogru_cevap: "C"
+    neden: "Karakterler gercekci insanlar, hayal urunu varliklar degil"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 50-100 arasinda mi?"
+    - "Cumle sayisi 4-7 arasinda mi?"
+    - "Oykuleyici bir uslupla mi yazilmis?"
+    - "Hikaye unsurlari hakkinda cikarim yapilabilir mi?"
+    - "Anlatici bakis acisi belirgin mi?"
+
+  correct_answer:
+    - "5-20 kelime tam cumle mi?"
+    - "Metinle acikca celisen bir yargi mi?"
+    - "Hikaye unsurlari hakkinda bir cikarim mi?"
+    - "Makul gorunuyor ama yanlis mi?"
+
+  distractors:
+    - "Her biri 5-20 kelime tam cumle mi?"
+    - "Hepsi metinden dogrulanabilecek yargilar mi?"
+    - "Farkli unsurlar hakkinda cikarimlar mi?"
+    - "Tum secenekler ayni formatta mi?"
+
+  overall:
+    - "Ogrenci metni analiz ederek yanlis yargiya ulasabilir mi?"
+    - "Dogru cevap acik bir sekilde metinle celisiyor mu?"
+    - "Celdiriciler makul ve dogru yargilar mi?"

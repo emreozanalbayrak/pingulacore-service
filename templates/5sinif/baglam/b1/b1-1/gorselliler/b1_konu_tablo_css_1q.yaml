@@ -1,0 +1,144 @@
+# B1.1 — 1Q CSS Tablo (Konu/Problem Belirleme)
+# Görsel: YOK — CSS tablo metin içine gömülü
+# Soru Tipi: Konu/Problem — B1.1 soru kökleri
+
+meta:
+  id: "b1_konu_tablo_css_1q"
+  ad: "1Q CSS Tablo — Konu/Problem"
+  sinif_seviyesi: 5
+  aciklama: "Senaryo + gömülü HTML tablo üzerinden konu/problem belirleme sorusu"
+  kaynak: "baglamb1sorukoku.md"
+  frequency: "Medium"
+
+context:
+  type: "b1_konu_tablo_css_1q"
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 80
+    word_count_max: 150
+    structure:
+      - "Bir karakterin (isimli) bir problemi fark ettiği kısa senaryo oluştur (2-3 cümle)"
+      - "Karakter bu durum üzerine araştırma yapar"
+      - "Araştırma sonucunda bir bilgi/karşılaştırma tablosuna ulaşır"
+      - "Tablo <table>, <tr>, <th>, <td> etiketleriyle oluşturulmalı (en az 3 sütun, en az 4 satır)"
+      - "Tablodaki veriler karşılaştırılabilir ve konu/problem çıkarımına uygun olmalı"
+      - "NOT: Bu tablo CSS ile stillendirilecektir — AI görsel üretilmeyecek"
+    kurallar:
+      - "Senaryo 5. sınıf seviyesinde, günlük hayattan bir durum olmalı"
+      - "KRİTİK — SENARYO KAPSAMI: Senaryo sadece DURUMU ve MERAKı anlatsın, CEVAPLARI vermesin!"
+      - "Detaylı bilgiler ve veriler SADECE tabloda olmalı — senaryo bunları içermemeli"
+      - "Tabloda hem olumlu hem olumsuz özellikler olmalı"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+      - "Tek soru bağlamlarında metin başında '... soruları aşağıdaki metne göre cevaplayınız' benzeri bir yönerge kesinlikle kullanılmaz"
+      - "Tabloya başlık eklenmez; <caption> etiketi, tablo üst başlığı, tablo alt başlığı veya tabloyu tanıtan ayrı başlık cümlesi kullanılmaz"
+      - "Tablodaki bilgilerden hareketle oluşturulan yanlış seçenekler, verilen bir bilginin yalnızca olumsuz biçimi olarak yazılamaz"
+      - "Yanlış seçenekler, tabloda açıkça verilen bir ifadenin başına olumsuzluk eklenerek ya da anlamı ters çevrilerek üretilemez"
+
+  questions:
+    - slot: 1
+      type: "konu_problem"
+      soru_kokleri:
+        - "<b>Tablodaki verilere dayanılarak hangi çıkarım yapılabilir?</b>"
+        - "<b>Bu bilgilere göre anlatılmak istenen asıl mesele nedir?</b>"
+      options_style: "short_phrase"
+      word_count_min: 3
+      word_count_max: 12
+      beceri:
+        katman: "KB2"
+        bilesenler: ["anlama", "cikarim_yapma"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+header_template: null
+
+format:
+  type: "llm_generated_html"
+  description: "1Q CSS tablo üzerinden konu/problem belirleme"
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 150
+    sentence_count_min: 2
+    sentence_count_max: 6
+  stem:
+    required: true
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 3
+    word_count_max: 12
+    style: "short_phrase"
+    correct_count: 1
+    correct_type: "matches"
+forbidden_phrases:
+      - "Aşağıdaki soruları metne göre cevaplayınız."
+      - "Aşağıdaki soruları aşağıdaki metne göre cevaplayınız."
+      - "Aşağıdaki soruları tabloya göre cevaplayınız."
+      - "Soruları aşağıdaki metne göre cevaplayınız."
+      - "Soruyu aşağıdaki metne göre cevaplayınız."
+      - "Bu soruları aşağıdaki metne göre cevaplayınız."
+      - "Bu soruyu aşağıdaki metne göre cevaplayınız."
+kurallar:
+      - "Tek soru üretilen bağlamlarda çoğul yönerge kullanılmaz."
+      - "Soru kökü doğrudan tek soruya odaklanmalı; ek yönlendirme cümlesi eklenmemelidir."
+
+dogru_cevap:
+  tanim: "Tablodaki verilerden çıkarılan ana konu/problem"
+  kurallar:
+    - "KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI"
+    - "Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI"
+    - "Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil"
+    - "HATALI YAKLASIM: Metinde/tabloda geçen bir cümlenin AYNEN seçeneklerde kullanılması YASAK"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin ANLAMCA ÖZDESİ olmalı"
+    - "En az %40 kelime farklılığı olmalı"
+    - "BİLİMSEL TERİM KORUMASI: Teknik terimler değiştirilmemeli"
+    - "Doğru şık en uzun şık OLMAMALI"
+    - "Paragraf içindeki herhangi bir cümle, doğru şıkkı birebir ya da çok yakın biçimde tekrar etmemelidir"
+    - "Doğru cevap, metindeki tek bir cümlenin doğrudan yeniden yazılmış hâli olmamalıdır"
+    - "Sorunun cevabı paragrafta tek cümlede açıkça verilmemeli; öğrenci senaryo ile tabloyu birlikte yorumlayarak sonuca ulaşmalıdır"
+
+distractors:
+  stratejiler:
+distractors:
+  zorunlu_kullanim:
+    required: true
+    kural: "4 seçenekli yapıda 3 yanlış şık aşağıdaki üç zorunlu çeldirici tipinden bire bir üretilmelidir"
+    dagilim:
+      - slot: "yanlis_sik_1"
+        tip: "COKLU_SUTUN_KISMI_DOGRU_TEK_HATA"
+      - slot: "yanlis_sik_2"
+        tip: "KONUYA_UYGUN_AMA_TABLO_DISI"
+      - slot: "yanlis_sik_3"
+        tip: "TEK_SUTUN_BASLIGINDAN_ASIRI_YORUM"
+    genel_kisitlar:
+      - "Hiçbir yanlış şık, tabloda verilen bir bilginin yalnızca olumsuzu olamaz"
+      - "Hiçbir yanlış şık, tek bir hücredeki açık bilgiyi tersine çevirerek oluşturulamaz"
+      - "Yanlış şıklar ilk bakışta makul görünmeli, öğrenciyi tabloyu yeniden incelemeye zorlamalıdır"
+
+  zorunlu_tip_tanimlari:
+    - ad: "COKLU_SUTUN_KISMI_DOGRU_TEK_HATA"
+      aciklama: "En az 3 farklı sütundaki bilgi tek bir cümlede birleştirilir; bunların çoğu tabloyla uyumludur ancak küçük bir ayrıntı bilinçli olarak hatalı verilir"
+      kurallar:
+        - "Aynı cümlede en az 3 sütundan veri kullanılmalıdır"
+        - "Bu verilerden yalnızca 1 tanesi hatalı olmalıdır"
+        - "Hata çok bariz olmamalı; öğrenci ilk bakışta cümleyi tamamen doğru sanabilmelidir"
+        - "Hata sayı, sıra, karşılaştırma, özellik ya da eşleşme düzeyinde olabilir"
+        - "Cümle tabloyu özetliyor gibi görünmelidir"
+
+    - ad: "KONUYA_UYGUN_AMA_TABLO_DISI"
+      aciklama: "Tablonun genel konusu ve bağlamıyla çok uyumlu görünen ancak tablonun vermediği bir bilgi veya yargı sunulur"
+      kurallar:
+        - "Cümle konu dışı olmamalıdır; tabloyla güçlü biçimde ilgili görünmelidir"
+        - "Ancak tabloda bu yargıyı destekleyen doğrudan ya da dolaylı yeterli veri bulunmamalıdır"
+        - "Öğrenci cümleyi, konuyu kapsıyor sanarak doğru kabul etmeye eğilimli olmalıdır"
+
+    - ad: "TEK_SUTUN_BASLIGINDAN_ASIRI_YORUM"
+      aciklama: "Tablodaki yalnızca bir sütun başlığı ya da o sütun çevresindeki veri esas alınır; devamında, tablonun desteklemediği bir yorum gerçek bilgi gibi sunulur"
+      kurallar:
+        - "Şık yalnızca bir sütun ekseninde düşünülmüş izlenimi vermelidir"
+        - "Başlangıç kısmı tabloda var olan ifadeye dayanmalıdır"
+        - "Devamındaki yorum, tablo dışı genelleme veya kesin sonuç gibi yazılmalıdır"
+        - "Yanlışlık, sütun bilgisinin kendisinde değil; o bilgiden taşan yorumda olmalıdır"
+
+use_shared_strategies: false

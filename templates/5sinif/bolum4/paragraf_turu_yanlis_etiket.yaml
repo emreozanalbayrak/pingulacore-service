@@ -1,0 +1,156 @@
+# templates/bolum4/paragraf_turu_yanlis_etiket.yaml
+# Bolum 4.3 - Ozel Bolum: Paragraf Turu Yanlis Etiket
+#
+# KALIP 2 — YANLIS ETIKET FORMATI
+# 4 seçenekte paragraf+etiket verilir, yanlış etiketlenen seçenek bulunur
+# Ana paragraf yok, içerik seçeneklerde
+
+meta:
+  id: "paragraf_turu_yanlis_etiket"
+  ad: "Paragraf Türü Yanlış Etiket"
+  sinif_seviyesi: 5
+  aciklama: "4 seçenekte paragraf+etiket verilir, yanlış etiketlenen seçenek bulunur"
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Paragraf yok (seçeneklerde), soru kökü + 4 paragraf+etiket seçenek"
+
+  paragraph:
+    required: false  # No main paragraph, content is in options
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 20
+    word_count_max: 55
+    style: "mini_paragraph"
+    correct_type: "does_not_belong"  # Correct = the wrongly labeled one
+    correct_count: 1
+    kurallar:
+      - "Her seçenek bir kısa paragraf + parantez içinde tür etiketi içerir"
+      - "Format: [kısa paragraf] ([tür adı])"
+      - "3 seçenek DOĞRU etiketlenmiş olmalı"
+      - "1 seçenek YANLIŞ etiketlenmiş olmalı — bu doğru cevap"
+      - "Yanlış etiket en yakın komşu türe kaydırılmalı"
+      - "Etiket havuzu: Betimleme, Öyküleme, Tanıtma, Sıralı-Kronolojik Metin"
+      - "Her paragraf baskın olarak tek türe yaslanmalı"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Aşağıdakilerin hangisinde paragraf türü yay ayraç içinde <u>yanlış</u> gösterilmiştir?</b>"
+  - "<b>Aşağıdaki metinlerden hangisinde parantez içindeki tür adı metne uygun <u>değildir</u>?</b>"
+  - "<b>Aşağıdaki eşleştirmelerden hangisinde paragraf türü <u>yanlış</u> verilmiştir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Paragrafın gerçek türü ile verilen etiketin uyuşmadığı seçenek"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Yanlış etiketlenen paragrafın gerçek türü açık olmalı"
+    - "Yanlış etiket en yakın komşu türe kaydırılmış olmalı (betimleme→tanıtma, öyküleme→sıralı-kronolojik gibi)"
+    - "Doğru cevap tartışmasız olmalı"
+  ornekler:
+    - secenekler:
+        A: "Bahçedeki güller kırmızı renkleriyle göz alıyordu. Taze çiçek kokusu her yanı sarıyordu. (Betimleme)"
+        B: "Arılar çiçeklerden nektar toplar ve kovanda bala dönüştürür. (Tanıtma)"
+        C: "Sabah erken kalktı, kahvaltısını yaptı ve okula gitti. (Sıralı-Kronolojik Metin)"
+        D: "Yağmur başlayınca çocuklar koşarak eve sığındı. Anneleri onları havluyla karşıladı. (Betimleme)"
+      dogru: "D"
+      neden: "D seçeneği aslında öyküleme (olay akışı var) ama betimleme diye etiketlenmiş"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI (CUSTOM — yanlis etiket icin ozel)
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "TUR_BENZERLIGI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Doğru etiketlenmiş ama karıştırılabilir seçenekler"
+    nasil_olusturulur: |
+      Betimleme paragrafında hafif olay izi, öyküleme paragrafında betimleyici sözcükler bulunabilir.
+      Ama etiket yine doğrudur. Öğrenci yanlış eşleştirmeyi dikkatle bulsun.
+    kategori: "semantic"
+
+  - ad: "YANLIS_ETIKET_KAYDIRMASI"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Yanlış seçenekte paragraf en yakın komşu türe etiketlenir"
+    nasil_olusturulur: |
+      Betimleme paragrafı → tanıtma diye etiketlenmiş
+      Öyküleme paragrafı → sıralı-kronolojik diye etiketlenmiş
+      Bu yanlışlığı makul kılar.
+    kategori: "core"
+
+  - ad: "BASKIN_AMAC_TESTI"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Paragrafta birden fazla türe ait işaretler bulunur ama baskın amaç belirleyicidir"
+    nasil_olusturulur: |
+      Yanlış etiket yüzeyde makul görünür ama baskın amaca uymaz.
+    kategori: "content"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ETIKETI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siniflandirma", "degerlendirme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "4 farklı paragraf türünden birer kısa paragraf oluştur"
+      details: |
+        4 paragraf türünden (Betimleme, Öyküleme, Tanıtma, Sıralı-Kronolojik) birer kısa metin yaz.
+        Her paragraf 2-4 cümle, baskın olarak tek türe yaslanmalı.
+
+    - step: 2
+      action: "3 paragrafı DOĞRU etiketle"
+      details: "3 paragrafın yanına gerçek türünü parantez içinde yaz"
+
+    - step: 3
+      action: "1 paragrafı YANLIŞ etiketle"
+      details: |
+        Kalan 1 paragrafın yanına en yakın komşu türün adını yaz.
+        Örnek: betimleme → tanıtma, öyküleme → sıralı-kronolojik
+
+    - step: 4
+      action: "Seçenekleri rastgele sırala"
+      details: "A-B-C-D seçeneklerini rastgele sırala"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  options:
+    - "Her seçenek kısa paragraf + parantez içinde tür etiketi mi?"
+    - "3 seçenek doğru etiketlenmiş mi?"
+    - "1 seçenek yanlış etiketlenmiş mi?"
+    - "Yanlış etiket en yakın komşu türe mi kaydırılmış?"
+
+  correct_answer:
+    - "Doğru cevap gerçekten yanlış etiketlenen seçenek mi?"
+    - "Yanlışlık tartışmasız mı?"

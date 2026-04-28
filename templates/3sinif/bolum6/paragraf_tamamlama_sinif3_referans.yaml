@@ -1,0 +1,420 @@
+meta:
+  id: "paragraf_tamamlama_sinif3_standart_gorselli_dort_secenekli"
+  ad: "Paragraf Tamamlama"
+  sinif_seviyesi: 3
+  ders: "Türkçe"
+  bolum: "3. Sınıf Türkçe Paragraf Kitabı"
+  alt_bolum: "6. Paragraf Tamamlama"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    3. sınıf öğrencisi için bir paragrafta boş bırakılan yere, metnin konusu,
+    anlam bütünlüğü, düşüncenin akışı ve anlatım tonuna uygun cümleyi seçtirmeye;
+    ayrıca uygun olmayan devamı elettirmeye ve bazı sorularda seçilen tamamlama
+    üzerinden kısa çıkarım yaptırmaya yönelik, görsel destekli ve 4 seçenekli
+    standart soru üretim şablonu.
+  kullanim_notu: >
+    Bu şablon, harici olarak kullanılan 3. Sınıf TYMM Ortak Kuralları YAML'ı,
+    3. sınıf öğretim programı ve 3. sınıf MEB Türkçe kitapları ile birlikte
+    doğrulanmalıdır.
+
+format:
+  type: "llm_generated_html"
+  description: "Görsel + eksik bırakılmış metin/parça + soru kökü + 4 seçenek"
+
+  question_variant:
+    allowed:
+      - "bosluga_getirilebilir"
+      - "bosluga_getirilemez"
+      - "metin_surdurulebilir"
+      - "metin_surdurulemez"
+      - "bitmesi_uygun_olmaz"
+      - "tamamlamaya_gore_anlam"
+    default: "bosluga_getirilebilir"
+
+  paragraph:
+    required: true
+    text_modes:
+      - "simple_info"
+      - "short_narrative"
+      - "dialogue_like_short_narrative"
+    sentence_count_min: 4
+    sentence_count_max: 7
+    word_count_min: 45
+    word_count_max: 105
+    blank_count: 1
+    blank_position_allowed:
+      - "middle"
+      - "end"
+    kurallar:
+      - "Metin 3. sınıf öğrencisinin anlayabileceği kadar açık, sade ve akıcı olmalıdır."
+      - "Metinde yalnız bir boşluk bulunmalıdır."
+      - "Boşluk, metnin ortasında veya sonunda olabilir."
+      - "Boş bırakılan yere getirilecek cümle metnin konusu ile uyumlu olmalıdır."
+      - "Boş bırakılan yere getirilecek cümle düşüncenin akışını bozmamalıdır."
+      - "Boş bırakılan yere getirilecek cümle anlatım tonuna uygun olmalıdır."
+      - "Metin dış bilgi gerektirmemelidir."
+      - "Doğru seçenek, yalnız sözcük benzerliğine değil anlam bütünlüğüne dayanmalıdır."
+      - "Yanlış seçenekler metne yakın görünebilir; ancak konu, ton, akış veya mantık açısından bozulma yaratmalıdır."
+      - "Paragraf tamamlama sorusu, metnin bölümleri sorusuna dönüşmemelidir."
+      - "Bu bölümde asıl amaç, uygun devam cümlesini seçmektir; giriş-gelişme-sonuç işlevi doğrudan ölçülmez."
+      - "Metin, tahmin ederek sürdürme ve nasıl sonuçlanacağını öngörme becerisine uygun olmalıdır."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  blank_design_rules:
+    kurallar:
+      - "Boşluk, anlamca kritik bir yerde bulunmalıdır."
+      - "Boşluk doldurulduğunda metin doğal ve akıcı okunmalıdır."
+      - "Boşluğun yeri yalnız dil bilgisiyle değil, anlam ilişkisiyle çözülebilmelidir."
+      - "Boşluktan önceki ve sonraki cümleler doğru cevabı desteklemelidir."
+      - "Boşluk sonunda ise doğru seçenek metni doğal biçimde bitirmelidir."
+      - "Boşluk ortadaysa doğru seçenek öncesi ve sonrası ile bağlantı kurmalıdır."
+    yasaklar:
+      - "yalnız tek bir bağlaç ipucuyla çözülebilen boşluk"
+      - "yalnız sözcük tekrarına dayanarak çözülen boşluk"
+      - "birden fazla seçeneğin aynı ölçüde uygun olduğu yapı"
+      - "çok belirsiz veya çok kopuk bağlam"
+
+  visual:
+    required: true
+    description: "Paragrafın ana içeriğini ve bağlamını destekleyen işlevsel görsel"
+    placement: "paragraph_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illüstrasyon"
+      - "tek sahneli fotoğraf benzeri çizim"
+      - "tek olay veya tek varlık odaklı sahne"
+      - "metindeki ana durumu destekleyen sade konu görseli"
+    kurallar:
+      - "Her soru için görsel zorunludur."
+      - "Görsel metnin ana içeriğiyle açık uyumlu olmalıdır."
+      - "Görsel çözümde destekleyici rol oynamalıdır."
+      - "Görsel süs olmamalıdır."
+      - "Görsel tek başına doğru cevabı açıkça vermemelidir."
+      - "Görsel ile metin birlikte değerlendirildiğinde doğru tamamlama daha netleşebilir."
+      - "Görsel dikkat dağıtıcı gereksiz ayrıntılar içermemelidir."
+    yasaklar:
+      - "dekoratif ve metinden bağımsız görsel"
+      - "çok sahneli karmaşık kolaj"
+      - "grafik, tablo veya infografik yoğunluğu taşıyan tasarım"
+
+  stem:
+    required: true
+    selection: "random_from_list_by_variant"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    correct_count: 1
+    style_by_variant:
+      bosluga_getirilebilir: "sentence_option"
+      bosluga_getirilemez: "sentence_option"
+      metin_surdurulebilir: "sentence_option"
+      metin_surdurulemez: "sentence_option"
+      bitmesi_uygun_olmaz: "sentence_option"
+      tamamlamaya_gore_anlam: "sentence_option"
+    word_count_min: 3
+    word_count_max: 18
+    kurallar:
+      - "3. sınıfta her soru 4 seçenekli olmalıdır."
+      - "Seçenekler anlamlı ve kurallı cümlelerden oluşmalıdır."
+      - "Doğru seçenek metnin konusu, akışı ve tonuyla tam uyumlu olmalıdır."
+      - "Yanlış seçenekler ilk bakışta makul görünebilir; ancak düşüncenin akışını bozmalıdır."
+      - "Yanlış seçenekler tamamen ilgisiz olmamalı; metne belli ölçüde yakın görünmelidir."
+      - "Birden fazla makul doğru seçenek oluşmamalıdır."
+
+soru_kokleri:
+  bosluga_getirilebilir:
+    - "Bu parçada boş bırakılan yere düşüncenin akışına göre aşağıdakilerden hangisi getirilebilir?"
+    - "Bu metinde boş bırakılan yere aşağıdakilerden hangisi getirilebilir?"
+    - "Parçada boş bırakılan yere anlam akışına göre hangi cümle getirilebilir?"
+    - "Bu parçada boş bırakılan yere en uygun cümle hangisidir?"
+    - "Aşağıdakilerden hangisi bu metindeki boşluğa getirilebilir?"
+
+  bosluga_getirilemez:
+    - "Bu parçada boş bırakılan yere düşüncenin akışına göre aşağıdakilerden hangisi getirilemez?"
+    - "Bu metinde boş bırakılan yere aşağıdakilerden hangisi getirilemez?"
+    - "Parçada boş bırakılan yere anlam akışına göre hangi cümle getirilemez?"
+    - "Bu parçada boş bırakılan yere uygun olmayan cümle hangisidir?"
+    - "Aşağıdakilerden hangisi bu metindeki boşluğa getirilemez?"
+
+  metin_surdurulebilir:
+    - "Bu metin, düşüncenin akışına göre aşağıdakilerden hangisi ile sürdürülebilir?"
+    - "Bu parça aşağıdakilerden hangisi ile devam ettirilebilir?"
+    - "Metnin devamına aşağıdakilerden hangisi getirilebilir?"
+    - "Bu metni sürdürmek için en uygun cümle hangisidir?"
+    - "Aşağıdakilerden hangisi bu parçanın devamı olabilir?"
+
+  metin_surdurulemez:
+    - "Bu metin, düşüncenin akışına göre aşağıdakilerden hangisi ile sürdürülemez?"
+    - "Bu parça aşağıdakilerden hangisi ile devam ettirilemez?"
+    - "Metnin devamına aşağıdakilerden hangisi getirilemez?"
+    - "Bu metni sürdürmek için uygun olmayan cümle hangisidir?"
+    - "Aşağıdakilerden hangisi bu parçanın devamı olamaz?"
+
+  bitmesi_uygun_olmaz:
+    - "Bu metnin aşağıdakilerden hangisi ile bitmesi uygun olmaz?"
+    - "Bu parça aşağıdakilerden hangisi ile bitirilemez?"
+    - "Metnin son cümlesi aşağıdakilerden hangisi olamaz?"
+    - "Aşağıdakilerden hangisi bu metnin sonuna uygun değildir?"
+    - "Bu metnin bitişine aşağıdakilerden hangisi uymaz?"
+
+  tamamlamaya_gore_anlam:
+    - "Bu parçanın sonu nasıl tamamlanırsa yeni gelen öğrencinin sınıftaki öğrenciler hakkındaki düşüncesi anlaşılır?"
+    - "Bu parça aşağıdakilerden hangisi ile tamamlanırsa anlatılan kişi hakkında belirli bir düşünce anlaşılır?"
+    - "Metnin sonuna aşağıdakilerden hangisi getirilirse istenen anlam oluşur?"
+    - "Bu parçanın anlamına göre aşağıdaki cümlelerden hangisi uygun tamamlamadır?"
+    - "Aşağıdakilerden hangisi getirilirse parçadan belirtilen anlam çıkarılabilir?"
+
+beceri_odagi:
+  birincil_beceri:
+    - "Paragrafı düşüncenin akışına uygun biçimde tamamlama"
+  ikincil_beceriler:
+    - "Konu bütünlüğünü koruma"
+    - "Anlam akışını izleme"
+    - "Uygun ve uygunsuz devam cümlesini ayırt etme"
+    - "Anlatım tonunu fark etme"
+    - "Tamamlama üzerinden kısa çıkarım yapma"
+    - "Görsel ve metni birlikte değerlendirerek anlamı netleştirme"
+
+dogru_cevap:
+  tanim: "Boş bırakılan yere veya metnin devamına, konuya ve düşüncenin akışına en uygun düşen cümle"
+  kurallar:
+    - "Doğru cevap metnin konusu ile tam uyumlu olmalıdır."
+    - "Doğru cevap önceki cümlelerle anlam ilişkisi kurmalıdır."
+    - "Doğru cevap varsa sonraki cümle ile de doğal bağ kurmalıdır."
+    - "Doğru cevap anlatım tonunu bozmamalıdır."
+    - "Doğru cevap dış bilgi gerektirmemelidir."
+    - "Doğru cevap 3. sınıf öğrencisinin metni dikkatle okuyarak bulabileceği açıklıkta olmalıdır."
+    - "Son cümle sorularında doğru seçenek metni doğal biçimde kapatmalıdır."
+    - "Tamamlamaya göre anlam varyantında doğru seçenek istenen anlamı açıkça oluşturmalıdır."
+
+yanlis_secenek_stratejileri:
+  count_per_question: 3
+  strategy_pool:
+    - id: "konuya_yakin_ama_akis_bozan"
+      tanim: "Metnin konusu ile ilişkili görünür ama düşüncenin akışını bozuyor"
+
+    - id: "tona_aykiri"
+      tanim: "Metnin duygusuna, üslubuna veya genel havasına uymayan seçenek"
+
+    - id: "fazla_genel_veya_belirsiz"
+      tanim: "Metne çok genel bağlanan ama boşluğu doğru doldurmayan seçenek"
+
+    - id: "yeni_bilgi_asiri_yukleme"
+      tanim: "Metinde olmayan yeni ve ağır bir bilgi ekleyen seçenek"
+
+    - id: "kismi_uyumlu"
+      tanim: "Bir cümleyle uyumlu görünür ama tüm paragrafla tam uyumlu değildir"
+
+    - id: "istenen_anlami_olusturmayan"
+      tanim: "Cümle dil bilgisel olarak uygun görünür ama sorudaki hedef anlamı vermez"
+
+  secim_kurali:
+    - "Her soruda 3 yanlış seçenek farklı stratejilerden seçilmelidir."
+    - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+    - "En az 1 yanlış seçenek konuya yakın ama akış bozucu olmalıdır."
+    - "Tamamlamaya göre anlam varyantında yalnız 1 seçenek hedef çıkarımı oluşturmalıdır."
+    - "Bitmesi uygun olmaz türünde sorularda diğer 3 seçenek metni doğal biçimde sürdürebilir olmalıdır."
+
+zorluk_duzeyleri:
+  kolay:
+    paragraph:
+      sentence_count_min: 4
+      sentence_count_max: 5
+      word_count_min: 45
+      word_count_max: 62
+      kurallar:
+        - "Boşluk metnin anlam akışında açık bir yere konulmalıdır."
+        - "Konu ve ton açık biçimde verilmelidir."
+        - "Doğru seçenek belirgin biçimde en uyumlu olmalıdır."
+    preferred_variants:
+      - "bosluga_getirilebilir"
+      - "metin_surdurulebilir"
+      - "bitmesi_uygun_olmaz"
+    distractors:
+      kurallar:
+        - "1 seçenek açıkça akışı bozmalıdır."
+        - "1 seçenek konuya yakın ama eksik uyumlu olabilir."
+        - "1 seçenek metne göre fazla genel olabilir."
+    difficulty_note: >
+      Kolay düzeyde öğrenci metnin açık akışını izleyerek uygun devam cümlesini bulur.
+
+  orta:
+    paragraph:
+      sentence_count_min: 5
+      sentence_count_max: 6
+      word_count_min: 58
+      word_count_max: 82
+      kurallar:
+        - "Boşluk anlamca önemli bir yerde bulunmalıdır."
+        - "Metinde 1-2 destekleyici ayrıntı yer alabilir."
+        - "Doğru seçenek için metnin tamamı düşünülmelidir."
+    preferred_variants:
+      - "bosluga_getirilemez"
+      - "metin_surdurulebilir"
+      - "metin_surdurulemez"
+      - "tamamlamaya_gore_anlam"
+    distractors:
+      kurallar:
+        - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+        - "Yanlış seçenekler metne yakın ama ton veya akış bakımından sorunlu olabilir."
+    difficulty_note: >
+      Orta düzeyde öğrenci yalnız konuya değil, düşüncenin yönüne ve tonuna da dikkat etmelidir.
+
+  zor:
+    paragraph:
+      sentence_count_min: 6
+      sentence_count_max: 7
+      word_count_min: 76
+      word_count_max: 105
+      kurallar:
+        - "Boşluk anlam bütünlüğü açısından kritik yerde olmalıdır."
+        - "Metinde birkaç ayrıntı bulunabilir; ancak doğru seçenek bütün parçayı birleştirmelidir."
+        - "Zor düzeyde bile soru 4. sınıfa kayan çok katmanlı soyut yorum gerektirmemelidir."
+    preferred_variants:
+      - "bosluga_getirilemez"
+      - "metin_surdurulemez"
+      - "bitmesi_uygun_olmaz"
+      - "tamamlamaya_gore_anlam"
+    distractors:
+      kurallar:
+        - "3 yanlış seçeneğin en az 2'si metne yakın görünmelidir."
+        - "Yanlış seçenekler ton, anlam yönü veya sonuç etkisi bakımından ayrılmalıdır."
+        - "Doğru seçenek ancak metnin tamamı okununca netleşmelidir."
+    difficulty_note: >
+      Zor düzeyde öğrencinin konu, ton ve anlam yönünü birlikte değerlendirerek en uygun tamamlamayı seçmesi beklenir.
+
+difficulty_selection_policy:
+  default: "Orta"
+  allowed_values: ["Kolay", "Orta", "Zor"]
+  hard_limits:
+    - "Her soru 4 seçenekli olmalıdır."
+    - "Her soru için görsel zorunludur."
+    - "Metin 3. sınıf düzeyini aşan ağır soyutluk içermemelidir."
+    - "Zor düzey seçilse bile soru 4. sınıf düzeyinde çok katmanlı yorum veya ileri metin analizi gerektiremez."
+    - "Kolay düzeyde aşırı yakın çeldirici yükü kurulmamalıdır."
+
+sinif_uygunluk_kurallari:
+  uygundur:
+    - "Öğrenciden metni tahmin ederek sürdürmesi bekleniyorsa"
+    - "Boşluk konu ve akış ipuçlarıyla doldurulabiliyorsa"
+    - "Devam cümlesi mantıklı biçimde öngörülebiliyorsa"
+    - "Metnin sonu nasıl tamamlanırsa hangi anlamın çıkacağı soruluyorsa"
+  yasaktir:
+    - "Soru yalnız giriş-gelişme-sonuç işlevine odaklanıyorsa"
+    - "Boşluk yalnız bağlaç bilgisiyle çözülebiliyorsa"
+    - "Aşırı soyut veya çok belirsiz devam cümlesi istiyorsa"
+    - "Metin dışı dünya bilgisi gerektiriyorsa"
+  ucuncu_sinifa_kayar:
+    - "Tahmin ederek sürdürme"
+    - "Konuşmanın ya da olayın nasıl sonuçlanacağını öngörme"
+    - "Parçayı anlam bütünlüğüne göre tamamlama"
+  dorduncu_sinifa_kayar:
+    - "Birden fazla yorumu savunmayı gerektiren açık uçlu tamamlama"
+    - "İleri düzey örtük anlam ve yazar tutumu çözümleme"
+    - "Ağır soyut ve çok katmanlı boşluk tamamlama"
+
+konu_alani:
+  izinli_ornekler:
+    - "gezi ve manzara"
+    - "hayvanların özellikleri"
+    - "bilim insanları ve buluşlar"
+    - "sınıf ortamı ve arkadaşlık"
+    - "doğa olayları"
+    - "teknoloji"
+    - "günlük yaşam olayları"
+    - "kısa bilgi verici metinler"
+    - "duygu ve düşünce içeren kısa anlatımlar"
+  kurallar:
+    - "Konu 3. sınıf öğrencisinin anlayabileceği kadar somut ve açık olmalıdır."
+    - "Metin sürdürmeye ve uygun cümle seçimine elverişli olmalıdır."
+    - "Görselle desteklenebilen konular tercih edilmelidir."
+    - "Tamamlama görevi dış bilgi gerektirmeden çözülebilmelidir."
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "3. sınıfa uygun, sürdürmeye elverişli somut bir konu seç"
+    - step: 2
+      action: "Seçilen konu için 4-7 cümlelik sade bir paragraf oluştur"
+      details:
+        - "Tek baskın konu kur"
+        - "Boşluk için anlamca kritik bir yer belirle"
+        - "Akış ve ton ipuçlarını metne yerleştir"
+    - step: 3
+      action: "Metni destekleyen işlevsel görsel tasarla"
+      details:
+        - "Görsel bağlamı desteklesin"
+        - "Görsel zorunlu olsun"
+        - "Görsel tek başına cevabı vermesin"
+    - step: 4
+      action: "Soru varyantını seç"
+      details:
+        - "bosluga_getirilebilir"
+        - "bosluga_getirilemez"
+        - "metin_surdurulebilir"
+        - "metin_surdurulemez"
+        - "bitmesi_uygun_olmaz"
+        - "tamamlamaya_gore_anlam"
+    - step: 5
+      action: "Varyanta uygun 1 doğru ve 3 yanlış seçenek oluştur"
+      details:
+        - "Yanlışlardan biri akışı bozsun"
+        - "Yanlışlardan biri tona uymasın"
+        - "Yanlışlardan biri konuya yakın ama tam uyumlu olmasın"
+    - step: 6
+      action: "Soru kökünü listeden rastgele seç"
+    - step: 7
+      action: "Şıkları A-B-C-D olarak karıştır"
+    - step: 8
+      action: "Harici 3. Sınıf TYMM Ortak Kuralları ile doğrulama yap"
+
+validation_checklist:
+  paragraph:
+    - "Metin 4-7 cümle arasında mı?"
+    - "Metinde yalnız 1 boşluk var mı?"
+    - "Metin 3. sınıf düzeyinde açık ve sade mi?"
+    - "Boşluk anlamca kritik bir noktada mı?"
+    - "Metin dış bilgi gerektiriyor mu? Gerektiriyorsa reddet."
+    - "Soru gerçekten paragrafı tamamlama becerisini mi ölçüyor?"
+
+  visual:
+    - "Görsel zorunlu olarak var mı?"
+    - "Görsel metnin ana içeriğiyle uyumlu mu?"
+    - "Görsel destekleyici ama tek başına cevap verici değil mi?"
+    - "Görsel dekoratif kalmıyor mu?"
+
+  stem:
+    - "Soru kökü seçilen varyanta uygun mu?"
+    - "Soru kökü açık ve 3. sınıf düzeyinde mi?"
+    - "Ekstra beceri yüklemiyor mu?"
+
+  options:
+    - "Toplam 4 seçenek var mı?"
+    - "Doğru seçenek akış, konu ve tona tam uyuyor mu?"
+    - "Yanlış seçenekler gerçekten akışı veya anlamı bozuyor mu?"
+    - "Bitmesi uygun olmaz sorularında yalnız 1 seçenek uygun değil mi?"
+    - "Tamamlamaya göre anlam varyantında yalnız 1 seçenek hedef anlamı oluşturuyor mu?"
+    - "Birden fazla makul doğru seçenek oluşuyor mu? Oluşuyorsa reddet."
+
+  difficulty:
+    - "Zorluk seçilen düzeye göre metin, görsel ve çeldirici kuralları uygulanmış mı?"
+    - "Zor düzey bile 3. sınıf sınırında mı?"
+    - "4. sınıfa kayan ileri soyut yorum var mı?"
+
+hard_fail_rules:
+  - "Seçenek sayısı 4 değilse"
+  - "Görsel yoksa"
+  - "Metinde birden fazla boşluk varsa"
+  - "Doğru cevap dış bilgi gerektiriyorsa"
+  - "İki veya daha fazla seçenek makul doğruysa"
+  - "Metin 3. sınıf için fazla soyut veya ağırsa"
+  - "Soru metnin bölümleri sorusuna kayıyorsa"
+  - "Soru 4. sınıfa kayan ileri yorum sorusuna dönüşüyorsa"
+  - "Görsel metinle uyumsuzsa"
+
+ornek_bicim_notlari:
+  - "Piedra del Penol örneğinde son cümle, önceki bilgilerin sonucu olarak arkadaşın aşağıda kaldığını anlamlı biçimde bağlamalıdır."
+  - "İpekkuyruk kuşu örneğinde boşluğa, kuşun dış görünüşünü destekleyen uygun ayrıntı getirilmelidir."
+  - "Edison örneğinde uygun olmayan devam, verilen icat listesiyle ve metnin yönüyle çelişen seçenektir."
+  - "Sınıfa gelen yeni öğrenci örneğinde doğru tamamlama, devam cümlesine göre öğrencilerin nasıl anlaşıldığını ortaya koymalıdır."
+  - "Bu bölümde temel amaç, metni anlam bütünlüğüne göre uygun cümle ile sürdürmek veya tamamlamaktır."

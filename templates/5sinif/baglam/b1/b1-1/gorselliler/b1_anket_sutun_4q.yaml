@@ -1,0 +1,139 @@
+# B1.1 — 4Q Sütun Grafik IMAGE Anket (Merak + Araştırma Sorusu + Grafik Bilgi + Grafik Yorum)
+# Görsel: infografik (AI sütun grafiğine dönüştürülecek)
+# Soru Tipleri: Merak Konusu + Araştırma Sorusu + Grafik Bilgi + Grafik Yorum — B1.1 soru kökleri
+
+meta:
+  id: "b1_anket_sutun_4q"
+  ad: "4Q Sütun Grafik IMAGE Anket — Merak/Araştırma/Bilgi/Yorum"
+  sinif_seviyesi: 5
+  aciklama: "Araştırma senaryosu + AI sütun grafiği üzerinden 4 farklı soru"
+  kaynak: "baglamb1sorukoku.md"
+  frequency: "Medium"
+
+context:
+  type: "b1_anket_sutun_4q"
+  question_count: 4
+  question_count_min: 4
+  question_count_max: 4
+  generation:
+    word_count_min: 120
+    word_count_max: 200
+    image_type: "infografik"
+    structure:
+      - "Bir karakter (isimli, 5. sınıf öğrencisi) bir konuyu merak edip anket/araştırma yapmıştır (3-5 cümle)"
+      - "Karakter arkadaşlarına anket uygular ve sonuçları kaydeder"
+      - "KRİTİK: Senaryoda sayısal değerleri YAZMA — veriler sadece grafikte olmalı"
+      - "Senaryoda karakterin merak konusu ve araştırma motivasyonu açıkça belirtilmeli"
+      - "Ardından verileri HTML tablosu olarak ekle: <table> ile, 2 sütun (Kategori | Değer), en az 4 satır"
+      - "Değerler sayısal olmalı (tam sayı) — anket katılımcı sayıları"
+      - "Kategoriler arasında belirgin farklar olmalı (hepsi eşit olmamalı)"
+      - "NOT: Bu tablo AI tarafından sütun grafiğine dönüştürülecektir"
+    kurallar:
+      - "Senaryo 5. sınıf seviyesinde, okul/çevre ortamında olmalı"
+      - "KRİTİK — SENARYO KAPSAMI: Senaryo sadece DURUMU ve MERAKı anlatsın, CEVAPLARI vermesin!"
+      - "Detaylı bilgiler ve veriler SADECE grafikte olmalı — senaryo bunları içermemeli"
+      - "Senaryoda alt bölüm için tablo ifadesi kullanılmamalı; yalnızca grafik ifadesi kullanılmalı"
+      - "Soruların cevabı senaryodan değil grafik verilerinden çıkarılmalı"
+      - "Anket konusu somut ve anlaşılır olmalı (yiyecek, spor, kitap, çevre, ulaşım vb.)"
+      - "Karakter meraklı ve araştırmacı bir öğrenci olmalı"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+    - slot: 1
+      type: "merak_konusu"
+      soru_kokleri:
+        - "<b>…Özne…'nin merak ettiği konu aşağıdakilerden hangisidir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 3
+      word_count_max: 15
+      beceri:
+        katman: "KB2"
+        bilesenler: ["cikarim_yapma"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+    - slot: 2
+      type: "anket_sorusu"
+      soru_kokleri:
+        - "<b>Aşağıdakilerden hangisi …Özne…'nin anketi uygularken arkadaşlarına sorduğu sorulardan biridir?</b>"
+      options_style: "question_sentence"
+      word_count_min: 4
+      word_count_max: 15
+      beceri:
+        katman: "KB2"
+        bilesenler: ["cikarim_yapma", "sorgulama"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+    - slot: 3
+      type: "grafik_bilgi"
+      soru_kokleri:
+        - "<b>…Özne…, araştırması sonucu oluşturduğu grafik sayesinde metinde önerilenlerden hangisiyle ilgili bilgi edinmiştir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 5
+      word_count_max: 20
+      beceri:
+        katman: "KB2"
+        bilesenler: ["grafik_okuma", "yorumlama"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+    - slot: 4
+      type: "anket_yorum"
+      soru_kokleri:
+        - "<b>Metin ve anket sonuçlarını gösteren grafikteki bilgilere göre aşağıdakilerden hangisi söylenebilir?</b>"
+        - "<b>Metindeki araştırmadan hareketle …Özne…'nin anket sonuçları ile ilgili aşağıdakilerden hangisi söylenebilir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 5
+      word_count_max: 20
+      beceri:
+        katman: "KB3"
+        bilesenler: ["cikarim_yapma", "degerlendirme", "butunlestirme"]
+        surec_bileseni: "problemi_yapilandirma"
+
+header_template: "1-4. soruları aşağıdaki senaryo ve anket grafiğine göre cevaplayınız."
+
+format:
+  type: "llm_generated_html"
+  description: "4Q sütun grafik IMAGE anket üzerinden merak, araştırma, bilgi ve yorum soruları"
+  paragraph:
+    required: true
+    word_count_min: 120
+    word_count_max: 200
+    sentence_count_min: 3
+    sentence_count_max: 8
+  stem:
+    required: true
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 3
+    word_count_max: 20
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+dogru_cevap:
+  tanim: "Senaryo ve grafik verilerinden doğru çıkarılan bilgi veya yargı"
+  kurallar:
+    - "KRİTİK: Doğru cevap grafiği OKUYARAK ve YORUMLAYARAK bulunmalı — ham veri tekrarı değil"
+    - "Doğru cevap hem senaryoyu hem grafik verilerini birlikte değerlendirmeyi gerektirmeli"
+    - "Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı"
+    - "HATALI YAKLASIM: Metinde/grafikte geçen bir cümlenin AYNEN seçeneklerde kullanılması YASAK"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin ANLAMCA ÖZDESİ olmalı"
+    - "En az %40 kelime farklılığı olmalı"
+    - "BİLİMSEL TERİM KORUMASI: Teknik terimler değiştirilmemeli"
+    - "Anket sorusunda doğru cevap anketin konusuyla tutarlı bir soru olmalı"
+    - "Grafik-bilgi sorusunda doğru cevap grafik verileriyle metindeki önerilerin kesiştiği nokta olmalı"
+    - "Yorum sorusunda doğru cevap anket sonuçlarıyla desteklenen çıkarım olmalı"
+
+distractors:
+  stratejiler:
+    - ad: "KONU_KAYDIRMA"
+      aciklama: "Merak konusunu farklı bir konuya kaydırma"
+      ornek: "Araştırmanın asıl konusundan uzak bir merak konusu sunma"
+    - ad: "SORULMAMIS_SORU"
+      aciklama: "Ankette sorulmamış bir soruyu sorulmuş gibi sunma"
+      ornek: "Anket konusuyla ilgili ama ankette yer almayan bir soru verme"
+    - ad: "VERI_CARPITMA"
+      aciklama: "Grafikteki değeri yanlış okuma veya aktarma"
+      ornek: "En yüksek değeri en düşük gibi sunma"
+
+use_shared_strategies: false

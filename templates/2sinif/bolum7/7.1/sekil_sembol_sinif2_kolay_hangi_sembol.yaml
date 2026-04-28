@@ -1,0 +1,113 @@
+# Kolay duzey — hangi_sembol varyanti
+# Ornek: Sembol tanimlari + senaryo → 3 gorsel ikon seti secenegi
+# Referans: 7.1orneksoru1.jpeg (telefon ikonlari)
+
+meta:
+  id: "sekil_sembol_sinif2_kolay_hangi_sembol"
+  ad: "2. Sinif - Sekil Sembol Isaretler (Kolay) - Hangi Sembol"
+  sinif_seviyesi: 2
+  aciklama: "Kolay duzey — Sembol tanimlari + senaryo verilir, dogru ikon/sembol kombinasyonunu secme. Gorsel siklar."
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Sembol tanimlari (paragraf) + senaryo + soru koku + 3 gorsel secenek (ikon kombinasyonlari)"
+
+  paragraph:
+    required: true
+    word_count_min: 30
+    word_count_max: 70
+    sentence_count_min: 3
+    sentence_count_max: 7
+    stil: "sembol_tanimi_ve_senaryo"
+    background_color: "#e8f8e8"
+    kurallar:
+      - "Paragraf IKI BOLUMLUK olmali:"
+      - "BOLUM 1 — SEMBOL TANIMLARI: 2-3 sembol/isaret ve anlamlari aciklanir. Ornek: 'Sebeke isareti: Telefonun cekim gucunu ifade eder. Wifi isareti: Internet cekim gucunu ifade eder.'"
+      - "BOLUM 2 — SENARYO: Bir karakter veya durum verilir. Ornek: 'Ozan: Anne, telefonun sarji cok az kaldi. Sebeke iyi cekiyor ama wifi ile internet alamiyorum.'"
+      - "Senaryo sembol durumlarini (acik/kapali, dolu/bos, var/yok) DOLAYLI olarak belirtmeli."
+      - "Senaryo tek basina TUM sembollerin durumunu kesin verMEMELI — gorsel destegi gerekli."
+      - "2. sinif duzeyinde sade, gunluk hayata yakin semboller kullan."
+      - "Semboller: trafik isaretleri, hava durumu, telefon ikonlari, geri donusum, guvenlik isareti, yonlendirme gibi."
+      - "Soyut veya teknik semboller YASAK."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 10
+    word_count_max: 40
+    style: "image_description"
+    image_style: "photo"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Her secenek 2-3 sembol/ikon kombinasyonunu TASVIR etmeli."
+      - "Secenekler AYNI sembol turlerini icermeli, sadece DURUMLARI (dolu/bos, acik/kapali, var/yok) farkli."
+      - "Dogru secenek senaryodaki TUM ipuclarina uygun ikon durumlarini gostermeli."
+      - "Yanlis secenekler en az 1 ikon durumunda hata icermeli."
+      - "Tasvir acik ve gorsellestirilmeye uygun olmali."
+      - "Ornek tasvir: 'Dusuk batarya ikonu (neredeyse bos), tam sebeke cubugu (5/5 dolu), wifi ikonu carpi isaretli (baglanti yok)'"
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Buna göre aşağıdaki sembollerden hangisi doğru verilmiştir?</b>"
+  - "<b>Verilen bilgilere göre semboller hangi seçenekte doğru gösterilmiştir?</b>"
+  - "<b>Buna göre işaretler aşağıdakilerden hangisinde doğru verilmiştir?</b>"
+  - "<b>Senaryoya gore dogru sembol kombinasyonu hangisidir?</b>"
+
+dogru_cevap:
+  tanim: "Senaryodaki TUM ipuclarina uygun sembol/ikon durumlarini gosteren secenek"
+  kurallar:
+    - "Dogru cevap senaryodaki HER sembol durumunu dogru yansitmali."
+    - "Dogru cevap yalniz senaryodan cikarilamamali — sembol tanimlari da gerekli."
+    - "2. sinif ogrencisinin tanimlari okuyup senaryoyu anlayarak bulabilecegi aciklikta olmali."
+
+celdirici_stratejileri:
+  - ad: "TEK_SEMBOL_HATASI"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Sembollerden birinin durumu yanlis, digerleri dogru"
+    nasil_olusturulur: |
+      Dogru cevaptaki sembollerden birinin durumunu degistir (ornek: wifi acik yerine kapali).
+      Kolay duzey: hatali sembol acikca senaryoyla celismeli.
+    kategori: "visual_conflict"
+
+  - ad: "BIRDEN_FAZLA_HATA"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Birden fazla sembolun durumu yanlis"
+    nasil_olusturulur: |
+      2 veya daha fazla sembolun durumunu yanlis goster.
+      Kolay duzey: birden fazla hata oldugu belirgin olmali.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+visual_requirement: "answer_critical"
+visual_type: "symbol_pair"
+visual_spec:
+  sembol_sayisi: 2
+  aciklama: "Paragraftaki sembol tanimlarina uygun 2 sembol ikonu"
+
+beceri:
+  katman: "KB1"
+  bilesenler: ["sembol_anlamlandirma", "cift_kaynak_okuma"]
+  surec_bileseni: "metni_anlama"
+
+sinif2_ek_kurallar:
+  cift_kaynak:
+    - "Soru yalniz metin okunarak cozulemez."
+    - "Soru yalniz gorsel incelenerek cozulemez."
+    - "Dogru cevap icin hem gorsel hem metin birlikte kullanilmalidir."
+  gorsel:
+    sembol_sayisi_min: 2
+    sembol_sayisi_max: 3
+    kurallar:
+      - "Semboller birbirinden acikca farkli olmalidir."
+      - "Gorsel sade olmali, gereksiz susleme icermemelidir."
+      - "Semboller net, buyuk ve tek bakista ayirt edilebilir olmalidir."
+  yasak_alanlar:
+    - "Yalniz gorsele bakilarak cevap secme YASAK"
+    - "Yalniz metin okunarak cevap secme YASAK"
+    - "2. sinif duzeyini asan teknik ikon kumeleri YASAK"

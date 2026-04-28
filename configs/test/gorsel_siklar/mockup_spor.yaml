@@ -1,0 +1,28 @@
+grade: 5
+subject: matematik
+template: gorsel_siklar_mockup
+topic: "Spor Takibi Uygulaması"
+
+models:
+  paragraph_writer: gemini-3.1-pro-preview
+  question_crafter: gemini-3.1-pro-preview
+  validator: gemini-3.1-pro-preview
+
+image_generation:
+  enabled: true
+  model: gemini-3-pro-image-preview
+  judge_model: gemini-3.1-pro-preview
+  max_retries: 2
+  max_judge_iterations: 3
+  temperature: 0.2
+
+validation:
+  max_fix_iterations: 3
+  required_checks:
+    - question_format
+    - accuracy
+    - distractors
+    - turkish
+
+output:
+  dir: output/test_gorsel_siklar/mockup_spor

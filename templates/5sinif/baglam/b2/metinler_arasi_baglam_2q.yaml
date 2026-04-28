@@ -1,0 +1,118 @@
+meta:
+  id: metinler_arasi_baglam_2q
+  ad: İki Metin Karşılaştırma (2 Soru)
+  sinif_seviyesi: 5
+  aciklama: Aynı konu farklı yaklaşımla yazılmış 2 metin — ortak tema ve temel fark soruları
+  kaynak: kaynak-soru-kokleri.md
+  frequency: Medium
+context:
+  type: metinler_arasi_baglam_2q
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 140
+    word_count_max: 200
+    structure:
+    - Aynı konu hakkında farklı yaklaşımla yazılmış 2 kısa metin oluştur
+    - Her metin 3-5 cümle olmalı ve '1. Metin' / '2. Metin' olarak etiketlenmeli
+    - 'Metinler aynı konuyu farklı açılardan ele almalı (ör: bilimsel vs günlük, olumlu vs eleştirel)'
+    - İki metin arasında ortak bir tema/mesaj bulunmalı
+    - Metinler arasında belirgin bir yaklaşım/bakış açısı farkı olmalı
+    - "YASAK: HTML tablosu (<table>) EKLEME — sadece düz metin yaz, tablo KULLANMA"
+    kurallar:
+    - 5. sınıf seviyesinde, doğa, bilim, toplum veya günlük hayat konuları
+    - Her metin bağımsız okunabilir ama birlikte düşünüldüğünde daha zengin olmalı
+    - Ortak tema açıkça belirtilmemeli — çıkarım yoluyla bulunmalı
+    - Farklılık yüzeysel değil derin bir yaklaşım farkı olmalı
+    - Metinler çelişmemeli, tamamlayıcı olmalı
+    - Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)
+  questions:
+  - slot: 1
+    type: ortak_tema
+    soru_kokleri:
+    - <b>İki metnin ortak teması aşağıdakilerden hangisidir?</b>
+    - <b>Her iki metinde de vurgulanan ortak düşünce aşağıdakilerden hangisidir?</b>
+    - <b>Bu metinlerde …Nesne… ile ilgili aşağıdaki bilgilerden hangisine <u>değinilmemiştir</u>?</b>
+    - <b>Bu metinlerde ...Nesne... ile ilgili asagidaki bilgilerden hangisine deginilmemistir?</b>
+    options_style: complete_sentence
+    word_count_min: 8
+    word_count_max: 22
+    beceri:
+      katman: KB2
+      bilesenler:
+      - cikarim_yapma
+      - sentezleme
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 2
+    type: farklilik
+    soru_kokleri:
+    - <b>İki metin arasındaki temel fark aşağıdakilerden hangisidir?</b>
+    - <b>1. Metin ile 2. Metin arasındaki en belirgin yaklaşım farkı hangisidir?</b>
+    - <b>Bu metinlerde bahsedilen …Nesne… ile ilgili aşağıdakilerden hangisi ortak <u>değildir</u>?</b>
+    options_style: complete_sentence
+    word_count_min: 8
+    word_count_max: 22
+    beceri:
+      katman: KB3
+      bilesenler:
+      - karsilastirma
+      - analiz
+      surec_bileseni: problemi_yapilandirma
+header_template: 1-2. soruları aşağıdaki metinlere göre cevaplayınız.
+format:
+  type: llm_generated_html
+  description: 2 metin karşılaştırması üzerinden ortak tema ve farklılık soruları
+  paragraph:
+    required: true
+    count: 2
+    labels:
+    - 1. Metin
+    - 2. Metin
+    word_count_min: 140
+    word_count_max: 200
+    sentence_count_min: 6
+    sentence_count_max: 10
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 8
+    word_count_max: 22
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: İki metni kapsayan ortak tema veya temel yaklaşım farkı
+  kurallar:
+  - 'KRİTİK: Doğru cevap metindeki tek bir cümleden direkt okunaMAMALI'
+  - Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve metindeki veriyi YORUMLAMALI
+  - Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil
+  - 'YASAK: Metindeki değeri aynen şıkka yazmak (örn: ''yalıtımı azdır'' metinde yazıyorsa şıkta aynen yazmamalı)'
+  - Şıklar senaryodaki probleme çözüm, metindeki verilerden yargı veya karşılaştırma içermeli
+  - Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri her iki metin birlikte değerlendirildiğinde doğru olmalı
+  - Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı
+  - Ortak tema sorusunda doğru cevap HER İKİ metni de kapsayan ortak düşünce/değer olmalı
+  - Farklılık sorusunda doğru cevap metinlerin derin yaklaşım farkını yansıtmalı (yüzeysel değil)
+  - 'HATALI YAKLASIM: Metinde geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek metinlerdeki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: ''teleskop'' → ''mercekli araç'' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: TEK_METNE_ODAKLANMA
+    aciklama: Sadece 1 metni kapsayan ama diğerini kapsamayan tema/sonuç sunma
+    ornek: Sadece 1. Metindeki düşünceyi ortak tema gibi gösterme
+  - ad: YUZEY_FARK
+    aciklama: Yüzeysel bir farkı temel fark gibi sunma
+    ornek: Konu farkı yerine üslup/uzunluk farkını temel fark olarak gösterme
+  - ad: DETAY_YANILTMASI
+    aciklama: Metinlerdeki bir detayı ortak tema veya temel fark gibi gösterme
+    ornek: Yan bir bilgiyi merkezi tema/fark olarak sunma
+use_shared_strategies: false

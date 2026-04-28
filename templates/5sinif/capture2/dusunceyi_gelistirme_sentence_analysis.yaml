@@ -1,0 +1,215 @@
+# templates/capture2/dusunceyi_gelistirme_sentence_analysis.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Bolum 2 - Dusunceyi Gelistirme Yollari
+#
+# CUMLE ANALIZI FORMATI (tum dusunceyi gelistirme sorularinin ~%25'i)
+# Numarali cumleler (I, II, III, IV) verilir, ogrenci her cumledeki teknigi analiz eder
+# Dogru cevap = cumleyle uyusmayan analiz (genellikle "soylenemez" / "yanlistir")
+#
+# MANTIK: 3 secenek dogru analiz (yanlis), 1 tanesi yanlis analiz (dogru cevap)
+# Secenekler "I. cumlede benzetme yapilmistir." gibi TAM CUMLE formatindadir
+
+meta:
+  id: "dusunceyi_gelistirme_sentence_analysis"
+  ad: "Düşünceyi Geliştirme (Cümle Analizi)"
+  sinif_seviyesi: 5
+  aciklama: "Metnin belirli cümlelerinde kullanılan teknikleri analiz etme"
+  kaynak: "data/dusunceyi_gelistirme_yollari.pdf"
+  frequency: "Medium (~25% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Numaralı cümleler (I, II, III, IV) + soru kökü + cümle analizi içeren seçenekler"
+
+  paragraph:
+    required: true
+    numbered_sentences: true
+    word_count_min: 50
+    word_count_max: 90
+    sentence_count_min: 4
+    sentence_count_max: 4
+    stil: "karma"
+    kurallar:
+      - "Metin 4 numaralı cümleden oluşmalı."
+      - "Her cümlede veya en az 3 cümlede farklı bir anlatım tekniği veya özelliği (tanım, benzetme, karşılaştırma, örnekleme, öznel/nesnel yargı) bulunmalı."
+      - "Örn: (I) Kalp en önemli kasımızdır [Tanım/Karşılaştırma]. (II) Bir pompa gibi çalışır [Benzetme]. (III) Dört odası vardır [Nesnel]. (IV) ..."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 5
+    word_count_max: 15
+    style: "complete_sentence"
+    correct_type: "does_not_belong"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 3 varyasyon)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metnin anlatımı ile ilgili aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Bu metinde numaralanmış cümlelerle ilgili aşağıdakilerden hangisi <u>yanlıştır</u>?</b>"
+  - "<b>Bu metinde kullanılan düşünceyi geliştirme yolları ile ilgili aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI (TERS MANTIK!)
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metindeki cümleyle uyuşmayan analiz"
+  mantik: "INVERSE - diger 3 secenek dogru analizler, dogru cevap yanlis analiz"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Dogru cevap, bir cumleye atfedilen teknigi YANLIS teshis etmeli"
+    - "Ornegin: Cumlede tanimlama yapilmissa, 'benzetme yapilmistir' demek yanlis analiz"
+    - "Yanlis analiz makul gorunmeli - tamamen sacma degil, ince bir hata olmali"
+    - "Diger 3 secenek cumlelerdeki teknikleri DOGRU analiz etmeli"
+  ornekler:
+    - paragraf: "(I) Stres, vücudun tehlike algıladığı durumlarda gösterdiği doğal bir tepkidir. (II) Bir savaşçı gibi vücudu hazırlar. (III) Kalp atış hızı artar, kaslar gerilir. (IV) Örneğin sınav öncesi yaşanan gerginlik stresin belirtilerindendir."
+      dogru: "I. cümlede benzetme yapılmıştır."
+      neden: "I. cumlede aslinda TANIMLAMA yapilmistir ('...tepkidir' ifadesi). Benzetme II. cumlede var ('gibi')."
+
+# ═══════════════════════════════════════════════════════════════
+# SECENEKLERE ILISKIN ORNEK YAPILAR
+# ═══════════════════════════════════════════════════════════════
+# Secenekler su formatta olur:
+# A) "I. cümlede benzetme yapılmıştır."
+# B) "II. cümlede karşılaştırmaya yer verilmiştir."
+# C) "III. cümlede örneklendirme yapılmıştır."
+# D) "IV. cümle bir tanım cümlesidir."
+
+sample_options:
+  - "I. cümlede benzetme yapılmıştır."
+  - "II. cümlede karşılaştırmaya yer verilmiştir."
+  - "III. cümlede örneklendirme yapılmıştır."
+  - "IV. cümle bir tanım cümlesidir."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# Ters mantik sorularinda LLM:
+# - 3 cumle icin dogru teknik analizi olusturur (yanlis secenekler)
+# - 1 cumle icin yanlis teknik analizi olusturur (dogru cevap)
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cozumleme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic suitable for multiple techniques"
+      details: "Birden fazla dusunceyi gelistirme yolunun kullanilabilecegi bir konu sec"
+
+    - step: 2
+      action: "Generate paragraph with 4 numbered sentences"
+      details: |
+        Paragrafta:
+        - Tam 4 numarali cumle olmali (I, II, III, IV)
+        - Her cumlede veya en az 3 cumlede farkli bir teknik kullanilmali
+        - Teknikler: tanimlama, benzetme, karsilastirma, orneklendirme, oznel/nesnel yargi
+        - Her cumle acikca bir tekniğe isaret etmeli
+
+    - step: 3
+      action: "Create 3 correct analysis options (distractors - wrong answers)"
+      details: |
+        Her biri TAM CUMLE olmali (5-15 kelime):
+        - 3 cumle icin dogru teknik analizi
+        - Format: "X. cumlede [teknik adi] yapilmistir." veya benzeri
+        - Her analiz paragraftaki cumleyle tutarli olmali
+
+    - step: 4
+      action: "Create 1 incorrect analysis (correct answer)"
+      details: |
+        TAM CUMLE olmali (5-15 kelime):
+        - Bir cumleye YANLIS teknik atfedilmeli
+        - Ornegin tanimlama olan cumleye "benzetme yapilmistir" demek
+        - Hata makul ve ince olmali (tamamen sacma degil)
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from 3 variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 86
+    soru_no: 8
+    konu: "Stres ve vucuttaki etkileri"
+    paragraf: "(I) Stres, vücudun tehlike algıladığı durumlarda gösterdiği doğal bir tepkidir. (II) Bir savaşçı gibi vücudu hazırlar. (III) Kalp atış hızı artar, kaslar gerilir. (IV) Örneğin sınav öncesi gerginlik stresin belirtilerindendir."
+    secenekler:
+      A: "I. cümlede tanımlama yapılmıştır."
+      B: "I. cümlede benzetme yapılmıştır."
+      C: "II. cümlede benzetmeye başvurulmuştur."
+      D: "IV. cümlede örneklendirme yapılmıştır."
+    dogru_cevap: "B"
+    neden: "I. cumlede tanimlama var ('...tepkidir'), benzetme degil. Benzetme II. cumlede ('gibi')."
+
+  - sayfa: 88
+    soru_no: 6
+    konu: "Kalp ve islevleri"
+    paragraf: "(I) Kalp vücudumuzdaki en önemli organlardan biridir. (II) Bir pompa gibi çalışarak kanı tüm vücuda pompalar. (III) İnsan kalbi dört odacıktan oluşur. (IV) Yetişkin bir insanın kalbi dakikada yaklaşık 72 kez atar."
+    secenekler:
+      A: "I. cümlede karşılaştırma yapılmıştır."
+      B: "II. cümlede benzetme yapılmıştır."
+      C: "III. cümlede nesnel bir bilgi verilmiştir."
+      D: "IV. cümlede sayısal verilerden yararlanılmıştır."
+    dogru_cevap: "A"
+    neden: "I. cumlede tanimlama var ('...biridir'), karsilastirma degil."
+
+  - sayfa: 89
+    soru_no: 3
+    konu: "Aricilik ve balar"
+    paragraf: "(I) Bal arıları doğanın en çalışkan canlılarındandır. (II) Bir mühendis gibi kusursuz petek yapıları inşa ederler. (III) Bir kilogram bal üretmek için milyonlarca çiçeği ziyaret ederler. (IV) Örneğin çam balı, çiçek balından farklı olarak böcek salgılarından elde edilir."
+    secenekler:
+      A: "I. cümlede karşılaştırma yapılmıştır."
+      B: "II. cümlede benzetme yapılmıştır."
+      C: "III. cümlede sayısal verilerden yararlanılmıştır."
+      D: "IV. cümlede örneklendirme yapılmıştır."
+    dogru_cevap: "A"
+    neden: "I. cumlede tanimlama/derecelendirme var ('...canlilarindan'), karsilastirma degil."
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Tam 4 numarali cumle var mi (I, II, III, IV)?"
+    - "Kelime sayisi 50-90 arasinda mi?"
+    - "En az 3 cumlede farkli teknik kullanilmis mi?"
+    - "Her cumledeki teknik acikca belirlenebilir mi?"
+
+  correct_answer:
+    - "5-15 kelime arasinda tam cumle mi?"
+    - "Bir cumleye YANLIS teknik atfedilmis mi?"
+    - "Hata makul ve ince mi (tamamen sacma degil)?"
+
+  distractors:
+    - "Her biri 5-15 kelime arasinda tam cumle mi?"
+    - "Her biri dogru bir teknik analizi mi?"
+    - "Farkli cumleleri analiz ediyorlar mi?"
+    - "Tum secenekler ayni gramer yapida mi?"

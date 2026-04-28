@@ -1,0 +1,138 @@
+meta:
+  id: arastirma_senaryo
+  ad: Araştırma Senaryosu
+  sinif_seviyesi: 5
+  aciklama: Bir karakterin araştırma yaparak bilgi edindiği senaryo üzerinden 4 soru
+  kaynak: kadirhocasorukokleri.md
+  frequency: Medium
+context:
+  type: arastirma_senaryo
+  question_count: 4
+  question_count_min: 3
+  question_count_max: 4
+  generation:
+    word_count_min: 100
+    word_count_max: 180
+    structure:
+    - Bir öğrencinin (isimli) bir konuyu merak edip araştırma yaptığı senaryo oluştur
+    - Karakter merak eder → öğretmenine sorar → araştırma yapar → bilgilere ulaşır
+    - Araştırma sonucunda öğrendiği bilgiler açıkça belirtilmeli
+    - Karakter bir tanıma/kavrama ulaşmalı
+    - Araştırma süreci anlatılmalı (kaynak tarama, gözlem, soru sorma vb.)
+    kurallar:
+    - Senaryo 5. sınıf müfredatıyla uyumlu bir konu hakkında olmalı
+    - Karakter meraklı bir öğrenci olmalı
+    - Araştırma adımları doğal ve anlaşılır olmalı
+    - Öğretmene sorulabilecek sorular içerik zenginliği sağlamalı
+    - Edinilen bilgiler somut ve doğrulanabilir olmalı
+    - Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)
+  questions:
+  - slot: 1
+    type: tanim_ulasma
+    soru_kokleri:
+    - <b>…Özne…'yi araştırmaları sonucunda …. tanımına ulaştıran durum nedir?</b>
+    - <b>…Özne…, merak ettiği konu hakkında araştırma yaparken hangi soruya odaklanmış olabilir?</b>
+    options_style: complete_sentence
+    word_count_min: 5
+    word_count_max: 20
+    beceri:
+      katman: KB2
+      bilesenler:
+      - cikarim_yapma
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 2
+    type: ogretmen_soru
+    soru_kokleri:
+    - <b>Aşağıdakilerden hangisi …Özne…'nin merak ettiği konu ile ilgili öğretmenine sorduğu sorulardan biri olabilir?</b>
+    - <b>Bu durumu açıklamak için hangi soru sorulmalıdır?</b>
+    - <b>…Özne… yaptığı araştırmalarla aşağıdaki soruların hangisine cevap <u>veremez</u>?</b>
+    - <b>Aşağıdakilerden hangisi …Özne…'nin araştırmasında cevap arayacağı sorulardan biri <u>olamaz</u>?</b>
+    - <b>Asagidaki bilgilerden hangisi ...Ozne...nin ulastigi bilgileri dogrular nitelikte bir durumdur?</b>
+    options_style: question_sentence
+    word_count_min: 5
+    word_count_max: 18
+    beceri:
+      katman: KB2
+      bilesenler:
+      - sorgulama
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 3
+    type: bilgi_yorum
+    soru_kokleri:
+    - <b>…Özne…'nin merak ettiği konu hakkında edindiği bilgilerle ilgili aşağıdakilerden hangisi söylenebilir?</b>
+    options_style: complete_sentence
+    word_count_min: 5
+    word_count_max: 20
+    beceri:
+      katman: KB2
+      bilesenler:
+      - yorumlama
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 4
+    type: bilgi_dogrulama
+    soru_kokleri:
+    - <b>Aşağıdaki bilgilerden hangisi …Özne…'nin …. ile ilgili ulaştığı bilgileri doğrular nitelikte bir durumdur?</b>
+    options_style: complete_sentence
+    word_count_min: 5
+    word_count_max: 20
+    beceri:
+      katman: KB3
+      bilesenler:
+      - mantiksal_denetleme
+      - cikarim_yapma
+      surec_bileseni: problemi_yapilandirma
+header_template: 1-4. soruları aşağıdaki araştırma senaryosuna göre cevaplayınız.
+format:
+  type: llm_generated_html
+  description: Araştırma senaryosu üzerinden 4 soru
+  paragraph:
+    required: true
+    word_count_min: 100
+    word_count_max: 180
+    sentence_count_min: 4
+    sentence_count_max: 8
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 5
+    word_count_max: 20
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Araştırma senaryosundaki bilgilerle doğrudan desteklenen cevap
+  kurallar:
+  - 'KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI'
+  - Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI
+  - Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil
+  - 'YASAK: Tablodaki değeri aynen şıkka yazmak (örn: ''yalıtımı azdır'' tabloda yazıyorsa şıkta aynen yazmamalı)'
+  - Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli
+  - Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı
+  - Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı
+  - Tanım sorusunda doğru cevap karakteri o tanıma götüren neden/durum olmalı
+  - Öğretmen sorusunda doğru cevap senaryodaki araştırma konusuyla ilgili mantıklı soru olmalı
+  - Bilgi yorumunda doğru cevap edinilen bilgilerden çıkarılabilecek yorum olmalı
+  - Doğrulama sorusunda doğru cevap senaryodaki bilgilerle tutarlı ek bir durum olmalı
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: ''teleskop'' → ''mercekli araç'' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: KONU_DISI_SORU
+    aciklama: Araştırma konusuyla ilgisi olmayan soru sunma
+    ornek: Merak edilen konudan farklı bir alana soru yöneltme
+  - ad: YANLIS_NEDEN
+    aciklama: Karakteri tanıma ulaştıran nedenin yanlış aktarımı
+    ornek: Araştırma sürecindeki bir adımı yanlış sırada sunma
+  - ad: CELISEN_BILGI
+    aciklama: Senaryodaki bilgilerle çelişen ama mantıklı görünen ifade
+    ornek: Edinilen bilgiyi ters çevirerek sunma
+use_shared_strategies: false

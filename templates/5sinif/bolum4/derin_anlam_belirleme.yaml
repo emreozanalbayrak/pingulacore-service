@@ -1,0 +1,199 @@
+# templates/bolum4/derin_anlam_belirleme.yaml
+# Bolum 4.1 - Ozel Bolum: Derin Anlam - Cikarilabilir Mesaji Bulma
+#
+# STANDART FORMAT
+# Kisa olay/ani verilir, ogrenci metnin ortuk mesajini (derin anlamini) bulur
+# correct_type: matches — dogru cevap metnin derin anlamini karsilar
+
+meta:
+  id: "derin_anlam_belirleme"
+  ad: "Derin Anlam - Çıkarılabilir Mesajı Bulma"
+  sinif_seviyesi: 5
+  aciklama: "Verilen kısa olay ya da durumdan hareketle metnin örtük mesajını buldurur"
+  frequency: "High (~50% of deep meaning questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Kısa olay/anı paragrafı + soru kökü + 4 soyut yargı seçeneği"
+
+  paragraph:
+    required: true
+    word_count_min: 50
+    word_count_max: 100
+    sentence_count_min: 4
+    sentence_count_max: 8
+    stil: "kisa_olay_veya_ani"
+    kurallar:
+      - "Yüzeyde somut bir olay içermeli"
+      - "Olayın altında çıkarılabilir tek baskın mesaj bulunmalı"
+      - "Derin anlam doğrudan söylenmemeli, çıkarım gerektirmeli"
+      - "Öyküleyici üslup: olay, karakter, durum akışı"
+      - "Mesaj doğrudan öğüt vermeden aktarılmalı"
+      - "Yardım, fedakârlık, saygı, sabır, merhamet, dürüstlük gibi evrensel değerler"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 8
+    word_count_max: 25
+    style: "complete_sentence"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Metinden çıkarılabilecek derin anlam aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu parçanın derin anlamı aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu olayın düşündürdüğü asıl mesaj nedir?</b>"
+  - "<b>Metinde verilmek istenen örtük anlam aşağıdakilerden hangisidir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metinde açıkça söylenmeyen ama olayın bütününden güvenli biçimde çıkarılabilen asıl mesaj"
+  kurallar:
+    - "KRITIK: Dogru secenekte paragraftaki hicbir cumle kelimesi kelimesine TEKRARLANMAMALI — es anlamli sozcuklerle yeniden ifade edilmeli"
+    - "Paragraftaki ifadelerle en az %40 kelime farkliligi olmali — kopyala-yapistir YASAK"
+    - "Ayni anlam korunmali ama farkli sozcukler ve cumle yapilari kullanilmali"
+    - "Metnin yüzeysel anlamından öte derin mesajı yakalmalı"
+    - "Doğru seçenek paragraftaki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI — eş anlamlı sözcüklerle yeniden ifade edilmeli"
+    - "Paragraftaki ifadelerle en az %40 kelime farklılığı olmalı — kopyala-yapıştır YASAK"
+    - "Aynı anlam korunmalı ama farklı sözcükler ve cümle yapıları kullanılmalı"
+    - "Somut olaylardan soyut çıkarım yapmalı"
+    - "8-25 kelime, tam bir cümle formatında olmalı"
+    - "Fazla genel olmamalı, metnin özel bağını korumalı"
+    - "Olayın özünü taşımalı"
+  ornekler:
+    - paragraf: "Yaşlı komşu her sabah kapının önünü süpürürdü. Bir gün hastalandı, kimse süpürmedi. Küçük Elif bunu fark edince komşusunun hem önünü süpürdü hem de çorba götürdü. Yaşlı adam gözleri dolarak teşekkür etti."
+      dogru: "Küçük bir iyilik, insanın gönlünde büyük bir iz bırakabilir."
+      neden: "Yüzey: Elif komşusuna yardım etti. Derin anlam: küçük iyiliklerin büyük etkisi"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI (CUSTOM — derin anlam belirleme icin ozel)
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "GENEL_DOGRU_ILKE_TUZAGI"
+    bilisssel_hata_kategorisi: "asiri_genelleme"
+    aciklama: "Ahlaken doğru bir düşünce sunulur ama metin bunu doğrudan desteklemez."
+    nasil_olusturulur: |
+      Genel olarak doğru olan ama bu metne özgü olmayan ahlaki bir ilke yaz.
+      Örnek: "İhtiyaç sahibi insanlara yardım etmek tüm toplumun görevidir."
+      Öğrenci genel doğruluk ile metne özgü mesajı karıştırabilir.
+    kategori: "scope"
+
+  - ad: "METIN_DISI_KURAL_URETME"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Olaydan bir davranış kuralı türetilir ama metin buna varmaz."
+    nasil_olusturulur: |
+      Metindeki olaydan mantıklı görünen ama metinde yer almayan bir kural üret.
+      Örnek: "Yardım, ihtiyaç sahibini incitmeden gizli olarak yapılmalıdır" — metinde gizlilik vurgusu yok.
+      Metin dışı kural türetme hatasını test eder.
+    kategori: "cognitive"
+
+  - ad: "DARALTILMIS_DERS"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metnin geniş mesajı daha dar bir anlayışa indirgenir."
+    nasil_olusturulur: |
+      Derin anlamın yalnızca bir boyutunu veren ama bütünü kapsamayan dar bir ders yaz.
+      Örnek: "Yardım ihtiyaç olan kişilere yapıldığında değerlidir" — metnin samimiyet boyutunu karşılamaz.
+      Geniş mesaj ile dar yorum arasındaki farkı test eder.
+    kategori: "semantic"
+
+  - ad: "YUZEYDE_KALMA"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Seçenek metindeki olayı tekrar eder ama soyut anlam üretmez."
+    nasil_olusturulur: |
+      Metindeki olayı özetleyen ama soyut mesaja ulaşmayan bir cümle yaz.
+      Bu tip çeldiriciler derin anlam sorusunu yüzey anlam sorusuna çevirir.
+      Güçlü görünse de yanlıştır çünkü derin anlam değil olay özetidir.
+    kategori: "content"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ETIKETI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB3"
+  bilesenler: ["cikarim_yapma", "degerlendirme", "yorumlama"]
+  surec_bileseni: "karar_verme"
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Somut olay seç"
+      details: |
+        Kısa ama anlam taşıyan bir olay kur:
+        yardım etme, fedakârlık, özveri, saygı, sabır,
+        merhamet, dürüstlük, dayanışma gibi temalar.
+
+    - step: 2
+      action: "Olayın alt mesajını belirle"
+      details: |
+        Tek baskın derin anlam seç:
+        - Samimiyet maddiyattan üstün olabilir
+        - Küçük bir iyilik büyük etki bırakabilir
+        - Değer görmek insanı güçlendirir
+        - Vazgeçmemek başarıya götürür
+        - Görünüş değil davranış önemlidir
+
+    - step: 3
+      action: "Kısa olay/anı paragrafı yaz (50-100 kelime)"
+      details: |
+        - Mesaj doğrudan söylenmesin
+        - Öğrenci mesajı olaydan çıkarsın
+        - 4-8 cümle, öyküleyici üslup
+
+    - step: 4
+      action: "Doğru cevap = soyut derin mesaj yargısı"
+      details: |
+        - Olayın özünü taşımalı
+        - Fazla genel olmamalı
+        - Metnin özel bağını korumalı
+
+    - step: 5
+      action: "3 çeldirici yargı oluştur"
+      details: |
+        - 1 genel doğru ilke (ahlaken doğru ama metne özgü değil)
+        - 1 daraltılmış ders (kısmi doğru)
+        - 1 yüzeyde kalan (olay özeti) veya metin dışı kural
+        Seçenekleri rastgele sırala.
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayısı 50-100 arasında mı?"
+    - "Somut bir olay var mı?"
+    - "Olayın altında tek baskın örtük mesaj var mı?"
+    - "Derin anlam doğrudan söylenmemiş mi?"
+
+  correct_answer:
+    - "8-25 kelime tam cümle mi?"
+    - "Olaydan güvenli biçimde çıkarılabiliyor mu?"
+    - "Metnin ahlaki/insani özünü karşılıyor mu?"
+
+  distractors:
+    - "Yanlış seçenekler metne yakın ama aşırı/eksik mi?"
+    - "Seçenekler aynı soyutluk düzeyinde mi?"
+    - "Tüm seçenekler aynı formatta mı?"

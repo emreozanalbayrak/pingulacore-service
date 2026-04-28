@@ -1,0 +1,430 @@
+meta:
+  id: "metin_turleri_sinif2_standart_gorselli_uc_secenekli"
+  ad: "Metin Türleri"
+  sinif_seviyesi: 2
+  ders: "Türkçe"
+  bolum: "2. Sınıf Paragraf Soru Bankası"
+  alt_bolum: "6. Metin Türleri"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    2. sınıf öğrencisi için kısa bir metnin türünü, çok belirgin ve temel özelliklerinden
+    hareketle ayırt ettirmeye yönelik, görsel destekli ve 3 seçenekli standart soru üretim şablonu.
+  kullanim_notu: >
+    Bu şablon, harici olarak kullanılan 2. Sınıf TYMM Ortak Kuralları YAML'ı ile birlikte
+    doğrulanmalıdır. TYMM ortak kuralları bu şablonun içine gömülmemiştir.
+
+format:
+  type: "llm_generated_html"
+  description: "Görsel + kısa metin + soru kökü + 3 metin türü seçeneği"
+
+  text:
+    required: true
+    text_variant_allowed:
+      - "siir"
+      - "duz_yazi"
+    style: "simple_primary_level_text"
+
+    siir:
+      line_count_min: 3
+      line_count_max: 6
+      word_count_min: 10
+      word_count_max: 28
+      kurallar:
+        - "Şiir açık dize düzeniyle verilmelidir."
+        - "Duygu, hayal veya doğa/n esne anlatımı sade olmalıdır."
+        - "Şiir 2. sınıf düzeyinde açık ve somut olmalıdır."
+        - "Yoğun mecaz, kapalı anlam ve yetişkin dili kullanılmamalıdır."
+        - "Şiir, biçimsel olarak düz yazıdan kolayca ayırt edilebilir olmalıdır."
+
+    duz_yazi:
+      sentence_count_min: 3
+      sentence_count_max: 5
+      word_count_min: 20
+      word_count_max: 48
+      kurallar:
+        - "Düz yazı 2. sınıf öğrencisinin anlayabileceği kadar sade, somut ve açık olmalıdır."
+        - "Metin tek baskın türe ait görünmelidir."
+        - "Metin dış bilgi gerektirmemelidir."
+        - "Tür ayırt etme, metnin görünür özelliklerinden yapılabilmelidir."
+        - "Metin, türü belirsizleştirecek kadar karma yapıda olmamalıdır."
+
+  visual:
+    required: true
+    description: "Metnin ana içeriğini destekleyen sade görsel"
+    placement: "text_top_or_left"
+    visual_type_allowed:
+      - "tek sahneli illüstrasyon"
+      - "tek sahneli fotoğraf benzeri çizim"
+      - "tek kişi, tek varlık veya tek olay odaklı sahne"
+    kurallar:
+      - "Görsel metnin ana içeriğiyle doğrudan uyumlu olmalıdır."
+      - "Görsel süs amaçlı olmamalı, metni desteklemelidir."
+      - "Görsel tek bakışta anlaşılır olmalıdır."
+      - "Görsel türü ima edebilir ama tek başına cevabı tamamen vermemelidir."
+      - "Görsel dikkat dağıtıcı gereksiz ayrıntılar içermemelidir."
+      - "Görsel yanlış türü destekleyecek kadar yanıltıcı olmamalıdır."
+    yasaklar:
+      - "karmaşık kolaj"
+      - "çok sahneli kompozisyon"
+      - "metinle zayıf ilişkili dekoratif görsel"
+      - "türü karıştıracak birden fazla olaylı yoğun sahne"
+
+  stem:
+    required: true
+    selection: "random_from_list"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    correct_count: 1
+    style: "text_type_label"
+    word_count_min: 1
+    word_count_max: 3
+    kurallar:
+      - "Tüm seçenekler metin türü adı biçiminde olmalıdır."
+      - "Seçenekler kısa, sade ve 2. sınıf düzeyinde olmalıdır."
+      - "Doğru seçenek metnin görünür tür özelliklerini karşılamalıdır."
+      - "Yanlış seçenekler yakın ama yanlış türlerden seçilmelidir."
+      - "Seçenekler kendi aralarında biçimce paralel olmalıdır."
+
+metin_turu_havuzu:
+  hedef_turler:
+    - id: "siir"
+      etiket: "Şiir"
+      temel_ipuclari:
+        - "Dizeler hâlinde yazılır."
+        - "Duygu, hayal veya doğa anlatımı olabilir."
+        - "Düz paragraf görünümünde değildir."
+
+    - id: "masal"
+      etiket: "Masal"
+      temel_ipuclari:
+        - "Olağanüstü olaylar veya varlıklar bulunabilir."
+        - "Yer ve zaman çoğu zaman açık değildir."
+        - "Gerçek yaşamdan çok hayal unsuru taşır."
+
+    - id: "bilgilendirici_metin"
+      etiket: "Bilgilendirici metin"
+      temel_ipuclari:
+        - "Bir varlık, canlı, yer veya konu hakkında bilgi verir."
+        - "Öğretici ve açıklayıcıdır."
+        - "Olay anlatmaktan çok bilgi vermeye yöneliktir."
+
+    - id: "oykuleyici_metin"
+      etiket: "Öyküleyici metin"
+      temel_ipuclari:
+        - "Kişi, olay, zaman veya yer bulunur."
+        - "Bir şey olur ya da olabilecek bir olay anlatılır."
+        - "Akış içinde bir durumdan başka bir duruma geçilir."
+
+  kullanim_notu:
+    - "Bu bölümde seçenek etiketi olarak öncelikli kullanım: Şiir / Masal / Bilgilendirici metin / Öyküleyici metin."
+    - "Hikâye kavramı kaynak açıklama olarak düşünülebilir; ancak soru seçeneklerinde varsayılan etiket 'Öyküleyici metin' olmalıdır."
+    - "Aynı soruda yalnız 3 seçenek kullanılacağı için hedef türe göre en yakın iki yanlış tür seçilmelidir."
+
+soru_kokleri:
+  - "Bu metnin türü aşağıdakilerden hangisidir?"
+  - "Aşağıdakilerden hangisi bu metnin türüdür?"
+  - "Bu metin hangi türe girer?"
+  - "Bu yazının türü aşağıdakilerden hangisidir?"
+  - "Bu metin aşağıdaki türlerden hangisine örnektir?"
+  - "Bu metnin türünü aşağıdakilerden hangisi gösterir?"
+  - "Aşağıdakilerden hangisi bu metnin türünü söyler?"
+  - "Bu metin hangi türdedir?"
+  - "Bu parça hangi metin türüne örnektir?"
+  - "Bu yazı aşağıdaki metin türlerinden hangisidir?"
+  - "Metnin türü aşağıdakilerden hangisi olabilir?"
+  - "Bu metin için en uygun tür hangisidir?"
+
+beceri_odagi:
+  birincil_beceri:
+    - "Metnin türünü görünür özelliklerinden ayırt etme"
+  ikincil_beceriler:
+    - "Bilgi verme ile olay anlatma farkını görme"
+    - "Şiiri düz yazıdan ayırma"
+    - "Masalı gerçekçi öyküleyici metinden ayırma"
+    - "Metnin ne amaçla yazıldığını temel düzeyde sezme"
+
+dogru_cevap:
+  tanim: "Metnin görünür ve açık özelliklerini en doğru karşılayan metin türü"
+  kurallar:
+    - "Doğru cevap metnin yapısına ve içeriğine birlikte uymalıdır."
+    - "Doğru cevap biçimsel ve içeriksel ipuçlarıyla bulunabilmelidir."
+    - "Doğru cevap soyut edebî analiz gerektirmemelidir."
+    - "Doğru cevap 2. sınıf öğrencisinin metne bakarak ayırt edebileceği açıklıkta olmalıdır."
+    - "Bilgilendirici metin seçilecekse metin açıkça bilgi verici olmalıdır."
+    - "Öyküleyici metin seçilecekse metinde açık olay akışı bulunmalıdır."
+    - "Masal seçilecekse olağanüstülük veya gerçeküstülük açıkça görünmelidir."
+    - "Şiir seçilecekse metin açık dize düzeninde verilmelidir."
+
+yanlis_secenek_stratejileri:
+  count_per_question: 2
+  strategy_pool:
+    - id: "yapiya_yakin_ama_icerikce_yanlis"
+      tanim: "Biçimce yakın görünür ama içerik olarak yanlış tür"
+      ornek_mantik:
+        - "Düz yazı bilgi veriyorsa: Öyküleyici metin"
+        - "Düz yazı olay anlatıyorsa: Bilgilendirici metin"
+
+    - id: "icerige_yakin_ama_ture_yanlis"
+      tanim: "Konu yakın olduğu için çekici görünür ama tür bakımından yanlış"
+      ornek_mantik:
+        - "Hayvanlarla ilgili bilgi veren metinde: Masal"
+        - "Balıklar hakkında bilgi veren metinde: Öyküleyici metin"
+
+    - id: "siir_bicimi_karistirma"
+      tanim: "Kısa ve sade metni şiir sanmaya yönelten seçenek"
+      ornek_mantik:
+        - "Kısa düz yazıda: Şiir"
+
+    - id: "masal_oyku_karistirma"
+      tanim: "Olay var diye masal ile öyküleyici metni karıştıran seçenek"
+      ornek_mantik:
+        - "Gerçekçi olay anlatımında: Masal"
+        - "Olağanüstü olaylı metinde: Öyküleyici metin"
+
+  secim_kurali:
+    - "Her soruda 2 yanlış seçenek farklı stratejilerden seçilmelidir."
+    - "Yanlış seçenekler hedef türe en yakın görünen türlerden seçilmelidir."
+    - "Zor düzeyde iki yanlış seçenek de ilk bakışta makul görünmelidir."
+    - "Şiir hedef tür ise yanlış seçenekler düz yazı türlerinden seçilmelidir."
+    - "Bilgilendirici metin hedef tür ise yanlış seçeneklerden biri öyküleyici, biri masal ya da şiir olabilir."
+    - "Öyküleyici metin hedef tür ise yanlış seçeneklerden biri bilgilendirici, biri masal olabilir."
+    - "Masal hedef tür ise yanlış seçeneklerden biri öyküleyici, biri bilgilendirici ya da şiir olabilir."
+
+question_type_pairing_rules:
+  target_siir:
+    preferred_option_sets:
+      - ["Şiir", "Öyküleyici metin", "Bilgilendirici metin"]
+      - ["Şiir", "Masal", "Bilgilendirici metin"]
+    text_rules:
+      - "Metin mutlaka dize düzeninde olmalıdır."
+      - "Düz paragraf görünümü kullanılmamalıdır."
+
+  target_bilgilendirici_metin:
+    preferred_option_sets:
+      - ["Bilgilendirici metin", "Öyküleyici metin", "Masal"]
+      - ["Bilgilendirici metin", "Şiir", "Öyküleyici metin"]
+    text_rules:
+      - "Metin bilgi vermelidir."
+      - "Olay akışı baskın olmamalıdır."
+      - "Canlılar, nesneler, yerler veya doğa hakkında açıklayıcı bilgi içerebilir."
+
+  target_oykuleyici_metin:
+    preferred_option_sets:
+      - ["Öyküleyici metin", "Bilgilendirici metin", "Masal"]
+      - ["Öyküleyici metin", "Şiir", "Bilgilendirici metin"]
+    text_rules:
+      - "Metinde kişi/kişiler ve olay bulunmalıdır."
+      - "Gerçekçi ve olağan akış tercih edilmelidir."
+      - "Masal düzeyinde olağanüstülük bulunmamalıdır."
+
+  target_masal:
+    preferred_option_sets:
+      - ["Masal", "Öyküleyici metin", "Bilgilendirici metin"]
+      - ["Masal", "Şiir", "Öyküleyici metin"]
+    text_rules:
+      - "Metinde açık olağanüstü unsur bulunmalıdır."
+      - "Yer ve zamanın belirsizliği hissedilebilir."
+      - "Gerçekçi gündelik olay anlatımı baskın olmamalıdır."
+
+zorluk_duzeyleri:
+  kolay:
+    text:
+      preferred_target_types:
+        - "siir"
+        - "bilgilendirici_metin"
+      kurallar:
+        - "Tür çok açık biçimde ayırt edilebilir olmalıdır."
+        - "Şiir ise açık dize düzeni bulunmalıdır."
+        - "Bilgilendirici metin ise yalnız bilgi verme amacı çok belirgin olmalıdır."
+        - "Masal ve öyküleyici metin kolay düzeyde mümkün olduğunca az kullanılmalıdır."
+    visual:
+      kurallar:
+        - "Görsel metnin ana içeriğini doğrudan göstermelidir."
+        - "Görsel öğrencinin konu alanını kolayca fark etmesini sağlamalıdır."
+    distractors:
+      kurallar:
+        - "Yanlış seçenekler kolay elenebilir olmalıdır."
+        - "En az bir yanlış seçenek belirgin biçimde farklı türden olmalıdır."
+    difficulty_note: >
+      Kolay düzeyde öğrenci metnin açık biçimine ve temel amacına bakarak türü seçer.
+      Zorluk düşük tutulur; yakın tür karışıklığı sınırlıdır.
+
+  orta:
+    text:
+      preferred_target_types:
+        - "bilgilendirici_metin"
+        - "oykuleyici_metin"
+        - "siir"
+      kurallar:
+        - "Tür açık olmalıdır ancak yakın bir türle karıştırılabilir yüzey benzerliği taşıyabilir."
+        - "Bilgilendirici ve öyküleyici metin ayrımı yapılabilir."
+        - "Hayvan veya doğa içerikli metinlerde masal çeldiricisi kullanılabilir."
+        - "Şiir yine açık dize düzeninde kalmalıdır."
+    visual:
+      kurallar:
+        - "Görsel metni desteklemeli ama tek başına cevabı tamamen vermemelidir."
+    distractors:
+      kurallar:
+        - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+        - "Yanlış seçenekler yakın tür karışıklığı yaratabilir."
+    difficulty_note: >
+      Orta düzeyde öğrenci metnin yalnız konusuna değil, nasıl yazıldığına da bakarak
+      türü ayırt etmelidir.
+
+  zor:
+    text:
+      preferred_target_types:
+        - "bilgilendirici_metin"
+        - "oykuleyici_metin"
+        - "masal"
+      kurallar:
+        - "Tür yine açık kalmalıdır ama iki yakın tür arasında dikkatli ayrım gerektirebilir."
+        - "Bilgilendirici metin ile öyküleyici metin arasında yakın yüzey benzerliği kurulabilir."
+        - "Masal ile öyküleyici metin arasında olay temelli yakınlık olabilir."
+        - "Zor düzeyde bile şiir biçimsel olarak açık olmalıdır; kapalı şiirsellik kullanılmamalıdır."
+        - "Tür ayırt etme 2. sınıf düzeyini aşan edebî çözümlemeye dönüşmemelidir."
+    visual:
+      kurallar:
+        - "Görsel ana içeriği desteklemeli ama yakın tür çeldiricilerine doğal zemin hazırlayabilir."
+        - "Görsel yine sade ve tek bakışta anlaşılır kalmalıdır."
+    distractors:
+      kurallar:
+        - "2 yanlış seçenek de metne yakın ve makul görünmelidir."
+        - "Yanlış seçeneklerden biri yapıya, diğeri içeriğe yakın yanlış tür olabilir."
+    difficulty_note: >
+      Zor düzey 2. sınıfta üst düzey edebî analiz değildir.
+      Zorluk, birbirine yakın görünen türleri metnin açık özelliklerine bakarak ayırt etme düzeyinde kalır.
+
+difficulty_selection_policy:
+  default: "Orta"
+  allowed_values: ["Kolay", "Orta", "Zor"]
+  hard_limits:
+    - "Tüm düzeylerde görsel zorunludur."
+    - "Tüm düzeylerde soru 3 seçenekli olmalıdır."
+    - "Tüm düzeylerde metin 2. sınıf sözcük ve cümle düzeyini aşamaz."
+    - "Zor düzey seçilse bile soru edebî analiz, tema çözümleme veya mesaj çıkarma sorusuna dönüşemez."
+    - "Kolay düzeyde tür belirsizliği oluşturulamaz."
+
+konu_alani:
+  izinli_ornekler:
+    - "kuşlar"
+    - "balıklar"
+    - "orman"
+    - "çiçekler"
+    - "mevsimler"
+    - "güneş"
+    - "arkadaşlık"
+    - "yardımlaşma"
+    - "hayvanlar"
+    - "okul"
+    - "doğa"
+    - "rüya"
+    - "bir çocuk ve yaşadığı olay"
+    - "olağanüstü kahramanlar"
+  kurallar:
+    - "Konu 2. sınıf öğrencisinin anlayabileceği kadar somut ve açık olmalıdır."
+    - "Bilgilendirici metinlerde konu hakkında temel bilgi verilmelidir."
+    - "Öyküleyici metinlerde kişi ve olay bulunmalıdır."
+    - "Masalda olağanüstü unsur açıkça görülmelidir."
+    - "Şiirde konu sade ve kısa dizelerle işlenmelidir."
+    - "Görselle rahat desteklenebilen konular tercih edilmelidir."
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "2. sınıfa uygun, görselle desteklenebilir tek ve açık bir metin türü seç"
+    - step: 2
+      action: "Seçilen türe uygun kısa metin oluştur"
+      details:
+        - "Türün görünür özelliklerini açıkça yerleştir"
+        - "2. sınıf sözcük dağarcığında kal"
+        - "Türü tekleyecek kadar net yaz"
+    - step: 3
+      action: "Metnin ana içeriğiyle uyumlu görsel tasarla"
+      details:
+        - "Görsel türü desteklesin"
+        - "Görsel sade ve tek sahneli olsun"
+        - "Görsel cevabı tamamen ele vermesin"
+    - step: 4
+      action: "Doğru metin türü seçeneğini belirle"
+    - step: 5
+      action: "Hedef türe göre en yakın 2 yanlış türü seç"
+      details:
+        - "Yukarıdaki option pairing rules kullanılmalı"
+    - step: 6
+      action: "Soru kökünü listeden rastgele seç"
+    - step: 7
+      action: "Şıkları A-B-C olarak karıştır"
+    - step: 8
+      action: "Harici TYMM ortak kuralları ile doğrulama yap"
+
+validation_checklist:
+  text:
+    - "Metin seçilen türle açıkça uyumlu mu?"
+    - "Metin 2. sınıf düzeyinde kısa, sade ve anlaşılır mı?"
+    - "Şiir ise dize düzeni açık mı?"
+    - "Bilgilendirici metin ise bilgi verme amacı açık mı?"
+    - "Öyküleyici metin ise kişi ve olay açık mı?"
+    - "Masal ise olağanüstü unsur açık mı?"
+    - "Metin tür bakımından belirsiz değil mi?"
+
+  visual:
+    - "Görsel zorunlu olarak var mı?"
+    - "Görsel metnin ana içeriğiyle uyumlu mu?"
+    - "Görsel tek bakışta anlaşılır mı?"
+    - "Görsel destekleyici ama yanıltıcı değil mi?"
+    - "Görsel dekoratif kalmıyor mu?"
+
+  stem:
+    - "Soru kökü metin türünü açıkça soruyor mu?"
+    - "Soru kökü ek beceri yüklemiyor mu?"
+
+  options:
+    - "Toplam 3 seçenek var mı?"
+    - "Seçenekler tür adı biçiminde mi?"
+    - "Doğru seçenek metnin türünü karşılıyor mu?"
+    - "Yanlış seçenekler en yakın türlerden mi seçilmiş?"
+    - "Seçenekler kendi arasında paralel mi?"
+
+  difficulty:
+    - "Zorluk seçilen düzeye göre hedef tür ve çeldirici kuralları uygulanmış mı?"
+    - "Zor düzey bile 2. sınıf sınırında mı?"
+    - "Kolay düzey gereksiz yere belirsiz değil mi?"
+
+hard_fail_rules:
+  - "Seçenek sayısı 3 değilse"
+  - "Görsel yoksa"
+  - "Metin seçilen türle açıkça uyuşmuyorsa"
+  - "İki veya daha fazla seçenek makul doğruysa"
+  - "Metin 2. sınıf için fazla soyut veya karmaşıksa"
+  - "Soru tür ayırt etmek yerine ana düşünce, mesaj veya yorum sorusuna kayıyorsa"
+  - "Şiir biçimsel olarak düz yazı gibi verilmişse"
+  - "Masalda olağanüstü unsur yoksa"
+  - "Öyküleyici metinde olay akışı yoksa"
+  - "Bilgilendirici metinde bilgi verme amacı görünür değilse"
+  - "Görsel metinle uyumsuzsa"
+
+ornek_bicim_notlari:
+  - "Kuşlar ve balıklar hakkında bilgi veren kısa metinler için doğru seçenek 'Bilgilendirici metin' olabilir."
+  - "Hayvanlardan söz edilmesi metni otomatik olarak masal yapmaz; bilgi veriliyorsa bilgilendirici metindir."
+  - "Kısa dizeler hâlinde yazılan metinler şiir olarak tasarlanabilir."
+  - "Bir olayın kişi, yer ve zamanla anlatıldığı metinler öyküleyici metin olarak kurulabilir."
+  - "2. sınıf düzeyinde metin türü soruları çok belirgin özelliklerle ölçülmelidir."
+
+output_contract:
+  required_fields:
+    - "text"
+    - "text_variant"
+    - "visual_description"
+    - "stem"
+    - "options"
+    - "answer"
+    - "difficulty"
+    - "target_type"
+    - "topic"
+  answer_format:
+    - "answer yalnızca A/B/C olarak verilebilir"
+    - "difficulty yalnızca Kolay / Orta / Zor olabilir"
+    - "text_variant yalnızca siir / duz_yazi olabilir"
