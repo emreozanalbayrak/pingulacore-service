@@ -327,31 +327,74 @@ class LegacyYamlUploadResponse(BaseModel):
     yaml_path: str
 
 
-class LegacyRunRequest(BaseModel):
+class LegacyYamlInfoResponse(BaseModel):
+    kind: LegacyPipelineKind
+    yaml_path: str
+    has_variants: bool
+    variant_count: int
+    variant_names: list[str] = Field(default_factory=list)
+
+
+class LegacyYamlContentResponse(BaseModel):
+    kind: LegacyPipelineKind
+    yaml_path: str
+    content: str
+    is_repo_yaml: bool
+
+
+class LegacyYamlContentUpdateRequest(BaseModel):
+    yaml_path: str
+    content: str
+
+
+class LegacyBatchItem(BaseModel):
     yaml_path: str
     params: dict[str, Any] = Field(default_factory=dict)
+    variants: list[str] = Field(default_factory=list)
+
+
+class LegacyBatchRunRequest(BaseModel):
+    items: list[LegacyBatchItem]
+    parallelism: int | None = None
     stream_key: str | None = None
 
 
-class LegacyRunResponse(BaseModel):
-    run_id: str
-    pipeline_id: str
+class LegacyBatchRunResponse(BaseModel):
+    batch_id: str
+    run_ids: list[str]
     status: str
     stream_key: str | None = None
 
 
-class LegacyOutputItem(BaseModel):
-    path: str
-    url: str
-    size: int
+class LegacyOutputNode(BaseModel):
+    name: str
+    type: Literal["dir", "file"]
+    url: str | None = None
+    size: int | None = None
+    rel_path: str
+    children: list["LegacyOutputNode"] = Field(default_factory=list)
 
 
-class LegacyRunDetailResponse(BaseModel):
+class LegacyRunDetail(BaseModel):
     run_id: str
     kind: LegacyPipelineKind
     yaml_path: str
+    variant_name: str | None = None
     status: str
     error: str | None = None
     started_at: str
     finished_at: str | None = None
-    outputs: list[LegacyOutputItem] = Field(default_factory=list)
+    outputs: list[LegacyOutputNode] = Field(default_factory=list)
+
+
+class LegacyRunDetailResponse(LegacyRunDetail):
+    pass
+
+
+class LegacyBatchDetailResponse(BaseModel):
+    batch_id: str
+    kind: LegacyPipelineKind
+    runs: list[LegacyRunDetail] = Field(default_factory=list)
+
+
+LegacyOutputNode.model_rebuild()

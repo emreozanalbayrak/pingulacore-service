@@ -24,8 +24,12 @@ import type {
   LegacyPipelinesResponse,
   LegacyYamlFilesResponse,
   LegacyYamlUploadResponse,
-  LegacyRunRequest,
-  LegacyRunResponse,
+  LegacyYamlInfoResponse,
+  LegacyYamlContentResponse,
+  LegacyYamlContentUpdateRequest,
+  LegacyBatchRunRequest,
+  LegacyBatchRunResponse,
+  LegacyBatchDetailResponse,
   LegacyRunDetailResponse,
 } from '../types'
 
@@ -265,15 +269,46 @@ export const api = {
     )
   },
 
-  runLegacyPipeline: (kind: LegacyPipelineKind, payload: LegacyRunRequest) =>
-    apiFetch<LegacyRunResponse>(`/v1/legacy/pipelines/${encodeURIComponent(kind)}/run`, {
-      method: 'POST',
-      headers: JSON_HEADERS,
-      body: JSON.stringify(payload),
-    }),
+  getLegacyYamlInfo: (kind: LegacyPipelineKind, yamlPath: string) =>
+    apiFetch<LegacyYamlInfoResponse>(
+      `/v1/legacy/pipelines/${encodeURIComponent(kind)}/yaml-info?yaml_path=${encodeURIComponent(yamlPath)}`,
+    ),
+
+  getLegacyYamlContent: (kind: LegacyPipelineKind, yamlPath: string) =>
+    apiFetch<LegacyYamlContentResponse>(
+      `/v1/legacy/pipelines/${encodeURIComponent(kind)}/yaml-content?yaml_path=${encodeURIComponent(yamlPath)}`,
+    ),
+
+  updateLegacyYamlContent: (kind: LegacyPipelineKind, payload: LegacyYamlContentUpdateRequest) =>
+    apiFetch<LegacyYamlContentResponse>(
+      `/v1/legacy/pipelines/${encodeURIComponent(kind)}/yaml-content`,
+      {
+        method: 'PUT',
+        headers: JSON_HEADERS,
+        body: JSON.stringify(payload),
+      },
+    ),
+
+  runLegacyBatch: (kind: LegacyPipelineKind, payload: LegacyBatchRunRequest) =>
+    apiFetch<LegacyBatchRunResponse>(
+      `/v1/legacy/pipelines/${encodeURIComponent(kind)}/batch-run`,
+      {
+        method: 'POST',
+        headers: JSON_HEADERS,
+        body: JSON.stringify(payload),
+      },
+    ),
 
   getLegacyRun: (runId: string) =>
     apiFetch<LegacyRunDetailResponse>(`/v1/legacy/runs/${encodeURIComponent(runId)}`),
+
+  getLegacyBatch: (batchId: string) =>
+    apiFetch<LegacyBatchDetailResponse>(`/v1/legacy/runs/${encodeURIComponent(batchId)}/batch`),
+
+  getLegacyRunDownloadUrl: (runId: string, subdir?: string) => {
+    const base = `/v1/legacy/runs/${encodeURIComponent(runId)}/download`
+    return subdir ? `${base}?subdir=${encodeURIComponent(subdir)}` : base
+  },
 
   getLegacyRunLogs: (runId: string) =>
     apiFetch<PipelineLogEntryResponse[]>(`/v1/legacy/runs/${encodeURIComponent(runId)}/logs`),

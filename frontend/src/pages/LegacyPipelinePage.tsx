@@ -1,16 +1,31 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { motion } from 'motion/react'
-import { Archive, FileCode, Hash, Play, RefreshCw, Upload } from 'lucide-react'
+import {
+  Archive,
+  Download,
+  Eye,
+  FileCode,
+  Hash,
+  Play,
+  RefreshCw,
+  Search,
+  Upload,
+  X,
+} from 'lucide-react'
 
 import { LogStreamPanel } from '../components/LogStreamPanel'
 import { StatusBadge } from '../components/StatusBadge'
+import { YamlDrawer } from '../components/YamlDrawer'
+import { OutputTree, OutputPreviewGrid } from '../components/OutputTree'
 import { useLogStream } from '../hooks/useLogStream'
 import { usePolling } from '../hooks/usePolling'
 import { ApiError, api } from '../lib/api'
+import { downloadFromUrl } from '../lib/download'
 import type {
+  LegacyBatchDetailResponse,
   LegacyPipelineDescriptor,
   LegacyPipelineKind,
-  LegacyRunDetailResponse,
+  LegacyYamlInfoResponse,
 } from '../types'
 
 const DIFFICULTIES = ['kolay', 'orta', 'zor'] as const
@@ -24,22 +39,13 @@ interface YamlState {
 
 const EMPTY_YAML_STATE: YamlState = { files: [], loading: false, error: null }
 
-function isImageUrl(url: string): boolean {
-  return /\.(png|jpe?g|gif|webp|svg)$/i.test(url)
-}
-
-function isPdfUrl(url: string): boolean {
-  return /\.pdf$/i.test(url)
-}
-
-function isJsonUrl(url: string): boolean {
-  return /\.json$/i.test(url)
-}
-
-function formatBytes(size: number): string {
-  if (size < 1024) return `${size} B`
-  if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`
-  return `${(size / (1024 * 1024)).toFixed(2)} MB`
+interface SelectedYaml {
+  path: string
+  info?: LegacyYamlInfoResponse
+  loadingInfo: boolean
+  infoError?: string
+  requestedCount: number // 0 = no variants requested (or no variant support)
+  selectedVariants: string[]
 }
 
 export function LegacyPipelinePage() {
@@ -51,21 +57,25 @@ export function LegacyPipelinePage() {
     geometry: EMPTY_YAML_STATE,
     turkce: EMPTY_YAML_STATE,
   })
-  const [yamlPath, setYamlPath] = useState('')
+  const [selectedYamls, setSelectedYamls] = useState<SelectedYaml[]>([])
+  const [yamlSearch, setYamlSearch] = useState('')
   const [difficulty, setDifficulty] = useState<Difficulty>('orta')
-  const [variantName, setVariantName] = useState('')
+  const [parallelism, setParallelism] = useState<number>(4)
 
   const [running, setRunning] = useState(false)
   const [runError, setRunError] = useState('')
-  const [runId, setRunId] = useState<string | null>(null)
-  const [runDetail, setRunDetail] = useState<LegacyRunDetailResponse | null>(null)
+  const [batchId, setBatchId] = useState<string | null>(null)
+  const [batchDetail, setBatchDetail] = useState<LegacyBatchDetailResponse | null>(null)
   const [uploadError, setUploadError] = useState('')
   const [uploading, setUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [drawerYaml, setDrawerYaml] = useState<string | null>(null)
+
   const { lines, connected, done, active, connect } = useLogStream()
 
-  // Pipeline listesi + her iki YAML listesini paralel yükle.
+  // Pipeline list + her iki YAML listesini paralel yükle.
   useEffect(() => {
     let cancelled = false
     void (async () => {
@@ -115,26 +125,109 @@ export function LegacyPipelinePage() {
 
   const currentYaml = selectedKind ? yamlByKind[selectedKind] : EMPTY_YAML_STATE
 
-  // Seçilen pipeline değiştiğinde YAML seçimini sıfırla.
+  // Pipeline türü değişince seçimleri sıfırla.
   useEffect(() => {
-    if (!selectedKind) return
-    const files = yamlByKind[selectedKind].files
-    if (files.length > 0) setYamlPath(files[0])
-    else setYamlPath('')
-  }, [selectedKind, yamlByKind])
+    setSelectedYamls([])
+    setBatchId(null)
+    setBatchDetail(null)
+  }, [selectedKind])
 
-  const selectedDescriptor = useMemo(
-    () => pipelines.find((p) => p.kind === selectedKind) ?? null,
-    [pipelines, selectedKind],
+  const filteredYamls = useMemo(() => {
+    const q = yamlSearch.trim().toLowerCase()
+    if (!q) return currentYaml.files
+    return currentYaml.files.filter((f) => f.toLowerCase().includes(q))
+  }, [currentYaml.files, yamlSearch])
+
+  const isSelected = (path: string) => selectedYamls.some((y) => y.path === path)
+
+  const toggleSelect = async (path: string) => {
+    if (!selectedKind) return
+    const already = selectedYamls.find((y) => y.path === path)
+    if (already) {
+      setSelectedYamls((prev) => prev.filter((y) => y.path !== path))
+      return
+    }
+    const placeholder: SelectedYaml = {
+      path,
+      loadingInfo: true,
+      requestedCount: 0,
+      selectedVariants: [],
+    }
+    setSelectedYamls((prev) => [...prev, placeholder])
+    try {
+      const info = await api.getLegacyYamlInfo(selectedKind, path)
+      setSelectedYamls((prev) =>
+        prev.map((y) =>
+          y.path === path
+            ? {
+                ...y,
+                info,
+                loadingInfo: false,
+                requestedCount: info.has_variants ? info.variant_count : 0,
+                selectedVariants: info.has_variants ? info.variant_names : [],
+              }
+            : y,
+        ),
+      )
+    } catch (e) {
+      setSelectedYamls((prev) =>
+        prev.map((y) =>
+          y.path === path
+            ? {
+                ...y,
+                loadingInfo: false,
+                infoError: e instanceof ApiError ? e.message : 'Varyant bilgisi alınamadı',
+              }
+            : y,
+        ),
+      )
+    }
+  }
+
+  const updateRequestedCount = (path: string, count: number) => {
+    setSelectedYamls((prev) =>
+      prev.map((y) => {
+        if (y.path !== path || !y.info?.has_variants) return y
+        const max = y.info.variant_count
+        const next = Math.max(0, Math.min(max, Math.floor(count)))
+        return {
+          ...y,
+          requestedCount: next,
+          selectedVariants: y.info.variant_names.slice(0, next),
+        }
+      }),
+    )
+  }
+
+  const toggleVariant = (path: string, variant: string) => {
+    setSelectedYamls((prev) =>
+      prev.map((y) => {
+        if (y.path !== path) return y
+        const has = y.selectedVariants.includes(variant)
+        const next = has
+          ? y.selectedVariants.filter((v) => v !== variant)
+          : [...y.selectedVariants, variant]
+        return { ...y, selectedVariants: next, requestedCount: next.length }
+      }),
+    )
+  }
+
+  const totalRuns = useMemo(
+    () =>
+      selectedYamls.reduce((acc, y) => {
+        if (y.info?.has_variants && y.selectedVariants.length > 0) return acc + y.selectedVariants.length
+        return acc + 1
+      }, 0),
+    [selectedYamls],
   )
 
-  const refreshRun = async () => {
-    if (!runId) return
+  const refreshBatch = async () => {
+    if (!batchId) return
     try {
-      const detail = await api.getLegacyRun(runId)
-      setRunDetail(detail)
+      const detail = await api.getLegacyBatch(batchId)
+      setBatchDetail(detail)
     } catch {
-      // sessizce geç — polling tekrar dener
+      // sessizce geç
     }
   }
 
@@ -170,7 +263,8 @@ export function LegacyPipelinePage() {
     try {
       const res = await api.uploadLegacyYaml(selectedKind, file)
       await reloadYamlFiles(selectedKind)
-      setYamlPath(res.yaml_path)
+      // Yüklenen dosyayı otomatik seç.
+      void toggleSelect(res.yaml_path)
     } catch (e) {
       setUploadError(e instanceof ApiError ? e.message : 'YAML yüklenemedi')
     } finally {
@@ -179,40 +273,49 @@ export function LegacyPipelinePage() {
     }
   }
 
-  usePolling(
-    refreshRun,
-    Boolean(runId) && (runDetail?.status ?? 'running') === 'running',
-    2500,
-  )
+  const allRunsDone = useMemo(() => {
+    if (!batchDetail) return false
+    return batchDetail.runs.every((r) => r.status !== 'running')
+  }, [batchDetail])
+
+  usePolling(refreshBatch, Boolean(batchId) && !allRunsDone, 2500)
 
   const handleRun = async () => {
     if (!selectedKind) return
-    if (!yamlPath) {
-      setRunError('YAML seçilmedi.')
+    if (selectedYamls.length === 0) {
+      setRunError('En az bir YAML seç.')
       return
     }
+    for (const y of selectedYamls) {
+      if (y.info?.has_variants && y.selectedVariants.length === 0) {
+        setRunError(`${y.path} için en az bir varyant seç (veya YAML'ı listeden çıkar).`)
+        return
+      }
+    }
     setRunError('')
-    setRunDetail(null)
+    setBatchDetail(null)
     setRunning(true)
 
     const streamKey = crypto.randomUUID()
     connect(streamKey)
 
-    const params: Record<string, string | number | boolean> = {}
-    if (selectedKind === 'geometry') {
-      params.difficulty = difficulty
-      if (variantName.trim()) params.variant_name = variantName.trim()
-    }
+    const items = selectedYamls.map((y) => {
+      const params: Record<string, string | number | boolean> = {}
+      if (selectedKind === 'geometry') {
+        params.difficulty = difficulty
+      }
+      const variants = y.info?.has_variants ? y.selectedVariants : []
+      return { yaml_path: y.path, params, variants }
+    })
 
     try {
-      const res = await api.runLegacyPipeline(selectedKind, {
-        yaml_path: yamlPath,
-        params,
+      const res = await api.runLegacyBatch(selectedKind, {
+        items,
+        parallelism,
         stream_key: streamKey,
       })
-      setRunId(res.run_id)
-      // İlk anlık snapshot
-      void refreshRun()
+      setBatchId(res.batch_id)
+      void refreshBatch()
     } catch (e) {
       setRunError(e instanceof ApiError ? e.message : 'Pipeline çalıştırılamadı')
     } finally {
@@ -220,8 +323,27 @@ export function LegacyPipelinePage() {
     }
   }
 
+  const openDrawer = (path: string) => {
+    setDrawerYaml(path)
+    setDrawerOpen(true)
+  }
+
+  const handleDownloadAll = async (runId: string) => {
+    try {
+      const url = api.getLegacyRunDownloadUrl(runId)
+      await downloadFromUrl(url, `${runId}.zip`)
+    } catch (e) {
+      if (!(e instanceof DOMException && e.name === 'AbortError')) console.error(e)
+    }
+  }
+
+  const selectedDescriptor = useMemo(
+    () => pipelines.find((p) => p.kind === selectedKind) ?? null,
+    [pipelines, selectedKind],
+  )
+
   return (
-    <div className="p-8 max-w-5xl mx-auto">
+    <div className="p-8 max-w-6xl mx-auto">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -233,7 +355,7 @@ export function LegacyPipelinePage() {
             Legacy Pipeline
           </h1>
           <p className="text-muted-foreground">
-            Eski Geometri ve Türkçe pipeline'larını mevcut YAML'larla çalıştır.
+            Eski Geometri ve Türkçe pipeline'larını çoklu YAML, paralel varyant ve klasör çıktıları ile çalıştır.
           </p>
         </div>
 
@@ -276,14 +398,7 @@ export function LegacyPipelinePage() {
                         </span>
                       )}
                     </div>
-                    <p className="mt-1 text-xs text-muted-foreground">YAML kökü: {p.yaml_root}</p>
-                    {!p.enabled && (
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        {p.kind === 'geometry'
-                          ? 'Gerekli: GOOGLE_API_KEY/GEMINI_API_KEY ve LEGACY_GEO_YAML_DIR'
-                          : 'Gerekli: GOOGLE_API_KEY/GEMINI_API_KEY, LEGACY_TURKCE_CONFIGS_DIR ve LEGACY_TURKCE_TEMPLATES_DIR'}
-                      </p>
-                    )}
+                    <p className="mt-1 text-xs text-muted-foreground">YAML kökü (repo): {p.yaml_root}/</p>
                   </div>
                 </button>
               )
@@ -311,11 +426,12 @@ export function LegacyPipelinePage() {
             </div>
 
             <div className="p-8 space-y-6">
-              <div className="space-y-2">
+              {/* YAML çoklu seçim */}
+              <div className="space-y-3">
                 <div className="flex items-center justify-between gap-3">
                   <label className="flex items-center gap-2 text-sm font-medium text-foreground">
                     <FileCode className="w-4 h-4" style={{ color: 'var(--primary)' }} />
-                    YAML Dosyası
+                    YAML Dosyaları (çoklu seç)
                   </label>
                   <div className="flex items-center gap-2">
                     <input
@@ -337,33 +453,146 @@ export function LegacyPipelinePage() {
                     </button>
                   </div>
                 </div>
-                {uploadError && (
-                  <p className="text-sm text-destructive">{uploadError}</p>
-                )}
+
+                {uploadError && <p className="text-sm text-destructive">{uploadError}</p>}
+
+                <div className="relative">
+                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                  <input
+                    type="text"
+                    value={yamlSearch}
+                    onChange={(e) => setYamlSearch(e.target.value)}
+                    placeholder="YAML ara..."
+                    className="w-full pl-9 pr-3 py-2 rounded-xl border-2 bg-white text-sm focus:outline-none"
+                    style={{ borderColor: 'var(--border)' }}
+                  />
+                </div>
+
                 {currentYaml.loading ? (
                   <p className="text-sm text-muted-foreground">YAML listesi yükleniyor…</p>
                 ) : currentYaml.error ? (
                   <p className="text-sm text-destructive">{currentYaml.error}</p>
-                ) : currentYaml.files.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">Bu pipeline için YAML bulunamadı. Yukarıdan kendi YAML'ını yükleyebilirsin.</p>
+                ) : filteredYamls.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    {currentYaml.files.length === 0
+                      ? "Bu pipeline için YAML bulunamadı. Yukarıdan kendi YAML'ını yükleyebilirsin."
+                      : 'Aramayla eşleşen YAML yok.'}
+                  </p>
                 ) : (
-                  <select
-                    value={yamlPath}
-                    onChange={(e) => setYamlPath(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border-2 bg-white focus:outline-none transition-colors"
-                    style={{ borderColor: 'var(--border)' }}
-                  >
-                    {currentYaml.files.map((f) => (
-                      <option key={f} value={f}>
-                        {f}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="max-h-72 overflow-auto border-2 rounded-xl bg-background" style={{ borderColor: 'var(--border)' }}>
+                    {filteredYamls.map((f) => {
+                      const checked = isSelected(f)
+                      return (
+                        <div
+                          key={f}
+                          className={`flex items-center gap-2 px-3 py-2 border-b last:border-b-0 hover:bg-accent ${
+                            checked ? 'bg-accent/50' : ''
+                          }`}
+                          style={{ borderColor: 'var(--border)' }}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={checked}
+                            onChange={() => void toggleSelect(f)}
+                            className="w-4 h-4"
+                          />
+                          <code className="text-xs flex-1 truncate">{f}</code>
+                          <button
+                            type="button"
+                            onClick={() => openDrawer(f)}
+                            className="p-1 rounded hover:bg-background"
+                            title="YAML'ı görüntüle / düzenle"
+                          >
+                            <Eye className="w-4 h-4 text-muted-foreground" />
+                          </button>
+                        </div>
+                      )
+                    })}
+                  </div>
                 )}
               </div>
 
-              {selectedKind === 'geometry' && (
-                <div className="grid gap-5 md:grid-cols-2">
+              {/* Seçili YAML kartları + varyant kontrolleri */}
+              {selectedYamls.length > 0 && (
+                <div className="space-y-3">
+                  <div className="text-sm font-medium text-foreground">
+                    Seçilen YAML'lar ({selectedYamls.length}) — toplam {totalRuns} alt-run üretilecek
+                  </div>
+                  {selectedYamls.map((y) => (
+                    <div
+                      key={y.path}
+                      className="rounded-xl border-2 p-4 bg-background"
+                      style={{ borderColor: 'var(--border)' }}
+                    >
+                      <div className="flex items-start justify-between gap-3 mb-2">
+                        <code className="text-xs break-all flex-1">{y.path}</code>
+                        <button
+                          type="button"
+                          onClick={() => toggleSelect(y.path)}
+                          className="p-1 rounded hover:bg-accent shrink-0"
+                          aria-label="Listeden çıkar"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      {y.loadingInfo && <p className="text-xs text-muted-foreground">Varyant bilgisi yükleniyor…</p>}
+                      {y.infoError && <p className="text-xs text-destructive">{y.infoError}</p>}
+
+                      {y.info?.has_variants ? (
+                        <div className="mt-2 space-y-2">
+                          <div className="flex items-center gap-3">
+                            <label className="text-xs font-medium text-muted-foreground">
+                              Üretilecek varyant sayısı
+                            </label>
+                            <input
+                              type="number"
+                              min={0}
+                              max={y.info.variant_count}
+                              value={y.requestedCount}
+                              onChange={(e) => updateRequestedCount(y.path, Number(e.target.value))}
+                              className="w-20 px-2 py-1 rounded border-2 text-sm bg-white"
+                              style={{ borderColor: 'var(--border)' }}
+                            />
+                            <span className="text-xs text-muted-foreground">
+                              / {y.info.variant_count} (autofill: ilk N varyant seçilir)
+                            </span>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {y.info.variant_names.map((name) => {
+                              const sel = y.selectedVariants.includes(name)
+                              return (
+                                <button
+                                  key={name}
+                                  type="button"
+                                  onClick={() => toggleVariant(y.path, name)}
+                                  className={`text-xs px-2 py-1 rounded-full border-2 transition-colors ${
+                                    sel
+                                      ? 'bg-primary/10 border-primary text-foreground'
+                                      : 'bg-muted border-border text-muted-foreground hover:bg-accent'
+                                  }`}
+                                >
+                                  {name}
+                                </button>
+                              )
+                            })}
+                          </div>
+                        </div>
+                      ) : (
+                        !y.loadingInfo && (
+                          <p className="text-xs text-muted-foreground">
+                            Bu YAML varyantsız — tek alt-run üretilir.
+                          </p>
+                        )
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Pipeline parametreleri */}
+              <div className="grid gap-5 md:grid-cols-2">
+                {selectedKind === 'geometry' && (
                   <div className="space-y-2">
                     <label className="flex items-center gap-2 text-sm font-medium text-foreground">
                       <Hash className="w-4 h-4" style={{ color: 'var(--primary)' }} />
@@ -382,38 +611,40 @@ export function LegacyPipelinePage() {
                       ))}
                     </select>
                   </div>
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-2 text-sm font-medium text-foreground">
-                      <Hash className="w-4 h-4" style={{ color: 'var(--primary)' }} />
-                      Variant Name (opsiyonel)
-                    </label>
-                    <input
-                      type="text"
-                      value={variantName}
-                      onChange={(e) => setVariantName(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border-2 bg-white focus:outline-none"
-                      style={{ borderColor: 'var(--border)' }}
-                    />
-                  </div>
+                )}
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2 text-sm font-medium text-foreground">
+                    <Hash className="w-4 h-4" style={{ color: 'var(--primary)' }} />
+                    Paralellik (max eşzamanlı alt-run)
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    max={16}
+                    value={parallelism}
+                    onChange={(e) => setParallelism(Math.max(1, Number(e.target.value)))}
+                    className="w-full px-4 py-3 rounded-xl border-2 bg-white focus:outline-none"
+                    style={{ borderColor: 'var(--border)' }}
+                  />
                 </div>
-              )}
+              </div>
             </div>
 
             <div className="px-8 py-5 border-t border-border flex gap-3 bg-muted/20">
               <button
                 type="button"
                 onClick={() => void handleRun()}
-                disabled={running || !yamlPath}
+                disabled={running || selectedYamls.length === 0}
                 className="flex items-center gap-2 px-6 py-3 rounded-xl text-white font-medium shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 style={{ background: `linear-gradient(to right, var(--primary), var(--secondary))` }}
               >
                 <Play className="w-4 h-4" fill="currentColor" />
-                {running ? 'Başlatılıyor…' : 'Çalıştır'}
+                {running ? 'Başlatılıyor…' : `Çalıştır (${totalRuns} alt-run)`}
               </button>
-              {runId && (
+              {batchId && (
                 <button
                   type="button"
-                  onClick={() => void refreshRun()}
+                  onClick={() => void refreshBatch()}
                   className="flex items-center gap-2 px-6 py-3 rounded-xl border-2 font-medium hover:bg-accent transition-all duration-200"
                   style={{ borderColor: 'var(--border)', color: 'var(--foreground)' }}
                 >
@@ -431,84 +662,58 @@ export function LegacyPipelinePage() {
           </div>
         )}
 
-        {/* Run sonucu */}
-        {runDetail && (
+        {/* Batch sonuçları */}
+        {batchDetail && batchDetail.runs.length > 0 && (
           <div className="bg-card rounded-2xl border border-border p-6 space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-medium" style={{ fontFamily: 'var(--font-display)' }}>
-                Run Detayı
+                Batch Sonuçları
               </h3>
-              <StatusBadge status={runDetail.status} />
-            </div>
-            <div className="space-y-1 text-sm">
-              <div className="flex gap-3">
-                <span className="text-muted-foreground w-28 shrink-0">run_id</span>
-                <code className="text-xs bg-muted px-2 py-1 rounded-lg truncate">{runDetail.run_id}</code>
-              </div>
-              <div className="flex gap-3">
-                <span className="text-muted-foreground w-28 shrink-0">YAML</span>
-                <code className="text-xs">{runDetail.yaml_path}</code>
-              </div>
-              {runDetail.error && (
-                <div className="flex gap-3">
-                  <span className="text-muted-foreground w-28 shrink-0">error</span>
-                  <span className="text-xs text-red-700">{runDetail.error}</span>
-                </div>
-              )}
+              <code className="text-xs text-muted-foreground">batch: {batchDetail.batch_id}</code>
             </div>
 
-            {runDetail.outputs.length > 0 && (
-              <div>
-                <h4 className="text-sm font-medium text-foreground mb-2">
-                  Çıktı Dosyaları ({runDetail.outputs.length})
-                </h4>
-                <div className="grid gap-3 md:grid-cols-2">
-                  {runDetail.outputs.map((o) => (
-                    <div key={o.url} className="rounded-xl border border-border p-3 bg-background">
-                      <div className="flex items-center justify-between mb-2">
-                        <code className="text-xs truncate">{o.url.split('/').slice(-1)[0]}</code>
-                        <span className="text-xs text-muted-foreground">{formatBytes(o.size)}</span>
+            <div className="space-y-4">
+              {batchDetail.runs.map((r) => (
+                <div key={r.run_id} className="rounded-xl border border-border p-4 bg-background">
+                  <div className="flex items-center justify-between gap-3 mb-3">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <StatusBadge status={r.status} />
+                        {r.variant_name && (
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-foreground border border-primary/20">
+                            {r.variant_name}
+                          </span>
+                        )}
                       </div>
-                      {isImageUrl(o.url) ? (
-                        <img
-                          src={o.url}
-                          alt={o.path}
-                          className="w-full rounded-lg border border-border"
-                          style={{ maxWidth: 480 }}
-                        />
-                      ) : isPdfUrl(o.url) ? (
-                        <a
-                          href={o.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm text-primary underline"
-                        >
-                          PDF'i aç
-                        </a>
-                      ) : isJsonUrl(o.url) ? (
-                        <a
-                          href={o.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm text-primary underline"
-                        >
-                          JSON'u görüntüle
-                        </a>
-                      ) : (
-                        <a
-                          href={o.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm text-primary underline"
-                        >
-                          İndir
-                        </a>
-                      )}
+                      <code className="text-xs text-muted-foreground break-all">{r.yaml_path}</code>
                     </div>
-                  ))}
+                    <button
+                      type="button"
+                      onClick={() => void handleDownloadAll(r.run_id)}
+                      disabled={r.outputs.length === 0}
+                      className="flex items-center gap-2 px-3 py-2 rounded-lg border-2 text-sm hover:bg-accent transition-colors disabled:opacity-40"
+                      style={{ borderColor: 'var(--border)' }}
+                    >
+                      <Download className="w-4 h-4" />
+                      Tümünü ZIP indir
+                    </button>
+                  </div>
+
+                  {r.error && (
+                    <div className="mb-3 px-3 py-2 rounded-lg text-xs bg-red-50 text-red-700 border border-red-200">
+                      {r.error}
+                    </div>
+                  )}
+
+                  {r.outputs.length > 0 && (
+                    <div className="space-y-3">
+                      <OutputPreviewGrid nodes={r.outputs} />
+                      <OutputTree runId={r.run_id} nodes={r.outputs} />
+                    </div>
+                  )}
                 </div>
-              </div>
-            )}
+              ))}
+            </div>
           </div>
         )}
 
@@ -520,6 +725,13 @@ export function LegacyPipelinePage() {
           title="Legacy Pipeline Logs"
         />
       </motion.div>
+
+      <YamlDrawer
+        open={drawerOpen}
+        kind={selectedKind}
+        yamlPath={drawerYaml}
+        onClose={() => setDrawerOpen(false)}
+      />
     </div>
   )
 }

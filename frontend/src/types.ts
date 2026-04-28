@@ -214,32 +214,70 @@ export interface LegacyYamlUploadResponse {
   yaml_path: string
 }
 
-export interface LegacyRunRequest {
+export interface LegacyYamlInfoResponse {
+  kind: LegacyPipelineKind
+  yaml_path: string
+  has_variants: boolean
+  variant_count: number
+  variant_names: string[]
+}
+
+export interface LegacyYamlContentResponse {
+  kind: LegacyPipelineKind
+  yaml_path: string
+  content: string
+  is_repo_yaml: boolean
+}
+
+export interface LegacyYamlContentUpdateRequest {
+  yaml_path: string
+  content: string
+}
+
+export interface LegacyBatchItem {
   yaml_path: string
   params?: Record<string, string | number | boolean>
+  variants?: string[]
+}
+
+export interface LegacyBatchRunRequest {
+  items: LegacyBatchItem[]
+  parallelism?: number
   stream_key?: string
 }
 
-export interface LegacyRunResponse {
-  run_id: string
-  pipeline_id: string
+export interface LegacyBatchRunResponse {
+  batch_id: string
+  run_ids: string[]
   status: string
   stream_key?: string | null
 }
 
-export interface LegacyOutputItem {
-  path: string
-  url: string
-  size: number
+export interface LegacyOutputNode {
+  name: string
+  type: 'dir' | 'file'
+  url?: string | null
+  size?: number | null
+  rel_path: string
+  children?: LegacyOutputNode[]
 }
 
-export interface LegacyRunDetailResponse {
+export interface LegacyRunDetail {
   run_id: string
   kind: LegacyPipelineKind
   yaml_path: string
+  variant_name?: string | null
   status: string
   error?: string | null
   started_at: string
   finished_at?: string | null
-  outputs: LegacyOutputItem[]
+  outputs: LegacyOutputNode[]
+}
+
+export type LegacyRunDetailResponse = LegacyRunDetail
+
+export interface LegacyBatchDetailResponse {
+  batch_id: string
+  kind: LegacyPipelineKind
+  runs: LegacyRunDetail[]
 }
