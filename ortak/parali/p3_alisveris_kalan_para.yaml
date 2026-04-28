@@ -1,0 +1,206 @@
+meta:
+  id: o18_alisveristen_sonra_kalan_para
+  ad: Alışverişten Sonra Kalan Para
+  sinif_seviyesi: 3
+  aciklama: >
+    Gorseldeki cüzdan ve secili urun fiyatlarini birlikte inceletip, ogrenciden
+    once toplam harcamayi sonra kalan parayi bulmasini isteyen, gorsel bagimli,
+    TYMM uyumlu ve HTML ciktisi da destekleyen soru uretim sablonu.
+  kaynak: o18_alisveristen_sonra_kalan_para.yaml
+  frequency: High
+
+context:
+  type: o18_alisveristen_sonra_kalan_para
+  question_count: 1
+  generation:
+    word_count_min: 55
+    word_count_max: 95
+    image_type: ortak_gorsel
+    real_currency: true
+    structure:
+      - Senaryo en az 5 cumleden olusmali.
+      - Soru basligi bulunmamali.
+      - Gorsel, sorunun ustunde tek ortak gorsel olarak verilmelidir.
+      - Gorselde cüzdandaki para ile secili urunler birlikte gorunmelidir.
+      - Secilen urunler isaret, sepet veya ayri bolum ile belirginlestirilmelidir.
+      - Sayisal veriler soru metninde tekrar edilmemeli, ogrenci bunlari gorselden okumali.
+      - Kalan para miktari verilecekse yalnizca giris metninde yer almali, gorselde ayrica gosterilmemelidir.
+      - '"Kasa sonrasinda 12 TL kaldi" gibi ibareler gorselde not, etiket veya baloncuk olarak yer almamalidir.'
+      - Soru yalnizca kavram sormamali; toplama, cikarma ve yorumlama birlikte gerektirmelidir.
+      - Siklikla kirtasiye, market, okul kantini veya sinif etkinligi baglami kullanilabilir.
+      - "KRITIK - GERCEK TL GORSELLERI: Gorseldeki tum banknot ve madeni paralar assets/turk_lirasi/ altindaki referans PNG'lerle (5/10/20/50/100/200 TL banknotlari; 1/5/10/25/50 kurus ve 1 TL madeni paralari) birebir ayni tasarimda (renk, Ataturk portresi, rakam) cizilmelidir. Referans gorseller pipeline tarafindan multimodal olarak beslenir."
+      - "KRITIK - METIN ETIKETI YASAK: Cuzdandaki fiziksel banknot/madeni paralarin yanina sayisal deger etiketi (orn. '10 TL', '25 kr') yazilmamalidir. Para miktari yalnizca gercek banknot/madeni para gorselleri ile ifade edilir; ogrenci miktari gorselden banknotlari taniyarak okumalidir."
+      - "Urun fiyat etiketleri (orn. 'Kalem 5 TL') metin olarak gosterilir - bu fiyat bilgisidir, para gorseli degildir. Yalnizca cuzdan/masa uzerindeki fiziksel banknot ve madeni paralar metin etiketi olmadan cizilir."
+    kurallar:
+      - 3. sinif seviyesinde olmali.
+      - Tek dogru cevap bulunmali.
+      - Gorsel cozumun ana tasiyicisi olmali.
+      - Gorselin altinda aciklayici not bulunmamali.
+      - Cüzdandaki para gorselde net gorunmeli ve paralar ust uste binmemeli.
+      - Urun fiyatlari okunakli olmali.
+      - Senaryo Turkce karakterlerle dogal, acik ve cocuk duzeyine uygun yazilmalidir.
+      - "TL banknot ve madeni paralar gercek TCMB tasarimiyla birebir uyumlu cizilmelidir."
+      - "Cuzdandaki fiziksel paralarin uzerine veya yanina sayisal deger etiketi (orn. '10 TL', '25 kr') yazilmamalidir; miktar sadece banknot/madeni para gorselleriyle temsil edilir."
+  questions:
+    - slot: 1
+      type: gorsel_bagimli_alisveris_kalan_para
+      soru_kokleri:
+        - Gorselde secili urunler alindiginda ogrencinin kac TL kac kr parasi kalir?
+        - Gorselde isaretlenen alisveris tamamlandiginda geriye kalan para hangi secenektedir?
+        - Secili urunler satin alindiktan sonra cüzdanda ne kadar para kalir?
+      beceri:
+        katman: MAB3-KB1-KB2
+        bilesenler:
+          - gorsel_okuma
+          - veri_secme
+          - toplama_cikarma
+          - yorumlama
+          - iliski_kurma
+        surec_bileseni: bilgiyi_cikartma
+      gorsel_kurgu:
+        - Sol ya da ust bolumde eldeki para net gorunmelidir.
+        - Diger bolumde en az 3 urun ve fiyat etiketi bulunmalidir.
+        - Satin alinacak urunler gorsel icinde belirginlestirilmelidir.
+        - Kalan para bilgisi gereken varyantlarda bu miktar yalnizca senaryoda verilmeli, gorselde not, etiket veya ek yazi olarak bulunmamalidir.
+        - Cevap, gorsel icinde dogrudan yazilmamalidir.
+      cozum_adimlari:
+        - Ogrenci once gorseldeki eldeki toplam parayi belirler.
+        - Ardindan secili urunlerin fiyatlarini toplar.
+        - Son olarak toplam harcamayi baslangic parasindan cikarir.
+        - Bazi varyantlarda kalan parayla alinabilecek urun ya da baslangic para yorumu da yaptirilabilir.
+
+format:
+  type: llm_generated_html
+  soru_koku: Kisa, acik, tek hedefli ve soru isareti ile biten gercek soru cumlesi olmali.
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 95
+    sentence_count_min: 5
+    sentence_count_max: 7
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    style: numeric_or_text
+    word_count_min: 1
+    word_count_max: 6
+    correct_count: 1
+  interaction:
+    clickable_options: true
+    show_result_color: true
+    correct_color: yesil
+    wrong_color: kirmizi
+    explanation_under_options: true
+  page_layout:
+    visual_position: sorunun_ustu
+    senaryo_basligi: false
+    note_or_feedback_area: false
+
+dogru_cevap:
+  tanim: >
+    Dogru cevap, gorseldeki para ve fiyat verilerinden bulunan kalan para miktarini
+    veya kalan para ile ilgili dogru yorumu veren tek secenektir.
+  kurallar:
+    - Dogru cevap tek ve net olmali.
+    - Ogrenci toplama ve cikarma adimlarini kullanarak sonuca ulasabilmeli.
+    - Cozum gorseldeki verilerle tamamen tutarli olmali.
+    - Dogru secenek bicimsel ipucuyla belli olmamali.
+
+distractors:
+  kurallar:
+    - Bir celdirici yalnizca tek urunu cikarma hatasina dayanabilir.
+    - Bir celdirici toplam harcamayi dogru bulup para ustunu yanlis hesaplama hatasina dayanabilir.
+    - Bir celdirici secili olmayan urunu da hesaba katma hatasina dayanabilir.
+    - Celdiriciler ogrencinin yaygin hata turlerinden uretilmeli ve birbirinden farkli olmali.
+  yasaklar:
+    - Bariz sacma secenekler
+    - Gorsel incelenmeden hemen elenen secenekler
+    - Iki farkli secenekte ayni sonucu tekrar etmek
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+      - Gorsel gercek hayat fotografi ya da gercekci cizim esteginde olmali.
+      - Cüzdandaki para ve urun fiyatlari ayni ortak gorselde yer almali.
+      - Gorselde sik harfleri bulunmamali.
+      - Gorsel sade, okunakli ve cocuk duzeyine uygun olmali.
+      - Secili urunler belirginlestirilmeli ancak cevap yazilmamali.
+      - Gorselin altinda ek aciklama metni bulunmamali.
+      - "Gorseldeki tum banknot ve madeni paralar assets/turk_lirasi/ referans PNG'leriyle birebir ayni tasarimda cizilmelidir (renk, Ataturk portresi, rakam eslesmeli)."
+      - "Paralar yatay, egik olmadan, tam gorunur ve ust uste binmeden yerlestirilmelidir; her banknot/madeni para rahat okunacak buyuklukte olmalidir."
+      - "Cuzdan/masa uzerindeki fiziksel paralarin yaninda TL/kurus miktarini yazan metin etiketi yer almamalidir; deger yalnizca banknot ve madeni para gorselleriyle temsil edilir."
+      - "Urun fiyat etiketleri (orn. 'Kalem 5 TL') metin olarak kalir - bu fiyat bilgisidir, fiziksel para degildir."
+    yasaklar:
+      - Ust uste binen banknot veya madeni paralar
+      - Okunmayan fiyat etiketleri
+      - Cevabi dogrudan veren yazi
+      - Ilgisiz dekoratif kalabalik
+      - "Banknot veya madeni para uzerinde gercek TCMB tasarimindan farkli portre, renk veya rakam kullanmak."
+      - "Fiziksel paranin yanina '10 TL', '25 kr' gibi sayisal metin etiketi yerlestirmek."
+      - "Fiziksel para miktarini gorselin icinde yaziyla belirtmek (miktar yalnizca banknot/madeni para gorselleriyle ifade edilir)."
+    stil: gercekci_kirtasiye_veya_market_alisverisi_gorseli
+    boyut: genis
+  sik_gorseli:
+    gerekli: false
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi:
+    - MAT.3.1.16 Madeni ve kagit paralari degerlerine gore iliskilendirme
+    - Gorsel destekli gunluk yasama uygun para problemlerinde toplama ve cikarma ile cozumleme
+  tema_siniri: Icerik para, alisveris, toplam harcama ve kalan para cercevesinde kalmalidir.
+  izinli_icerik:
+    kavramlar:
+      - madeni_para
+      - kagit_para
+      - toplam_harcama
+      - kalan_para
+      - para_ustu
+      - tl_ve_kurus
+    beceriler:
+      - gorsel_okuma
+      - toplama
+      - cikarma
+      - yorumlama
+      - iliski_kurma
+  yasaklar:
+    - Carpma, bolme, oran veya yuzde gerektiren yapilar
+    - 3. sinif duzeyini asan karmasik finansal terimler
+    - Gorselle iliskisi zayif salt metin problemleri
+
+izinli_icerikler:
+  kavramlar:
+    - madeni_para
+    - kagit_para
+    - toplam_harcama
+    - kalan_para
+    - para_ustu
+    - alisveris_plani
+  beceriler:
+    - gorsel_okuma
+    - veri_secme
+    - toplama_cikarma
+    - yorumlama
+    - iliski_kurma
+  soru_islemleri:
+    - gorselden_para_toplama
+    - secili_urun_fiyatlarini_toplama
+    - toplam_harcamayi_baslangic_parasindan_cikarma
+    - kalan_paraya_gore_yorum_yapma
+
+Varyant:
+  - baslik: Varyant 1
+    aciklama: >
+      Cuzdanda gorulen toplam para ile gorselde isaretlenmis iki urunun fiyatlari
+      kullanilir. Ogrenci once iki fiyati toplar, sonra kalan parayi bulur.
+  - baslik: Varyant 2
+    aciklama: >
+      Gorseldeki secili alisveris tamamlandiktan sonra ogrenciden kalan parayla
+      tam olarak alinabilecek tek ek urunu belirlemesi istenir. Boylece hesaplama
+      sonrasinda yorumlama da yapar.
+  - baslik: Varyant 3
+    aciklama: >
+      Gorselde secili urunler verilir; metinde ise alisveris sonrasinda elde kalan
+      para belirtilir. Ogrenci secili urunlerin toplam fiyatina kalan miktari
+      ekleyerek baslangictaki parayi bulur.
+
+Zorluk Seviyesi: "Orta"

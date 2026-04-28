@@ -1,0 +1,210 @@
+# Robotun Enerji İstasyonları — 4. Sınıf
+
+meta:
+  id: "robotun_enerji_istasyonlari"
+  ad: "Robotun Enerji İstasyonları"
+  sinif_seviyesi: 4
+  aciklama: >
+    Robotun sabit bir güzergâhta ilerlerken istasyonlardan enerji topladığı,
+    kapılardan geçerken enerji harcadığı ve görseldeki artı-eksi enerji
+    değişimlerinin sırayla takip edildiği toplama-çıkarma odaklı soru yapısı.
+  kaynak: "16_robotun_enerji_istasyonlari.yml"
+  frequency: "Medium"
+
+context:
+  type: "robotun_enerji_istasyonlari"
+  question_count: 1
+  generation:
+    word_count_min: 55
+    word_count_max: 95
+    image_type: "ortak_gorsel"
+    structure:
+      - "Uzay üssü, bilim merkezi, yer altı tüneli, fabrika koridoru, keşif alanı ya da benzeri yaratıcı bir bağlamda geçen 4-6 cümlelik doğal ve akıcı bir paragraf yaz"
+      - "Paragraf kısa, kuru veya tekrar eden kalıplarla kurulmuş olmamalı; her üretimde farklı bir olay akışı hissi vermeli"
+      - "Robotun izleyeceği güzergâh sabit olmalı ve görselde başlangıçtan bitişe kadar açık biçimde gösterilmeli"
+      - "Görselde rota üzerindeki kutucuklarda artı ve eksi enerji değerleri yer almalı"
+      - "Bazı sorularda başlangıç enerjisi ile bitişte kalan enerji, bazı sorularda ise belirli bir ara noktadaki enerji durumu sorulmalı"
+      - "KRİTİK: Metinde işlem adımları, çözüm ipuçları, doğru cevap ya da cevaba doğrudan götüren yönlendirme cümleleri YAZILMAMALI"
+      - "Görsel çözümün ana taşıyıcısı olmalı; paragraf yalnızca sahneyi ve durumu kurmalı"
+    kurallar:
+      - "4. sınıf seviyesine uygun olmalı"
+      - "Toplama ve çıkarma işlemleri doğal sayı düzeyinde kalmalı"
+      - "Enerji değişimleri sırayla uygulanmalı; soru rota takibi gerektirmeli"
+      - "Başlangıç enerjisi, istasyon ve kapı değerleri görsel ile tutarlı olmalı"
+      - "İşlem sayısı öğrenciyi zorlamayacak ama dikkat gerektirecek düzeyde olmalı"
+      - "Ara sonuçlar negatif olmamalı"
+      - "Senaryoda soruyu çözecek kişiye doğrudan hitap edilmemeli"
+      - "Senaryoda şıklarla bağlantı kurulmamali"
+      - "Görsel süs olmamalı; soru yalnızca metinden çözülememeli"
+      - "Türkçe karakterler doğru kullanılmalı"
+      - "Görseller üzerinde Türkçe dışında yazı bulunmamalı"
+  questions:
+    - slot: 1
+      type: "enerji_takibi"
+      soru_kokleri:
+        - "<b>Robot, bitiş noktasına ulaştığında kaç enerjiyle kalır?</b>"
+        - "<b>Robot ana ekrana dönmeden hemen önce kaç enerjiye sahiptir?</b>"
+        - "<b>Robot, işaretli istasyona geldiğinde kaç enerjiye ulaşır?</b>"
+        - "<b>Robot, gösterilen kapıdan geçtikten sonra kaç enerjiyle yoluna devam eder?</b>"
+        - "<b>Robotun bu güzergâhın sonunda kalan enerjisi kaçtır?</b>"
+        - "<b>Robot, belirtilen noktaya kadar ilerlediğinde kaç enerji taşır?</b>"
+      beceri:
+        katman: "KB4"
+        bilesenler:
+          - "görsel_okuma"
+          - "sıra_takibi"
+          - "işlem_yapma"
+          - "çözümleme"
+        surec_bileseni: "bilgiyi_birleştirme"
+
+header_template: >
+  Bu şablondan her soru üretildiğinde benzersiz bir soru oluşturulmalıdır.
+  Değiştirilmesi gereken öğeler: robotun adı veya modeli, güzergâhın geçtiği ortam
+  (uzay üssü, bilim merkezi, yer altı tüneli, fabrika koridoru, keşif alanı vb.),
+  istasyon ve kapı sayıları, başlangıç enerjisi, her istasyondaki artı-eksi enerji
+  değerleri, güzergâhın uzunluğu ve ara noktaların konumu.
+  soru_kokleri listesinden her seferinde farklı bir kök seçilmeli; aynı kök arka arkaya kullanılmamalıdır.
+  Enerji değerleri, istasyon düzeni ve rota yapısı her üretimde yeniden oluşturulmalıdır.
+  Sayısal değerler ve olay örgüsü her üretimde özgün olmalıdır.
+
+format:
+  type: "llm_generated_html"
+  soru_koku: "Kısa, tek cümlelik ve gerçekten soru biçiminde kurulmuş olmalı."
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 95
+    sentence_count_min: 4
+    sentence_count_max: 6
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    style: "numeric_only"
+    word_count_min: 1
+    word_count_max: 2
+    correct_count: 1
+
+dogru_cevap:
+  tanim: "Başlangıç enerjisi ile rota üzerindeki artı-eksi enerji değişimlerini doğru sırayla uygulayarak bulunan sayısal seçenek"
+  kurallar:
+    - "Doğru cevap, başlangıç enerjisi ile rota üzerindeki tüm gerekli enerji değişimlerinin sıralı uygulanmasıyla elde edilmelidir"
+    - "Soru ara noktayı soruyorsa yalnızca o noktaya kadar olan değişimler dikkate alınmalıdır"
+    - "Soru bitişi soruyorsa güzergâhtaki tüm ilgili adımlar hesaba katılmalıdır"
+    - "Doğru cevap görseldeki rota, kutucuk değerleri ve soru köküyle tamamen tutarlı olmalıdır"
+    - "Doğru cevap tek ve net olmalıdır"
+    - "Öğrenci cevaba yalnızca metinden değil, görseldeki yol ve enerji değişimlerini inceleyerek ulaşmalıdır"
+
+distractors:
+  kurallar:
+    - "Yanlış seçenekler öğrencinin yaygın yapabileceği hatalardan türetilmelidir"
+    - "Bir enerji kutucuğunu atlama hatası içeren seçenek kullanılabilir"
+    - "Artı ve eksi yönünü karıştırma hatası içeren seçenek kullanılabilir"
+    - "Sorulan ara nokta yerine bir adım önceki ya da bir adım sonraki sonucu verme hatası içeren seçenek kullanılabilir"
+    - "Başlangıç enerjisini doğru alıp sıra hatası yapan bir işlem sonucu seçeneklere dönüştürülebilir"
+    - "Yanlış seçenekler birbirinden farklı hata türlerine dayanmalıdır"
+  yasaklar:
+    - "Bariz saçma veya bağlamsız seçenek üretilmemeli"
+    - "İki yanlış seçenek aynı hata türünden olmamalı"
+    - "Doğru cevap görsel okunmadan tahmin edilebilir hale getirilmemeli"
+  stratejiler:
+    - ad: "İstasyon Atlama"
+      aciklama: "Rota üzerindeki bir enerji kutucuğunu hesaba katmayı atlama hatası"
+      ornek: "5 istasyonluk rotada 3. istasyonun +4 enerjisi hesaba katılmaz"
+    - ad: "Artı-Eksi Yön Karıştırma"
+      aciklama: "Enerji kazandıran istasyonu kaybettiren, kaybettireni kazandıran olarak hesaplama"
+      ornek: "Kapıdaki -3 enerji yanlışlıkla +3 olarak uygulanır"
+    - ad: "Yanlış Ara Nokta Okuma"
+      aciklama: "Sorulan ara nokta yerine bir adım önceki veya sonraki noktadaki enerjiyi cevap olarak verme"
+      ornek: "3. istasyon sorulduğunda 4. istasyona kadar olan toplam verilir"
+    - ad: "Sıra Hatası"
+      aciklama: "Başlangıç enerjisini doğru alıp istasyonları yanlış sırayla uygulama"
+      ornek: "Rota sırası yerine rastgele sırada istasyon değerleri toplanır"
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+      - "Görsel sorunun üst kısmında yer almalı"
+      - "Başlangıç noktası, sabit rota ve bitiş noktası açık biçimde gösterilmeli"
+      - "Rota üzerindeki istasyon ve kapılarda artı ve eksi enerji değerleri kutucuklar içinde yer almalı"
+      - "Soru ara noktayı soruyorsa ilgili istasyon ya da kapı sade bir vurgu ile işaretlenebilmeli"
+      - "Robotun ilerleme yönü görselden rahatça anlaşılmalı"
+      - "Görsel sade, çocuk dostu ve 4. sınıf düzeyine uygun olmalı"
+      - "Görseldeki tüm sayılar okunaklı olmalı"
+      - "Görsel çözüm için zorunlu veri taşımalı"
+    yasaklar:
+      - "Sırf süs amacıyla eklenmiş görseller"
+      - "Rota dışında dikkat dağıtıcı fazla nesne"
+      - "Şıklarda yer almayan görsellerin üzerinde A-B-C-D harfleri"
+      - "Görsel üzerinde cevabı doğrudan söyleyen açıklama cümleleri"
+      - "Metinden bağımsız, anlamsız veya çözüme katkısız dekoratif alanlar"
+    stil: "robot_rota_ve_enerji_istasyonlari"
+    boyut: "orta"
+  sik_gorseli:
+    gerekli: false
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: "Görselde verilen verileri sırayla kullanarak toplama ve çıkarma işlemleri yapabilme"
+  tema_siniri: "Yalnızca rota takibi, görsel veri okuma ve toplama-çıkarma odaklı kalınmalı"
+  izinli_icerik:
+    kavramlar:
+      - "başlangıç değeri"
+      - "enerji artışı"
+      - "enerji azalması"
+      - "rota"
+      - "istasyon"
+      - "kapı"
+    beceriler:
+      - "Toplama yapma"
+      - "Çıkarma yapma"
+      - "Sıralı işlem yürütme"
+      - "Görselden bilgi çekme"
+      - "Ara sonuç bulma"
+  yasaklar:
+    - "Çarpma veya bölme gerektiren yapı"
+    - "Negatif sonuç gerektiren işlem akışı"
+    - "Üst sınıf cebirsel gösterimler"
+    - "Görselsiz çözülebilen metin ağırlıklı yapı"
+    - "Biçimsel matematik analizi"
+
+izinli_icerikler:
+  kavramlar:
+    - "enerji"
+    - "rota"
+    - "istasyon"
+    - "kapı"
+    - "başlangıç"
+    - "bitiş"
+    - "artış"
+    - "azalış"
+  beceriler:
+    - "görsel_okuma"
+    - "sıra_takibi"
+    - "işlem_yapma"
+    - "çözümleme"
+    - "sonuç_bulma"
+    - "ara_durum_bulma"
+  soru_islemleri:
+    - "toplama"
+    - "çıkarma"
+    - "sıralı işlem"
+    - "rota izleme"
+    - "ara nokta bulma"
+    - "bitiş değeri bulma"
+
+use_shared_strategies: true
+
+varyantlar:
+  varyant_1:
+    ad: "Bitiş Noktasında Kalan Enerji"
+    aciklama: >
+      Robot sabit bir güzergâhta ilerler. Yol üzerindeki istasyon ve kapılarda artı-eksi
+      enerji değerleri açıkça verilir. Öğrenci başlangıç enerjisinden başlayarak tüm
+      değişimleri sırayla uygular ve robotun bitiş noktasında kaç enerjiyle kaldığını bulur.
+  varyant_2:
+    ad: "Ara Noktadaki Enerji Durumu"
+    aciklama: >
+      Robot yine sabit bir güzergâhta ilerler; ancak bu kez bitiş değil, belirli bir istasyona
+      ya da kapıya geldiğindeki enerji miktarı sorulur. Öğrenci yalnızca doğru noktaya kadar
+      olan değişimleri dikkatle izleyerek ara durumdaki enerjiyi bulur.
+
+zorluk_seviyesi: "orta"

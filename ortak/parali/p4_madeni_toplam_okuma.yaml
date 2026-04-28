@@ -1,0 +1,161 @@
+meta:
+  id: k10_madeni_paralar_toplamini_okuma_3sinif
+  ad: K10 — Madeni Paraların Toplamını Okuma
+  sinif: 3
+  ders: Matematik
+  tema: Sayılar ve Nicelikler
+  kazanim: MAT.3.1.16 — Madeni ve kâğıt paraları değerlerine göre ilişkilendirir.
+  beceriler:
+    - görsel okuma
+    - küçük toplamlar yapma
+    - ilişki kurma
+    - yorumlama
+  aciklama: >
+    Öğrenci, görselde verilen madeni paraları tanır, değerlerini birleştirir ve toplam parayı bulur.
+    Soru günlük yaşamla ilişkilidir, tek doğru cevap içerir ve 3. sınıf düzeyine uygundur.
+
+context:
+  type: k10_madeni_paralar_toplamini_okuma
+  question_count: 1
+  generation:
+    image_type: ortak_gorsel
+    real_currency: true
+    structure:
+      - "KRITIK - GERCEK TL GORSELLERI: Gorseldeki tum banknot ve madeni paralar assets/turk_lirasi/ altindaki referans PNG'lerle (5/10/20/50/100/200 TL banknotlari; 1/5/10/25/50 kurus ve 1 TL madeni paralari) birebir ayni tasarimda (renk, Ataturk portresi, rakam) cizilmelidir. Referans gorseller pipeline tarafindan multimodal olarak beslenir."
+      - "KRITIK - METIN ETIKETI YASAK: Paranin yanina, ustune veya altina sayisal deger etiketi (orn. '55 TL', '25 kr', '100 TL') yazilmamalidir. Para miktari yalnizca gercek banknot ve madeni para gorselleri ile ifade edilir; ogrenci miktari gorselden banknotlari taniyarak okumalidir."
+    kurallar:
+      - "3. sinif seviyesine uygun olmali."
+      - "TL banknot ve madeni paralar gercek TCMB tasarimiyla birebir uyumlu cizilmelidir."
+      - "Paralarin uzerine veya yanina sayisal deger etiketi (orn. '55 TL', '25 kr') yazilmamalidir; miktar sadece banknot/madeni para gorselleriyle temsil edilir."
+
+soru:
+  tip: coktan_secmeli
+  soru_uret_butonu: true
+  cevap_goster_butonu: false
+  secenekler_tiklanabilir: true
+  secenek_etiketleri: [A, B, C]
+  secenek_sayisi: 3
+  geri_bildirim:
+    dogru: "Doğru!"
+    yanlis: "Yanlış."
+    her_durumda_cozum_goster: true
+  gorsel_altinda_aciklama: false
+  gorsel_turu: gerçekçi çizim veya gerçek hayat fotoğrafı
+  baslik_goster: false
+
+soru_metni:
+  giris: >
+    Deniz, mahallede kurulan kitap değişim köşesindeki ayraçlardan birini almak istiyor.
+    Bunun için cebindeki bozuk paraları dikkatle çıkarıyor.
+    Önce toplam ne kadar parası olduğunu bulması gerekiyor.
+    Paraları tek tek inceleyip hepsini bir arada düşünmeye çalışıyor.
+    Deniz’in elindeki madeni paraların toplamı kaç lira kaç kuruştur?
+
+gorsel:
+  madeni_paralar:
+    - deger: "1 TL"
+      adet: 1
+    - deger: "50 kr"
+      adet: 1
+    - deger: "25 kr"
+      adet: 1
+  ana_gorsel:
+    kurallar:
+      - "Gorseldeki tum banknot ve madeni paralar assets/turk_lirasi/ referans PNG'leriyle birebir ayni tasarimda cizilmelidir (renk, Ataturk portresi, rakam eslesmeli)."
+      - "Paralar yatay, egik olmadan, tam gorunur ve ust uste binmeden yerlestirilmelidir; her banknot/madeni para rahat okunacak buyuklukte olmalidir."
+      - "Paralarin yaninda TL/kurus miktarini yazan metin etiketi yer almamalidir; deger yalnizca banknot ve madeni para gorselleriyle temsil edilir."
+    yasaklar:
+      - "Banknot veya madeni para uzerinde gercek TCMB tasarimindan farkli portre, renk veya rakam kullanmak."
+      - "Paranin yanina '55 TL', '25 kr' gibi sayisal metin etiketi yerlestirmek."
+      - "Para miktarini gorselin icinde yaziyla belirtmek (miktar yalnizca banknot/madeni para gorselleriyle ifade edilir)."
+
+secenekler:
+  A: "1 TL 50 kr"
+  B: "1 TL 75 kr"
+  C: "2 TL"
+
+dogru_cevap: B
+
+cozum: >
+  1 TL, 50 kuruş ve 25 kuruş birlikte sayılır.
+  50 kuruş ile 25 kuruşun toplamı 75 kuruştur.
+  Buna 1 TL eklenince toplam 1 TL 75 kuruş olur.
+  Doğru cevap B seçeneğidir.
+
+varyantlar:
+  - varyant_no: 1
+    soru_kalibi: "Aşağıdaki madeni paraların toplamı kaç lira kaç kuruştur?"
+    soru_metni: >
+      Deniz, mahallede kurulan kitap değişim köşesindeki ayraçlardan birini almak istiyor.
+      Bunun için cebindeki bozuk paraları dikkatle çıkarıyor.
+      Önce toplam ne kadar parası olduğunu bulması gerekiyor.
+      Paraları tek tek inceleyip hepsini bir arada düşünmeye çalışıyor.
+      Deniz’in elindeki madeni paraların toplamı kaç lira kaç kuruştur?
+    gorsel:
+      madeni_paralar:
+        - deger: "1 TL"
+          adet: 1
+        - deger: "50 kr"
+          adet: 1
+        - deger: "25 kr"
+          adet: 1
+    secenekler:
+      A: "1 TL 50 kr"
+      B: "1 TL 75 kr"
+      C: "2 TL"
+    dogru_cevap: B
+    cozum: >
+      1 TL, 50 kuruş ve 25 kuruş birlikte sayılır.
+      50 kuruş ile 25 kuruşun toplamı 75 kuruştur.
+      Buna 1 TL eklenince toplam 1 TL 75 kuruş olur.
+      Doğru cevap B seçeneğidir.
+
+  - varyant_no: 2
+    soru_kalibi: "Kutudaki madeni paraların toplam değerini bulun."
+    soru_metni: >
+      İpek, okul bahçesindeki küçük yardım standından bir rozet almak istiyor.
+      Çantasının ön gözünde duran bozuk paraları çıkarıp sıralıyor.
+      Rozeti alıp alamayacağını anlaması için önce toplamı bulması gerekiyor.
+      Bu yüzden elindeki paraları dikkatle inceliyor.
+      İpek’in masadaki madeni paralarının toplamı kaç lira kaç kuruştur?
+    gorsel:
+      madeni_paralar:
+        - deger: "50 kr"
+          adet: 2
+        - deger: "25 kr"
+          adet: 1
+    secenekler:
+      A: "1 TL 25 kr"
+      B: "75 kr"
+      C: "1 TL 50 kr"
+    dogru_cevap: A
+    cozum: >
+      50 kuruş ile 50 kuruşun toplamı 1 TL eder.
+      Buna 25 kuruş eklenince toplam 1 TL 25 kuruş olur.
+      Doğru cevap A seçeneğidir.
+
+  - varyant_no: 3
+    soru_kalibi: "Elindeki madeni paraların toplamını seçin."
+    soru_metni: >
+      Baran, oyuncak müzesinin çıkışındaki hatıra makinesine jeton almak istiyor.
+      Bunun için cebindeki bozuk paraları avucuna döküyor.
+      Elindeki paranın toplamını bilirirse hangi jetonu seçebileceğine karar verecek.
+      Bu yüzden paraları tek tek saymaya hazırlanıyor.
+      Baran’ın elindeki madeni paraların toplamı kaç lira kaç kuruştur?
+    gorsel:
+      madeni_paralar:
+        - deger: "1 TL"
+          adet: 2
+        - deger: "25 kr"
+          adet: 1
+    secenekler:
+      A: "1 TL 25 kr"
+      B: "2 TL"
+      C: "2 TL 25 kr"
+    dogru_cevap: C
+    cozum: >
+      1 TL ile 1 TL’nin toplamı 2 TL eder.
+      Buna 25 kuruş eklenince toplam 2 TL 25 kuruş olur.
+      Doğru cevap C seçeneğidir.
+
+zorluk_seviyesi: orta
