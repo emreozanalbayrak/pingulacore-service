@@ -12,8 +12,10 @@ import {
   Trash2,
 } from 'lucide-react'
 
+import { HtmlLayoutEditor } from '../components/HtmlLayoutEditor'
 import { HtmlViewer } from '../components/HtmlViewer'
 import { JsonPanel } from '../components/JsonPanel'
+import { Modal } from '../components/Modal'
 import { ApiError, api } from '../lib/api'
 import type { ExplorerFileReadResponse, ExplorerRoot, ExplorerTreeNode } from '../types'
 
@@ -88,6 +90,8 @@ export function FilesPage() {
   const [isResizing, setIsResizing] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const [editorOpen, setEditorOpen] = useState(false)
+  const [htmlOverride, setHtmlOverride] = useState<string | null>(null)
   const splitContainerRef = useRef<HTMLDivElement | null>(null)
 
   const btnPrimary =
@@ -174,6 +178,7 @@ export function FilesPage() {
     const nextSelected: SelectedFile = { root, path: node.path, node }
     setSelected(nextSelected)
     setPreview(null)
+    setHtmlOverride(null)
     setBusy(true)
     setError('')
     try {
@@ -292,7 +297,15 @@ export function FilesPage() {
       return <JsonPanel title="JSON Preview" data={preview.content} size="large" />
     }
     if (preview.content_type === 'html') {
-      return <HtmlViewer html={String(preview.content ?? '')} title="HTML Preview" fillHeight />
+      const htmlSource = htmlOverride ?? String(preview.content ?? '')
+      return (
+        <HtmlViewer
+          html={htmlSource}
+          title="HTML Preview"
+          fillHeight
+          onEditClick={() => setEditorOpen(true)}
+        />
+      )
     }
     if (preview.content_type === 'text') {
       return (
@@ -436,6 +449,21 @@ export function FilesPage() {
           </div>
         </div>
       </motion.div>
+
+      {preview?.content_type === 'html' && (
+        <Modal
+          open={editorOpen}
+          onClose={() => setEditorOpen(false)}
+          size="full"
+          title="HTML Layout Editor"
+        >
+          <HtmlLayoutEditor
+            html={htmlOverride ?? String(preview.content ?? '')}
+            onSave={(edited) => { setHtmlOverride(edited); setEditorOpen(false) }}
+            onCancel={() => setEditorOpen(false)}
+          />
+        </Modal>
+      )}
     </div>
   )
 }

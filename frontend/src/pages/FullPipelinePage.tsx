@@ -322,8 +322,10 @@ export function FullPipelinePage() {
                   const rawHtml = pickHtmlContent((row?.output_json as Record<string, unknown> | undefined)?.html)
                   const html = subHtmlOverrides[name] ?? rawHtml
                   const subRenderedImagePath = (row?.output_json as Record<string, unknown> | undefined)?.rendered_image_path
-                  const subRenderedImageUrl =
+                  const subRenderedImageUrlRaw =
                     typeof subRenderedImagePath === 'string' ? toAssetUrlFromPath(subRenderedImagePath) : ''
+                  // Fall back to the parent pipeline's final render when the sub-pipeline output didn't store one.
+                  const subRenderedImageUrl = subRenderedImageUrlRaw || fullRenderedImageUrl
                   return (
                     <div key={id} className="border border-border rounded-xl p-5">
                       <div className="flex items-center justify-between mb-3">

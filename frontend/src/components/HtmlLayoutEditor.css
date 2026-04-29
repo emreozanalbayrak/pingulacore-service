@@ -1,16 +1,23 @@
 .editor-stage-viewport {
   position: relative;
-  overflow: auto;
-  border: 1px solid var(--border);
-  border-radius: 0.875rem;
-  padding: 0.75rem;
-  background: #fefefe;
+  min-height: 100%;
+  min-width: 100%;
+  padding: 24px;
+  background: var(--muted);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
 .editor-stage-canvas {
   position: relative;
-  min-height: 580px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  flex-shrink: 0;
   min-width: 760px;
+  min-height: 580px;
   width: fit-content;
 }
 
@@ -24,7 +31,7 @@
 }
 
 [data-editor-selected='true'] {
-  outline: 2px solid rgba(44, 74, 107, 0.8);
+  outline: 2px solid rgba(44, 74, 107, 0.85);
   outline-offset: 2px;
 }
 
@@ -33,12 +40,19 @@
   outline-offset: 1px;
 }
 
+/* Moveable: control box itself doesn't capture clicks (so other elements
+   underneath remain clickable). Only the actual handles/lines do. */
 .moveable-control-box {
   pointer-events: none !important;
 }
 
 .moveable-control-box .moveable-line,
-.moveable-control-box .moveable-control,
-.moveable-control-box .moveable-area {
+.moveable-control-box .moveable-control {
   pointer-events: auto !important;
+}
+
+/* Don't claim the inner area: clicking inside a selected element should
+   still work to select sibling/child elements. */
+.moveable-control-box .moveable-area {
+  pointer-events: none !important;
 }
