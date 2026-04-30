@@ -287,6 +287,11 @@ def flag_topic_line(line: str) -> dict[str, Any]:
 
 def audit_topics(topics_path: Path) -> list[dict[str, Any]]:
     """Audit the bolum6 topics file."""
+    if not topics_path.exists():
+        raise FileNotFoundError(
+            f"Bolum 6 topics file not found: {topics_path}. "
+            "Provide topics_path explicitly or mount the legacy_app/kadir_hoca/konular/4sinif data."
+        )
     flags: list[dict[str, Any]] = []
     with open(topics_path, encoding="utf-8") as f:
         for lineno, line in enumerate(f, start=1):
@@ -308,7 +313,20 @@ def build_bolum6_audit(
     topics_path = topics_path or default_bolum6_topics_path()
 
     audits = [audit_template(path) for path in template_paths]
-    topic_flags = audit_topics(topics_path)
+    topic_flags: list[dict[str, Any]] = []
+    topic_warnings: list[dict[str, str]] = []
+    if topics_path.exists():
+        topic_flags = audit_topics(topics_path)
+    else:
+        topic_warnings.append(
+            {
+                "template": "topics",
+                "message": (
+                    f"Bolum 6 topics file not found: {topics_path}. "
+                    "Topic audit skipped; provide topics_path explicitly or mount the legacy konular/4sinif data."
+                ),
+            }
+        )
 
     errors = [
         {"template": audit.template_id, "message": message}
@@ -319,7 +337,7 @@ def build_bolum6_audit(
         {"template": audit.template_id, "message": message}
         for audit in audits
         for message in audit.warnings
-    ]
+    ] + topic_warnings
 
     return {
         "errors": errors,

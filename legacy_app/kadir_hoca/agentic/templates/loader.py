@@ -32,6 +32,21 @@ DEFAULT_TEMPLATES_DIR = Path(
 )
 
 
+def _is_runnable_template_file(path: Path) -> bool:
+    """Return True for YAML files that represent runnable question templates."""
+    name = path.name
+    stem = path.stem
+    if name.startswith(("_", ".")):
+        return False
+    if name == "templates.yaml":
+        return False
+    if stem.endswith("_referans"):
+        return False
+    if "Ortak_Kurallar" in stem:
+        return False
+    return True
+
+
 def _deep_merge(base: dict, override: dict) -> dict:
     """Recursive merge. Override values take priority. Lists in override REPLACE base lists."""
     result = base.copy()
@@ -105,7 +120,7 @@ class TemplateLoader:
         self._template_index = {}
         # Scan root and all subdirectories
         for f in self.templates_dir.rglob("*.yaml"):
-            if f.name.startswith("_") or f.name.startswith("."):
+            if not _is_runnable_template_file(f):
                 continue
             tid = f.stem
             # First-found wins (subdirectories are fine)
@@ -230,7 +245,7 @@ class TemplateLoader:
 
     def list_templates(self) -> list[str]:
         """
-        List all available template IDs (searches subdirectories too).
+        List runnable template IDs (searches subdirectories too).
 
         Returns:
             List of template IDs (without .yaml extension)
@@ -239,7 +254,15 @@ class TemplateLoader:
             return []
 
         self._build_template_index()
-        return sorted(self._template_index.keys())
+        runnable: list[str] = []
+        for template_id in sorted(self._template_index.keys()):
+            try:
+                self.load(template_id)
+            except Exception as exc:
+                logger.debug("[TEMPLATES] Skipping non-runnable template %s: %s", template_id, exc)
+                continue
+            runnable.append(template_id)
+        return runnable
 
     def clear_cache(self) -> None:
         """Clear the template and index cache."""

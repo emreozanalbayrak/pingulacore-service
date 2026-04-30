@@ -32,3 +32,6 @@ dependencies = [
 where = ["."]
 include = ["app*", "legacy_app*"]
 exclude = ["frontend*", "legacy_runners*", "meb_books*", "data*"]
+
+[tool.setuptools.package-data]
+legacy_app = ["**/*.yaml", "**/*.yml", "**/*.txt", "shared/assets/**/*.png"]
