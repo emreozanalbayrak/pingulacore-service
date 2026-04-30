@@ -3,17 +3,17 @@ CLI for the agentic question generator.
 
 Usage:
     # Run from config file (simplest)
-    python -m agentic --config template_config.yaml
-    python -m agentic -c template_config.yaml
+    python -m legacy_app.kadir_hoca.agentic --config template_config.yaml
+    python -m legacy_app.kadir_hoca.agentic -c template_config.yaml
 
     # Override template/topic via CLI
-    python -m agentic -c template_config.yaml --template ana_fikir --topic "..."
+    python -m legacy_app.kadir_hoca.agentic -c template_config.yaml --template ana_fikir --topic "..."
 
     # List available templates
-    python -m agentic --list-templates
+    python -m legacy_app.kadir_hoca.agentic --list-templates
 
     # Extract question types from PDF
-    python -m agentic --extract-question-types book.pdf
+    python -m legacy_app.kadir_hoca.agentic --extract-question-types book.pdf
 """
 
 import argparse
@@ -312,17 +312,17 @@ def parse_args():
         epilog="""
 Examples:
   # Run from config file (simplest)
-  python -m agentic --config template_config.yaml
-  python -m agentic -c template_config.yaml
+  python -m legacy_app.kadir_hoca.agentic --config template_config.yaml
+  python -m legacy_app.kadir_hoca.agentic -c template_config.yaml
 
   # Override template/topic via CLI
-  python -m agentic -c template_config.yaml --template ana_fikir --topic "..."
+  python -m legacy_app.kadir_hoca.agentic -c template_config.yaml --template ana_fikir --topic "..."
 
   # List available templates
-  python -m agentic --list-templates
+  python -m legacy_app.kadir_hoca.agentic --list-templates
 
   # Extract question types from a PDF
-  python -m agentic --extract-question-types book.pdf
+  python -m legacy_app.kadir_hoca.agentic --extract-question-types book.pdf
         """,
     )
 
@@ -1657,7 +1657,7 @@ async def main_async():
     if template_id or generation_plan or context_generation_plan:
         if not topic and not topics_file and not generation_plan and not context_generation_plan:
             print("Hata: --topic parametresi, config'de 'topic' veya 'topics_file' alanı gerekli")
-            print("Ornek: python -m agentic --template ana_fikir --topic \"OYUN DUNYASI / Okuma\"")
+            print("Ornek: python -m legacy_app.kadir_hoca.agentic --template ana_fikir --topic \"OYUN DUNYASI / Okuma\"")
             print("Veya: template_config.yaml dosyasına 'topic: ...' veya 'topics_file: ...' ekleyin")
             return 1
 
@@ -1866,10 +1866,10 @@ async def main_async():
     # No action specified - show help
     print("Hata: Bir işlem belirtilmedi.")
     print("\nKullanım:")
-    print("  python -m agentic -c template_config.yaml")
-    print("  python -m agentic --list-templates")
-    print("  python -m agentic --extract-question-types <pdf>")
-    print("\nYardım için: python -m agentic --help")
+    print("  python -m legacy_app.kadir_hoca.agentic -c template_config.yaml")
+    print("  python -m legacy_app.kadir_hoca.agentic --list-templates")
+    print("  python -m legacy_app.kadir_hoca.agentic --extract-question-types <pdf>")
+    print("\nYardım için: python -m legacy_app.kadir_hoca.agentic --help")
     return 1
 
 
