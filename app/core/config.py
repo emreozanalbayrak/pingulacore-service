@@ -81,6 +81,12 @@ class Settings:
     legacy_state_dir: Path
     legacy_timeout_seconds: int
 
+    auth_token_ttl_hours: int
+    password_min_length: int
+    signup_enabled: bool
+    admin_seed_email: str | None
+    admin_seed_password: str | None
+
 
 def build_settings() -> Settings:
     root_dir = Path(__file__).resolve().parents[2]
@@ -135,6 +141,11 @@ def build_settings() -> Settings:
         legacy_uploads_dir=Path(os.getenv("LEGACY_UPLOADS_DIR", str(root_dir / ".legacy_uploads"))),
         legacy_state_dir=Path(os.getenv("LEGACY_STATE_DIR", str(root_dir / ".legacy_state"))),
         legacy_timeout_seconds=_as_int(os.getenv("LEGACY_TIMEOUT_SECONDS"), 1800),
+        auth_token_ttl_hours=_as_int(os.getenv("AUTH_TOKEN_TTL_HOURS"), 168),
+        password_min_length=_as_int(os.getenv("PASSWORD_MIN_LENGTH"), 8),
+        signup_enabled=_as_bool(os.getenv("SIGNUP_ENABLED"), True),
+        admin_seed_email=(os.getenv("ADMIN_EMAIL") or None),
+        admin_seed_password=(os.getenv("ADMIN_PASSWORD") or None),
     )
 
 

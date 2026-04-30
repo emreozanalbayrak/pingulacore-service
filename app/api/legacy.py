@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
+from app.api.deps import get_current_user
 from app.db import repository
 from app.db.database import get_db
 from app.schemas.api import (
@@ -28,7 +29,11 @@ from app.schemas.api import (
 from app.services import legacy_pipeline_service as legacy_svc
 
 
-router = APIRouter(prefix="/v1/legacy", tags=["legacy"])
+router = APIRouter(
+    prefix="/v1/legacy",
+    tags=["legacy"],
+    dependencies=[Depends(get_current_user)],
+)
 
 
 def _dt(value) -> str | None:

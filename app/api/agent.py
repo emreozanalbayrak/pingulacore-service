@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.agents.agent_service import AgentService
 from app.agents.config import get_agent_settings
+from app.api.deps import get_current_user
 from app.core.config import get_settings
 from app.db import repository
 from app.db.database import get_db
@@ -28,7 +29,7 @@ from app.services.log_stream_service import publish_done
 from app.services.pipeline_log_service import write_pipeline_log
 from app.services.run_dir_service import create_standalone_run_dir, write_manifest
 
-router = APIRouter(prefix="/v1", tags=["agent"])
+router = APIRouter(prefix="/v1", tags=["agent"], dependencies=[Depends(get_current_user)])
 
 
 def _dt(value: Any) -> str | None:
