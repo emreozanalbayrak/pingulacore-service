@@ -2,7 +2,16 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, Text, UniqueConstraint
+from sqlalchemy import (
+    Boolean,
+    CheckConstraint,
+    DateTime,
+    ForeignKey,
+    Index,
+    Integer,
+    Text,
+    UniqueConstraint,
+)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.database import Base
@@ -143,6 +152,191 @@ class FavoriteOutput(Base):
     content_json: Mapped[str] = mapped_column(Text, default="{}")
     source_sub_pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("sub_pipelines.id"), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+
+class TaxonomyNode(Base):
+    __tablename__ = "taxonomy_nodes"
+    __table_args__ = (
+        UniqueConstraint("parent_id", "slug", name="uq_taxonomy_nodes_parent_slug"),
+        UniqueConstraint("path", name="uq_taxonomy_nodes_path"),
+        CheckConstraint(
+            "node_type IN ('root','grade','subject','theme','topic','yaml_template')",
+            name="ck_taxonomy_nodes_node_type",
+        ),
+        CheckConstraint("depth >= 0", name="ck_taxonomy_nodes_depth_non_negative"),
+        Index("ix_taxonomy_nodes_parent_id", "parent_id"),
+        Index("ix_taxonomy_nodes_node_type", "node_type"),
+        Index("ix_taxonomy_nodes_path", "path"),
+    )
+
+    id: Mapped[str] = mapped_column(primary_key=True)
+    parent_id: Mapped[str | None] = mapped_column(ForeignKey("taxonomy_nodes.id", ondelete="CASCADE"), nullable=True)
+    node_type: Mapped[str] = mapped_column(Text, default="topic")
+    name: Mapped[str] = mapped_column(Text, default="")
+    slug: Mapped[str] = mapped_column(Text, default="")
+    code: Mapped[str | None] = mapped_column(Text, nullable=True)
+    sort_order: Mapped[int] = mapped_column(Integer, default=0)
+    depth: Mapped[int] = mapped_column(Integer, default=0)
+    path: Mapped[str] = mapped_column(Text, default="")
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
+
+    parent: Mapped["TaxonomyNode | None"] = relationship(
+        back_populates="children",
+        remote_side=lambda: [TaxonomyNode.id],
+    )
+    children: Mapped[list["TaxonomyNode"]] = relationship(back_populates="parent", cascade="all, delete-orphan")
+
+
+class YamlTemplate(Base):
+    __tablename__ = "yaml_templates"
+    __table_args__ = (
+        UniqueConstraint("taxonomy_node_id", name="uq_yaml_templates_taxonomy_node_id"),
+        UniqueConstraint("template_code", name="uq_yaml_templates_template_code"),
+        CheckConstraint("status IN ('active','archived')", name="ck_yaml_templates_status"),
+        Index("ix_yaml_templates_taxonomy_node_id", "taxonomy_node_id"),
+        Index("ix_yaml_templates_status", "status"),
+    )
+
+    id: Mapped[str] = mapped_column(primary_key=True)
+    taxonomy_node_id: Mapped[str] = mapped_column(
+        ForeignKey("taxonomy_nodes.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    template_code: Mapped[str] = mapped_column(Text, default="")
+    title: Mapped[str] = mapped_column(Text, default="")
+    description: Mapped[str | None] = mapped_column(Text, nullable=True)
+    field_schema_json: Mapped[str] = mapped_column(Text, default="{}")
+    schema_version: Mapped[str] = mapped_column(Text, default="v1")
+    status: Mapped[str] = mapped_column(Text, default="active")
+    created_by: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
+
+    taxonomy_node: Mapped[TaxonomyNode] = relationship()
+    instances: Mapped[list["YamlInstance"]] = relationship(back_populates="template")
+
+
+class YamlInstance(Base):
+    __tablename__ = "yaml_instances"
+    __table_args__ = (
+        CheckConstraint("status IN ('draft','final','archived')", name="ck_yaml_instances_status"),
+        Index("ix_yaml_instances_template_id", "template_id"),
+        Index("ix_yaml_instances_status", "status"),
+    )
+
+    id: Mapped[str] = mapped_column(primary_key=True)
+    template_id: Mapped[str] = mapped_column(
+        ForeignKey("yaml_templates.id", ondelete="RESTRICT"),
+        nullable=False,
+    )
+    instance_name: Mapped[str] = mapped_column(Text, default="")
+    status: Mapped[str] = mapped_column(Text, default="draft")
+    values_json: Mapped[str] = mapped_column(Text, default="{}")
+    rendered_yaml_text: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_by: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
+
+    template: Mapped[YamlTemplate] = relationship(back_populates="instances")
+    property_values: Mapped[list["YamlInstancePropertyValue"]] = relationship(back_populates="instance")
+
+
+class YamlVariantRelationship(Base):
+    __tablename__ = "yaml_variant_relationships"
+    __table_args__ = (
+        UniqueConstraint(
+            "from_instance_id",
+            "to_instance_id",
+            "relation_type",
+            name="uq_yaml_variant_relationships_edge_type",
+        ),
+        CheckConstraint("relation_type IN ('clone','variant','derived','merge')", name="ck_yaml_variant_relationships_type"),
+        CheckConstraint("from_instance_id <> to_instance_id", name="ck_yaml_variant_relationships_no_self"),
+        Index("ix_yaml_variant_relationships_from_instance_id", "from_instance_id"),
+        Index("ix_yaml_variant_relationships_to_instance_id", "to_instance_id"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    from_instance_id: Mapped[str] = mapped_column(
+        ForeignKey("yaml_instances.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    to_instance_id: Mapped[str] = mapped_column(
+        ForeignKey("yaml_instances.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    relation_type: Mapped[str] = mapped_column(Text, default="variant")
+    note: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_by: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+
+class PropertyDefinition(Base):
+    __tablename__ = "property_definitions"
+    __table_args__ = (
+        UniqueConstraint("defined_at_node_id", "canonical_path", name="uq_property_definitions_node_path"),
+        CheckConstraint(
+            "data_type IN ('text','bool','number','json','array','enum','object')",
+            name="ck_property_definitions_data_type",
+        ),
+        Index("ix_property_definitions_defined_at_node_id", "defined_at_node_id"),
+        Index("ix_property_definitions_parent_property_id", "parent_property_id"),
+        Index("ix_property_definitions_canonical_path", "canonical_path"),
+    )
+
+    id: Mapped[str] = mapped_column(primary_key=True)
+    defined_at_node_id: Mapped[str] = mapped_column(
+        ForeignKey("taxonomy_nodes.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    parent_property_id: Mapped[str | None] = mapped_column(
+        ForeignKey("property_definitions.id", ondelete="CASCADE"),
+        nullable=True,
+    )
+    property_key: Mapped[str] = mapped_column(Text, default="")
+    canonical_path: Mapped[str] = mapped_column(Text, default="")
+    data_type: Mapped[str] = mapped_column(Text, default="text")
+    constraints_json: Mapped[str | None] = mapped_column(Text, nullable=True)
+    is_required: Mapped[bool] = mapped_column(Boolean, default=False)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
+
+    defined_at_node: Mapped[TaxonomyNode] = relationship()
+    parent_property: Mapped["PropertyDefinition | None"] = relationship(
+        back_populates="child_properties",
+        remote_side=lambda: [PropertyDefinition.id],
+    )
+    child_properties: Mapped[list["PropertyDefinition"]] = relationship(
+        back_populates="parent_property",
+        cascade="all, delete-orphan",
+    )
+    instance_values: Mapped[list["YamlInstancePropertyValue"]] = relationship(back_populates="property_definition")
+
+
+class YamlInstancePropertyValue(Base):
+    __tablename__ = "yaml_instance_property_values"
+    __table_args__ = (
+        UniqueConstraint("instance_id", "property_definition_id", name="uq_yaml_instance_property_values_pair"),
+        Index("ix_yaml_instance_property_values_instance_id", "instance_id"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    instance_id: Mapped[str] = mapped_column(
+        ForeignKey("yaml_instances.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    property_definition_id: Mapped[str] = mapped_column(
+        ForeignKey("property_definitions.id", ondelete="RESTRICT"),
+        nullable=False,
+    )
+    value_json: Mapped[str] = mapped_column(Text, default="null")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+    instance: Mapped[YamlInstance] = relationship(back_populates="property_values")
+    property_definition: Mapped[PropertyDefinition] = relationship(back_populates="instance_values")
 
 
 class User(Base):
