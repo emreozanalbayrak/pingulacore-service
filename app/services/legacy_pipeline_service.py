@@ -233,8 +233,8 @@ def inspect_yaml(
 
     if kind == "geometry":
         try:
-            from pomodoro.yaml_loader import load_and_parse_template
-            from pomodoro.variant_rotation import get_variant_names
+            from legacy_app.geometri.pomodoro.yaml_loader import load_and_parse_template
+            from legacy_app.geometri.pomodoro.variant_rotation import get_variant_names
 
             template = load_and_parse_template(str(abs_path))
             names = get_variant_names(template)
@@ -564,7 +564,7 @@ def _run_geometry_sync(
     variant_name: str | None,
 ) -> None:
     """Geometri pipeline'ı (pomodoro.graph.run) sync olarak çalıştırır."""
-    from pomodoro.graph import run as pomodoro_run
+    from legacy_app.geometri.pomodoro.graph import run as pomodoro_run
 
     pomodoro_run(
         yaml_path=str(yaml_abs),
@@ -629,7 +629,7 @@ def _run_turkce_subprocess(
     try:
         env = os.environ.copy()
         proc = subprocess.Popen(
-            [sys.executable, "-m", "agentic", "--config", str(tmp_path)],
+            [sys.executable, "-m", "legacy_app.kadir_hoca.agentic", "--config", str(tmp_path)],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             env=env,

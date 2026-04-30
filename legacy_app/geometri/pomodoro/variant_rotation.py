@@ -17,7 +17,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from pomodoro.yaml_loader import ParsedTemplate
+from legacy_app.geometri.pomodoro.yaml_loader import ParsedTemplate
 
 logger = logging.getLogger(__name__)
 

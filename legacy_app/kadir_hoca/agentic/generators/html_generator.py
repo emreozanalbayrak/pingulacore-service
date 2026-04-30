@@ -1483,7 +1483,7 @@ ORNEK question: "<b>Bu metinde,</b>\n{{statements}}\n<b>maddelerinden hangileri.
         # Build skill areas hint with taxonomy level
         skill_hint = ""
         if beceri and beceri.skill_areas:
-            from agentic.prompts.beceri_prompts import SKILL_AREAS
+            from legacy_app.kadir_hoca.agentic.prompts.beceri_prompts import SKILL_AREAS
             skill_parts = []
             for area in beceri.skill_areas:
                 info = SKILL_AREAS.get(area)
@@ -2102,7 +2102,7 @@ ONEMLI:
         # Post-process: apply visual format transformation if configured
         _visual_fmt = _gen.visual_format if _gen else None
         if _visual_fmt:
-            from agentic.tools.visual_formats import apply_visual_format
+            from legacy_app.kadir_hoca.agentic.tools.visual_formats import apply_visual_format
             original_len = len(result.paragraph)
             result.paragraph = apply_visual_format(result.paragraph, _visual_fmt)
             if len(result.paragraph) != original_len:

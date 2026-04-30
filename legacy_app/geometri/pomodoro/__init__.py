@@ -6,6 +6,6 @@ ortak/ klasorundeki 7 baslikli YAML sablonlarindan
 adim adim coklu LLM chain'lerle soru + gorsel uretir.
 
 Kullanim:
-    from pomodoro.graph import run
+    from legacy_app.geometri.pomodoro.graph import run
     result = run("ortak/kareli_zeminde_baslangic_hedef_rota_secme.yaml")
 """

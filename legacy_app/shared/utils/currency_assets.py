@@ -117,7 +117,7 @@ def _upload_and_wait_active(path_str: str, mtime_ns: int):
     mtime_ns parametresi cache invalidation icin sinyaldir; fonksiyon kullanmaz.
     """
     # Import local to avoid circular dependency (utils.llm also uses utils)
-    from utils.llm import get_image_client
+    from legacy_app.shared.utils.llm import get_image_client
 
     client = get_image_client()
     uploaded = client.files.upload(file=path_str)

@@ -31,14 +31,14 @@ from typing import Annotated, Optional, TypedDict
 
 from langgraph.graph import END, StateGraph
 
-from pomodoro.chains.chain_generate_visual_question import generate_visual_question
-from pomodoro.chains.chain_validate_batch import validate_batch
-from pomodoro.chains.chain_solve_question import solve_question
-from pomodoro.chains.chain_generate_image import generate_images
-from pomodoro.chains.chain_validate_visual import validate_visual
-from pomodoro.chains.chain_verify_currency import verify_currency
-from pomodoro.chains.chain_solve_visual_question import solve_visual_question
-from pomodoro.models import (
+from legacy_app.geometri.pomodoro.chains.chain_generate_visual_question import generate_visual_question
+from legacy_app.geometri.pomodoro.chains.chain_validate_batch import validate_batch
+from legacy_app.geometri.pomodoro.chains.chain_solve_question import solve_question
+from legacy_app.geometri.pomodoro.chains.chain_generate_image import generate_images
+from legacy_app.geometri.pomodoro.chains.chain_validate_visual import validate_visual
+from legacy_app.geometri.pomodoro.chains.chain_verify_currency import verify_currency
+from legacy_app.geometri.pomodoro.chains.chain_solve_visual_question import solve_visual_question
+from legacy_app.geometri.pomodoro.models import (
     BatchValidation,
     CurrencyVerification,
     GeneratedImages,
@@ -47,11 +47,11 @@ from pomodoro.models import (
     VisualQuestionSolution,
     VisualValidation,
 )
-from pomodoro.pipeline_log import pipeline_log
-from pomodoro.variant_rotation import get_variant_names, select_next_variant
-from pomodoro.yaml_loader import ParsedTemplate, load_and_parse_template
-from src.build_question_html import build_question_html
-from src.render_question_html import render_question_html
+from legacy_app.geometri.pomodoro.pipeline_log import pipeline_log
+from legacy_app.geometri.pomodoro.variant_rotation import get_variant_names, select_next_variant
+from legacy_app.geometri.pomodoro.yaml_loader import ParsedTemplate, load_and_parse_template
+from legacy_app.shared.src.build_question_html import build_question_html
+from legacy_app.shared.src.render_question_html import render_question_html
 
 
 MAX_QUESTION_ATTEMPTS = 3

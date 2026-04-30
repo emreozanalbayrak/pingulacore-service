@@ -12,10 +12,10 @@ from __future__ import annotations
 from langchain_core.output_parsers import PydanticOutputParser
 from langchain_core.prompts import PromptTemplate
 
-from pomodoro.models import GeneratedVisualQuestion, QuestionSolution, QuestionSolutionLLM
-from pomodoro.pipeline_log import pipeline_log
-from pomodoro.yaml_loader import ParsedTemplate, extract_for_solver_chain
-from utils.llm import ModelRole, get_model
+from legacy_app.geometri.pomodoro.models import GeneratedVisualQuestion, QuestionSolution, QuestionSolutionLLM
+from legacy_app.geometri.pomodoro.pipeline_log import pipeline_log
+from legacy_app.geometri.pomodoro.yaml_loader import ParsedTemplate, extract_for_solver_chain
+from legacy_app.shared.utils.llm import ModelRole, get_model
 
 
 _parser = PydanticOutputParser(pydantic_object=QuestionSolutionLLM)

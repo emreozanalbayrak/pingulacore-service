@@ -23,7 +23,7 @@ from .curriculum_tools import (
 from .render_html import render_question_html, render_to_png
 
 # Note: save_output imports are deferred to avoid circular imports
-# Use: from agentic.tools.save_output import save_question_output
+# Use: from legacy_app.kadir_hoca.agentic.tools.save_output import save_question_output
 
 __all__ = [
     # Paragraph constraints

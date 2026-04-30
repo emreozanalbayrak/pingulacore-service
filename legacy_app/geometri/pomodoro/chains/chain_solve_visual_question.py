@@ -12,15 +12,15 @@ from typing import Optional
 
 from langchain.messages import HumanMessage
 
-from pomodoro.models import (
+from legacy_app.geometri.pomodoro.models import (
     GeneratedVisualQuestion,
     VisualQuestionSolution,
     VisualQuestionSolutionLLM,
 )
-from pomodoro.pipeline_log import pipeline_log
-from pomodoro.yaml_loader import ParsedTemplate, extract_for_visual_solver_chain
-from utils.image_data import encode_image_data_uri
-from utils.llm import ModelRole, get_model
+from legacy_app.geometri.pomodoro.pipeline_log import pipeline_log
+from legacy_app.geometri.pomodoro.yaml_loader import ParsedTemplate, extract_for_visual_solver_chain
+from legacy_app.shared.utils.image_data import encode_image_data_uri
+from legacy_app.shared.utils.llm import ModelRole, get_model
 
 
 _model = get_model(ModelRole.VISUAL_QUESTION_SOLVER)

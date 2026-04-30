@@ -18,11 +18,11 @@ from pathlib import Path
 
 from langchain.messages import HumanMessage
 
-from pomodoro.models import CurrencyVerification
-from pomodoro.pipeline_log import pipeline_log
-from utils.currency_assets import get_asset_path
-from utils.image_data import encode_image_data_uri
-from utils.llm import ModelRole, get_model
+from legacy_app.geometri.pomodoro.models import CurrencyVerification
+from legacy_app.geometri.pomodoro.pipeline_log import pipeline_log
+from legacy_app.shared.utils.currency_assets import get_asset_path
+from legacy_app.shared.utils.image_data import encode_image_data_uri
+from legacy_app.shared.utils.llm import ModelRole, get_model
 
 
 _model = get_model(ModelRole.VISUAL_VALIDATOR)

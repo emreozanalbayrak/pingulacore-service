@@ -24,11 +24,11 @@ from langchain_core.prompts import PromptTemplate
 
 import hashlib
 
-from pomodoro.models import GeneratedVisualQuestion
-from pomodoro.pipeline_log import pipeline_log
-from pomodoro.variant_rotation import get_variant_details, get_variant_names
-from pomodoro.yaml_loader import ParsedTemplate, extract_for_question_chain, _dict_to_yaml_str
-from utils.llm import ModelRole, get_model
+from legacy_app.geometri.pomodoro.models import GeneratedVisualQuestion
+from legacy_app.geometri.pomodoro.pipeline_log import pipeline_log
+from legacy_app.geometri.pomodoro.variant_rotation import get_variant_details, get_variant_names
+from legacy_app.geometri.pomodoro.yaml_loader import ParsedTemplate, extract_for_question_chain, _dict_to_yaml_str
+from legacy_app.shared.utils.llm import ModelRole, get_model
 
 
 def _variant_number_seeds(variant_name: str, idx: int) -> dict:

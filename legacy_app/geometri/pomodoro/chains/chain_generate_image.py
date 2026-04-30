@@ -19,18 +19,18 @@ from langchain_core.prompts import PromptTemplate
 
 import re
 
-from pomodoro.models import GeneratedImages, GeneratedVisualQuestion
-from pomodoro.yaml_loader import (
+from legacy_app.geometri.pomodoro.models import GeneratedImages, GeneratedVisualQuestion
+from legacy_app.geometri.pomodoro.yaml_loader import (
     ParsedTemplate,
     extract_for_main_image_chain,
     extract_for_option_image_chain,
 )
-from utils.currency_assets import (
+from legacy_app.shared.utils.currency_assets import (
     build_reference_block,
     resolve_required_denominations,
     upload_reference_files,
 )
-from utils.llm import MODEL_REGISTRY, ModelRole, get_image_client, get_model
+from legacy_app.shared.utils.llm import MODEL_REGISTRY, ModelRole, get_image_client, get_model
 
 
 _prompt_engineer_model = get_model(ModelRole.VISUAL_PROMPT_ENGINEER)

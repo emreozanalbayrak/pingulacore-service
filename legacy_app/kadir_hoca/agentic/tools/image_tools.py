@@ -1258,7 +1258,7 @@ Ogrenciye gosterilecek soruda bunlar otomatik olarak "Bu gorselde" / "gorselin" 
 Sen gorseli tasarlarken bunu dikkate al — ogrenci "Bu GORSELDE ... hangisinden bahsedilmektedir?" seklinde gorecek."""
 
     # Replace metin references in question for judge prompt too
-    from agentic.generic_workflow import _replace_metin_with_gorsel
+    from legacy_app.kadir_hoca.agentic.generic_workflow import _replace_metin_with_gorsel
     _visual_question = _replace_metin_with_gorsel(question)
 
     judge_prompt_template = f"""Sen bir egitim icerik denetcisisin. Asagidaki soru icin ogrencinin SADECE gorseli gorecegini varsay (paragraf metni gizlenecek). Gorselden soruyu dogru cevaplayabilir mi?
