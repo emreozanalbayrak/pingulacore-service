@@ -92,7 +92,7 @@ def build_settings() -> Settings:
     root_dir = Path(__file__).resolve().parents[2]
     _load_dotenv_file(root_dir)
 
-    primary_yaml = root_dir / "ortak"
+    primary_yaml = root_dir / "legacy_app" / "geometri" / "ortak"
     fallback_yaml = root_dir / "old" / "ortak"
     output_dir = root_dir / "generated_assets"
     catalog_dir = root_dir / "catalog"
@@ -132,12 +132,12 @@ def build_settings() -> Settings:
         rule_eval_parallelism=_as_int(os.getenv("RULE_EVAL_PARALLELISM"), 4),
         rule_eval_max_rules=_as_int(os.getenv("RULE_EVAL_MAX_RULES"), 12),
         use_stub_agents=_as_bool(os.getenv("AI_USE_STUB"), use_stub_default),
-        legacy_geo_yaml_dir=Path(os.getenv("LEGACY_GEO_YAML_DIR", str(root_dir / "ortak"))),
-        legacy_turkce_templates_dir=Path(os.getenv("LEGACY_TURKCE_TEMPLATES_DIR", str(root_dir / "templates"))),
+        legacy_geo_yaml_dir=Path(os.getenv("LEGACY_GEO_YAML_DIR", str(root_dir / "legacy_app" / "geometri" / "ortak"))),
+        legacy_turkce_templates_dir=Path(os.getenv("LEGACY_TURKCE_TEMPLATES_DIR", str(root_dir / "legacy_app" / "kadir_hoca" / "templates"))),
         legacy_turkce_meb_books_dir=Path(os.getenv("LEGACY_TURKCE_MEB_BOOKS_DIR", str(root_dir / "meb_books"))),
         legacy_turkce_data_dir=Path(os.getenv("LEGACY_TURKCE_DATA_DIR", str(root_dir / "data"))),
-        legacy_turkce_configs_dir=Path(os.getenv("LEGACY_TURKCE_CONFIGS_DIR", str(root_dir / "configs"))),
-        legacy_turkce_konular_dir=Path(os.getenv("LEGACY_TURKCE_KONULAR_DIR", str(root_dir / "konular"))),
+        legacy_turkce_configs_dir=Path(os.getenv("LEGACY_TURKCE_CONFIGS_DIR", str(root_dir / "legacy_app" / "kadir_hoca" / "configs"))),
+        legacy_turkce_konular_dir=Path(os.getenv("LEGACY_TURKCE_KONULAR_DIR", str(root_dir / "legacy_app" / "kadir_hoca" / "konular"))),
         legacy_uploads_dir=Path(os.getenv("LEGACY_UPLOADS_DIR", str(root_dir / ".legacy_uploads"))),
         legacy_state_dir=Path(os.getenv("LEGACY_STATE_DIR", str(root_dir / ".legacy_state"))),
         legacy_timeout_seconds=_as_int(os.getenv("LEGACY_TIMEOUT_SECONDS"), 1800),

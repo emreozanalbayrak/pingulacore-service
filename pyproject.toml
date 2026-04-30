@@ -30,5 +30,5 @@ dependencies = [
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["app*", "pomodoro*", "utils*", "src*", "agentic*"]
-exclude = ["frontend*", "legacy_runners*", "ortak*", "templates*", "meb_books*", "data*", "configs*", "konular*"]
+include = ["app*", "legacy_app*"]
+exclude = ["frontend*", "legacy_runners*", "meb_books*", "data*"]

@@ -35,21 +35,21 @@ pingula-ui-mock/
 .claude/
 
 # Vendored legacy pipelines — küçük örnek setler repoda; ağır binary'ler mount edilir.
-# Repoda örnek olarak küçük subset'ler tutuluyor:
-#   - ortak/, configs/, templates/ (sadece YAML), konular/
+# Repoda örnek olarak küçük subset'ler tutuluyor (legacy_app/ altında):
+#   - legacy_app/geometri/ortak/, legacy_app/kadir_hoca/{configs,templates,konular}/
 # Bunları .gitignore ETME.
 # Mount via env: meb_books/ (~633MB PDF), data/ (~47MB PDF) ve büyük PDF/PNG asset'ler.
 meb_books/
 data/
 # Templates klasöründeki büyük binary'ler (PDF/PNG/JPG); YAML'lar repoda kalır.
-templates/**/*.pdf
-templates/**/*.png
-templates/**/*.jpg
-templates/**/*.jpeg
+legacy_app/kadir_hoca/templates/**/*.pdf
+legacy_app/kadir_hoca/templates/**/*.png
+legacy_app/kadir_hoca/templates/**/*.jpg
+legacy_app/kadir_hoca/templates/**/*.jpeg
 # Konular klasöründeki büyük asset'ler
-konular/**/*.pdf
-konular/**/*.png
-konular/**/*.jpg
+legacy_app/kadir_hoca/konular/**/*.pdf
+legacy_app/kadir_hoca/konular/**/*.png
+legacy_app/kadir_hoca/konular/**/*.jpg
 
 # Legacy pipeline runtime state files (machine-local)
 .legacy_state/
