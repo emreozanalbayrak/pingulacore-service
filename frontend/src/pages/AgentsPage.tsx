@@ -254,11 +254,12 @@ export function AgentsPage() {
           <div className="p-8 space-y-6">
             {/* Agent Selector */}
             <div className="space-y-2">
-              <label className={labelClass}>
+              <label htmlFor="standalone-agent-select" className={labelClass}>
                 <Bot className="w-4 h-4" style={{ color: 'var(--primary)' }} />
                 Agent
               </label>
               <select
+                id="standalone-agent-select"
                 value={agentId}
                 onChange={(e) => selectAgent(e.target.value as StandaloneAgentName)}
                 className="w-full px-4 py-3 rounded-xl border-2 bg-white focus:outline-none transition-colors"

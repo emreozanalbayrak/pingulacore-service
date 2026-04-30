@@ -494,6 +494,7 @@ export function LegacyPipelinePage() {
                             type="checkbox"
                             checked={checked}
                             onChange={() => void toggleSelect(f)}
+                            aria-label={`YAML seç: ${f}`}
                             className="w-4 h-4"
                           />
                           <code className="text-xs flex-1 truncate">{f}</code>
@@ -501,6 +502,7 @@ export function LegacyPipelinePage() {
                             type="button"
                             onClick={() => openDrawer(f)}
                             className="p-1 rounded hover:bg-background"
+                            aria-label={`YAML görüntüle/düzenle: ${f}`}
                             title="YAML'ı görüntüle / düzenle"
                           >
                             <Eye className="w-4 h-4 text-muted-foreground" />
@@ -551,6 +553,7 @@ export function LegacyPipelinePage() {
                               max={y.info.variant_count}
                               value={y.requestedCount}
                               onChange={(e) => updateRequestedCount(y.path, Number(e.target.value))}
+                              aria-label={`Üretilecek varyant sayısı: ${y.path}`}
                               className="w-20 px-2 py-1 rounded border-2 text-sm bg-white"
                               style={{ borderColor: 'var(--border)' }}
                             />
@@ -623,6 +626,7 @@ export function LegacyPipelinePage() {
                     max={16}
                     value={parallelism}
                     onChange={(e) => setParallelism(Math.max(1, Number(e.target.value)))}
+                    aria-label="Paralellik"
                     className="w-full px-4 py-3 rounded-xl border-2 bg-white focus:outline-none"
                     style={{ borderColor: 'var(--border)' }}
                   />
