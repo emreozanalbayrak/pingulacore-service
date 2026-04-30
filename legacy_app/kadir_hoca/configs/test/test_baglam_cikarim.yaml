@@ -11,7 +11,7 @@ models:
 
 grounding:
   enabled: true
-  pdf_path: "../../meb_books/fen_bilimleri_5_1_compressed.pdf"
+  pdf_path: "../../../../meb_books/fen_bilimleri_5_1_compressed.pdf"
   cache_ttl: 3600
 
 validation:
@@ -26,7 +26,7 @@ image_generation:
   enabled: false
 
 output:
-  dir: ../../output/test_baglam_cikarim
+  dir: ../../../../output/test_baglam_cikarim
 
 context_generation_plan:
   - topics: "4"

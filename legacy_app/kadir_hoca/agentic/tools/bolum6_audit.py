@@ -12,7 +12,7 @@ import yaml
 
 from .rule_consistency_check import check_template
 
-BOLUM6_TEMPLATE_GLOB = "templates/4sinif/bolum6/paragraf_cumle_ekleme_*_sinif4_*.yaml"
+BOLUM6_TEMPLATE_GLOB = "legacy_app/kadir_hoca/templates/4sinif/bolum6/paragraf_cumle_ekleme_*_sinif4_*.yaml"
 
 HIGH_RISK_TOPIC_KEYWORDS = {
     "biyoteknoloji",

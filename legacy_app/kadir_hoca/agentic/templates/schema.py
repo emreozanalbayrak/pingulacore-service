@@ -513,7 +513,7 @@ class TopicHierarchy(BaseModel):
 class TopicSourceConfig(BaseModel):
     """Configuration for topic source files and hierarchy."""
 
-    klasor: str = Field(default="konular/", description="Topics folder")
+    klasor: str = Field(default="legacy_app/kadir_hoca/konular/", description="Topics folder")
     dosyalar: list[str] = Field(
         default_factory=list,
         description="List of topic files",

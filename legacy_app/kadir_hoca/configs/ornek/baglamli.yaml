@@ -23,7 +23,7 @@ image_generation:
   enabled: false
 
 output:
-  dir: ../../output/ornek_baglamli
+  dir: ../../../../output/ornek_baglamli
 
 parallel_workers: 2
 

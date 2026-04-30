@@ -24,7 +24,7 @@ image_generation:
   enabled: false
 
 output:
-  dir: ../../output/ornek_bireysel
+  dir: ../../../../output/ornek_bireysel
 
 parallel_workers: 2
 

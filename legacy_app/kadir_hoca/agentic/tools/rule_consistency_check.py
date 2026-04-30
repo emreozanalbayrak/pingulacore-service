@@ -5,8 +5,8 @@ Compares template YAML declarations against hardcoded rules in batch_validator.p
 to catch conflicts before an LLM call is spent on a doomed-to-fail generation.
 
 Usage:
-    python -m agentic.tools.rule_consistency_check --template <yaml_path>
-    python -m agentic.tools.rule_consistency_check --glob "templates/4sinif/bolum6/*_{kolay,orta,zor}.yaml"
+    python -m legacy_app.kadir_hoca.agentic.tools.rule_consistency_check --template <yaml_path>
+    python -m legacy_app.kadir_hoca.agentic.tools.rule_consistency_check --glob "legacy_app/kadir_hoca/templates/4sinif/bolum6/*_{kolay,orta,zor}.yaml"
 
 Exit codes:
     0 - all checks OK
@@ -222,7 +222,7 @@ def check_template(path: Path) -> list[Finding]:
 def main() -> int:
     parser = argparse.ArgumentParser(description="YAML <-> batch_validator tutarlilik kontrolu")
     parser.add_argument("--template", type=str, help="Tek YAML yolu")
-    parser.add_argument("--glob", type=str, help="Glob pattern (ornek: 'templates/4sinif/bolum6/*_kolay.yaml')")
+    parser.add_argument("--glob", type=str, help="Glob pattern (ornek: 'legacy_app/kadir_hoca/templates/4sinif/bolum6/*_kolay.yaml')")
     parser.add_argument("--quiet", action="store_true", help="Sadece WARN/FAIL goster")
     args = parser.parse_args()
 

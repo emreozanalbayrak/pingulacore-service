@@ -22,7 +22,7 @@ image_generation:
   enabled: false
 
 output:
-  dir: ../../output/test_b1_1_ornek
+  dir: ../../../../output/test_b1_1_ornek
 
 context_generation_plan:
   - topics: "1"
