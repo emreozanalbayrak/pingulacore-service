@@ -8,6 +8,7 @@ from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from app.agents.config import get_agent_settings
+from app.api.deps import get_current_user
 from app.core.config import get_settings
 from app.db import repository
 from app.db.database import get_db
@@ -39,7 +40,7 @@ from app.services.pipeline_service import PipelineService
 from app.services import sub_pipeline_files_service as sp_files
 from app.services.yaml_service import load_yaml_file
 
-router = APIRouter(prefix="/v1", tags=["pipeline"])
+router = APIRouter(prefix="/v1", tags=["pipeline"], dependencies=[Depends(get_current_user)])
 
 
 def _dt(value: Any) -> str | None:

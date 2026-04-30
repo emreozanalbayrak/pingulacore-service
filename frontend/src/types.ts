@@ -1,5 +1,30 @@
 export type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue }
 
+export interface AuthUser {
+  id: number
+  email: string
+  display_name: string | null
+  is_admin: boolean
+  created_at: string
+}
+
+export interface AuthTokenResponse {
+  token: string
+  expires_at: string | null
+  user: AuthUser
+}
+
+export interface LoginRequest {
+  email: string
+  password: string
+}
+
+export interface RegisterRequest {
+  email: string
+  password: string
+  display_name?: string
+}
+
 export interface RetryConfig {
   question_max_retries?: number
   layout_max_retries?: number

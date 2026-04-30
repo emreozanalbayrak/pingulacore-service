@@ -1,6 +1,10 @@
 import type {
   AgentRunGetResponse,
   ApiErrorShape,
+  AuthTokenResponse,
+  AuthUser,
+  LoginRequest,
+  RegisterRequest,
   ExplorerFavoritePayload,
   ExplorerFileReadResponse,
   ExplorerRoot,
@@ -37,6 +41,31 @@ const JSON_HEADERS = {
   'Content-Type': 'application/json',
 }
 
+export const AUTH_TOKEN_STORAGE_KEY = 'pingula.auth_token'
+export const AUTH_UNAUTHORIZED_EVENT = 'pingula:auth-unauthorized'
+
+export function getStoredAuthToken(): string | null {
+  if (typeof window === 'undefined') return null
+  try {
+    return window.localStorage.getItem(AUTH_TOKEN_STORAGE_KEY)
+  } catch {
+    return null
+  }
+}
+
+export function setStoredAuthToken(token: string | null): void {
+  if (typeof window === 'undefined') return
+  try {
+    if (token) {
+      window.localStorage.setItem(AUTH_TOKEN_STORAGE_KEY, token)
+    } else {
+      window.localStorage.removeItem(AUTH_TOKEN_STORAGE_KEY)
+    }
+  } catch {
+    /* ignore quota/access errors */
+  }
+}
+
 export class ApiError extends Error implements ApiErrorShape {
   status: number
   detail: unknown
@@ -71,18 +100,35 @@ function parseErrorMessage(status: number, body: unknown): string {
   return `İstek başarısız oldu (HTTP ${status})`
 }
 
+function buildAuthorizedInit(init?: RequestInit): RequestInit | undefined {
+  const token = getStoredAuthToken()
+  if (!token) return init
+
+  const headers = new Headers(init?.headers ?? undefined)
+  if (!headers.has('Authorization')) {
+    headers.set('Authorization', `Bearer ${token}`)
+  }
+  return { ...(init ?? {}), headers }
+}
+
 export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(path, init)
+  const response = await fetch(path, buildAuthorizedInit(init))
   const contentType = response.headers.get('content-type') ?? ''
 
   let body: unknown = null
   if (contentType.includes('application/json')) {
     body = await response.json()
-  } else {
+  } else if (response.status !== 204) {
     body = await response.text()
   }
 
   if (!response.ok) {
+    if (response.status === 401) {
+      setStoredAuthToken(null)
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new Event(AUTH_UNAUTHORIZED_EVENT))
+      }
+    }
     throw new ApiError(response.status, parseErrorMessage(response.status, body), body)
   }
 
@@ -101,6 +147,27 @@ export const standaloneEndpointMap: Record<StandaloneAgentName, string> = {
 }
 
 export const api = {
+  register: (payload: RegisterRequest) =>
+    apiFetch<AuthTokenResponse>('/v1/auth/register', {
+      method: 'POST',
+      headers: JSON_HEADERS,
+      body: JSON.stringify(payload),
+    }),
+
+  login: (payload: LoginRequest) =>
+    apiFetch<AuthTokenResponse>('/v1/auth/login', {
+      method: 'POST',
+      headers: JSON_HEADERS,
+      body: JSON.stringify(payload),
+    }),
+
+  logout: () =>
+    apiFetch<unknown>('/v1/auth/logout', {
+      method: 'POST',
+    }),
+
+  me: () => apiFetch<AuthUser>('/v1/auth/me'),
+
   getRuntimeInfo: () => apiFetch<RuntimeInfoResponse>('/v1/runtime-info'),
 
   listYamlFiles: async (): Promise<string[]> => {
