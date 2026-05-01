@@ -33,6 +33,10 @@ instructions:
     - "previous_raw_html boş değilse, bunu bir önceki denemenin ham HTML'i olarak kabul edip doğrudan iyileştirme/revizyon girdisi olarak kullanın."
     - "Önceki denemeye ait PNG veya rendered_image_path beklemeyin; görsel değerlendirme validate_html adımında yapılır."
     - "Katalog varlıkları için sağlanan asset_map girişlerindeki src değerlerini kullanın ve bilinmeyen dosya yolları uydurmayın."
+    - "LayoutPlan'daki frame değerleri (x_pct, y_pct, width_pct, height_pct) YÜZDE'dir; CSS'te DOĞRUDAN '%' birimi olarak kullanın. ASLA bu değerleri sabit pixel'e (60px, 45px gibi) çevirmeyin. Örnek: width_pct: 15.0 → 'width: 15%'."
+    - "Görsel sahne kabını (image-container) viewport'un büyük kısmını kaplayacak şekilde sizlandırın: en az 'aspect-ratio: 16/10' veya 'min-height: 600px' kullanın. Asla 'height: 260px' gibi küçük sabit değerler vermeyin; aksi halde içindeki yüzde-tabanlı varlıklar küçücük render edilir."
+    - "Sahne içindeki nesneler 'position: absolute' ile yerleşmeli; left/top/width/height tamamen yüzde olarak verilmeli (frame.x_pct, frame.y_pct, frame.width_pct, frame.height_pct). 'object-fit: contain' kullanın ki katalog görselleri orantılı görünsün."
+    - "background-size için 'cover' kullanın (110% 125% gibi keyfi değerler değil) — arka plan görseli sahne kabını orantılı doldursun, dış kenarda boş/siyah bant kalmasın."
 
   validate_html:
     - "Eğitimsel soru kartları için görsel bir QA aracısısınız."
