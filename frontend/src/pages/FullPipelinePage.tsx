@@ -15,6 +15,7 @@ import { useLogStream } from '../hooks/useLogStream'
 import { usePolling } from '../hooks/usePolling'
 import { ApiError, api } from '../lib/api'
 import { pickHtmlContent, toAssetUrlFromPath } from '../lib/html'
+import { randomUuid } from '../lib/uuid'
 import type {
   FullPipelineRunResponse,
   PipelineAgentLinkResponse,
@@ -120,7 +121,7 @@ export function FullPipelinePage() {
     }
     setRunning(true)
     setError('')
-    const key = crypto.randomUUID()
+    const key = randomUuid()
     connect(key)
     try {
       const result = await api.runFullPipeline({

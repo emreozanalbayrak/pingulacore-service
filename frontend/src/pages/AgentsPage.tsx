@@ -9,6 +9,7 @@ import { StatusBadge } from '../components/StatusBadge'
 import { useLogStream } from '../hooks/useLogStream'
 import { ApiError, api } from '../lib/api'
 import { pickHtmlContent } from '../lib/html'
+import { randomUuid } from '../lib/uuid'
 import type { AgentRunGetResponse, StandaloneAgentName, StandaloneAgentResponse } from '../types'
 
 interface FieldConfig {
@@ -187,7 +188,7 @@ export function AgentsPage() {
   const run = async () => {
     setRunning(true)
     setError('')
-    const key = crypto.randomUUID()
+    const key = randomUuid()
     connect(key)
     try {
       const payload = advancedMode

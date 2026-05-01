@@ -17,6 +17,7 @@ import { useLogStream } from '../hooks/useLogStream'
 import { usePolling } from '../hooks/usePolling'
 import { ApiError, api } from '../lib/api'
 import { pickHtmlContent, toAssetUrlFromPath } from '../lib/html'
+import { randomUuid } from '../lib/uuid'
 import type {
   LayoutToHtmlRunResponse,
   PipelineLogEntryResponse,
@@ -173,7 +174,7 @@ export function SubPipelinesPage() {
 
   const runYamlToQuestion = async () => {
     setError('')
-    const key = crypto.randomUUID()
+    const key = randomUuid()
     connect(key)
     try {
       const result = await api.runSubYamlToQuestion({
@@ -194,7 +195,7 @@ export function SubPipelinesPage() {
 
   const runQuestionToLayout = async () => {
     setError('')
-    const key = crypto.randomUUID()
+    const key = randomUuid()
     connect(key)
     try {
       const questionJson = parseJson(questionInput)
@@ -216,7 +217,7 @@ export function SubPipelinesPage() {
   const runLayoutToHtml = async () => {
     setError('')
     setHtmlRunning(true)
-    const key = crypto.randomUUID()
+    const key = randomUuid()
     connect(key)
     try {
       const questionJson = parseJson(htmlQuestionInput)

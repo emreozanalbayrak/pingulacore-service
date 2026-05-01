@@ -21,6 +21,7 @@ import { useLogStream } from '../hooks/useLogStream'
 import { usePolling } from '../hooks/usePolling'
 import { ApiError, api } from '../lib/api'
 import { downloadFromUrl } from '../lib/download'
+import { randomUuid } from '../lib/uuid'
 import type {
   LegacyBatchDetailResponse,
   LegacyPipelineDescriptor,
@@ -296,7 +297,7 @@ export function LegacyPipelinePage() {
     setBatchDetail(null)
     setRunning(true)
 
-    const streamKey = crypto.randomUUID()
+    const streamKey = randomUuid()
     connect(streamKey)
 
     const items = selectedYamls.map((y) => {
