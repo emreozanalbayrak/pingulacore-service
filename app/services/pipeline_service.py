@@ -998,7 +998,7 @@ class PipelineService:
                 sub_pipeline_id=None,
             )
 
-            run_path = str(run_dir.relative_to(self.settings.root_dir))
+            run_path = str(run_dir.relative_to(self.settings.runs_dir.parent))
             return FullPipelineRunResponse(
                 pipeline_id=pipeline.id,
                 sub_pipeline_ids={
@@ -1108,7 +1108,7 @@ class PipelineService:
                 question_json=question,
                 rule_evaluation=rule_eval,
                 attempts=attempts,
-                run_path=str(run_dir.relative_to(self.settings.root_dir)),
+                run_path=str(run_dir.relative_to(self.settings.runs_dir.parent)),
             )
         except Exception as exc:
             self._log(
@@ -1192,7 +1192,7 @@ class PipelineService:
                 layout_plan_json=layout,
                 validation=validation,
                 attempts=attempts,
-                run_path=str(run_dir.relative_to(self.settings.root_dir)),
+                run_path=str(run_dir.relative_to(self.settings.runs_dir.parent)),
             )
         except Exception as exc:
             self._log(
@@ -1293,7 +1293,7 @@ class PipelineService:
                 attempts=attempts,
                 generated_assets=asset_map,
                 rendered_image_path=rendered_image_path,
-                run_path=str(run_dir.relative_to(self.settings.root_dir)),
+                run_path=str(run_dir.relative_to(self.settings.runs_dir.parent)),
             )
         except Exception as exc:
             self._log(

@@ -413,7 +413,7 @@ def standalone_generate_composite_image(
             sub_pipeline_id=None,
         )
         result_dict: Any = result.model_dump()
-        result_dict["run_path"] = str(run_dir.relative_to(settings.root_dir))
+        result_dict["run_path"] = str(run_dir.relative_to(settings.runs_dir.parent))
         _log_standalone(
             db,
             component=component,

@@ -41,6 +41,7 @@ from app.services import sub_pipeline_files_service as sp_files
 from app.services.yaml_service import load_yaml_file
 
 router = APIRouter(prefix="/v1", tags=["pipeline"], dependencies=[Depends(get_current_user)])
+assets_router = APIRouter(prefix="/v1", tags=["assets"])
 
 
 def _dt(value: Any) -> str | None:
@@ -340,7 +341,7 @@ def delete_favorite(favorite_id: int, db: Session = Depends(get_db)) -> Response
     return Response(status_code=204)
 
 
-@router.get("/assets/{filename:path}")
+@assets_router.get("/assets/{filename:path}")
 def get_generated_asset(filename: str) -> FileResponse:
     settings = get_settings()
     token = Path(filename)

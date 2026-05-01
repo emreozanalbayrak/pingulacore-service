@@ -737,6 +737,8 @@ class AgentService:
                 cmd,
                 "--headless=new",
                 "--disable-gpu",
+                "--no-sandbox",
+                "--disable-dev-shm-usage",
                 "--hide-scrollbars",
                 "--allow-file-access-from-files",
                 "--no-first-run",
