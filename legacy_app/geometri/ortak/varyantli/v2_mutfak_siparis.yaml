@@ -1,0 +1,229 @@
+# Mutfak Siparis Fisleri — 4. Sinif
+
+meta:
+  id: "mutfak_siparis_fisleri"
+  ad: "Mutfak Siparis Fisleri"
+  sinif_seviyesi: 4
+  aciklama: >
+    Lokantadaki menu fiyati ve ayni masaya ya da iki farkli masaya ait
+    siparis fisleri uzerinden, iptal edilen ve sonradan eklenen urunleri
+    takip ettirerek son hesap ya da hesap farkini bulduran soru yapisi.
+  kaynak: "21_mutfak_siparis_fisleri.yaml"
+  frequency: "Medium"
+
+context:
+  type: "mutfak_siparis_fisleri"
+  question_count: 1
+  generation:
+    word_count_min: 55
+    word_count_max: 95
+    image_type: "ust_gorsel"
+    structure:
+      - "Lokanta, aile yemegi, okul cikisi yemek molasi, mahalle lokantasi, sahil restoranı gibi 4. sinif seviyesine uygun dogal bir baglamda gecen 4-6 cumlelik bir paragraf yaz"
+      - "Senaryo akici olacak, kisa ve yuzeysel kalmayacak, ancak gereksiz uzatilmadan rahat anlasilacak"
+      - "Senaryoda menu fiyati listesi ile fisler ayni baglamda anlamli bicimde yer almali"
+      - "Ilk fiste siparis edilen urunler bulunmali"
+      - "Ikinci fiste iptal edilen urunler ve sonradan eklenen urunler ayri simgeler ya da isaretlerle gosterilmeli"
+      - "Gorsel sus olmayacak; ogrenci menu fiyatlarini ve fis degisikliklerini okuyarak sonuca ulasmali"
+      - "Metin, gorselde zaten gorunen tum sayilari uzun uzun tekrar etmemeli; sahneyi kurmali ve durumu dogal akista vermeli"
+      - "Soru koku gercek bir soru olmali ve tek cumlede net bicimde neyin istendigini sormali"
+      - "Her uretilen soruda senaryo, sayilar, soru koku ve secenekler birlikte yeniden olusmali"
+    kurallar:
+      - "4. sinif seviyesine uygun olmali"
+      - "Senaryolar birbirine benzememeli; her uretiliste farkli olay akisi kurulmalı"
+      - "Senaryoda soru cozen kisiye dogrudan hitap edilmemeli"
+      - "Senaryoda siklarla baglanti kurulmamali"
+      - "Dogru sikki sec, simdi karar ver, yardim et gibi yonlendirmeler kullanilmamali"
+      - "Senaryoda tavsiye veren cozum ipuclari bulunmamali"
+      - "Turkce karakterler dogru kullanilmali"
+      - "Gorseller uzerinde Turkce disinda yazi bulunmamali"
+  questions:
+    - slot: 1
+      type: "hesap_bulma_veya_hesap_farki"
+      soru_kokleri:
+        - "<b>Bu masanin son hesabi kac liradir?</b>"
+        - "<b>Fislerdeki degisikliklerden sonra masanin odeyecegi tutar kac liradir?</b>"
+        - "<b>Iade edilen urunlerin toplam degeri kac liradir?</b>"
+        - "<b>Iki masanin son hesaplari arasindaki fark kac liradir?</b>"
+        - "<b>Hangi masanin hesabi daha fazladir?</b>"
+      beceri:
+        katman: "KB3"
+        bilesenler:
+          - "gorsel_okuma"
+          - "veri_takibi"
+          - "toplama"
+          - "cikarma"
+          - "karsilastirma"
+        surec_bileseni: "bilgiyi_cozumleme"
+
+header_template: >
+  Bu şablondan her soru üretildiğinde benzersiz bir soru oluşturulmalıdır.
+  Değiştirilmesi gereken öğeler: lokanta veya restoran adı, menü öğeleri ve fiyatları,
+  masa numaraları, sipariş edilen ürünler ve adetleri, iptal edilen ürünler,
+  sonradan eklenen ürünler, senaryonun geçtiği bağlam (aile yemeği, okul çıkışı, mahalle lokantası vb.).
+  soru_kokleri listesinden her seferinde farklı bir kök seçilmeli; aynı kök arka arkaya kullanılmamalıdır.
+  Sayısal değerler, menü fiyatları ve sipariş kombinasyonları her üretimde tamamen yeni olmalıdır.
+  Görseldeki menü ve fiş düzeni her üretimde yeniden oluşturulmalıdır.
+
+format:
+  type: "llm_generated_html"
+  soru_koku: "Tek cumlelik, dogrudan neyin istendigini soran acik soru kokusu. Dogru olani sec gibi ifade kullanilmaz."
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 95
+    sentence_count_min: 4
+    sentence_count_max: 6
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    style: "numeric_only"
+    word_count_min: 1
+    word_count_max: 3
+    correct_count: 1
+  interaction:
+    clickable_options: true
+    show_result_color: true
+    correct_color: "yesil"
+    wrong_color: "kirmizi"
+    explanation_under_options: false
+    generate_button: true
+    generate_button_label: "Soru Uret"
+  layout:
+    visual_position: "question_top"
+    scenario_heading: false
+    feedback_note_area: false
+    option_images_show_labels: false
+
+dogru_cevap:
+  tanim: "Menu fiyatlari ve fis degisiklikleriyle tam uyumlu olan tek dogru sayisal secenek"
+  kurallar:
+    - "Dogru cevap tek ve net olmali"
+    - "Dogru cevap, menu fiyatlarini okuyup ilk fis ile ikinci fis arasindaki degisiklikleri dogru uygulayarak bulunmali"
+    - "Son hesap soruluyorsa iptal edilen urunler cikarilmali, eklenen urunler eklenmeli"
+    - "Hesap farki soruluyorsa iki masanin son hesaplari once ayri ayri bulunmali"
+    - "Iade toplami soruluyorsa yalnizca iptal edilen urunlerin toplam fiyati alinmali"
+    - "Soruda istenen buyukluk disinda ara toplam ya da menu toplami cevap olarak verilmemeli"
+
+distractors:
+  kurallar:
+    - "Yanlis secenekler ogrencinin yapabilecegi gercek hatalara dayanmali"
+    - "Iptal edilen urunu cikarmayip toplamda birakma hatasi kullanilabilir"
+    - "Sonradan eklenen urunu eklememe hatasi kullanilabilir"
+    - "Bir urunun adetini atlama ya da eksik sayma hatasi kullanilabilir"
+    - "Iki masa karsilastirmasinda bir masanin ara toplamini son hesap sanma hatasi kullanilabilir"
+    - "Hesap farki yerine iki masanin toplamini alma hatasi kullanilabilir"
+  yasaklar:
+    - "Bariz sacma veya baglamsiz secenek uretilmemeli"
+    - "Iki yanlis secenek ayni hata turunden olmamali"
+    - "Yanlis secenekler, istenen sonucu neredeyse tahminle bulduracak kadar asiri uzak olmamali"
+  stratejiler:
+    - ad: "İptal Edilen Ürünü Çıkarmama"
+      aciklama: "Öğrenci iptal edilen ürünün fiyatını toplamdan düşmez ve hesabı yüksek bulur"
+      ornek: "Toplam sipariş 48 TL, iptal 12 TL iken son hesabı 48 TL olarak verir"
+    - ad: "Eklenen Ürünü Hesaba Katmama"
+      aciklama: "Öğrenci sonradan eklenen ürünü toplamaya dahil etmez"
+      ornek: "İlk sipariş 35 TL, eklenen ürün 8 TL iken sonucu 35 TL'de bırakır"
+    - ad: "Adet Hatası"
+      aciklama: "Öğrenci bir ürünün adetini gözden kaçırır ve tek adet fiyatıyla hesaplar"
+      ornek: "2 adet çorba (her biri 10 TL) yerine 1 adet olarak 10 TL hesaplar"
+    - ad: "Hesap Farkı Yerine Toplam Alma"
+      aciklama: "İki masanın hesap farkı sorulurken iki hesabı birbirine toplar"
+      ornek: "Masa 1: 40 TL, Masa 2: 30 TL iken fark 10 yerine 70 TL olarak seçer"
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+      - "Gorsel sorunun ustunde yer almali"
+      - "Gorselde menu fiyatlari ve fisler birlikte bulunmali"
+      - "Menu okunakli olmali ve her urunun fiyati net secilebilmeli"
+      - "Ilk fis ile ikinci fis ayri ayri secilebilmeli"
+      - "Iptal edilen urunler ve eklenen urunler fark edilir isaretlerle gosterilmeli"
+      - "Iki masali sorularda her masanin fisleri karismayacak bicimde ayrilmali"
+      - "Gorsel sus olmamali; cozum icin gerekli veri burada yer almali"
+      - "Ayni gorselde asiri kalabalik, dikkat dagitici ve gereksiz nesneler bulunmamali"
+      - "Gorselde siklarin ustunde ya da gorsel icinde A-B-C-D harfleri yer almamali"
+    yasaklar:
+      - "Fiyati veya sonucu gizleyip metinde vermek"
+      - "Yalnizca dekoratif tabak, masa veya lokanta cizimi kullanmak"
+      - "Soruyu cozmek icin gerekli veri olmayan sus gorsellerini one cikarmak"
+      - "Okunamayacak kadar kucuk yazi kullanmak"
+    stil: "menu_ve_siparis_fisleri"
+    boyut: "orta"
+  sik_gorseli:
+    gerekli: false
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: "Gorselden veri okuyarak toplama, cikarma ve karsilastirma yapabilme"
+  tema_siniri: "Menu fiyatlari ve siparis fislerindeki degisimler uzerinden son hesap veya hesap farki bulma odagi korunmali"
+  izinli_icerik:
+    kavramlar:
+      - "menu"
+      - "fiyat"
+      - "fis"
+      - "iptal"
+      - "ekleme"
+      - "toplam tutar"
+      - "hesap farki"
+    beceriler:
+      - "Gorsel veri okuma"
+      - "Toplama ve cikarma islemleri"
+      - "Adim adim veri takibi"
+      - "Iki sonucun karsilastirilmasi"
+  yasaklar:
+    - "4. sinif duzeyini asan karmasik yuzdeler, oranlar veya cebirsel anlatimlar"
+    - "Ondalik fiyatlar"
+    - "Asiri uzun ve yetiskin diline kayan senaryolar"
+    - "Gorselsiz cozulebilecek soru yapilari"
+    - "Birden fazla dogru cevaba yol acan belirsiz durumlar"
+
+izinli_icerikler:
+  kavramlar:
+    - "menu"
+    - "fiyat listesi"
+    - "siparis fisi"
+    - "iptal edilen urun"
+    - "eklenen urun"
+    - "son hesap"
+    - "hesap farki"
+  beceriler:
+    - "gorsel_okuma"
+    - "veri_takibi"
+    - "toplama"
+    - "cikarma"
+    - "karsilastirma"
+    - "sonuc_bulma"
+  soru_islemleri:
+    - "son_hesap_bulma"
+    - "iade_toplami_bulma"
+    - "hesap_farki_bulma"
+    - "iki_masa_karsilastirma"
+
+use_shared_strategies: true
+
+varyantlar:
+  varyant_1:
+    ad: "Tek masa, iki fis, son hesap"
+    aciklama: >
+      Gorselde ortak bir menu ile ayni masaya ait iki ayri fis bulunur.
+      Ilk fiste verilen siparisler, ikinci fiste ise iptal edilen ve sonradan
+      eklenen urunler yer alir. Ogrenci fislerdeki degisimi takip ederek
+      masanin son hesabini ya da iade edilen urunlerin toplam degerini bulur.
+    odak:
+      - "tek akisli veri takibi"
+      - "menu fiyatlarini okuma"
+      - "ekleme ve cikarma islemlerini sirayla uygulama"
+  varyant_2:
+    ad: "Iki masa, fis degisiklikleri, hesap farki"
+    aciklama: >
+      Gorselde ortak bir menu ve iki farkli masaya ait fisler bulunur.
+      Her masa icin ilk siparis ve sonradan yapilan iptal ya da eklemeler
+      ayri bicimde gosterilir. Ogrenci once her masanin son hesabini bulur,
+      sonra iki masa arasindaki hesap farkini ya da hangi masanin daha fazla
+      odeme yapacagini belirler.
+    odak:
+      - "iki ayri veri akisini takip etme"
+      - "ayri ayri hesaplama yapma"
+      - "sonuclari karsilastirma"
+
+zorluk_seviyesi: "orta"

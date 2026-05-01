@@ -1,0 +1,211 @@
+meta:
+  id: "turk_lirasi_banknot_ve_madeni_paralari_toplayarak_toplam_parayi_bulma"
+  ad: "Turk Lirasi Banknot ve Madeni Paralari Toplayarak Toplam Parayi Bulma"
+  sinif_seviyesi: 1
+  aciklama: >
+    Ustte kisa bir senaryo ve baglama uygun bir baglam bulunan; tek bir ortak gorselde
+    gercek Turk lirasina benzeyen 5 TL ve 10 TL kagit paralar ile 1 TL madeni
+    paralarin birlikte verildigi soru kalibi. Ogrenci gorseldeki kagit para ve
+    madeni para adetlerini belirler, para turlerine gore toplar ve toplam para
+    miktarini TL cinsinden sayisal secenekler arasindan bulur.
+  kaynak: "o_turk_lirasi_banknot_ve_madeni_paralari_toplayarak_toplam_parayi_bulma.yaml"
+  frequency: "Medium"
+  difficulty: "orta"
+
+context:
+  type: "turk_lirasi_banknot_ve_madeni_paralari_toplayarak_toplam_parayi_bulma"
+  question_count: 1
+  generation:
+    word_count_min: 18
+    word_count_max: 42
+    image_type: "ortak_gorsel"
+    real_currency: true
+    structure:
+      - "Marketten alisveris oncesi hazirlik, kumbaradaki parayi sayma, okul kantinine gitmeden once para kontrolu, aile ici para sayma oyunu ya da cocuklara uygun benzer bir baglamda gecen 1-2 cumlelik kisa ve dogal bir baglam yaz"
+      - "Baglamda tek bir ortak gorselden soz edilmeli"
+      - "Baglam gorseldeki para miktarini dogrudan soylememeli"
+      - "Baglam ogrenciyi gorsele bakip paralari saymaya yonlendirmeli"
+      - "Gorselde tam olarak 2 ya da 3 kagit para bulunmali"
+      - "Kagit paralar yalnizca 5 TL ve 10 TL banknotlardan secilmeli"
+      - "Gorselde ayrica 1 ile 5 adet arasinda 1 TL madeni para bulunmali"
+      - "Tum kagit para ve madeni paralar gercek Turk lirasina benzer gorsel ozellikler tasimali"
+      - "Kagit para ve madeni para turleri gorselden ayirt edilebilir olmali"
+      - "Paralar ayni ortak gorsel alani icinde net ve rahat sayilabilir bicimde yerlestirilmeli"
+      - "Paralar ust uste binerek saymayi zorlastirmamali"
+      - "Gorsel uzerine para degerlerini aciklayan ek yazi, ok, etiket ya da not eklenmemeli"
+      - "Para degerleri gorselin kendi para tasarimindan anlasilabilir olmali"
+      - "Toplam para miktari 30 TL'yi asmamali"
+      - "Ogrenci once kagit paralari turlerine gore ayirt etmeli"
+      - "Sonra kac tane 5 TL, kac tane 10 TL ve kac tane 1 TL oldugunu belirlemeli"
+      - "En son tum para degerlerini toplayarak toplam miktari bulmali"
+      - "Arka plan baglama uygun olmali; ancak sade, temiz ve dikkat dagitmayacak bicimde tasarlanmali"
+      - "Soru koku, toplam ne kadar para oldugunu soran sade ve tek cumlelik bir yapida olmali"
+      - "Secenekler x TL biciminde olmali"
+      - "Gorsel cozumun ana tasiyicisi olmali; ogrenci paralari gorselden saymadan cevap verememeli"
+    kurallar:
+      - "1. sinif seviyesinde olmali"
+      - "Her soruda yalnizca 1 ortak gorsel bulunmali"
+      - "Gorselde tam olarak 2 ya da 3 kagit para bulunmali"
+      - "Kagit paralar yalnizca 5 TL ve 10 TL olmali"
+      - "Madeni paralar yalnizca 1 TL olmali"
+      - "Madeni para sayisi 1 ile 5 arasinda olmali"
+      - "Toplam para miktari 30 TL'yi asmamali"
+      - "Paralar rahat sayilabilir olmali"
+      - "Gorsel uzerinde ek aciklayici yazi ya da etiket bulunmamali"
+      - "Seceneklerde yalnizca 1 TL cinsinden dogru cevap olmali"
+      - "Secenekler x TL biciminde olmali"
+      - "Turkce karakterler dogru kullanilmali"
+      - "Arka plan sade olmali ve dikkat dagitmamali"
+      - "Ogrenci kagit ve madeni paralari sayip toplayarak cevap verebilmelidir"
+
+  questions:
+    - slot: 1
+      varyant: "kagit_ve_madeni_paralari_toplayarak_toplam_tutari_bulma"
+      type: "gorseldeki_gercek_para_gorsellerinden_toplam_para_hesaplama"
+      soru_kokleri:
+        - "<b>Toplam ne kadar parasi vardir?</b>"
+        - "<b>Gorsele gore toplam kac TL vardir?</b>"
+        - "<b>Bu paralarin toplami kac TL eder?</b>"
+        - "<b>Toplam para miktari kac TL'dir?</b>"
+      beceri:
+        katman: "KB2"
+        bilesenler:
+          - "gorsel_okuma"
+          - "kagit_para_turlerini_ayirt_etme"
+          - "madeni_para_turunu_tanima"
+          - "para_adetlerini_sayma"
+          - "para_degerlerini_toplama"
+          - "toplam_tutari_belirleme"
+          - "dogru_tl_secenegini_secme"
+        surec_bileseni: "bilgiyi_isleme"
+
+format:
+  type: "llm_generated_html"
+  soru_koku: "Baglama uygun, tek cumlelik soru koku. Gorseldeki 5 TL, 10 TL ve 1 TL paralari inceleterek toplam para miktarini TL cinsinden sorduran yapida."
+  paragraph:
+    required: true
+    word_count_min: 18
+    word_count_max: 42
+    sentence_count_min: 1
+    sentence_count_max: 2
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    style: "tl_amount"
+    word_count_min: 2
+    word_count_max: 2
+    correct_count: 1
+
+dogru_cevap:
+  tanim: "Gorseldeki 5 TL ve 10 TL kagit paralar ile 1 TL madeni paralari dogru tanayip sayan, bunlarin degerlerini toplayan ve toplam parayi TL olarak veren secenek"
+  kurallar:
+    - "KRITIK: Dogru cevap, hem kagit para turlerini ayirt etmeyi hem de madeni paralari sayip hepsini birlikte toplamayi gerektirmeli"
+    - "Dogru cevap, yalnizca kagit paralar ya da yalnizca madeni paralar dikkate alinarak bulunamamali"
+    - "Dogru cevap, once kagit paralarin 5 TL mi 10 TL mi oldugunu belirletmeli"
+    - "Dogru cevap, sonra 1 TL madeni para sayisini belirletmeli"
+    - "Dogru cevap, en son tum para degerlerini toplayip TL cinsinden vermeli"
+    - "Dogru cevap, seceneklerde yalnizca bir TL miktari ile temsil edilmeli"
+    - "Dogru cevap, tahminle degil gorsel okuma ve toplama ile bulunabilmeli"
+    - "Dogru cevap tek ve net olmali"
+
+distractors:
+  kurallar:
+    - "Yanlis secenekler, ogrencinin banknotlardan birini yanlis tanimasi, madeni paralari eksik-fazla saymasi ya da kagit ve madeni para toplamlarini birlestirirken hata yapmasi gibi yaygin hata turlerine dayanmali"
+    - "Bir yanlis secenek, madeni paralari hesaba katmayan ogrenciyi cekebilmeli"
+    - "Bir yanlis secenek, banknotlardan birini 5 TL yerine 10 TL ya da 10 TL yerine 5 TL yorumlayan ogrenciyi cekebilmeli"
+    - "Yanlis secenekler sayisal olarak makul olmali ve bariz eleme secenegi gibi durmamali"
+    - "Secenekler tarafsiz ve tek dogruyu koruyan bicimde kurulabilmeli"
+  yasaklar:
+    - "Bariz sacma, baglamsiz ya da gorselle hicbir iliskisi olmayan tutarlar uretilmemeli"
+    - "Iki yanlis secenek ayni hata turunden uretilmemeli"
+    - "Seceneklere aciklama, islem ya da ipucu eklenmemeli"
+    - "Dogru cevabi ele veren dikkat cekici bicim farklari olusturulmamali"
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+      - "Baglama uygun tek bir ana gorsel bulunmali"
+      - "Gorselde 2 ya da 3 adet kagit para bulunmali"
+      - "Kagit paralar yalnizca gercek Turk lirasina benzeyen 5 TL ve 10 TL banknotlardan olusmali"
+      - "Gorselde ayrica 1 ile 5 adet arasi 1 TL madeni para bulunmali"
+      - "Madeni paralar gercek 1 TL bozuk paraya benzeyen ozellikler tasimali"
+      - "Kagit ve madeni paralar ayni ortak gorsel alani icinde yer almali"
+      - "Paralar net, rahat ayirt edilir ve rahat sayilir olmali"
+      - "Kagit para ve bozuk para degerlerini aciklayan ek yazi, ok, etiket ya da not bulunmamali"
+      - "Para gorselleri kendi tasarimlariyla ayirt edilebilir olmali"
+      - "Arka plan baglama uygun olmali; ancak sade, temiz ve dikkat dagitmayacak bicimde tasarlanmali"
+      - "Gorsel sade, temiz, cocuk dostu ve 1. sinif duzeyine uygun olmali"
+      - "Dogru cevabi gosteren tik, yildiz, renkli vurgu, hazir toplam ya da ipucu bulunmamali"
+    yasaklar:
+      - "Gorselde 5 TL ve 10 TL disinda farkli banknot bulunmamali"
+      - "Gorselde 1 TL disinda farkli madeni para bulunmamali"
+      - "Kagit para ve madeni paralar birbirini saymayi zorlastiracak bicimde ust uste binmemeli"
+      - "Paralari aciklayan rakamsal etiketler gorsel ustunde ayrica verilmemeli"
+      - "Toplam 30 TL'yi asan yapilar kullanilmamali"
+      - "Asiri karmasik arka plan veya dikkat dagitici sus ogeleri kullanilmamali"
+      - "Gorsel uzerinde cevabi sezdiren aciklama ya da ek etiketleme bulunmamali"
+    stil: "gercek_turk_lirasi_banknot_ve_1_tl_bozuk_para_gorseli"
+    boyut: "orta"
+  sik_gorseli:
+    gerekli: false
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: "Gunluk yasam baglamlarinda toplama ve cikarma gerektiren durumlari fark etme; 20'ye kadar (20 dahil) eldesiz toplama ve onluk bozma gerektirmeyen cikarma yapma; esit isaretini denge ve esitlik anlami ile yorumlama; tahmin ve zihinden islem yaparak muhakeme etme; toplama ve cikarma islemleri arasindaki iliskiyi kullanma"
+  tema_siniri: "Yalnizca 20'ye kadar sayilar, gunluk yasam durumlari, bir araya getirme, para sayma, gorselden sayma, toplama, tahmin-zihinden islem ve somut model odagi korunmali"
+  izinli_icerik:
+    kavramlar:
+      - "toplama"
+      - "toplanan"
+      - "toplam"
+      - "bir araya getirme"
+      - "tahmin"
+      - "zihinden islem"
+      - "grup"
+      - "para"
+      - "kagit para"
+      - "madeni para"
+      - "Turk lirası"
+      - "gunluk yasam durumu"
+      - "gorsel bilgi"
+      - "somut model"
+    beceriler:
+      - "Gunluk yasam durumunun toplama gerektirip gerektirmedigini belirleme"
+      - "Gorselden ve somut modelden sayma"
+      - "Farkli para turlerini ayirt etme"
+      - "Para adetlerini belirleme"
+      - "Toplam para miktarini bulma"
+      - "Tahmin ve zihinden islem stratejileri kullanma"
+      - "Gorsel ve gunluk yasam bilgisini birlestirme"
+  yasaklar:
+    - "20'yi asan sayilar ve 20'yi asan sonuc odakli islem yapilari"
+    - "Eldeli toplama"
+    - "Onluk bozma gerektiren cikarma"
+    - "Ikiden fazla sayi ile toplama islemi"
+    - "Carpma ve bolme islemleri"
+    - "Kesirli veya ondalikli sayilar"
+    - "1. sinif duzeyini asan formal islem dili ve algoritmik teknikler"
+    - "Baglamsiz, yalnizca semboller uzerinden kurulan uzun soyut islem dizileri"
+    - "Esit isaretini sadece sonuc gelir anlaminda sunan yapilar"
+    - "Kutle kavramini ogretme amaciyla denge modelleri kullanma"
+    - "Gorsel, somut model veya gunluk yasam baglami olmadan baslayan soru yapilari"
+
+izinli_icerikler:
+  kavramlar:
+    - "para"
+    - "kagit_para"
+    - "madeni_para"
+    - "toplama"
+    - "gorsel bilgi"
+    - "somut model"
+  beceriler:
+    - "gorsel_okuma"
+    - "para_turlerini_ayirt_etme"
+    - "para_adetlerini_sayma"
+    - "toplam_tutari_bulma"
+    - "dogru_tl_secenegini_secme"
+  soru_islemleri:
+    - "kagit_paralari_tanimlama"
+    - "madeni_paralari_sayma"
+    - "her_para_turunun_degerini_hesaplama"
+    - "toplam_para_miktarini_bulma"
+    - "dogru_secenegi_secme"

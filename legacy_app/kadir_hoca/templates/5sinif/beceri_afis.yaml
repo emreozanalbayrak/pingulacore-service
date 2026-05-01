@@ -1,0 +1,278 @@
+# templates/beceri_afis.yaml
+# Kaynak: MEB Beceri Temelli Soru Bankasi - Afis/Poster
+#
+# BECERI TEMELLI AFIS FORMATI
+# Afis/poster metni verilir, ogrenci beceri temelli soruyu cevaplar
+#
+# MANTIK: 1 secenekte dogru cevap, 4 secenekte yanlis cevaplar
+# Secenekler TAM CUMLE formatindadir (3-20 sozcuk)
+
+meta:
+  id: "beceri_afis"
+  ad: "Beceri Temelli - Afis"
+  sinif_seviyesi: 5
+  aciklama: "Afis/poster metinleri uzerinden beceri temelli sorular"
+  kaynak: "MEB Beceri Temelli Soru Bankasi"
+  frequency: "~15% of questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Afis baglami + soru koku + 5 tam cumle secenek (beceri temelli)"
+
+  paragraph:
+    required: true
+    word_count_min: 40
+    word_count_max: 80
+    sentence_count_min: 2
+    sentence_count_max: 8
+    stil: "bilgilendirici"
+    kurallar:
+      - "Kisa ve dikkat cekici ifadeler kullan"
+      - "Slogan veya cagri cumlesi icersin"
+      - "Bilgilendirme veya ikna amaci tasisin"
+      - "Gercekci bir afis/poster icerigi olmali"
+      - "Hedef kitlesi belirlenebilir olmali"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 5
+    labels: ["A", "B", "C", "D", "E"]
+    word_count_min: 3
+    word_count_max: 20
+    style: "complete_sentence"
+    correct_type: "matches"
+    correct_count: 1
+
+  questions_per_context: 1
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ALANLARI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  context_type: "AFIS"
+  context_label: "Afis"
+  skill_level: "KB2"
+  process_component: "Gorsel ve metin ogelerini birlikte analiz ederek mesaj cikarimi"
+  skill_areas:
+    - "anlama"
+    - "degerlendirme"
+    - "elestirsel_dusunme"
+    - "yorumlama"
+    - "cikarimlama"
+  answer_key_explanation: true
+  question_patterns:
+    - "Bu afisin amaci nedir?"
+    - "Afiste verilmek istenen mesaj nedir?"
+    - "Afisin hedef kitlesi kimdir?"
+    - "Afisteki gorsel ve metin nasil bir anlam olusturuyor?"
+  image_context: true
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # Amaç / Mesaj
+  - "<b>Bu afişin temel amacı aşağıdakilerden hangisidir?</b>"
+  - "<b>Afişte verilmek istenen mesaj aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu afişe göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Bu afişten aşağıdaki <u>çıkarımlardan hangisi yapılamaz</u>?</b>"
+  # Hedef Kitle / Görsel Okuma
+  - "<b>Afişin hedef kitlesi aşağıdakilerden hangisidir?</b>"
+  - "<b>Afişe göre aşağıdakilerden hangisi doğrudur?</b>"
+  - "<b>Bu afişin hangi amaçla hazırlandığı aşağıdakilerden hangisinde doğru verilmiştir?</b>"
+  - "<b>Afişteki bilgilerden yola çıkarak aşağıdakilerden hangisine ulaşılabilir?</b>"
+  # Değerlendirme / Mesaj Destekleme (PDF kaynak)
+  - "<b>Bu afişte verilen bilgiler dikkate alındığında aşağıdakilerden hangisi en doğru değerlendirmedir?</b>"
+  - "<b>Afişin tasarımı ve içeriği birlikte düşünüldüğünde aşağıdakilerden hangisine ulaşılabilir?</b>"
+  - "<b>Afişteki mesajı desteklemek için aşağıdakilerden hangisi kullanılmıştır?</b>"
+  - "<b>Bu afişe bakarak aşağıdakilerden hangisi <u>çıkarılamaz</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Afisin icerigi ve amacina uygun cevap"
+  kurallar:
+    - "Afis icerigiyle dogrudan desteklenmeli"
+    - "Elestirsel okuma gerektirmeli"
+    - "Afisin ana mesaji veya amaci ile uyumlu olmali"
+    - "Tam cumle formatinda olmali (3-20 sozcuk)"
+    - "Baglam olmadan cevaplanamaz olmali"
+    - "Ust duzey dusunme becerisi gerektirmeli"
+    - "Bilissel surec bilesenini hedeflemeli"
+  ornekler:
+    - afis: "SU HAYATTIR! Gunluk en az 8 bardak su icin. Saglikli yasamak senin elinde. T.C. Saglik Bakanligi"
+      dogru: "Insanlari yeterli miktarda su icmeye tesvik etmek"
+      neden: "Afisin temel amaci su tuketimini artirmaya yonelik"
+    - afis: "KITAP OKU, DUNYA'YI KESFET! Her gun en az 30 dakika kitap oku. Milli Egitim Bakanligi"
+      dogru: "Ogrencileri duzenli kitap okumaya yonlendirmek"
+      neden: "Afisin amaci kitap okuma aliskanligini kazandirmak"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM afis iceriğine gore en uygun 4 stratejiyi secer
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic suitable for poster/advertisement format"
+      details: "Afis/poster formatina uygun bir konu sec (saglik, cevre, egitim, guvenlik vb.)"
+
+    - step: 2
+      action: "Generate poster text (40-80 words) with clear message"
+      details: |
+        Afis metninde:
+        - Kisa ve dikkat cekici ifadeler olmali
+        - Slogan veya cagri cumlesi icermeli
+        - Bilgilendirme veya ikna amaci tasimali
+        - Hedef kitlesi belirlenebilir olmali
+
+    - step: 3
+      action: "Create correct answer as complete sentence"
+      details: |
+        Dogru cevap:
+        - Afisin amaci veya mesajini dogrudan yansitmali
+        - Tam cumle formatinda olmali (3-20 sozcuk)
+        - Afis icerigiyle kanitlanabilir olmali
+
+    - step: 4
+      action: "Create 4 wrong answers using strategies"
+      details: |
+        Her yanlis secenek icin farkli strateji kullan:
+        - 1x afisin detayindan turetilmis ama ana amac olmayan
+        - 1x konuyla iliskili ama afiste desteklenmeyen
+        - 1x afisin tonunu yanlis yorumlayan
+        - 1x mantikli gorunen ama icerigi carpitan
+        Tum secenekler ayni formatta olmali (tam cumle, 3-20 sozcuk)
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D-E seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - konu: "Su tasarrufu afisi"
+    dogru_cevap: "C"
+    secenekler:
+      A: "Suyun kimyasal yapisini aciklamak"
+      B: "Yagmur mevsimlerini duyurmak"
+      C: "Insanlari su tasarrufuna tesvik etmek"
+      D: "Su faturalarinin arttigini bildirmek"
+      E: "Su aritma tesislerini tanitmak"
+    dogru_cevap_icerigi: "Insanlari su tasarrufuna tesvik etmek"
+    neden: "Afisin temel amaci su tasarrufunu tesvik etmek"
+
+  - konu: "Trafik guvenligi afisi"
+    dogru_cevap: "B"
+    secenekler:
+      A: "Yeni trafik isareti tasarimlarini tanitmak"
+      B: "Cocuklari trafik kurallarina uyma konusunda bilinclendirmek"
+      C: "Arac satis kampanyasini duyurmak"
+      D: "Toplu tasima kullanimi artirmak"
+      E: "Yol yapim calismalarini bildirmek"
+    dogru_cevap_icerigi: "Cocuklari trafik kurallarina uyma konusunda bilinclendirmek"
+    neden: "Afisin hedef kitlesi cocuklar ve amaci trafik bilinci"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  # Asama 0: Kimlik ve Olcme Niyeti
+  identity:
+    - "Soru bir beceriyi mi olcuyor, bilgi hatirlamayi mi?"
+    - "Hedef beceri seviyesi uygun mu?"
+    - "Surec bileseni dogru hedeflenmis mi?"
+
+  # Asama 1: Baglam Secimi
+  context:
+    - "Baglam olmadan soru cozulebilir mi? (Hayir olmali)"
+    - "Baglam fonksiyonel mi? (Dekoratif degil)"
+    - "Baglam cevabi dogrudan veriyor mu? (Vermemeli)"
+    - "Baglam otantik mi? (Gercek hayattan)"
+    - "Kelime sayisi 40-80 arasinda mi?"
+    - "Gercekci bir afis/poster icerigi mi?"
+    - "Slogan veya cagri cumlesi iceriyor mu?"
+    - "Hedef kitlesi belirlenebilir mi?"
+
+  # Asama 2: Soru ve Secenekler
+  question:
+    - "Soru koku net ve anlasilir mi?"
+    - "Cift olumsuz var mi? (Olmamali)"
+    - "Tek dogru cevap var mi?"
+
+  options:
+    - "Celdiriciler belirli bilissel hatalari temsil ediyor mu?"
+    - "Eleme yoluyla cevaplanabilir mi? (Olmamali)"
+    - "Format farkliligi ile dogru cevap belli oluyor mu? (Olmamali)"
+    - "Tum secenekler benzer uzunlukta mi?"
+    - "5 secenek var mi (A-B-C-D-E)?"
+
+  # Asama 3: Etik
+  ethics:
+    - "Cinsiyet/etnik onyargi var mi? (Olmamali)"
+    - "Yas grubuna uygun mu?"
+
+  # Asama 4: Dil
+  language:
+    - "Turkce dil bilgisi dogru mu?"
+    - "Sinif seviyesine uygun mu?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+
+  generation_rules:
+    - "Afis/poster formatina uygun konulari tercih et"
+    - "Saglik, cevre, egitim, guvenlik gibi toplumsal konular ideal"
+    - "Hedef kitlesi ve mesaji net belirlenebilecek konulari sec"

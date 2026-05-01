@@ -1,0 +1,95 @@
+# Kaynak: metinde_karakter_yakinilan_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.orta
+# 4. sinif metinde karakter yakinilan — orta duzey
+
+meta:
+  id: "metinde_karakter_yakinilan_sinif4_orta"
+  ad: "Metinde Karakter - Yakınılan Özellik (Orta)"
+  sinif_seviyesi: 4
+  aciklama: "Orta duzey — kişinin şikayet edilen olumsuz özelliğini bulma."
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Şikayet içeren paragraf + soru kökü + kavram seçenekler (orta)"
+
+  paragraph:
+    required: true
+    word_count_min: 60
+    word_count_max: 80
+    background_color: "#f8f0e0"
+    sentence_count_min: 4
+    sentence_count_max: 6
+    stil: "oykuleyici"
+    kurallar:
+      - "Bir kişinin huyundan veya alışkanlığından şikayet edilmeli."
+      - "Şikayet eden kişi ve şikayet edilen kişi açıkça belirgin olmalı."
+      - "Olumsuz özellik doğrudan söylenmemeli, davranışlar üzerinden gösterilmeli."
+      - "Şikayet edilen özellik birden fazla davranış ipucuyla desteklenmeli."
+      - "Paragrafta konuyla ilgili AÇIKLAMA, TANIM veya EK BİLGİ verme! Paragraf SADECE hikâyeyi/olayı anlatsın."
+      - "YASAK: Ders kitabı açıklamaları yapma."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 3
+    style: "concept"
+    correct_count: 1
+    correct_type: "matches"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Bu metinde bahsedilen kişinin yakınılan özelliği aşağıdakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Bu metinde bahsedilen kişi hangi kişilik özelliğinden yakınmaktadır?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metinde şikayet edilen olumsuz alışkanlık/özellik"
+  kurallar:
+    - "Sikayet edilen ozellik metindeki davranislarla ortusmelidir."
+    - "1-3 kelimelik kisa kavram olmali."
+    - "Ozellik olumsuz bir aliskanlik veya huy olmali."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI BILGILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "YAKIN_DURUM_TUZAGI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Gerçek yakınılan duruma anlamsal olarak yakın, ilk bakışta doğru gibi görünen seçenek"
+    nasil_olusturulur: |
+      Metindeki gerçek yakınılan duruma anlamsal olarak yakın ama farklı bir durum seç.
+      Orta seviyede en az 1 celdirici doğru cevaba yakın görünmeli.
+      Öğrenci metnin tamamını değerlendirerek ayırt etmelidir.
+    kategori: "semantic"
+
+  - ad: "KISMI_DOGRU_YAKINLANMA"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Yakınılan durumun bir boyutunu doğru yakalayan ama bütünüyle yanlış seçenek"
+    nasil_olusturulur: |
+      Yakınılan durumun yalnızca bir boyutunu doğru yakalayan ama bütünde yanlış olan bir seçenek oluştur.
+      Orta seviyede öğrenci dikkatli okuma yapmalıdır.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

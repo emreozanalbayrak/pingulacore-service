@@ -1,0 +1,167 @@
+# Referans: paragraf_olusturma_sinif3_referans.yaml → zorluk_duzeyleri.zor
+# Zor duzey — anlamli_metin_olusturma varyanti (numaralanmis cumle siralama)
+
+meta:
+  id: "anlamli_metin_olusturma_sinif3_zor"
+  ad: "3. Sinif - Paragraf Olusturma / Anlamli Metin Olusturma (Zor)"
+  sinif_seviyesi: 3
+  aciklama: "Zor duzey — anlamli_metin_olusturma: Anlamli Metin Olusturma. 4 secenekli, gorselli, numaralanmis cumle siralama."
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Gorsel + numaralanmis karisik cumleler + soru koku + 4 siralama secenegi (zor)"
+
+  paragraph:
+    required: true
+    word_count_min: 45
+    word_count_max: 75
+    sentence_count_min: 5
+    sentence_count_max: 6
+    stil: "numaralanmis_yanyana_karisik_cumle"
+    background_color: "#fce8e8"
+    kurallar:
+      - "Cumleler 3. sinif ogrencisinin anlayabilecegi kadar acik, sade ve akici olmalidir."
+      - "Cumleler karisik sirada verilmelidir."
+      - "Tum cumleler bir araya geldiginde tek bir anlamli metin olusturmalidir."
+      - "Olay sirasi sorularinda cumleler acik bir zaman veya olus sirasi icermelidir."
+      - "Anlamli metin olusturma sorularinda cumleler konu butunlugu, kisi-zamir iliskisi, neden-sonuc ve anlatim akisi bakimindan birbirine baglanmalidir."
+      - "Cumleler dis bilgi gerektirmemelidir."
+      - "Dogru siralama yalniz tum cumleler birlikte dusunulerek bulunabilmelidir."
+      - "Tamamen serbest, soyut ve tartismaci paragraf yapisi kullanilmamalidir."
+      - "Metin, kisa ve tamamlanmis bir butun olusturmalidir."
+      - "Cumleler (1), (2), (3), (4) (ve gerekirse (5)) seklinde parantezli rakamlarla numaralandirilmalidir."
+      - "Cumleler ayni paragraf icinde YANYANA akici bicimde yazilmalidir; her cumle parantezli numarasiyla baslar (ornek: (1) Ali okula gitti. (2) Okulda arkadasini gordu. (3) ...). Cumleler arasinda <br> KULLANILMAZ, sadece normal bosluk birakilir. Cumleler alt alta degil, tek paragrafta arka arkaya yazilir."
+      - "Cumleler arasinda birden fazla anlam bagi bulunabilir."
+      - "Dogru siralama icin zamir, zaman ve olay akisi birlikte dusunulmelidir."
+      - "Zor duzeyde bile metin kisa ve somut kalmalidir."
+      - "Tamamen serbest yorum gerektiren yapi kurulamaz."
+      - "Ilk cumle dogal bir baslangic niteliği tasimalidir."
+      - "Son cumle metni dogal bicimde bitirmelidir."
+      - "Ortadaki cumleler birbirini aciklayan, surduren veya olay sirasini ilerleten yapida olmalidir."
+      - "Dogru siralamada zamir, baglac, zaman ve neden-sonuc iliskileri dogal akmalidir."
+      - "Yanlis siralamalarda en az bir anlam bozuklugu, akis kirilması veya olay sirasi sorunu olusmalidir."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  visual:
+    required: true
+    description: "Cumlelerin konusu, olayi veya baglamini destekleyen islevsel gorsel"
+    placement: "paragraph_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illustrasyon"
+      - "tek sahneli fotograf benzeri cizim"
+      - "tek olay veya tek varlik odakli sahne"
+      - "numaralanmis cumlelerin ana baglamini destekleyen sade konu gorseli"
+    kurallar:
+      - "Her soru icin gorsel zorunludur."
+      - "Gorsel cumlelerin ortak konusunu desteklemelidir."
+      - "Gorsel sus olmamali, baglami anlamayi kolaylastirmalidir."
+      - "Gorsel tek basina dogru siralamayi vermemelidir."
+      - "Gorsel ve cumleler birlikte degerlendirildiginde dogru siralama daha anlasilir hale gelebilir."
+      - "Gorsel dikkat dagitici gereksiz ayrintilar icermemelidir."
+    yasaklar:
+      - "dekoratif ve cumlelerle ilgisiz gorsel"
+      - "cok sahneli karmasik kolaj"
+      - "cevabi dogrudan acik eden sirali cizgi roman yapisi"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir (anlamli_metin_olusturma varyanti)"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 3
+    word_count_max: 10
+    style: "number_sequence"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "3. sinifta her soru 4 secenekli olmalidir."
+      - "Tum secenekler yalniz siralama dizisi biciminde verilmelidir (ornek: '2 - 4 - 1 - 3')."
+      - "Her secenekte tum cumle numaralari birer kez kullanilmalidir."
+      - "Hicbir secenekte numara eksikligi veya tekrar olmamalidir."
+      - "Dogru secenek cumleleri anlamli ve dogal siraya koymalidir."
+      - "Yanlis secenekler ilk bakista makul gorunebilir; ancak akis veya olay sirasi bakimindan sorunlu olmalidir."
+      - "Birden fazla makul dogru secenek olusmamalidir."
+      - "3 yanlis secenegin en az 2'si metne yakin gorunmelidir."
+      - "Yanlis seceneklerden biri yalniz iki orta cumleyi yanlis yerlestirebilir."
+      - "Yanlis seceneklerden biri baslangic veya sonuc islevini bozar."
+      - "Yanlis seceneklerden biri olay sirasini ters kurar."
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Numaralanmis cumlelerle anlamli bir metin olusturuldugunda siralama asagidakilerden hangisi olur?</b>"
+  - "<b>Numaralanmis cumlelerle anlamli bir paragraf olusturulursa dogru siralama hangisi olur?</b>"
+  # KULLANILDI: - "<b>Bu cumleler anlamli bir metin olusturacak sekilde nasil siralanmalidir?</b>"
+  # KULLANILDI: - "<b>Numaralanmis cumleler anlam butunlugune gore dizildiginde dogru siralama hangisidir?</b>"
+  - "<b>Asagidaki cumlelerle anlamli bir metin olusturmak icin dogru siralama hangisidir?</b>"
+
+dogru_cevap:
+  tanim: "Numaralanmis cumeleri dogal, anlamli ve akici bicimde bir araya getiren tek dogru siralama"
+  kurallar:
+    - "Dogru cevap tum cumeleri anlamli bir butun haline getirmelidir."
+    - "Dogru cevapta olay sirasi bozulmamalidir."
+    - "Dogru cevapta zamir, baglac, neden-sonuc ve zaman iliskileri dogal akmalidir."
+    - "Ilk cumle baslangic, son cumle bitis islevi tasimalidir."
+    - "Dogru cevap dis bilgi gerektirmemelidir."
+    - "Dogru cevap 3. sinif ogrencisinin dikkatli okuyarak bulabilecegi aciklikta olmalidir."
+
+celdirici_stratejileri:
+  - ad: "ILK_CUMLEYI_YANLIS_SECMEK"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metnin dogal baslangici olmayan bir cumleyi basa getiren siralama"
+    nasil_olusturulur: |
+      Ortadaki ya da sondaki cumleyi basa koyan bir siralama olustur.
+    kategori: "cognitive"
+
+  - ad: "SON_CUMLEYI_YANLIS_SECMEK"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metni dogal bicimde bitirmeyen bir cumleyi sona koyan siralama"
+    nasil_olusturulur: |
+      Bastaki veya ortadaki cumleyi sona koyan bir siralama olustur.
+    kategori: "cognitive"
+
+  - ad: "ORTA_BLOK_KARISIKLIGI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Baslangic ve bitis dogru gorunse de ortadaki cumleleri yanlis dizen secenek"
+    nasil_olusturulur: |
+      Ilk ve son cumleleri dogru birak, ortadaki cumleleri karistir.
+    kategori: "cognitive"
+
+  - ad: "OLAY_SIRASI_BOZMA"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Once olani sona, sonra olani basa tasiyan siralama"
+    nasil_olusturulur: |
+      Olay sirasini tersine ceviren bir siralama olustur.
+    kategori: "semantic"
+
+  - ad: "NEDEN_SONUC_TERSLIGI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Sonuc cumlesini neden cumlesinden once getiren siralama"
+    nasil_olusturulur: |
+      Sonuc cumlesini neden cumlesinden once yerlestiren bir siralama olustur.
+    kategori: "semantic"
+
+  - ad: "ZAMIR_VE_BAGLAM_KOPUKLUGU"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Kimin veya neyin anlatildigi anlasilmadan ilgili cumleyi one ceken siralama"
+    nasil_olusturulur: |
+      Zamirin kime/neye baglandigi belirsizlesen bir siralama olustur.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cumle_siralama", "anlam_butunlugu_kurma", "olay_sirasi_belirleme"]
+  surec_bileseni: "metni_anlama"
+
+sinif3_ek_kurallar:
+  yasak_alanlar:
+    - "Tamamen serbest, acik uclu, uzun paragraf yazdirma YASAK"
+    - "Asiri soyut, tartismaci veya cok katmanli paragraf siralatma YASAK"
+    - "Dil bilgisi terimleriyle cumle islevi cozdurme YASAK"
+    - "Metin disi dunya bilgisi gerektiren siralama YASAK"
+    - "Uzun paragrafin orgusunu gerekceli bicimde savundurma (4. sinif) YASAK"
+    - "Birden fazla mantikli siralamayi tartistirma (4. sinif) YASAK"
+    - "Soyut ve tartismaci metinlerin yapisini cozumletme (4. sinif) YASAK"

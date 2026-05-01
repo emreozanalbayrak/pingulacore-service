@@ -1,0 +1,261 @@
+# templates/soru_cevap_numarali.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Metinde Soru ve Cevap
+#
+# NUMARALI SORU-CEVAP FORMATI (~%13 - 24 sorudan 3'u)
+# Paragraf verilir, I/II/III/IV numarali SORULAR soru kokunde listelenir
+# Secenekler "I ve II", "II ve IV" gibi birlesik formatindadir
+#
+# yardimci_fikir_numarali ile FARK:
+# - yardimci_fikir: numarali IFADELER (assertions) - "Zeytin agaci uzun omurludur."
+# - soru_cevap: numarali SORULAR (questions) - "Kup seker yapilirken hangi tur seker kullanilir?"
+#
+# MANTIK: Cevabi olmayan sorularin birlesimini bul (does_not_belong)
+
+meta:
+  id: "soru_cevap_numarali"
+  ad: "Metinde Soru ve Cevap (Numarali)"
+  sinif_seviyesi: 5
+  aciklama: "I/II/III/IV numarali sorular + birlesik secenek formatinda soru-cevap sorulari"
+  kaynak: "data/metinde_soru_cevap.pdf"
+  frequency: "~13% of soru_cevap questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Paragraf + soru kokunde I/II/III/IV sorular + 'I ve II' tarzi birlesik secenekler"
+
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 100
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "bilgilendirici"
+    kurallar:
+      - "Birden fazla soruya cevap verecek zengin icerik icermeli"
+      - "En az 2 soruya acikca cevap vermeli (dogrulanabilir)"
+      - "En az 2 sorunun cevabi paragrafta olmamali"
+      - "Her cumle farkli bir bilgi vermeli"
+
+  stem:
+    required: true
+    description: "Soru kokleri pattern listesinden rastgele secilir, {statements} placeholder ile"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 6
+    style: "roman_numeral_combination"
+    correct_type: "does_not_belong"
+    correct_count: 1
+    preserve_order: true
+    layout: "two_column"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 4 varyasyon)
+# {statements} placeholder: I/II/III/IV sorular buraya gelir
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Buna göre bu metinde,</b>\n{statements}\n<b>numaralanmış sorulardan hangisinin cevabı <u>yoktur</u>?</b>"
+  - "<b>Bu metinde,</b>\n{statements}\n<b>sorularından hangilerinin cevabı <u>yoktur</u>?</b>"
+  - "<b>Bu metinde,</b>\n{statements}\n<b>sorularından hangilerinin cevapları <u>yoktur</u>?</b>"
+  - "<b>Bu metinde,</b>\n{statements}\n<b>numaralanmış soruların hangilerinin cevabı <u>yoktur</u>?</b>"
+  # Topic-embedded varyasyonlar ({topic} → leaf topic, ör: "Yerçekimi kuvveti")
+  - "\"{topic}\" <b>ile ilgili bu metinde,</b>\n{statements}\n<b>numaralanmış sorulardan hangisinin cevabı <u>yoktur</u>?</b>"
+  - "\"{topic}\" <b>konulu bu metinde,</b>\n{statements}\n<b>sorularından hangilerinin cevabı <u>yoktur</u>?</b>"
+  # POZİTİF mantık varyasyonu (vardır = exists - "matches" logic)
+  - "<b>Bu metinde,</b>\n{statements}\n<b>sorularından hangilerinin cevabı vardır?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "4 numarali sorudan 2 tanesinin birlesimi - paragrafta CEVAPLANMAYAN 2 soru"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "4 numarali soru olusturulmali (I, II, III, IV)"
+    - "2 soru paragrafta cevaplanmali (yanlis seceneklere gider)"
+    - "2 sorunun cevabi paragrafta olmamali (dogru cevap bunlarin birlesimi)"
+    - "Secenekler ikili birlesimler: 'I ve II', 'I ve III', 'II ve IV', 'III ve IV', 'I ve IV', 'II ve III' gibi"
+    - "Her soru soru cumlesi formatinda olmali (4-15 kelime, '?' ile bitmeli)"
+  ornekler:
+    - paragraf: "Kup seker, seker kamisi veya seker pancarindan elde edilen seker kullanilarak uretilir. Seker oncelikle eritilir, sonra kaliplara dokulerek sogutulur. Kuplere ayrilarak paketlenir. Kup sekerin beyaz rengi, rafinasyon surecinde elde edilir."
+      ifadeler:
+        I: "Küp şeker yapılırken hangi tür şeker kullanılır?"
+        II: "Küp şekerin beyaz rengi nasıl elde edilir?"
+        III: "Küp şeker hangi ülkede icat edilmiştir?"
+        IV: "Küp şekerin raf ömrü ne kadardır?"
+      dogru: "III ve IV"
+      neden: "III ve IV sorularinin cevabi paragrafta yok"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# Numarali format (I/II/III/IV sorular + "I ve II" tarzi secenekler):
+# - 2 soru paragrafta CEVAPLANAN
+# - 2 soru paragrafta CEVAPLANMAYAN
+# Strateji havuzu "cevaplanmayan" sorulari olusturmak icin kullanilir
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siniflandirma", "cikarim_yapma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic with rich content"
+      details: "Birden fazla soruya cevap iceren zengin bir konu sec"
+
+    - step: 2
+      action: "Generate paragraph (55-100 words)"
+      details: |
+        Paragrafta:
+        - En az 2 soruya acik cevap olmali (cevaplanan sorular icin)
+        - En az 2 sorunun cevabi kasitli olarak olmamali (cevaplanmayan sorular icin)
+
+    - step: 3
+      action: "Create 4 numbered questions (I, II, III, IV)"
+      details: |
+        Her biri soru cumlesi formatinda (4-15 kelime, '?'):
+        - 2 soru: paragrafta CEVAPLANAN (metinden cikariabilir)
+        - 2 soru: paragrafta CEVAPLANMAYAN (metinden cikarilamaz)
+        - Siralama rastgele olmali
+
+    - step: 4
+      action: "Create 4 combination options"
+      details: |
+        Secenekler ikili birlesimler:
+        - Dogru cevap: cevaplanmayan 2 sorunun birlesimi
+        - Diger 3 secenek: karisik birlesimleri
+        Ornek: A) I ve II  B) I ve III  C) II ve IV  D) III ve IV
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem and embed questions"
+      details: |
+        soru_kokleri listesinden rastgele sec
+        {statements} yerine numarali sorulari yerlestir:
+        I. [soru 1]?
+        II. [soru 2]?
+        III. [soru 3]?
+        IV. [soru 4]?
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 3
+    soru_no: 6
+    konu: "Kup seker uretimi"
+    tip: "negatif"
+    paragraf: "Kup seker, seker kamisi veya seker pancarindan elde edilen seker kullanilarak uretilir..."
+    soru_koku: "Buna gore bu metinde, I/II/III/IV numaralanmis sorulardan hangisinin cevabi yoktur?"
+    ifadeler:
+      I: "Küp şeker yapılırken hangi tür şeker kullanılır?"
+      II: "Küp şekerin beyaz rengi nasıl elde edilir?"
+      III: "Küp şeker hangi ülkede icat edilmiştir?"
+      IV: "Küp şekerin raf ömrü ne kadardır?"
+    secenekler:
+      A: "I ve II"
+      B: "I ve III"
+      C: "II ve IV"
+      D: "III ve IV"
+    dogru_cevap: "D"
+    neden: "III ve IV sorularinin cevabi paragrafta yok"
+
+  - sayfa: 5
+    soru_no: 2
+    konu: "Ipek bocegi yetistiriciligi"
+    tip: "negatif"
+    paragraf: "Ipek bocegi yetistiriciligi, ipek ureten boceklerin bakimini kapsar. Bocekler dut yapraklariyla beslenir..."
+    soru_koku: "Bu metinde, I/II/III/IV sorularindan hangilerinin cevabi yoktur?"
+    ifadeler:
+      I: "İpek böcekleri ne ile beslenir?"
+      II: "İpek böceği yetiştirmek için hangi iklim gerekir?"
+      III: "İpek böcekleri nasıl koza yapar?"
+      IV: "İpek böceği yetiştirciliği ne zaman başlamıştır?"
+    secenekler:
+      A: "I ve II"
+      B: "I ve III"
+      C: "II ve IV"
+      D: "III ve IV"
+    dogru_cevap: "C"
+    neden: "II ve IV paragrafta cevaplanmiyor"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 55-100 arasinda mi?"
+    - "En az 2 soruya cevap veriyor mu?"
+    - "En az 2 sorunun cevabi paragrafta yok mu?"
+
+  statements:
+    - "Tam 4 numarali soru var mi (I, II, III, IV)?"
+    - "Her soru soru cumlesi mi (4-15 kelime, '?')?"
+    - "2 soru paragrafta cevaplaniyor mu?"
+    - "2 sorunun cevabi paragrafta yok mu?"
+
+  options:
+    - "4 secenek ikili birlesim mi ('X ve Y' formati)?"
+    - "Dogru cevap cevaplanmayan 2 sorunun birlesimi mi?"
+    - "Diger secenekler karisik birlesimler mi?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+
+  generation_rules:
+    - "Birden fazla soruya cevap verebilecek zengin konulari tercih et"
+    - "Konuyla ilgili ama cevaplanmayan makul sorular uretileebilecek konulari sec"
+    - "Hem cevaplanan hem cevaplanmayan sorular icin zengin icerik gerekli"

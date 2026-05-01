@@ -1,0 +1,121 @@
+# Pattern: zor / hangisi_infografikle_uyumlu_degildir (referans tercih_edilen_varyantlar)
+# 1 soru: infografikle uyumlu olmayan secenegi bulma
+
+meta:
+  id: infografik_sinif2_zor_uyumlu_degil
+  ad: "2. Sinif - Infografik (Zor) - Hangisi Uyumlu Degildir"
+  sinif_seviyesi: 2
+  aciklama: "Zor baglam — 1 soru: infografikle uyumlu olmayan yargiyi secme"
+  frequency: "Medium"
+
+context:
+  type: infografik_sinif2_zor_uyumlu_degil
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    image_type: "infografik"
+    infografik_bilgi_yogunlugu: "orta_yuksek"
+    infografik_bilgi_sayisi_min: 6
+    infografik_bilgi_sayisi_max: 8
+    ust_metin_kelime_min: 8
+    ust_metin_kelime_max: 32
+    ust_metin_cumle_min: 1
+    ust_metin_cumle_max: 3
+    structure:
+      - "Infografikte 6-8 bilgi ya da sembol dizisi bulunabilir."
+      - "Dogru cevap icin iki veya daha fazla parcayi birlestirmek gerekebilir."
+      - "Sira veya duzen bilgisi kullaniliyorsa secenekler birbirine yakin olabilir."
+      - "Zor duzey bile 2. sinif sadeligi korunmalidir."
+      - "Varsa ust metin baglam kurar ama tek basina cozum saglamaz."
+      - "Infografik maddelemeli, ikon destekli, sira/surec semalari veya karsilastirmali bilgi afisi olabilir."
+    kurallar:
+      - "2. sinif duzeyinde, sade ve gunluk hayata yakin icerik."
+      - "Infografik soru cozumunun ana kaynagi olmalidir."
+      - "Varsa ust metin tek basina cozum saglamamamalidir."
+      - "Infografik kaldirildiginda soru cozulemez hale gelmelidir."
+      - "Dis bilgi gerektirmeyen icerik."
+      - "Turkce karakterler dogru kullanilmali."
+      - "KRITIK: Bu bir TAVSIYE/ONERI infografigidir — sayisal veri (yuzde, oran, rakam listesi) YASAK"
+      - "Paragraf 4-6 KISA TAVSIYE/ONERI maddesi icermeli (ornek: 'Ekran mesafesini koruyun', 'A vitamini tuketin', 'Gozlerinizi dinlendirin')"
+      - "Bar chart, sutun grafik, tablo tarzi veri YASAK — bu bir BILGI paylasma infografigidir"
+      - "Oneriler kisa, emir kipinde: 'Yapin / Yapmayin / Koruyun / Uzak durun' formatinda"
+      - "Merkez konu ekseninde, cevreye dagitilmis tavsiyeler"
+
+  questions:
+    - slot: 1
+      type: hangisi_infografikle_uyumlu_degildir
+      soru_kokleri:
+        - "<b>Aşağıdakilerden hangisi infografikle uyumlu <u>değildir</u>?</b>"
+      options_style: kisa_yargi
+      word_count_min: 3
+      word_count_max: 12
+      beceri:
+        katman: KB2
+        bilesenler: [infografikten_bilgi_cikarma, yargi_ayirt_etme]
+        surec_bileseni: metni_anlama
+
+header_template: "Asagidaki infografigi inceleyerek soruyu cevaplayiniz."
+
+format:
+  type: llm_generated_html
+  description: "Infografik + 1 soru (zor): hangisi uyumlu degildir"
+  paragraph:
+    required: false
+  stem:
+    required: true
+  options:
+    count: 3
+    labels: [A, B, C]
+    word_count_min: 3
+    word_count_max: 12
+    style: kisa_yargi
+    correct_count: 1
+    correct_type: matches
+
+dogru_cevap:
+  tanim: "Infografik ile acik celiski tasiyan ya da infografikte yer almayan secenek"
+  kurallar:
+    - "Dogru cevap infografik ile acik celiski tasimali ya da infografikte yer almamalidir."
+    - "Diger iki secenek infografikle uyumlu olmalidir."
+    - "Dogru cevap dis bilgi gerektirmemelidir."
+    - "Dogru cevap 2. sinif ogrencisinin infografigi dikkatle inceleyerek bulabilecegi aciklikta olmalidir."
+
+distractors:
+  stratejiler:
+    - ad: KISMI_DOGRU_KISMI_YANLIS
+      bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+      aciklama: "Ifadenin bir kismi infografige uyar gibi gorunur ama tamami dogru degildir"
+      nasil_olusturulur: |
+        Infografikteki bir bilgiyi hafifce bozarak ver.
+        Zor duzey: 2 yanlis secenek de makul gorunmeli.
+      kategori: "semantic"
+    - ad: YAKIN_AMA_FARKLI_VURGU
+      bilisssel_hata_kategorisi: "cikarim_hatasi"
+      aciklama: "Ayni tema alaninda ama infografigin soylediginden farkli vurgu tasiyan secenek"
+      nasil_olusturulur: |
+        Infografikteki bilgiye yakin ama farkli vurgu tasiyan secenek uret.
+        Zor duzey: yakin ama dis bilgi karistiran yapi tasiyabilir.
+      kategori: "cognitive"
+    - ad: SIRAYI_BOZMA
+      bilisssel_hata_kategorisi: "siralama_hatasi"
+      aciklama: "Infografikteki surec, sira veya dizilimi karistiran secenek"
+      nasil_olusturulur: |
+        Infografikteki siralama veya surec bilgisini bozarak secenek uret.
+        Zor duzey: siralama bozulmasi ince ve dikkat gerektiren olmali.
+      kategori: "structural"
+
+use_shared_strategies: false
+
+beceri:
+  katman: KB2
+  bilesenler: [infografikten_bilgi_cikarma, yargi_ayirt_etme]
+  surec_bileseni: metni_anlama
+
+sinif2_ek_kurallar:
+  yasak_alanlar:
+    - "Ana dusunce, gizli mesaj veya soyut yorum sorusuna kayma YASAK"
+    - "Dis bilgi gerektiren uzmanlik icerigi YASAK"
+    - "2. sinif duzeyini asan teknik istatistikler YASAK"
+    - "Infografik olmadan cozulebilen soru YASAK"
+    - "Zor duzey bile dis bilgi, soyut yorum veya ana dusunce gerektiren yapi kurulamaz"

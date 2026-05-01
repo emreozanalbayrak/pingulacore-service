@@ -1,0 +1,488 @@
+meta:
+  id: "tablo_yorumlama_sinif2_tablo_merkezli_uc_secenekli"
+  ad: "Tablo Yorumlama"
+  sinif_seviyesi: 2
+  ders: "Türkçe"
+  bolum: "2. Sınıf Paragraf Soru Bankası"
+  alt_bolum: "7.5 Tablo Yorumlama"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    2. sınıf öğrencisi için tabloda verilen verileri okuyup yorumlayarak
+    söylenebilen, söylenemeyen, çıkarılabilen veya çıkarılamayan bilgileri
+    ayırt ettirmeye; ayrıca metindeki bilgileri içeren tabloyu seçtirmeye
+    yönelik, tablo zorunlu ve 3 seçenekli standart soru üretim şablonu.
+  kullanim_notu: >
+    Bu şablonda tablo soru çözümünün ana kaynağıdır. Varsa kısa bağlam metni
+    yalnız yönlendirme yapar; tek başına çözüm sağlamaz. Metinden tablo seçme
+    varyantında ise hem metin hem tablo seçenekleri birlikte kullanılmalıdır.
+    Harici 2. Sınıf TYMM Ortak Kuralları ile birlikte doğrulanmalıdır.
+
+format:
+  tip: "llm_generated_html"
+  aciklama: "İsteğe bağlı kısa bağlam metni + ana tablo veya tablo seçenekleri + soru kökü + 3 seçenek"
+
+  soru_varyanti:
+    izinli:
+      - "tablodan_hangisi_soylenebilir"
+      - "tablodan_hangisi_soylenemez"
+      - "tablodan_hangisi_cikarilabilir"
+      - "tablodan_hangisi_cikarilamaz"
+      - "metindeki_bilgileri_veren_tablo"
+    varsayilan: "tablodan_hangisi_soylenebilir"
+
+  cozum_kaynagi_politikasi:
+    tablo_tabanli_varyantlar:
+      kapsar:
+        - "tablodan_hangisi_soylenebilir"
+        - "tablodan_hangisi_soylenemez"
+        - "tablodan_hangisi_cikarilabilir"
+        - "tablodan_hangisi_cikarilamaz"
+      ana_kaynak: "ana_tablo"
+      kurallar:
+        - "Ana tablo zorunludur."
+        - "Varsa bağlam metni tek başına çözüm vermemelidir."
+        - "Doğru cevap tablo incelenmeden bulunamamalıdır."
+        - "Tablodaki satır, sütun, sayı veya düzen çözümde gerçek işlev taşımalıdır."
+    metinden_tablo_secme_varyanti:
+      kapsar:
+        - "metindeki_bilgileri_veren_tablo"
+      ana_kaynaklar:
+        - "metin_veya_veri_listesi"
+        - "tablo_secenekleri"
+      kurallar:
+        - "Metin veya veri listesi zorunludur."
+        - "3 tablo seçeneği zorunludur."
+        - "Doğru cevap için hem metin/liste hem tablo seçenekleri birlikte kullanılmalıdır."
+        - "Yalnız metne bakarak doğru tablo seçilememelidir."
+        - "Yalnız tablo seçeneklerine bakarak da doğru cevap kesin seçilememelidir."
+
+  baglam_metni:
+    gerekli: false
+    aciklama: "Tablonun neyi gösterdiğini açıklayan kısa bilgi alanı"
+    cumle_sayisi_min: 1
+    cumle_sayisi_max: 3
+    kelime_sayisi_min: 8
+    kelime_sayisi_max: 28
+    kurallar:
+      - "Bağlam metni varsa kısa, sade ve açıklayıcı olmalıdır."
+      - "Bağlam metni tablodaki sayıların neyi ifade ettiğini söyleyebilir."
+      - "Bağlam metni doğru seçeneği tek başına vermemelidir."
+      - "Bağlam metni 2. sınıf düzeyinde olmalıdır."
+    yasaklar:
+      - "tabloyu okumadan cevabı açıkça veren açıklama"
+      - "uzun ve karmaşık paragraf"
+      - "teknik istatistik dili"
+
+  ana_tablo:
+    gerekli_varyantlarda:
+      - "tablodan_hangisi_soylenebilir"
+      - "tablodan_hangisi_soylenemez"
+      - "tablodan_hangisi_cikarilabilir"
+      - "tablodan_hangisi_cikarilamaz"
+    tipler:
+      - "iki sütunlu basit sayı tablosu"
+      - "haftalık ders programı"
+      - "görev / sorumluluk çizelgesi"
+      - "satır-sütunlu temel veri tablosu"
+      - "basit karşılaştırma tablosu"
+    kurallar:
+      - "Tablo sade, okunabilir ve 2. sınıf düzeyine uygun olmalıdır."
+      - "Başlık, satır ve sütunlar açıkça ayırt edilebilir olmalıdır."
+      - "Sayılar veya bilgiler tablodan kolayca takip edilebilir olmalıdır."
+      - "Tabloda en az 3 veri noktası bulunmalıdır."
+      - "Tablodaki veriler tek bir bağlam içinde olmalıdır."
+      - "Doğru cevap tablo okunmadan bulunamamalıdır."
+      - "Tablo çok yoğun olmamalıdır."
+      - "Tablo görsel olarak düzenli olmalıdır."
+    yasaklar:
+      - "çok küçük yazılı kalabalık tablo"
+      - "2. sınıf düzeyini aşan çok sütunlu karmaşık veri seti"
+      - "renk veya süslemenin okunabilirliği bozduğu düzen"
+      - "başlıksız ve belirsiz tablo"
+
+  metin_veya_veri_listesi:
+    gerekli_varyantlarda:
+      - "metindeki_bilgileri_veren_tablo"
+    tipler:
+      - "kısa açıklama metni"
+      - "madde madde veri listesi"
+      - "kişi-nesne-sayı ilişkisi veren kısa bilgiler"
+    cumle_sayisi_min: 2
+    cumle_sayisi_max: 5
+    kelime_sayisi_min: 18
+    kelime_sayisi_max: 52
+    kurallar:
+      - "Metin veya liste tablodaki verilerin ne olması gerektiğini anlatmalıdır."
+      - "Bilgiler açık ve sade olmalıdır."
+      - "Doğru tabloyu seçmek için metin dikkatle okunmalıdır."
+      - "Metin tek başına doğru cevabı söylememeli; tablo seçenekleriyle karşılaştırma gerektirmelidir."
+      - "Liste veya metin 2. sınıf düzeyine uygun olmalıdır."
+
+  tablo_secenekleri:
+    gerekli_varyantlarda:
+      - "metindeki_bilgileri_veren_tablo"
+    secenek_sayisi: 3
+    etiketler: ["A", "B", "C"]
+    stil: "kucuk_tablo_gorseli"
+    kurallar:
+      - "Her seçenek tablo biçiminde verilmelidir."
+      - "3 tablo da biçimce paralel olmalıdır."
+      - "Doğru tablo metindeki bilgileri tam karşılamalıdır."
+      - "Yanlış tablolar yakın ama hatalı veri taşımalıdır."
+      - "Tablo seçenekleri 2. sınıf düzeyinde okunabilir olmalıdır."
+      - "Tablo seçenekleri yalnız şekil olarak değil, veri olarak ayırt edilmelidir."
+
+  soru_koku:
+    gerekli: true
+    secim: "listeden_rastgele"
+
+  secenekler:
+    tablo_tabanli_varyantlarda:
+      sayi: 3
+      etiketler: ["A", "B", "C"]
+      dogru_sayisi: 1
+      stil: "kisa_yargi"
+      kelime_sayisi_min: 3
+      kelime_sayisi_max: 14
+      kurallar:
+        - "Seçenekler kısa, sade ve 2. sınıf düzeyinde olmalıdır."
+        - "Doğru seçenek tabloya dayanmalıdır."
+        - "Yanlış seçenekler tabloya yakın ama hatalı olmalıdır."
+        - "Seçenekler kendi aralarında biçimce paralel olmalıdır."
+
+soru_kokleri:
+  tablodan_hangisi_soylenebilir:
+    - "Tabloya göre aşağıdakilerden hangisi söylenebilir?"
+    - "Bu tablodan hareketle aşağıdakilerden hangisi söylenebilir?"
+    - "Tablodaki bilgilere göre aşağıdakilerden hangisi doğrudur?"
+    - "Aşağıdakilerden hangisi tabloya uygundur?"
+    - "Tablo incelendiğinde aşağıdakilerden hangisi söylenebilir?"
+
+  tablodan_hangisi_soylenemez:
+    - "Tabloya göre aşağıdakilerden hangisi söylenemez?"
+    - "Bu tablodan hareketle aşağıdakilerden hangisi söylenemez?"
+    - "Tablodaki bilgilere göre aşağıdakilerden hangisi doğru değildir?"
+    - "Aşağıdakilerden hangisi tabloya uygun değildir?"
+    - "Tablo incelendiğinde aşağıdakilerden hangisi söylenemez?"
+
+  tablodan_hangisi_cikarilabilir:
+    - "Tabloya göre aşağıdakilerden hangisi çıkarılabilir?"
+    - "Bu tablodan hareketle aşağıdakilerden hangisi çıkarılabilir?"
+    - "Tablodaki verilere göre aşağıdakilerden hangisine ulaşılabilir?"
+    - "Tablo incelendiğinde aşağıdakilerden hangisi bulunabilir?"
+    - "Aşağıdakilerden hangisi tabloya göre belirlenebilir?"
+
+  tablodan_hangisi_cikarilamaz:
+    - "Tabloya göre aşağıdakilerden hangisi çıkarılamaz?"
+    - "Bu tablodan hareketle aşağıdakilerden hangisine ulaşılamaz?"
+    - "Tablodaki verilere göre aşağıdakilerden hangisi bulunamaz?"
+    - "Tablo incelendiğinde aşağıdakilerden hangisi belirlenemez?"
+    - "Aşağıdakilerden hangisi tabloya göre çıkarılamaz?"
+
+  metindeki_bilgileri_veren_tablo:
+    - "Tablolardan hangisi metindeki bilgileri içermektedir?"
+    - "Aşağıdaki tablolardan hangisi metindeki bilgilere uygundur?"
+    - "Verilen bilgilere göre doğru tablo hangisidir?"
+    - "Metindeki bilgilere göre oluşturulan tablo aşağıdakilerden hangisidir?"
+    - "Aşağıdaki tablolardan hangisi verilen bilgileri doğru göstermektedir?"
+
+beceri_odagi:
+  birincil_beceri:
+    - "Tablodan bilgi çıkarma ve tabloyu yorumlama"
+  ikincil_beceriler:
+    - "Satır ve sütunları doğru okuma"
+    - "Sayıların neyi gösterdiğini anlama"
+    - "En çok, en az, eşit, toplam gibi ilişkileri fark etme"
+    - "Tablodan ulaşılabilen ve ulaşılamayan bilgileri ayırt etme"
+    - "Metindeki bilgileri tabloyla eşleştirme"
+
+dogru_cevap:
+  tanim: "Tabloda yer alan açık bilgiye veya tablodan doğrudan çıkarılabilen basit sonuca dayanan doğru seçenek"
+  kurallar:
+    - "Doğru cevap tabloya dayanmalıdır."
+    - "Doğru cevap dış bilgi gerektirmemelidir."
+    - "Doğru cevap 2. sınıf öğrencisinin tabloyu inceleyerek bulabileceği açıklıkta olmalıdır."
+    - "Söylenemez / çıkarılamaz sorularında doğru cevap tablodan gerçekten bulunamayan bilgi olmalıdır."
+    - "Metinden tablo seçme varyantında doğru cevap metindeki bilgileri tam karşılayan tablo olmalıdır."
+
+yanlis_secenek_stratejileri:
+  count_per_question: 2
+  strateji_havuzu:
+    - id: "yakın_sayi_hatasi"
+      tanim: "Tablodaki değere çok yakın ama yanlış sayı kullanma"
+      ornek_mantik:
+        - "36 yerine 39 söylemek"
+        - "26 yerine 23 söylemek"
+
+    - id: "satir_sutun_karistirma"
+      tanim: "Bilgiyi yanlış kişi, gün, ders veya başlıkla eşleştirme"
+      ornek_mantik:
+        - "Derya'nın sayısını Ahmet'e bağlama"
+        - "Cuma bilgisini perşembe ile karıştırma"
+
+    - id: "kismi_dogru_kismi_yanlis"
+      tanim: "İfadenin bir kısmı tabloya uyar ama tamamı yanlış olur"
+      ornek_mantik:
+        - "Her gün matematik vardır ama Türkçe yoktur"
+        - "Ali her gün yıldız almıştır"
+
+    - id: "ulasilamaz_bilgi"
+      tanim: "Tabloda bulunmayan ayrıntıyı sorma ya da söyleme"
+      ornek_mantik:
+        - "hangi tür kitap okuduğu"
+        - "kitapları hangi saatlerde okuduğu"
+        - "hangi kütüphaneden aldığı"
+
+    - id: "toplam_hatasi"
+      tanim: "Toplam veya karşılaştırma gerektiren durumda yanlış toplama/çıkarma"
+      ornek_mantik:
+        - "toplam Türkçe dersi sayısını bir eksik söylemek"
+        - "ödül için yeterli yıldız sayısını yanlış değerlendirmek"
+
+    - id: "yanlis_tablo_eslesmesi"
+      tanim: "Metindeki bilgilerin bir kısmını doğru, bir kısmını yanlış gösteren tablo"
+      ornek_mantik:
+        - "iki kişi doğru, bir kişi yanlış sayı"
+        - "bir satır yer değiştirmiş tablo"
+
+  secim_kurali:
+    - "Her soruda 2 yanlış seçenek farklı stratejilerden seçilmelidir."
+    - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+    - "Çıkarılamaz / söylenemez sorularında diğer iki seçenek tabloyla desteklenmelidir."
+    - "Metinden tablo seçme varyantında iki yanlış tablo da metne kısmen benzeyebilir."
+
+soru_varyanti_kurallari:
+  tablodan_hangisi_soylenebilir:
+    kurallar:
+      - "1 seçenek tablo ile desteklenmelidir."
+      - "2 seçenek tablo ile desteklenmemelidir."
+      - "Doğru seçenek doğrudan okuma veya çok basit karşılaştırma ile bulunmalıdır."
+
+  tablodan_hangisi_soylenemez:
+    kurallar:
+      - "2 seçenek tablo ile desteklenmelidir."
+      - "1 seçenek tablo ile desteklenmemelidir."
+      - "Doğru seçenek tabloda yer almayan ya da tabloya aykırı bilgi olmalıdır."
+
+  tablodan_hangisi_cikarilabilir:
+    kurallar:
+      - "Doğru seçenek tablodaki bilgilerden çıkarılabilen basit bir sonuç olmalıdır."
+      - "Çıkarım en fazla 1-2 adımlı olmalıdır."
+      - "Soyut yorum gerektirmemelidir."
+
+  tablodan_hangisi_cikarilamaz:
+    kurallar:
+      - "Doğru seçenek tablodan bulunamayan bilgi olmalıdır."
+      - "Diğer 2 seçenek tablodan doğrudan veya basit karşılaştırmayla bulunabilmelidir."
+
+  metindeki_bilgileri_veren_tablo:
+    kurallar:
+      - "3 tablo seçeneği bulunmalıdır."
+      - "1 tablo metindeki bilgileri tam karşılamalıdır."
+      - "2 tablo yakın ama hatalı veri taşımalıdır."
+      - "Doğru cevap için hem metin/liste hem tablo seçenekleri birlikte incelenmelidir."
+
+zorluk_duzeyleri:
+  kolay:
+    ana_tablo:
+      bilgi_yogunlugu: "dusuk"
+      kurallar:
+        - "Tabloda 3-4 satır ve en fazla 2 sütun bulunmalıdır."
+        - "Doğru cevap doğrudan okuma, en çok / en az bulma gibi açık görevlerden gelmelidir."
+        - "Toplam gerektiren görevler mümkünse kullanılmamalıdır."
+    tercih_edilen_varyantlar:
+      - "tablodan_hangisi_soylenebilir"
+      - "tablodan_hangisi_soylenemez"
+    celdiriciler:
+      kurallar:
+        - "1 seçenek yakın sayı hatası içerebilir."
+        - "1 seçenek ulaşılamaz bilgi veya satır-sütun karışıklığı olabilir."
+        - "Yanlış seçenekler kolay elenebilir olmalıdır."
+    zorluk_notu: >
+      Kolay düzeyde öğrenci tabloyu okuyarak açık bilgileri seçer.
+      Zorluk düşük tutulur.
+
+  orta:
+    ana_tablo:
+      bilgi_yogunlugu: "orta"
+      kurallar:
+        - "Tabloda 4-6 satır/sütun bilgisi olabilir."
+        - "Doğru cevap için basit karşılaştırma veya küçük toplam gerekebilir."
+        - "Haftalık ders programı veya sorumluluk tablosu gibi düzenler kullanılabilir."
+    tercih_edilen_varyantlar:
+      - "tablodan_hangisi_cikarilabilir"
+      - "tablodan_hangisi_cikarilamaz"
+      - "tablodan_hangisi_soylenemez"
+      - "metindeki_bilgileri_veren_tablo"
+    celdiriciler:
+      kurallar:
+        - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+        - "Yanlış seçenekler yakın ama hatalı karşılaştırma ya da toplam içerebilir."
+    zorluk_notu: >
+      Orta düzeyde öğrenci tabloyu okuyup karşılaştırma yapar ve hangi bilginin
+      çıkarılabildiğini ayırt eder.
+
+  zor:
+    ana_tablo:
+      bilgi_yogunlugu: "orta_yuksek"
+      kurallar:
+        - "Tabloda birden fazla satır ve sütun ilişkisi bulunabilir."
+        - "Doğru cevap için iki bilgiyi birleştirmek gerekebilir."
+        - "Toplam, eşitlik, fark veya ödül-eşik karşılaştırması olabilir."
+        - "Zor düzeyde bile en fazla 2 adımlı işlem yapılmalıdır."
+        - "Zor düzeyde de 2. sınıf sadeliği korunmalıdır."
+    tercih_edilen_varyantlar:
+      - "tablodan_hangisi_cikarilamaz"
+      - "tablodan_hangisi_cikarilabilir"
+      - "metindeki_bilgileri_veren_tablo"
+    celdiriciler:
+      kurallar:
+        - "2 yanlış seçenek de makul görünmelidir."
+        - "1 yanlış seçenek yakın toplam/karşılaştırma hatası içermelidir."
+        - "1 yanlış seçenek satır-sütun ya da veri eşleştirme hatası içermelidir."
+    zorluk_notu: >
+      Zor düzey 2. sınıfta derin veri analizi değildir.
+      Zorluk, tablodaki birden fazla bilgiyi dikkatle kullanarak doğru sonuca ulaşma düzeyindedir.
+
+zorluk_secim_politikasi:
+  varsayilan: "Orta"
+  izinli_degerler: ["Kolay", "Orta", "Zor"]
+  kesin_sinirlar:
+    - "Tüm düzeylerde tablo zorunludur."
+    - "Tablo tabanlı varyantlarda çözümün ana kaynağı tablo olmalıdır."
+    - "Metinden tablo seçme varyantında hem metin/liste hem tablo seçenekleri zorunludur."
+    - "Tüm düzeylerde 3 seçenek kullanılmalıdır."
+    - "Zor düzey seçilse bile 2 adımdan fazla işlem gerektiren yapı kurulamaz."
+    - "Zor düzey seçilse bile dış bilgi, soyut yorum veya ana düşünce gerektiren soru kurulamaz."
+
+konu_alani:
+  izinli_ornekler:
+    - "okunan kitap sayıları"
+    - "haftalık ders programı"
+    - "sorumluluk tablosu"
+    - "günlere göre etkinlikler"
+    - "öğrencilerin puanları"
+    - "hayvan sayıları"
+    - "oyuncak sayıları"
+    - "sınıf içi görevler"
+    - "hava durumu tablosu"
+    - "basit alışveriş listesi verileri"
+  kurallar:
+    - "Konu 2. sınıf öğrencisinin anlayabileceği kadar somut ve açık olmalıdır."
+    - "Tablodaki sayı ve bilgiler neyi gösterdiği belli olacak şekilde verilmelidir."
+    - "Konu dış bilgi gerektirmeden çözülebilmelidir."
+    - "Tablo, çocukların okul ve günlük yaşamına yakın olmalıdır."
+
+uretim_mantigi:
+  adimlar:
+    - adim: 1
+      eylem: "2. sınıfa uygun, tablo ile gösterilebilir açık bir veri konusu seç"
+    - adim: 2
+      eylem: "Soru varyantını belirle"
+      detaylar:
+        - "tablodan_hangisi_soylenebilir"
+        - "tablodan_hangisi_soylenemez"
+        - "tablodan_hangisi_cikarilabilir"
+        - "tablodan_hangisi_cikarilamaz"
+        - "metindeki_bilgileri_veren_tablo"
+    - adim: 3
+      eylem: "Varyanta göre ana tabloyu ya da metin+tablo seçeneklerini oluştur"
+      detaylar:
+        - "Tablo sade ve okunabilir olsun"
+        - "Doğru cevabı belirleyecek veri açık biçimde yer alsın"
+    - adim: 4
+      eylem: "Gerekirse kısa bağlam metni ekle"
+      detaylar:
+        - "Tablonun neyi gösterdiğini açıklasın"
+        - "Çözümü tek başına vermesin"
+    - adim: 5
+      eylem: "1 doğru ve 2 yanlış seçenek oluştur"
+      detaylar:
+        - "Yanlışlardan biri yakın sayı/karşılaştırma hatası olsun"
+        - "Yanlışlardan biri ulaşılamaz bilgi veya veri karışıklığı olsun"
+    - adim: 6
+      eylem: "Soru kökünü listeden rastgele seç"
+    - adim: 7
+      eylem: "Şıkları A-B-C olarak karıştır"
+    - adim: 8
+      eylem: "Tablo bağımlılığını doğrula"
+      detaylar:
+        - "Tablo kaldırıldığında soru çözülemiyor mu?"
+        - "Varsa bağlam metni tek başına yetmiyor mu?"
+        - "Doğru cevap tablo incelenince tekleşiyor mu?"
+
+validation_checklist:
+  tablo_bagimliligi:
+    - "Tablo zorunlu olarak var mı?"
+    - "Çözümün ana kaynağı tablo mu?"
+    - "Tablo kaldırıldığında soru çözülemez hâle geliyor mu?"
+    - "Varsa bağlam metni tek başına yetmiyor mu?"
+    - "Doğru cevap tablodaki bilgiye dayanıyor mu?"
+
+  ana_tablo:
+    - "Tablo sade ve okunabilir mi?"
+    - "Satır ve sütun başlıkları açık mı?"
+    - "Tablodaki sayıların neyi gösterdiği belli mi?"
+    - "Tablo dekoratif kalmıyor mu?"
+    - "Tabloda en az 3 veri noktası var mı?"
+
+  metin_veya_veri_listesi:
+    - "Yalnız metinden tablo seçme varyantında zorunlu alanlar var mı?"
+    - "Metin/liste kısa ve sade mi?"
+    - "Metin/liste doğru tabloyu karşılaştırmalı seçtirecek kadar açık mı?"
+    - "Metin/liste tek başına cevabı vermiyor mu?"
+
+  soru_koku:
+    - "Soru kökü kısa ve açık mı?"
+    - "Soru kökü tabloya yönlendiriyor mu?"
+    - "Soru kökü cevabı açıklamıyor mu?"
+
+  secenekler:
+    - "Toplam 3 seçenek var mı?"
+    - "Doğru seçenek tabloyla doğrulanabiliyor mu?"
+    - "Yanlış seçenekler yakın ama hatalı mı?"
+    - "Söylenemez / çıkarılamaz sorularında diğer iki seçenek tabloyla destekleniyor mu?"
+    - "Metinden tablo seçme varyantında yalnız 1 tablo tam uyumlu mu?"
+
+  zorluk:
+    - "Zorluk seçilen düzeye göre bilgi yoğunluğu ayarlanmış mı?"
+    - "Zor düzey bile 2. sınıf sınırında mı?"
+    - "Kolay düzey gereksiz yere karmaşık değil mi?"
+
+hard_fail_rules:
+  - "Tablo yoksa"
+  - "Soru yalnız bağlam metninden çözülebiliyorsa"
+  - "Doğru cevap tabloda doğrulanamıyorsa"
+  - "Seçenek sayısı 3 değilse"
+  - "İki veya daha fazla seçenek makul doğruysa"
+  - "Tablo 2. sınıf için fazla karmaşıksa"
+  - "Soru ana düşünce, gizli mesaj veya soyut yorum sorusuna kayıyorsa"
+  - "Doğru cevap dış bilgi gerektiriyorsa"
+  - "Bağlam metni cevabı doğrudan veriyorsa"
+  - "Metinden tablo seçme varyantında tablo seçenekleri birbirinden ayırt edilemiyorsa"
+
+ornek_bicim_notlari:
+  - "Kitap sayıları tablosunda en çok veya en az okuyan kişiyle ilgili sorular sorulabilir."
+  - "Haftalık ders programı tablosunda toplam ders sayısı, ortak dersler veya ulaşılamayan bilgiler sorulabilir."
+  - "Sorumluluk tablosunda yıldız sayıları üzerinden ödül kazanıp kazanmadığı gibi basit sonuçlara ulaşılabilir."
+  - "Bu bölümde temel amaç, tabloda verilen bilgileri okuyup doğru yargıya ulaşmaktır."
+
+output_contract:
+  required_fields:
+    - "soru_varyanti"
+    - "stem"
+    - "answer"
+    - "difficulty"
+    - "topic"
+  conditional_required_fields:
+    tablo_tabanli_varyantlar:
+      - "ana_tablo"
+      - "options"
+    metindeki_bilgileri_veren_tablo:
+      - "metin_veya_veri_listesi"
+      - "tablo_secenekleri"
+  optional_fields:
+    - "baglam_metni"
+  answer_format:
+    - "answer yalnızca A/B/C olarak verilebilir"
+    - "difficulty yalnızca Kolay / Orta / Zor olabilir"

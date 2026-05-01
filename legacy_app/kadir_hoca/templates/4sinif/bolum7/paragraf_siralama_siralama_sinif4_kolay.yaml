@@ -1,0 +1,117 @@
+# Kaynak: paragraf_siralama_siralama_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.kolay
+# 4. sinif paragraf siralama (dogru sira) — kolay duzey
+
+meta:
+  id: "paragraf_siralama_siralama_sinif4_kolay"
+  ad: "Paragraf Sıralama (Doğru Sıra) (Kolay)"
+  sinif_seviyesi: 4
+  aciklama: "Kolay duzey — karışık sıradaki numaralı cümleleri doğru sıraya koyma"
+  frequency: "High"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Numaralı karışık cümleler + soru kökü + 4 sıralama seçeneği (kolay)"
+
+  paragraph:
+    required: true
+    word_count_min: 40
+    word_count_max: 55
+    sentence_count_min: 5
+    sentence_count_max: 10
+    numbered_sentences: true
+    background_color: "#e8f8e8"
+    stil: "bilgilendirici"
+    kurallar:
+      - "Tam 5 cümleden oluşsun"
+      - "Her cümle 8-11 kelime arasında olmalı"
+      - "Cümleler tek bir konu çevresinde yazılmalı"
+      - "Cümleler doğal sıralarında okunduğunda tek ve akıcı bir paragraf oluşturmalı"
+      - "İlk cümle ve son cümle adayları daha belirgin olmalıdır"
+      - "Cümleler arası zaman, neden-sonuç veya süreç ilişkisi daha görünür olmalıdır"
+      - "Orijinal paragraf oluşturulduktan sonra, 5 cümleye 1, 2, 3, 4, 5 Arap rakamları rastgele atanmalı"
+      - "FORMAT: '1. Cümle1.<br>2. Cümle2.<br>3. Cümle3.<br>4. Cümle4.<br>5. Cümle5.'"
+      - "SADECE ARAP RAKAMI (1, 2, 3, 4, 5) KULLAN — Roma rakamı (I, II, III) KULLANMA"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+    kurallar:
+      - "Soru kökü SADECE tek bir soru cümlesi olmalı — paragraftaki cümleleri TEKRARLAMA!"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 3
+    word_count_max: 12
+    style: "short_phrase"
+    correct_count: 1
+    kurallar:
+      - "Her seçenek SADECE Arap rakamlarından oluşan sıralama dizisi olmalı"
+      - "FORMAT: '3 - 1 - 5 - 2 - 4' (Arap rakamları tire ile ayrılmış)"
+      - "YASAK: Roma rakamı (I, II, III) kullanmak"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Numaralanmış cümleler anlamlı bir paragraf oluşturacak şekilde sıralandığında doğru sıralama aşağıdakilerden hangisidir?</b>"
+  - "<b>Anlamlı metnin doğru sıralaması aşağıdakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Bu cümleler anlamlı bir bütün oluşturacak şekilde sıralandığında doğru sıra hangisidir?</b>"
+  - "<b>Numaralanmış cümlelerle anlamlı bir paragraf oluşturulduğunda sıralama aşağıdakilerden hangisi olur?</b>"
+  - "<b>Numaralanmış bölümler giriş, gelişme ve sonuç olarak sıralanırsa doğru sıralama aşağıdakilerden hangisi olur?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Orijinal paragrafı oluşturan 5 cümlenin doğru sırasını veren Arap rakamı dizisi"
+  kurallar:
+    - "Her cümle paragrafın doğal akışı içinde belirli bir işlev taşımalıdır."
+    - "Cümleler arasında doğru sıralamayı kurduracak anlam ilişkisi bulunmalıdır."
+    - "Doğru sıra bulunduğunda paragraf açıkça düzelmeli ve doğal bir bütün oluşturmalıdır."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "BELIRGIN_ILKSON"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "İlk ve son cümle adayları belirgin — kolay ayırt edilebilir sıralama"
+    nasil_olusturulur: |
+      İlk cümle ve son cümle adayları daha belirgin olmalı.
+      Cümleler arası zaman, neden-sonuç veya süreç ilişkisi daha görünür olmalı.
+      Celdiricilerden en az biri kolay elenebilir olmalı.
+      Paragraf daha kısa ve açık kurulmalı.
+    kategori: "cognitive"
+
+  - ad: "KOLAY_ELENEBILIR_SIRALAMA"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Mantık akışına açıkça aykırı olan yanlış sıralamalar"
+    nasil_olusturulur: |
+      Yanlış seçeneklerdeki sıralamalar metindeki mantık akışına açıkça aykırı olmalı.
+      Kolay seviyede öğrenci doğru sırayı hızlıca belirleyebilmeli.
+    kategori: "content"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siralama", "yapilandirma"]
+  surec_bileseni: "metin_yapisini_analiz_etme"
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

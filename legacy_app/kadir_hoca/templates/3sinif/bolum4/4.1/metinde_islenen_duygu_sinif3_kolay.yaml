@@ -1,0 +1,167 @@
+# Referans: paragrafta_duygu_siirde_ana_duygu_sinif3_referans.yaml → zorluk_duzeyleri.kolay
+# Kolay duzey — metinde_islenen_duygu varyanti (METIN tabanli)
+
+meta:
+  id: "metinde_islenen_duygu_sinif3_kolay"
+  ad: "3. Sinif - Metinde Islenen Duygu (Kolay)"
+  sinif_seviyesi: 3
+  aciklama: "Kolay duzey — metinde_islenen_duygu: Metinde Islenen Duygu. 4 secenekli, gorselli, metin tabanli."
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Gorsel + tek paragraf + soru koku + 4 duygu secenegi (kolay)"
+
+  paragraph:
+    required: true
+    word_count_min: 40
+    word_count_max: 82
+    sentence_count_min: 4
+    sentence_count_max: 6
+    stil: "duygu_metni_duzyazi"
+    background_color: "#e8f8e8"
+    kurallar:
+      - "Metin 3. sinif ogrencisinin anlayabilecegi kadar acik, sade ve akici olmalidir."
+      - "Metinde baskin bir duygu acik bicimde hissedilmelidir."
+      - "Duygu, olaylar, durumlar, ifadeler veya anlatim tonu ile desteklenmelidir."
+      - "Birden fazla duygu bulunabilir; ancak biri acik bicimde baskin olmalidir."
+      - "Metin 4. sinifa kayan derin psikolojik cozumleme gerektirmemelidir."
+      - "Duygu metnin tamami dusunulerek bulunabilmelidir."
+      - "Duygu, yalniz tek kelimelik ipucuyla degil, butun anlatimla desteklenmelidir."
+      - "Baskin duygu acik ifadelerle verilmelidir."
+      - "Duygu olay veya durum uzerinden kolayca hissedilmelidir."
+      - "Yan duygular cok sinirli olmalidir."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  visual:
+    required: true
+    description: "Metnin ana icerigini ve baskin duygusunu destekleyen islevsel gorsel"
+    placement: "paragraph_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illustrasyon"
+      - "tek sahneli fotograf benzeri cizim"
+      - "tek olay veya tek varlik odakli sahne"
+    kurallar:
+      - "Her soru icin gorsel zorunludur."
+      - "Gorsel metnin veya siirin icerigiyle acik uyumlu olmalidir."
+      - "Gorsel sus olmamali, cozumde etkili destek sunmalidir."
+      - "Gorsel tek basina dogru cevabi acikca vermemelidir."
+      - "Gorsel ile metin/siir birlikte degerlendirildiginde baskin duygu daha netlesmelidir."
+      - "Gorsel dikkat dagitici gereksiz ayrintilar icermemelidir."
+      - "Gorsel yanlis secenegi acikca isaret edecek kadar yaniltici olmamalidir."
+    yasaklar:
+      - "dekoratif ve metinden bagimsiz gorsel"
+      - "cok sahneli karmasik kolaj"
+      - "grafik, tablo veya infografik yogunlugu tasiyan tasarim"
+      - "duyguyu asiri dogrudan yaziyla etiketleyen gorsel"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir (metinde_islenen_duygu varyanti)"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 3
+    style: "emotion_label"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "3. sinifta her soru 4 secenekli olmalidir."
+      - "Secenekler duygu adi biciminde olmalidir."
+      - "Secenekler kisa, sade ve 3. sinif duzeyinde olmalidir."
+      - "Dogru secenek metindeki veya siirdeki baskin duyguyu karsilamalidir."
+      - "Yanlis secenekler metne/siire yakin gorunebilir; ancak dikkatli okuyunca elenebilmelidir."
+      - "Birden fazla makul dogru secenek olusmamalidir."
+      - "1 secenek yakin duygu"
+      - "1 secenek metinle acikca uyumsuz duygu"
+      - "1 secenek yardimci duyguyu baskin gibi sunma"
+      - "Yanlis secenekler kolay elenebilir olmalidir."
+
+soru_kokleri:
+  - "<b>Bu metinde islenen duygu asagidakilerden hangisidir?</b>"
+  - "<b>Bu metinde hangi duygu islenmistir?</b>"
+  - "<b>Metinde anlatilan baskin duygu asagidakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Bu metinde one cikan duygu hangisidir?</b>"
+  - "<b>Asagidakilerden hangisi bu metinde islenen duygudur?</b>"
+
+duygu_havuzu:
+  izinli_duygular:
+    - "Sevinc"
+    - "Ofke"
+    - "Acima"
+    - "Huzur"
+    - "Ozlem"
+    - "Saskinlik"
+    - "Hayranlik"
+    - "Yasama sevinci"
+    - "Korku"
+    - "Karamsarlik"
+    - "Heyecan"
+    - "Uzuntu"
+    - "Mutluluk"
+  kullanim_kurallari:
+    - "Her soruda dogru duygu metin veya siirle acikca desteklenmelidir."
+    - "Secenekler arasinda anlamca asiri yakin ve ayirt edilmesi guc dort duygu birlikte kullanilmamalidir."
+    - "Ilk asamada daha somut ve ogrencinin asina oldugu duygular tercih edilmelidir."
+    - "Mutluluk ve sevinc birlikte kullanilacaksa metin bunlari ayirmayi gercekten desteklemelidir; aksi halde yalniz biri tercih edilmelidir."
+    - "Ozlem, huzur, heyecan, korku, uzuntu gibi daha belirgin duygu ciftleri tercih edilebilir."
+
+dogru_cevap:
+  tanim: "Metne veya siire hakim olan, en baskin bicimde hissedilen duygu"
+  kurallar:
+    - "KRITIK PARAPHRASE: Dogru cevap paragraftaki cumleleri/ifadeleri AYNEN KULLANMA — paragraf kelimelerini es anlamli sozcuklerle degistir ve farkli cumle yapisiyla yeniden ifade et. En az %50 kelime farkliligi zorunlu. Paragrafa cok benzer secenekler FAIL olur."
+    - "Dogru cevap metnin veya siirin tamaminda baskin bicimde hissedilen duygu olmalidir."
+    - "Dogru cevap tek bir sozcuk ya da ayrintiya degil, butun anlatima dayanmalidir."
+    - "Dogru cevap duygu ile konu arasindaki farki korumalidir."
+    - "Siirde ana duygu, siirin temasiyla karistirilmamalidir."
+    - "Dogru cevap dis bilgi gerektirmemelidir."
+    - "Dogru cevap 3. sinif ogrencisinin dikkatli okuyarak bulabilecegi aciklikta olmalidir."
+
+celdirici_stratejileri:
+  - ad: "YAKIN_DUYGU"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metne yakin gorunen ama baskin olmayan duygu"
+    nasil_olusturulur: |
+      Metne yakin gorunen ama baskin olmayan bir duygu sec.
+      Ornek: Mutluluk yerine heyecan, ozlem yerine uzuntu, huzur yerine sevinc.
+    kategori: "semantic"
+
+  - ad: "OLAYDAN_BAGIMSIZ_DUYGU"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Metnin olay orgusuyle uyumlu gorunmeyen duygu"
+    nasil_olusturulur: |
+      Metnin olay orgusuyle uyumlu gorunmeyen bir duygu sec.
+      Ornek: Korku, Ofke, Karamsarlik.
+    kategori: "cognitive"
+
+  - ad: "YARDIMCI_DUYGU_BASKIN_GIBI_SUNMA"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metinde kisa sureli hissedilen ama asil duygu olmayan secenegi one cikarma"
+    nasil_olusturulur: |
+      Metinde kisa sureli hissedilen yan duyguyu baskin duygu gibi sun.
+    kategori: "cognitive"
+
+  - ad: "KONU_DUYGU_KARISTIRMA"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Duygu yerine nesneye, kisiye ya da duruma baglanan yanlis cagrisim sonucu secilen duygu"
+    nasil_olusturulur: |
+      Metindeki bir nesne, kisi veya durum cagrisimindan gelen ama metne hakim olmayan bir duygu sec.
+      Ornek: Oyuncak sevgisi cagrisimindan sevinc; bayram cagrisimindan yalniz heyecan.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["duygu_belirleme", "baskin_duygu_ayirt_etme"]
+  surec_bileseni: "metni_anlama"
+
+sinif3_ek_kurallar:
+  yasak_alanlar:
+    - "Agir sembolik ve cok katmanli siir yorumlari YASAK"
+    - "Psikolojik derinlik gerektiren karakter cozumlemesi YASAK"
+    - "Duygu yerine deger, mesaj veya ders sorduran yapi YASAK"
+    - "Sembollerden hareketle gizli duygu cozumleme (4. sinif) YASAK"
+    - "Yazarin amaciyla duygu arasinda ayrintili iliski kurdurma (4. sinif) YASAK"

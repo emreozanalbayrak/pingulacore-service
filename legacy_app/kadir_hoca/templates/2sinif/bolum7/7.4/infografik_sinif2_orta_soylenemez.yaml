@@ -1,0 +1,122 @@
+# Pattern: orta / hangisi_soylenemez (referans tercih_edilen_varyantlar)
+# 1 soru: infografige gore hangisi soylenemez
+
+meta:
+  id: infografik_sinif2_orta_soylenemez
+  ad: "2. Sinif - Infografik (Orta) - Hangisi Soylenemez"
+  sinif_seviyesi: 2
+  aciklama: "Orta baglam — 1 soru: infografige gore soylenemez yargiyi secme"
+  frequency: "Medium"
+
+context:
+  type: infografik_sinif2_orta_soylenemez
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    image_type: "infografik"
+    infografik_bilgi_yogunlugu: "orta"
+    infografik_bilgi_sayisi_min: 5
+    infografik_bilgi_sayisi_max: 7
+    ust_metin_kelime_min: 8
+    ust_metin_kelime_max: 32
+    ust_metin_cumle_min: 1
+    ust_metin_cumle_max: 3
+    structure:
+      - "Infografikte 5-7 bilgi bulunabilir."
+      - "Dogru cevap icin birden fazla bilgi parcasi birlikte dusunulmesi gerekebilir."
+      - "Sira, belirti, oneri veya ozellik listesi kullanilabilir."
+      - "Varsa ust metin konu tanitimi yapmali ama cozumu vermemelidir."
+      - "Infografik maddelemeli, ikon destekli, sira/surec semalari veya karsilastirmali bilgi afisi olabilir."
+    kurallar:
+      - "2. sinif duzeyinde, sade ve gunluk hayata yakin icerik."
+      - "Infografik soru cozumunun ana kaynagi olmalidir."
+      - "Varsa ust metin tek basina cozum saglamamamalidir."
+      - "Infografik kaldirildiginda soru cozulemez hale gelmelidir."
+      - "Dis bilgi gerektirmeyen icerik."
+      - "Turkce karakterler dogru kullanilmali."
+      - "KRITIK: Bu bir TAVSIYE/ONERI infografigidir — sayisal veri (yuzde, oran, rakam listesi) YASAK"
+      - "Paragraf 4-6 KISA TAVSIYE/ONERI maddesi icermeli (ornek: 'Ekran mesafesini koruyun', 'A vitamini tuketin', 'Gozlerinizi dinlendirin')"
+      - "Bar chart, sutun grafik, tablo tarzi veri YASAK — bu bir BILGI paylasma infografigidir"
+      - "Oneriler kisa, emir kipinde: 'Yapin / Yapmayin / Koruyun / Uzak durun' formatinda"
+      - "Merkez konu ekseninde, cevreye dagitilmis tavsiyeler"
+
+  questions:
+    - slot: 1
+      type: hangisi_soylenemez
+      soru_kokleri:
+        - "<b>İnfografiğe göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+        - "<b>Bu infografiğe göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+        - "<b>İnfografikten hareketle aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+        - "<b>İnfografikte verilen bilgilere göre aşağıdakilerden hangisi doğru <u>değildir</u>?</b>"
+      options_style: kisa_yargi
+      word_count_min: 3
+      word_count_max: 12
+      beceri:
+        katman: KB2
+        bilesenler: [infografikten_bilgi_cikarma, yargi_ayirt_etme]
+        surec_bileseni: metni_anlama
+
+header_template: "Asagidaki infografigi inceleyerek soruyu cevaplayiniz."
+
+format:
+  type: llm_generated_html
+  description: "Infografik + 1 soru (orta): hangisi soylenemez"
+  paragraph:
+    required: false
+  stem:
+    required: true
+  options:
+    count: 3
+    labels: [A, B, C]
+    word_count_min: 3
+    word_count_max: 12
+    style: kisa_yargi
+    correct_count: 1
+    correct_type: matches
+
+dogru_cevap:
+  tanim: "Infografikte yer almayan veya infografikten cikarilmayan bilgi"
+  kurallar:
+    - "Dogru cevap infografikte yer almamali ya da infografikten cikarilamamalidir."
+    - "Diger 2 secenek infografikle acikca desteklenmelidir."
+    - "Dogru cevap dis bilgi gerektirmemelidir."
+    - "Dogru cevap 2. sinif ogrencisinin infografigi inceleyerek bulabilecegi aciklikta olmalidir."
+
+distractors:
+  stratejiler:
+    - ad: INFOGRAFIKTE_YOK
+      bilisssel_hata_kategorisi: "kavram_karisikligi"
+      aciklama: "Infografikte yer almayan ama konu alanina yakin bilgi"
+      nasil_olusturulur: |
+        Bu strateji soylenemez sorularinda dogru cevap icin kullanilir.
+        Orta duzey: yanlislik ilk bakista fark edilmeyebilir.
+      kategori: "content"
+    - ad: KISMI_DOGRU_KISMI_YANLIS
+      bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+      aciklama: "Ifadenin bir kismi infografige uyar gibi gorunur ama tamami dogru degildir"
+      nasil_olusturulur: |
+        Infografikteki bir bilgiyi kismen dogru kismen yanlis olarak ver.
+        Orta duzey: bozulma dikkatli incelemeyle fark edilebilir olmali.
+      kategori: "semantic"
+    - ad: YAKIN_AMA_FARKLI_VURGU
+      bilisssel_hata_kategorisi: "cikarim_hatasi"
+      aciklama: "Ayni tema alaninda ama infografigin soylediginden farkli vurgu tasiyan secenek"
+      nasil_olusturulur: |
+        Infografikteki bilgiye yakin ama farkli vurgu tasiyan secenek uret.
+        Orta duzey: yakin ama hatali cikarim tasiyan secenek.
+      kategori: "cognitive"
+
+use_shared_strategies: false
+
+beceri:
+  katman: KB2
+  bilesenler: [infografikten_bilgi_cikarma, yargi_ayirt_etme]
+  surec_bileseni: metni_anlama
+
+sinif2_ek_kurallar:
+  yasak_alanlar:
+    - "Ana dusunce, gizli mesaj veya soyut yorum sorusuna kayma YASAK"
+    - "Dis bilgi gerektiren uzmanlik icerigi YASAK"
+    - "2. sinif duzeyini asan teknik istatistikler YASAK"
+    - "Infografik olmadan cozulebilen soru YASAK"

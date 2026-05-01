@@ -1,0 +1,166 @@
+# templates/capture2/anlatici_turleri_standard.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Bolum 2 - Anlatici Turleri
+#
+# STANDART ANLATICI TURLERI FORMATI (tum anlatici sorularinin ~%50'si)
+# Seceneklerde 4 mini paragraf verilir, ogrenci istenen sahis (1. veya 3.) ile yazilani secer
+#
+# 1. Kisi: Yuklemler '-m, -k' sahis eklerini alir (geldim, gorduk, kostum)
+# 3. Kisi: Yuklemler sahis eki almaz veya '-lar/ler' alir (geldi, gordu, kostular)
+
+meta:
+  id: "anlatici_turleri_standard"
+  ad: "Anlatıcı Türleri (Standart)"
+  sinif_seviyesi: 5
+  aciklama: "Metnin birinci kişi (ben/biz) mi yoksa üçüncü kişi (o/onlar) ağzıyla mı yazıldığını belirleme"
+  kaynak: "data/anlatici_turleri.pdf"
+  frequency: "High (~50% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Öyküleyici paragraf + soru kökü + seçenekler"
+
+  paragraph:
+    required: false  # Ana paragraf YOK, secenekler mini-paragraf
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 25
+    word_count_max: 45
+    style: "mini_paragraph"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 4 varyasyon, Sayfa 97-100)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Aşağıdaki metinlerden hangisi birinci kişi ağzıyla yazılmıştır?</b>"
+  - "<b>Aşağıdaki metinlerden hangisi üçüncü kişi ağzıyla yazılmıştır?</b>"
+  - "<b>Aşağıdakilerin hangisinde anlatım birinci kişi ağzıyla yapılmıştır?</b>"
+  - "<b>Aşağıdaki metinlerin hangisinde olaylar, yaşayan kişinin ağzından anlatılmıştır?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "İstenen şahıs eklerini (1. veya 3.) içeren paragraf"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Soru 'birinci kişi' diyorsa, metinde 'ben' dili (yaptım, ettim) hakim olmalı."
+    - "Soru 'üçüncü kişi' diyorsa, metinde 'o' dili (yaptı, etti) hakim olmalı."
+    - "Kelime sayısı bakımından en uzun şık olmamalı."
+  ornekler:
+    - paragraf: "O sabah erkenden kalktım. Bahçeye çıkıp kuşları izledim. Annemin hazırladığı kahvaltıyı yedim ve okula koştum."
+      dogru: "Birinci kişi ağzı"
+      neden: "Yuklemler '-m' eki almis: kalktim, izledim, yedim, kostum"
+    - paragraf: "Küçük çocuk bahçede oynuyordu. Annesi onu içeri çağırdı. Akşam olmuştu ve hava kararmaya başlamıştı."
+      dogru: "Üçüncü kişi ağzı"
+      neden: "Yuklemler sahis eki almamis: oynuyordu, cagirdi, olmustu, baslamisti"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM paragraf iceriğine gore en uygun 3 stratejiyi secer
+# Celdiriciler: Diger sahis agziyla yazilmis 3 mini paragraf
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siniflandirma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select a stem that specifies 1st or 3rd person"
+      details: "Soru koklerinden birini sec - birinci kisi mi ucuncu kisi mi soruldugunu belirle"
+
+    - step: 2
+      action: "Determine narrator type for correct answer"
+      details: |
+        Soru kokune gore:
+        - 'birinci kisi' soruluyorsa: dogru cevap 1. kisi agziyla yazilmali
+        - 'ucuncu kisi' soruluyorsa: dogru cevap 3. kisi agziyla yazilmali
+
+    - step: 3
+      action: "Generate 4 mini-paragraphs (25-45 words each)"
+      details: |
+        - 1 paragraf istenen sahis agziyla (dogru cevap)
+        - 3 paragraf diger sahis agziyla (celdiriciler)
+        - Her paragraf farkli bir konu/olay anlatan kisa metin olmali
+        - Sahis ekleri net ve tutarli olmali
+
+    - step: 4
+      action: "Verify narrator consistency"
+      details: |
+        - Dogru cevapta tum yuklemler istenen sahis eklerini tasimali
+        - Celdiricilerde tum yuklemler diger sahis eklerini tasimali
+        - Karisik sahis eki kullanilmamali
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR (Sayfa 97-100)
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 97
+    konu: "Birinci kisi agzi"
+    soru_koku: "Aşağıdaki metinlerden hangisi birinci kişi ağzıyla yazılmıştır?"
+    dogru_cevap: "A"
+    dogru_cevap_icerigi: "Yüklemlerde '-m, -k' şahıs ekleri bulunan metin"
+    celdirici_aciklama: "Diğer 3 seçenek üçüncü kişi ağzıyla yazılmış metinler"
+
+  - sayfa: 98
+    konu: "Ucuncu kisi agzi"
+    soru_koku: "Aşağıdaki metinlerden hangisi üçüncü kişi ağzıyla yazılmıştır?"
+    dogru_cevap: "C"
+    dogru_cevap_icerigi: "Yüklemlerde şahıs eki almayan veya '-lar/ler' alan metin"
+    celdirici_aciklama: "Diğer 3 seçenek birinci kişi ağzıyla yazılmış metinler"
+
+  - sayfa: 99
+    konu: "Yasayan kisinin agzindan anlatim"
+    soru_koku: "Aşağıdaki metinlerin hangisinde olaylar, yaşayan kişinin ağzından anlatılmıştır?"
+    dogru_cevap: "B"
+    dogru_cevap_icerigi: "Birinci kişi ağzıyla, olayı bizzat yaşayan kişinin anlatımı"
+    celdirici_aciklama: "Diğer 3 seçenek gözlemci (üçüncü kişi) ağzıyla yazılmış metinler"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Her secenek 25-45 kelime arasinda mi?"
+    - "Her paragrafta sahis ekleri tutarli mi?"
+    - "Karisik sahis eki kullanilmamis mi?"
+
+  correct_answer:
+    - "Istenen sahis agziyla mi yazilmis?"
+    - "Yuklemlerdeki sahis ekleri dogru mu?"
+    - "Anlatim tek bir bakis acisindan mi yapilmis?"
+
+  distractors:
+    - "Tum celdiriciler diger sahis agziyla mi yazilmis?"
+    - "Her celdirici farkli bir konu/olay mi anlatiyor?"
+    - "Sahis ekleri acikca farkli mi?"
+    - "Tum secenekler ayni uzunluk araliginda mi? (25-45 kelime)"

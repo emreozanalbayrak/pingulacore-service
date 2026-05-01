@@ -1,0 +1,286 @@
+# templates/beceri_tablo.yaml
+# Kaynak: MEB Beceri Temelli Soru Bankasi - Tablo/Grafik
+#
+# BECERI TEMELLI TABLO FORMATI
+# Tablo/grafik verileri verilir, ogrenci veri analizi ve yorum sorusunu cevaplar
+#
+# MANTIK: 1 secenekte dogru cevap, 4 secenekte yanlis cevaplar
+# Secenekler TAM CUMLE formatindadir (3-20 sozcuk)
+
+meta:
+  id: "beceri_tablo"
+  ad: "Beceri Temelli - Tablo"
+  sinif_seviyesi: 5
+  aciklama: "Tablo/grafik verileri uzerinden beceri temelli sorular"
+  kaynak: "MEB Beceri Temelli Soru Bankasi"
+  frequency: "~10% of beceri temelli questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Tablo baglami + soru koku + 5 tam cumle secenek (beceri temelli)"
+
+  paragraph:
+    required: true
+    word_count_min: 30
+    word_count_max: 80
+    sentence_count_min: 1
+    sentence_count_max: 6
+    stil: "tablo"
+    kurallar:
+      - "HTML <table> formatinda tablo olustur"
+      - "Tablo basligini tablonun uzerinde duz metin olarak yaz"
+      - "3-6 veri satiri ve 2-4 sutun olmali"
+      - "Sayisal veriler veya karsilastirmalar icersin"
+      - "Veriler arasinda anlamli iliskiler olmali"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 5
+    labels: ["A", "B", "C", "D", "E"]
+    word_count_min: 3
+    word_count_max: 20
+    style: "complete_sentence"
+    correct_type: "matches"
+    correct_count: 1
+
+  questions_per_context: 2
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ALANLARI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  context_type: "TABLO"
+  context_label: "Tablo"
+  skill_level: "KB2"
+  process_component: "Sayisal verileri okuma, karsilastirma ve veri temelli cikarim yapma"
+  skill_areas:
+    - "analiz"
+    - "cikarimlama"
+    - "degerlendirme"
+    - "tablo_grafik_okuma"
+    - "karsilastirma"
+    - "problem_cozme"
+    - "sorgulama"
+  answer_key_explanation: true
+  question_patterns:
+    - "Tabloya gore hangi sonuca ulasilabilir?"
+    - "Verilere gore hangi yorum yanlistir?"
+    - "Tablo verilerinden hangi cikarim desteklenebilir?"
+    - "Veriler arasindaki iliski nasil yorumlanabilir?"
+    - "Tablodaki verilere gore yasanan problem nedir?"
+    - "Verilerden hareketle en dogru tahmin hangisidir?"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # Veri Okuma / Analiz
+  - "<b>Tabloya göre aşağıdakilerden hangisi doğrudur?</b>"
+  - "<b>Tablodaki verilere göre aşağıdakilerden hangisine ulaşılabilir?</b>"
+  - "<b>Tablo incelendiğinde aşağıdakilerden hangisi söylenebilir?</b>"
+  - "<b>Verilen bilgilere göre aşağıdaki <u>yorumlardan hangisi yapılamaz</u>?</b>"
+  # Karşılaştırma / Çıkarım
+  - "<b>Tablodaki veriler karşılaştırıldığında aşağıdakilerden hangisi doğrudur?</b>"
+  - "<b>Tabloya göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Tablodaki verilere göre aşağıdaki <u>çıkarımlardan hangisi desteklenemez</u>?</b>"
+  # Yorum / Değerlendirme
+  - "<b>Tablodaki verilerden yola çıkarak aşağıdakilerden hangisine ulaşılabilir?</b>"
+  - "<b>Tablodaki bilgiler değerlendirildiğinde aşağıdakilerden hangisi en doğru yorumdur?</b>"
+  - "<b>Verilen tabloya göre aşağıdakilerden hangisi en doğru sonuçtur?</b>"
+  # Problem Yansıtma / Tahmin (PDF kaynak)
+  - "<b>Bu durumda aşağıdakilerden hangisi cevap aranan soruyu ifade eder?</b>"
+  - "<b>Tablodaki verilere göre aşağıdakilerden hangisi yaşanan problemi yansıtmaktadır?</b>"
+  - "<b>Tablodaki verilere göre yapılan aşağıdaki tahminlerden hangisi en doğrudur?</b>"
+  # Karşılaştırma / Kullanım (PDF kaynak)
+  - "<b>Verilen tabloya göre aşağıdakilerden hangisi en doğru <u>karşılaştırmadır</u>?</b>"
+  - "<b>Tablodaki bilgileri kullanarak aşağıdakilerden hangisine ulaşılabilir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Tablodaki verilere dayali, analitik dusunme gerektiren cevap"
+  kurallar:
+    - "Verilerle dogrudan desteklenmeli"
+    - "Analiz becerisi gerektirmeli"
+    - "Tam cumle formatinda olmali (3-20 sozcuk)"
+    - "Sayisal verileri dogru yorumlamali"
+    - "Baglam olmadan cevaplanamaz olmali"
+    - "Ust duzey dusunme becerisi gerektirmeli"
+    - "Bilissel surec bilesenini hedeflemeli"
+  ornekler:
+    - tablo: "Sehir | Nufus (bin) | Yüzölcumu (km2): Ankara 5700 25632, Istanbul 16000 5461, Izmir 4400 12007"
+      dogru: "Istanbul en kalabalik sehir olmakla birlikte en kucuk yuzolcumune sahiptir"
+      neden: "Veriler Istanbul'un nufusu en yuksek ama alani en kucuk oldugunu gosterir"
+    - tablo: "Ay | Sicaklik (C) | Yagis (mm): Ocak 2 80, Nisan 14 45, Temmuz 30 5, Ekim 16 60"
+      dogru: "Sicaklik arttikca yagis miktarinin azaldigi gorulmektedir"
+      neden: "Veriler sicaklik-yagis ters orantisini gostermektedir"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM tablo iceriğine gore en uygun 4 stratejiyi secer
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic with quantitative data"
+      details: "Sayisal veri ve karsilastirma iceren bir konu sec"
+
+    - step: 2
+      action: "Generate table/data context (60-100 words) with clear data"
+      details: |
+        Tablo metninde:
+        - Sayisal veriler veya karsilastirmalar olmali
+        - Tablo basligi ve kaynak bilgisi belirtilmeli
+        - Veriler arasinda anlamli iliskiler olmali
+        - Yorum yapmaya uygun veriler secilmeli
+
+    - step: 3
+      action: "Create correct answer as complete sentence"
+      details: |
+        Dogru cevap:
+        - Tablodaki verilere dogrudan dayanmali
+        - Analitik dusunme gerektirmeli
+        - Tam cumle formatinda olmali (3-20 sozcuk)
+
+    - step: 4
+      action: "Create 4 wrong answers using strategies"
+      details: |
+        Her yanlis secenek icin farkli strateji kullan:
+        - 1x verileri yanlis okuyan/yorumlayan
+        - 1x tabloda olmayan veri ekleyen
+        - 1x dogru veri ama yanlis cikarim yapan
+        - 1x mantikli gorunen ama verilerle celisen
+        Tum secenekler ayni formatta olmali (tam cumle, 3-20 sozcuk)
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D-E seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - konu: "Turkiye sehirleri nufus ve yuzolcumu"
+    dogru_cevap: "B"
+    secenekler:
+      A: "Ankara en kalabalik sehirdir"
+      B: "Istanbul en kalabalik sehir olmakla birlikte en kucuk yuzolcumune sahiptir"
+      C: "Izmir en buyuk yuzolcumune sahiptir"
+      D: "Nufus arttikca yuzolcumu de artmaktadir"
+      E: "Uc sehrin nufuslari birbirine yakindir"
+    dogru_cevap_icerigi: "Istanbul en kalabalik sehir olmakla birlikte en kucuk yuzolcumune sahiptir"
+    neden: "Veriler Istanbul'un nufusu en yuksek ama alani en kucuk oldugunu gosterir"
+
+  - konu: "Aylik sicaklik ve yagis verileri"
+    dogru_cevap: "C"
+    secenekler:
+      A: "Ocak ayinda yagis en az duzeydedir"
+      B: "Temmuz ayinda yagis en yuksek duzeydedir"
+      C: "Sicaklik arttikca yagis miktarinin azaldigi gorulmektedir"
+      D: "Nisan ayi en sicak aydir"
+      E: "Ekim ayinda yagis hic olmamistir"
+    dogru_cevap_icerigi: "Sicaklik arttikca yagis miktarinin azaldigi gorulmektedir"
+    neden: "Veriler sicaklik-yagis ters orantisini gostermektedir"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  # Asama 0: Kimlik ve Olcme Niyeti
+  identity:
+    - "Soru bir beceriyi mi olcuyor, bilgi hatirlamayi mi?"
+    - "Hedef beceri seviyesi uygun mu?"
+    - "Surec bileseni dogru hedeflenmis mi?"
+
+  # Asama 1: Baglam Secimi
+  context:
+    - "Baglam olmadan soru cozulebilir mi? (Hayir olmali)"
+    - "Baglam fonksiyonel mi? (Dekoratif degil)"
+    - "Baglam cevabi dogrudan veriyor mu? (Vermemeli)"
+    - "Baglam otantik mi? (Gercek hayattan)"
+    - "Kelime sayisi 60-100 arasinda mi?"
+    - "Sayisal veriler var mi?"
+    - "Tablo basligi ve kaynak bilgisi belirtilmis mi?"
+    - "Veriler arasinda anlamli iliskiler var mi?"
+
+  # Asama 2: Soru ve Secenekler
+  question:
+    - "Soru koku net ve anlasilir mi?"
+    - "Cift olumsuz var mi? (Olmamali)"
+    - "Tek dogru cevap var mi?"
+
+  options:
+    - "Celdiriciler belirli bilissel hatalari temsil ediyor mu?"
+    - "Eleme yoluyla cevaplanabilir mi? (Olmamali)"
+    - "Format farkliligi ile dogru cevap belli oluyor mu? (Olmamali)"
+    - "Tum secenekler benzer uzunlukta mi?"
+    - "5 secenek var mi (A-B-C-D-E)?"
+
+  # Asama 3: Etik
+  ethics:
+    - "Cinsiyet/etnik onyargi var mi? (Olmamali)"
+    - "Yas grubuna uygun mu?"
+
+  # Asama 4: Dil
+  language:
+    - "Turkce dil bilgisi dogru mu?"
+    - "Sinif seviyesine uygun mu?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+
+  generation_rules:
+    - "Sayisal veri ve karsilastirma iceren konulari tercih et"
+    - "Tablo veya grafik olusturulabilecek konular ideal"
+    - "Veri analizi ve yorum yapmaya uygun konulari sec"

@@ -1,0 +1,115 @@
+# B1.2 — Bilgi Kartları formatında Başlık/Anahtar Sözcük/Soru Cevap (3Q)
+# İki sütunlu renkli kartlar — CSS post-processor
+meta:
+  id: "baslik_anahtar_soru_kartlar"
+  ad: "Bilgi Kartları — Başlık/Anahtar/Soru Cevap (3 Soru)"
+  sinif_seviyesi: 5
+  aciklama: "İki sütunlu renkli bilgi kartları üzerinden başlık, anahtar sözcük ve soru-cevap soruları"
+  frequency: "Medium"
+
+context:
+  type: "baslik_anahtar_soru_kartlar"
+  question_count: 3
+  question_count_min: 3
+  question_count_max: 3
+  generation:
+    word_count_min: 100
+    word_count_max: 180
+    visual_format: "info_cards"
+    structure:
+      - "İKİ FARKLI kısa bilgi metni oluştur — aynı konunun farklı yönleri"
+      - "İki metni <b>---KART-AYIRICI---</b> ile ayır. Başlık KOYMA — sadece düz metin yaz"
+      - "KRİTİK: Metinlere HİÇBİR BAŞLIK yazma — ne konu başlığı ne numara ne 'Metin 1' gibi etiket. Direkt paragraf metniyle başla"
+      - "Her metin 3-5 cümle olmalı"
+      - "İki metin birbirini tamamlamalı ama farklı bilgiler içermeli"
+      - "Metinlerde 2-3 anahtar sözcük doğal olarak geçmeli"
+      - "Bazı soruların cevabı bir metinde varken diğerinde olmamalı"
+      - "YASAK: HTML tablosu (<table>) ekleme — sadece <b>Başlık</b> ve düz metin yaz"
+      - "NOT: Bu metinler otomatik olarak renkli bilgi kartlarına dönüştürülecektir"
+    kurallar:
+      - "5. sınıf seviyesinde, anlaşılır bilgi metinleri"
+      - "İki metin aynı genel konunun farklı alt konularını ele almalı"
+      - "Her metnin net bir başlığı olmalı"
+      - "Anahtar sözcükler her iki metinde de geçebilir"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+    - slot: 1
+      type: "baslik"
+      soru_kokleri:
+        - "<b>Bu metinlere başlık olarak aşağıdakilerden hangisi gelebilir?</b>"
+        - "<b>Her iki metin birlikte düşünüldüğünde en uygun ortak başlık aşağıdakilerden hangisidir?</b>"
+      options_style: "headline_title"
+      word_count_min: 2
+      word_count_max: 6
+      beceri:
+        katman: "KB2"
+        bilesenler: ["ozetleme"]
+        surec_bileseni: "bilgiyi_cikartma"
+    - slot: 2
+      type: "anahtar_sozcuk"
+      soru_kokleri:
+        - "<b>Bu metinlerdeki anahtar sözcükler aşağıdakilerden hangileri olabilir?</b>"
+        - "<b>Her iki metnin ortak anahtar kavramları aşağıdakilerden hangisidir?</b>"
+      options_style: "keyword_set"
+      word_count_min: 2
+      word_count_max: 8
+      beceri:
+        katman: "KB2"
+        bilesenler: ["cozumleme"]
+        surec_bileseni: "bilgiyi_cikartma"
+    - slot: 3
+      type: "soru_cevap"
+      soru_kokleri:
+        - "<b>Bu metinlerde aşağıdaki sorulardan hangisinin cevabı <u>yoktur</u>?</b>"
+        - "<b>Aşağıdakilerden hangisi bu metinlerle <u>cevaplanamayacak</u> bir sorudur?</b>"
+        - "<b>…Özne… yaptığı araştırmalarla aşağıdaki soruların hangisine cevap <u>veremez</u>?</b>"
+      options_style: "question_sentence"
+      word_count_min: 4
+      word_count_max: 15
+      beceri:
+        katman: "KB3"
+        bilesenler: ["cikarim_yapma", "mantiksal_denetleme"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+header_template: "1-3. soruları aşağıdaki metinden faydalanarak cevaplayınız."
+
+format:
+  type: "llm_generated_html"
+  paragraph:
+    required: true
+    word_count_min: 100
+    word_count_max: 180
+    sentence_count_min: 6
+    sentence_count_max: 12
+  stem:
+    required: true
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 15
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+dogru_cevap:
+  tanim: "İki bilgi kartından doğru çıkarılan başlık, anahtar sözcük veya soru-cevap"
+  kurallar:
+    - "HATALI YAKLASIM: Metinde geçen bir cümlenin AYNEN seçeneklerde kullanılması YASAK"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin ANLAMCA ÖZDESİ olmalı"
+    - "Doğru seçenek paragraftaki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farklılığı olmalı"
+    - "BİLİMSEL TERİM KORUMASI: Teknik terimler değiştirilmemeli"
+    - "Doğru şık en uzun şık OLMAMALI"
+
+distractors:
+  stratejiler:
+    - ad: "YAKIN_BASLIK"
+      aciklama: "Ana fikirle ilişkili ama tam karşılamayan başlık"
+    - ad: "TEK_METIN_ODAKLI"
+      aciklama: "Sadece bir kartın konusunu yansıtan, diğerini ihmal eden seçenek"
+    - ad: "CEVABI_VAR"
+      aciklama: "Metinlerde cevabı bulunan soruyu çeldirici olarak sunma"
+
+use_shared_strategies: false

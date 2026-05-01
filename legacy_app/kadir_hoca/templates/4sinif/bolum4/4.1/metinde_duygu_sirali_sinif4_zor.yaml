@@ -1,0 +1,103 @@
+# Kaynak: metinde_duygu_sirali_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.zor
+# 4. sinif metinde duygu sirali — zor duzey
+
+meta:
+  id: "metinde_duygu_sirali_sinif4_zor"
+  ad: "Metinde Duygu - Duygu Değişimi (Zor)"
+  sinif_seviyesi: 4
+  aciklama: "Zor duzey — kahramanın yaşadığı duyguları sırasıyla belirleme."
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Duygu değişimi içeren paragraf + soru kökü + ikili duygu seçenekleri (zor)"
+
+  paragraph:
+    required: true
+    word_count_min: 93
+    word_count_max: 110
+    background_color: "#fce8e8"
+    sentence_count_min: 6
+    sentence_count_max: 7
+    stil: "oykuleyici"
+    kurallar:
+      - "Iki duygu asamasi acik kalmali; ancak aradaki gecis daha incelikli kurulabilir."
+      - "Duygular yalnız tek bir ipucuyla degil, birden fazla anlatim ayrintisiyla sezdirilmeli."
+      - "Paragrafta ara duygu izlenimi veren ama baskin olmayan kisa ayrintilar bulunabilir."
+      - "Dogru cevaba ulasmak icin butun paragraf dikkatle izlenmeli."
+      - "Metin iki aşamadan oluşmalı; ilk bölümde bir duygu, ikinci bölümde farklı bir duygu hakim olmalı."
+      - "Duygu isimleri metinde doğrudan geçmemeli, olaylar ve davranışlar üzerinden sezdirilmeli."
+      - "Paragrafta konuyla ilgili AÇIKLAMA, TANIM veya EK BİLGİ verme! Paragraf SADECE hikâyeyi/olayı anlatsın."
+      - "YASAK: Ders kitabı açıklamaları yapma."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+      - "Dis bilgi gerektirmemelidir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 3
+    word_count_max: 8
+    style: "variable"
+    correct_count: 1
+    correct_type: "matches"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Bu metnin kahramanı sırasıyla aşağıdaki duygulardan hangilerini yaşamıştır?</b>"
+  # KULLANILDI: - "<b>Bu metinde bahsedilen kişinin yaşadığı duygular aşağıdakilerin hangisinde sırasıyla verilmiştir?</b>"
+  # KULLANILDI: - "<b>Yukarıdaki metne göre kahramanın yaşadığı duygu değişimi aşağıdakilerin hangisinde doğru sıralanmıştır?</b>"
+  # KULLANILDI: - "<b>Bu metindeki kişinin duyguları hangi sırayla değişim göstermiştir?</b>"
+  # KULLANILDI: - "<b>Metnin kahramanının baştan sona yaşadığı duygular aşağıdakilerin hangisinde sırasıyla verilmiştir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metnin akışına uygun sıradaki duygu çifti"
+  kurallar:
+    - "Dogru duygu cifti yakin anlamli celdiriciler arasindan ayirt edilebilir olmali."
+    - "Iki duygu 'tire' ile ayrilmali (Ornek: 'Endişe - Sevinç')."
+    - "Siralama metnin kronolojik akisina uygun olmali."
+    - "Her iki duygu da metinde acikca sezdirilmis olmali."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI BILGILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "COK_YAKIN_DUYGUSAL_CIFTLER"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Doğru çifte çok yakın, birbirine benzer duygu çiftleri — güçlü tuzak"
+    nasil_olusturulur: |
+      Doğru duygu çiftine çok yakın anlamlı celdiriciler oluştur.
+      Zor seviyede yanlış celdiriciler doğru cevaba yakın görünmeli — öğrenci her iki duygu sırasını da metinle tek tek doğrulamalı.
+      Doğru duygu çifti yakın anlamlı celdiriciler arasından ayırt edilebilir olmalı.
+    kategori: "semantic"
+
+  - ad: "ANLAM_KAYMASI_CIFTI"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Bir duygusu çok yakın ama hafif kaymış, sıralama makul görünen seçenek"
+    nasil_olusturulur: |
+      Duygu çiftinin bir elemanı doğru duygunun çok yakın anlamlısı olan, sıralamada da makul görünen bir seçenek oluştur.
+      Zor seviyede öğrenci her iki duyguyu paragraf bağlamında tek tek doğrulamalıdır.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

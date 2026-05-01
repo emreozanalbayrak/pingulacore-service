@@ -1,0 +1,101 @@
+# Kaynak: metinde_duyular_sentence_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.orta
+# 4. sinif metinde duyular cumle analizi — orta duzey
+
+meta:
+  id: "b12_metinde_duyular_sentence_sinif4_orta"
+  ad: "Metinde Duyular - Cümle Analizi (Orta)"
+  sinif_seviyesi: 4
+  aciklama: "Orta duzey — seçeneklerdeki cümlelerde duyu analizi yapma."
+  frequency: "Low"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Soru kökü + 4 cümle seçenek (orta)"
+
+  paragraph:
+    required: false
+    kurallar:
+      - "Hedef duyu net olmali ancak farkli baglamlarda verilebilir."
+      - "Baska bir duyu ile dikkat dagitilabilir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 12
+    word_count_max: 18
+    background_color: "#f8f0e0"
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "does_not_belong"
+    kurallar:
+      - "Duyular için SADECE basit, bilinen kelimeleri kullan: görme, işitme, dokunma, tatma, koklama"
+      - "Hedef duyu net olmalı ama bağlam çeşitlenebilir."
+      - "Doğru cevap başka bir duyu ile dikkat dağıtabilir."
+      - "En az 1 çeldirici ilk bakışta güçlü görünmeli."
+      - "Secenekler anlam ve yapi bakimindan daha yakin olmali."
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Aşağıdaki cümlelerin hangisinde işitme duyusuna dair bir ayrıntıya <u>yer verilmemiştir</u>?</b>"
+  # KULLANILDI: - "<b>Aşağıdaki cümlelerin hangisinde görme duyusuna ait bir ifadeye <u>yer verilmemiştir</u>?</b>"
+  - "<b>Aşağıdaki cümlelerin hangisinde dokunma duyusuna ilişkin bir ayrıntıya <u>rastlanmaz</u>?</b>"
+  - "<b>Aşağıdaki cümlelerin hangisinde koklama duyusunu yansıtan bir ifadeye <u>yer verilmemiştir</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "İstenen duyuyu içermeyen cümle"
+  kurallar:
+    - "Soru 'yer verilmemistir' diyorsa: dogru cevap istenen duyuyu ICERMEYEN cumle."
+    - "Diger 3 cumle istenen duyuyu ICERMELI."
+    - "Duyu ifadeleri net ve belirgin olmali."
+    - "Cumle tam ve anlamli olmali."
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cozumleme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+
+celdirici_stratejileri:
+  - ad: "FARKLI_BAGLAMDA_DUYU"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Hedef duyuyu farklı bağlamlarda veren, dikkat dağıtıcı seçenekler"
+    nasil_olusturulur: |
+      Hedef duyu net olmalı ancak farklı bağlamlarda verilebilir.
+      Doğru cevap hedef duyuyu içermemeli, başka bir duyu ile dikkat dağıtabilir.
+      En az 1 celdirici ilk bakışta güçlü görünmeli.
+    kategori: "semantic"
+
+  - ad: "BASKA_DUYU_DIKKAT_DAGITICI"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Doğru cevap başka bir duyuyu içererek dikkat dağıtıyor"
+    nasil_olusturulur: |
+      Doğru cevap cümlesi hedef duyuyu içermemeli ama başka belirgin bir duyuyu içirerek öğrencinin dikkatini dağıtabilmeli.
+      Orta seviyede öğrenci yalnızca hedef duyu varlığına odaklanarak karar vermeli.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

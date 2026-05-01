@@ -1,0 +1,146 @@
+meta:
+  id: senaryo_anket
+  ad: Senaryo + Anket Grafiği
+  sinif_seviyesi: 5
+  aciklama: Bir karakterin anket araştırması yaptığı senaryo ve grafik/tablo üzerinden 5 soru
+  kaynak: kadirhocasorukokleri.md
+  frequency: Medium
+context:
+  type: senaryo_anket
+  question_count: 4
+  question_count_min: 4
+  question_count_max: 4
+  generation:
+    word_count_min: 120
+    word_count_max: 200
+    structure:
+    - Bir karakterin (isimli) bir konuyu merak edip anket/araştırma yaptığı senaryo oluştur (3-5 cümle)
+    - Karakter arkadaşlarına anket uygular ve sonuçları yatay çubuk grafik (bar chart) olarak sunar
+    - Senaryoda metinde önerilere/bilgilere de yer ver
+    - 'Anket sonuclarini GORSEL OLARAK sun — asagidaki formatlardan birini sec:'
+    - 'FORMAT 1 — HTML CUBUK GRAFIGI: <div class=''chart''><div class=''chart-row''><span class=''chart-label''>Etiket</span><span class=''chart-bar'' style=''width:XX%''></span><span class=''chart-val''>Deger</span></div></div>
+      (4-6 satir, cubuk genislikleri oranli)'
+    - 'FORMAT 2 — HTML TABLOSU: <table><tr><th>Baslik</th></tr><tr><td>Veri</td></tr></table> (en az 4 satir, 2-3 sutun)'
+    - Sayisal veriler olmali (kisi sayisi, yuzde, puan vb.)
+    - 'Tercih sirasi: cubuk grafik > tablo (grafik gorsel olarak daha zengin)'
+    kurallar:
+    - Senaryo 5. sınıf öğrencisinin günlük hayatından olmalı
+    - Karakter meraklı ve araştırmacı bir öğrenci olmalı
+    - Anket konusu somut ve anlaşılır olmalı
+    - Veriler gerçekçi ve tutarlı olmalı
+    - Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)
+    - 'KRİTİK — SENARYO KAPSAMI: Senaryo sadece DURUMU ve MERAKı anlatsın, CEVAPLARI anlatmasın!'
+    - Senaryo kısa ve öz olmalı — sadece karakterin ne merak ettiğini ve neden araştırma yaptığını söylemeli
+    - 'YASAK: Senaryoda uzman önerileri, sonuçlar, çıkarımlar veya detaylı bilgiler vermek'
+    - Detaylı bilgiler ve veriler SADECE grafik/tabloda olmalı — senaryo bunları içermemeli
+    - Soruların cevabı senaryodan değil grafik/tablodan çıkarılmalı
+    - 'TEST: Senaryoyu okuyup grafiğe/tabloya bakmadan kaç soru cevaplanabilir? 0 olmalı!'
+  questions:
+  - slot: 1
+    type: merak_konusu
+    soru_kokleri:
+    - <b>…Özne…'nin merak ettiği konu aşağıdakilerden hangisidir?</b>
+    - <b>Asagidakilerden hangisi ...Ozne...nin anketi uygularken arkadaslarina sordugu sorulardan biridir?</b>
+    options_style: complete_sentence
+    word_count_min: 3
+    word_count_max: 15
+    beceri:
+      katman: KB2
+      bilesenler:
+      - cikarim_yapma
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 2
+    type: anket_sorusu
+    soru_kokleri:
+    - <b>Aşağıdakilerden hangisi …Özne…'nin anketi uygularken arkadaşlarına sorduğu sorulardan biridir?</b>
+    options_style: question_sentence
+    word_count_min: 5
+    word_count_max: 18
+    beceri:
+      katman: KB2
+      bilesenler:
+      - cikarim_yapma
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 3
+    type: grafik_bilgi
+    soru_kokleri:
+    - <b>…Özne…, araştırması sonucu oluşturduğu grafik sayesinde metinde önerilenlerden hangisiyle ilgili bilgi edinmiştir?</b>
+    options_style: complete_sentence
+    word_count_min: 4
+    word_count_max: 18
+    beceri:
+      katman: KB2
+      bilesenler:
+      - yorumlama
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 4
+    type: anket_yorum
+    soru_kokleri:
+    - <b>Metindeki araştırmadan hareketle …Özne…'nin anket sonuçları ile ilgili aşağıdakilerden hangisi söylenebilir?</b>
+    - <b>Metin ve anket sonuçlarını gösteren grafikteki bilgilere göre aşağıdakilerden hangisi söylenebilir?</b>
+    - <b>Metin ve anket sonuclarini gosteren grafikteki bilgilere gore asagidakilerden hangisi soylenebilir?</b>
+    options_style: complete_sentence
+    word_count_min: 5
+    word_count_max: 20
+    beceri:
+      katman: KB2
+      bilesenler:
+      - yorumlama
+      - cikarim_yapma
+      surec_bileseni: bilgiyi_cikartma
+header_template: 1-4. soruları aşağıdaki senaryo ve anket grafiğine göre cevaplayınız.
+format:
+  type: llm_generated_html
+  description: Senaryo + Anket grafiği bağlamı üzerinden 4 soru
+  paragraph:
+    required: true
+    word_count_min: 120
+    word_count_max: 200
+    sentence_count_min: 3
+    sentence_count_max: 10
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 3
+    word_count_max: 20
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Senaryo, metin ve/veya anket sonuçlarıyla doğrudan desteklenen cevap
+  kurallar:
+  - 'KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI'
+  - Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI
+  - Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil
+  - 'YASAK: Tablodaki değeri aynen şıkka yazmak (örn: ''yalıtımı azdır'' tabloda yazıyorsa şıkta aynen yazmamalı)'
+  - Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli
+  - Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı
+  - Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı
+  - Merak sorusunda doğru cevap senaryoda açıkça belirtilen araştırma konusu olmalı
+  - Anket sorusunda doğru cevap anketin konusuyla tutarlı bir soru olmalı
+  - Grafik-bilgi sorusunda doğru cevap grafik verileriyle metindeki önerilerin kesiştiği nokta olmalı
+  - Yorum sorusunda doğru cevap anket sonuçlarıyla desteklenen çıkarım olmalı
+  - Metin-grafik sorusunda doğru cevap her iki kaynaktaki bilginin birleşiminden çıkarılmalı
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: ''teleskop'' → ''mercekli araç'' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: KONU_KAYDIRMA
+    aciklama: Merak konusunu farklı bir alana kaydırma
+    ornek: Asıl araştırma konusundan farklı ama ilişkili bir konuyu sunma
+  - ad: YANLIS_SORU
+    aciklama: Ankette sorulmamış bir soruyu sorulmuş gibi sunma
+    ornek: Anket konusuyla ilgili ama ankette yer almayan bir soru verme
+  - ad: VERI_CARPITMA
+    aciklama: Anket verilerini yanlış yorumlama
+    ornek: Tablodaki sayıları yanlış okuyarak çıkarım yapma
+use_shared_strategies: false

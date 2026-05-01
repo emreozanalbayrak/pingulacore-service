@@ -1,0 +1,202 @@
+# Kaynak: 5sinif/capture2/metinde_karakter_ozellik.yaml — 4. sinif icin adapte edildi (sinif_seviyesi 5->4)
+# templates/capture2/metinde_karakter_ozellik.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Metinde Karakter
+#
+# STANDART KARAKTER OZELLIGI FORMATI (tum karakter sorularinin ~%60'i)
+# Karakter odakli paragraf verilir, ogrenci kisinin kisilik ozelligini belirler
+#
+# MANTIK: Kisilik ozelligi dogrudan soylenmez, davranislar uzerinden sezdirilir
+# Secenekler KISA KAVRAM formatindadir (1-3 kelime)
+
+meta:
+  id: "metinde_karakter_ozellik_sinif4"
+  ad: "Metinde Karakter (Kişilik Özelliği)"
+  sinif_seviyesi: 4
+  aciklama: "Metindeki kişinin karakter özelliğini analiz etme"
+  kaynak: "data/metinde_karakter.pdf"
+  frequency: "High (~60% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Karakter odaklı paragraf + soru kökü + sıfat/kavram seçenekler"
+
+  paragraph:
+    required: true
+    word_count_min: 50
+    word_count_max: 100
+    sentence_count_min: 3
+    sentence_count_max: 7
+    stil: "oykuleyici"
+    kurallar:
+      - "Kişinin belirgin bir davranışı anlatılmalı (Örn: Parasını harcamaya kıyamıyor -> Cimri)."
+      - "Kişilik özelliği doğrudan söylenmemeli, olaylar üzerinden sezdirilmeli."
+      - "Özellikler: İnatçı, Kararlı, Sabırsız, Düzenli, Titiz, Dağınık, Yardımsever, Bencil, Karamsar, İyimser, Alçakgönüllü."
+      - "Metinde tek bir baskın kişilik özelliği ön plana çıkmalı."
+      - "Karakter isim veya unvan ile tanımlanmalı (Örn: Ahmet, Zeynep Teyze)."
+      - "Paragrafta konuyla ilgili AÇIKLAMA, TANIM veya EK BİLGİ verme! Paragraf SADECE hikâyeyi/olayı anlatsın"
+      - "YASAK: 'Duyular insanın çevresini algılamasını sağlar', 'Karakter özellikleri kişinin davranışlarını belirler' gibi ders kitabı açıklamaları"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 3
+    style: "concept"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 3 varyasyon)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metinde sözü edilen kişinin aşağıdaki özelliklerden hangisine sahip olduğu söylenebilir?</b>"
+  - "<b>Bu metinde bahsedilen kişi için aşağıdakilerden hangisi söylenebilir?</b>"
+  - "<b>Bu metinde bahsedilen Ali, aşağıdaki özelliklerden hangisine sahiptir?</b>"
+  # Karakter hakkında söylenemez (ARI Paragraf 2025 kaynak)
+  - "<b>Bu metnin kahramanı ile ilgili aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Davranışla örtüşen kişilik sıfatı"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Kisilik ozelligi metindeki davranislarla birebir ortusmeli"
+    - "1-3 kelimelik kisa kavram olmali"
+    - "Ozellik dogrudan soylenmemeli, davranislardan cikarilmali"
+  ornekler:
+    - paragraf: "Odasını her gün toplar, kitaplarını boy sırasına dizerdi."
+      dogru: "Düzenli / Titiz"
+      neden: "Odayi toplama ve kitaplari sirayla dizme duzenlilik gosterir"
+    - paragraf: "Asla vazgeçmedi, defalarca denedi ve sonunda başardı."
+      dogru: "Kararlı / Azimli"
+      neden: "Vazgecmeme ve defalarca deneme kararlilik gosterir"
+    - paragraf: "Her olayın en kötü tarafını görür, sürekli şikayet ederdi."
+      dogru: "Karamsar / Kötümser"
+      neden: "Her seyin kotu tarafini gorme ve sikayet etme karamsarlik gosterir"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI BILGILERI
+# ═══════════════════════════════════════════════════════════════
+# LLM paragraf iceriğine gore en uygun 3 celdiriciyi secer
+# Benzer ama yanlis ozellikler veya zit ozellikler kullanilir
+
+distractors:
+  notlar:
+    - "Benzer ama yanlış özellikler (Örn: Kararlı yerine İnatçı, Düzenli yerine Titiz)"
+    - "Zıt özellikler (Örn: Cömert yerine Cimri, İyimser yerine Karamsar)"
+    - "Metinde izi bulunmayan özellikler seçilmeli"
+    - "Tüm seçenekler aynı formatta olmalı (1-3 kelimelik kişilik sıfatı)"
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["yorumlama"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select a character trait"
+      details: |
+        Bir baskin kisilik ozelligi sec:
+        Inatci, Kararli, Sabirsiz, Duzenli, Titiz, Daginik, Yardimsever,
+        Bencil, Karamsar, Iyimser, Alcakgonullu, Comert, Cimri, Cesur,
+        Korkak, Guvensiz, Ozguvensiz, Sabir, Hosgorulu, Ozverili
+
+    - step: 2
+      action: "Generate character-focused paragraph (50-100 words)"
+      details: |
+        Paragrafta:
+        - Kisi isim veya unvan ile tanitilmali
+        - Kisilik ozelligi DOGRUDAN SOYLENMEMELI
+        - Davranislar, aliskanliklar, tepkiler uzerinden sezdirilmeli
+        - Ornek: Cimri icin "Parasini harcamaya kiyamiyor, en ucuz olani aliyor"
+        - Tek bir baskin ozellik on plana cikmali
+
+    - step: 3
+      action: "Set correct answer = character trait"
+      details: "Metindeki davranislarla ortusken kisilik sifati dogru cevap yapilir"
+
+    - step: 4
+      action: "Generate 3 distractors"
+      details: |
+        3 yanlis kisilik ozelligi olustur:
+        - Benzer ama farkli ozellikler (kararli/inatci, duzenli/titiz)
+        - Zit ozellikler (comert/cimri, iyimser/karamsar)
+        - Her biri 1-3 kelimelik kavram
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR (Sayfa 115-117)
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 115
+    konu: "Duzenlilik ozelligi"
+    paragraf: "Odasını her gün toplar, kitaplarını boy sırasına dizerdi. Masasında her şeyin yeri belliydi."
+    dogru_cevap: "Düzenli"
+    celdirici_1: "Titiz"
+    celdirici_2: "Sabırlı"
+    celdirici_3: "Kararlı"
+
+  - sayfa: 116
+    konu: "Kararlilik ozelligi"
+    paragraf: "Asla vazgeçmedi, defalarca denedi. Herkes 'Artık bırak' dese de o yoluna devam etti ve sonunda başardı."
+    dogru_cevap: "Kararlı"
+    celdirici_1: "İnatçı"
+    celdirici_2: "Sabırlı"
+    celdirici_3: "Cesur"
+
+  - sayfa: 117
+    konu: "Karamsarlik ozelligi"
+    paragraf: "Her olayın en kötü tarafını görür, sürekli şikayet ederdi. 'Bu iş olmaz' demek ağzından düşmezdi."
+    dogru_cevap: "Karamsar"
+    celdirici_1: "Şikayetçi"
+    celdirici_2: "Sabırsız"
+    celdirici_3: "Bencil"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 50-100 arasinda mi?"
+    - "Cumle sayisi 3-7 arasinda mi?"
+    - "Oykuleyici bir uslupla mi yazilmis?"
+    - "Tek bir baskin kisilik ozelligi on plana cikmis mi?"
+    - "Kisilik ozelligi dogrudan soylenmemis mi?"
+    - "Davranislar uzerinden sezdirilmis mi?"
+    - "Karakter isim veya unvanla tanitilmis mi?"
+
+  correct_answer:
+    - "1-3 kelime kavram adi mi?"
+    - "Paragraftaki davranislarla ortusuyur mu?"
+    - "Kisilik sifati dogru yazilmis mi (Turkce karakterler)?"
+
+  distractors:
+    - "Her celdirici farkli bir kisilik ozelligi mi?"
+    - "Celdiriciler 1-3 kelime kavram adi mi?"
+    - "Hicbiri paragraftaki baskin ozellikle ortusmuyur mu?"
+    - "Benzer/zit ozellik stratejisi kullanilmis mi?"
+    - "Tum secenekler ayni gramer yapida mi? (kisilik sifati)"

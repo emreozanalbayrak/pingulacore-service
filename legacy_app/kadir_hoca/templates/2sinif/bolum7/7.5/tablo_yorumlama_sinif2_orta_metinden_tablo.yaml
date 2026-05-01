@@ -1,0 +1,104 @@
+# Varyant: metindeki_bilgileri_veren_tablo (referans zorluk_duzeyleri.orta)
+# Orta duzey, 1 soru: metin/liste + tablo secenekleri — dogru tabloyu secme
+
+meta:
+  id: tablo_yorumlama_sinif2_orta_metinden_tablo
+  ad: "2. Sinif - Tablo Yorumlama (Orta) - Metinden Tablo Secme"
+  sinif_seviyesi: 2
+  aciklama: "Orta baglam — 1 soru: metindeki bilgileri dogru gosteren tabloyu secme"
+  frequency: "Medium"
+
+context:
+  type: tablo_yorumlama_sinif2_orta_metinden_tablo
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 18
+    word_count_max: 52
+    structure:
+      - "Metin veya liste tablodaki verilerin ne olmasi gerektigini anlatmali."
+      - "Bilgiler acik ve sade olmali."
+      - "Dogru tabloyu secmek icin metin dikkatle okunmali."
+      - "Metin tek basina dogru cevabi soylememeli; tablo secenekleriyle karsilastirma gerektirmeli."
+      - "Liste veya metin 2. sinif duzeyine uygun olmali."
+      - "Metin 2-5 cumle icermeli."
+    kurallar:
+      - "2. sinif duzeyinde, sade ve gunluk hayata yakin icerik."
+      - "Kisa aciklama metni, madde madde veri listesi veya kisi-nesne-sayi iliskisi veren kisa bilgiler olabilir."
+      - "Metin/liste dogru tabloyu karsilastirmali sectirecek kadar acik olmali."
+      - "Metin/liste tek basina cevabi vermemeli."
+      - "Turkce karakterler dogru kullanilmali."
+
+  questions:
+    - slot: 1
+      type: metindeki_bilgileri_veren_tablo
+      soru_kokleri:
+        - "<b>Tablolardan hangisi metindeki bilgileri içermektedir?</b>"
+        - "<b>Aşağıdaki tablolardan hangisi metindeki bilgilere uygundur?</b>"
+        - "<b>Verilen bilgilere göre doğru tablo hangisidir?</b>"
+        - "<b>Metindeki bilgilere göre oluşturulan tablo aşağıdakilerden hangisidir?</b>"
+        - "<b>Aşağıdaki tablolardan hangisi verilen bilgileri doğru göstermektedir?</b>"
+      options_style: image_description
+      image_style: table
+      word_count_min: 15
+      word_count_max: 50
+      slot_rules:
+        - "3 tablo secenegi bulunmali."
+        - "1 tablo metindeki bilgileri tam karsilamali."
+        - "2 tablo yakin ama hatali veri tasimali."
+        - "Dogru cevap icin hem metin/liste hem tablo secenekleri birlikte incelenmeli."
+      beceri:
+        katman: KB2
+        bilesenler: [metin_tablo_eslestirme, karsilastirma]
+        surec_bileseni: metni_yorumlama
+
+header_template: "Asagidaki bilgileri okuyarak soruyu cevaplayiniz."
+
+format:
+  type: llm_generated_html
+  description: "1 baglam sorusu (orta): metin/liste + tablo secenekleri — dogru tabloyu secme"
+  paragraph:
+    required: true
+    word_count_min: 18
+    word_count_max: 52
+    sentence_count_min: 2
+    sentence_count_max: 5
+    stil: "bilgilendirici_liste"
+    background_color: "#f8f0e0"
+  stem:
+    required: true
+  options:
+    count: 3
+    labels: [A, B, C]
+    word_count_min: 15
+    word_count_max: 50
+    style: image_description
+    image_style: table
+    correct_count: 1
+    correct_type: matches
+
+dogru_cevap:
+  tanim: "Metindeki bilgileri tam karsilayan tablo secenegi"
+  kurallar:
+    - "Dogru cevap metindeki bilgileri tam karsilayan tablo olmali."
+    - "Yanliz metne bakarak dogru tablo secilememelidir."
+    - "Yalniz tablo seceneklerine bakarak da dogru cevap kesin secilememelidir."
+    - "Dogru cevap dis bilgi gerektirmemeli."
+    - "En az 1 yanlis secenek ilk bakista makul gorunmeli."
+
+distractors:
+  stratejiler:
+    - ad: YANLIS_TABLO_ESLESMESI
+      aciklama: "Metindeki bilgilerin bir kismini dogru, bir kismini yanlis gosteren tablo"
+    - ad: YAKIN_SAYI_HATASI
+      aciklama: "Tablodaki degere cok yakin ama yanlis sayi kullanma"
+    - ad: SATIR_SUTUN_KARISTIRMA
+      aciklama: "Bilgiyi yanlis kisi, gun, ders veya baslikla eslestirme"
+
+use_shared_strategies: false
+
+beceri:
+  katman: KB2
+  bilesenler: [metin_tablo_eslestirme, karsilastirma]
+  surec_bileseni: metni_yorumlama

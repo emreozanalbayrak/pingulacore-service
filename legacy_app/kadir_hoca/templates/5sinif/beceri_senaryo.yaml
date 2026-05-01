@@ -1,0 +1,289 @@
+# templates/beceri_senaryo.yaml
+# Kaynak: MEB Beceri Temelli Soru Bankasi - Senaryo
+#
+# BECERI TEMELLI SENARYO FORMATI
+# Gercek hayat senaryosu verilir, ogrenci beceri temelli soruyu cevaplar
+#
+# MANTIK: 1 secenekte dogru cevap, 4 secenekte yanlis cevaplar
+# Secenekler TAM CUMLE formatindadir (3-20 sozcuk)
+
+meta:
+  id: "beceri_senaryo"
+  ad: "Beceri Temelli - Senaryo"
+  sinif_seviyesi: 5
+  aciklama: "Gercek hayat senaryolari uzerinden beceri temelli sorular"
+  kaynak: "MEB Beceri Temelli Soru Bankasi"
+  frequency: "~12% of beceri temelli questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Senaryo baglami + soru koku + 5 tam cumle secenek (beceri temelli)"
+
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 150
+    sentence_count_min: 5
+    sentence_count_max: 12
+    stil: "senaryo"
+    kurallar:
+      - "Gercek hayat senaryosu olustur"
+      - "Somut bir durum/olay anlat"
+      - "Karakterler ve mekan belirt"
+      - "Problem veya karar gerektiren bir nokta icersin"
+      - "Ogrencinin gunluk hayatta karsilasabilecegi bir durum olmali"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 5
+    labels: ["A", "B", "C", "D", "E"]
+    word_count_min: 3
+    word_count_max: 20
+    style: "complete_sentence"
+    correct_type: "matches"
+    correct_count: 1
+
+  questions_per_context: 2
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ALANLARI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  context_type: "SENARYO"
+  context_label: "Senaryo"
+  skill_level: "KB3"
+  process_component: "Gercek yasam durumunda bilgiyi uygulama ve problem cozme sureci"
+  skill_areas:
+    - "uygulama"
+    - "problem_cozme"
+    - "degerlendirme"
+    - "karar_verme"
+    - "neden_sonuc"
+  answer_key_explanation: true
+  question_patterns:
+    - "Bu durumda en uygun davranis hangisidir?"
+    - "Senaryodaki kisinin yerine olsaniz ne yapardiniz?"
+    - "Bu durumun en olasi sonucu nedir?"
+    - "Verilen durumda hangi cozum en uygundur?"
+    - "Bu senaryoda neden-sonuc iliskisi nasil kurulur?"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # Uygulama / Problem Çözme
+  - "<b>Bu durumda aşağıdakilerden hangisi en uygun davranıştır?</b>"
+  - "<b>Senaryodaki kişinin yerine olsanız aşağıdakilerden hangisini yapardınız?</b>"
+  - "<b>Bu durumda yapılması gereken ilk şey aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu senaryodaki sorunun çözümü için aşağıdakilerden hangisi en etkilidir?</b>"
+  # Çıkarım / Değerlendirme
+  - "<b>Verilen senaryoya göre aşağıdakilerden hangisi doğrudur?</b>"
+  - "<b>Bu durumun en olası sonucu aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu senaryoda aşağıdaki <u>çıkarımlardan hangisi yapılamaz</u>?</b>"
+  - "<b>Senaryoya göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  # Neden-Sonuç / Analiz
+  - "<b>Senaryodaki kişinin bu duruma düşmesinin nedeni aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu senaryodaki davranışın olası sonuçları düşünüldüğünde aşağıdakilerden hangisine ulaşılabilir?</b>"
+  - "<b>Verilen durumda aşağıdaki <u>davranışlardan hangisi uygun değildir</u>?</b>"
+  - "<b>Bu senaryoya göre aşağıdakilerden hangisi en doğru değerlendirmedir?</b>"
+  # Temel Problem / Özetleme (PDF kaynak)
+  - "<b>Bu metne göre yaşanan temel problem aşağıdakilerden hangisidir?</b>"
+  - "<b>Aşağıdakilerden hangisi yaşanan problemi en iyi şekilde özetlemektedir?</b>"
+  - "<b>Aşağıdakilerden hangisi yaşanan sorunu çözmek amacıyla atılan adımlardan biri <u>değildir</u>?</b>"
+  # Koşul Değiştirme / Transfer (PDF kaynak)
+  - "<b>Eğer mevcut koşullar değiştirilseydi bu durum sonucu nasıl etkilerdi?</b>"
+  - "<b>Bu çözüm hangi durumda da işe yarayacaktır?</b>"
+  # Karar Verme / Sorgulama (PDF kaynak)
+  - "<b>Bu durumda karar verilmesi gerekirse aşağıdakilerden hangisinin yapılması beklenir?</b>"
+  - "<b>Bu durumu açıklamak için aşağıdaki sorulardan hangisi sorulmalıdır?</b>"
+  - "<b>Bu iddiayı kanıtlamak için ne tür bir gözlem veya araştırma yapılmalıdır?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Senaryodaki duruma en uygun, bilimsel/mantiksal olarak dogru cevap"
+  kurallar:
+    - "Senaryo baglamina uygun olmali"
+    - "Bilimsel olarak dogru olmali"
+    - "Ust duzey dusunme becerisi gerektirmeli"
+    - "Diger seceneklerden ayirt edilebilir olmali"
+    - "Baglam olmadan cevaplanamaz olmali"
+    - "Bilissel surec bilesenini hedeflemeli"
+    - "Tam cumle formatinda olmali (3-20 sozcuk)"
+  ornekler:
+    - senaryo: "Ahmet, piknikte yiyecekleri buzlugun disinda birakti. Hava sicakligi 35 derece. Birkaç saat sonra yiyecekleri yemek istedi."
+      dogru: "Yiyecekler bozulmus olabilecegi icin yememeleri daha uygun olur"
+      neden: "Sicak havada uzun sure disarida kalan yiyecekler bakteriyel ureme riski tasir"
+    - senaryo: "Elif, deney sirasinda asitli bir sivi dokerken gozune sicrama oldu."
+      dogru: "Hemen bol su ile gozlerini yikamali ve ogretmenine haber vermeli"
+      neden: "Asit sicramasinda ilk mudahale bol su ile yikamaktir"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM senaryo iceriğine gore en uygun 4 stratejiyi secer
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic suitable for real-life scenario format"
+      details: "Gercek hayatta karsilasabilecek, problem cozme gerektiren bir konu sec"
+
+    - step: 2
+      action: "Generate scenario text (80-150 words) with characters and setting"
+      details: |
+        Senaryo metninde:
+        - Somut karakterler ve mekan olmali
+        - Problem veya karar gerektiren bir durum olmali
+        - Gercekci ve inandirici olmali
+        - Ogrencinin seviyesine uygun olmali
+
+    - step: 3
+      action: "Create correct answer as complete sentence"
+      details: |
+        Dogru cevap:
+        - Senaryodaki soruna en uygun cozum olmali
+        - Bilimsel/mantiksal olarak dogru olmali
+        - Tam cumle formatinda olmali (3-20 sozcuk)
+
+    - step: 4
+      action: "Create 4 wrong answers using strategies"
+      details: |
+        Her yanlis secenek icin farkli strateji kullan:
+        - 1x kismi dogru ama eksik cozum
+        - 1x mantikli gorunen ama yanlis cozum
+        - 1x iliskili ama konudan sapan cevap
+        - 1x yuzeysel dogru gorunen ama bilimsel olarak yanlis cevap
+        Tum secenekler ayni formatta olmali (tam cumle, 3-20 sozcuk)
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D-E seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - konu: "Besin guvenligi senaryosu"
+    dogru_cevap: "B"
+    secenekler:
+      A: "Yiyecekleri koklayarak kontrol etmeli"
+      B: "Yiyecekler bozulmus olabilecegi icin yememeleri daha uygun olur"
+      C: "Yiyecekleri isitarak yemeli"
+      D: "Yiyeceklerin rengine bakarak karar vermeli"
+      E: "Yiyecekleri baska bir kaba koyarak yemeli"
+    dogru_cevap_icerigi: "Yiyecekler bozulmus olabilecegi icin yememeleri daha uygun olur"
+    neden: "Sicak havada uzun sure bekleyen yiyecekler saglik riski tasir"
+
+  - konu: "Laboratuvar guvenligi senaryosu"
+    dogru_cevap: "D"
+    secenekler:
+      A: "Gozlerini ovalamali"
+      B: "Deneye devam etmeli ve sonra mudahale etmeli"
+      C: "Gozlerini kapatip beklemeli"
+      D: "Hemen bol su ile gozlerini yikamali ve ogretmenine haber vermeli"
+      E: "Arkadalarindan yardim istemeli"
+    dogru_cevap_icerigi: "Hemen bol su ile gozlerini yikamali ve ogretmenine haber vermeli"
+    neden: "Kimyasal sicramalarda ilk mudahale bol su ile yikama ve yetkili bilgilendirme"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  # Asama 0: Kimlik ve Olcme Niyeti
+  identity:
+    - "Soru bir beceriyi mi olcuyor, bilgi hatirlamayi mi?"
+    - "Hedef beceri seviyesi uygun mu?"
+    - "Surec bileseni dogru hedeflenmis mi?"
+
+  # Asama 1: Baglam Secimi
+  context:
+    - "Baglam olmadan soru cozulebilir mi? (Hayir olmali)"
+    - "Baglam fonksiyonel mi? (Dekoratif degil)"
+    - "Baglam cevabi dogrudan veriyor mu? (Vermemeli)"
+    - "Baglam otantik mi? (Gercek hayattan)"
+    - "Kelime sayisi 80-150 arasinda mi?"
+    - "Gercekci bir senaryo mu?"
+    - "Karakter ve mekan belirtilmis mi?"
+    - "Problem veya karar gerektiren durum var mi?"
+
+  # Asama 2: Soru ve Secenekler
+  question:
+    - "Soru koku net ve anlasilir mi?"
+    - "Cift olumsuz var mi? (Olmamali)"
+    - "Tek dogru cevap var mi?"
+
+  options:
+    - "Celdiriciler belirli bilissel hatalari temsil ediyor mu?"
+    - "Eleme yoluyla cevaplanabilir mi? (Olmamali)"
+    - "Format farkliligi ile dogru cevap belli oluyor mu? (Olmamali)"
+    - "Tum secenekler benzer uzunlukta mi?"
+    - "5 secenek var mi (A-B-C-D-E)?"
+
+  # Asama 3: Etik
+  ethics:
+    - "Cinsiyet/etnik onyargi var mi? (Olmamali)"
+    - "Yas grubuna uygun mu?"
+
+  # Asama 4: Dil
+  language:
+    - "Turkce dil bilgisi dogru mu?"
+    - "Sinif seviyesine uygun mu?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+
+  generation_rules:
+    - "Gercek hayat senaryolarina uygun konulari tercih et"
+    - "Problem cozme gerektiren konular ideal"
+    - "Ogrencinin gunluk hayatta karsilasabilecegi durumlar sec"

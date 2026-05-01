@@ -1,0 +1,359 @@
+meta:
+  id: "paragraf_olusturma_sinif2_standart_gorselli_uc_secenekli"
+  ad: "Paragraf Oluşturma"
+  sinif_seviyesi: 2
+  ders: "Türkçe"
+  bolum: "2. Sınıf Paragraf Soru Bankası"
+  alt_bolum: "4. Paragraf Oluşturma"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    2. sınıf öğrencisi için numaralanmış cümleleri anlamlı bir sıra içinde dizdirerek
+    paragraf oluşturmayı ölçen, görsel destekli ve 3 seçenekli standart soru üretim şablonu.
+  kullanim_notu: >
+    Bu şablon, harici olarak kullanılan 2. Sınıf TYMM Ortak Kuralları YAML'ı ile birlikte
+    doğrulanmalıdır. TYMM ortak kuralları bu şablonun içine gömülmemiştir.
+
+format:
+  type: "llm_generated_html"
+  description: "Görsel + numaralanmış cümleler + soru kökü + 3 sıralama seçeneği"
+
+  numbered_sentences:
+    required: true
+    sentence_count_min: 3
+    sentence_count_max: 4
+    style: "simple_ordered_statements"
+    numbering_style: "1_2_3_4"
+    kurallar:
+      - "Cümleler birlikte anlamlı ve doğal bir paragraf oluşturmalıdır."
+      - "Cümleler tek baskın konu veya tek olay akışı etrafında kurulmalıdır."
+      - "Cümleler 2. sınıf öğrencisinin anlayabileceği kadar sade, kısa ve somut olmalıdır."
+      - "Her cümle tek bir açık bilgi veya tek bir açık adım içermelidir."
+      - "Doğru sıralama; zaman, oluş sırası, neden-sonuç veya işlem basamakları bakımından açık olmalıdır."
+      - "Başlangıç cümlesi belirgin olmalıdır."
+      - "Devam cümleleri önceki cümleye doğal olarak bağlanmalıdır."
+      - "Son cümle süreci, olayı veya düşünceyi doğal biçimde tamamlamalıdır."
+      - "Cümleler dış bilgi gerektirmeden yalnız kendi iç ilişkileriyle sıralanabilir olmalıdır."
+      - "Paragraf oluşturma görevi ana düşünce, ana duygu veya yorum sorusuna dönüşmemelidir."
+      - "Cümleler arasında açık bağlayıcılar kullanılabilir: önce, sonra, ardından, en sonunda, böylece gibi."
+      - "Karışık sırada verilseler bile doğru diziliş tek olmalıdır."
+
+  sequence_design_rules:
+    zorunlu:
+      - "Doğru sıra değiştirildiğinde anlam, zaman ya da akış bozulmalıdır."
+      - "İlk cümle paragrafın doğal girişini oluşturmalıdır."
+      - "Son cümle paragrafın doğal bitişini oluşturmalıdır."
+      - "En az iki cümle arasında açık sıra ilişkisi bulunmalıdır."
+      - "Sıralama, yalnız sayısal ezberle değil anlam ilişkisiyle bulunmalıdır."
+    yasak:
+      - "Birden fazla makul doğru sıra oluşturulamaz."
+      - "Tüm cümleler birbirinden bağımsız bilgi cümlesi gibi yazılamaz."
+      - "Sıralama yalnız tek bir sözcüğe dayalı yapay bilmeceye dönüştürülemez."
+      - "Yalnızca dilbilgisel teknik bilgiyle çözülen düzen kurulamaz."
+      - "Çok katmanlı, karmaşık veya yetişkin düzeyi mantık gerektiren dizilim kurulamaz."
+
+  visual:
+    required: true
+    description: "Cümlelerde anlatılan ana konu, süreç veya varlığı destekleyen sade görsel"
+    placement: "sentences_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illüstrasyon"
+      - "tek nesne veya süreç odaklı çizim"
+      - "tek ürün, canlı veya yapı görseli"
+    kurallar:
+      - "Görsel numaralanmış cümlelerin ortak konusunu desteklemelidir."
+      - "Görsel süs amaçlı olmamalı, konu alanını belirginleştirmelidir."
+      - "Görsel tek bakışta anlaşılır olmalıdır."
+      - "Görsel sıralamayı tek başına tamamen vermemelidir."
+      - "Görsel dikkat dağıtıcı ayrıntılar içermemelidir."
+      - "Görsel ile cümleler arasında açık uyum bulunmalıdır."
+      - "Görsel yanlış sıralamayı destekleyecek kadar yanıltıcı olmamalıdır."
+    yasaklar:
+      - "karmaşık kolaj"
+      - "çok sahneli zaman çizgisi"
+      - "grafik veya veri yoğun görsel"
+      - "cümlelerle zayıf ilişkili dekoratif görsel"
+
+  stem:
+    required: true
+    selection: "random_from_list"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    correct_count: 1
+    style: "ordering_sequence"
+    kurallar:
+      - "Tüm seçenekler yalnız sıra dizisi biçiminde verilmelidir."
+      - "Sıralama, cümle numaraları tire ile ayrılmış biçimde yazılmalıdır."
+      - "3 cümle varsa seçenekler örneğin 1-2-3 biçiminde olmalıdır."
+      - "4 cümle varsa seçenekler örneğin 2-3-4-1 biçiminde olmalıdır."
+      - "Doğru seçenek anlamlı paragraf sırasını vermelidir."
+      - "Yanlış seçenekler rastgele değil, makul ama hatalı dizilişlerden seçilmelidir."
+      - "Yanlış seçeneklerden en az biri doğru başlangıca yakın ama devamı yanlış olmalıdır."
+      - "Yanlış seçeneklerden en az biri doğru sona yakın ama başlangıcı yanlış olmalıdır."
+
+soru_kokleri:
+  - "Numaralanmış cümlelerin olayların oluş sırasına göre sıralanışı hangi seçenekte doğru verilmiştir?"
+  - "Numaralanmış cümlelerle anlamlı bir paragraf oluşturulmak istenirse sıralama nasıl olmalıdır?"
+  - "Bu cümlelerle anlamlı bir paragraf oluşturmak için doğru sıralama hangisidir?"
+  - "Numaralanmış cümlelerin doğru sıralanışı aşağıdakilerden hangisidir?"
+  - "Bu cümleler anlamlı bir paragraf oluşturacak şekilde nasıl sıralanmalıdır?"
+  - "Aşağıdaki numaralanmış cümlelerle bir paragraf oluşturulursa doğru sıra hangisi olur?"
+  - "Karışık verilen cümelerle anlamlı bir paragraf oluşturulursa sıralama nasıl olur?"
+  - "Numaralanmış cümleler düşüncenin akışına göre nasıl sıralanmalıdır?"
+  - "Bu cümlelerin anlamlı bir paragraf oluşturması için sıralama hangi seçenekte doğru verilmiştir?"
+  - "Bu cümleler olayların oluş sırasına göre dizilirse hangi sıra oluşur?"
+
+beceri_odagi:
+  birincil_beceri:
+    - "Cümleleri doğru sıraya koyarak anlamlı paragraf oluşturma"
+  ikincil_beceriler:
+    - "Olayların oluş sırasını fark etme"
+    - "Zaman ve işlem basamakları arasındaki ilişkiyi kurma"
+    - "Başlangıç, gelişme ve bitiş cümlelerini ayırt etme"
+    - "Düşüncenin akışını izleme"
+
+dogru_cevap:
+  tanim: "Numaralanmış cümeleri anlamlı ve doğal bir paragraf oluşturacak biçimde sıralayan seçenek"
+  kurallar:
+    - "Doğru cevap paragrafın doğal başlangıcını doğru cümleyle başlatmalıdır."
+    - "Doğru cevap cümeler arasında açık zaman, neden-sonuç veya işlem akışı kurmalıdır."
+    - "Doğru cevap paragrafı doğal bir sonla tamamlamalıdır."
+    - "Doğru cevap yalnız tek bir doğru diziliş bırakmalıdır."
+    - "Doğru sıra 2. sınıf öğrencisinin açık ipuçlarıyla fark edebileceği nitelikte olmalıdır."
+
+yanlis_secenek_stratejileri:
+  count_per_question: 2
+  strategy_pool:
+    - id: "dogru_baslangic_yanlis_devam"
+      tanim: "İlk cümle doğruya yakındır ama devam sırası bozulmuştur"
+      ornek_mantik:
+        - "2-4-3-1"
+        - "1-3-2-4"
+
+    - id: "yanlis_baslangic_dogru_bitis"
+      tanim: "Son cümle doğruya yakın görünür ama başlangıç yanlıştır"
+      ornek_mantik:
+        - "3-2-4-1"
+        - "4-2-3-1"
+
+    - id: "islem_basamagi_karisik"
+      tanim: "İşlem veya oluş sırasındaki iki yakın adım yer değiştirmiştir"
+      ornek_mantik:
+        - "2-4-3-1"
+        - "1-2-4-3"
+
+    - id: "neden_sonuc_ters"
+      tanim: "Sonuç cümlesi sebep cümlesinden önce verilmiştir"
+      ornek_mantik:
+        - "4-2-3-1"
+        - "3-1-2-4"
+
+    - id: "orta_bolum_kaymasi"
+      tanim: "Başlangıç ve bitiş daha makul görünür ama orta kısım bozulmuştur"
+      ornek_mantik:
+        - "2-4-1-3"
+        - "1-3-4-2"
+
+  secim_kurali:
+    - "Her soruda 2 yanlış seçenek farklı stratejilerden seçilmelidir."
+    - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+    - "Zor düzeyde iki yanlış seçenek de doğru sıraya yakın hata taşımalıdır."
+    - "Yanlış seçenekler rastgele permütasyon mantığıyla değil, anlam akışını bozan mantıklı hatalarla üretilmelidir."
+
+zorluk_duzeyleri:
+  kolay:
+    numbered_sentences:
+      sentence_count_min: 3
+      sentence_count_max: 3
+      kurallar:
+        - "3 cümle kullanılmalıdır."
+        - "İlk cümle açıkça giriş niteliğinde olmalıdır."
+        - "Son cümle açıkça bitiş niteliğinde olmalıdır."
+        - "Sıralama çoğunlukla zaman veya işlem basamaklarına dayalı olmalıdır."
+        - "Bağlayıcılar belirgin olabilir: ilk olarak, sonra, en sonunda gibi."
+    visual:
+      kurallar:
+        - "Görsel ana konuyu doğrudan göstermelidir."
+        - "Görsel öğrencinin konu alanını hemen fark etmesine yardım etmelidir."
+    distractors:
+      kurallar:
+        - "1 seçenek tamamen ters sıra gibi belirgin yanlış olabilir."
+        - "1 seçenek yalnız orta ve sonu karıştırabilir."
+        - "Yanlış seçenekler kolay elenebilir olmalıdır."
+    difficulty_note: >
+      Kolay düzeyde öğrenci, açık zaman ve sıra ipuçlarıyla cümeleri doğru dizerek
+      anlamlı paragrafı oluşturur.
+
+  orta:
+    numbered_sentences:
+      sentence_count_min: 4
+      sentence_count_max: 4
+      kurallar:
+        - "4 cümle kullanılmalıdır."
+        - "Sıralama, olay akışı veya işlem basamakları üzerinden kurulmalıdır."
+        - "En az iki cümle arasında doğrudan bağlayıcı bulunabilir; diğer ilişkiler anlamdan çıkarılmalıdır."
+        - "Başlangıç ve bitiş makul düzeyde ayırt edilebilir olmalıdır."
+    visual:
+      kurallar:
+        - "Görsel ana konuyu desteklemeli ama sıralamayı tamamen ele vermemelidir."
+    distractors:
+      kurallar:
+        - "1 seçenek doğru başlangıca yakın ama devamı yanlış olmalıdır."
+        - "1 seçenek doğru sona yakın ama başı ya da ortası yanlış olmalıdır."
+        - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+    difficulty_note: >
+      Orta düzeyde öğrenci, cümeler arasındaki anlam bağını kurarak doğru sırayı bulur.
+      Ancak soru yine de ağır mantık kurgusuna dönüşmez.
+
+  zor:
+    numbered_sentences:
+      sentence_count_min: 4
+      sentence_count_max: 4
+      kurallar:
+        - "4 cümle kullanılmalıdır."
+        - "Sıralama birkaç ipucunun birlikte kullanılmasını gerektirebilir."
+        - "Bağlayıcıların bir kısmı açık, bir kısmı örtük olabilir."
+        - "Cümeler birbirine yakın görünebilir; ancak doğru sıra yine tek olmalıdır."
+        - "Zor düzeyde bile ana düşünce veya yorum gerektiren yapı kurulamaz."
+    visual:
+      kurallar:
+        - "Görsel ana konuyu desteklemelidir ama yakın çeldiricilere doğal zemin hazırlayabilir."
+        - "Görsel yine de sade ve tek bakışta anlaşılır kalmalıdır."
+    distractors:
+      kurallar:
+        - "2 yanlış seçenek de doğru sıraya yakın hata taşımalıdır."
+        - "1 seçenek orta bölüm kayması içermelidir."
+        - "1 seçenek neden-sonuç veya işlem sırasını bozmalıdır."
+    difficulty_note: >
+      Zor düzey 2. sınıfta gizli anlam veya üst düzey mantık zorluğu değildir.
+      Zorluk, birbirine yakın görünen cümeleri doğru akışta sıralama düzeyinde kalır.
+
+difficulty_selection_policy:
+  default: "Orta"
+  allowed_values: ["Kolay", "Orta", "Zor"]
+  hard_limits:
+    - "Tüm düzeylerde görsel zorunludur."
+    - "Tüm düzeylerde cümeler 2. sınıf sözcük ve cümle düzeyini aşamaz."
+    - "Zor düzey seçilse bile soru ana düşünce, ana duygu veya yorum sorusuna dönüşemez."
+    - "Kolay düzeyde 4 cümle kullanılmamalıdır."
+    - "2. sınıf için cümle sayısı 4'ü geçemez."
+
+konu_alani:
+  izinli_ornekler:
+    - "bir ürünün oluşma aşamaları"
+    - "günlük işlerin sırası"
+    - "ekmek yapımı"
+    - "bitkinin büyümesi"
+    - "okula hazırlanma"
+    - "temizlik yapma"
+    - "oyun oynama"
+    - "piknik hazırlığı"
+    - "bir hayvana yardım etme"
+    - "tohum ekme"
+    - "bir yapının oluşumu"
+    - "bir aracın kullanımı"
+  kurallar:
+    - "Konu 2. sınıf öğrencisinin anlayabileceği kadar somut ve açık olmalıdır."
+    - "Cümeler arasında olay, işlem ya da oluş sırası bulunmalıdır."
+    - "Görselle rahat desteklenebilen konular tercih edilmelidir."
+    - "Sıralama dış bilgiyle değil metin içi anlam bağıyla yapılmalıdır."
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "2. sınıfa uygun, görselle desteklenebilir tek ve açık bir konu seç"
+    - step: 2
+      action: "Seçilen konu için 3 veya 4 kısa cümleden oluşan anlamlı paragraf oluştur"
+      details:
+        - "Tek baskın konu kur"
+        - "2. sınıf sözcük dağarcığında kal"
+        - "Doğal bir giriş, gelişme ve bitiş oluştur"
+    - step: 3
+      action: "Paragraf cümelerini doğru sıradan çıkar ve karışık sırada numarala"
+      details:
+        - "Doğru sıra tek olsun"
+        - "Karışık sıra doğal görünsün"
+    - step: 4
+      action: "Numaralanmış cümelerin ortak konusuyla uyumlu görsel tasarla"
+      details:
+        - "Görsel ana süreç ya da ana varlığı göstersin"
+        - "Görsel sıralamayı tamamen vermesin"
+    - step: 5
+      action: "Doğru sıralama seçeneğini oluştur"
+      details:
+        - "Seçenek biçimi 1-2-3 ya da 2-3-4-1 gibi olmalı"
+    - step: 6
+      action: "Zorluk düzeyine uygun 2 yanlış sıralama oluştur"
+      details:
+        - "Farklı hata stratejileri kullan"
+        - "Rastgele değil, anlam akışını bozan mantıklı dizilim kur"
+    - step: 7
+      action: "Soru kökünü listeden rastgele seç"
+    - step: 8
+      action: "Şıkları A-B-C olarak karıştır"
+    - step: 9
+      action: "Harici TYMM ortak kuralları ile doğrulama yap"
+
+validation_checklist:
+  numbered_sentences:
+    - "Toplam cümle sayısı 3 ya da 4 mü?"
+    - "Cümeler 2. sınıf düzeyinde kısa ve sade mi?"
+    - "Cümeler tek baskın konu etrafında mı?"
+    - "Cümeler doğru sırada anlamlı paragraf oluşturuyor mu?"
+    - "Doğru sıralama tek mi?"
+    - "Dış bilgi olmadan sıralama yapılabiliyor mu?"
+    - "Görev paragraf oluşturmayı mı ölçüyor? Ana düşünce düzeyine kayıyorsa reddet."
+
+  visual:
+    - "Görsel zorunlu olarak var mı?"
+    - "Görsel ana konuyla uyumlu mu?"
+    - "Görsel tek bakışta anlaşılır mı?"
+    - "Görsel destekleyici ama sıralamayı tamamen vermiyor mu?"
+    - "Görsel dekoratif kalmıyor mu?"
+
+  stem:
+    - "Soru kökü sıralama işini açıkça istiyor mu?"
+    - "Soru kökü ek beceri yüklemiyor mu?"
+
+  options:
+    - "Toplam 3 seçenek var mı?"
+    - "Seçenekler yalnız sıra dizisi biçiminde mi?"
+    - "Doğru seçenek anlamlı paragraf sırasını veriyor mu?"
+    - "Yanlış seçeneklerden biri başlangıca yakın ama devamı yanlış mı?"
+    - "Yanlış seçeneklerden biri bitişe yakın ama diğer bölümler yanlış mı?"
+
+  difficulty:
+    - "Zorluk seçilen düzeye göre cümle sayısı ve çeldirici kuralları uygulanmış mı?"
+    - "Zor düzey bile 2. sınıf sınırında mı?"
+    - "Kolay düzey gereksiz yere karmaşık değil mi?"
+
+hard_fail_rules:
+  - "Seçenek sayısı 3 değilse"
+  - "Görsel yoksa"
+  - "Cümle sayısı 3'ten az ya da 4'ten fazlaysa"
+  - "İki veya daha fazla sıralama makul doğruysa"
+  - "Cümeler birbirinden bağımsızsa ve paragraf oluşturmuyorsa"
+  - "Sıralama dış bilgi gerektiriyorsa"
+  - "Soru ana düşünce, ana duygu, mesaj veya yorum sorusuna kayıyorsa"
+  - "Seçenekler sıra dizisi biçiminde değilse"
+  - "Görsel cümlelerle uyumsuzsa"
+
+ornek_bicim_notlari:
+  - "Buğdayın ekilmesi, büyümesi, biçilmesi ve undan ekmek yapılması gibi işlem basamakları bu tür için uygundur."
+  - "Doğru sıra, olayların ya da işlemlerin doğal oluş sırasını vermelidir."
+  - "Yanlış seçenekler rastgele karıştırma değil, makul ama hatalı dizilimler olmalıdır."
+  - "2. sınıf düzeyinde cümeler kısa, sade ve somut tutulmalıdır."
+
+output_contract:
+  required_fields:
+    - "numbered_sentences"
+    - "visual_description"
+    - "stem"
+    - "options"
+    - "answer"
+    - "difficulty"
+    - "topic"
+  answer_format:
+    - "answer yalnızca A/B/C olarak verilebilir"
+    - "difficulty yalnızca Kolay / Orta / Zor olabilir"

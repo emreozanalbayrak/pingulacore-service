@@ -1,0 +1,107 @@
+# B1.1 — 2Q Çizgi Grafik (Çıkarım + Sınıflandırma)
+# Görsel: cizgi_grafigi (AI çizgi grafiğine dönüştürülecek)
+# Soru Tipleri: Çıkarım + Sınıflandırma — B1.1 soru kökleri
+
+meta:
+  id: "b1_cikarim_cizgi_2q"
+  ad: "2Q Çizgi Grafik — Çıkarım/Sınıflandırma"
+  sinif_seviyesi: 5
+  aciklama: "Senaryo + çizgi grafiği üzerinden çıkarım ve sınıflandırma soruları"
+  kaynak: "baglamb1sorukoku.md"
+  frequency: "Medium"
+
+context:
+  type: "b1_cikarim_cizgi_2q"
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 80
+    word_count_max: 140
+    image_type: "cizgi_grafigi"
+    structure:
+      - "Bir karakter (isimli) bir araştırma/gözlem yapmış, zaman içindeki değişimi kaydetmiştir (3-4 cümle)"
+      - "KRİTİK: Senaryoda sayısal değerleri YAZMA — veriler sadece tabloda olmalı"
+      - "Ardından verileri HTML tablosu olarak ekle: <table> ile, 2 sütun (Zaman | Değer), en az 5 satır"
+      - "Senaryo konunun genel çerçevesini çizsin — detaylı bilgileri grafik verecek"
+      - "Grafikteki verilerde belirgin bir eğilim (artış/azalış) ve karşılaştırma yapılabilecek noktalar olmalı"
+      - "NOT: Bu tablo AI tarafından çizgi grafiğine dönüştürülecektir"
+    kurallar:
+      - "5. sınıf seviyesinde, zaman serisi verisi"
+      - "KRİTİK — SENARYO KAPSAMI: Senaryo sadece DURUMU ve MERAKı anlatsın, CEVAPLARI vermesin!"
+      - "Detaylı bilgiler ve veriler SADECE tabloda/grafikte olmalı"
+      - "Değerler arasında karşılaştırma yapılabilir belirgin farklar olmalı"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+    - slot: 1
+      type: "cikarim"
+      soru_kokleri:
+        - "<b>Grafikteki değişime etki eden temel faktör aşağıdakilerden hangisidir?</b>"
+        - "<b>Grafikteki verilerine dayanılarak hangi çıkarım yapılabilir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 5
+      word_count_max: 18
+      beceri:
+        katman: "KB3"
+        bilesenler: ["cikarim_yapma", "yorumlama"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+    - slot: 2
+      type: "siniflandirma"
+      soru_kokleri:
+        - "<b>Grafikteki veriler karşılaştırıldığında aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 5
+      word_count_max: 20
+      beceri:
+        katman: "KB3"
+        bilesenler: ["cikarim_yapma", "karsilastirma", "degerlendirme"]
+        surec_bileseni: "problemi_yapilandirma"
+
+header_template: "1-2. soruları aşağıdaki bilgilere göre birbirinden bağımsız olarak cevaplayınız."
+
+format:
+  type: "llm_generated_html"
+  description: "2Q çizgi grafik üzerinden çıkarım ve sınıflandırma"
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 140
+    sentence_count_min: 3
+    sentence_count_max: 6
+  stem:
+    required: true
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 5
+    word_count_max: 20
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+dogru_cevap:
+  tanim: "Grafikteki verilerden doğru çıkarılan bilgi veya yargı"
+  kurallar:
+    - "KRİTİK: Doğru cevap grafiği OKUYARAK ve YORUMLAYARAK bulunmalı — ham veri tekrarı değil"
+    - "Doğru cevap hem senaryoyu hem grafik verilerini birlikte değerlendirmeyi gerektirmeli"
+    - "Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı"
+    - "HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin AYNEN seçeneklerde kullanılması YASAK"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin ANLAMCA ÖZDESİ olmalı"
+    - "En az %40 kelime farklılığı olmalı"
+    - "BİLİMSEL TERİM KORUMASI: Teknik terimler değiştirilmemeli"
+
+distractors:
+  stratejiler:
+    - ad: "VERI_CARPITMA"
+      aciklama: "Grafikteki değeri yanlış okuma veya aktarma"
+      ornek: "Artış eğilimindeki bir veriyi azalış gibi sunma"
+    - ad: "YANLIS_KARSILASTIRMA"
+      aciklama: "Zaman noktalarını yanlış karşılaştırma"
+      ornek: "İki farklı dönemdeki değerleri karıştırma"
+    - ad: "GENELLEME_HATASI"
+      aciklama: "Grafikte olmayan bir sonuca genelleme yapma"
+      ornek: "Verinin kapsamı dışında bir çıkarım sunma"
+
+use_shared_strategies: false

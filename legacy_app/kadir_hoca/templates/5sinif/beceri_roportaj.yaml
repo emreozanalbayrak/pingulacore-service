@@ -1,0 +1,278 @@
+# templates/beceri_roportaj.yaml
+# Kaynak: MEB Beceri Temelli Soru Bankasi - Roportaj
+#
+# BECERI TEMELLI ROPORTAJ FORMATI
+# Roportaj metni verilir, ogrenci gorusleri degerlendirme sorusunu cevaplar
+#
+# MANTIK: 1 secenekte dogru cevap, 4 secenekte yanlis cevaplar
+# Secenekler TAM CUMLE formatindadir (3-20 sozcuk)
+
+meta:
+  id: "beceri_roportaj"
+  ad: "Beceri Temelli - Roportaj"
+  sinif_seviyesi: 5
+  aciklama: "Roportaj metinleri uzerinden beceri temelli sorular"
+  kaynak: "MEB Beceri Temelli Soru Bankasi"
+  frequency: "~6% of beceri temelli questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Roportaj baglami + soru koku + 5 tam cumle secenek (beceri temelli)"
+
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 150
+    sentence_count_min: 4
+    sentence_count_max: 8
+    stil: "diyalog"
+    kurallar:
+      - "Roportaj formati kullan (soru-cevap)"
+      - "Gorusmeci ve gorusulen kisi belirle"
+      - "Sorular ve cevaplar dogal olsun"
+      - "Bilgi verici ve ilgi cekici olsun"
+      - "Gorusulen kisinin uzmanlık alani belirtilsin"
+      - "Her yeni konusmacinin sozu <br> etiketi ile yeni satirda baslamali"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 5
+    labels: ["A", "B", "C", "D", "E"]
+    word_count_min: 3
+    word_count_max: 20
+    style: "complete_sentence"
+    correct_type: "matches"
+    correct_count: 1
+
+  questions_per_context: 2
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ALANLARI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  context_type: "ROPORTAJ"
+  context_label: "Roportaj"
+  skill_level: "KB2"
+  process_component: "Roportaj metninde bakis acisi, gorus analizi ve kanit degerlendirmesi"
+  skill_areas:
+    - "anlama"
+    - "cikarimlama"
+    - "elestirsel_dusunme"
+    - "yorumlama"
+    - "kanit_gosterme"
+  answer_key_explanation: true
+  question_patterns:
+    - "Gorusulen kisinin ana gorusu nedir?"
+    - "Roportaja gore hangi bilgi dogrudur?"
+    - "Gorusulen kisinin konuya yaklasimi nasil degerlendirilir?"
+    - "Roportajdaki kanit-iddia iliskisi nasil kurulmustur?"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # Anlam / Çıkarım
+  - "<b>Bu röportaja göre aşağıdakilerden hangisi doğrudur?</b>"
+  - "<b>Bu röportaja göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Röportajdan aşağıdaki çıkarımlardan hangisi yapılabilir?</b>"
+  - "<b>Röportajdan aşağıdaki <u>çıkarımlardan hangisi yapılamaz</u>?</b>"
+  # Bakış Açısı / Görüş
+  - "<b>Görüşülen kişinin ana görüşü aşağıdakilerden hangisidir?</b>"
+  - "<b>Görüşülen kişinin konuya yaklaşımı aşağıdakilerden hangisinde doğru verilmiştir?</b>"
+  - "<b>Röportajdaki bilgilere göre aşağıdakilerden hangisine ulaşılabilir?</b>"
+  - "<b>Röportajın bütününden çıkarılabilecek en kapsamlı sonuç aşağıdakilerden hangisidir?</b>"
+  # Değerlendirme / Kanıt / Temel Kaygı (PDF kaynak)
+  - "<b>Röportajda görüşülen kişinin ifadeleri dikkate alındığında aşağıdakilerden hangisi en doğru değerlendirmedir?</b>"
+  - "<b>Röportajdaki bilgilere göre aşağıdakilerden hangisi görüşülen kişinin temel kaygısıdır?</b>"
+  - "<b>Röportajda savunulan düşünceyi destekleyen kanıt aşağıdakilerden hangisidir?</b>"
+  - "<b>Röportajdan hareketle aşağıdaki <u>çıkarımlardan hangisi desteklenemez</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Roportaj icerigiyle uyumlu, gorusleri dogru yansitan cevap"
+  kurallar:
+    - "Roportaj icerigiyle desteklenmeli"
+    - "Gorusmecinin goruslerini dogru yansitmali"
+    - "Tam cumle formatinda olmali (3-20 sozcuk)"
+    - "Cikarimsal dusunme gerektirmeli"
+    - "Baglam olmadan cevaplanamaz olmali"
+    - "Ust duzey dusunme becerisi gerektirmeli"
+    - "Bilissel surec bilesenini hedeflemeli"
+  ornekler:
+    - roportaj: "Gazeteci: Su kirliligi konusunda ne dusunuyorsunuz? Dr. Yilmaz: Fabrika atiklari en buyuk tehdit. Aritma tesisleri yetersiz kaliyor..."
+      dogru: "Dr. Yilmaz'a gore fabrika atiklari su kirliliğinin en onemli nedenidir"
+      neden: "Gorusulen kisinin ana gorusu fabrika atiklarinin tehditini vurgular"
+    - roportaj: "Gazeteci: Cocuklarda teknoloji bagimliligi hakkinda ne soylersiniz? Psikolog Ayse Hanim: Cocuklarin ekran suresi sinirlanmali..."
+      dogru: "Psikolog Ayse Hanim cocuklarda ekran suresinin sinirlanmasini onermektedir"
+      neden: "Uzman gorusu ekran suresi sinirlamasina yoneliktir"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM roportaj iceriğine gore en uygun 4 stratejiyi secer
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic and expert for interview format"
+      details: "Roportaj formatina uygun bir konu ve uzman kisi sec"
+
+    - step: 2
+      action: "Generate interview text (80-150 words) in Q&A format"
+      details: |
+        Roportaj metninde:
+        - Soru-cevap formati kullanilmali
+        - Gorusmeci ve gorusulen kisi belirli olmali
+        - Sorular ve cevaplar dogal olmali
+        - Bilgi verici ve ilgi cekici olmali
+
+    - step: 3
+      action: "Create correct answer as complete sentence"
+      details: |
+        Dogru cevap:
+        - Gorusulen kisinin goruslerini dogru yansitmali
+        - Tam cumle formatinda olmali (3-20 sozcuk)
+        - Roportaj icerigiyle kanitlanabilir olmali
+
+    - step: 4
+      action: "Create 4 wrong answers using strategies"
+      details: |
+        Her yanlis secenek icin farkli strateji kullan:
+        - 1x gorusmecinin sozlerini carpitan
+        - 1x konuyla iliskili ama roportajda desteklenmeyen
+        - 1x ksmen dogru ama genellemis
+        - 1x mantikli gorunen ama gorusu yanlis atfeden
+        Tum secenekler ayni formatta olmali (tam cumle, 3-20 sozcuk)
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D-E seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - konu: "Su kirliligi roportaji"
+    dogru_cevap: "B"
+    secenekler:
+      A: "Su kirliligi yalnizca buyuk sehirlerde gorulen bir sorundur"
+      B: "Dr. Yilmaz'a gore fabrika atiklari su kirliliğinin en onemli nedenidir"
+      C: "Aritma tesisleri su kirliligi sorununu tamamen cozmustur"
+      D: "Gazeteci su kirliligi konusunda iyimserdir"
+      E: "Fabrikalar cevre dostu uretim yapmaktadir"
+    dogru_cevap_icerigi: "Dr. Yilmaz'a gore fabrika atiklari su kirliliğinin en onemli nedenidir"
+    neden: "Gorusulen kisinin ana gorusu fabrika atiklarinin tehditini vurgular"
+
+  - konu: "Teknoloji bagimliligi roportaji"
+    dogru_cevap: "D"
+    secenekler:
+      A: "Teknoloji cocuklarin gelisimi icin her zaman faydaldir"
+      B: "Ekran kullanimi sinirlanmamalidir"
+      C: "Cocuklar teknolojiye bagimli degildir"
+      D: "Psikolog Ayse Hanim cocuklarda ekran suresinin sinirlanmasini onermektedir"
+      E: "Gazeteci teknoloji kullanimini tamamen yasaklamayi savunmaktadir"
+    dogru_cevap_icerigi: "Psikolog Ayse Hanim cocuklarda ekran suresinin sinirlanmasini onermektedir"
+    neden: "Uzman gorusu ekran suresi sinirlamasina yoneliktir"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  # Asama 0: Kimlik ve Olcme Niyeti
+  identity:
+    - "Soru bir beceriyi mi olcuyor, bilgi hatirlamayi mi?"
+    - "Hedef beceri seviyesi uygun mu?"
+    - "Surec bileseni dogru hedeflenmis mi?"
+
+  # Asama 1: Baglam Secimi
+  context:
+    - "Baglam olmadan soru cozulebilir mi? (Hayir olmali)"
+    - "Baglam fonksiyonel mi? (Dekoratif degil)"
+    - "Baglam cevabi dogrudan veriyor mu? (Vermemeli)"
+    - "Baglam otantik mi? (Gercek hayattan)"
+    - "Kelime sayisi 80-150 arasinda mi?"
+    - "Roportaj (soru-cevap) formati kullanilmis mi?"
+    - "Gorusmeci ve gorusulen kisi belirli mi?"
+    - "Bilgi verici ve dogal bir konusma mu?"
+
+  # Asama 2: Soru ve Secenekler
+  question:
+    - "Soru koku net ve anlasilir mi?"
+    - "Cift olumsuz var mi? (Olmamali)"
+    - "Tek dogru cevap var mi?"
+
+  options:
+    - "Celdiriciler belirli bilissel hatalari temsil ediyor mu?"
+    - "Eleme yoluyla cevaplanabilir mi? (Olmamali)"
+    - "Format farkliligi ile dogru cevap belli oluyor mu? (Olmamali)"
+    - "Tum secenekler benzer uzunlukta mi?"
+    - "5 secenek var mi (A-B-C-D-E)?"
+
+  # Asama 3: Etik
+  ethics:
+    - "Cinsiyet/etnik onyargi var mi? (Olmamali)"
+    - "Yas grubuna uygun mu?"
+
+  # Asama 4: Dil
+  language:
+    - "Turkce dil bilgisi dogru mu?"
+    - "Sinif seviyesine uygun mu?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+
+  generation_rules:
+    - "Roportaj formatina uygun uzmanlik konulari tercih et"
+    - "Bilim, saglik, cevre gibi guncel konular ideal"
+    - "Uzman gorusu alinabilecek konulari sec"

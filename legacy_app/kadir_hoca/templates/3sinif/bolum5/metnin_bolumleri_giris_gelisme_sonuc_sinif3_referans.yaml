@@ -1,0 +1,520 @@
+meta:
+  id: "metnin_bolumleri_giris_gelisme_sonuc_sinif3_standart_gorselli_dort_secenekli"
+  ad: "Metnin Bölümleri (Giriş-Gelişme-Sonuç)"
+  sinif_seviyesi: 3
+  ders: "Türkçe"
+  bolum: "3. Sınıf Türkçe Paragraf Kitabı"
+  alt_bolum: "5. Metnin Bölümleri"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    3. sınıf öğrencisi için bir metnin giriş, gelişme ve sonuç bölümlerini
+    ayırt ettirmeye; metnin başına, gelişme kısmına veya sonuna uygun cümleyi
+    seçtirmeye; ayrıca numaralanmış cümlelerde hangi bölümün nerede başladığını
+    buldurmaya yönelik, görsel destekli ve 4 seçenekli standart soru üretim şablonu.
+  kullanim_notu: >
+    Bu şablon, harici olarak kullanılan 3. Sınıf TYMM Ortak Kuralları YAML'ı,
+    3. sınıf öğretim programı ve 3. sınıf MEB Türkçe kitapları ile birlikte
+    doğrulanmalıdır.
+
+format:
+  type: "llm_generated_html"
+  description: "Görsel + metin/parça + soru kökü + 4 seçenek"
+
+  question_variant:
+    allowed:
+      - "giris_cumlesi_olabilir"
+      - "giris_cumlesi_olamaz"
+      - "metnin_basina_getirilebilir"
+      - "metnin_basina_getirilemez"
+      - "gelisme_cumlesi_olabilir"
+      - "gelisme_cumlesi_olamaz"
+      - "gelisme_bolumu_hangi_cumleyle_baslar"
+      - "sonuc_bolumu_hangi_cumleyle_baslar"
+      - "metnin_sonuna_getirilebilir"
+      - "metnin_sonuna_getirilemez"
+      - "sonuc_cumlesi_olabilir"
+      - "sonuc_cumlesi_olamaz"
+      - "bu_metnin_giris_cumlesi_hangisi_olabilir"
+    default: "metnin_sonuna_getirilebilir"
+
+  text_structure:
+    allowed:
+      - "eksik_baslangicli_metin"
+      - "eksik_sonlu_metin"
+      - "numaralanmis_metin"
+      - "tek_parca_metin"
+    default: "eksik_sonlu_metin"
+
+  paragraph:
+    required: true
+    sentence_count_min: 4
+    sentence_count_max: 7
+    word_count_min: 40
+    word_count_max: 95
+    style: "simple_clear_primary_text"
+    kurallar:
+      - "Metin 3. sınıf öğrencisinin anlayabileceği kadar açık, sade ve akıcı olmalıdır."
+      - "Metin giriş, gelişme ve sonuç mantığına uygun kurulmalıdır."
+      - "Giriş bölümü konuyu açmalı, gelişme bölümü ayrıntıları vermeli, sonuç bölümü anlamı toparlamalıdır."
+      - "Metin tek baskın konu veya tek kısa olay etrafında kurulmalıdır."
+      - "Metin dış bilgi gerektirmemelidir."
+      - "Bölümler arası geçiş anlamlı ve doğal olmalıdır."
+      - "Soru, paragrafın yapısını fark ettirmeli; ama 4. sınıfa kayan ayrıntılı metin çözümlemesine dönüşmemelidir."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  giris_bolumu_kurallari:
+    kurallar:
+      - "Giriş bölümü genellikle metnin ilk bölümüdür."
+      - "Giriş cümlesi konuyu başlatmalı veya tanıtmalıdır."
+      - "Giriş cümlesi ani sonuç, çıkarım veya toparlama havası taşımamalıdır."
+      - "Giriş cümlesi çoğu durumda açıklayıcı, tanıtıcı veya hazırlayıcı olmalıdır."
+      - "Giriş bölümünde olayın ya da konunun ayrıntısına çok hızlı girilmemelidir."
+    yasak_baglayici_egilimleri:
+      - "bu yüzden"
+      - "bundan dolayı"
+      - "sonuç olarak"
+      - "özetle"
+      - "kısacası"
+      - "sonunda"
+    not:
+      - "Bu ifadeler kesin yasak olarak değil, giriş cümlesi olma ihtimalini düşüren güçlü işaretler olarak düşünülmelidir."
+
+  gelisme_bolumu_kurallari:
+    kurallar:
+      - "Gelişme bölümü girişte açılan konuyu ayrıntılandırmalıdır."
+      - "Gelişme bölümünde örnek, açıklama, karşılaştırma, neden-sonuç veya tanıtıcı ayrıntılar yer alabilir."
+      - "Gelişme cümlesi, girişten sonra doğal biçimde gelebilmelidir."
+      - "Gelişme bölümü sonuç gibi toparlayıcı olmamalıdır."
+      - "Numaralanmış metin varyantında gelişme bölümü açık biçimde belirlenebilir olmalıdır."
+
+  sonuc_bolumu_kurallari:
+    kurallar:
+      - "Sonuç bölümü anlatılanları toparlamalı veya bir sonuca bağlamalıdır."
+      - "Sonuç cümlesi metnin sonunda doğal kapanış sağlamalıdır."
+      - "Sonuç cümlesi yeni bir ana konu başlatmamalıdır."
+      - "Sonuç bölümünde çıkarım, kapanış veya toparlama havası bulunabilir."
+      - "Sonuç bölümü önceki cümlelerin doğal devamı olmalıdır."
+      - "Numaralanmış metin varyantında sonuç bölümünün başladığı cümle açık biçimde ayırt edilebilir olmalıdır."
+    destekleyici_ifadeler:
+      - "bu yüzden"
+      - "bundan dolayı"
+      - "sonuç olarak"
+      - "özetle"
+      - "kısacası"
+      - "böylece"
+      - "artık"
+      - "günümüzde"
+    not:
+      - "Bu ifadeler zorunlu değildir; uygun durumlarda sonuç havasını güçlendirmek için kullanılabilir."
+
+  visual:
+    required: true
+    description: "Metnin ana içeriğini destekleyen işlevsel görsel"
+    placement: "paragraph_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illüstrasyon"
+      - "tek sahneli fotoğraf benzeri çizim"
+      - "tek olay veya tek varlık odaklı sahne"
+      - "metnin ana konusunu destekleyen sade konu görseli"
+    kurallar:
+      - "Her soru için görsel zorunludur."
+      - "Görsel metnin ana içeriğiyle açık uyumlu olmalıdır."
+      - "Görsel süs olmamalı, çözümde anlam desteği sunmalıdır."
+      - "Görsel tek başına doğru cevabı açıkça vermemelidir."
+      - "Görsel ile metin birlikte değerlendirildiğinde doğru bölüm veya doğru cümle daha netleşebilir."
+      - "Görsel dikkat dağıtıcı gereksiz ayrıntılar içermemelidir."
+    yasaklar:
+      - "dekoratif ve metinden bağımsız görsel"
+      - "çok sahneli karmaşık kolaj"
+      - "grafik, tablo veya infografik yoğunluğu taşıyan tasarım"
+
+  stem:
+    required: true
+    selection: "random_from_list_by_variant"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    correct_count: 1
+    style_by_variant:
+      giris_cumlesi_olabilir: "sentence_option"
+      giris_cumlesi_olamaz: "sentence_option"
+      metnin_basina_getirilebilir: "sentence_option"
+      metnin_basina_getirilemez: "sentence_option"
+      gelisme_cumlesi_olabilir: "sentence_option"
+      gelisme_cumlesi_olamaz: "sentence_option"
+      gelisme_bolumu_hangi_cumleyle_baslar: "number_option"
+      sonuc_bolumu_hangi_cumleyle_baslar: "number_option"
+      metnin_sonuna_getirilebilir: "sentence_option"
+      metnin_sonuna_getirilemez: "sentence_option"
+      sonuc_cumlesi_olabilir: "sentence_option"
+      sonuc_cumlesi_olamaz: "sentence_option"
+      bu_metnin_giris_cumlesi_hangisi_olabilir: "sentence_option"
+    word_count_min: 1
+    word_count_max: 16
+    kurallar:
+      - "3. sınıfta her soru 4 seçenekli olmalıdır."
+      - "Cümle seçenekleri anlamlı ve kurallı olmalıdır."
+      - "Numara seçenekli sorularda seçenekler yalnız sayı biçiminde olabilir."
+      - "Doğru seçenek metnin bölüm yapısına ve düşüncenin akışına tam uymalıdır."
+      - "Yanlış seçenekler metne yakın görünmeli ama düşüncenin akışını bozmalıdır."
+      - "Birden fazla makul doğru seçenek oluşmamalıdır."
+
+soru_kokleri:
+  giris_cumlesi_olabilir:
+    - "Aşağıdaki ifadelerden hangisi bir metnin giriş cümlesi olabilir?"
+    - "Aşağıdakilerden hangisi bir metnin giriş cümlesi olmaya uygundur?"
+    - "Aşağıdaki cümlelerden hangisi bir metnin giriş cümlesi olabilir?"
+    - "Aşağıdakilerden hangisi giriş cümlesi olarak kullanılabilir?"
+
+  giris_cumlesi_olamaz:
+    - "Aşağıdaki ifadelerden hangisi bir metnin giriş cümlesi olamaz?"
+    - "Aşağıdakilerden hangisi bir metnin giriş cümlesi olmaya uygun değildir?"
+    - "Aşağıdaki cümlelerden hangisi giriş cümlesi olamaz?"
+    - "Aşağıdakilerden hangisi giriş cümlesi olarak kullanılamaz?"
+
+  metnin_basina_getirilebilir:
+    - "Bu metnin başına düşüncenin akışına göre aşağıdakilerden hangisi getirilebilir?"
+    - "Aşağıdakilerden hangisi bu metnin başına getirilebilir?"
+    - "Bu parçanın başına aşağıdakilerden hangisi uygun olur?"
+    - "Metnin başına düşüncenin akışına göre uygun cümle hangisidir?"
+
+  metnin_basina_getirilemez:
+    - "Bu metnin başına düşüncenin akışına göre aşağıdakilerden hangisi getirilemez?"
+    - "Aşağıdakilerden hangisi bu metnin başına uygun değildir?"
+    - "Bu parçanın başına aşağıdakilerden hangisi getirilemez?"
+    - "Metnin başına düşüncenin akışına göre uygun olmayan cümle hangisidir?"
+
+  gelisme_cumlesi_olabilir:
+    - "Aşağıdakilerden hangisi bir metnin gelişme cümlesi olabilir?"
+    - "Aşağıdaki cümlelerden hangisi gelişme bölümüne ait olabilir?"
+    - "Aşağıdakilerden hangisi gelişme bölümünde yer alabilir?"
+    - "Bir metnin gelişme cümlesi aşağıdakilerden hangisi olabilir?"
+
+  gelisme_cumlesi_olamaz:
+    - "Aşağıdakilerden hangisi bir metnin gelişme cümlesi olamaz?"
+    - "Aşağıdaki cümlelerden hangisi gelişme bölümüne ait olamaz?"
+    - "Aşağıdakilerden hangisi gelişme bölümünde yer alamaz?"
+    - "Bir metnin gelişme cümlesi aşağıdakilerden hangisi olamaz?"
+
+  gelisme_bolumu_hangi_cumleyle_baslar:
+    - "Bu metinde gelişme bölümü numaralanmış cümlelerin hangisi ile başlamıştır?"
+    - "Numaralanmış cümlelere göre gelişme bölümü hangi cümle ile başlar?"
+    - "Bu parçanın gelişme bölümü hangi cümleyle başlamaktadır?"
+    - "Metnin gelişme bölümü aşağıdaki numaralanmış cümlelerden hangisi ile başlar?"
+
+  sonuc_bolumu_hangi_cumleyle_baslar:
+    - "Bu metnin sonuç bölümü kaç numaralı cümle ile başlamaktadır?"
+    - "Numaralanmış cümlelere göre sonuç bölümü hangi cümle ile başlar?"
+    - "Bu parçanın sonuç bölümü hangi cümleyle başlamaktadır?"
+    - "Metnin sonuç bölümü aşağıdaki numaralanmış cümlelerden hangisi ile başlar?"
+
+  metnin_sonuna_getirilebilir:
+    - "Bu metnin sonuna düşüncenin akışına göre aşağıdakilerden hangisi getirilebilir?"
+    - "Aşağıdakilerden hangisi bu metnin sonuna getirilebilir?"
+    - "Bu parçanın sonuna aşağıdakilerden hangisi uygun olur?"
+    - "Metnin sonuna düşüncenin akışına göre uygun cümle hangisidir?"
+
+  metnin_sonuna_getirilemez:
+    - "Bu metnin sonuna düşüncenin akışına göre aşağıdakilerden hangisi getirilemez?"
+    - "Aşağıdakilerden hangisi bu metnin sonuna uygun değildir?"
+    - "Bu parçanın sonuna aşağıdakilerden hangisi getirilemez?"
+    - "Metnin sonuna düşüncenin akışına göre uygun olmayan cümle hangisidir?"
+
+  sonuc_cumlesi_olabilir:
+    - "Aşağıdaki cümlelerden hangisi bir metnin sonuç cümlesi olabilir?"
+    - "Aşağıdakilerden hangisi bir metnin sonuç cümlesi olmaya uygundur?"
+    - "Bir metnin sonuç cümlesi aşağıdakilerden hangisi olabilir?"
+    - "Aşağıdakilerden hangisi sonuç cümlesi olarak kullanılabilir?"
+
+  sonuc_cumlesi_olamaz:
+    - "Aşağıdaki cümlelerden hangisi bir metnin sonuç cümlesi olamaz?"
+    - "Aşağıdakilerden hangisi bir metnin sonuç cümlesi olmaya uygun değildir?"
+    - "Bir metnin sonuç cümlesi aşağıdakilerden hangisi olamaz?"
+    - "Aşağıdakilerden hangisi sonuç cümlesi olarak kullanılamaz?"
+
+  bu_metnin_giris_cumlesi_hangisi_olabilir:
+    - "Bu metnin giriş cümlesi aşağıdakilerden hangisi olabilir?"
+    - "Aşağıdakilerden hangisi bu metnin giriş cümlesi olabilir?"
+    - "Bu parça için uygun giriş cümlesi hangisidir?"
+    - "Metnin başında yer alabilecek cümle aşağıdakilerden hangisidir?"
+
+beceri_odagi:
+  birincil_beceri:
+    - "Metnin giriş, gelişme ve sonuç bölümlerini ayırt etme"
+  ikincil_beceriler:
+    - "Düşüncenin akışına uygun cümleyi seçme"
+    - "Girişte konuyu açan ifadeleri fark etme"
+    - "Gelişmede ayrıntıyı, sonuçta toparlamayı fark etme"
+    - "Numaralanmış cümlelerde paragraf yapısını çözümleme"
+    - "Görsel ve metni birlikte değerlendirerek metin bütünlüğü kurma"
+
+dogru_cevap:
+  tanim: "Metnin bölüm yapısına ve düşüncenin akışına tam uyan doğru cümle veya doğru bölüm bilgisi"
+  kurallar:
+    - "Giriş sorularında doğru cevap konuyu doğal biçimde başlatmalıdır."
+    - "Gelişme sorularında doğru cevap konuya ayrıntı, açıklama, örnek veya bilgi eklemelidir."
+    - "Sonuç sorularında doğru cevap metni doğal biçimde toparlamalıdır."
+    - "Numaralanmış metin sorularında doğru cevap bölüm geçişini açık biçimde göstermelidir."
+    - "Doğru cevap metnin tamamıyla uyumlu olmalıdır."
+    - "Doğru cevap dış bilgi gerektirmemelidir."
+    - "Doğru cevap 3. sınıf öğrencisinin metni dikkatle okuyarak bulabileceği açıklıkta olmalıdır."
+
+yanlis_secenek_stratejileri:
+  count_per_question: 3
+  strategy_pool:
+    giris_varyantlari:
+      - id: "sonuc_havali_cumle"
+        tanim: "Başlangıç yerine toparlama veya sonuç havası taşıyan cümle"
+      - id: "gelisme_ayrintisi"
+        tanim: "Doğrudan konu içi ayrıntıya giren, hazırlıksız başlayan cümle"
+      - id: "konu_disi_baslangic"
+        tanim: "Metnin ana odağına uymayan başlangıç"
+
+    gelisme_varyantlari:
+      - id: "giris_tanitimi"
+        tanim: "Ayrıntı yerine yalnız konuyu açan başlangıç cümlesi"
+      - id: "sonuc_toparlamasi"
+        tanim: "Ayrıntı yerine metni kapatan sonuç cümlesi"
+      - id: "yan_akisa_kayan_ayrinti"
+        tanim: "Metne yakın ama gelişme akışını tam desteklemeyen ayrıntı"
+
+    sonuc_varyantlari:
+      - id: "yeni_konu_baslatma"
+        tanim: "Metni toparlamak yerine yeni konu başlatan cümle"
+      - id: "gelisme_ayrintisi"
+        tanim: "Kapanış yerine yalnız ek bilgi veren cümle"
+      - id: "giris_tanitimi"
+        tanim: "Sonuç yerine konuyu yeni açıyormuş gibi duran cümle"
+
+    numarali_varyantlar:
+      - id: "bir_onceki_bolumle_karistirma"
+        tanim: "Gelişme ile sonucu ya da giriş ile gelişmeyi karıştıran numara"
+      - id: "erken_baslatma"
+        tanim: "Bölümü olduğundan önce başlatan seçenek"
+      - id: "gec_baslatma"
+        tanim: "Bölümü olduğundan sonra başlatan seçenek"
+
+  secim_kurali:
+    - "Her soruda 3 yanlış seçenek farklı stratejilerden seçilmelidir."
+    - "Giriş varyantlarında en az 1 yanlış seçenek sonuç havası taşımalıdır."
+    - "Sonuç varyantlarında en az 1 yanlış seçenek yeni konu başlatmalıdır."
+    - "Gelişme varyantlarında en az 1 yanlış seçenek giriş veya sonuç işlevi taşımalıdır."
+    - "Numaralı sorularda en az 1 yanlış seçenek bir önceki bölümle karışmalıdır."
+    - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+
+zorluk_duzeyleri:
+  kolay:
+    paragraph:
+      sentence_count_min: 4
+      sentence_count_max: 5
+      word_count_min: 42
+      word_count_max: 60
+      kurallar:
+        - "Metin yapısı açık ve belirgin olmalıdır."
+        - "Giriş, gelişme ve sonuç bölümleri kolay ayırt edilebilir olmalıdır."
+        - "Eksik başlangıçlı veya eksik sonlu metinler öncelikli kullanılabilir."
+    preferred_variants:
+      - "giris_cumlesi_olabilir"
+      - "metnin_basina_getirilebilir"
+      - "metnin_sonuna_getirilebilir"
+      - "sonuc_cumlesi_olabilir"
+      - "bu_metnin_giris_cumlesi_hangisi_olabilir"
+    distractors:
+      kurallar:
+        - "1 seçenek giriş yerine sonuç havası taşımalıdır."
+        - "1 seçenek ayrıntıya erken girmelidir."
+        - "1 seçenek konu dışına veya akış dışına kaymalıdır."
+    difficulty_note: >
+      Kolay düzeyde öğrenci metnin başlangıç ve bitiş mantığını rahatça fark eder.
+
+  orta:
+    paragraph:
+      sentence_count_min: 5
+      sentence_count_max: 6
+      word_count_min: 55
+      word_count_max: 78
+      kurallar:
+        - "Metinde gelişme bölümü daha belirgin ayrıntılar içerebilir."
+        - "Doğru seçeneği bulmak için metnin birkaç cümlesi birlikte düşünülmelidir."
+        - "Giriş ve sonuç arasındaki işlev farkı dikkat gerektirebilir."
+    preferred_variants:
+      - "giris_cumlesi_olamaz"
+      - "gelisme_cumlesi_olabilir"
+      - "gelisme_cumlesi_olamaz"
+      - "metnin_sonuna_getirilemez"
+      - "sonuc_cumlesi_olamaz"
+      - "sonuc_bolumu_hangi_cumleyle_baslar"
+    distractors:
+      kurallar:
+        - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+        - "Yanlış seçenekler bölüm işlevini karıştıracak kadar yakın olabilir."
+    difficulty_note: >
+      Orta düzeyde öğrenci cümlenin metnin hangi bölümüne uygun düştüğünü ayırt etmelidir.
+
+  zor:
+    paragraph:
+      sentence_count_min: 6
+      sentence_count_max: 7
+      word_count_min: 72
+      word_count_max: 95
+      kurallar:
+        - "Metinde giriş-gelişme-sonuç geçişleri açık kalmalı; fakat yakın çeldiricilere izin vermelidir."
+        - "Numaralanmış cümle yapısı kullanılabilir."
+        - "Doğru seçenek için paragrafın tamamı düşünülmelidir."
+        - "Zor düzeyde bile soru 4. sınıfa kayan ileri yapı çözümlemesine dönüşmemelidir."
+    preferred_variants:
+      - "gelisme_bolumu_hangi_cumleyle_baslar"
+      - "sonuc_bolumu_hangi_cumleyle_baslar"
+      - "metnin_basina_getirilemez"
+      - "metnin_sonuna_getirilemez"
+      - "sonuc_cumlesi_olamaz"
+    distractors:
+      kurallar:
+        - "3 yanlış seçeneğin en az 2'si metne yakın görünmelidir."
+        - "Yanlış seçeneklerden biri girişe, biri gelişmeye, biri sonuca yakın işlev taşıyabilir."
+    difficulty_note: >
+      Zor düzeyde öğrencinin cümle işlevlerini ve paragrafın düşünce akışını birlikte değerlendirmesi beklenir.
+
+difficulty_selection_policy:
+  default: "Orta"
+  allowed_values: ["Kolay", "Orta", "Zor"]
+  hard_limits:
+    - "Her soru 4 seçenekli olmalıdır."
+    - "Her soru için görsel zorunludur."
+    - "Metin 3. sınıf düzeyini aşan ağır soyutluk içermemelidir."
+    - "Zor düzey seçilse bile soru 4. sınıf düzeyinde yazarın planını yorumlama veya ileri metin yapısı tartışmasına dönüşemez."
+    - "Kolay düzeyde aşırı yakın çeldirici yükü kurulmamalıdır."
+
+sinif_uygunluk_kurallari:
+  uygundur:
+    - "Metnin giriş, gelişme ve sonuç işlevleri açık biçimde kuruluyorsa"
+    - "Cümlelerin paragraf içindeki görevi somut olarak ayırt edilebiliyorsa"
+    - "Numaralanmış cümlelerde bölüm başlangıcı açıkça bulunabiliyorsa"
+    - "Görsel metnin konusunu destekliyor ve paragraf bütünlüğünü anlamayı kolaylaştırıyorsa"
+  yasaktir:
+    - "Yazarın üslup tercihini veya niyetini yorumlatma"
+    - "Aşırı soyut paragraf yapısı tartışmaları"
+    - "Metin dışı dünya bilgisi gerektiren seçenekler"
+  ucuncu_sinifa_kayar:
+    - "Giriş-gelişme-sonuç işlevini ayırt etme"
+    - "Düşüncenin akışına uygun başlangıç ve sonuç cümlesi seçme"
+    - "Numaralanmış cümlelerle gelişme veya sonuç başlangıcını belirleme"
+  dorduncu_sinifa_kayar:
+    - "Metnin örgütlenme biçimini ayrıntılı gerekçeyle tartıştırma"
+    - "Birden fazla paragraf arasında yapı karşılaştırması yaptırma"
+    - "Yazar tercihini ve bölüm etkisini analiz ettirme"
+
+konu_alani:
+  izinli_ornekler:
+    - "renklerin tarihi"
+    - "bilim insanları ve eserleri"
+    - "dinozorlar"
+    - "günlük yaşam olayları"
+    - "doğa ve çevre"
+    - "teknoloji"
+    - "okul yaşamı"
+    - "sağlıklı yaşam"
+    - "hayvanlar"
+    - "kısa tarihsel bilgiler"
+  kurallar:
+    - "Konu 3. sınıf öğrencisinin anlayabileceği kadar somut ve açık olmalıdır."
+    - "Metin giriş-gelişme-sonuç düzenine uygun kurulabilmelidir."
+    - "Numaralanmış cümlelerle bölüm tespiti yapılabilecek metinler üretilebilir."
+    - "Görselle desteklenebilen konular tercih edilmelidir."
+    - "Konu dış bilgi gerektirmeden çözülebilmelidir."
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "3. sınıfa uygun, giriş-gelişme-sonuç yapısına elverişli somut bir konu seç"
+    - step: 2
+      action: "Seçilen konu için 4-7 cümlelik sade bir metin oluştur"
+      details:
+        - "Girişi kur"
+        - "Gelişmede ayrıntıları ver"
+        - "Sonuçta toparla"
+        - "Gerekirse cümleleri numaralandır"
+    - step: 3
+      action: "Metni destekleyen işlevsel görsel tasarla"
+      details:
+        - "Görsel bağlamı desteklesin"
+        - "Görsel zorunlu olsun"
+        - "Görsel tek başına cevabı vermesin"
+    - step: 4
+      action: "Soru varyantını seç"
+      details:
+        - "giris_cumlesi_olabilir"
+        - "giris_cumlesi_olamaz"
+        - "metnin_basina_getirilebilir"
+        - "metnin_basina_getirilemez"
+        - "gelisme_cumlesi_olabilir"
+        - "gelisme_cumlesi_olamaz"
+        - "gelisme_bolumu_hangi_cumleyle_baslar"
+        - "sonuc_bolumu_hangi_cumleyle_baslar"
+        - "metnin_sonuna_getirilebilir"
+        - "metnin_sonuna_getirilemez"
+        - "sonuc_cumlesi_olabilir"
+        - "sonuc_cumlesi_olamaz"
+        - "bu_metnin_giris_cumlesi_hangisi_olabilir"
+    - step: 5
+      action: "Varyanta uygun 1 doğru ve 3 yanlış seçenek oluştur"
+      details:
+        - "Yanlışlardan biri bölüm işlevi karışıklığı taşısın"
+        - "Yanlışlardan biri akış dışına kaysın"
+        - "Yanlışlardan biri ilk bakışta makul görünsün"
+    - step: 6
+      action: "Soru kökünü listeden rastgele seç"
+    - step: 7
+      action: "Şıkları A-B-C-D olarak karıştır"
+    - step: 8
+      action: "Harici 3. Sınıf TYMM Ortak Kuralları ile doğrulama yap"
+
+validation_checklist:
+  paragraph:
+    - "Metin 4-7 cümle arasında mı?"
+    - "Metin 3. sınıf düzeyinde açık ve sade mi?"
+    - "Giriş, gelişme ve sonuç işlevleri ayırt edilebilir mi?"
+    - "Numaralı varyantta bölüm başlangıcı gerçekten belirlenebilir mi?"
+    - "Metin dış bilgi gerektiriyor mu? Gerektiriyorsa reddet."
+    - "Soru gerçekten bölüm işlevini mi ölçüyor?"
+
+  visual:
+    - "Görsel zorunlu olarak var mı?"
+    - "Görsel metnin ana içeriğiyle uyumlu mu?"
+    - "Görsel destekleyici ama tek başına cevap verici değil mi?"
+    - "Görsel dekoratif kalmıyor mu?"
+
+  stem:
+    - "Soru kökü seçilen varyanta uygun mu?"
+    - "Soru kökü açık ve 3. sınıf düzeyinde mi?"
+    - "Ekstra beceri yüklemiyor mu?"
+
+  options:
+    - "Toplam 4 seçenek var mı?"
+    - "Doğru seçenek metnin bölüm yapısına tam uyuyor mu?"
+    - "Yanlış seçenekler bölüm işlevi açısından gerçekten sorunlu mu?"
+    - "Numaralı sorularda yalnız 1 doğru numara var mı?"
+    - "Birden fazla makul doğru seçenek oluşuyor mu? Oluşuyorsa reddet."
+
+  difficulty:
+    - "Zorluk seçilen düzeye göre metin, görsel ve çeldirici kuralları uygulanmış mı?"
+    - "Zor düzey bile 3. sınıf sınırında mı?"
+    - "4. sınıfa kayan ileri yapı yorumu var mı?"
+
+hard_fail_rules:
+  - "Seçenek sayısı 4 değilse"
+  - "Görsel yoksa"
+  - "Doğru cevap dış bilgi gerektiriyorsa"
+  - "İki veya daha fazla seçenek makul doğruysa"
+  - "Metin 3. sınıf için fazla soyut veya ağırsa"
+  - "Numaralı soruda bölüm geçişi belirsizse"
+  - "Soru metnin bölümleri yerine ana düşünce, konu veya dil bilgisi sorusuna kayıyorsa"
+  - "Soru 4. sınıfa kayan ileri metin yapısı yorumuna dönüşüyorsa"
+  - "Görsel metinle uyumsuzsa"
+
+ornek_bicim_notlari:
+  - "Kaşgarlı Mahmud örneğinde sonuç bölümü, anlatılan bilgileri toparlayan cümleyle başlamalıdır."
+  - "‘Aşağıdakilerden hangisi bir paragrafın giriş cümlesi olmaya en uygundur?’ tipinde seçenekler bölüm işlevine göre ayırt edilmelidir."
+  - "Triceratops örneğinde ‘Bu metnin giriş cümlesi aşağıdakilerden hangisi olabilir?’ sorusu, konuya doğal başlangıç yapan cümleyi ölçer."
+  - "Bu bölümde temel amaç, metnin düşünce akışını ve bölüm işlevlerini ayırt etmektir."

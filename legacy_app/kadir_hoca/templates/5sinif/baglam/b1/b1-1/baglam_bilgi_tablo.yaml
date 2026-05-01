@@ -1,0 +1,150 @@
+# templates/baglam/baglam_bilgi_tablo.yaml
+# Bağlam Tipi: Bağlam + Bilgi Tablosu
+# Soru Sayısı: 2
+# Kaynak: kadirhocasorukokleri.md
+# Soru Tipleri: Tek Kriter + Çoklu Kriter (Karar)
+
+meta:
+  id: "baglam_bilgi_tablo"
+  ad: "Bağlam + Bilgi Tablosu"
+  sinif_seviyesi: 5
+  aciklama: "Karakterin problem fark edip araştırma yaptığı bağlam ve karar tablosu üzerinden 2 soru"
+  kaynak: "kadirhocasorukokleri.md"
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# BAĞLAM KONFİGÜRASYONU
+# ═══════════════════════════════════════════════════════════════
+
+context:
+  type: "baglam_bilgi_tablo"
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 80
+    word_count_max: 150
+    structure:
+      - "Bir karakterin (isimli) bir problemi fark ettiği kısa senaryo oluştur (2-3 cümle)"
+      - "Karakter bu durum üzerine araştırma yapar"
+      - "Araştırma sonucunda bir karar/karşılaştırma tablosuna ulaşır"
+      - "Tablo: Seçenek | Olumlu Özellik | Olumsuz Özellik | Sayısal Veri formatında"
+      - "Tablo <table>, <tr>, <th>, <td> etiketleriyle oluşturulmalı (en az 3 satır)"
+      - "Tablodaki veriler karşılaştırılabilir ve karar vermeye uygun olmalı"
+    kurallar:
+      - "Senaryo 5. sınıf seviyesinde, günlük hayattan bir karar verme durumu olmalı"
+      - "KRİTİK — SENARYO KAPSAMI: Senaryo sadece DURUMU ve MERAKı anlatsın, CEVAPLARI vermesin!"
+      - "Detaylı bilgiler ve veriler SADECE tablo/grafikte olmalı — senaryo bunları içermemeli"
+      - "Soruların cevabı senaryodan değil tablo/grafikten çıkarılmalı"
+      - "Karakter bir seçim yapması gereken durumda olmalı"
+      - "Tabloda hem olumlu hem olumsuz özellikler olmalı (tek seçenek en iyi olmamalı)"
+      - "Farklı kriterlere göre farklı seçenekler öne çıkmalı"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+  - slot: 1
+    type: "tek_kriter"
+    soru_kokleri:
+      - "<b>Tablodaki bilgiler birlikte değerlendirildiğinde, [belirli_kriter] bakımından öne çıkan seçenekle ilgili aşağıdakilerden hangisi söylenebilir?</b>"
+      - "<b>Yalnızca [belirli_kriter] dikkate alındığında, aşağıdaki yargılardan hangisine ulaşılır?</b>"
+      - "<b>[belirli_kriter] açısından tablo yorumlandığında, en uygun değerlendirme aşağıdakilerden hangisidir?</b>"
+      - "<b>Tablodaki verilere göre [belirli_kriter] yönünden yapılabilecek çıkarım aşağıdakilerden hangisidir?</b>"
+      - "<b>Seçenekler [belirli_kriter] bakımından karşılaştırıldığında, aşağıdakilerden hangisi doğru bir yorum olur?</b>"
+      - "<b>[belirli_kriter] esas alındığında, tablodan çıkarılabilecek en uygun sonuç aşağıdakilerden hangisidir?</b>"
+
+    options_style: "complete_sentence"
+    word_count_min: 5
+    word_count_max: 18
+    beceri:
+      katman: "KB2"
+      bilesenler: ["cozumleme", "yorumlama", "cikarim_yapma"]
+      surec_bileseni: "bilgiyi_cikartma"
+
+  - slot: 2
+    type: "coklu_kriter"
+    soru_kokleri:
+      - "<b>[ozne], [kriter_1] ve [kriter_2] birlikte düşünüldüğünde hangi seçeneğe yönelmelidir?</b>"
+      - "<b>[ozne] için [kriter_1] ile [kriter_2] arasında denge kurulduğunda en uygun tercih aşağıdakilerden hangisi olur?</b>"
+      - "<b>Tablodaki bilgiler karşılaştırıldığında, [ozne]nin [kriter_1] ve [kriter_2] ölçütlerini aynı anda gözeterek vereceği en mantıklı karar hangisidir?</b>"
+      - "<b>[ozne], yalnızca tek bir özelliğe değil, [kriter_1] ile [kriter_2]nin birlikte sağlanmasına önem verirse hangi seçeneği seçmelidir?</b>"
+      - "<b>[ozne] için hem [kriter_1] hem de [kriter_2] önemliyse, aşağıdaki seçeneklerden hangisi daha uygun olur?</b>"
+      - "<b>[ozne], karar verirken [kriter_1] yanında [kriter_2] ölçütünü de dikkate alırsa hangi seçeneği tercih etmelidir?</b>"
+
+    options_style: "short_phrase"
+    word_count_min: 2
+    word_count_max: 10
+    beceri:
+      katman: "KB3"
+      bilesenler: ["karar_verme", "karsilastirma", "yorumlama", "cikarim_yapma"]
+      surec_bileseni: "problemi_yapilandirma"
+
+header_template: "1-2. soruları aşağıdaki bilgilere göre birbirinden bağımsız olarak cevaplayınız."
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Bağlam + Karar tablosu üzerinden 2 soru"
+
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 150
+    sentence_count_min: 2
+    sentence_count_max: 6
+
+  stem:
+    required: true
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 18
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+# ═══════════════════════════════════════════════════════════════
+# DOĞRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Tablodaki verilerle doğrudan desteklenen kriter analizi veya karar"
+  kurallar:
+    - "KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI"
+    - "Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI"
+    - "Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil"
+    - "YASAK: Tablodaki değeri aynen şıkka yazmak (örn: 'yalıtımı azdır' tabloda yazıyorsa şıkta aynen yazmamalı)"
+    - "Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli"
+
+    - "Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı"
+    - "Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı"
+    - "Tek kriter sorusunda doğru cevap belirtilen kritere göre tablodaki verilerle kanıtlanabilir olmalı"
+    - "Çoklu kriter sorusunda doğru cevap iki kriteri birlikte en iyi karşılayan seçenek olmalı"
+    - "Her soru farklı bir karar verme becerisini ölçmeli"
+    - "HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer"
+    - "Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK"
+    - "BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: 'teleskop' → 'mercekli araç' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı"
+
+# ═══════════════════════════════════════════════════════════════
+# ÇELDİRİCİ STRATEJİLERİ
+# ═══════════════════════════════════════════════════════════════
+
+distractors:
+  stratejiler:
+    - ad: "TEK_KRITER_YANILGISI"
+      aciklama: "Çoklu kriter sorusunda sadece tek kriterle en iyi olanı sunma"
+      ornek: "İki kriteri dikkate alması gerekirken sadece birini değerlendirme"
+    - ad: "VERI_CARPITMA"
+      aciklama: "Tablodaki bir veriyi yanlış aktarma"
+      ornek: "Olumsuz özelliği olumlu gibi sunma"
+    - ad: "YANLIS_KARSILASTIRMA"
+      aciklama: "Tablodaki seçenekleri yanlış karşılaştırma"
+      ornek: "Daha düşük puanlı seçeneği daha yüksek gibi gösterme"
+
+use_shared_strategies: false

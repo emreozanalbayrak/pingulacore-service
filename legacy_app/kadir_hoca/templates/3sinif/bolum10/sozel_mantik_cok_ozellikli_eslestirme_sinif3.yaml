@@ -1,0 +1,672 @@
+# bolum6/sozel_mantik_cok_ozellikli_eslestirme_sorusu.yaml
+# Bölüm 6 - Sözel Mantık ve Muhakeme
+#
+# FORMAT: Setup cümlesi + maddeli koşullar (•) + soru kökü + 4 seçenek
+# Bu sürüm yalnızca "çok özellikli eşleştirme sorusu" kalıbı içindir.
+
+meta:
+  id: "sozel_mantik_cok_ozellikli_eslestirme_sinif3"
+  ad: "3. Sınıf Sözel Mantık - Çok Özellikli Eşleştirme"
+  sinif_seviyesi: 3
+  aciklama: "Kişi veya varlıkları birden fazla özellik kümesi üzerinde eşleştirerek gizli özellik profilini bulma ve buna göre kesin çıkarım yapma"
+  frequency: "High (~12 questions)"
+
+cok_ozellikli_eslestirme_senaryolari:
+  - ad: "bilim_fuari_takim_puan_eslestirmesi"
+    aciklama: "Öğrencilerin proje takımları ve aldıkları puanlarla birlikte eşleştirilmesi"
+    ornek_setup: "Bir bilim fuarında öğrencilerin her biri farklı proje takımlarında yer almakta ve farklı puanlar almaktadır."
+
+  - ad: "spor_gunu_grup_madalya_eslestirmesi"
+    aciklama: "Katılımcıların spor grupları ve madalya dereceleriyle eşleştirilmesi"
+    ornek_setup: "Bir spor gününde öğrencilerin her biri farklı gruplarda yarışmış ve farklı dereceler elde etmiştir."
+
+  - ad: "planetaryum_ekip_koltuk_numarasi_eslestirmesi"
+    aciklama: "Öğrencilerin ait oldukları ekip ve oturdukları numaralı koltukların birlikte eşleştirilmesi"
+    ornek_setup: "Bir planetaryum etkinliğinde öğrencilerin her biri farklı ekiplerde yer almakta ve farklı numaralı koltuklarda oturmaktadır."
+
+  - ad: "kutuphane_okuma_grubu_kitap_sayisi_eslestirmesi"
+    aciklama: "Öğrencilerin okuma grupları ve okudukları kitap sayılarıyla eşleştirilmesi"
+    ornek_setup: "Bir okuma etkinliğinde öğrencilerin her biri farklı gruplarda bulunmakta ve farklı sayıda kitap okumaktadır."
+
+  - ad: "robotik_atolye_masa_puan_eslestirmesi"
+    aciklama: "Katılımcıların çalıştıkları masa ve elde ettikleri puanlarla eşleştirilmesi"
+    ornek_setup: "Bir sanat atölyeside öğrencilerin her biri farklı masalarda çalışmakta ve farklı puanlar almaktadır."
+
+  - ad: "muzik_okulu_sinif_rozet_numarasi_eslestirmesi"
+    aciklama: "Öğrencilerin gittikleri sınıf ve taşıdıkları rozet numaralarıyla eşleştirilmesi"
+    ornek_setup: "Bir müzik okulunda öğrencilerin her biri farklı sınıflara gitmekte ve farklı numaralı rozetler taşımaktadır."
+
+  - ad: "kamp_ekibi_cadir_numarasi_eslestirmesi"
+    aciklama: "Kampçıların ait oldukları ekip ve kaldıkları çadır numaralarıyla eşleştirilmesi"
+    ornek_setup: "Bir yaz kampında öğrencilerin her biri farklı ekiplerde yer almakta ve farklı numaralı çadırlarda kalmaktadır."
+
+  - ad: "uzay_kampi_gorev_grubu_seviye_puani_eslestirmesi"
+    aciklama: "Katılımcıların görev grupları ve başarı seviyeleriyle eşleştirilmesi"
+    ornek_setup: "Bir bilim etkinliğinda öğrencilerin her biri farklı görev gruplarında bulunmakta ve farklı başarı puanları almaktadır."
+
+  - ad: "sanat_atolyesi_tema_malzeme_sayisi_eslestirmesi"
+    aciklama: "Katılımcıların seçtikleri tema ve kullandıkları malzeme sayısıyla eşleştirilmesi"
+    ornek_setup: "Bir sanat atölyesinde öğrencilerin her biri farklı temalarda çalışmakta ve farklı sayıda malzeme kullanmaktadır."
+
+  - ad: "yetenek_gosterisi_sira_grup_numarasi_eslestirmesi"
+    aciklama: "Öğrencilerin gösteri grupları ve sahne sıra numaralarıyla eşleştirilmesi"
+    ornek_setup: "Bir yetenek gösterisinde öğrencilerin her biri farklı gruplarda yer almakta ve farklı sıra numaraları almaktadır."
+
+  - ad: "sera_gozlem_alan_bitki_sayisi_eslestirmesi"
+    aciklama: "Öğrencilerin gözlem yaptıkları alan ve inceledikleri bitki sayısıyla eşleştirilmesi"
+    ornek_setup: "Bir sera çalışmasında öğrencilerin her biri farklı gözlem alanlarında çalışmakta ve farklı sayıda bitki incelemektedir."
+
+  - ad: "hayvanat_bahcesi_gorev_bolgesi_bakim_sayisi_eslestirmesi"
+    aciklama: "Görevlilerin çalıştıkları bölge ve baktıkları hayvan sayısıyla eşleştirilmesi"
+    ornek_setup: "Bir hayvanat bahçesi etkinliğinde öğrencilerin her biri farklı bölgelerde görev almakta ve farklı sayıda hayvanla ilgilenmektedir."
+
+  - ad: "drama_kulubu_rol_grubu_prova_saati_eslestirmesi"
+    aciklama: "Katılımcıların rol grupları ve prova saatleriyle eşleştirilmesi"
+    ornek_setup: "Bir drama kulübünde öğrencilerin her biri farklı rol gruplarında yer almakta ve farklı prova saatlerinde çalışmaktadır."
+
+  - ad: "kodlama_atolyesi_proje_takimi_hata_sayisi_eslestirmesi"
+    aciklama: "Öğrencilerin proje takımları ve programlarındaki hata sayılarıyla eşleştirilmesi"
+    ornek_setup: "Bir kodlama atölyesinde öğrencilerin her biri farklı proje takımlarında yer almakta ve farklı sayıda hata düzeltmektedir."
+
+  - ad: "okul_gazetesi_bolum_yazi_sayisi_eslestirmesi"
+    aciklama: "Öğrencilerin görev aldıkları bölüm ve hazırladıkları yazı sayısıyla eşleştirilmesi"
+    ornek_setup: "Bir okul gazetesinde öğrencilerin her biri farklı bölümlerde çalışmakta ve farklı sayıda yazı hazırlamaktadır."
+
+  - ad: "matematik_oyunlari_masa_jeton_sayisi_eslestirmesi"
+    aciklama: "Oyuncuların oturdukları masa ve topladıkları jeton sayısıyla eşleştirilmesi"
+    ornek_setup: "Bir matematik oyunları etkinliğinde öğrencilerin her biri farklı masalarda yer almakta ve farklı sayıda jeton toplamaktadır."
+
+  - ad: "muze_gezi_grubu_rehber_numarasi_eslestirmesi"
+    aciklama: "Öğrencilerin gezi grupları ve rehber numaralarıyla eşleştirilmesi"
+    ornek_setup: "Bir müze gezisinde öğrencilerin her biri farklı gezi gruplarında yer almakta ve farklı rehberlerle ilerlemektedir."
+
+  - ad: "yaratici_yazma_ekibi_hikaye_sayfasi_eslestirmesi"
+    aciklama: "Katılımcıların yazma ekipleri ve yazdıkları sayfa sayılarıyla eşleştirilmesi"
+    ornek_setup: "Bir yaratıcı yazma etkinliğinde öğrencilerin her biri farklı ekiplerde yer almakta ve farklı sayıda sayfa yazmaktadır."
+
+  - ad: "akil_oyunlari_grubu_puan_karti_eslestirmesi"
+    aciklama: "Öğrencilerin ait oldukları grup ve puan kartlarıyla eşleştirilmesi"
+    ornek_setup: "Bir akıl oyunları turnuvasında öğrencilerin her biri farklı gruplarda yarışmakta ve farklı puan kartlarına sahiptir."
+
+  - ad: "festival_standi_gorev_kupon_numarasi_eslestirmesi"
+    aciklama: "Katılımcıların görev aldıkları stant ve kupon numaralarıyla eşleştirilmesi"
+    ornek_setup: "Bir çocuk festivalinde öğrencilerin her biri farklı stantlarda görev almakta ve farklı kupon numaraları taşımaktadır."
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Setup cümlesi + maddeli koşullar + soru kökü + 4 seçenekten oluşan çok özellikli eşleştirme sorusu"
+
+  paragraph:
+    required: true
+    word_count_min: 30
+    word_count_max: 65
+    sentence_count_min: 2
+    sentence_count_max: 8
+    stil: "mantik_bulmacasi"
+
+    amac: >
+      Öğrencinin, kişi veya varlıkları birden fazla özellik kümesi üzerinde
+      birlikte değerlendirerek gizli özellik profilini kurması gerekir.
+      Koşullar kişi–özellik ilişkilerini doğrudan tablo gibi vermemeli;
+      öğrenci bazı özellik eşleşmelerini, grup bağlantılarını ve sayısal
+      özellikleri mantıksal çıkarımla tamamlamalıdır.
+
+    kurallar:
+      - "Paragraf iki bölümden oluşur: (1) SETUP CÜMLESİ + (2) MADDELİ KOŞULLAR"
+      - "SETUP CÜMLESİ (1-2 cümle): Kaç kişi/varlık olduğu, hangi özellik kümelerinin bulunduğu ve her kişinin her özellik kümesinden yalnızca bir değer aldığı açıkça tanıtılmalıdır"
+      - "Kurgu kişi-merkezli olabilir; ancak yapı en az 2, tercihen 3 özellik ekseni içermelidir"
+      - "Her kişi, her özellik kümesinden yalnızca bir değer almalıdır"
+      - "Özellik kümeleri birbiriyle karışmayacak kadar açık olmalıdır; örneğin grup, sayı, sıra, puan, takım, masa, rozet numarası gibi alanlar net ayrılmalıdır"
+      - "MADDELİ KOŞULLAR 3 madde olmalıdır; her koşul • ile başlamalı ve <br> ile ayrılmalıdır"
+      - "FORMAT ŞEKLİ şu mantıkta olmalıdır: Setup cümlesi.<br>Bu kişiler ve özelliklerle ilgili aşağıdaki bilgiler verilmektedir:<br>• Koşul 1<br>• Koşul 2<br>• Koşul 3"
+      - "YASAK: Düz paragraf yazma; mutlaka setup + • maddeli koşul yapısı kullanılmalıdır"
+      - "YASAK: <ul>, <li>, <ol> tag'leri kullanma; yalnızca • karakteri ve <br> kullanılmalıdır"
+
+      - "Önce gizli doğru özellik yapısı kurulmalı; ardından yalnızca bu yapıya götüren koşullar yazılmalıdır"
+      - "Koşullar tek tek değil, birlikte değerlendirildiğinde anlam kazanmalıdır"
+      - "Her bir madde farklı bilgi taşımalıdır; maddeler birbirini tekrar etmemelidir"
+      - "Aynı sonuca götüren gereksiz veya yinelenen iki ayrı koşul yazılmamalıdır"
+
+      - "Koşullar kişi–özellik yapısını satır satır açıkça doldurmamalıdır"
+      - "Maddeler, gizli özellik profilinin yalnızca bazı parçalarını, dışlamalarını, karşılaştırmalarını veya çapraz bağlarını vermelidir"
+      - "Öğrenci, verilen ilişkilerden hareketle bazı kişi–özellik eşleşmelerini kendi mantıksal çıkarımıyla tamamlamak zorunda kalmalıdır"
+      - "Koşullar çözümü doğrudan ele vermemelidir; sorulan kişi–özellik ilişkisi ya da kişi–özellik–sayı bağlantısı açıkça söylenmemelidir"
+      - "Sorunun çözümü, tek bir koşula bakılarak değil, tüm koşullar analiz edildikten sonra yapılabilmelidir"
+      - "Şıklara bakmadan önce gizli özellik yapısı büyük ölçüde kurulabilir olmalı; şıklar yapıyı kurdurmamalı, kurulmuş yapı üzerinden test edilmelidir"
+      - "Koşullar arasında çelişki olmamalıdır"
+      - "Koşullar, hedeflenen soru köküne göre tek bir doğru cevap üretmelidir"
+      - "Koşullar, öğrenciyi adım adım sona götürmeli; ancak ara adımlardan biri nihai cevabı tek başına vermemelidir"
+
+      - "Koşullar ağırlıklı olarak çok özellikli çapraz ilişki içermelidir"
+      - "Öncelikli ilişki türleri: belirli bir özellik değerine sahip kişinin başka bir özellik bakımından tanımlanması, bir kişinin belirli bir gruptan gelmesi ya da gelmemesi, iki kişinin bir özellik bakımından karşılaştırılması, kişi–grup–sayı özellikleri arasında çapraz ilişki kurulması, aynı özelliği paylaşan ya da paylaşmayan kişilerin belirtilmesi"
+      - "Tek bir maddeyle doğrudan tam eşleştirme veren açık tablo cümleleri kullanılmamalıdır"
+      - "Koşullar, öğrencinin yalnızca isimleri ve özellikleri alt alta yazıp mekanik eşleme yapacağı kadar açık olmamalıdır"
+      - "En az 2 koşul dolaylı çıkarım gerektirmelidir; yani bir madde başka bir maddeyle birleşmeden tam anlam kazanmamalıdır"
+      - "En az 1 koşul, öğrencinin önce küçük bir ara eşleştirme ya da karşılaştırma bloğu kurup sonra bunu başka bir özellik kümesiyle birleştirmesini gerektirmelidir"
+      - "Yapının bazı parçaları doğrudan verilebilir; ancak sorulan ilişkinin doğruluk değeri mutlaka düşünerek bulunmalıdır"
+
+      - "3. sınıf seviyesinde 3 kişi/varlık ve 2-3 özellik kümesi tercih edilmelidir"
+      - "Özellik kümeleri somut ve anlaşılır olmalıdır: grup, takım, masa, kat, puan, sıra numarası, rozet numarası, kitap sayısı, bakım sayısı, koltuk numarası vb."
+      - "Sayısal özellik kullanılacaksa küçük ve zihinden takip edilebilir değerler tercih edilmelidir"
+      - "Kişi kullanılacaksa Türk isimleri tercih edilmelidir (Ali, Ayşe, Ece, Baran, Defne vb.)"
+      - "Bağlam, öğrencinin aşina olduğu günlük yaşam durumlarından seçilmelidir"
+      - "Dil açık, kısa ve kesin olmalıdır"
+      - "'aittir' ve 'ait değildir', 'daha fazla' ve 'daha az', 'aynı' ve 'farklı', 'yüksek' ve 'düşük' gibi kavramlar net ayrılmalıdır"
+      - "Kişi–özellik ve özellik kümeleri arası ilişkiler belirsizlik taşımamalıdır"
+      - "Koşullar yalnızca gizli özellik yapısını kurmaya ve sorulan ilişkiyi test etmeye hizmet etmelidir; konu dışı süsleme veya dikkat dağıtıcı detay eklenmemelidir"
+
+    kosul_dagilimi:
+      preferred_structure:
+        - "1 madde: belirli bir özellik değerine sahip kişiyi başka bir özellik üzerinden tanımlama"
+        - "1 madde: bir kişinin belirli bir grupta olduğu ya da olmadığı bilgisi"
+        - "1 madde: iki kişiyi bir özellik bakımından karşılaştırma"
+        - "Gerekirse 1 madde: kişi–grup–sayı arasında çapraz bağ kuran koşul"
+
+      yasaklar:
+        - "Her kişi için tüm özellikleri tek tek söyleyen koşullar yazma"
+        - "Her özellik kümesini ayrı ayrı tamamen çözen koşullar yazma"
+        - "Bir kişiyi aynı madde içinde iki veya üç özellik bakımından tamamen çözen açık koşullar yazma"
+        - "Koşulları tabloyu soldan sağa dolduracak çözüm şeması gibi dizme"
+        - "Tek bir maddeyle doğru seçeneğin kesinleşmesine yol açma"
+
+  visual:
+    required: true
+    description: "Çok özellikli eşleştirme sorusunu simgeleyen kişi × özellik matrisi tablo şeması"
+    placement: "paragraph_right_or_top"
+    visual_type_allowed:
+      - "satır-sütun matris tablosu (hücreler boş, soru işaretli)"
+      - "özellik-kişi eşleştirme ızgarası"
+      - "boş tablo şeması + soru işareti ikonu"
+    kurallar:
+      - "Görsel senaryo içeriğini (kişileri, nesneleri veya konumlarını) tasvir etmemelidir"
+      - "Görsel yalnızca soru tipini simgeleyen soyut/sembolik bir ikon veya şema olmalıdır"
+      - "Görsel bulmacayı çözmede ipucu vermemeli; doğru cevabı ima etmemelidir"
+      - "Görsel sade, temiz ve dikkat dağıtmayan bir ikon olmalıdır"
+      - "Görsel içinde kişi adı, konum bilgisi veya bulmacaya ait sayısal veri bulunmamalıdır"
+      - "Tablo veya ızgara görseli kullanılacaksa hücreler boş ya da soru işaretli olmalıdır"
+    yasaklar:
+      - "Senaryo sahnesi — kişileri, nesneleri veya konumlarını gösteren illüstrasyon"
+      - "Bulmacadaki sıra, yerleşim veya eşleşmeleri ele veren gerçekçi tasvir"
+      - "Fotoğraf benzeri sahne görüntüsü"
+      - "Puzzle içeriğine dair somut nesne görseli (sandalye, masa, kişi silueti vb.)"
+
+  stem:
+    required: true
+    description: >
+      Soru kökü, öğrenciyi gizli çok özellikli yapıyı kurmaya ve ardından belirli
+      bir kişi–özellik ya da kişi–özellik–sayı ilişkisinin kesin doğru, kesin yanlış,
+      söylenebilir ya da söylenemez olduğunu seçmeye zorlamalıdır.
+    kurallar:
+      - "Soru kökü gizli özellik yapısı yeterince kurulduktan sonra cevaplanabilir olmalıdır"
+      - "Soru kökü, tek bir maddeye bakılarak çözülebilecek kadar dar olmamalıdır"
+      - "Bu formatta soru kökü esas olarak kişi–özellik veya kişi–özellik–sayı çıkarımı sordurmalıdır"
+      - "Tercihen 'kesinlikle doğrudur', 'kesinlikle yanlıştır', 'kesin olarak söylenebilir', 'kesin olarak söylenemez' türünde kökler kullanılmalıdır"
+      - "Soru kökü, öğrenciyi doğrudan tek bir bilgi okumaya değil, kurulmuş gizli özellik profilini yorumlamaya yöneltmelidir"
+      - "Soru kökü, öğrenciyi en az iki özellik kümesini birlikte düşünmeye zorlamalıdır"
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 3
+    word_count_max: 18
+    style: "multi_feature_proposition"
+    correct_count: 1
+    kurallar:
+      - "Her seçenek bir özellik önermesi biçiminde yazılmalıdır"
+      - "Seçenekler tam özellik tablosunu vermemelidir"
+      - "Tüm seçenekler aynı temsil düzeyinde olmalıdır"
+      - "Seçenekler kişi–grup, kişi–sayı, kişi–özellik veya kişi–özellik–sayı ilişkisi biçiminde yazılmalıdır"
+      - "Bir seçenek kişi–grup, bir diğeri tüm tablo özeti, bir diğeri yalnızca tek sayı bilgisi gibi dağınık yapılmamalıdır"
+      - "Seçenekler, gizli çok özellikli yapı üzerinden test edilen tekil önermeler olmalıdır"
+      - "Doğru seçenek, gizli yapıdan kesin doğru ya da kesin yanlış çıkan tek önerme olmalıdır"
+      - "Hiçbir seçenek doğrudan bir koşul cümlesinin tekrar yazılmış hâli olmamalıdır"
+      - "Hiçbir seçenek tek bir maddeye bakılarak doğrudan doğrulanabilir veya elenebilir olmamalıdır"
+      - "Seçenekler biçimsel olarak dengeli olmalıdır"
+      - "Doğru cevap uzunluk, vurgu veya özel ifade nedeniyle ayırt edilmemelidir"
+      - "Temsil düzeyi seçenekler arasında bozulmamalıdır"
+      - "Seçenekler mümkün olduğunca paralel dil ve yapı ile kurulmalıdır"
+      - "Kişi–özellik–sayı yapısı kullanılıyorsa, bu yapı seçenekler arasında biçimsel üstünlük oluşturmayacak şekilde dengelenmelidir"
+      - "Seçenekler, öğrenciyi tek bir açık bilgiye değil, çok özellikli yapının tamamına dönmeye zorlamalıdır"
+
+# ═══════════════════════════════════════════════════════════════
+      # SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Bu bilgilere göre aşağıdakilerden hangisi kesinlikle <u>doğrudur</u>?</b>"
+  # KULLANILDI: - "<b>Bu bilgilere göre aşağıdakilerden hangisi kesinlikle <u>yanlıştır</u>?</b>"
+  # KULLANILDI: - "<b>Bu bilgilere göre aşağıdakilerden hangisi kesinlikle <u>söylenebilir</u>?</b>"
+  - "<b>Bu bilgilere göre aşağıdakilerden hangisi kesinlikle <u>söylenemez</u>?</b>"
+  - "<b>Bu bilgilere göre aşağıdaki eşleştirmelerden hangisi <u>doğrudur</u>?</b>"
+  - "<b>Bu bilgilere göre aşağıdaki eşleştirmelerden hangisi <u>yanlıştır</u>?</b>"
+  # KULLANILDI: - "<b>Bu bilgilere göre aşağıdaki özellik bilgilerinden hangisi <u>doğrudur</u>?</b>"
+  - "<b>Bu bilgilere göre aşağıdaki özellik bilgilerinden hangisi <u>yanlıştır</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+  # DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: >
+    Doğru cevap, yalnızca verilen tüm koşullar birlikte değerlendirilip gizli
+    çok özellikli eşleştirme yapısı kurulduktan sonra mantıksal olarak kesin
+    biçimde belirlenebilen özellik önermesidir. Öğrenciden tek bir ipucuna
+    dayanarak değil, tüm maddeleri analiz ederek doğru kişi–özellik,
+    kişi–grup ya da kişi–özellik–sayı ilişkisini seçmesi beklenir.
+
+  temel_ilke: >
+    Gizli özellik yapısı kurulmadan doğru cevap belirlenememelidir. Doğru seçenek,
+    bir veya iki koşuldan doğrudan fark edilebilen değil; ancak tüm koşulların
+    ortak sonucu olarak ortaya çıkan kesin kişi–özellik, kişi–grup veya
+    kişi–özellik–sayı önermesi olmalıdır.
+
+  kurallar:
+    - "Doğru cevap SADECE tüm koşullar birlikte değerlendirildiğinde ulaşılabilir olmalıdır"
+    - "Doğru cevap bir tek maddeye bakılarak anlaşılmamalıdır"
+    - "Doğru cevap yalnızca iki koşul birleştirilerek doğrudan bulunamamalıdır; gerekli ise ara eşleştirmeler, grup ilişkileri, karşılaştırmalar ve sayısal özellikler üzerinden gizli yapı kurulmalıdır"
+    - "Öğrenci, seçeneklere geçmeden önce kişi–özellik yapısını ve özellik kümeleri arasındaki çapraz ilişkileri kurabilecek durumda olmalıdır"
+    - "Doğru cevap, maddelerden doğrudan alınmış tekil bir bilgi değil; kurulmuş gizli yapının zorunlu sonucu olmalıdır"
+    - "Pozitif köklerde doğru cevap: gizli yapıdan KESİNLİKLE çıkan önerme olmalıdır"
+    - "Negatif köklerde doğru cevap: gizli yapıyla çelişen ya da gizli yapıdan kesin olarak çıkarılamayan önerme olmalıdır"
+    - "Çıkarım köklerinde yalnızca bir seçenek kesin doğru ya da kesin yanlış olmalıdır"
+    - "Doğru cevap tahmine, sezgiye veya eksik okumaya değil; mantıksal zincire dayanmalıdır"
+    - "Sorunun tek bir doğru cevabı olmalıdır; belirsizlik ve alternatif doğru cevap YASAKTIR"
+    - "Doğru cevap, koşullardan biri tekrar edilerek yazılmamalıdır"
+    - "Doğru cevap, madde cümlelerinden birinin neredeyse aynısı olmamalıdır"
+    - "Doğru seçenek, verilen koşulları sadece yeniden söylemek yerine onların birleşiminden doğan yeni bir çıkarım olmalıdır"
+    - "Doğru cevap 3-18 kelime arasında olmalıdır"
+    - "Duruma göre kısa ifade ya da tam cümle olabilir"
+    - "Biçimsel olarak diğer şıklardan ayrışmamalıdır"
+    - "Doğru cevap, seçenek setindeki temsil düzeyini bozmamalıdır"
+    - "Doğru cevap, en az iki özellik kümesinin birlikte değerlendirilmesini gerektirmelidir"
+    - "Doğru cevap, tek bir grup bilgisinin veya tek bir sayısal bilginin kaba tekrarına dönüşmemelidir"
+    - "Doğru cevap, kişi–özellik–sayı yapısı kullanıyorsa bunu yüzeysel değil çapraz çıkarım sonucu yansıtmalıdır"
+
+  yasaklar:
+    - "Doğru cevabın tek bir koşulun yeniden yazılmış hâli olması"
+    - "Doğru cevabın iki koşuldan hemen fark edilecek kadar açık olması"
+    - "Gizli çok özellikli yapı kurulmadan seçenek elemesi yapılabilmesi"
+    - "Doğru cevabın, maddelerden birinde açıkça verilen kişi/özellik ilişkisinin doğrudan tekrarına dönüşmesi"
+    - "Doğru cevabın, maddelerden birinde açıkça verilen grup bilgisinin kaba tekrarına dönüşmesi"
+    - "Doğru cevabın, maddelerden birinde açıkça verilen sayısal bilginin kaba tekrarına dönüşmesi"
+    - "Birden fazla seçeneğin gizli yapıdan eşit derecede doğru ya da yanlış çıkması"
+    - "Doğru cevabın tüm yapıyı açık eden kapsamlı bir açıklama biçiminde yazılması"
+    - "Temsil düzeyini bozup doğru cevabı biçimsel olarak öne çıkarma"
+
+  kontrol:
+    - "Tek bir koşul çıkarıldığında doğru cevap hâlâ açıkça görünür hâle geliyor mu?"
+    - "Sadece ilk iki koşula bakılarak doğru seçenek bulunabiliyor mu?"
+    - "Gizli çok özellikli yapı kurulmadan doğru seçenek tahmin edilebiliyor mu?"
+    - "Doğru seçenek, maddelerde verilen ifadelerden birini tekrar mı ediyor?"
+    - "Doğru seçenek gerçekten tüm koşulların birleşiminden mi doğuyor?"
+    - "Diğer seçeneklerin de aynı ölçüde doğru ya da yanlış olma ihtimali kalıyor mu?"
+    - "Doğru seçenek, çok özellikli yapıyı kurmadan yalnızca yüzeysel eleme ile bulunabiliyor mu?"
+    - "Doğru seçenek en az iki özellik kümesini birlikte düşündürmek zorunda bırakıyor mu?"
+# ═══════════════════════════════════════════════════════════════
+    # CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  temel_ilke: >
+    Bu formatta çeldiriciler, tek bir koşula bakılarak yanlış olduğu anlaşılabilen
+    yüzeysel kişi–özellik önermeleri olmamalıdır. Her yanlış seçenek, öğrencinin
+    gizli çok özellikli eşleştirme yapısını kurarken yapabileceği bütünsel bir
+    muhakeme hatasının sonucu olmalıdır. Öğrenci yanlış bir ara yapı kurarsa ya da
+    kişi–grup, kişi–sayı ve diğer özellik kümeleri arasındaki çapraz bağları
+    gereğinden erken kesinleştirirse, bu şıklardan birini işaretlemeye yatkın
+    olmalıdır.
+
+  ana_prensipler:
+    - "Çeldirici, bir koşulun doğrudan olumsuzu ya da kaba ters çevrilmiş hâli olmamalıdır"
+    - "Çeldirici, tek bir maddeyle hemen elenmemelidir"
+    - "Her çeldirici, yanlış kurulmuş bir alternatif çok özellikli yapının sonucu olmalıdır"
+    - "Yanlış seçenek, koşulların bir kısmını doğru kullanıp bir kısmını yanlış yorumlayan öğrencinin ulaşacağı özellik önermesi olmalıdır"
+    - "Çeldirici, tüm yapı kurulmadan değil; yanlış yapı kurulduğunda güçlü görünmelidir"
+    - "Çeldiriciler, çözüm sürecindeki farklı yanlış çapraz eşleştirme yollarını temsil etmelidir"
+    - "Her çeldirici, doğru cevaba biçimsel olarak benzemeli; ama yalnızca tam ve doğru gizli yapı ile test edildiğinde geçersiz olmalıdır"
+    - "Amaç, açık yanlış yazmak değil; yanlış kurulmuş çok özellikli yapıda doğruymuş gibi görünen makul kişi–özellik, kişi–grup ya da kişi–özellik–sayı önermesi yazmaktır"
+
+  uretim_proseduru:
+    - "1. Önce doğru gizli çok özellikli eşleştirme yapısını kur."
+    - "2. Ardından öğrencinin düşebileceği 3 farklı yanlış yapı veya yanlış kesinleştirme kurgusu tasarla."
+    - "3. Her yanlış kurgu, koşulların en az bir kısmını sağlamalı; fakat tümünü sağlamamalıdır."
+    - "4. Çeldiricileri bu yanlış kurguların sonuçlarından üret."
+    - "5. Her çeldiricinin yanlışlığı ancak tüm koşullar yeniden kontrol edildiğinde ortaya çıkmalıdır."
+    - "6. Bir çeldirici tek bir madde ile hemen eleniyorsa yeniden yaz."
+    - "7. Her çeldirici, sorudaki temsil düzeyini korumalıdır."
+    - "8. Seçenekler kişi–grup ağırlıklı kurulmuşsa çeldiriciler de bu çizgide kalmalıdır."
+    - "9. Seçenekler kişi–özellik–sayı yapısı içeriyorsa çeldiriciler de aynı karmaşıklık düzeyinde olmalıdır."
+
+  genel_kurallar:
+    - "Her çeldirici farklı bir yanlış çok özellikli eşleştirme mantığına dayanmalıdır"
+    - "Bazı çeldirici türleri tek başına yeterince güçlü olmayabilir; bu türler başka bir yanlış eşleştirme stratejisiyle birlikte kullanılmalıdır"
+    - "'ILISKIYI_EKSIK_TASIMA' tek başına ana çeldirici olarak kullanılmamalı; daha güçlü bir yanlış çapraz eşleştirme stratejisini destekleyici olarak kullanılmalıdır"
+    - "Çeldiriciler, öğrencinin gizli yapıyı yanlış ya da eksik tamamlaması hâlinde makul görünmelidir"
+    - "Çeldiriciler, maddelerde açıkça yazan bilgileri kopyalayıp bozarak üretilmemelidir"
+    - "Yanlış seçenekler, eksik çözüm değil yanlış çok özellikli yapı sonucu olmalıdır"
+    - "Çeldiriciler, doğru cevabın yalnızca rastgele başka bir kişiyle, başka bir grupla veya başka bir sayıyla değiştirilmiş yüzeysel hâli olmamalıdır"
+    - "Bir çeldirici, yalnızca son kontrol aşamasında çürütülebilecek güçte olmalıdır"
+    - "Her yanlış seçenek aynı temsil düzeyinde olmalıdır"
+    - "Seçenekler arasında kişi–grup, kişi–sayı ve kişi–özellik–sayı yapıları kullanılıyorsa bunlar dengesiz dağılmamalı; çeldiriciler de aynı düzeyi korumalıdır"
+    - "Öğrenci bir çeldiriciyi tek bir açık bilgiye bakarak eleyememelidir; bunun için birden fazla özelliği birlikte kontrol etmek zorunda kalmalıdır"
+
+  stratejiler:
+    - ad: "OZELLIKLER_ARASI_CAPRAZ_BAGI_YANLIS_KURMA"
+      bilisssel_hata_kategorisi: "capraz_hata"
+      aciklama: "Öğrenci bir kişiye ait iki farklı özellik hattını kısmen doğru kurar; fakat bunları yanlış biçimde birleştirir"
+      nasil_olusturulur: |
+        Bir kişinin bir özellik kümesindeki değerini ve başka bir özellik kümesiyle
+        ilgili ipucunu ayrı ayrı makul bırak; ancak bu iki hattı yanlış bağlayan
+        alternatif bir yapı kur. Çeldirici, çapraz bağın yanlış kurulması sonucu
+        doğruymuş gibi görünen kişi–özellik veya kişi–özellik–sayı önermesi olmalıdır.
+
+    - ad: "GRUP_BILGISINI_YANLIS_KISIYE_TASIMA"
+      bilisssel_hata_kategorisi: "grup_hatasi"
+      aciklama: "Öğrenci belirli bir gruba ait olma ya da olmama bilgisini yanlış kişiye taşır"
+      nasil_olusturulur: |
+        Bir kişinin ait olduğu ya da olmadığı grup bilgisini koruyor gibi görünen,
+        fakat bu bilgiyi başka bir kişiye kaydıran alternatif bir yapı kur.
+        Çeldirici, grup bilgisi doğruymuş gibi görünse de kişi bağlantısı yanlış olan
+        önermeye dayanmalıdır.
+
+    - ad: "KARSILASTIRMA_ILISKISINI_YANLIS_YORUMLAMA"
+      bilisssel_hata_kategorisi: "iliski_hatasi"
+      aciklama: "Öğrenci iki kişinin bir özellik bakımından karşılaştırılmasını yanlış taşır"
+      nasil_olusturulur: |
+        İki kişinin bir özellik bakımından daha büyük-küçük, daha fazla-az, önce-sonra
+        ya da farklı-aynı oluşunu içeren bir ilişkiyi yanlış yorumlayan alternatif
+        yapı kur. Çeldirici, bu yanlış karşılaştırma sonucunda doğruymuş gibi görünen
+        kişi–grup ya da kişi–sayı önermesi olmalıdır.
+
+    - ad: "SAYISAL_OZELLIGI_YANLIS_ESLESTIRME"
+      bilisssel_hata_kategorisi: "nicel_hata"
+      aciklama: "Öğrenci kişiye ait sayısal değeri ya da sayısal sıralamayı yanlış kişiye bağlar"
+      nasil_olusturulur: |
+        Sayısal özellikler içeren yapılarda, doğru sayı kümesini koru; ancak bu
+        değerleri kişilere veya gruplara yanlış dağıtan alternatif bir yapı kur.
+        Çeldirici, sayı doğru aralıkta görünse de kişi–sayı ya da kişi–grup–sayı
+        bağı yanlış olan önermeye dayanmalıdır.
+
+    - ad: "OZELLIK_DEGERINDEN_GRUP_SONUCUNU_ERKEN_CIKARMA"
+      bilisssel_hata_kategorisi: "erken_sabitleme"
+      aciklama: "Öğrenci bir özellik değerinden hareketle kişinin grup ya da ikinci özellik bilgisini gereğinden erken kesinleştirir"
+      nasil_olusturulur: |
+        Belirli bir özellik değeri doğru olsa bile bunun diğer özellik kümesine
+        zorunlu olarak taşınmadığı bir alternatif yapı kur. Çeldirici, öğrencinin
+        'bu özelliğe sahipse şu gruptadır' türü erken sabitleme hatasından doğan
+        kişi–grup veya kişi–özellik–sayı önermesi olmalıdır.
+
+    - ad: "ILISKIYI_EKSIK_TASIMA"
+      bilisssel_hata_kategorisi: "eksik_analiz"
+      aciklama: "Öğrenci bir koşulu doğru kullanır; fakat bu koşulun diğer maddelerle birleşince doğurduğu sonucu taşımaz"
+      nasil_olusturulur: |
+        Bir veya iki koşula göre makul görünen, ancak başka bir koşulla birleşince
+        bozulması gereken yanlış bir çok özellikli yapı kur. Çeldirici, öğrencinin
+        ara çıkarımı yapıp sonraki mantıksal taşıma adımını atlaması sonucu yanlış
+        kişi–özellik, kişi–grup veya kişi–özellik–sayı önermesini doğru ya da mümkün
+        sanmasına dayanmalıdır.
+      kullanim_notu: >
+        Bu strateji tek başına kullanıldığında çeldirici zayıf kalabilir. Bu nedenle
+        tek başına ana çeldirici olarak kullanılmamalı;
+        "OZELLIKLER_ARASI_CAPRAZ_BAGI_YANLIS_KURMA",
+        "GRUP_BILGISINI_YANLIS_KISIYE_TASIMA",
+        "KARSILASTIRMA_ILISKISINI_YANLIS_YORUMLAMA",
+        "SAYISAL_OZELLIGI_YANLIS_ESLESTIRME",
+        "OZELLIK_DEGERINDEN_GRUP_SONUCUNU_ERKEN_CIKARMA" veya
+        "KALAN_ESLESMELERI_YANLIS_TAMAMLAMA" gibi daha güçlü bir yanlış eşleştirme
+        stratejisini destekleyici biçimde kullanılmalıdır.
+      tek_basina_kullanilabilir: false
+      birlikte_kullan:
+        - "OZELLIKLER_ARASI_CAPRAZ_BAGI_YANLIS_KURMA"
+        - "GRUP_BILGISINI_YANLIS_KISIYE_TASIMA"
+        - "KARSILASTIRMA_ILISKISINI_YANLIS_YORUMLAMA"
+        - "SAYISAL_OZELLIGI_YANLIS_ESLESTIRME"
+        - "OZELLIK_DEGERINDEN_GRUP_SONUCUNU_ERKEN_CIKARMA"
+        - "KALAN_ESLESMELERI_YANLIS_TAMAMLAMA"
+
+    - ad: "KALAN_ESLESMELERI_YANLIS_TAMAMLAMA"
+      bilisssel_hata_kategorisi: "yanlis_tamamlama"
+      aciklama: "Öğrenci yapının büyük kısmını doğru kurar; fakat kalan özellik eşleşmelerini elde kalana göre yanlış tamamlar"
+      nasil_olusturulur: |
+        Gizli yapının çoğunu doğru tut; ancak son 1-2 kişi ya da özellik değerini,
+        tüm koşulları tekrar kontrol etmeden yanlış tamamlanmış gibi kurgula.
+        Çeldirici, bu yanlış tamamlama sonucunda doğruymuş gibi görünen kişi–özellik
+        ya da kişi–özellik–sayı önermesine dayanmalıdır.
+
+    - ad: "NEGATIF_KOKTE_MUMKUN_ONERMEYI_YANLIS_SECME"
+      bilisssel_hata_kategorisi: "kok_yon_hatasi"
+      aciklama: "Öğrenci kökün yönünü karıştırdığı için doğru olan yerine yanlış olanı ya da tersini seçer"
+      nasil_olusturulur: |
+        Eğer soru kökü 'yanlıştır' veya 'söylenemez' türündeyse, gizli yapıyla büyük
+        ölçüde uyumlu ve güçlü görünen ama aslında işaretlenmemesi gereken bir
+        kişi–özellik ya da kişi–özellik–sayı önermesi üret. Bu çeldirici, kök yönü
+        ve kesinlik derecesi karışıklığına dayanmalıdır.
+
+  yasaklar:
+    - "Bir koşulun açık tersini yazmak"
+    - "Bir maddede verilen bilgiyi bozup kolay eleme yapılacak özellik önermesi üretmek"
+    - "Tek başına tek koşulla elenen çeldirici üretmek"
+    - "Koşullardan bağımsız, rastgele yanlış eşleştirme ya da özellik önermesi yazmak"
+    - "Çeldiriciyi yanlış çok özellikli yapı düzeyinde tasarlamadan üretmek"
+    - "Aynı yanlış çözüm mantığını temsil eden birden fazla çeldirici kullanmak"
+    - "Bir yanlış seçenekte temsil düzeyini bozmak; örneğin biri kişi–grup, biri tüm tablo özeti, biri yalnızca çıplak sayı bilgisi gibi dengesiz yapı kurmak"
+
+  kalite_kontrol:
+    - "Bu çeldirici, öğrencinin kurabileceği yanlış bir çok özellikli yapının sonucu mu?"
+    - "Bu seçenek bir tek maddeyle hemen eleniyor mu?"
+    - "Bu seçenek ancak tüm koşullar kontrol edilince mi yanlışlaşıyor?"
+    - "Bu çeldirici, doğru yapıya yakın ama hatalı bir alternatif kurguya dayanıyor mu?"
+    - "Her çeldirici farklı bir yanlış çözüm yolunu temsil ediyor mu?"
+    - "Tüm çeldiriciler aynı temsil düzeyinde mi?"
+    - "Seçenekler arasında paralellik korunuyor mu?"
+    - "Öğrenci çeldiriciyi elemek için en az iki özelliği birlikte kontrol etmek zorunda kalıyor mu?"
+
+  onerilen_dagilim:
+    - "1 ana çeldirici: OZELLIKLER_ARASI_CAPRAZ_BAGI_YANLIS_KURMA veya GRUP_BILGISINI_YANLIS_KISIYE_TASIMA"
+    - "1 ana çeldirici: KARSILASTIRMA_ILISKISINI_YANLIS_YORUMLAMA veya SAYISAL_OZELLIGI_YANLIS_ESLESTIRME"
+    - "1 ana çeldirici: KALAN_ESLESMELERI_YANLIS_TAMAMLAMA veya NEGATIF_KOKTE_MUMKUN_ONERMEYI_YANLIS_SECME"
+    - "'ILISKIYI_EKSIK_TASIMA' tek başına kullanılmamalı; yalnızca yukarıdaki ana çeldiricilerden biriyle birlikte destekleyici mantık olarak kullanılmalıdır"
+
+use_shared_strategies: false
+# ═══════════════════════════════════════════════════════════════
+# BECERI ETIKETI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB3"
+  bilesenler: ["mantiksal_cikarim", "cok_ozellikli_eslestirme", "capraz_iliski_kurma", "degerlendirme", "sorgulama"]
+  surec_bileseni: "karar_verme"
+
+# ═══════════════════════════════════════════════════════════════
+    # URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  temel_ilke: >
+    Bu formatta soru, öğrenciyi gizli çok özellikli eşleştirme yapısını tamamen
+    ya da büyük ölçüde kurmaya zorlamalıdır. Doğru cevap; tek bir koşuldan, iki
+    koşulun hızlı birleşiminden veya yüzeysel elemeden bulunamamalı; ancak
+    kişiler/varlıklar ile onların ait oldukları grup, sayısal değer ve diğer
+    özellik kümeleri birlikte değerlendirildikten sonra sorulan önermenin
+    kesin doğru, kesin yanlış, söylenebilir ya da söylenemez olduğu anlaşılmalıdır.
+
+  steps:
+    - step: 1
+      action: "Senaryo alanı seç"
+      details: |
+        Yalnızca çok özellikli eşleştirme sorusuna uygun bir bağlam seç.
+        Örnek alanlar:
+        - proje takımı + puan + şehir
+        - kamp grubu + görev + numara
+        - araştırma ekibi + renk + puan
+        - festival grubu + tema + sıra
+        - robot takımı + bölüm + skor
+        - bilim yarışması + salon + derece
+
+    - step: 2
+      action: "Kişileri, özellik kümelerini ve gizli doğru yapıyı kur"
+      details: |
+        - Önce 3 kişi/varlık belirle
+        - Sonra 2-3 özellik kümesi belirle
+        - Her kişi için her özellik kümesinden yalnızca bir değer olacak şekilde yerleştir
+        - Grup bilgisi, sayı bilgisi ve diğer özellik kümeleri arasındaki bağları netleştir
+        - Bu yapı, sorunun görünmeyen çözüm tablosu olmalıdır
+        - Soru yazımına geçmeden önce tüm eşleştirmeler kesinleşmiş olmalıdır
+
+    - step: 3
+      action: "Soru kökünü ve seçenek temsil düzeyini belirle"
+      details: |
+        Soru kökü, gizli yapı kurulduktan sonra cevaplanabilir olmalıdır.
+        Tercihen şu tür kökler seçilmelidir:
+        - kesinlikle doğrudur
+        - kesinlikle yanlıştır
+        - kesinlikle söylenebilir
+        - kesinlikle söylenemez
+
+        Ayrıca seçenek temsil düzeyi baştan belirlenmelidir:
+        - kişi–grup eşleştirmesi
+        veya
+        - kişi–grup/sayı eşleştirmesi
+
+        Aynı soruda temsil düzeyi dağılmamalı; seçenekler paralel yapı korumalıdır.
+
+    - step: 4
+      action: "Koşulları gizli yapıdan türet"
+      details: |
+        - 3 madde oluştur
+        - Her madde farklı bilgi taşımalı
+        - Koşullar birbirini tekrar etmemeli
+        - Hiçbir madde tek başına doğru cevabı vermemeli
+        - İki madde birleşince doğru seçenek doğrudan görünür olmamalı
+        - Koşullar ancak birlikte değerlendirildiğinde çok özellikli yapıyı yeterince kurdurmalıdır
+        - Koşullar arasında çelişki olmamalıdır
+        - Koşullar, hedeflenen soru köküne göre yalnızca bir doğru cevap üretmelidir
+        - Koşullar ağırlıklı olarak kişi–grup, kişi–sayı, kişi–özellik ve bunlar arasındaki çapraz ilişkileri içermelidir
+
+    - step: 5
+      action: "Setup cümlesini yaz"
+      details: |
+        - 1-2 cümlede yapının çerçevesini tanıt
+        - Kaç kişi/varlık olduğu anlaşılır olsun
+        - Hangi özellik kümelerinin bulunduğu net olsun
+        - Her kişinin her özellik kümesinden yalnızca bir değer aldığı açıkça belirtilsin
+        - Bağlam sade, öğrenciye yakın ve çok özellikli yapı-merkezli olsun
+        - Gereksiz süsleme yapma
+
+    - step: 6
+      action: "Doğru seçeneği üret"
+      details: |
+        - Doğru seçenek, sorulan ilişki için kesin doğru ya da kesin yanlış olan tek önerme olmalıdır
+        - Doğru cevap maddelerden biri tekrar edilerek yazılmamalıdır
+        - Öğrenci gizli yapıyı kurmadan bu önermeye ulaşamamalıdır
+        - Doğru seçenek, başta seçilmiş temsil düzeyine uygun biçimde yazılmalıdır
+        - Kişi–grup tipi seçildiyse doğru seçenek kişi–grup önermesi olmalıdır
+        - Kişi–grup/sayı tipi seçildiyse doğru seçenek kişi–grup/sayı önermesi olmalıdır
+
+    - step: 7
+      action: "3 çeldirici üret"
+      details: |
+        - Her çeldirici farklı bir muhakeme hatasına dayanmalıdır
+        - Tek bir maddeden hemen elenmemelidir
+        - Çeldiriciler, gizli yapıyı eksik veya yanlış kuran öğrencinin düşebileceği yanlış önermeler olmalıdır
+        - Çeldiriciler, çapraz bağı yanlış kurma, grup bilgisini yanlış kişiye taşıma,
+        karşılaştırma ilişkisini yanlış yorumlama, sayısal özelliği yanlış eşleştirme,
+        kalan eşleşmeleri yanlış tamamlama gibi hatalara dayanmalıdır
+        - 'ILISKIYI_EKSIK_TASIMA' tek başına ana çeldirici olarak kullanılmamalıdır
+        - Tüm çeldiriciler seçilen temsil düzeyiyle aynı yapıda kalmalıdır
+
+    - step: 8
+      action: "Seçenekleri dengele ve sırala"
+      details: |
+        - A-B-C-D seçeneklerini rastgele sırala
+        - Tüm seçenekler aynı temsil düzeyinde olsun
+        - Doğru cevap biçimsel olarak öne çıkmasın
+        - Uzunluk, ton ve yapı bakımından şıklar dengeli olsun
+        - Seçenek temsil düzeyi baştan sona korunmalıdır
+        - Seçeneklerde karmaşıklık farkı doğru cevabı ele vermemelidir
+
+    - step: 9
+      action: "Tam çözüm testi yap"
+      details: |
+        Aşağıdaki soruları kontrol et:
+        - Öğrenci gizli çok özellikli yapıyı kurmadan doğru cevabı bulabilir mi?
+        - Tek bir madde doğru cevabı ele veriyor mu?
+        - Yalnızca ilk iki maddeyle doğru seçenek tahmin edilebiliyor mu?
+        - Yanlış şıklardan biri tek bir maddeyle eleniyor mu?
+        - Sorulan ilişki için yalnızca bir seçenek mi kesin doğru/yanlış?
+        - Şıklardan biri maddelerde açıkça verilen bilgiyi tekrar ediyor mu?
+        - Tüm seçenekler aynı temsil düzeyinde mi kurulmuş?
+        Bu sorulardan herhangi birine 'evet' deniyorsa soru yeniden kurulmalıdır.
+
+# ═══════════════════════════════════════════════════════════════
+    # DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Setup cümlesi + maddeli koşul formatında mı?"
+    - "Koşullar 3 madde arasında mı?"
+    - "Her madde farklı bilgi taşıyor mu?"
+    - "Maddeler birbirini tekrar etmiyor mu?"
+    - "Koşullar arasında çelişki yok mu?"
+    - "3. sınıf seviyesine uygun mu?"
+    - "Bağlam çok özellikli eşleştirme-merkezli ve sade mi?"
+    - "Bir tane madde ile yanlış şıklardan herhangi biri eleniyor mu? ELENMEMELİ"
+
+  hidden_structure:
+    - "Soru yazılmadan önce gizli doğru çok özellikli eşleştirme yapısı kurulmuş mu?"
+    - "Tüm kişiler/varlıklar her özellik kümesinde net biçimde eşleştirilmiş mi?"
+    - "Grup bilgileri ve sayısal özellikler netleşmiş mi?"
+    - "Soru metni bu gizli yapıyı doğrudan ele veriyor mu?"
+    - "Koşullar ancak birlikte değerlendirildiğinde mi yapıyı yeterince kuruyor?"
+    - "Sorulan önerme için yalnızca bir seçeneğin doğru/yanlış statüsü netleşiyor mu?"
+
+  condition_quality:
+    - "Tek bir koşul doğru cevabı doğrudan ele veriyor mu?"
+    - "Yalnızca iki koşul birleştirilerek doğru cevap hızlıca bulunabiliyor mu?"
+    - "Koşullar, öğrenciyi çok özellikli yapı kurmaya ve önermeleri karşılaştırmaya zorlayacak derinlikte mi?"
+    - "Her koşul çözüm için işlevli mi?"
+    - "Gereksiz veya dekoratif koşul var mı?"
+    - "Koşullardan biri doğrudan bir kişi–grup ilişkisini kesinleştiriyor mu?"
+    - "Koşullardan biri doğrudan bir kişi–sayı ilişkisini kaba biçimde verip doğru cevabı öne çıkarıyor mu?"
+    - "Koşulların çoğu kişi–grup, kişi–sayı ve çapraz özellik ilişkisi içeriyor mu?"
+    - "En az 2 koşul gerçekten dolaylı çıkarım gerektiriyor mu?"
+    - "En az 1 koşul başka bir koşulla birleşmeden tam anlam kazanmıyor mu?"
+
+  option_consistency:
+    - "Seçeneklerin tamamı aynı temsil düzeyinde mi?"
+    - "Kişi–grup ve kişi–grup/sayı yapıları aynı soruda dengesiz biçimde karışmadan kullanılmış mı?"
+    - "Temsil düzeyi seçenekler arasında bozulmadan korunmuş mu?"
+    - "Seçenekler paralel dil ve yapı ile mi kurulmuş?"
+    - "Doğru seçenek biçimsel olarak diğerlerinden ayrışıyor mu? AYRIŞMAMALI"
+
+  correct_answer:
+    - "Doğru cevap ancak tüm koşullar birlikte değerlendirildiğinde bulunabiliyor mu?"
+    - "Doğru cevap, maddelerden birinin tekrar yazılmış hâli değil mi?"
+    - "Doğru cevap, sorulan ilişki için kesin doğru ya da kesin yanlış olan tek önerme mi?"
+    - "Tek doğru cevap var mı?"
+    - "Belirsizlik veya ikinci doğru seçenek ihtimali var mı?"
+    - "Öğrenci gizli yapıyı kurmadan doğru cevabı seçebilir mi?"
+    - "Doğru seçenek seçilen temsil düzeyine uygun biçimde mi?"
+    - "Doğru cevap, yalnızca açık bir bilginin kaba yeniden yazımı mı? OLMAMALI"
+
+  distractors:
+    - "Her çeldirici farklı bir muhakeme hatasına dayanıyor mu?"
+    - "Hiçbir çeldirici tek bir maddeden hemen elenmiyor mu?"
+    - "Çeldiriciler gizli çok özellikli yapının yanlış kurulmuş alternatiflerine dayanıyor mu?"
+    - "Çeldiriciler makul ama mantıksal olarak geçersiz mi?"
+    - "Tüm seçenekler aynı formatta mı?"
+    - "Tüm yanlış seçenekler aynı temsil düzeyinde mi?"
+    - "Şıklar arasında biçimsel dengesizlik var mı?"
+    - "'ILISKIYI_EKSIK_TASIMA' destekleyici olarak mı kullanılmış?"
+    - "Çeldiricilerden biri yalnızca tek açık bilgiyi bozarak mı üretilmiş? ÜRETİLMEMELİ"
+    - "Öğrenci çeldiriciyi elemek için birden fazla özelliği birlikte kontrol etmek zorunda kalıyor mu?"
+
+  final_gate:
+    - "Öğrenci gizli çok özellikli yapıyı yeterince kurmadan hiçbir seçeneği güvenle işaretleyemiyor mu?"
+    - "Soru, eleme değil gerçek çok özellikli eşleştirme analizi gerektiriyor mu?"
+    - "Cevap, ancak grup, sayı ve diğer özellik kümeleri birlikte tamamlandıktan sonra kesinleşiyor mu?"
+    - "Yüzeysel okuma yerine bütünsel tablo kurma zorunlu mu?"

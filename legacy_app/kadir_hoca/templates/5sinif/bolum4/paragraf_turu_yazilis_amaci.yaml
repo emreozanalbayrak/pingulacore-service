@@ -1,0 +1,173 @@
+# templates/bolum4/paragraf_turu_yazilis_amaci.yaml
+# Bolum 4.3 - Ozel Bolum: Metnin Yazilis Amacini Belirleme
+#
+# KALIP 3 — YAZILIS AMACI FORMATI
+# Verilen metnin hangi amaçla yazıldığını belirleme
+# Paragraf + soru kökü + 4 amaç ifadesi seçenek
+
+meta:
+  id: "paragraf_turu_yazilis_amaci"
+  ad: "Metnin Yazılış Amacını Belirleme"
+  sinif_seviyesi: 5
+  aciklama: "Verilen metnin hangi amaçla yazıldığını belirleme"
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Paragraf + soru kökü + 4 amaç ifadesi seçenek"
+
+  paragraph:
+    required: true
+    word_count_min: 40
+    word_count_max: 80
+    sentence_count_min: 3
+    sentence_count_max: 5
+    stil: "bilgilendirici veya oykuleyici"
+    kurallar:
+      - "Tek baskın yazılış amacına hizmet eden paragraf oluştur"
+      - "Yazılış amaçları: bilgi vermek, ikna etmek, olay anlatmak, izlenim uyandırmak"
+      - "Bilgi vermek: tanım, açıklama, özellik, neden-sonuç — nesnel ton"
+      - "İkna etmek: görüş savunulur, okuyucu etkilenmek istenir, gerekçeler bulunur"
+      - "Olay anlatmak: kişi, zaman, olay akışı — 'ne oldu?' sorusuna cevap verir"
+      - "İzlenim uyandırmak: duyusal ayrıntılar, okuyucunun zihninde görünüm canlandırılır"
+      - "Paragraf baskın amacı açık bırakmalı ama doğrudan söylememeli"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 3
+    word_count_max: 10
+    style: "short_phrase"
+    correct_count: 1
+    kurallar:
+      - "Seçenekler amaç ifadelerinden oluşur (paragraf DEĞİL)"
+      - "Örnek: 'Bilgi vermek', 'Okuyucuyu ikna etmek', 'Bir olay anlatmak', 'İzlenim uyandırmak'"
+      - "Her seçenek farklı bir yazılış amacını temsil etmeli"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metnin yazılış amacı aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metin hangi amaçla yazılmıştır?</b>"
+  - "<b>Bu paragrafın yazılış amacı aşağıdakilerden hangisidir?</b>"
+  - "<b>Yazar bu metni oluştururken aşağıdakilerden hangisini amaçlamıştır?</b>"
+  - "<b>Bu metinde asıl anlatılmak istenen amaç aşağıdakilerden hangisidir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metnin baskın yazılış amacını en doğru karşılayan seçenek"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Paragrafın baskın amacı doğru belirlenmiş olmalı"
+    - "Amaç ifadesi 3-10 kelime olmalı"
+  ornekler:
+    - paragraf: "Çevre kirliliği her geçen gün artmaktadır. Fabrikalar kontrolsüz biçimde atık bırakıyor. Bu gidişata dur demek için hepimiz harekete geçmeliyiz."
+      dogru: "Okuyucuyu ikna etmek"
+      neden: "Metin görüş savunuyor ve okuyucuyu harekete geçmeye çağırıyor"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI (CUSTOM — yazilis amaci icin ozel)
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "AMAC_BENZERLIGI_TUZAGI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Bilgi veren metni izlenim uyandıran gibi, olay anlatanı bilgi veriyor gibi gösterme"
+    nasil_olusturulur: |
+      Paragraftaki yüzey ipuçlarını kullanarak yakın ama yanlış bir amaç önermek.
+      Örnek: Bilgi veren metinde canlı anlatım varsa "İzlenim uyandırmak" çeldiricisi.
+    kategori: "semantic"
+
+  - ad: "YUZEY_IPUCU_YANILTMASI"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Birkaç betimleyici kelime varsa hemen izlenim uyandırma, bilgi varsa hemen bilgi verme sanma"
+    nasil_olusturulur: |
+      Paragraftaki tek bir özelliğe takılarak yanlış amaca yönlendirme.
+      Örnek: Bir olay anlatılırken "güzel" sözcüğü geçti diye izlenim uyandırma sanma.
+    kategori: "content"
+
+  - ad: "BASKIN_AMAC_KARISTIRMASI"
+    bilisssel_hata_kategorisi: "asiri_genelleme"
+    aciklama: "Metin birden fazla unsur içerir ama öğrenci 'metin ne yapmak istiyor?' sorusunu sormalı"
+    nasil_olusturulur: |
+      Paragrafta birden fazla türe ait iz bulunabilir; öğrenci baskın amacı belirleyemezse
+      ikincil unsuru amaç olarak seçebilir.
+    kategori: "scope"
+
+  - ad: "OLAY_VAR_SANMA"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Canlı anlatım var diye olay anlatma sanılabilir ama gerçek olay zinciri yoksa yanlış"
+    nasil_olusturulur: |
+      Paragrafta canlı, hareketli ifadeler bulunur ama gerçek bir olay zinciri yoksa
+      öğrenci "olay anlatmak" seçeneğine yönelebilir.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ETIKETI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siniflandirma", "analiz"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Yazılış amacı seç"
+      details: |
+        4 amaçtan birini seç: bilgi vermek, ikna etmek, olay anlatmak, izlenim uyandırmak
+
+    - step: 2
+      action: "Amaca uygun paragraf yaz (40-80 kelime)"
+      details: "Tek baskın amaca hizmet eden, 3-5 cümlelik paragraf"
+
+    - step: 3
+      action: "Doğru cevap = amaç ifadesi"
+      details: "Paragrafın baskın yazılış amacını karşılayan 3-10 kelimelik ifade"
+
+    - step: 4
+      action: "3 çeldirici amaç ifadesi oluştur"
+      details: "Yakın ama farklı amaçlardan seç"
+
+    - step: 5
+      action: "Seçenekleri rastgele sırala"
+      details: "A-B-C-D seçeneklerini rastgele sırala"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayısı 40-80 arasında mı?"
+    - "Tek baskın yazılış amacı var mı?"
+    - "Amaç açık ama doğrudan söylenmemiş mi?"
+
+  correct_answer:
+    - "Amaç ifadesi paragraftaki baskın amacı doğru karşılıyor mu?"
+    - "3-10 kelime arasında mı?"
+
+  distractors:
+    - "Çeldirici amaçlar yakın ama farklı mı?"
+    - "Tüm seçenekler aynı formatta mı?"

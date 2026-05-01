@@ -1,0 +1,101 @@
+# Kaynak: metinde_duyular_sentence_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.zor
+# 4. sinif metinde duyular cumle analizi — zor duzey
+
+meta:
+  id: "metinde_duyular_sentence_sinif4_zor"
+  ad: "Metinde Duyular - Cümle Analizi (Zor)"
+  sinif_seviyesi: 4
+  aciklama: "Zor duzey — seçeneklerdeki cümlelerde duyu analizi yapma."
+  frequency: "Low"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Soru kökü + 4 cümle seçenek (zor)"
+
+  paragraph:
+    required: false
+    kurallar:
+      - "En az 2 celdirici hedef duyu acisindan guclu ve yakin gorunmeli."
+      - "Yuzeysel kelime bakisiyla degil, gercek duyu analiziyle ayrim yapilmali."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 16
+    word_count_max: 25
+    background_color: "#fce8e8"
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "does_not_belong"
+    kurallar:
+      - "Duyular için SADECE basit, bilinen kelimeleri kullan: görme, işitme, dokunma, tatma, koklama"
+      - "Duyu ifadeleri yine net olmalı ancak daha doğal akışa dağıtılabilir."
+      - "Doğru cevap hedef duyuyu içermemeli ama tema ve cümle yapısı olarak çeldiricilere daha çok benzemeli."
+      - "En az 2 çeldirici hedef duyuya semantik olarak güçlü ve yakın görünmeli."
+      - "Yuzeysel kelime bakisiyla degil, gercek duyu analiziyle ayrim yapilabilmeli."
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Aşağıdaki cümlelerin hangisinde işitme duyusuna dair bir ayrıntıya <u>yer verilmemiştir</u>?</b>"
+  - "<b>Aşağıdaki cümlelerin hangisinde görme duyusuna ait bir ifadeye <u>yer verilmemiştir</u>?</b>"
+  - "<b>Aşağıdaki cümlelerin hangisinde dokunma duyusuna ilişkin bir ayrıntıya <u>rastlanmaz</u>?</b>"
+  - "<b>Aşağıdaki cümlelerin hangisinde koklama duyusunu yansıtan bir ifadeye <u>yer verilmemiştir</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "İstenen duyuyu içermeyen cümle"
+  kurallar:
+    - "Soru 'yer verilmemistir' diyorsa: dogru cevap istenen duyuyu ICERMEYEN cumle."
+    - "Diger 3 cumle istenen duyuyu ICERMELI."
+    - "Duyu ifadeleri net ve belirgin olmali."
+    - "Cumle tam ve anlamli olmali."
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cozumleme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+
+celdirici_stratejileri:
+  - ad: "GUCLU_CELDIRICILER_HEDEFDUYU"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Hedef duyuyu içeren celdiriciler doğal akışa dağıtılmış — güçlü tuzak"
+    nasil_olusturulur: |
+      Hedef duyuyu içeren celdiriciler doğal akışa dağıtılmış ama yine de net olmalı.
+      Doğru cevap hedef duyuyu içermemeli ancak tema ve cümle yapısı olarak diğer seçeneklere benzemeli.
+      En az 2 celdirici hedef duyu açısından güçlü ve yakın görünmeli.
+    kategori: "semantic"
+
+  - ad: "TEMA_UYUMLU_YANLIS"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Tema ve cümle yapısı bakımından diğer seçeneklere benzeyen ama hedef duyuyu taşımayan seçenek"
+    nasil_olusturulur: |
+      Doğru cevap cümlesi tema ve yapısal olarak diğer seçeneklere benzemeli ama hedef duyuyu içermemeli.
+      Zor seviyede öğrenci her cümleyi hedef duyu açısından dikkatle analiz etmelidir.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

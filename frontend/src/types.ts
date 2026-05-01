@@ -1,5 +1,30 @@
 export type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue }
 
+export interface AuthUser {
+  id: number
+  email: string
+  display_name: string | null
+  is_admin: boolean
+  created_at: string
+}
+
+export interface AuthTokenResponse {
+  token: string
+  expires_at: string | null
+  user: AuthUser
+}
+
+export interface LoginRequest {
+  email: string
+  password: string
+}
+
+export interface RegisterRequest {
+  email: string
+  password: string
+  display_name?: string
+}
+
 export interface RetryConfig {
   question_max_retries?: number
   layout_max_retries?: number
@@ -188,4 +213,96 @@ export interface ApiErrorShape {
   status: number
   message: string
   detail: unknown
+}
+
+export type LegacyPipelineKind = 'geometry' | 'turkce'
+
+export interface LegacyPipelineDescriptor {
+  kind: LegacyPipelineKind
+  label: string
+  enabled: boolean
+  yaml_root: string
+  default_params: Record<string, unknown>
+}
+
+export interface LegacyPipelinesResponse {
+  pipelines: LegacyPipelineDescriptor[]
+}
+
+export interface LegacyYamlFilesResponse {
+  kind: LegacyPipelineKind
+  files: string[]
+}
+
+export interface LegacyYamlUploadResponse {
+  kind: LegacyPipelineKind
+  yaml_path: string
+}
+
+export interface LegacyYamlInfoResponse {
+  kind: LegacyPipelineKind
+  yaml_path: string
+  has_variants: boolean
+  variant_count: number
+  variant_names: string[]
+}
+
+export interface LegacyYamlContentResponse {
+  kind: LegacyPipelineKind
+  yaml_path: string
+  content: string
+  is_repo_yaml: boolean
+}
+
+export interface LegacyYamlContentUpdateRequest {
+  yaml_path: string
+  content: string
+}
+
+export interface LegacyBatchItem {
+  yaml_path: string
+  params?: Record<string, string | number | boolean>
+  variants?: string[]
+}
+
+export interface LegacyBatchRunRequest {
+  items: LegacyBatchItem[]
+  parallelism?: number
+  stream_key?: string
+}
+
+export interface LegacyBatchRunResponse {
+  batch_id: string
+  run_ids: string[]
+  status: string
+  stream_key?: string | null
+}
+
+export interface LegacyOutputNode {
+  name: string
+  type: 'dir' | 'file'
+  url?: string | null
+  size?: number | null
+  rel_path: string
+  children?: LegacyOutputNode[]
+}
+
+export interface LegacyRunDetail {
+  run_id: string
+  kind: LegacyPipelineKind
+  yaml_path: string
+  variant_name?: string | null
+  status: string
+  error?: string | null
+  started_at: string
+  finished_at?: string | null
+  outputs: LegacyOutputNode[]
+}
+
+export type LegacyRunDetailResponse = LegacyRunDetail
+
+export interface LegacyBatchDetailResponse {
+  batch_id: string
+  kind: LegacyPipelineKind
+  runs: LegacyRunDetail[]
 }

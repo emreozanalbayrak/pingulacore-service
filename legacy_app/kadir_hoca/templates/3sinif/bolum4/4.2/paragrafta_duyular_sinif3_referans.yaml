@@ -1,0 +1,346 @@
+meta:
+  id: "paragrafta_duyular_sinif3_standart_gorselli_dort_secenekli"
+  ad: "Paragrafta Duyular"
+  sinif_seviyesi: 3
+  ders: "Türkçe"
+  bolum: "3. Sınıf Türkçe Paragraf Kitabı"
+  alt_bolum: "4.2 Paragrafta Duyular"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    3. sınıf öğrencisi için bir paragrafta geçen duyusal ayrıntıları
+    fark ettirmeye yönelik, görsel destekli ve 4 seçenekli standart soru üretim şablonu.
+  kullanim_notu: >
+    Bu şablon, harici olarak kullanılan 3. Sınıf TYMM Ortak Kuralları YAML'ı,
+    3. sınıf öğretim programı ve 3. sınıf MEB Türkçe kitapları ile birlikte
+    doğrulanmalıdır.
+
+format:
+  type: "llm_generated_html"
+  description: "Görsel + tek paragraf + soru kökü + 4 seçenek"
+
+  question_variant:
+    allowed:
+      - "gecen_duyulardan_biri_degildir"
+      - "gecen_duyulardan_biridir"
+      - "hangi_duyuya_ornektir"
+    default: "gecen_duyulardan_biri_degildir"
+
+  paragraph:
+    required: true
+    sentence_count_min: 4
+    sentence_count_max: 6
+    word_count_min: 40
+    word_count_max: 82
+    style: "simple_clear_primary_text"
+    kurallar:
+      - "Metin 3. sınıf öğrencisinin anlayabileceği kadar açık, sade ve akıcı olmalıdır."
+      - "Metinde en az 2, en fazla 4 farklı duyuya ait açık ipucu bulunmalıdır."
+      - "Duyusal ayrıntılar doğal cümle akışı içinde verilmelidir."
+      - "Metin tek baskın konu veya tek kısa olay etrafında kurulmalıdır."
+      - "Metindeki duyu ifadeleri doğrudan ya da çok açık bağlamla anlaşılmalıdır."
+      - "Metin dış bilgi gerektirmemelidir."
+      - "Duyu sorusu, ana düşünce veya konu sorusuna dönüşmemelidir."
+      - "Metin 4. sınıfa kayan soyut betimleme veya ağır mecaz yoğunluğu taşımamalıdır."
+      - "Duyu ifadeleri olay, nesne, ortam veya teknoloji gibi somut bağlamlara yerleştirilebilir."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  visual:
+    required: true
+    description: "Metindeki ana içeriği ve duyusal bağlamı destekleyen işlevsel görsel"
+    placement: "paragraph_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illüstrasyon"
+      - "tek sahneli fotoğraf benzeri çizim"
+      - "tek olay veya tek varlık odaklı sahne"
+      - "duyusal bağlamı destekleyen sade konu görseli"
+    kurallar:
+      - "Her soru için görsel zorunludur."
+      - "Görsel metnin ana içeriğiyle açık uyumlu olmalıdır."
+      - "Görsel süs olmamalı, çözümde destek sunmalıdır."
+      - "Görsel tek başına doğru cevabı vermemelidir."
+      - "Görsel ile metin birlikte değerlendirildiğinde duyusal bağlam daha netleşebilir."
+      - "Görsel dikkat dağıtıcı gereksiz ayrıntılar içermemelidir."
+      - "Görsel yanlış seçeneği açıkça işaret edecek kadar yanıltıcı olmamalıdır."
+    yasaklar:
+      - "dekoratif ve metinden bağımsız görsel"
+      - "çok sahneli karmaşık kolaj"
+      - "grafik, tablo veya infografik yoğunluğu taşıyan tasarım"
+      - "duyu adlarını yazıyla etiketleyen görsel"
+
+  stem:
+    required: true
+    selection: "random_from_list_by_variant"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    correct_count: 1
+    style_by_variant:
+      gecen_duyulardan_biri_degildir: "sense_label"
+      gecen_duyulardan_biridir: "sense_label"
+      hangi_duyuya_ornektir: "sense_label"
+    word_count_min: 1
+    word_count_max: 2
+    kurallar:
+      - "3. sınıfta her soru 4 seçenekli olmalıdır."
+      - "Seçenekler duyu adı biçiminde olmalıdır."
+      - "İzinli seçenekler: Görme, İşitme, Koklama, Tatma, Dokunma."
+      - "Doğru seçenek metindeki duyusal ipuçlarıyla açıkça desteklenmelidir."
+      - "Yanlış seçenekler metne yakın görünse de dikkatli okuyunca elenebilmelidir."
+      - "Birden fazla makul doğru seçenek oluşmamalıdır."
+
+soru_kokleri:
+  gecen_duyulardan_biri_degildir:
+    - "Aşağıdakilerden hangisi bu metinde geçen duyulardan biri değildir?"
+    - "Bu metinde aşağıdaki duyulardan hangisine yer verilmemiştir?"
+    - "Metinde aşağıdaki duyulardan hangisi kullanılmamıştır?"
+    - "Bu parçada geçen duyular arasında aşağıdakilerden hangisi yoktur?"
+    - "Aşağıdaki duyulardan hangisi metinde geçmemektedir?"
+
+  gecen_duyulardan_biridir:
+    - "Aşağıdakilerden hangisi bu metinde geçen duyulardan biridir?"
+    - "Bu metinde aşağıdaki duyulardan hangisine yer verilmiştir?"
+    - "Metinde kullanılan duyulardan biri aşağıdakilerden hangisidir?"
+    - "Aşağıdaki duyulardan hangisi bu parçada geçmektedir?"
+    - "Bu metinde hangi duyuya ait ayrıntı vardır?"
+
+  hangi_duyuya_ornektir:
+    - "Metindeki altı çizili ifade aşağıdaki duyulardan hangisine örnektir?"
+    - "Bu ifadede aşağıdaki duyulardan hangisine ait ayrıntı vardır?"
+    - "Parçadaki bu söz aşağıdaki duyulardan hangisiyle ilgilidir?"
+    - "Aşağıdakilerden hangisi metindeki bu ayrıntının ilgili olduğu duyudur?"
+    - "Verilen ifade hangi duyuya örnek olur?"
+
+duyu_havuzu:
+  izinli_duyular:
+    - "Görme"
+    - "İşitme"
+    - "Koklama"
+    - "Tatma"
+    - "Dokunma"
+  kullanim_kurallari:
+    - "Her soruda doğru duyu metindeki açık ifadelerle desteklenmelidir."
+    - "Bir metinde tüm duyuların bulunması gerekmez."
+    - "Duyular doğal anlatım içinde geçmelidir."
+    - "Duyuların ayırt edilmesi için metinde yeterli ipucu bulunmalıdır."
+    - "Tatma ve koklama birlikte kullanılacaksa metin bunları ayırmayı gerçekten desteklemelidir."
+
+beceri_odagi:
+  birincil_beceri:
+    - "Paragraftaki duyusal ayrıntıları fark etme"
+  ikincil_beceriler:
+    - "Duyu adları ile metindeki ifadeleri eşleştirme"
+    - "Metinde geçen ve geçmeyen duyuları ayırt etme"
+    - "Baskın duyusal alanı belirleme"
+    - "Görsel ve metni birlikte değerlendirerek bağlamı anlama"
+
+dogru_cevap:
+  tanim: "Metindeki duyusal ipuçlarıyla açıkça desteklenen doğru duyu seçeneği"
+  kurallar:
+    - "Doğru cevap metinde açıkça bulunan duyu ayrıntılarına dayanmalıdır."
+    - "Doğru cevap tek bir sözcüğe değil, bağlama da dayanabilir."
+    - "Doğru cevap dış bilgi gerektirmemelidir."
+    - "Doğru cevap 3. sınıf öğrencisinin dikkatli okuyarak bulabileceği açıklıkta olmalıdır."
+    - "Geçen duyulardan biri değildir varyantında doğru seçenek metinde hiç desteklenmeyen duyu olmalıdır."
+    - "Hangi duyuya örnektir varyantında hedef ifade yalnız bir duyuya açık biçimde bağlanmalıdır."
+
+yanlis_secenek_stratejileri:
+  count_per_question: 3
+  strategy_pool:
+    - id: "yakın_duyu"
+      tanim: "Metne yakın görünür ama bağlamda desteklenmeyen duyu"
+      ornek_mantik:
+        - "Görme yerine dokunma"
+        - "İşitme yerine görme"
+
+    - id: "cagrisim_duyusu"
+      tanim: "Konu alanından çağrışım yoluyla gelebilecek ama metinde geçmeyen duyu"
+      ornek_mantik:
+        - "Telefon metninde tatma"
+        - "Yemek metninde işitme"
+
+    - id: "yardimci_ipucunu_buyutme"
+      tanim: "Kısa bir ayrıntıyı baskın duyu gibi gösteren seçenek"
+
+    - id: "metin_disina_tasma"
+      tanim: "Genel dünya bilgisine dayanarak seçilebilecek ama metinde bulunmayan duyu"
+
+  secim_kurali:
+    - "Her soruda 3 yanlış seçenek farklı stratejilerden seçilmelidir."
+    - "En az 1 yanlış seçenek konu alanından çağrışımla gelebilecek ama metinde geçmeyen duyu olmalıdır."
+    - "En az 1 yanlış seçenek metne yakın görünmelidir."
+    - "Birden fazla seçenek aynı ölçüde doğru görünmemelidir."
+
+zorluk_duzeyleri:
+  kolay:
+    paragraph:
+      kurallar:
+        - "Metinde kullanılan duyular açık ve doğrudan olmalıdır."
+        - "En fazla 2 farklı duyu kullanılmalıdır."
+        - "Duyuya işaret eden ifadeler belirgin olmalıdır."
+    preferred_variants:
+      - "gecen_duyulardan_biri_degildir"
+      - "gecen_duyulardan_biridir"
+    distractors:
+      kurallar:
+        - "1 seçenek açıkça metinde olmayan duyu olmalıdır."
+        - "1 seçenek konu çağrışımı taşıyabilir."
+        - "1 seçenek metinle belirgin biçimde uyumsuz olabilir."
+    difficulty_note: >
+      Kolay düzeyde öğrenci metindeki açık duyusal ifadeleri fark ederek doğru seçeneği bulur.
+
+  orta:
+    paragraph:
+      kurallar:
+        - "Metinde 2 veya 3 farklı duyu bulunabilir."
+        - "Duyusal ipuçları doğrudan ve bağlamsal biçimde birlikte verilebilir."
+        - "Baskın duyu ile yan duyular arasında ayrım yapılabilir."
+    preferred_variants:
+      - "gecen_duyulardan_biri_degildir"
+      - "hangi_duyuya_ornektir"
+      - "gecen_duyulardan_biridir"
+    distractors:
+      kurallar:
+        - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+        - "1 yanlış seçenek yakın duyu"
+        - "1 yanlış seçenek çağrışım duyusu"
+        - "1 yanlış seçenek yardımcı ipucunu büyütme olabilir"
+    difficulty_note: >
+      Orta düzeyde öğrenci metindeki açık ve dolaylı duyusal ipuçlarını birlikte değerlendirmelidir.
+
+  zor:
+    paragraph:
+      kurallar:
+        - "Metinde 3 veya 4 farklı duyu bulunabilir."
+        - "Baskın duyu belirgin olmalı; ancak diğer duyular da çeldiriciye malzeme verebilir."
+        - "Zor düzeyde bile ağır mecaz ve soyut yorum kullanılmamalıdır."
+    preferred_variants:
+      - "hangi_duyuya_ornektir"
+      - "gecen_duyulardan_biri_degildir"
+    distractors:
+      kurallar:
+        - "3 yanlış seçeneğin en az 2'si metne yakın görünmelidir."
+        - "Yakın duyu ve çağrışım duyusu birlikte kullanılabilir."
+    difficulty_note: >
+      Zor düzeyde öğrencinin metindeki duyusal ayrıntıları ayırıp hangisinin baskın ya da eksik olduğunu belirlemesi beklenir.
+
+difficulty_selection_policy:
+  default: "Orta"
+  allowed_values: ["Kolay", "Orta", "Zor"]
+  hard_limits:
+    - "Her soru 4 seçenekli olmalıdır."
+    - "Her soru için görsel zorunludur."
+    - "Metin 3. sınıf düzeyini aşan ağır soyutluk içermemelidir."
+    - "Zor düzey seçilse bile soru 4. sınıf düzeyinde mecaz çözümleme veya edebî yorum sorusuna dönüşemez."
+    - "Kolay düzeyde aşırı yakın duyu çeldiricileri üst üste kullanılmamalıdır."
+
+sinif_uygunluk_kurallari:
+  uygundur:
+    - "Metindeki duyusal ayrıntılar açık ve somut biçimde veriliyorsa"
+    - "Öğrenci metindeki olay, bilgi ve betimleme içinden ilgili duyuyu seçebiliyorsa"
+    - "Görsel ve metin birlikte bağlamı destekliyorsa"
+  yasaktir:
+    - "Ağır mecazlarla gizlenmiş duyu çözümlemeleri"
+    - "Duyu yerine soyut duygu veya ana fikir sorduran yapı"
+    - "Metin dışı dünya bilgisi gerektiren seçenekler"
+  dorduncu_sinifa_kayar:
+    - "Mecazlı ve sembolik anlatımdan duyu çıkarma"
+    - "Duyusal ayrıntının anlatım tekniği içindeki işlevini tartıştırma"
+
+konu_alani:
+  izinli_ornekler:
+    - "teknoloji kullanımı"
+    - "doğa betimlemeleri"
+    - "yemek ve tat"
+    - "bahçe, okul, ev ortamı"
+    - "hayvanlar ve sesleri"
+    - "rüzgâr, sıcaklık, serinlik"
+    - "çiçek ve koku"
+    - "müzik ve ses"
+    - "günlük yaşam olayları"
+  kurallar:
+    - "Konu 3. sınıf öğrencisinin anlayabileceği kadar somut ve açık olmalıdır."
+    - "Duyu ifadeleri doğal bağlam içinde kullanılmalıdır."
+    - "Görselle desteklenebilen konular tercih edilmelidir."
+    - "Duyu, konu veya ana düşünce ile karıştırılmamalıdır."
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "3. sınıfa uygun, duyusal ayrıntı içeren somut bir konu seç"
+    - step: 2
+      action: "Seçilen konu için 4-6 cümlelik sade bir paragraf oluştur"
+      details:
+        - "En az 2 duyu ipucu yerleştir"
+        - "Metni doğal ve akıcı tut"
+        - "Duyu sorusuna uygun açık bağlam kur"
+    - step: 3
+      action: "Metni destekleyen işlevsel görsel tasarla"
+      details:
+        - "Görsel bağlamı desteklesin"
+        - "Görsel zorunlu olsun"
+        - "Görsel tek başına cevabı vermesin"
+    - step: 4
+      action: "Soru varyantını seç"
+      details:
+        - "gecen_duyulardan_biri_degildir"
+        - "gecen_duyulardan_biridir"
+        - "hangi_duyuya_ornektir"
+    - step: 5
+      action: "1 doğru ve 3 yanlış duyu seçeneği oluştur"
+      details:
+        - "Bir yakın duyu kullan"
+        - "Bir çağrışım duyusu ekle"
+        - "Bir belirgin uyumsuz duyu ekle"
+    - step: 6
+      action: "Soru kökünü listeden rastgele seç"
+    - step: 7
+      action: "Şıkları A-B-C-D olarak karıştır"
+    - step: 8
+      action: "Harici 3. Sınıf TYMM Ortak Kuralları ile doğrulama yap"
+
+validation_checklist:
+  paragraph:
+    - "Metin 4-6 cümle arasında mı?"
+    - "Metin 3. sınıf düzeyinde açık ve sade mi?"
+    - "Metinde en az 2 duyu ipucu var mı?"
+    - "Duyusal ayrıntılar doğal mı?"
+    - "Metin dış bilgi gerektiriyor mu? Gerektiriyorsa reddet."
+
+  visual:
+    - "Görsel zorunlu olarak var mı?"
+    - "Görsel metnin ana içeriğiyle uyumlu mu?"
+    - "Görsel destekleyici ama tek başına cevap verici değil mi?"
+    - "Görsel dekoratif kalmıyor mu?"
+
+  stem:
+    - "Soru kökü seçilen varyanta uygun mu?"
+    - "Soru kökü duyuları sormayı açıkça istiyor mu?"
+    - "Ekstra beceri yüklemiyor mu?"
+
+  options:
+    - "Toplam 4 seçenek var mı?"
+    - "Seçenekler yalnız duyu adı biçiminde mi?"
+    - "Doğru seçenek metinle açıkça destekleniyor mu?"
+    - "Birden fazla makul doğru seçenek oluşuyor mu? Oluşuyorsa reddet."
+
+  difficulty:
+    - "Zorluk seçilen düzeye göre paragraf ve çeldirici kuralları uygulanmış mı?"
+    - "Zor düzey bile 3. sınıf sınırında mı?"
+    - "4. sınıfa kayan ağır mecaz veya yorum var mı?"
+
+hard_fail_rules:
+  - "Seçenek sayısı 4 değilse"
+  - "Görsel yoksa"
+  - "Doğru cevap dış bilgi gerektiriyorsa"
+  - "İki veya daha fazla seçenek aynı ölçüde doğru görünüyorsa"
+  - "Metin 3. sınıf için fazla soyut veya ağırsa"
+  - "Soru duyular yerine duygu, konu veya ana fikir sorusuna kayıyorsa"
+  - "Soru 4. sınıfa kayan ileri mecaz yorumuna dönüşüyorsa"
+  - "Görsel metinle uyumsuzsa"
+
+ornek_bicim_notlari:
+  - "Teknoloji metninde 'görerek' ve 'seslerini duyarak' ifadeleri görme ve işitme duyularını destekler."
+  - "Bu nedenle 'Tatma' gibi bir seçenek metinde geçmeyen duyu olabilir."
+  - "Yemek, doğa, ses, koku ve sıcaklık gibi bağlamlar duyular sorusu için uygundur."
+  - "Bu bölümde amaç, paragraftaki duyusal ayrıntıları fark etmektir; duygu veya ana düşünceyi buldurmak değildir."

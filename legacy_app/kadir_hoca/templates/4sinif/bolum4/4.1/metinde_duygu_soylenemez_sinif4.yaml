@@ -1,0 +1,196 @@
+# Kaynak: 5sinif/capture2/metinde_duygu_soylenemez.yaml — 4. sinif icin adapte edildi (sinif_seviyesi 5->4)
+# templates/capture2/metinde_duygu_soylenemez.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Metinde Duygu
+#
+# SOYLENEMEZ FORMATI (tum duygu sorularinin ~%15'i)
+# Duygusal paragraf verilir, ogrenci metinde YER ALMAYAN duyguyu secer
+#
+# MANTIK: 3 secenek metinde bulunan duygular (yanlis), 1 tanesi bulunmayan (dogru cevap)
+# Secenekler KISA KAVRAM formatindadir (1-3 kelime)
+
+meta:
+  id: "metinde_duygu_soylenemez_sinif4"
+  ad: "Metinde Duygu (Söylenemez)"
+  sinif_seviyesi: 4
+  aciklama: "Metinde yer almayan duyguyu tespit etme"
+  kaynak: "data/metinde_duygu.pdf"
+  frequency: "Low (~15% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Duygusal paragraf + soru kökü + 4 duygu seçeneği"
+
+  paragraph:
+    required: true
+    word_count_min: 50
+    word_count_max: 100
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "oykuleyici"
+    kurallar:
+      - "Metin yoğun duygusal ifadeler içermeli (Öfke, Çaresizlik, Karamsarlık vb.)."
+      - "Seçeneklerdeki 3 duygu metinde bulunmalı, 1 tanesi bulunmamalı."
+      - "Birden fazla duyguya yer verilmeli (en az 3 farklı duygu sezdirilmeli)."
+      - "Duygu isimleri doğrudan geçmemeli, olaylar ve davranışlar üzerinden sezdirilmeli."
+      - "Paragrafta konuyla ilgili AÇIKLAMA, TANIM veya EK BİLGİ verme! Paragraf SADECE hikâyeyi/olayı anlatsın"
+      - "YASAK: 'Duyular insanın çevresini algılamasını sağlar', 'Karakter özellikleri kişinin davranışlarını belirler' gibi ders kitabı açıklamaları"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 3
+    style: "concept"
+    correct_type: "does_not_belong"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 2 varyasyon)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metinde bahsedilen kişinin aşağıdaki duygulardan hangisini yaşadığı <u>söylenemez</u>?</b>"
+  - "<b>Aşağıdaki duygulardan hangisi bu metinde bahsi geçen kişinin yaşadığı duygulardan <u>değildir</u>?</b>"
+  - "<b>Bu metne göre kahramanın aşağıdaki duygulardan hangisini yaşadığı <u>söylenemez</u>?</b>"
+  - "<b>Yukarıdaki metinde aşağıdaki duygulardan hangisine <u>rastlanmaz</u>?</b>"
+  - "<b>Bu metindeki kişinin yaşadığı duygular düşünüldüğünde aşağıdakilerden hangisi <u>yanlıştır</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI (TERS MANTIK!)
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metinde izi bulunmayan duygu"
+  mantik: "INVERSE - diger 3 secenek metinde bulunan duygular, dogru cevap metinde bulunmayan duygu"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Metinde hicbir sekilde sezdirilmeyen duygu olmali"
+    - "Diger 3 secenek metinde acikca sezdirilen duygular olmali"
+    - "Dogru cevap makul bir celdirici gibi gorunmeli (tamamen alakasiz degil)"
+    - "Ogrenci her secenegi metinle karsilastirarak analiz etmeli"
+  ornekler:
+    - paragraf: "Kapıyı hızla çarptı, masanın üzerine yumruğunu vurdu. Kimse ona laf anlatamıyordu. Sonra köşeye çekilip duvara baktı, gözleri doldu."
+      dogru: "Mutluluk"
+      neden: "Metinde ofke ve uzuntu var ama mutluluk izi yok"
+    - paragraf: "Her şeyi denemiş ama bir türlü başaramamıştı. Artık umudunu kaybetmişti. Bir yandan da neden hep kendisinin başına geldiğini sorguluyordu."
+      dogru: "Sevinç"
+      neden: "Metinde caresizlik, umutsuzluk ve sorgulama var ama sevinc izi yok"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI BILGILERI
+# ═══════════════════════════════════════════════════════════════
+# Celdiriciler (yanlis cevaplar) metinde bulunan duygulardir
+# Dogru cevap metinde bulunmayan duygudur
+
+distractors:
+  notlar:
+    - "3 celdirici metinde acikca sezdirilen duygular olmali"
+    - "Her celdirici farkli bir duygu olmali"
+    - "Celdiriciler paragraftaki olaylarla dogrudan iliskilendirilebilmeli"
+    - "Tum secenekler ayni formatta olmali (1-3 kelimelik duygu kavrami)"
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["yorumlama", "mantiksal_denetleme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select 3 emotions to include + 1 to exclude"
+      details: |
+        3 duygu sec (metinde sezdirilecek):
+        - Ornek: Ofke, Uzuntu, Caresizlik
+        1 duygu sec (metinde BULUNMAYACAK):
+        - Ornek: Mutluluk
+        Bulunmayan duygu makul gorunmeli ama metinde izi olmamali
+
+    - step: 2
+      action: "Generate emotional paragraph (50-100 words)"
+      details: |
+        Paragrafta:
+        - 3 duygu acikca sezdirilmeli (olaylar, davranislar uzerinden)
+        - 4. duygu HICBIR SEKILDE sezdirilmemeli
+        - Duygu isimleri dogrudan gecmemeli
+        - Yogun duygusal ifadeler icermeli
+
+    - step: 3
+      action: "Set correct answer = absent emotion"
+      details: "Metinde izi bulunmayan duygu dogru cevap yapilir"
+
+    - step: 4
+      action: "Set 3 distractors = present emotions"
+      details: |
+        Metinde sezdirilen 3 duygu celdirici (yanlis cevap) olur:
+        - Her biri 1-3 kelimelik kavram
+        - Her biri paragraftaki olaylarla iliskilendirilebilmeli
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR (Sayfa 110, 114)
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 110
+    konu: "Ofke ve caresizlik"
+    paragraf: "Kapıyı hızla çarptı, masanın üzerine yumruğunu vurdu. Kimse ona laf anlatamıyordu. Sonra köşeye çekilip duvara baktı, gözleri doldu."
+    dogru_cevap: "Mutluluk"
+    secenekler:
+      A: "Öfke"
+      B: "Üzüntü"
+      C: "Mutluluk"
+      D: "Çaresizlik"
+    neden: "Metinde ofke, uzuntu ve caresizlik sezdirilmis ama mutluluk izi yok"
+
+  - sayfa: 114
+    konu: "Umutsuzluk ve sorgulama"
+    paragraf: "Her şeyi denemiş ama bir türlü başaramamıştı. Artık umudunu kaybetmişti. Bir yandan da neden hep kendisinin başına geldiğini sorguluyordu."
+    dogru_cevap: "Sevinç"
+    secenekler:
+      A: "Çaresizlik"
+      B: "Sevinç"
+      C: "Umutsuzluk"
+      D: "Sorgulama"
+    neden: "Metinde caresizlik, umutsuzluk ve sorgulama var ama sevinc izi yok"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 50-100 arasinda mi?"
+    - "Cumle sayisi 4-7 arasinda mi?"
+    - "Oykuleyici bir uslupla mi yazilmis?"
+    - "En az 3 farkli duygu sezdirilmis mi?"
+    - "Duygu isimleri dogrudan gecmiyor mu?"
+    - "Yogun duygusal ifadeler var mi?"
+
+  correct_answer:
+    - "1-3 kelime kavram adi mi?"
+    - "Metinde gercekten izi bulunmayan duygu mu?"
+    - "Makul bir celdirici gibi gorunuyor mu (tamamen alakasiz degil)?"
+
+  distractors:
+    - "Her celdirici metinde acikca sezdirilen bir duygu mu?"
+    - "Celdiriciler 1-3 kelime kavram adi mi?"
+    - "Her celdirici paragraftaki olaylarla iliskilendirilebilir mi?"
+    - "Tum secenekler ayni gramer yapida mi? (kavram adi)"

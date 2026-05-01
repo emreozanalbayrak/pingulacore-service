@@ -1,0 +1,279 @@
+# templates/konu_inverse.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Metinde Konu (Yer Almaz Sorulari)
+#
+# TERS KONU FORMATI (tum konu sorularinin ~%7'si)
+# Konu sorudaki kokte verilir, ogrenci UYMAYAN paragrafi secer
+#
+# ONEMLI: Bu ters mantik kullanir - 3 secenek UYAR, 1 secenek UYMAZ
+# Dogru cevap = Konuya AIT OLMAYAN mini-paragraf
+
+meta:
+  id: "konu_inverse"
+  ad: "Metinde Konu (Yer Almaz)"
+  sinif_seviyesi: 5
+  aciklama: "Verilen konuya ait OLMAYAN paragrafi belirleme sorulari"
+  kaynak: "data/metinde_konu.pdf"
+  frequency: "~7% of konu questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Konu kokte verilir, uygun olmayan paragraf secilir"
+
+  paragraph:
+    required: false  # Bu formatta ana paragraf YOK!
+
+  topic_in_stem:
+    required: true
+    description: "Konu soru kokune gomulur"
+
+  stem:
+    required: true
+    pattern: "{topic} konulu bir metin olusturulsa asagidakilerden hangisi bu metinde yer almaz?"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    type: "mini_paragraph"
+    word_count_min: 20
+    word_count_max: 50
+    sentence_count_min: 2
+    sentence_count_max: 3
+    correct_type: "does_not_belong"  # TERS mantik!
+    correct_count: 1
+
+  # HTML template for LLM to fill (topic embedded in stem)
+  html_template: |
+    <div class="question">{question}</div>
+    <div class="options">
+      <div class="option"><span class="option-letter">A)</span> {option_a}</div>
+      <div class="option"><span class="option-letter">B)</span> {option_b}</div>
+      <div class="option"><span class="option-letter">C)</span> {option_c}</div>
+      <div class="option"><span class="option-letter">D)</span> {option_d}</div>
+    </div>
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 4 varyasyon)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # Tum soru kokleri: Topic tirnak icinde NORMAL (bold degil), geri kalan BOLD, negatif kelime UNDERLINED
+  - "\"{topic}\" <b>konulu bir metin oluşturulsa aşağıdakilerden hangisi bu metinde <u>yer almaz</u>?</b>"
+  - "<b>Aşağıdakilerden hangisi</b> \"{topic}\" <b>konulu bir metinden alınmış <u>olamaz</u>?</b>"
+  - "\"{topic}\" <b>konulu bir bilimsel yazı yazıldığında aşağıdakilerden hangisi bu yazıda <u>yer almaz</u>?</b>"
+  - "\"{topic}\" <b>konusu işlenirken aşağıdakilerden hangisine <u>değinilmez</u>?</b>"
+  - "<b>Aşağıdakilerden hangisi</b> \"{topic}\" <b>konusuyla <u>ilişkilendirilemez</u>?</b>"
+  - "\"{topic}\" <b>hakkında yazılan bir metinde aşağıdakilerden hangisine <u>yer verilmez</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI (TERS MANTIK!)
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Verilen konuya AIT OLMAYAN mini-paragraf"
+  mantik: "INVERSE - diger 3 secenek konuya uyar, dogru cevap UYMAZ"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Verilen konunun DISINDA bir icerik olmali"
+    - "Tamamen alakasiz degil, ayni genel alanda olabilir"
+    - "Ama spesifik konuyla dogrudan ilgili olmamali"
+    - "Ogrenci icin 'neden uymuyor?' sorusu acik olmali"
+    - "Kelime sayısı bakımından en uzun şık olmamalı"
+  ornekler:
+    - konu: "Mevsiminde sebze tuketmenin faydalari"
+      dogru_cevap: "Seralarda uretilen sebzeler hakkinda bilgi"
+      neden: "Sera uretimi 'faydalar' konusunun disinda"
+    - konu: "Gaziantep'in yiyecek icecek kulturu"
+      dogru_cevap: "Antep bakir el islemeciligi hakkinda bilgi"
+      neden: "Bakir islemeciligi yiyecek-icecek degil"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# Ters sorularda LLM:
+# - 3 "konuya UYGUN" mini-paragraf olusturur (yanlis secenekler)
+# - 1 "konuya UYMAYAN" mini-paragraf olusturur (dogru cevap)
+# Strateji havuzu "konuya uymayan" paragrafi olusturmak icin kullanilir
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siniflandirma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic from konular/ folder (parse hierarchy)"
+      details: "Konu hiyerarsisini parse et, uygun bir konu sec"
+
+    - step: 2
+      action: "Use LEAF topic in stem"
+      details: "Secilen konuyu soru kokune yerlestir"
+
+    - step: 3
+      action: "Generate 3 mini-paragraphs that FIT the leaf topic (30-60 words each)"
+      details: "Her biri konunun farkli bir yonunu anlatan 3 mini-paragraf olustur"
+
+    - step: 4
+      action: "Generate 1 mini-paragraph from SIBLING topic (correct answer - doesn't fit)"
+      details: |
+        KRITIK: Ana unsuru DEGISTIRME, sadece aspect/boyutunu degistir!
+
+        Ornek: Konu = "Ay'in kesfi"
+        - Ana unsur: Ay ← BU SABİT KALMALI
+        - Değiştirilecek: keşif aspect'i
+
+        İDEAL sibling seçimleri:
+        - "Ay'in olusumu" (ayni cisim, farkli bilimsel soru)
+        - "Ay'in Dünya'ya etkileri" (ayni cisim, farkli ilişki)
+        - "Ay'in yuzey yapisi" (ayni cisim, farkli ozellik)
+
+        YASAK sibling seçimleri:
+        - "Mars'in kesfi" ← FARKLI CISIM (cok acik!)
+        - "Uzay istasyonlari" ← FARKLI YAPILAR (acik)
+        - "Gunes sistemi" ← COK GENIS (acik)
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select stem pattern with topic embedded"
+      details: "soru_kokleri listesinden uygun deseni sec ve konuyu yerlestir"
+
+  sibling_topic_selection:
+    description: |
+      KURAL: Ana unsuru KORU, sadece aspect/boyutunu DEGISTIR
+
+      ORNEK 1: Isik konusu
+      Topic: "ISIGIN DUNYASI / Isigin Yayilmasi / Isigin Dogrusal Yayilmasi"
+
+      İDEAL siblings (aynı domain, farklı aspect):
+        ✓ "ISIGIN DUNYASI / Isigin Yayilmasi / Isik Kaynagi"
+        ✓ "ISIGIN DUNYASI / Madde ve Isik / Saydam Maddeler"
+        ✓ "ISIGIN DUNYASI / Golge / Tam Golgenin Olusumu"
+
+      YASAK siblings (farklı domain - çok açık):
+        ✗ "SES DUNYASI / Sesin Yayilmasi" ← FARKLI FİZİK ALANI
+        ✗ "ELEKTRIK / Akimin Yayilmasi" ← TAMAMEN FARKLI
+
+      ORNEK 2: Ay konusu
+      Topic: "GOKYUZU / Ay / Ay'in Kesfi"
+
+      İDEAL siblings (aynı cisim, farklı aspect):
+        ✓ "GOKYUZU / Ay / Ay'in Olusumu" ← AYNI CİSİM, farklı bilimsel soru
+        ✓ "GOKYUZU / Ay / Ay'in Dünya'ya Etkileri" ← AYNI CİSİM, farklı ilişki
+        ✓ "GOKYUZU / Ay / Ay'in Fiziksel Yapisi" ← AYNI CİSİM, farklı özellik
+
+      YASAK siblings (farklı cisim - çok açık):
+        ✗ "GUNES SISTEMI / Mars / Mars'in Kesfi" ← FARKLI GEZEGEN (Mars marker'ı çok açık!)
+        ✗ "GOKYUZU / Gunes / Gunes'in Yapisi" ← FARKLI CİSİM
+        ✗ "UZAY / Uzay Istasyonlari" ← FARKLI YAPI
+
+      Key: Same PRIMARY SUBJECT (ışık/Ay/sebze), different ASPECT (yayılma/oluşum/faydalar)
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 10
+    soru_no: 10
+    konu: "Mevsiminde sebze tuketmenin faydalari"
+    dogru_cevap: "D"
+    dogru_cevap_icerigi: "Sera uretimi hakkinda (konuya uymuyor)"
+    neden: "Sera uretimi 'mevsiminde tuketmenin faydalari' ile ilgili degil"
+
+  - sayfa: 12
+    soru_no: 7
+    konu: "Muze gezisi gerceklestirmeden once yapilacaklar"
+    basliklar: ["Arastir", "Hazirlik Yap", "Kurallara Uy"]
+    dogru_cevap: "D"
+    dogru_cevap_icerigi: "Gezi sonrasi ozet yapma (once degil sonra)"
+    neden: "Gezi SONRASI aktivite, soru ONCE'yi soruyor"
+
+  - sayfa: 14
+    soru_no: 7
+    konu: "Gaziantep'in yiyecek icecek kulturu"
+    dogru_cevap: "B"
+    dogru_cevap_icerigi: "Bakir el islemeciligi (yiyecek-icecek degil)"
+    neden: "Bakir islemeciligi el sanati, yiyecek-icecek kulturune ait degil"
+
+  - sayfa: 16
+    soru_no: 9
+    konu: "Bagisiklik sistemimizi zayiflatan nedenler"
+    dogru_cevap: "D"
+    dogru_cevap_icerigi: "Bagisiklik sisteminin yapisi (nedenler degil)"
+    neden: "Sistemin yapisi, 'zayiflatan nedenler' konusunun disinda"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  stem:
+    - "Konu soru kokune dogru yerlestirilmis mi?"
+    - "Pattern dogru kullanilmis mi?"
+
+  fitting_options:
+    - "3 secenek konuya tam uyuyor mu?"
+    - "Her biri konunun farkli bir yonunu mu anlatyor?"
+    - "Kelime sayisi 30-60 arasinda mi?"
+    - "2-4 cumle iceriyor mu?"
+
+  correct_answer:
+    - "Konuyla ayni alanda mi ama farkli bir konuda mi?"
+    - "Neden uymadigini anlamak kolay mi?"
+    - "Tamamen alakasiz degil, mantikli bir 'yakin ama farkli' mi?"
+
+  overall:
+    - "Ogrenci kolayca yanlis secenekleri elemeli mi?"
+    - "Dogru cevap makul bir 'yakin ama farkli' secenek mi?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI (konular/ klasorunden secilir)
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+      - name: "detay"
+        description: "Detay seviyesi (opsiyonel)"
+
+  inverse_generation_rules:
+    - "Select a topic with at least one sibling topic"
+    - "3 fitting paragraphs come from the selected topic"
+    - "1 non-fitting paragraph comes from a sibling or cousin topic"
+    - "All 4 paragraphs should be in the same broad domain for difficulty"

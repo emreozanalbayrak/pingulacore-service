@@ -4,9 +4,10 @@ import asyncio
 import json
 import uuid
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 
+from app.api.deps import get_current_user
 from app.schemas.api import CreateStreamKeyResponse
 from app.services import log_stream_service
 
@@ -15,7 +16,11 @@ router = APIRouter(prefix="/v1", tags=["logs"])
 _KEEPALIVE_TIMEOUT = 20.0
 
 
-@router.post("/stream-keys", response_model=CreateStreamKeyResponse)
+@router.post(
+    "/stream-keys",
+    response_model=CreateStreamKeyResponse,
+    dependencies=[Depends(get_current_user)],
+)
 async def create_stream_key() -> CreateStreamKeyResponse:
     return CreateStreamKeyResponse(stream_key=str(uuid.uuid4()))
 

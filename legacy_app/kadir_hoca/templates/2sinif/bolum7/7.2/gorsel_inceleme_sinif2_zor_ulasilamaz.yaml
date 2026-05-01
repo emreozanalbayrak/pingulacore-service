@@ -1,0 +1,141 @@
+# templates/2sinif/bolum7/7.2/gorsel_inceleme_sinif2_zor_ulasilamaz_1q.yaml
+# 2. Sinif — Gorsel Inceleme — ZOR — hangi_bilgiye_ulasilamaz varyanti
+# Gorsel zorunlu, paragraf yok, 3 secenekli
+
+meta:
+  id: "gorsel_inceleme_sinif2_zor_ulasilamaz"
+  ad: "2. Sinif - Gorsel Inceleme (Zor) - Hangi Bilgiye Ulasilamaz"
+  sinif_seviyesi: 2
+  aciklama: "Zor duzey — gorsel inceleme, hangi bilgiye ulasilamaz varyanti, 3 secenekli"
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Tek gorsel + kisa soru koku + 3 secenek (zor, hangi_bilgiye_ulasilamaz)"
+
+  paragraph:
+    required: true
+    word_count_min: 30
+    word_count_max: 60
+    sentence_count_min: 3
+    sentence_count_max: 5
+    stil: "gorsel_sahne_tasviri"
+    kurallar:
+      - "Bu paragraf gorselde gosterilecek sahneyi TASVIR eder."
+      - "Sahne bir gunluk yasam sahnesi olmalidir (park, okul, ev, doga)."
+      - "En az 3 somut bilgi icermelidir: kisi sayisi, nesne, eylem, yer, mevsim."
+      - "En az 1 bilgi gorselden CIKARILAMAMALI (soru icin gerekli)."
+      - "2. sinif ogrencisinin anlayabilecegi sade dil kullanilmalidir."
+      - "Soyut kavramlar ve dis bilgi gerektiren ifadeler YASAK."
+
+  visual:
+    required: true
+    placement: "top"
+    detail_density: "medium_high"
+    kurallar:
+      - "Gorselde birden fazla kisi, nesne veya etkinlik olabilir."
+      - "Dogru cevap icin ogrenci birden fazla ayrintiyi birlikte dusunmelidir."
+      - "Zor duzeyde bile gorsel karmasik degil, yalnizca dikkat gerektirici olmalidir."
+      - "Gorsel soru cozumunun ana ve zorunlu kaynagi olmalidir."
+      - "Gorsel tek bakista anlasilir ama dikkatli inceleme gerektirir olmalidir."
+      - "Gorselde en az 3 acik bilgi cikarilabilir olmalidir."
+      - "Gorselde en az 1 ulasilamayan bilgi alani da bulunabilmelidir."
+      - "Kisi, nesne, hareket, sayi, yer veya mevsim gibi acik ipuclari bulunabilir."
+      - "Gorsel sade olmali, gereksiz susleme icermemelidir."
+      - "Gorseldeki karakterler ve nesneler ayirt edilebilir olmalidir."
+    yasaklar:
+      - "dekoratif ama bilgi tasimayan gorsel"
+      - "asiri kalabalik ve karisik sahne"
+      - "tek bakista tum secenekleri acikca eleyen asiri basit kurgu"
+      - "2. sinif duzeyini asan karmasik infografik veya coklu panel"
+      - "gorsel disinda dis bilgi gerektiren sahne"
+    visual_type_allowed:
+      - "tek sahneli gunluk yasam gorseli"
+      - "oyun oynayan cocuklar sahnesi"
+      - "park / okul / ev / doga sahnesi"
+      - "hayvan veya nesne duzeni"
+      - "basit etkinlik sahnesi"
+      - "insan ve nesne iliskisi iceren sahne"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 3
+    word_count_max: 10
+    style: "short_statement"
+    correct_count: 1
+    correct_type: "does_not_belong"
+    kurallar:
+      - "Her soruda 3 secenek olmalidir."
+      - "Secenekler kisa, sade ve 2. sinif duzeyinde olmalidir."
+      - "Dogru secenek gorselden cevaplanamayan soru ya da bilgi olmalidir."
+      - "Diger 2 secenek gorselden acikca cevaplanabilir olmalidir."
+      - "2 yanlis secenek de makul gorunmelidir."
+      - "Secenekler soru biciminde ya da kisa bilgi biciminde olabilir."
+      - "Dogru secenek yalniz dikkatli gorsel incelemeyle secilebilmelidir."
+
+soru_kokleri:
+  - "<b>Bu görselden aşağıdaki sorulardan hangisinin cevabına <u>ulaşamayız</u>?</b>"
+  - "<b>Görsel incelendiğinde aşağıdaki bilgilerden hangisine <u>ulaşılamaz</u>?</b>"
+  - "<b>Bu görsel bize aşağıdakilerden hangisini <u>göstermez</u>?</b>"
+  - "<b>Aşağıdakilerden hangisi görselden <u>öğrenilemez</u>?</b>"
+
+soru_varyanti: "hangi_bilgiye_ulasilamaz"
+
+soru_varyanti_kurallari:
+  - "Dogru secenek gorselden cevaplanamayan soru ya da bilgi olmalidir."
+  - "Diger 2 secenek gorselden acikca cevaplanabilir olmalidir."
+
+dogru_cevap:
+  tanim: "Gorselden cevaplanamayan veya ogrenilemeyecek bilgi"
+  kurallar:
+    - "Dogru cevap gorselden cevaplanamayan veya ogrenilemeyecek bilgi olmalidir."
+    - "Dogru cevap dis bilgi gerektirmemelidir."
+    - "Dogru cevap 2. sinif ogrencisinin gorsele dikkatle bakarak belirleyebilecegi aciklikta olmalidir."
+    - "Dogru cevap yalniz dikkatli gorsel incelemeyle secilebilmelidir."
+
+celdirici_stratejileri:
+  - ad: "ULASILAMAZ_BILGI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Gorselden ogrenilebilecek bilgi (celdirici olarak kullanilir)"
+    nasil_olusturulur: |
+      Gorselden acikca cikarilabilen bir bilgiyi secenek olarak sun (bu dogru degil, celdirici).
+      Zor duzey: dikkatli inceleme ile gorselden dogrulanabilir olmali, iki celdirici de makul gorunmelidir.
+    kategori: "scope_error"
+
+  - ad: "KISMI_DOGRU_KISMI_YANLIS"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Bir kismi gorsele uyar gibi gorunur ama tamami dogru degildir"
+    nasil_olusturulur: |
+      Gorselden dogrulanabilen bilgiyi celdirici olarak sun.
+      Zor duzey: celdirici dikkat gerektirici olmali, ilk bakista ulasilamaz gibi gorunebilir.
+    kategori: "partial_truth"
+
+use_shared_strategies: false
+
+visual_requirement: "answer_critical"
+visual_type: "scene"
+visual_spec:
+  scene_type: "gunluk_yasam"
+  kisi_sayisi_min: 2
+  kisi_sayisi_max: 5
+  bilgi_sayisi_min: 3
+hide_paragraph_after_visual: true
+
+beceri:
+  katman: "KB1"
+  bilesenler: ["gorselden_bilgi_cikarma", "gorselden_ulasilabilen_ulasilamayan_bilgiyi_ayirt_etme"]
+  surec_bileseni: "gorseli_anlama"
+
+sinif2_ek_kurallar:
+  sadece_gorselle_cozum_gerekli: true
+  sadece_metinle_cozum_yasak: true
+  yasak_alanlar:
+    - "Ana dusunce, mesaj veya soyut yorum sorusu YASAK"
+    - "Dis bilgi gerektiren soru YASAK"
+    - "Gorsel olmadan cozulebilir soru YASAK"
+    - "Zor duzey bile 2. sinif sinirinda kalmalidir — derin yorum zorlugu degil, dikkat zorlugu"

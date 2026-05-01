@@ -1,0 +1,292 @@
+# templates/beceri_bilgilendirici.yaml
+# Kaynak: MEB Beceri Temelli Soru Bankasi - Bilgilendirici Metin
+#
+# BECERI TEMELLI BILGILENDIRICI METIN FORMATI
+# Bilgilendirici metin verilir, ogrenci analiz ve degerlendirme sorusunu cevaplar
+#
+# MANTIK: 1 secenekte dogru cevap, 4 secenekte yanlis cevaplar
+# Secenekler TAM CUMLE formatindadir (3-25 sozcuk)
+
+meta:
+  id: "beceri_bilgilendirici"
+  ad: "Beceri Temelli - Bilgilendirici"
+  sinif_seviyesi: 5
+  aciklama: "Bilgilendirici metinler uzerinden beceri temelli sorular"
+  kaynak: "MEB Beceri Temelli Soru Bankasi"
+  frequency: "~15% of beceri temelli questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Bilgilendirici baglam + soru koku + 5 tam cumle secenek (beceri temelli)"
+
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 150
+    sentence_count_min: 4
+    sentence_count_max: 8
+    stil: "bilgilendirici"
+    kurallar:
+      - "Nesnel ve gercekci bilgiler ver"
+      - "Konu hakkinda temel kavramlari acikla"
+      - "Neden-sonuc iliskileri ve ornekler icersin"
+      - "MEB mufredat terminolojisini kullan"
+      - "Bilimsel dogrulugu yuksek olmali"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 5
+    labels: ["A", "B", "C", "D", "E"]
+    word_count_min: 3
+    word_count_max: 25
+    style: "complete_sentence"
+    correct_type: "matches"
+    correct_count: 1
+
+  questions_per_context: 2
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ALANLARI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  context_type: "BILGILENDIRICI"
+  context_label: "Bilgilendirici Metin"
+  skill_level: "KB2"
+  process_component: "Bilgilendirici metinde ana fikir, yardimci dusunce ve neden-sonuc analizi"
+  skill_areas:
+    - "anlama"
+    - "analiz"
+    - "degerlendirme"
+    - "cikarimlama"
+    - "neden_sonuc"
+    - "ozetleme"
+    - "problem_cozme"
+    - "sorgulama"
+  answer_key_explanation: true
+  question_patterns:
+    - "Metne gore hangi bilgi dogrudur?"
+    - "Metinden cikarilabilecek sonuc nedir?"
+    - "Metnin ana fikri nedir?"
+    - "Metinde hangi neden-sonuc iliskisi kurulmustur?"
+    - "Yuzey ve derin anlam arasindaki fark nedir?"
+    - "Cozulmesi gereken ana problem nedir?"
+    - "Probleme yonelik en uygun cozum onerisi hangisidir?"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # Anlam / Ana Fikir
+  - "<b>Bu metne göre aşağıdakilerden hangisi doğrudur?</b>"
+  - "<b>Bu metnin ana düşüncesi aşağıdakilerden hangisidir?</b>"
+  - "<b>Metindeki bilgilere göre aşağıdakilerden hangisine ulaşılabilir?</b>"
+  - "<b>Metne göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Metinden aşağıdaki <u>çıkarımlardan hangisi yapılamaz</u>?</b>"
+  # Yardımcı Düşünce / Detay
+  - "<b>Metinde aşağıdaki bilgilerden hangisine yer verilmiştir?</b>"
+  - "<b>Metne göre aşağıdaki yargılardan hangisine ulaşılabilir?</b>"
+  - "<b>Metindeki bilgilerden yola çıkarak aşağıdakilerden hangisi <u>desteklenemez</u>?</b>"
+  # Neden-Sonuç / Analiz
+  - "<b>Metinde anlatılan olayın temel nedeni aşağıdakilerden hangisidir?</b>"
+  - "<b>Metindeki bilgilere göre neden-sonuç ilişkisi düşünüldüğünde aşağıdakilerden hangisi doğrudur?</b>"
+  # Yüzey / Derin Anlam
+  - "<b>Metnin bütünü düşünüldüğünde aşağıdakilerden hangisi söylenebilir?</b>"
+  - "<b>Metne göre aşağıdakilerden hangisi en kapsamlı değerlendirmedir?</b>"
+  # Problem Çözme / Çözüm Önerisi (PDF kaynak)
+  - "<b>Metne göre çözülmesi gereken ana problem aşağıdakilerden hangisidir?</b>"
+  - "<b>Aşağıdakilerden hangisi probleme yönelik <u>kesin bir çözüm önerisi değildir</u>?</b>"
+  - "<b>Aşağıdakilerden hangisi problemi azaltmak için en uygun çözüm önerisidir?</b>"
+  # Araştırma / Sorgulama (PDF kaynak)
+  - "<b>Metindeki araştırmadan hareketle aşağıdakilerden hangisi söylenebilir?</b>"
+  - "<b>Okuduğunuz metinden hareketle aşağıdakilerden hangisine ulaşılabilir?</b>"
+  - "<b>Metne göre aşağıdaki neden-sonuç ilişkilerinden hangisi <u>çıkarılamaz</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metin icerigiyle desteklenen, analitik dusunme gerektiren cevap"
+  kurallar:
+    - "Metin icerigiyle desteklenmeli"
+    - "Analiz ve degerlendirme becerisi gerektirmeli"
+    - "Tam cumle formatinda olmali (3-25 sozcuk)"
+    - "Bilimsel olarak dogru olmali"
+    - "Baglam olmadan cevaplanamaz olmali"
+    - "Ust duzey dusunme becerisi gerektirmeli"
+    - "Bilissel surec bilesenini hedeflemeli"
+  ornekler:
+    - metin: "Gunes enerjisi, gunes panelleri araciligiyla elektrik uretiminde kullanilir. Temiz ve yenilenebilir bir enerji kaynagi olan gunes enerjisi, cevre kirliligi yaratmaz..."
+      dogru: "Gunes enerjisi cevre kirliligi yaratmayan yenilenebilir bir enerji kaynagindir"
+      neden: "Metinde gunes enerjisinin temiz ve yenilenebilir oldugu acikca belirtilmektedir"
+    - metin: "Depremler, yer kabugunun hareketleri sonucu olusur. Turkiye aktif fay hatlari uzerinde bulundugu icin deprem riski yuksektir..."
+      dogru: "Turkiye'nin deprem riski yuksektir cunki aktif fay hatlari uzerinde bulunmaktadir"
+      neden: "Metinde fay hatlari ve deprem riski iliskisi aciklanmaktadir"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM bilgilendirici metin iceriğine gore en uygun 4 stratejiyi secer
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic from MEB curriculum"
+      details: "MEB mufredatindan bilgilendirici metin yazilabilecek bir konu sec"
+
+    - step: 2
+      action: "Generate informative text (80-150 words) with facts and examples"
+      details: |
+        Bilgilendirici metinde:
+        - Nesnel ve gercekci bilgiler olmali
+        - Temel kavramlar aciklanmali
+        - Neden-sonuc iliskileri ve ornekler icermeli
+        - MEB mufredat terminolojisi kullanilmali
+
+    - step: 3
+      action: "Create correct answer as complete sentence"
+      details: |
+        Dogru cevap:
+        - Metindeki bilgilerle desteklenmeli
+        - Analitik dusunme gerektirmeli
+        - Tam cumle formatinda olmali (3-25 sozcuk)
+
+    - step: 4
+      action: "Create 4 wrong answers using strategies"
+      details: |
+        Her yanlis secenek icin farkli strateji kullan:
+        - 1x metindeki bir detayi genellemis
+        - 1x konuyla iliskili ama metinde desteklenmeyen
+        - 1x neden-sonuc iliskisini ters cevirmis
+        - 1x mantikli gorunen ama bilimsel olarak yanlis
+        Tum secenekler ayni formatta olmali (tam cumle, 3-25 sozcuk)
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D-E seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - konu: "Gunes enerjisi"
+    dogru_cevap: "B"
+    secenekler:
+      A: "Gunes enerjisi yalnizca sicak iklimlerde kullanilabilir"
+      B: "Gunes enerjisi cevre kirliligi yaratmayan yenilenebilir bir enerji kaynagindir"
+      C: "Gunes panelleri her zaman elektrik uretir"
+      D: "Gunes enerjisi fosil yakitlardan daha pahalidir"
+      E: "Gunes enerjisi yalnizca konut isitmada kullanilir"
+    dogru_cevap_icerigi: "Gunes enerjisi cevre kirliligi yaratmayan yenilenebilir bir enerji kaynagindir"
+    neden: "Metinde gunes enerjisinin temiz ve yenilenebilir oldugu belirtilmektedir"
+
+  - konu: "Depremler"
+    dogru_cevap: "C"
+    secenekler:
+      A: "Depremler yalnizca fay hatlari uzerinde olusur"
+      B: "Turkiye deprem riski dusuk bir ulkedir"
+      C: "Turkiye'nin deprem riski yuksektir cunki aktif fay hatlari uzerinde bulunmaktadir"
+      D: "Depremler yalnizca yer alti sularindan kaynaklaniir"
+      E: "Fay hatlari zamanla ortadan kalkar"
+    dogru_cevap_icerigi: "Turkiye'nin deprem riski yuksektir cunki aktif fay hatlari uzerinde bulunmaktadir"
+    neden: "Metinde fay hatlari ve deprem riski iliskisi aciklanmaktadir"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  # Asama 0: Kimlik ve Olcme Niyeti
+  identity:
+    - "Soru bir beceriyi mi olcuyor, bilgi hatirlamayi mi?"
+    - "Hedef beceri seviyesi uygun mu?"
+    - "Surec bileseni dogru hedeflenmis mi?"
+
+  # Asama 1: Baglam Secimi
+  context:
+    - "Baglam olmadan soru cozulebilir mi? (Hayir olmali)"
+    - "Baglam fonksiyonel mi? (Dekoratif degil)"
+    - "Baglam cevabi dogrudan veriyor mu? (Vermemeli)"
+    - "Baglam otantik mi? (Gercek hayattan)"
+    - "Kelime sayisi 80-150 arasinda mi?"
+    - "Nesnel ve gercekci bilgiler var mi?"
+    - "Neden-sonuc iliskileri ve ornekler iceriyor mu?"
+    - "MEB mufredat terminolojisi kullanilmis mi?"
+
+  # Asama 2: Soru ve Secenekler
+  question:
+    - "Soru koku net ve anlasilir mi?"
+    - "Cift olumsuz var mi? (Olmamali)"
+    - "Tek dogru cevap var mi?"
+
+  options:
+    - "Celdiriciler belirli bilissel hatalari temsil ediyor mu?"
+    - "Eleme yoluyla cevaplanabilir mi? (Olmamali)"
+    - "Format farkliligi ile dogru cevap belli oluyor mu? (Olmamali)"
+    - "Tum secenekler benzer uzunlukta mi?"
+    - "5 secenek var mi (A-B-C-D-E)?"
+
+  # Asama 3: Etik
+  ethics:
+    - "Cinsiyet/etnik onyargi var mi? (Olmamali)"
+    - "Yas grubuna uygun mu?"
+
+  # Asama 4: Dil
+  language:
+    - "Turkce dil bilgisi dogru mu?"
+    - "Sinif seviyesine uygun mu?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+
+  generation_rules:
+    - "MEB mufredatindan bilgilendirici metin yazilabilecek konulari tercih et"
+    - "Bilimsel ve nesnel bilgi iceren konular ideal"
+    - "Neden-sonuc iliskisi kurulabilecek konulari sec"

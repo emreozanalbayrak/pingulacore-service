@@ -1,0 +1,107 @@
+# B1.2 — Çizgi Grafikli Başlık/Anahtar Sözcük/Soru Cevap (3Q)
+meta:
+  id: "baslik_anahtar_soru_cizgi"
+  ad: "Çizgi Grafik — Başlık/Anahtar/Soru Cevap (3 Soru)"
+  sinif_seviyesi: 5
+  aciklama: "Senaryo + çizgi grafiği üzerinden başlık, anahtar sözcük ve soru-cevap soruları"
+  frequency: "Medium"
+
+context:
+  type: "baslik_anahtar_soru_cizgi"
+  question_count: 3
+  question_count_min: 3
+  question_count_max: 3
+  generation:
+    word_count_min: 80
+    word_count_max: 140
+    image_type: "cizgi_grafigi"
+    structure:
+      - "Bir karakter (isimli) bir araştırma/gözlem yapmış, zaman içindeki değişimi kaydetmiştir (3-4 cümle)"
+      - "KRİTİK: Senaryoda sayısal değerleri YAZMA — veriler sadece tabloda olmalı"
+      - "Ardından verileri HTML tablosu olarak ekle: <table> ile, 2 sütun (Zaman | Değer), en az 5 satır"
+      - "Metinde 2-3 anahtar sözcük doğal olarak geçmeli"
+      - "Metinde bazı soruların cevabı verilirken bazılarının cevabı olmayacak şekilde yazılmalı"
+      - "NOT: Bu tablo AI tarafından çizgi grafiğine dönüştürülecektir"
+    kurallar:
+      - "KRİTİK — BAŞLIK YASAĞI: Metin ve görsellere konunun ana fikrini veren başlık KOYMA! 1. soruda en uygun başlık sorulacak — metin/görsel başlığı cevabı ele vermemeli. Nötr başlık kullan (ör: Metin 1, I. Metin)"
+      - "5. sınıf seviyesinde, zaman serisi verisi"
+      - "Anahtar sözcükler metinde doğal olarak geçmeli"
+      - "Türkçe karakterler doğru kullanılmalı"
+
+  questions:
+  - slot: 1
+    type: "baslik"
+    soru_kokleri:
+      - "<b>Bu araştırmaya başlık olarak aşağıdakilerden hangisi gelebilir?</b>"
+      - "<b>Grafik ve metin birlikte düşünüldüğünde en uygun başlık aşağıdakilerden hangisidir?</b>"
+    options_style: "headline_title"
+    word_count_min: 2
+    word_count_max: 6
+    beceri:
+      katman: "KB2"
+      bilesenler: ["ozetleme"]
+      surec_bileseni: "bilgiyi_cikartma"
+  - slot: 2
+    type: "anahtar_sozcuk"
+    soru_kokleri:
+      - "<b>Bu metindeki anahtar sözcükler aşağıdakilerden hangileri olabilir?</b>"
+      - "<b>Araştırmanın anahtar kavramları aşağıdakilerden hangisidir?</b>"
+    options_style: "keyword_set"
+    word_count_min: 2
+    word_count_max: 8
+    beceri:
+      katman: "KB2"
+      bilesenler: ["cozumleme"]
+      surec_bileseni: "bilgiyi_cikartma"
+  - slot: 3
+    type: "soru_cevap"
+    soru_kokleri:
+      - "<b>Metin ve grafikte aşağıdaki sorulardan hangisinin cevabı <u>yoktur</u>?</b>"
+      - "<b>Aşağıdakilerden hangisi bu araştırmayla <u>cevaplanamayacak</u> bir sorudur?</b>"
+    options_style: "question_sentence"
+    word_count_min: 4
+    word_count_max: 15
+    beceri:
+      katman: "KB3"
+      bilesenler: ["cikarim_yapma"]
+      surec_bileseni: "bilgiyi_cikartma"
+
+header_template: "1-3. soruları aşağıdaki bilgilere göre birbirinden bağımsız olarak cevaplayınız."
+
+format:
+  type: "llm_generated_html"
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 140
+    sentence_count_min: 3
+    sentence_count_max: 6
+  stem:
+    required: true
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 15
+    style: "headline_title"
+    correct_count: 1
+    correct_type: "matches"
+
+dogru_cevap:
+  tanim: "Metin ve grafikten doğru çıkarılan başlık, anahtar sözcük veya soru-cevap"
+  kurallar:
+    - "HATALI YAKLASIM: Metinde geçen ifadenin AYNEN seçeneklerde kullanılması YASAK"
+    - "DOĞRU YAKLASIM: Seçenek ANLAMCA ÖZDESİ olmalı"
+    - "Doğru seçenek TEKRARLAMAMALI"
+    - "En az %40 kelime farklılığı"
+    - "BİLİMSEL TERİM KORUMASI"
+    - "Doğru şık en uzun şık OLMAMALI"
+
+distractors:
+  stratejiler:
+    - ad: "YAKIN_BASLIK"
+      aciklama: "Konuya yakın ama ana fikri yansıtmayan başlık"
+    - ad: "DETAY_TUZAGI"
+      aciklama: "Grafikteki bir detayı konu gibi sunma"
+
+use_shared_strategies: false

@@ -1,0 +1,330 @@
+# templates/bolum3/paragraf_siralama_giris_gelisme_sonuc.yaml
+# Bolum 3 - Yapi Yonu: Giris/Gelisme/Sonuc Bolumu Tespiti
+#
+# GIRIS-GELISME-SONUC FORMATI
+# Numarali cumleler verilir, ogrenci giris/gelisme/sonuc bolumunu tespit eder
+
+meta:
+  id: "paragraf_siralama_giris_gelisme_sonuc"
+  ad: "Paragraf Sıralama (Giriş-Gelişme-Sonuç)"
+  sinif_seviyesi: 5
+  aciklama: "Numaralı cümlelerden giriş, gelişme veya sonuç bölümünü tespit etme"
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Numaralı karışık cümleler + soru kökü + 4 sıralama seçeneği"
+
+  paragraph:
+    required: true
+    word_count_min: 40
+    word_count_max: 80
+    sentence_count_min: 5
+    sentence_count_max: 10
+    numbered_sentences: true
+    stil: "bilgilendirici"
+    kurallar:
+      - "Tam 5 cümleden oluşsun"
+      - "Her cümle 8-16 kelime arasında olmalı"
+      - "Cümleler tek bir konu çevresinde yazılmalı"
+      - "Cümleler doğal sıralarında okunduğunda tek ve akıcı bir paragraf oluşturmalı"
+      - "Cümleler arasında mantıksal sıra kurulmasını sağlayan anlam ilişkisi bulunmalı ve bu sıralama dışında hiçbir sıralama anlam ilişkisi sağlamamalı"
+      - "Paragraftaki hiçbir cümle diğerlerinden tamamen kopuk olmamalı"
+      - "Doğru sıra bulunduğunda paragraf açıkça düzelmeli, yanlış sırada ise akış bozulmalı"
+      - "Orijinal paragraf oluşturulduktan sonra, bu paragraftaki 5 cümleye I, II, III, IV, V Roma rakamları rastgele atanmalı"
+      - "Bu Roma rakamları cümlelerin doğal sırasını göstermemeli; yalnızca karıştırma etiketi olarak kullanılmalı"
+      - "Her Roma rakamı yalnızca bir cümleye atanmalı ve hiçbir rakam tekrar etmemeli"
+      - "Numara atama işlemi tamamlandıktan sonra her cümlenin bir gizli etiketi oluşmuş olur"
+      - "Soruda orijinal paragraf doğrudan şu düzende görülmeli: I., II., III., IV., V."
+      - "Sıra, paragrafın gerçek sırası değil; rastgele atanmış etiketlerin sırası olmalı"
+      - "Her Roma rakamının yanında o rakama atanmış cümle yer almalı"
+      - "Üretilen sorudaki metin, görünüşte sıralı; anlam bakımından ise çözülmesi gereken bir yapı olmalı"
+      - |
+        NUMARALANDIRMA ve FORMAT KURALLARI (KRİTİK!):
+        ★ Orijinal paragraf üretildikten sonra paragraf içindeki 5 cümle ayrı ayrı tespit edilmelidir.
+        ★ Bu 5 cümlenin her birine I, II, III, IV ve V Roma rakamları rastgele ve tekrarsız biçimde atanmalıdır.
+        ★ Roma rakamları cümlelerin DOĞRU sırasını DEĞİL, sadece etiketini gösterir.
+        ★ Her Roma rakamı yalnızca bir cümleye atanmalıdır.
+        ★ Her cümle yalnızca bir Roma rakamı almalıdır.
+        ★ Numara ataması tamamlandıktan sonra öğrenciye gösterilecek metin, orijinal paragraf sırasına göre değil, atanmış Roma rakamlarının sırasına göre kurulmalıdır.
+        ★ Öğrenci metni her zaman I., II., III., IV., V. sırasıyla görmelidir.
+        ★ Ekranda görünen I. numaralı cümle, orijinal paragrafın 1. cümlesi olmak zorunda değildir.
+        ★ Aynı durum II., III., IV. ve V. için de geçerlidir.
+        ★ Gösterilen metinde her cümlenin başında Roma rakamı ve nokta ile alt alta yazılmalıdır: I., II., III., IV., V.
+        ★ PARANTEZ KULLANMA — (I) değil, I. formatı kullan!
+        ★ Her cümle arasına <br> etiketi koyulmalıdır — cümleler alt alta görünmeli, düz paragraf olmamalı!
+        ★ FORMAT: "I. Cümle1.<br>II. Cümle2.<br>III. Cümle3.<br>IV. Cümle4.<br>V. Cümle5."
+        ★ SADECE ROMA RAKAMI (I, II, III, IV, V) KULLAN — Arap rakamı (1, 2, 3) KULLANMA
+        ★ Numaralı cümleler öğrenciye alt alta yazılan maddeler şeklinde sunulmalıdır.
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+    kurallar:
+      - |
+        SORU KÖKÜ KURALLARI (KRİTİK!):
+        ★ Soru kökü SADECE tek bir soru cümlesi olmalı — paragraftaki cümleleri TEKRARLAMA!
+        ★ YASAK: Soru kökünde (I)... (II)... (III)... şeklinde cümle listesi yazmak
+        ★ YASAK: Paragrafı doğru sırada veya herhangi sırada yeniden yazmak
+        ★ YASAK: Paragraftaki metni bold/kalın yapıp tekrar yazmak
+        ★ DOĞRU: Sadece "Numaralanmış cümleler anlamlı bir paragraf oluşturacak şekilde sıralandığında doğru sıralama aşağıdakilerden hangisidir?" gibi TEK CÜMLELİK soru
+        ★ Soru kökünde SADECE soru cümlesi olsun, başka HİÇBİR ŞEY olmasın
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 3
+    word_count_max: 12
+    style: "short_phrase"
+    correct_count: 1
+    kurallar:
+      - |
+        SEÇENEK KURALLARI (KRİTİK!):
+        ★ Her seçenek SADECE Roma rakamlarından oluşan sıralama dizisi olmalı
+        ★ FORMAT: "III - I - V - II - IV" (Roma rakamları tire ile ayrılmış)
+        ★ YASAK: Seçenekte cümle metni yazmak
+        ★ YASAK: Arap rakamı (1, 2, 3) kullanmak
+        ★ YASAK: Seçenekte sadece "A", "B" yazmak
+        ★ DOĞRU ÖRNEK: A) III - I - V - II - IV
+        ★ YANLIŞ ÖRNEK: A) 3 - 1 - 5 - 2 - 4
+        ★ YANLIŞ ÖRNEK: A) İlkbaharda toprak ısınır...
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Aşağıdaki cümlelerden hangisi bir paragrafın giriş bölümü olmaya en uygundur?</b>"
+  - "<b>Aşağıdakilerden hangisi bir metnin sonuç bölümü olmaya en uygundur?</b>"
+  - "<b>Bu cümlelerden hangisi metnin gelişme bölümünde yer <u>alamaz</u>?</b>"
+  - "<b>Aşağıdakilerin hangisinde metnin ait olduğu bölüm yay ayraç içinde <u>yanlış</u> verilmiştir?</b>"
+  - "<b>Aşağıdakilerden hangisi bir metnin giriş bölümü <u>olamaz</u>?</b>"
+  - "<b>Aşağıdakilerden hangisi bir metnin giriş bölümü olabilir?</b>"
+  - "<b>Aşağıdakilerden hangisi bir metnin sonuç bölümüne aittir?</b>"
+  - "<b>Aşağıdakilerden hangisi bir metnin sonuç bölümüne ait <u>olamaz</u>?</b>"
+  - "<b>Aşağıdakilerden hangisi bir hikâyenin sonuç bölümüne aittir?</b>"
+  - "<b>Aşağıdakilerden hangisi bir araştırmanın sonuç bölümüne aittir?</b>"
+  - "<b>Numaralanmış bölümler giriş, gelişme ve sonuç olarak sıralanırsa doğru sıralama aşağıdakilerden hangisi olur?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Orijinal paragrafı oluşturan 5 cümle arasında, öğrencinin doğru sıralamayı çıkarabilmesini sağlayacak açık bir anlam ilişkisi bulunmalıdır. Bu ilişki; zaman sırası, neden-sonuç, aşama ilerleyişi, hazırlık-uygulama-sonuç, sorun-çözüm, genel düşünce-detay veya gözlem-yorum gibi mantıksal bağlarla kurulabilir. Her cümle, paragrafın doğal akışında kendinden önce veya sonra gelen en az bir cümleyle anlam bakımından ilişkili olmalıdır. Bu bağ yalnızca dilsel ipuçlarıyla değil, olayların gerçekleşme sırası, bir hazırlığın sonuçtan önce gelmesi, bir nedenin sonuçtan önce verilmesi, bir sürecin aşamalar hâlinde ilerlemesi veya bir açıklamanın örnekten önce gelmesi gibi içerik ilişkileriyle de kurulabilir."
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Her cümle paragrafın doğal akışı içinde belirli bir işlev taşımalıdır."
+    - "Cümleler arasında doğru sıralamayı kurduracak anlam ilişkisi bulunmalıdır."
+    - "Bu ilişki zaman dizisi, neden-sonuç, süreç, aşama, hazırlık-uygulama-sonuç veya sorun-çözüm yapısıyla kurulabilir."
+    - "Cümleler tek tek anlaşılabilir olsa da yanlış sırada verildiğinde metnin akışı zayıflamalıdır."
+    - "Doğru sıra bulunduğunda paragraf açıkça düzelmeli ve doğal bir bütün oluşturmalıdır."
+    - "Hiçbir cümle paragrafın geri kalanından bağımsız veya rastgele durmamalıdır."
+    - "Doğru sıra yalnızca yüzeysel anahtar kelimelerle değil, anlam akışıyla bulunabilmelidir."
+  ornekler:
+    - orijinal_paragraf: "Sabah erken saatlerde gökyüzü aniden kararmaya başladı. Kısa süre sonra kuvvetli rüzgâr ağaç dallarını salladı. Ardından yoğun yağmur sokakları hızla ıslattı. İnsanlar ıslanmamak için en yakın dükkânlara sığındı. Fırtına dinince herkes yeniden dışarı çıkmaya başladı."
+      gizli_numaralandirma:
+        "I. cümle": "III"
+        "II. cümle": "V"
+        "III. cümle": "I"
+        "IV. cümle": "IV"
+        "V. cümle": "II"
+      ogrenciye_gosterilen_metin: "I. Ardından yoğun yağmur sokakları hızla ıslattı.<br>II. Fırtına dinince herkes yeniden dışarı çıkmaya başladı.<br>III. Sabah erken saatlerde gökyüzü aniden kararmaya başladı.<br>IV. İnsanlar ıslanmamak için en yakın dükkânlara sığındı.<br>V. Kısa süre sonra kuvvetli rüzgâr ağaç dallarını salladı."
+      dogru_cevap: "III - V - I - IV - II"
+      neden: "Olaylar doğal olarak gökyüzünün kararmasıyla başlar; ardından rüzgâr çıkar, sonra yağmur başlar, insanlar korunacak yer arar ve en sonda fırtına diner."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI (CUSTOM — siralama icin ozel)
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "GUCLU_ILK_CUMLE_REKABETI"
+    bilisssel_hata_kategorisi: "erken_karar_verme"
+    aciklama: "Yanlış seçenekleri, ilk cümle için makul görünen adaylar üzerinden kur"
+    nasil_olusturulur: |
+      Paragrafta ilk cümle olma ihtimali taşıyan en az iki cümle varsa,
+      yanlış seçeneklerde bu aday cümleleri ilk sıraya yerleştir.
+      Böylece öğrenci ilk cümleyi bulduğunu düşünse bile şıkları kolayca eleyemez.
+      Ama açık biçimde devam hissi veren veya bağlaçla başlayan cümleleri ilk sıraya koyma.
+    kategori: "cognitive"
+
+  - ad: "GUCLU_SON_CUMLE_REKABETI"
+    bilisssel_hata_kategorisi: "erken_karar_verme"
+    aciklama: "Yanlış seçenekleri, son cümle için makul görünen adaylar üzerinden kur"
+    nasil_olusturulur: |
+      Paragrafta kapanış cümlesi olma ihtimali taşıyan en az iki cümle varsa,
+      yanlış seçeneklerde bu aday cümleleri son sıraya yerleştir.
+      Böylece öğrenci yalnızca son cümleyi tahmin ederek doğru cevaba ulaşamaz.
+      Ama açık kapanış bildiren cümleleri yanlış seçeneklerde sona koyma.
+    kategori: "cognitive"
+
+  - ad: "ORTA_BLOK_KARISTIRMA"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Makul görünen başlangıç ve bitişi koruyup orta akışı boz"
+    nasil_olusturulur: |
+      İlk ve son cümle adaylarını güçlü tut, fakat ortadaki cümlelerin sırasını boz.
+      Öğrenci başlangıç ve bitişe güvenip orta akışı dikkatle incelemezse yanılır.
+      Bu strateji özellikle süreç, zaman ve neden-sonuç zinciri içeren paragraflarda etkilidir.
+    kategori: "cognitive"
+
+  - ad: "YAKIN_GECIS_YANILSAMASI"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Birbirine dilsel olarak yakın görünen cümleleri yanlış sırada eşleştir"
+    nasil_olusturulur: |
+      Aynı özneye, ortak kavrama veya benzer zamansal çerçeveye sahip iki cümleyi art arda getir;
+      fakat gerçek mantıksal sıra bu olmasın.
+      Öğrenci yalnızca kelime benzerliğine bakarsa bu seçeneği doğru sanabilir.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ETIKETI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siralama", "yapilandirma"]
+  surec_bileseni: "metin_yapisini_analiz_etme"
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Konu seç ve orijinal paragraf akışını planla"
+      details: |
+        Konuyla ilgili tek bir anlamlı paragraf planla.
+        Bu paragraf 5 cümleden oluşmalıdır.
+        Cümleler doğal sıralarında okunduğunda mantıksal ve akıcı bir bütün oluşturmalıdır.
+        Akış şu tür ilişkilerden biri veya birkaçıyla kurulabilir:
+        - Neden-sonuç zinciri
+        - Zaman dizisi (kronolojik akış)
+        - Süreç adımları
+        - Hazırlık → uygulama → sonuç
+        - Genel → özel
+        - Giriş → gelişme → sonuç
+
+    - step: 2
+      action: "Orijinal paragrafı DOĞRU sırada yaz"
+      details: |
+        Önce öğrenciye gösterilmeyecek olan orijinal doğru paragrafı üret.
+        Bu paragraf tam 5 cümleden oluşmalıdır.
+        Her cümle 8-16 kelime arasında olmalıdır.
+        Tüm cümleler tek bir konu çevresinde yazılmalıdır.
+        Cümleler doğru sırada okunduğunda tek ve akıcı bir paragraf gibi görünmelidir.
+
+    - step: 3
+      action: "Orijinal paragrafın 5 cümlesini ayrı ayrı tespit et"
+      details: |
+        Orijinal paragraf içindeki 5 cümleyi arka planda ayır.
+        Bu cümleler doğal paragraf sırasındaki I., II., III., IV. ve V. cümlelerdir.
+        Bu aşamada cümleler henüz öğrenciye gösterilmez.
+
+    - step: 4
+      action: "Her cümleye rastgele ve tekrarsız Roma rakamı ata"
+      details: |
+        I, II, III, IV ve V Roma rakamlarını bu 5 cümleye rastgele ve tekrarsız biçimde ata.
+        Bu Roma rakamları cümlelerin doğru sırasını değil, sadece etiketini gösterir.
+        Her Roma rakamı yalnızca bir cümleye atanmalıdır.
+        Her cümle yalnızca bir Roma rakamı almalıdır.
+        Doğru cevap dizisi I - II - III - IV - V olmamalıdır.
+
+    - step: 5
+      action: "Öğrenciye gösterilecek numaralı metni oluştur"
+      details: |
+        Öğrenciye orijinal paragraf doğal sırasıyla gösterilmez.
+        Bunun yerine cümleler, atanmış Roma rakamlarının sırasına göre alt alta gösterilir:
+        I., II., III., IV., V.
+        Her Roma rakamının yanında, o rakama atanmış cümle yer almalıdır.
+        Gösterilen bu sıra, paragrafın gerçek sırası değil; etiket sırasıdır.
+
+    - step: 6
+      action: "Doğru cevap sıralamasını oluştur"
+      details: |
+        Doğru cevap, orijinal paragrafın doğal sırasındaki cümlelerin Roma rakamı etiket dizisidir.
+        Yani orijinal I. cümlenin Roma rakamı etiketi, sonra orijinal II. cümlenin etiketi,
+        sonra III., IV. ve V. cümlelerin etiketleri yazılır.
+        Format Roma rakamları tire ile ayrılmış biçimde olmalıdır:
+        'III - V - I - IV - II'
+
+    - step: 7
+      action: "3 çeldirici sıralama oluştur"
+      details: |
+        Yanlış seçenekler, doğru cevaba yakın ve mantıklı görünecek şekilde üretilmelidir.
+        Her çeldiricide farklı strateji kullanılabilir:
+        - Güçlü ilk cümle rekabeti
+        - Güçlü son cümle rekabeti
+        - Orta blok karıştırma
+        - Mantık zinciri kaydırma
+        - Yakın geçiş yanılsaması
+        Çeldiriciler kolay eleme yapılabilecek kadar açık olmamalıdır.
+
+    - step: 8
+      action: "Seçenekleri rastgele sırala"
+      details: |
+        1 doğru cevap ve 3 çeldirici oluşturulduktan sonra
+        seçenekleri A-B-C-D sırasına rastgele yerleştir.
+        Her seçenek yalnızca sayı sıralamasından oluşmalıdır.
+        Format: 'III - I - IV - II - V'
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  original_paragraph:
+    - "Öğrenciye gösterilmeyecek orijinal paragraf oluşturuldu mu?"
+    - "Orijinal paragraf tam 5 cümleden oluşuyor mu?"
+    - "Her cümle 8-16 kelime arasında mı?"
+    - "Tüm cümleler tek bir konu etrafında mı?"
+    - "Cümleler doğru doğal sırada okunduğunda akıcı ve tutarlı bir paragraf oluşturuyor mu?"
+    - "Cümleler arasında sıralama kurulmasını sağlayan mantıksal ilişki var mı?"
+    - "Yanlış sırada okunduğunda akış belirgin biçimde bozuluyor mu?"
+
+  numbering:
+    - "Orijinal paragraftaki 5 cümle ayrı ayrı tespit edildi mi?"
+    - "Her cümleye I, II, III, IV, V Roma rakamları rastgele ve tekrarsız biçimde atandı mı?"
+    - "Her Roma rakamı yalnızca bir cümleye atanmış mı?"
+    - "Her cümle yalnızca bir Roma rakamı almış mı?"
+    - "Roma rakamları doğru sırayı değil, sadece etiketi gösteriyor mu?"
+    - "Doğru cevap dizisi I - II - III - IV - V değil mi?"
+
+  displayed_text:
+    - "Öğrenciye gösterilen metin, orijinal paragraf sırasına göre değil, atanmış Roma rakamlarının sırasına göre kurulmuş mu?"
+    - "Öğrenci metni I., II., III., IV., V. sırasıyla görüyor mu?"
+    - "Her Roma rakamının yanında doğru cümle yer alıyor mu?"
+    - "Roma rakamları nokta ile mi yazılmış: I., II., III., IV., V.?"
+    - "Sadece Roma rakamı kullanılmış mı (Arap rakamı yok)?"
+    - "Numaralı cümleler alt alta maddeler şeklinde sunulmuş mu?"
+
+  correct_answer:
+    - "Doğru cevap, orijinal paragraf sırasındaki cümlelerin Roma rakamı etiket dizisinden mi oluşturuldu?"
+    - "Roma rakamları tire ile ayrılmış mı?"
+    - "Doğru cevap formatı 'III - I - IV - II - V' biçiminde mi?"
+    - "Doğru cevap, öğrenciye gösterilen görünür sırayı değil, orijinal paragraf sırasını mı veriyor?"
+    - "Doğru cevap uygulandığında paragraf akıcı ve mantıklı hâle geliyor mu?"
+
+  distractors:
+    - "Her çeldirici doğru cevaptan farklı mı?"
+    - "Çeldiriciler birbirinden de farklı mı?"
+    - "Her çeldirici aynı sayı formatında mı yazıldı?"
+    - "Çeldiriciler kolay eleme yapılacak kadar açık ipucu vermiyor mu?"
+    - "Yanlış seçeneklerde ilk cümle ve son cümle üzerinden aşırı kolay eleme oluşmuyor mu?"
+    - "Çeldiriciler doğru cevaba yakın ama mantıksal olarak hatalı mı?"
+    - "Çeldiriciler mümkünse farklı çeldirici stratejileriyle üretilmiş mi?"
+
+  options:
+    - "Toplam 4 seçenek var mı?"
+    - "Seçenekler A, B, C, D olarak etiketlenmiş mi?"
+    - "Her seçenek yalnızca Roma rakamı sıralamasından mı oluşuyor?"
+    - "Seçeneklerde cümle metni, açıklama veya Arap rakamı yok mu?"
+    - "Yalnızca 1 doğru cevap var mı?"
+

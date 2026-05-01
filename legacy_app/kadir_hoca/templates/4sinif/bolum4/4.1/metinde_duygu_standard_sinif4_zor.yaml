@@ -1,0 +1,97 @@
+# Kaynak: metinde_duygu_standard_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.zor
+# 4. sinif metinde duygu standart — zor duzey
+
+meta:
+  id: "metinde_duygu_standard_sinif4_zor"
+  ad: "Metinde Duygu - Baskın Duygu (Zor)"
+  sinif_seviyesi: 4
+  aciklama: "Zor duzey — metindeki kahramanın içinde bulunduğu duygusal durumu belirleme."
+  frequency: "High"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Duygusal içerikli öyküleyici paragraf + soru kökü + duygu seçenekleri (zor)"
+
+  paragraph:
+    required: true
+    word_count_min: 73
+    word_count_max: 90
+    background_color: "#fce8e8"
+    sentence_count_min: 5
+    sentence_count_max: 6
+    stil: "oykuleyici"
+    kurallar:
+      - "Duygu ismi metinde doğrudan geçmemeli (Örn: 'Çok üzüldü' yerine 'Gözleri doldu, başını önüne eğdi' denmeli)."
+      - "Olay veya durum, belirli bir duyguyu güçlü şekilde hissettirmeli."
+      - "Duygu daha dolaylı ama tek baskın eksende sezdirilmeli."
+      - "Paragrafta konuyla ilgili AÇIKLAMA, TANIM veya EK BİLGİ verme! Paragraf SADECE hikâyeyi/olayı anlatsın."
+      - "YASAK: Ders kitabı açıklamaları yapma."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 3
+    style: "concept"
+    correct_count: 1
+    correct_type: "matches"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Bu metinde bahsedilen kişinin hissettiği duygu aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu şiire hâkim olan duygu aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metinde aşağıdaki duygulardan hangisine yer verilmiştir?</b>"
+  - "<b>Bu metne göre kahramanın aşağıdaki duygulardan hangisine sahip olması beklenir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metindeki durumu en iyi özetleyen duygu kavramı"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Duygu ismi metinde dogrudan gecmemeli, davranislardan cikarilmali"
+    - "1-3 kelimelik kisa kavram olmali"
+    - "Paragraftaki olaylarla birebir ortusmeli"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI BILGILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "COKLU_YAKINDUYGU_TUZAGI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "En az 2 celdirici doğru duyguya anlamsal olarak yakın — güçlü tuzak"
+    nasil_olusturulur: |
+      En az 2 celdirici doğru duyguya anlamsal olarak yakın görünmeli.
+      Zor seviyede doğru cevap yalnızca yüzeysel kelime eşleşmesiyle değil, tüm paragrafın duygusal tonu değerlendirilerek bulunmalıdır.
+      Duygu daha dolaylı biçimde ama tek baskın eksende sezdirilmeli.
+    kategori: "semantic"
+
+  - ad: "DOLAYLI_DUYGUSAL_MASKELEME"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Paragraftaki ipuçlardan dolaylı ama yanlış çıkarılan duygu"
+    nasil_olusturulur: |
+      Paragraftaki olay/davranışlardan dolaylı yolla ulaşılabilecek ama gerçekte yanlış olan bir duygu çıkarımı oluştur.
+      Zor seviyede bu seçenek paragrafla semantik bağ kurmalı ama duygusal ton tutarsız olmalı.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

@@ -1,0 +1,119 @@
+# Kaynak: konu_inverse_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.zor
+# 4. sinif konu yer almaz — zor duzey
+
+meta:
+  id: "konu_inverse_sinif4_zor"
+  ad: "4. Sinif - Metinde Konu (Yer Almaz) Zor"
+  sinif_seviyesi: 4
+  aciklama: "Zor duzey — ayni ana unsur korunurken yalnizca odak/boyut degisimi uzerinden konuya uymayan paragrafi ayirt etme."
+  frequency: "Low"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Konu kokte verilir, konuya uymayan mini-paragraf secilir (zor)"
+
+  paragraph:
+    required: false
+
+  topic_in_stem:
+    required: true
+    description: "Konu alt konu/leaf duzeyinde net verilmeli; ters mantigi acikca korumali"
+
+  stem:
+    required: true
+    pattern: "{topic} konulu bir metin olusturulsa asagidakilerden hangisi bu metinde yer almaz?"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    type: "mini_paragraph"
+    word_count_min: 28
+    word_count_max: 45
+    background_color: "#fce8e8"
+    sentence_count_min: 2
+    sentence_count_max: 3
+    correct_type: "does_not_belong"
+    correct_count: 1
+    kurallar:
+      - "3 uyan secenek konunun farkli alt yonlerini islemelidir."
+      - "Uyan secenekler konuya derin ama dogrudan bagli olmali."
+      - "Kelime secimi ve tema yaklasimi dogru cevaba yakin gorunebilir."
+      - "Dogru cevap ayni ana unsur korunarak farkli aspect/boyuttan secilmelidir."
+      - "Dogru cevap ile uyan secenekler ayni domain, benzer ton ve benzer bicimde yazilmalidir."
+      - "Dogru cevap tamamen alakasiz veya cok genis olmamalidir."
+      - "Neden uymadigi acikca savunulabilir olmali ama ilk bakista hemen ele verilmemeli."
+      - "3 uyan secenekten en az 2'si dogru cevapla yuzeyde cok benzer gorunmelidir."
+      - "Zor duzeyde zorluk yakin konu ayrimindan gelmeli; belirsizlikten gelmemeli."
+      - "En az 2 uyan secenek konuya cok yakin yazilmali."
+      - "Dogru cevap sadece ince anlam analizi ile ayirt edilmeli."
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "\"{topic}\" <b>konulu bir metin oluşturulsa aşağıdakilerden hangisi bu metinde <u>yer almaz</u>?</b>"
+  # KULLANILDI: - "<b>Aşağıdakilerden hangisi</b> \"{topic}\" <b>konulu bir metinden alınmış <u>olamaz</u>?</b>"
+  - "\"{topic}\" <b>konulu bir bilimsel yazı yazıldığında aşağıdakilerden hangisi bu yazıda <u>yer almaz</u>?</b>"
+  - "\"{topic}\" <b>konusu işlenirken aşağıdakilerden hangisine <u>değinilmez</u>?</b>"
+  - "<b>Aşağıdakilerden hangisi</b> \"{topic}\" <b>konusuyla <u>ilişkilendirilemez</u>?</b>"
+  # KULLANILDI: - "\"{topic}\" <b>hakkında yazılan bir metinde aşağıdakilerden hangisine <u>yer verilmez</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Verilen konuya AIT OLMAYAN mini-paragraf — ayni ana unsur, farkli aspect (ters mantik)"
+  mantik: "INVERSE — diger 3 secenek konuya uyar, dogru cevap UYMAZ"
+  kurallar:
+    - "Dogru secenek verilen konunun DISINDA bir icerik olmali."
+    - "Ana unsuru koru, sadece aspect/boyutu degistir."
+    - "IDEAL: ayni cisim/varlik, farkli bilimsel soru veya ozellik (orn: 'Ay kesfi' → 'Ay olusumu')."
+    - "YASAK: Tamamen farkli cisim veya alan — bu zor degil, cok acik olur."
+    - "Dogru cevap sadece 'farkli varlik' oldugu icin degil, 'farkli aspect' oldugu icin elenmelidir."
+    - "Kelime sayisi bakimindan en uzun secenek olmamali."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "SIBLING_COK_YAKIN"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Ana unsur korunup yalnızca aspect değiştirilen, çok yakın doğru cevap"
+    nasil_olusturulur: |
+      Doğru cevap için aynı ana unsuru tamamen koruyarak yalnızca açı/boyut değiştir.
+      Zor seviyede doğru cevap ile uyan seçenekler aynı domain, benzer ton ve biçimde yazılmalı.
+      Örnek: "Ayın keşfi" konusu için "Ayın yüzey yapısı" — aynı cisim, sadece farklı bilimsel soru.
+    kategori: "semantic"
+
+  - ad: "UYGUN_PARAGRAF_DERIN"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "3 uyan seçenek konuya derin ama doğrudan bağlı, doğru cevaba yüzeyde benzer"
+    nasil_olusturulur: |
+      3 uyan mini-paragraf konunun farklı alt yönlerini derinlemesine işlemeli.
+      Zor seviyede kelime seçimi ve tema yaklaşımı doğru cevaba yakın görünmeli.
+      28-50 kelime, 2-3 cümle kullan.
+    kategori: "content"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siniflandirma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "Ana fikir / yardimci fikir sorulari YASAK"
+    - "5. sinifa kayan soyut yorum sorulari YASAK"
+    - "Dogru cevap cok acik alakasiz olmamali (zorluk belirsizlikten degil aspect ayrimindan gelmeli)"

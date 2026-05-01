@@ -1,0 +1,226 @@
+meta:
+  id: "fiyati_ve_verilen_paraya_gore_satinalinamayan_nesneyi_bulma"
+  ad: "Fiyati ve Verilen Paraya Gore Satinalinamayan Nesneyi Bulma"
+  sinif_seviyesi: 1
+  aciklama: >
+    Ustte kisa bir senaryo ve baglama uygun bir baglam bulunan; tek bir ortak gorselde
+    3 farkli nesnenin fiyat etiketi ile birlikte verildigi ve her nesnenin yaninda
+    o nesneyi almak icin ayrilmis gercek Turk lirasina benzeyen kagit para ve 1 TL
+    madeni para grubunun bulundugu soru kalibi. Ogrenci her nesnenin fiyatini ve
+    yanindaki para miktarini karsilastirir. Iki nesne icin verilen para fiyata esit
+    ya da fiyattan fazla olurken, yalnizca bir nesne icin verilen para fiyattan azdir.
+    Ogrenci buna gore verilen kisinin hangi nesneyi satin alamayacagini seceneklerden
+    belirler.
+  kaynak: "o_fiyati_ve_verilen_paraya_gore_satinalinamayan_nesneyi_bulma.yaml"
+  frequency: "Medium"
+  difficulty: "orta"
+
+context:
+  type: "fiyati_ve_verilen_paraya_gore_satinalinamayan_nesneyi_bulma"
+  question_count: 1
+  generation:
+    word_count_min: 20
+    word_count_max: 46
+    image_type: "ortak_gorsel"
+    real_currency: true
+    structure:
+      - "Kirtasiye alisverisi, oyuncak secimi, okul kantini hazirligi, pazar gezisi ya da cocuklara uygun benzer bir baglamda gecen 1-2 cumlelik kisa ve dogal bir baglam yaz"
+      - "Baglamda tek bir ortak gorselden soz edilmeli"
+      - "Baglamda bir cocugun ya da kisinin 3 farkli nesneye bakip parasinin hangisine yetmedigini anlamaya calistigi dogal bicimde anlasilmali"
+      - "Baglam ogrenciyi gorsele yonlendirmeli; hangi nesnenin satin alinamayacagina dair ipucu vermemeli"
+      - "Gorselde tam olarak 3 farkli nesne bulunmali"
+      - "Bu nesneler cocuklara uygun, gercek hayatta satin alinabilir nesneler olmali"
+      - "Nesneler defter, silgi, oyuncak, top, kitap, kalem kutusu, yapboz, anahtarlik ya da benzer uygun nesnelerden secilebilmeli"
+      - "Her nesnenin yaninda ya da altinda fiyat etiketi bulunmali"
+      - "Fiyat etiketi TL cinsinden acik bicimde yazilmali"
+      - "Fiyatlar 20 TL'yi asmamali"
+      - "Her nesnenin yaninda yalnizca o nesne icin ayrilmis bir para grubu bulunmali"
+      - "Bu para gruplari gercek Turk lirasina benzeyen 5 TL ve 10 TL kagit paralardan ve 1 TL madeni paralardan olusmali"
+      - "Gorselde kagit paralari aciklayan ek deger yazisi, ok, not ya da etiket bulunmamali"
+      - "Para degerleri para gorsellerinin kendi tasarimindan anlasilabilir olmali"
+      - "Her nesnenin yanindaki para grubu rahat sayilabilir ve net olmali"
+      - "Uc nesneden tam olarak 2 tanesinde verilen para fiyata esit ya da fiyattan fazla olmali"
+      - "Uc nesneden tam olarak 1 tanesinde verilen para fiyattan az olmali"
+      - "Bu nedenle yalnizca 1 nesne satin alinamiyor olmali"
+      - "Verilen para miktarlari ve fiyatlar 20'yi asmamali"
+      - "Karsilastirma yapisi 1. sinif duzeyine uygun olmali"
+      - "Arka plan baglama uygun olmali; ancak sade, temiz ve dikkat dagitmayacak bicimde tasarlanmali"
+      - "Soru koku, verilen kisi adini kullanarak hangi nesneyi satin alamayacagini soran sade ve tek cumlelik bir yapida olmali"
+      - "Soru kokunde kullanilan isim baglamda gecen kisi ile ayni olmali"
+      - "Secenekler yalnizca gorseldeki 3 nesnenin adi olmali"
+      - "Gorsel cozumun ana tasiyicisi olmali; ogrenci fiyat ve para miktarini tek tek karsilastirmadan cevap verememeli"
+    kurallar:
+      - "1. sinif seviyesinde olmali"
+      - "Her soruda yalnizca 1 ortak gorsel bulunmali"
+      - "Gorselde tam olarak 3 nesne bulunmali"
+      - "Her nesnenin fiyat etiketi bulunmali"
+      - "Fiyatlar 20 TL'yi asmamali"
+      - "Her nesnenin yaninda yalnizca 5 TL, 10 TL ve 1 TL paralardan olusan bir para grubu bulunmali"
+      - "Her para grubu rahat sayilabilir olmali"
+      - "Gorselde para gorselleri disinda para degerlerini aciklayan ek yazi bulunmamali"
+      - "Tam olarak 2 nesne icin para yeterli ya da fazla olmali"
+      - "Tam olarak 1 nesne icin para yetersiz olmali"
+      - "Yalnizca 1 secenek dogru olmali"
+      - "Secenekler yalnizca nesne adlarindan olusmali"
+      - "Turkce karakterler dogru kullanilmali"
+      - "Arka plan sade olmali ve dikkat dagitmamali"
+      - "Ogrenci para sayma ve fiyat karsilastirma yaparak cevap verebilmelidir"
+
+  questions:
+    - slot: 1
+      varyant: "fiyat_ve_yanindaki_paraya_gore_satinalinamayan_nesneyi_bulma"
+      type: "nesne_fiyati_ile_verilen_para_miktarini_karsilastirarak_yetersiz_olan_durumu_belirleme"
+      soru_kokleri:
+        - "<b>[isim] hangisini satin alamaz?</b>"
+        - "<b>Gorsele gore [isim] hangi nesneyi alamaz?</b>"
+        - "<b>Verilen paralara gore [isim] hangisini satin alamaz?</b>"
+        - "<b>[isim] icin hangi nesnenin parasi yetmez?</b>"
+      beceri:
+        katman: "KB2"
+        bilesenler:
+          - "gorsel_okuma"
+          - "nesneleri_tanima"
+          - "fiyat_etiketlerini_okuma"
+          - "kagit_ve_madeni_para_turlerini_ayirt_etme"
+          - "para_miktarini_hesaplama"
+          - "fiyat_ile_para_miktarini_karsilastirma"
+          - "yetersiz_olan_durumu_belirleme"
+          - "dogru_nesne_secenegini_secme"
+        surec_bileseni: "bilgiyi_isleme"
+
+format:
+  type: "llm_generated_html"
+  soru_koku: "Baglama uygun, tek cumlelik soru koku. Gorseldeki nesnelerin fiyatlarini ve yanlarindaki para miktarlarini inceleterek verilen kisinin hangisini satin alamayacagini sorduran yapida."
+  paragraph:
+    required: true
+    word_count_min: 20
+    word_count_max: 46
+    sentence_count_min: 1
+    sentence_count_max: 2
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    style: "object_name_only"
+    word_count_min: 1
+    word_count_max: 3
+    correct_count: 1
+
+dogru_cevap:
+  tanim: "Gorseldeki her nesnenin fiyatini ve yanindaki para miktarini dogru karsilastiran ve verilen paranin fiyatina yetmedigi tek nesneyi secenek olarak veren cevap"
+  kurallar:
+    - "KRITIK: Dogru cevap, hem fiyat etiketini okumayi hem de her nesnenin yanindaki para miktarini hesaplayip karsilastirmayi gerektirmeli"
+    - "Dogru cevap, yalnizca en pahali nesneye bakilarak ya da yalnizca para grubunun buyuklugune bakilarak bulunamamali"
+    - "Dogru cevap, once her nesnenin fiyatini belirletmeli"
+    - "Dogru cevap, sonra her nesnenin yanindaki kagit ve madeni para miktarini toplatmali"
+    - "Dogru cevap, en son para miktari fiyatindan az olan tek nesneyi buldurmali"
+    - "Dogru cevap, seceneklerde yalnizca bir nesne adi ile temsil edilmeli"
+    - "Dogru cevap, tahminle degil sayma ve karsilastirma ile bulunabilmeli"
+    - "Dogru cevap tek ve net olmali"
+
+distractors:
+  kurallar:
+    - "Yanlis secenekler, ogrencinin para turlerinden birini eksik saymasi, fiyat etiketi ile para miktarini yanlis karsilastirmasi ya da fiyati yuksek ama parasi yeten nesneyi secmesi gibi yaygin hata turlerine dayanmali"
+    - "Bir yanlis secenek, fiyati yuksek oldugu icin satin alinamaz sanilan ama parasi yeten nesneyi temsil edebilmeli"
+    - "Bir yanlis secenek, 1 TL madeni paralari hesaba katmayan ogrenciyi cekebilmeli"
+    - "Yanlis secenekler nesne adlari olarak makul olmali ve bariz eleme secenegi gibi durmamali"
+    - "Secenekler tarafsiz ve tek dogruyu koruyan bicimde kurulabilmeli"
+  yasaklar:
+    - "Bariz sacma, baglamsiz ya da gorselde yer almayan nesne adlari kullanilmamali"
+    - "Iki yanlis secenek ayni hata turunden uretilmemeli"
+    - "Seceneklere sayi, islem ya da ipucu eklenmemeli"
+    - "Dogru cevabi ele veren dikkat cekici bicim farklari olusturulmamali"
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+      - "Baglama uygun tek bir ana gorsel bulunmali"
+      - "Gorselde tam olarak 3 farkli nesne yer almali"
+      - "Her nesnenin yaninda ya da altinda fiyat etiketi bulunmali"
+      - "Fiyat etiketleri TL cinsinden net ve okunakli olmali"
+      - "Fiyatlar 20 TL'yi asmamali"
+      - "Her nesnenin yaninda yalnizca o nesneye ait 5 TL ve 10 TL kagit para ile 1 TL madeni para grubu bulunmali"
+      - "Para gruplari rahat sayilabilir ve birbirinden ayrik olmali"
+      - "Kagit para ve madeni para gorselleri gercek Turk lirasina benzer olmali"
+      - "Para gorsellerinin ustunde para degerini aciklayan ek yazilar, notlar ya da isaretler bulunmamali"
+      - "Tam olarak 2 nesnede verilen para fiyatina yetmeli ya da fiyattan fazla olmali"
+      - "Tam olarak 1 nesnede verilen para fiyattan az olmali"
+      - "Nesneler, fiyat etiketleri ve para gruplari ayni ortak gorsel duzeni icinde net sekilde eslestirilebilir olmali"
+      - "Arka plan baglama uygun olmali; ancak sade, temiz ve dikkat dagitmayacak bicimde tasarlanmali"
+      - "Gorsel sade, temiz, cocuk dostu ve 1. sinif duzeyine uygun olmali"
+      - "Dogru cevabi gosteren tik, yildiz, renkli vurgu, hazir toplam ya da ipucu bulunmamali"
+    yasaklar:
+      - "Gorselde 3'ten az ya da 3'ten fazla nesne bulunmamali"
+      - "5 TL, 10 TL ve 1 TL disinda para turleri kullanilmamali"
+      - "Paralar saymayi zorlastiracak sekilde ust uste binmemeli"
+      - "Nesnelerin fiyatlari 20 TL'yi asmamali"
+      - "Birden fazla nesne icin para yetersiz olacak sekilde kurgu yapilmamali"
+      - "Tum nesneler icin para yeten kurgu yapilmamali"
+      - "Asiri karmasik arka plan veya dikkat dagitici sus ogeleri kullanilmamali"
+      - "Gorsel uzerinde cevabi sezdiren aciklama, numaralandirma ya da ek etiketleme bulunmamali"
+    stil: "fiyat_etiketli_uc_nesne_ve_yaninda_turk_lirasi_para_gruplari_gorseli"
+    boyut: "orta"
+  sik_gorseli:
+    gerekli: false
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: "Gunluk yasam baglamlarinda toplama ve cikarma gerektiren durumlari fark etme; 20'ye kadar (20 dahil) eldesiz toplama ve onluk bozma gerektirmeyen cikarma yapma; esit isaretini denge ve esitlik anlami ile yorumlama; tahmin ve zihinden islem yaparak muhakeme etme; toplama ve cikarma islemleri arasindaki iliskiyi kullanma"
+  tema_siniri: "Yalnizca 20'ye kadar sayilar, gunluk yasam durumlari, para sayma, toplama, karsilastirma, fiyat ve para miktari iliskisi, tahmin-zihinden islem ve somut model odagi korunmali"
+  izinli_icerik:
+    kavramlar:
+      - "toplama"
+      - "toplam"
+      - "bir araya getirme"
+      - "karsilastirma"
+      - "para"
+      - "kagit para"
+      - "madeni para"
+      - "fiyat"
+      - "daha fazla"
+      - "daha az"
+      - "esit"
+      - "Turk lirasi"
+      - "gunluk yasam durumu"
+      - "gorsel bilgi"
+      - "somut model"
+    beceriler:
+      - "Gunluk yasam durumunun toplama gerektirip gerektirmedigini belirleme"
+      - "Gorselden ve somut modelden sayma"
+      - "Farkli para turlerini ayirt etme"
+      - "Para miktarini bulma"
+      - "Fiyat ile eldeki parayi karsilastirma"
+      - "Yeterli ve yetersiz durumlari ayirt etme"
+      - "Tahmin ve zihinden islem stratejileri kullanma"
+      - "Gorsel ve gunluk yasam bilgisini birlestirme"
+  yasaklar:
+    - "20'yi asan sayilar ve 20'yi asan sonuc odakli islem yapilari"
+    - "Eldeli toplama"
+    - "Onluk bozma gerektiren cikarma"
+    - "Ikiden fazla sayi ile toplama islemi"
+    - "Carpma ve bolme islemleri"
+    - "Kesirli veya ondalikli sayilar"
+    - "1. sinif duzeyini asan formal islem dili ve algoritmik teknikler"
+    - "Baglamsiz, yalnizca semboller uzerinden kurulan uzun soyut islem dizileri"
+    - "Esit isaretini sadece sonuc gelir anlaminda sunan yapilar"
+    - "Kutle kavramini ogretme amaciyla denge modelleri kullanma"
+    - "Gorsel, somut model veya gunluk yasam baglami olmadan baslayan soru yapilari"
+
+izinli_icerikler:
+  kavramlar:
+    - "fiyat"
+    - "para"
+    - "kagit_para"
+    - "madeni_para"
+    - "karsilastirma"
+    - "gorsel bilgi"
+  beceriler:
+    - "gorsel_okuma"
+    - "para_turlerini_ayirt_etme"
+    - "para_miktarini_hesaplama"
+    - "fiyatla_karsilastirma"
+    - "dogru_nesneyi_secme"
+  soru_islemleri:
+    - "her_nesnenin_fiyatini_okuma"
+    - "her_nesnenin_yanindaki_parayi_toplama"
+    - "fiyat_ve_para_miktarini_karsilastirma"
+    - "satinalinamayan_nesneyi_bulma"
+    - "dogru_secenegi_secme"

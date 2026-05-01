@@ -1,0 +1,118 @@
+meta:
+  id: "7_8_basit_aile_iliskileri_yorumlama_sinif2"
+  ad: "7.8 Basit Aile İlişkileri Yorumlama"
+  sinif_seviyesi: 2
+  ders: "Türkçe"
+  bolum: "2. Sınıf Paragraf Soru Bankası"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    Basit aile şeması veya soy ağacı görseli ile kısa açıklamaları birlikte
+    kullanarak temel aile ilişkilerini yorumlatan, 2. sınıfa uyarlanmış
+    3 seçenekli standart şablon.
+
+format:
+  tip: "llm_generated_html"
+  aciklama: "Aile şeması görseli + kısa bilgi bloğu + soru kökü + 3 seçenek"
+
+  cift_kaynak_zorunlu: true
+  sadece_gorselle_cozum_yasak: true
+  sadece_metinle_cozum_yasak: true
+
+  gorsel:
+    gerekli: true
+    aciklama: "Basit aile şeması veya sade soy ağacı"
+    kurallar:
+      - "Görselde en fazla 6 kişi bulunmalıdır."
+      - "İlişkiler açık çizgilerle gösterilmelidir."
+      - "Kişi adları kısa ve okunabilir olmalıdır."
+      - "Görsel soru çözümünün zorunlu kaynaklarından biri olmalıdır."
+    yasaklar:
+      - "kayınbaba, kayınvalide, enişte, gelin gibi ilişkiler"
+      - "çok kuşaklı karmaşık geniş aile"
+      - "çok kalabalık soy ağacı"
+
+  bilgi_bloku:
+    gerekli: true
+    aciklama: "Aile ilişkisini açıklayan kısa cümleler"
+    kurallar:
+      - "Bilgi bloğunda yalnız temel aile ilişkileri kullanılmalıdır."
+      - "İzinli ilişki alanı: anne, baba, çocuk, kardeş, dede, nine, torun."
+      - "İpuçları kısa ve doğrudan olmalıdır."
+      - "Bilgi bloğu tek başına cevabı vermemelidir."
+    yasaklar:
+      - "kuzen, dayı, hala, teyze, amca zorunlu kılınmamalıdır"
+      - "evlilikten doğan dolaylı akrabalık zinciri"
+      - "çok adımlı ilişki çözümü"
+
+  soru_koku:
+    gerekli: true
+    secim: "listeden_rastgele"
+
+  secenekler:
+    sayi: 3
+    etiketler: ["A", "B", "C"]
+    dogru_sayisi: 1
+    stil: "kisa_yargi"
+    kurallar:
+      - "Seçenekler temel aile ilişkisi veya çocuk sayısı gibi açık bilgiler içermelidir."
+      - "Yalnız bir seçenek tüm görsel ve bilgilerle uyumlu olmalıdır."
+      - "Yanlış seçenekler temel bir ilişki hatası taşımalıdır."
+
+soru_kokleri:
+  - "Buna göre aile şeması ile ilgili aşağıdakilerden hangisi doğrudur?"
+  - "Buna göre aşağıdaki bilgilerden hangisi yanlıştır?"
+  - "Aile şemasına göre aşağıdakilerden hangisi söylenebilir?"
+  - "Verilen aile şemasına göre aşağıdakilerden hangisi doğru değildir?"
+
+beceri_odagi:
+  birincil_beceri:
+    - "Temel aile ilişkilerini yorumlama"
+  ikincil_beceriler:
+    - "Görsel takip etme"
+    - "Bilgi eşleştirme"
+    - "Basit ilişki kurma"
+
+zorluk_duzeyleri:
+  kolay:
+    kurallar:
+      - "En fazla 4 kişi kullanılmalıdır."
+      - "Anne-baba-çocuk ilişkisi düzeyinde kalınmalıdır."
+      - "Çocuk sayısı veya kardeşlik gibi tek adımlı yorum olmalıdır."
+  orta:
+    kurallar:
+      - "En fazla 5 kişi kullanılabilir."
+      - "Dede veya nine eklenebilir."
+      - "En fazla 2 kısa ipucu kullanılabilir."
+  zor:
+    kurallar:
+      - "En fazla 6 kişi kullanılabilir."
+      - "Dede-nine-torun ilişkisi kullanılabilir."
+      - "Yine de tek soruda en fazla 2 adımlı ilişki gerektirilmelidir."
+
+sinif_uygunluk_kurallari:
+  uygundur:
+    - "Yalnız temel aile ilişkileri kullanılıyorsa"
+    - "Görsel sade ve kişi sayısı sınırlıysa"
+    - "Soru tek veya iki adımlı ilişki çözümü gerektiriyorsa"
+  yasaktir:
+    - "Kayın akrabalığı"
+    - "kuzen/dayı/teyze/amca zinciri"
+    - "çok kuşaklı yoğun aile ağı"
+  ucuncu_sinifa_kayar:
+    - "Aynı soruda birden fazla dolaylı akrabalık çözümü istenirse"
+  dorduncu_sinifa_kayar:
+    - "Ayrıntılı ilişki açıklaması ve gerekçelendirme istenirse"
+
+validation_checklist:
+  - "Kişi sayısı 6'yı geçmiyor mu?"
+  - "Yalnız temel aile ilişkileri mi kullanıldı?"
+  - "Soru yalnız görselle çözülemiyor mu?"
+  - "Soru yalnız metinle çözülemiyor mu?"
+  - "İlişki çözümü en fazla 2 adımlı mı?"
+  - "Kayın akrabalığı yok mu?"
+
+hard_fail_rules:
+  - "Kayın akrabalığı kullanıldıysa"
+  - "Kişi sayısı 6'yı geçiyorsa"
+  - "Çok adımlı soy ağacı çözümü gerekiyorsa"
+  - "İki veya daha fazla doğru seçenek varsa"

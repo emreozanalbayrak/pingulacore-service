@@ -1,0 +1,129 @@
+meta:
+  id: problem_cozme_2q
+  ad: Problem Çözme Senaryosu (2 Soru)
+  sinif_seviyesi: 5
+  aciklama: Bir karakter bir problemle karşılaşır — senaryo + tablo üzerinden ana problemi belirleme ve çözüm önerisi değerlendirme soruları
+  kaynak: kaynak-soru-kokleri.md
+  frequency: High
+context:
+  type: problem_cozme_2q
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 80
+    word_count_max: 150
+    structure:
+    - Bir karakter (isimli) günlük hayatta bir problemle karşılaşıyor (2-3 cümle senaryo)
+    - 'KRİTİK — SENARYO KAPSAMI: Senaryo sadece DURUMU ve PROBLEMİ anlatsın, çözümleri ve detaylı verileri VERMESİN!'
+    - Karakter araştırma yapar ve bir tabloya/veriye ulaşır
+    - 'Tablo: <table> etiketleriyle, en az 3 satır, en az 2 sütun'
+    - 'Tablo formatı şunlardan biri olabilir:'
+    - '  a) Veri tablosu: Kategori | Değer1 | Değer2 (ör: Ulaşım Aracı | Süre | Maliyet)'
+    - '  b) Karşılaştırma tablosu: Seçenek | Olumlu | Olumsuz | Sayısal veri'
+    - '  c) X işaretli tablo: <table class=''feature-table''> ile Seçenek | Özellik1 | Özellik2... formatında'
+    - Tabloda problemin boyutlarını gösteren SAYISAL VERİLER olmalı
+    - Soruların cevabı SADECE senaryodan veya SADECE tablodan değil, İKİSİ BİRLİKTE değerlendirilerek bulunmalı
+    kurallar:
+    - 5. sınıf seviyesinde, günlük hayattan bir problem (çevre, sağlık, okul, aile, ulaşım)
+    - Problem açıkça tanımlanmalı ama çözüm tek yönlü olmamalı
+    - Birden fazla bakış açısıyla değerlendirilebilecek bir durum olmalı
+    - Karakter aktif çözüm arayan biri olmalı (pasif değil)
+    - Tablodaki veriler karşılaştırılabilir ve karar vermeye uygun olmalı
+    - Detaylı bilgiler ve sayısal veriler SADECE tabloda olmalı — senaryo bunları içermemeli
+    - Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)
+  questions:
+  - slot: 1
+    type: ana_problem
+    soru_kokleri:
+    - <b>Metin ve tablodaki bilgiler birlikte değerlendirildiğinde, …Karakter…'ın karşılaştığı ana problem aşağıdakilerden hangisidir?</b>
+    - <b>Metin ve tabloya göre çözülmesi gereken asıl sorun aşağıdakilerden hangisidir?</b>
+    - <b>Verilen bilgiler birlikte ele alındığında, …Karakter…'ın durumunu en doğru tanımlayan ifade aşağıdakilerden hangisidir?</b>
+    - <b>Metin ve tablo birlikte incelendiğinde, anlatılan temel problem aşağıdakilerden hangisidir?</b>
+    options_style: complete_sentence
+    word_count_min: 8
+    word_count_max: 22
+    beceri:
+      katman: KB2
+      bilesenler:
+      - cikarim_yapma
+      - ozetleme
+      - yorumlama
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 2
+    type: cozum_degerlendirme
+    soru_kokleri:
+    - <b>Metin ve tablodaki bilgilere göre aşağıdakilerden hangisi bu probleme yönelik en uygun çözüm önerisidir?</b>
+    - <b>…Karakter… metin ve tablodaki verileri birlikte düşündüğünde, sorunu çözmek için aşağıdakilerden hangisini yapmalıdır?</b>
+    - <b>Metin ve tablodaki bilgiler birlikte değerlendirildiğinde, aşağıdaki çözüm önerilerinden hangisi <u>uygun değildir</u>?</b>
+    - <b>Verilen bilgilere göre …Karakter…'ın durumu düşünüldüğünde aşağıdakilerden hangisi <u>söylenemez</u>?</b>
+    options_style: complete_sentence
+    word_count_min: 8
+    word_count_max: 25
+    beceri:
+      katman: KB3
+      bilesenler:
+      - problem_cozme
+      - degerlendirme
+      - cikarim_yapma
+      surec_bileseni: problemi_yapilandirma
+header_template: 1-2. soruları aşağıdaki metin ve tabloya göre birbirinden bağımsız olarak cevaplayınız.
+format:
+  type: llm_generated_html
+  description: Problem senaryosu + tablo üzerinden problem belirleme ve çözüm değerlendirme soruları
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 150
+    sentence_count_min: 4
+    sentence_count_max: 8
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 8
+    word_count_max: 25
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Senaryodaki problemi doğru tanımlayan veya en uygun çözümü sunan cevap
+  kurallar:
+  - 'KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI'
+  - 'KRİTİK: Doğru cevap hem senaryoyu hem tabloyu BİRLİKTE değerlendirmeyi gerektirmeli — sadece birinden bulunamaz olmalı'
+  - Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI + tablodaki veriyi YORUMLAMALI + İKİSİNİ BİRLEŞTİRMELİ
+  - Doğru şık bir ÇIKARIM, YORUM veya ANALİZ içermeli — ham veri tekrarı veya metin kopyası DEĞİL
+  - 'YASAK: Metindeki bir cümleyi veya tablodaki bir değeri aynen şıkka yazmak'
+  - 'YASAK: Doğru cevabın sadece tabloyu okuyarak (hangi hücrede ne var) bulunabilmesi — mutlaka senaryo bağlamıyla birleştirme gerekli'
+  - 'YASAK: Doğru cevabın sadece senaryoyu okuyarak bulunabilmesi — mutlaka tablodaki verilerle desteklenmeli'
+  - Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı
+  - Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı
+  - Paragraftaki/tablodaki ifadeler EŞ ANLAMLI sözcüklerle yeniden ifade edilmeli
+  - Ana problem sorusunda doğru cevap tablodaki veriyi YORUMLAYARAK problemi tanımlamalı
+  - Çözüm değerlendirme sorusunda doğru cevap tablodaki verilerle uyumlu, uygulanabilir ve ÇIKARIM gerektiren bir çözüm olmalı
+  - Söylenemez tipi soru kökü seçilirse doğru cevap metin+tabloyla çelişen veya desteklenmeyen öneri olmalı
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: teleskop → mercekli araç GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: YAN_PROBLEM
+    aciklama: Asıl problem yerine yan etkiyi veya belirtiyi ana problem olarak sunma
+    ornek: Sorunun nedenini değil sonucunu problem olarak gösterme
+  - ad: UYGULANAMAZ_COZUM
+    aciklama: Genel olarak doğru ama senaryoya uygulanamayan çözüm önerme
+    ornek: Mantıklı görünen ama karakterin durumuna veya tablodaki verilere uymayan çözüm
+  - ad: ASIRI_BASIT_COZUM
+    aciklama: Problemi çözmeyen yüzeysel bir öneri sunma
+    ornek: Kök nedeni ele almayan, sadece belirtileri gizleyen çözüm
+  - ad: TABLO_YANILTMASI
+    aciklama: Tablodaki bir veriyi yanlış aktarma veya yanlış yorumlama
+    ornek: Tablodaki düşük değeri yüksek gibi gösterme veya yanlış satırı referans alma
+use_shared_strategies: false

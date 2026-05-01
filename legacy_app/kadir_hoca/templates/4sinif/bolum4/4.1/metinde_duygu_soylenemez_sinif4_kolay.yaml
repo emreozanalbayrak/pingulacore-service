@@ -1,0 +1,102 @@
+# Kaynak: metinde_duygu_soylenemez_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.kolay
+# 4. sinif metinde duygu soylenemez — kolay duzey
+
+meta:
+  id: "metinde_duygu_soylenemez_sinif4_kolay"
+  ad: "Metinde Duygu - Söylenemez (Kolay)"
+  sinif_seviyesi: 4
+  aciklama: "Kolay duzey — metinde yer almayan duyguyu tespit etme."
+  frequency: "Low"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Duygusal paragraf + soru kökü + 4 duygu seçeneği (kolay)"
+
+  paragraph:
+    required: true
+    word_count_min: 50
+    word_count_max: 65
+    background_color: "#e8f8e8"
+    sentence_count_min: 4
+    sentence_count_max: 5
+    stil: "oykuleyici"
+    kurallar:
+      - "Duygular daha acik davranis ve tepkilerle sezdirilmelidir."
+      - "Bulunmayan duygu, diger duygulardan daha net ayristirilabilir olmalidir."
+      - "Celdiriciler kolay elenebilir olmali; ancak tamamen alakasiz gorunmemelidir."
+      - "Metin yoğun duygusal ifadeler içermeli; seçeneklerdeki 3 duygu metinde bulunmalı, 1 tanesi bulunmamalı."
+      - "Duygu isimleri doğrudan geçmemeli, olaylar ve davranışlar üzerinden sezdirilmeli."
+      - "Paragrafta konuyla ilgili AÇIKLAMA, TANIM veya EK BİLGİ verme! Paragraf SADECE hikâyeyi/olayı anlatsın."
+      - "YASAK: Ders kitabı açıklamaları yapma."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+      - "Dis bilgi gerektirmemelidir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 3
+    style: "concept"
+    correct_type: "does_not_belong"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Bu metinde bahsedilen kişinin aşağıdaki duygulardan hangisini yaşadığı <u>söylenemez</u>?</b>"
+  # KULLANILDI: - "<b>Aşağıdaki duygulardan hangisi bu metinde bahsi geçen kişinin yaşadığı duygulardan <u>değildir</u>?</b>"
+  # KULLANILDI: - "<b>Bu metne göre kahramanın aşağıdaki duygulardan hangisini yaşadığı <u>söylenemez</u>?</b>"
+  - "<b>Yukarıdaki metinde aşağıdaki duygulardan hangisine <u>rastlanmaz</u>?</b>"
+  - "<b>Bu metindeki kişinin yaşadığı duygular düşünüldüğünde aşağıdakilerden hangisi <u>yanlıştır</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metinde izi bulunmayan duygu"
+  mantik: "INVERSE - diger 3 secenek metinde bulunan duygular, dogru cevap metinde bulunmayan duygu"
+  kurallar:
+    - "Metinde hicbir sekilde sezdirilmeyen duygu olmali."
+    - "Diger 3 secenek metinde acikca sezdirilen duygular olmali."
+    - "Dogru cevap makul bir celdirici gibi gorunmeli (tamamen alakasiz degil)."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI BILGILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "BELIRGIN_BULUNAN_DUYGULAR"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "3 bulunan duygu metinde belirgin izler taşımalı — kolay ayırt edilebilir"
+    nasil_olusturulur: |
+      3 bulunan duygu metinde daha belirgin izler taşımalıdır.
+      Bulunmayan duygu metinle tamamen çelişmemeli ama açıkça desteklenmemelidir.
+      Kolay seviyede doğru cevap (bulunmayan duygu) makul görünmeli ama metnin duygusal tonuyla açıkça uyuşmamalı.
+    kategori: "content"
+
+  - ad: "UYUMSUZ_DUYGU_BELIRGIN"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metinle uyumsuzluğu belirgin olan celdiriciler — kolay elenebilir"
+    nasil_olusturulur: |
+      Yanlış seçenekler (bulunan duygular) metinle açıkça bağlantılı olmalı.
+      Kolay seviyede bulunmayan duygunun metinde yer almadığı belirgin — öğrenci kolayca elemelidir.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

@@ -1,0 +1,332 @@
+meta:
+  id: mat_3_t3_kareli_zeminde_iki_karelik_duzeltme_ile_simetriyi_kurma
+  ad: Kareli Zeminde Iki Karelik Duzeltme Ile Simetriyi Kurma
+  sinif_seviyesi: 3
+  aciklama: Kareli zeminde verilen bir desen ya da sekilde, simetriyi kurmak icin hangi iki karenin boyanmasi, silinmesi ya da yer degistirmesi gerektigini bulduran soru kalibi.
+  kaynak: 104_paylastirmada_carpim_dusuncesiyle_bolme (1)(13).yaml
+  frequency: Medium
+
+context:
+  type: kareli_zeminde_iki_karelik_duzeltme_ile_simetriyi_kurma
+  question_count: 1
+  generation:
+    word_count_min: 35
+    word_count_max: 90
+    image_type: ortak_gorsel
+    structure:
+      - Bir sinifta, koridorda, sanat etkinliginde, pano duzenlemesinde, bahce oyununda ya da benzeri dogal bir baglamda gecen 4-6 cumlelik kisa bir senaryo yaz
+      - Senaryo metni gorseldeki karelerin tam yerini, hangi karelerin duzeltilecegini ya da simetriyi bozulan bolgeyi dogrudan soylememeli
+      - Ana sahnede kareli zemin, simetri dogrusu ve duzeltilmesi gereken desen acikca gorunmeli
+      - Metin, duzenlemenin neden onemli oldugunu dogal bicimde anlatmali ancak gorselin cozumunu acik etmemeli
+      - Soru, hangi iki karenin boyanmasi, silinmesi ya da yer degistirmesiyle simetri kurulacagini sordurmali
+      - Soru koku mutlaka soru cumlesi olmali ve tek cumlede verilmelidir
+      - Senaryo, soru koku ve siklar ana sahnenin disinda verilmeli
+      - KRITIK: Gorsel sus olmamali; ogrenci gorseli dikkatle incelemeden dogru cevaba ulasamamali
+      - KRITIK: Gorsel icerigi ile soruda ve metinde ifade edilen sayisal veriler tutarli olmali; farkli sayisal verileri yansitmamali
+    kurallar:
+      - 2. ve 3. sinif simetri kapsaminda olmali
+      - Kareli zemin uzerinde iki kritik karelik duzeltme gerektirmeli
+      - Duzeltme boyama, silme ya da yer degistirme bicimlerinden biriyle kurulabilir
+      - Tek dogru cevap olmali
+      - Siklar 3 adet olmali
+      - Siklarin basinda A B C bicimi kullanilmali
+      - Celdiriciler yakin ve ayirt edici olmali
+      - Soru kavramsal tanimla degil gorsel muhakeme ile cozulmeli
+      - Soru kokunde baslik kullanilmamali
+      - Koordinat, satir-sutun, yon ve konum ifadeleri 3. sinif duzeyinde sade kullanilmali
+  questions:
+    - slot: 1
+      type: simetriyi_kurmak_icin_iki_karelik_duzeltmeyi_bulma
+      soru_kokleri:
+        - "<b>Hangi iki kare boyanirsa sekil simetrik olur?</b>"
+        - "<b>Hangi iki kare silinirse desen simetrik hale gelir?</b>"
+        - "<b>Hangi iki kare yer degistirirse duzen simetriye uyar?</b>"
+      beceri:
+        katman: KB2
+        bilesenler:
+          - gorsel_okuma
+          - simetri_dogrusunu_fark_etme
+          - konum_esleme
+          - iki_adimli_muhakeme
+          - secenek_elemesi
+          - kontrol
+        surec_bileseni: cozum_olusturma
+
+format:
+  type: llm_generated_html
+  soru_koku: Kisa, tek cumlelik, soru isaretiyle biten soru koku. Hangi iki karenin duzeltilecegini sorduran yapida olmali.
+  paragraph:
+    required: true
+    word_count_min: 35
+    word_count_max: 90
+    sentence_count_min: 4
+    sentence_count_max: 6
+  options:
+    count: 3
+    labels:
+      - "A)"
+      - "B)"
+      - "C)"
+    style: text_only
+    word_count_min: 1
+    word_count_max: 14
+    correct_count: 1
+
+dogru_cevap:
+  tanim: Simetri dogrusuna gore karsilikli gelen kareleri inceleyince, yalnizca iki karelik dogru duzeltme ile tum duzeni simetrik yapan secenek.
+  kurallar:
+    - Dogru cevap simetri dogrusu, kare konumlari ve desen iliskisi ile tam uyumlu olmali
+    - Dogru cevap iki karelik tek bir duzeltme plani icermeli
+    - Ogrenci gorseli incelemeden dogru sonuca ulasamamali
+    - Dogru cevap metinden degil ana sahnedeki konum iliskilerinden cikarilabilmeli
+    - Gorsel icerigi ile soruda ve metinde ifade edilen sayisal veriler tutarli olmali; farkli sayisal verileri yansitmamali
+
+distractors:
+  kurallar:
+    - Bir celdirici iki kareden birini dogru, digerini yanlis secer hatasina dayanmali
+    - Bir celdirici yonu ya da ekseni ters yorumlama hatasina dayanmali
+    - Secenekler konum olarak birbirine yakin olmali
+    - Yanlis secenekler tahmin degil dikkatli karsilastirma gerektirmeli
+  yasaklar:
+    - Simetriyle ilgisiz rastgele kareler
+    - Bariz sacma ya da gorselde karsiligi olmayan konumlar
+    - Birden fazla dogru gibi gorunen secenekler
+    - Metin ipucuyla gorselsiz cozulur hale gelen yapilar
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+      - Kareli zemin net, temiz ve kolay takip edilebilir olmali
+      - Simetri dogrusu acikca secilmeli
+      - Duzeltilecek iki kritik kare ana sahnede ayirt edilebilir olmali
+      - Ayni tur nesneler ayni gorsel ozelliklerle cizilmeli
+      - Gorsel baglami senaryoyla uyumlu olmali
+      - Gorsel icerigi ile soruda ve metinde ifade edilen sayisal veriler tutarli olmali farkli sayisal verileri yansitmamali
+      - Gorsel sus olmamali
+      - Ana sahnede dikkat dagitici ve cozumle ilgisiz oge bulunmamali
+  sik_gorseli:
+    gerekli: false
+    kurallar:
+      - Siklarda dogrudan gorsel bulunmamali
+      - Illa gorsel sorgulamasi gerekiyorsa A B C olarak isimlendirilmis secenek gorselleri ana gorselin alt bolmesinde yer almali
+      - Siklarda yalnizca metin bulunmali
+      - Sik metinleri yalnizca sorunun istedigi iki karelik duzeltmeye odaklanmali
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: "Uzamsal iliskiler ve simetri baglaminda yer-yon-konum bilgisini kullanma, simetrik olanı ayirt etme, kare-dikdortgen-daire gibi sekillerde birden fazla simetri dogrusunu fark etme, bir parcasi verilen simetrik sekli yatay ve dikey simetri dogrusuna gore tamamlama ve basit yonerge-kodlama ile simetri olusturma"
+  tema_siniri: "Yalnizca 2. ve 3. sinif duzeyinde yer-yon-konum, hedefe ulasma icin basit strateji secme, simetrik olanı ayirt etme, kare-dikdortgen-dairede birden fazla simetri dogrusunu belirleme, bir parcasi verilen sekli yatay ve dikey simetri dogrusuna gore tamamlama, kareli veya noktalı zeminde basit yonerge takibi ile simetri olusturma odagi korunmali"
+  gorsel_metin_tutarliligi: "Gorselde verilen parca, simetri dogrusu, yon bilgisi ve metindeki ifadeler birbiriyle tam tutarli olmali; gorseldeki yarim sekil, eksen ve secenekler farkli veya celiskili bir simetri iliskisi yansitmamalidir."
+  sayisal_veri_tutarliligi: "Gorsel icerigi ile soruda ve metinde ifade edilen sayisal veriler tutarli olmali; farkli sayisal verileri yansitmamali."
+  izinli_icerik:
+    kavramlar:
+      - "yer"
+      - "yon"
+      - "konum"
+      - "mesafe"
+      - "hedefe ulasma"
+      - "uygun yol"
+      - "simetri"
+      - "simetrik"
+      - "simetri dogrusu"
+      - "birden fazla simetri dogrusu"
+      - "es parca"
+      - "es goruntu"
+      - "kat izi"
+      - "yatay"
+      - "dikey"
+      - "sag"
+      - "sol"
+      - "yukari"
+      - "asagi"
+      - "kare"
+      - "dikdortgen"
+      - "daire"
+      - "desen"
+      - "figür"
+      - "sekil tamamlama"
+      - "yarim sekil"
+      - "kareli zemin"
+      - "noktali zemin"
+      - "yonerge"
+      - "kodlama"
+      - "baslangic noktasi"
+      - "bitis noktasi"
+      - "gorsel karsilastirma"
+      - "parca-butun iliskisi"
+    beceriler:
+      - "Yer, yon ve konum bildiren ifadeleri gorsel uzerinde ayirt etme ve kullanma"
+      - "Hedefe ulasmak icin basit olcut belirleme ve uygun secenegi secme"
+      - "Gorseller arasinda konum ve yon karsilastirmasi yapma"
+      - "Verilen sekiller arasindan simetrik olani ayirt etme"
+      - "Simetri dogrusuna gore olusan iki parçanin es oldugunu fark etme"
+      - "Kare, dikdortgen ve dairenin birden fazla simetri dogrusu olabilecegini belirleme"
+      - "Bir parcasi verilen simetrik sekli inceleyerek eksik parcayi tahmin etme"
+      - "Bir parcasi verilen sekli yatay simetri dogrusuna gore tamamlama"
+      - "Bir parcasi verilen sekli dikey simetri dogrusuna gore tamamlama"
+      - "Seklin eksik kismini renk, buyukluk ve konum iliskilerini koruyarak tamamlama"
+      - "Kareli veya noktali zeminde verilen basit yonergeleri takip etme"
+      - "Verilen yonergeyi kendi ifadesiyle yeniden kurma"
+      - "Basit kodlama adimlariyla seklin simetrik kismini olusturma"
+      - "Olusan seklin simetrik olup olmadigini kontrol etme"
+      - "Gorsel ipuclari ile secenekler arasinda mantiksal denetleme yapma"
+      - "Parca-butun iliskisini kullanarak dogru tamamlamayi secme"
+  yasaklar:
+    - "4. sinif duzeyinde dogruya gore simetri kavramini acikca kurdurma"
+    - "Aynaya gore simetri ile dogruya gore simetri arasindaki iliskiyi sorgulatma"
+    - "Ayna simetrisi kavramini teknik bir geometri diliyle isleme"
+    - "Seklin dogruya gore simetrisini kurala dayali olarak cizdirme"
+    - "Simetri dogrusuna esit uzaklik ilkesini acik kural olarak kullandirma"
+    - "Yansima noktasi belirletme"
+    - "Dogrunun obur tarafina geometrik yansima yerlestirme turunde teknik kurgu"
+    - "Egik simetri dogrusu"
+    - "Capraz veya egik eksene gore simetri tamamlama"
+    - "Geometrik nesneler ve sekiller uzerinden aynaya gore simetriyi yorumlatma"
+    - "4. sinif duzeyinde seklin dogruya gore simetrisini yapilandirma"
+    - "Geometrik sekillere dayali yapi olusturma"
+    - "Kopru, model veya anlamli geometrik yapi tasarlatma"
+    - "Cok adimli kodlama stratejisi gelistirtme"
+    - "Ogrenciden kendi kodunu uretmesini gerektiren acik uclu tasarim gorevleri"
+    - "Sekillerden cisim, cisimlerden yapi kurmaya dayali ileri duzey kurgu"
+    - "3 boyutlu geometrik yapi veya tasarim gorevleri"
+    - "Cok adimli, uzun ve soyut mantiksal aciklama gerektiren soru yapilari"
+    - "Gorselden bagimsiz, yalnizca teknik tanimla cozulmesi beklenen sorular"
+    - "Ust sinif duzeyinde teknik geometri dili"
+    - "Doğru, yansıma, izdüşüm, dönüşüm gibi kavramlari ogretim hedefi haline getirme"
+    - "Simetriyi analitik veya kural-merkezli ispat duzeyine tasima"
+    - "Gorsel yerine soyut sembolik anlatimla simetri kurdurma"
+    - "2. ve 3. sinif kapsamini asan performans gorevi niteligindeki karmasik yapilandirma sorulari"
+
+izinli_icerikler:
+  kavramlar:
+    - simetri
+    - simetri dogrusu
+    - kareli zemin
+    - es parca
+    - konum
+    - yon
+    - desen
+    - duzeltme
+    - eksik parca
+    - fazlalik
+    - yer degistirme
+    - gorsel model
+  beceriler:
+    - simetri dogrusunu fark etme
+    - kareler arasinda konum esleme
+    - iki karelik duzeltme plani kurma
+    - boyama silme ya da yer degistirme kararini verme
+    - secenekleri gorselle karsilastirma
+    - dogru secenegi secme
+  soru_islemleri:
+    - iki kare boyayarak simetri kurma
+    - iki kare silerek simetri kurma
+    - iki kare yer degistirerek simetri kurma
+    - eksene gore karsilikli kareleri esleme
+  nesneler:
+    - pano kartlari
+    - cikartmalar
+    - renkli kareler
+    - mozaik taslari
+    - sinif armalari
+    - kagit parcalari
+    - bahce bayraklari
+    - pencere etiketleri
+    - kutu desenleri
+    - rozet parcaciklari
+  mekanlar:
+    - sinif
+    - okul koridoru
+    - atolye masasi
+    - kutuphane kosesi
+    - sergi alani
+    - bahce panosu
+    - oyun odasi
+    - sanat kosesi
+  isim_havuzu:
+    - Ali
+    - Ayse
+    - Mert
+    - Ece
+    - Kerem
+    - Zeynep
+    - Elif
+    - Can
+    - Deniz
+    - Mina
+    - Arda
+    - Defne
+    - Emir
+    - Lina
+    - Yusuf
+    - Duru
+    - Bora
+    - Asya
+    - Mete
+    - Ipek
+    - Cem
+    - Nehir
+    - Ruzgar
+    - Ada
+    - Eren
+    - Nisa
+    - Sarp
+    - Melis
+    - Kuzey
+    - Naz
+    - Atlas
+    - Irmak
+    - Baris
+    - Ela
+    - Mertcan
+    - Selin
+    - Doruk
+    - Arya
+    - Lara
+    - Eymen
+    - Yagiz
+    - Umay
+    - Lalin
+    - Gunes
+    - Poyraz
+    - Miray
+    - Ozan
+    - Bade
+    - Tanem
+    - Kuzgun
+    - Aylin
+    - Bulut
+    - Cinar
+    - Eylul
+    - Ilayda
+    - Kaan
+    - Lila
+    - Masal
+    - Nil
+    - Oyku
+    - Pars
+    - Sanem
+    - Tuna
+    - Yaren
+    - Zeren
+
+zorluk_seviyesi: orta-ust
+
+varyant:
+  - ad: Iki Kare Boyayarak Simetriyi Kurma
+    aciklama: Kareli zemindeki eksik iki kare bulunur; ogrenci hangi iki karenin boyanmasi gerektigini belirler.
+    cevap_bicimi: coktan_secmeli
+    secenek_tipi: yalnizca_metin
+    secenek_sayisi: 3
+    gorsel_notu: Ana gorselde net bir kareli zemin uzerinde belirgin tek bir simetri dogrusu cizilmeli; bir tarafta tamamlanmis renkli desen, karsi tarafta ayni desenin yalnizca iki karesi BOS birakilmis hali gorunmelidir. Eksik iki kare simetri dogrusuna gore karsi taraftaki dolu karelerle birebir eslesmeli; sahnede boyanacak iki kareyi isaret eden ok, etiket ya da yardimci yazi bulunmamali, karar yalnizca konum karsilastirmasiyla alinabilmelidir.
+  - ad: Iki Kare Silerek Fazlaligi Giderme
+    aciklama: Neredeyse simetrik olan desende fazlalik yapan iki kare bulunur; ogrenci hangi iki karenin silinecegini secer.
+    cevap_bicimi: coktan_secmeli
+    secenek_tipi: yalnizca_metin
+    secenek_sayisi: 3
+    gorsel_notu: Ana gorselde kareli zemin uzerinde simetri dogrusunun iki yanindaki desen neredeyse ayni olmali; ancak bir tarafta karsiligi olmayan FAZLA iki dolu kare bulunmalidir. Bu iki fazla kare desenin icine dogal bicimde yedirilmeli, vurgulu cerceve ya da renk farkiyla isaretlenmemeli; ogrenci karsilikli kareleri tek tek esleyerek hangi iki karenin silinmesi gerektigini gormelidir.
+  - ad: Iki Kareyi Yer Degistirerek Duzeni Duzeltme
+    aciklama: Yanlis yerde duran iki kare yer degistirilince simetri kurulur; ogrenci dogru ikiliyi belirler.
+    cevap_bicimi: coktan_secmeli
+    secenek_tipi: yalnizca_metin
+    secenek_sayisi: 3
+    gorsel_notu: Ana gorselde kareli zemin ve simetri dogrusu net olmali; iki yandaki dolu kare sayilari esit fakat iki kare yanlis konumda yerlestirilmis olmalidir. Yer degistirmesi gereken iki kare desenin icinde dogal gorunmeli; biri bir yarida fazlalik, digeri karsi yarida eksik konumda durmali, yer degistirildiginde simetri kurulmali. Sahnede ok, daire ya da vurgu isareti bulunmamalidir.

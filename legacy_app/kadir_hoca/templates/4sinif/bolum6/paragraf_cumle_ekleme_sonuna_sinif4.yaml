@@ -1,0 +1,193 @@
+# Kaynak: 5sinif/bolum3/paragraf_cumle_ekleme_sonuna.yaml — 4. sinif icin adapte edildi (sinif_seviyesi 5->4)
+# templates/bolum3/paragraf_cumle_ekleme_sonuna.yaml
+# Bolum 3 - Yapi Yonu: Metne Cumle Ekleme (SONUNA)
+#
+# METNE CÜMLE EKLEME (SONUNA) FORMATI
+# Paragraf verilir, SONUNDA boş bırakılan yere hangi TAM CÜMLENİN
+# getirileceği sorulur. Cümle tamamlatma DEĞİL, tam cümle ekleme sorusu.
+
+meta:
+  id: "paragraf_cumle_ekleme_sonuna_sinif4"
+  ad: "Metne Cümle Ekleme (Sonuna)"
+  sinif_seviyesi: 4
+  aciklama: "Paragrafın SONUNA hangi tam cümlenin getirileceğini seçme"
+  frequency: "Medium (~30% of structure questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Paragraf (sonunda boşluk) + soru kökü + 4 tam cümle seçenek"
+
+  paragraph:
+    required: true
+    word_count_min: 40
+    word_count_max: 75
+    sentence_count_min: 3
+    sentence_count_max: 4
+    stil: "bilgilendirici"
+    kurallar:
+      - |
+        ★★★ TEMEL KURAL (KRİTİK!) ★★★
+        Bu soru tipinde öğrenciden paragrafın SONUNA hangi TAM CÜMLENİN getirileceği sorulur.
+        YASAK: Cümleyi yarıda kesip tamamlatmak! Bu bir cümle tamamlama sorusu DEĞİLDİR!
+        DOĞRU: Paragrafta bir cümle eksiktir ve o cümlenin tamamı seçeneklerde verilir.
+
+        ★ Paragraf 4 cümlelik bir bütün olarak PLANLANMALI (giriş-gelişme-sonuç akışıyla)
+        ★ 4. cümleyi çıkar, yerine \"----\" koy — kalan 3 cümle paragrafta kalır
+        ★ Çıkarılan cümle = doğru cevap (seçeneklerde tam cümle olarak verilir)
+        ★ Kalan 3 cümle paragrafta kalır ve kendi başına anlaşılır olmalı
+        ★ \"----\" işareti çıkarılan cümlenin yerini gösterir
+
+        ★★★ \"----\" PARAGRAFIN EN SONUNDA OLMALI ★★★
+        ★ \"----\" paragrafın EN SONUNDA olmalı — son karakter \"----\" olmalı
+        ★ \"----\" kesinlikle başta veya ortada OLMAMALI!
+        ★ Format: [1. cümle]. [2. cümle]. [3. cümle]. \"----\"
+
+        ★★★ SEÇENEKLERDEKİ CÜMLELER ★★★
+        ★ Her seçenek kendi başına TAM ve BAĞIMSIZ bir cümle olmalı
+        ★ YASAK: Yarım cümle, cümle parçası veya paragraftaki cümlenin devamı
+        ★ YASAK: Seçenek cümlesi paragraftaki son cümlenin devamı gibi görünmek
+        ★ Her seçenek büyük harfle başlamalı ve nokta ile bitmeli
+        ★ Seçenekler paragrafın herhangi bir cümlesinin devamı olarak DEĞİL, bağımsız cümle olarak okunabilmeli
+      - "Paragraf düz metin olarak yazılmalı — Roma rakamı (I., II., III.) KULLANMA"
+      - |
+        BOŞLUK İŞARETİ KURALLARI:
+        ★ TAM OLARAK \"----\" yazılmalı (dört tire, çift tırnak içinde)
+        ★ Paragrafta sadece BİR TANE \"----\" olmalı
+        ★ \"----\" MUTLAKA paragrafın EN SONUNDA olmalı!
+        ★ DOĞRU ÖRNEK:
+          Arılar doğadaki en çalışkan canlılardan biridir. Çiçeklerden topladıkları nektarı kovana taşırlar. Bu süreçte çiçeklerin tozlaşmasına da katkı sağlarlar. \"----\"
+        ★ YANLIŞ ÖRNEKLER:
+          - Başta \"----\": "\"----\" İkinci cümle. Üçüncü cümle." — BU YASAK!
+          - Ortada \"----\": "Birinci cümle. \"----\" Üçüncü cümle." — BU YASAK!
+          - Cümle yarıda kesilmiş: "...bu özel bölüme \"----\"" — BU YASAK!
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 8
+    word_count_max: 22
+    style: "complete_sentence"
+    correct_count: 1
+    kurallar:
+      - "Her seçenek TAM BİR CÜMLE olmalı — büyük harfle başlar, nokta ile biter"
+      - "YASAK: Yarım cümle, kelime grubu veya cümle parçası"
+      - "YASAK: Paragraftaki bir cümlenin devamı niteliğinde seçenek"
+      - "Her seçenek bağımsız okunduğunda kendi başına anlamlı olmalı"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metnin sonuna aşağıdaki cümlelerden hangisi getirilmelidir?</b>"
+  - "<b>Bu metnin sonuna düşüncenin akışına göre aşağıdakilerden hangisi getirilebilir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Paragraftan çıkarılan ve paragrafın SONUNA konulması gereken TAM CÜMLE"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Paragrafın ana konusuyla tutarlı olmalı"
+    - "Paragrafın sonuç cümlesi olarak konuyu bağlamalı veya çıkarım yapmalı"
+    - "Kendi başına TAM ve BAĞIMSIZ bir cümle olmalı — büyük harfle başlar, nokta ile biter"
+    - "8-22 kelime olmalı"
+    - "Paragraftaki bir cümlenin devamı veya parçası OLMAMALI"
+  ornekler:
+    - paragraf: "Arılar doğadaki en çalışkan canlılardan biridir. Çiçeklerden topladıkları nektarı kovana taşırlar. Bu süreçte çiçeklerin tozlaşmasına da katkı sağlarlar. \"----\""
+      soru_koku: "Bu metnin sonuna aşağıdaki cümlelerden hangisi getirilmelidir?"
+      dogru: "Bu nedenle arılar ekosistem için vazgeçilmez bir öneme sahiptir."
+      neden: "Paragrafın sonuç cümlesi olarak konuyu bağlar, seçenekteki cümle TAM ve BAĞIMSIZ"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# YAKIN_ANLAM, DETAY_TUZAGI, KAPSAM_KAYDIRMA uygun
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cikarim_yapma", "yapilandirma"]
+  surec_bileseni: "metin_yapisini_analiz_etme"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Konu seç ve 4 cümlelik tam paragraf planla"
+      details: |
+        Konuyla ilgili 4 cümlelik tam bir paragraf planla:
+        - 1. cümle: Giriş (konuyu tanıtır)
+        - 2-3. cümle: Gelişme (konuyu açar, detaylandırır)
+        - 4. cümle: Sonuç (konuyu bağlar, çıkarım yapar)
+
+    - step: 2
+      action: "4. cümleyi çıkar, paragrafın SONUNA \"----\" koy"
+      details: |
+        - 4. cümleyi (sonuç cümlesini) çıkar
+        - Paragrafın EN SONUNA \"----\" koy — son karakter \"----\" olmalı
+        - Çıkarılan cümle = doğru cevap
+        - Kalan 3 cümle (1., 2., 3.) paragrafta kalır
+        - YASAK: \"----\" yi başa veya ortaya koymak!
+        - YASAK: Cümleyi yarıda kesip \"----\" koymak!
+        - YASAK: Roma rakamı kullanmak!
+
+    - step: 3
+      action: "Doğru cevap = çıkarılan TAM CÜMLE"
+      details: |
+        - Çıkarılan 4. cümle aynen seçeneklere eklenir
+        - Büyük harfle başlar, nokta ile biter
+        - Kendi başına bağımsız ve anlamlı
+
+    - step: 4
+      action: "3 çeldirici TAM CÜMLE oluştur"
+      details: |
+        - Konuyla ilgili ama paragrafın sonuna uygun olmayan TAM CÜMLELER
+        - Her çeldirici büyük harfle başlar, nokta ile biter
+        - Farklı stratejiler kullan (yakın anlam, detay tuzağı, kapsam kaydırma)
+        - YASAK: Yarım cümle, kelime grubu veya cümle parçası
+
+    - step: 5
+      action: "Seçenekleri rastgele sırala"
+      details: "A-B-C-D seçeneklerini rastgele sırala"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayısı 40-75 arasında mı?"
+    - "3-4 cümle var mı?"
+    - "Paragraf kendi başına anlamlı mı?"
+    - "\"----\" paragrafın EN SONUNDA mı (son karakter)?"
+    - "\"----\" cümle arasında mı (cümle ortasında DEĞİL)?"
+
+  correct_answer:
+    - "8-22 kelime TAM CÜMLE mi?"
+    - "Büyük harfle başlıyor ve nokta ile bitiyor mu?"
+    - "Paragrafın sonuna konulduğunda akışı tamamlıyor mu?"
+    - "Kendi başına bağımsız okunabiliyor mu?"
+
+  distractors:
+    - "Her çeldirici TAM CÜMLE mi?"
+    - "Her çeldirici büyük harfle başlayıp nokta ile bitiyor mu?"
+    - "Konuyla ilgili ama akışa uymuyor mu?"
+    - "Her çeldirici farklı bir hata türü mü?"
+    - "Tüm seçenekler aynı formatta mı?"

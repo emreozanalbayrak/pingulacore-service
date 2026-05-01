@@ -1,0 +1,222 @@
+# templates/capture2/metinde_dil_ve_anlatim_yargilar.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Bolum 2 - Metinde Dil ve Anlatim
+#
+# ONCULLU FORMAT (tum dil ve anlatim sorularinin ~%25'i)
+# Paragraf verilir, I/II/III/IV numarali yargilar soru kokunde listelenir
+# Secenekler "I ve II", "II ve IV" gibi birlesik formatindadir
+#
+# MANTIK: 4 numarali yargi → metnin dil ve anlatim ozellikleriyle ilgili
+# Hem DOGRU hem YANLIS soru kokleri: "hangileri dogrudur?" / "hangileri soylenemez?"
+
+meta:
+  id: "metinde_dil_ve_anlatim_yargilar"
+  ad: "Metinde Dil ve Anlatım (Öncüllü)"
+  sinif_seviyesi: 5
+  aciklama: "Metnin anlatım özelliklerini öncüller üzerinden değerlendirme"
+  kaynak: "data/metinde_dil_ve_anlatim.pdf"
+  frequency: "Medium (~25% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Paragraf + öncüller + soru kökü"
+
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 100
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "karma"
+    kurallar:
+      - "Metin, dil bilgisi ve anlatım özellikleri açısından zengin olmalı."
+      - "En az 3 farkli anlatim ozelligi icermeli (benzetme, kisilelstirme, deyim, ikileme, oznel/nesnel, 1. kisi, soru cumlesi)."
+      - "Hem dogrulanabilir hem de desteklenmeyen yargilar icin yeterli icerik olmali."
+      - "Paragraf dogal ve akici bir dil ile yazilmali."
+
+  stem:
+    required: true
+    description: "Soru kokleri pattern listesinden rastgele secilir, {statements} placeholder ile"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    style: "roman_numeral_combination"
+    correct_count: 1
+    preserve_order: true
+    layout: "two_column"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 2 varyasyon)
+# {statements} placeholder: I/II/III/IV ifadeler buraya gelir
+# Sayfa 127-131
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # POZİTİF (metinde doğru olan yargılar)
+  - "<b>Bu metnin dil ve anlatımıyla ilgili;</b>\n{statements}\n<b>yargılarından hangileri doğrudur?</b>"
+  # NEGATİF (metinde söylenemeyecek yargılar)
+  - "<b>Bu metnin dil ve anlatımı ile ilgili numaralanmış bilgilerden hangileri <u>söylenemez</u>?</b>"
+  # POZİTİF varyasyon
+  - "<b>Bu metnin anlatım özellikleriyle ilgili;</b>\n{statements}\n<b>yargılarından hangileri söylenebilir?</b>"
+  # NEGATİF varyasyon
+  - "<b>Bu metnin dil ve anlatımıyla ilgili;</b>\n{statements}\n<b>yargılarından hangileri <u>yanlıştır</u>?</b>"
+  # POZİTİF varyasyon
+  - "<b>Bu metinle ilgili;</b>\n{statements}\n<b>numaralanmış bilgilerden hangileri doğrudur?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Doğru/yanlış numaralanmış yargıların birleşimi"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "4 numarali yargi olusturulmali (I, II, III, IV)"
+    - "Pozitif soru: 2 yargi dogru (metinde desteklenen) → dogru cevap bileseni"
+    - "Negatif soru: 2 yargi yanlis (metinde desteklenmeyen) → dogru cevap bileseni"
+    - "Secenekler ikili birlesimler: 'I ve II', 'I ve III', 'II ve IV', 'III ve IV', 'I ve IV', 'II ve III' gibi"
+    - "Her yargi tam cumle olmali (8-20 kelime)"
+    - "Yargilar dil ve anlatim teknik terimleri icermeli"
+  ornekler:
+    - metin: "Gunes bir altin top gibi parliyordu. Ruzgar kulagima fisildadi. Bu guzel gun usul usul gecip gidiyordu. Bence hava cok guzeldi."
+      ifadeler:
+        I: "Benzetme yapılmıştır."
+        II: "Deyim kullanılmıştır."
+        III: "Kişileştirmeden yararlanılmıştır."
+        IV: "Öznel ifadelere yer verilmiştir."
+      dogru: "I ve III"
+      neden: "Pozitif soru: I (gibi → benzetme) ve III (fisildadi → kisilelstirme) metinde destekleniyor"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# Numarali format: 2 yargi DOGRU (desteklenen) + 2 yargi YANLIS (desteklenmeyen)
+# Strateji havuzu "desteklenmeyen" yargilari olusturmak icin kullanilir
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["yorumlama", "mantiksal_denetleme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic and determine literary features"
+      details: |
+        Kullanilabilecek ozellikler:
+        - Benzetme, Kisilelstirme, Deyim, Ikileme
+        - Oznel yargi, Nesnel yargi, 1. Kisi agzi, Soru cumlesi
+
+    - step: 2
+      action: "Generate paragraph (55-100 words) with rich literary content"
+      details: |
+        Paragrafta:
+        - En az 3 farkli anlatim ozelligi acikca yer almali
+        - Ozellikler dogal ve akici bir sekilde kullanilmali
+        - Hem dogru hem yanlis yargi uretmeye uygun icerik olmali
+
+    - step: 3
+      action: "Create 4 numbered statements (I, II, III, IV)"
+      details: |
+        Her biri tam cumle (8-20 kelime):
+        - 2 yargi: metinde DESTEKLENEN (dogrulanabilir ozellik)
+        - 2 yargi: metinde DESTEKLENMEYEN (ornegi bulunmayan ozellik)
+        - Siralama rastgele olmali
+        - Ornekler: "Benzetme yapilmistir.", "Deyim kullanilmistir."
+
+    - step: 4
+      action: "Create 4 combination options"
+      details: |
+        Secenekler ikili birlesimler:
+        - Pozitif soru icin dogru cevap: desteklenen 2 yarginin birlesimi
+        - Negatif soru icin dogru cevap: desteklenmeyen 2 yarginin birlesimi
+        - Diger 3 secenek: karisik birlesimler
+        Ornek: A) I ve II  B) I ve III  C) II ve IV  D) III ve IV
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem and embed statements"
+      details: |
+        soru_kokleri listesinden rastgele sec
+        {statements} yerine numarali ifadeleri yerlestir:
+        I. [yargi 1]
+        II. [yargi 2]
+        III. [yargi 3]
+        IV. [yargi 4]
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR (Sayfa 127-131)
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 128
+    konu: "Doga ve mevsimler - dil ozellikleri"
+    tip: "pozitif"
+    metin: "Gunes bir altin top gibi parliyordu. Ruzgar kulagima fisildadi. Bu guzel gun usul usul gecip gidiyordu."
+    ifadeler:
+      I: "Benzetme yapılmıştır."
+      II: "Deyim kullanılmıştır."
+      III: "Kişileştirmeden yararlanılmıştır."
+      IV: "Nesnel ifadelere yer verilmiştir."
+    secenekler:
+      A: "I ve II"
+      B: "I ve III"
+      C: "II ve IV"
+      D: "III ve IV"
+    dogru_cevap: "B"
+    neden: "I (gibi → benzetme) ve III (fisildadi → kisilelstirme) metinde destekleniyor"
+
+  - sayfa: 130
+    konu: "Cocukluk anilari - dil ozellikleri"
+    tip: "negatif"
+    metin: "O gunlerde agaclar bile gulumsuyordu gozumde. Annem beni sicak sicak sarmisti. Gunler ne cabuk gecti!"
+    ifadeler:
+      I: "Soru cümlesi kullanılmıştır."
+      II: "İkilemelere yer verilmiştir."
+      III: "Deyim kullanılmıştır."
+      IV: "Kişileştirmeden yararlanılmıştır."
+    secenekler:
+      A: "I ve II"
+      B: "I ve III"
+      C: "II ve IV"
+      D: "III ve IV"
+    dogru_cevap: "B"
+    neden: "I (soru cumlesi yok) ve III (deyim yok) metinde desteklenmiyor"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 55-100 arasinda mi?"
+    - "Cumle sayisi 4-7 arasinda mi?"
+    - "En az 3 farkli anlatim ozelligi iceriyor mu?"
+    - "Ozellikler acikca tespit edilebilir mi?"
+
+  statements:
+    - "Tam 4 numarali yargi var mi (I, II, III, IV)?"
+    - "Her yargi tam cumle mi (8-20 kelime)?"
+    - "2 yargi metinde destekleniyor mu?"
+    - "2 yargi metinde desteklenmiyor mu?"
+    - "Yargilar dil ve anlatim teknik terimleri iceriyor mu?"
+
+  options:
+    - "4 secenek ikili birlesim mi ('X ve Y' formati)?"
+    - "Dogru cevap dogru 2 yarginin birlesimi mi?"
+    - "Diger secenekler karisik birlesimler mi?"

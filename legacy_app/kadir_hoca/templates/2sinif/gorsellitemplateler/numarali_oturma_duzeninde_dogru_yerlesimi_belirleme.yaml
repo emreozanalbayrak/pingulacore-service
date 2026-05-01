@@ -1,0 +1,149 @@
+meta:
+  id: "numarali_oturma_duzeninde_dogru_yerlesimi_belirleme"
+  ad: "Numaralı Oturma Düzeninde Doğru Yerleşimi Belirleme"
+  ders: "Türkçe"
+  sinif_seviyesi: "2. Sınıf"
+  tema: "Mantık, Konum ve Sıralama"
+  model: "TYMM"
+  format_turu: "llm_generated_html"
+  aciklama: "Numaralı oturma düzeni ve verilen ipuçlarından hareketle kişilerin yerlerini bulup doğru ifadeyi seçtiren 3 seçenekli soru formatı"
+  frequency: "orta"
+
+context:
+  type: "numarali_oturma_duzeni_ve_ipuclari"
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 16
+    word_count_max: 40
+    structure:
+      - "Önce kısa bir bağlam verilir."
+      - "Bağlamda 4 kişi ya da nesnenin numaralanmış yerlere oturduğu belirtilir."
+      - "Ardından 3 veya 4 kısa ipucu yazılır."
+      - "İpuçları doğrudan sonucu söylememeli, öğrencinin düşünmesini sağlamalıdır."
+      - "Son olarak belirli iki kişinin yerleriyle ilgili 3 seçenek sunulur."
+    kurallar:
+      - "Bağlam 2. sınıf seviyesine uygun olmalıdır."
+      - "Kişi adları kısa ve kolay ayırt edilebilir olmalıdır."
+      - "İpuçları kısa, açık ve tek anlamlı olmalıdır."
+      - "Konum ilişkileri sade olmalıdır."
+      - "Çözüm görsel ve ipuçları birlikte kullanılarak bulunmalıdır."
+      - "Türkçe karakterler doğru kullanılmalıdır."
+
+format:
+  type: "llm_generated_html"
+  description: "Kısa bağlam + numaralı oturma düzeni görseli + ipuçları + 3 seçenek"
+
+  paragraph:
+    required: true
+    word_count_min: 16
+    word_count_max: 40
+    sentence_count_min: 2
+    sentence_count_max: 5
+
+  visual:
+    required: true
+    count: 1
+    description: "Numaralanmış sandalyeler ya da yerler içeren oturma düzeni görseli"
+
+  stem:
+    required: true
+    sentence_count_min: 1
+    sentence_count_max: 1
+    soru_koku_ornekleri:
+      - "Buna göre [kisi_1] ile [kisi_2]nin oturduğu yerler ile ilgili hangi ifade doğrudur?"
+      - "Verilen bilgilere göre aşağıdakilerden hangisi doğrudur?"
+      - "İpuçlarına göre [kisi_1] ve [kisi_2] hangi yerlere oturmuştur?"
+      - "Aşağıdaki ifadelerden hangisi oturma düzenine göre doğrudur?"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 6
+    word_count_max: 16
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+gorsel:
+  required: true
+  tur: "numarali_oturma_duzeni"
+  amac: "Öğrencinin numaralı yerleri ve karşılıklı konumları görselden takip etmesini sağlamak"
+  kurallar:
+    - "Görselde 4 numaralı yer bulunmalıdır."
+    - "Numaralar açıkça görülmelidir."
+    - "Karşılıklı konum ilişkisi görselden anlaşılmalıdır."
+    - "Kişiler başlangıçta yerleştirilmiş ya da sadece yerler numaralandırılmış olabilir."
+    - "Görsel sade ve 2. sınıf seviyesine uygun olmalıdır."
+    - "Görsel süsleyici değil, çözüm için zorunlu olmalıdır."
+
+olculen_beceri:
+  tanim: "İpuçlarını kullanarak kişilerin numaralı yerlerini belirleme"
+  bilesenler:
+    - "okudugunu_anlama"
+    - "konum_bilgisi"
+    - "mantik_yurutme"
+    - "eslestirme"
+    - "dogru_ifadeyi_belirleme"
+
+dogru_cevap:
+  tanim: "Görseldeki yerleşim ve tüm ipuçlarıyla uyumlu ifade"
+  kurallar:
+    - "Doğru cevap tüm ipuçlarını aynı anda sağlamalıdır."
+    - "Yanlış seçenekler en az bir ipucuyla çelişmelidir."
+    - "Belirli kişilerin yerleri tek bir doğru sonuca götürmelidir."
+    - "Doğru cevap yalnızca ipuçları dikkatle değerlendirilerek bulunmalıdır."
+
+distractors:
+  stratejiler:
+    - ad: "TEK_IPUCUNA_UYAN_SECENEK"
+      aciklama: "Bir ipucuna uyan ama diğer ipuçlarına uymayan yerleşim sunma"
+      ornek: "Ali'nin yeri doğru, Bilal'in yeri yanlış olan seçenek"
+    - ad: "KARSILIKLI_KONUM_YANILGISI"
+      aciklama: "Karşılıklı oturma bilgisini yanlış yorumlatan seçenek verme"
+      ornek: "Karşılıklı olmayan iki yeri karşılıklıymış gibi sunma"
+    - ad: "NUMARA_KARISTIRMA"
+      aciklama: "Yakın görünen ama yanlış numaraları kullanan seçenek verme"
+      ornek: "2 ile 3 numaralı sandalyeleri karıştırma"
+    - ad: "IPUCUNU_TERS_YORUMLAMA"
+      aciklama: "Olumsuz ipucunu olumlu gibi düşündüren seçenek oluşturma"
+      ornek: "Karşılıklı oturmuyor bilgisini karşılıklı oturuyor gibi kullanma"
+
+use_shared_strategies: false
+
+tymm_uyum_kurallari:
+  - "2. sınıf seviyesine uygun kısa ve açık cümleler kullanılmalıdır."
+  - "İpuçları kısa ve tek anlamlı olmalıdır."
+  - "Kişi sayısı 4 ile sınırlı tutulmalıdır."
+  - "Numaralı yerler açıkça seçilebilir olmalıdır."
+  - "Görsel ve ipuçları birlikte kullanılmadan çözüm kesinleşmemelidir."
+  - "3 seçenekli yapıda iki çeldirici de güçlü olmalıdır."
+  - "Seçenekler aynı temsil düzeyinde, yani hepsi yerleşim cümlesi biçiminde olmalıdır."
+  - "Birden fazla doğru seçeneğe izin verilmemelidir."
+
+izinli_icerikler:
+  - "sandalye"
+  - "masa etrafında oturma"
+  - "numaralı yerler"
+  - "karşılıklı oturma"
+  - "yan yana / karşı karşıya ilişkileri"
+  - "kısa kişi adları"
+  - "basit mantık ipuçları"
+
+yasakli_icerikler:
+  - "çok karmaşık oturma planları"
+  - "5'ten fazla kişi"
+  - "çok adımlı ağır mantık zinciri"
+  - "birden fazla doğru seçenek"
+  - "yalnızca görselle çözülebilen yapı"
+  - "2. sınıf düzeyini aşan soyut mantık"
+
+ornek_sablon:
+  ust_metin: "Kısa bağlam ve birkaç ipucu"
+  gorsel: "1, 2, 3, 4 numaralı yerlerden oluşan oturma düzeni"
+  soru_koku: "Buna göre [kisi_1] ile [kisi_2]nin oturduğu yerler ile ilgili hangi ifade doğrudur?"
+  secenekler:
+    A: "................................"
+    B: "................................"
+    C: "................................"

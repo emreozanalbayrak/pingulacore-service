@@ -1,0 +1,146 @@
+meta:
+  id: "tablodaki_sayilardan_soylenemeyeni_belirleme"
+  ad: "Tablodaki Sayılardan Söylenemeyeni Belirleme"
+  ders: "Türkçe"
+  sinif_seviyesi: "2. Sınıf"
+  tema: "Veri Okuma ve Karşılaştırma"
+  model: "TYMM"
+  format_turu: "llm_generated_html"
+  aciklama: "Basit bir tabloda verilen sayılardan hareketle karşılaştırma yapıp söylenemeyen ifadeyi seçtiren 3 seçenekli soru formatı"
+  frequency: "orta"
+
+context:
+  type: "sade_tablo_veri_okuma"
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 10
+    word_count_max: 35
+    structure:
+      - "Önce kısa bir tanıtım cümlesi verilir."
+      - "Ardından aylar, günler, ürünler ya da benzeri kategoriler için sayıların yer aldığı sade bir tablo gösterilir."
+      - "Tablo çözümün ana kaynağı olmalıdır."
+    kurallar:
+      - "Bağlam 2. sınıf seviyesine uygun olmalıdır."
+      - "Günlük hayattan, çocukların anlayabileceği bir konu seçilmelidir."
+      - "Sayılar karşılaştırma yapmaya uygun olmalıdır."
+      - "Tablo sade ve okunaklı olmalıdır."
+      - "Metin tek başına cevabı vermemelidir."
+
+format:
+  type: "llm_generated_html"
+  description: "Kısa tanıtım + sade tablo + tek soru + 3 seçenek"
+
+  paragraph:
+    required: true
+    word_count_min: 10
+    word_count_max: 35
+    sentence_count_min: 1
+    sentence_count_max: 2
+
+  visual:
+    required: true
+    count: 1
+    description: "Ay, nesne ya da kategori adları ile bunlara ait sayıların yer aldığı sade tablo"
+
+  stem:
+    required: true
+    sentence_count_min: 1
+    sentence_count_max: 1
+    soru_koku_ornekleri:
+      - "Bu tablodan hareketle aşağıdakilerden hangisi söylenemez?"
+      - "Tabloya göre aşağıdakilerden hangisi doğru değildir?"
+      - "Verilen tabloya göre aşağıdakilerden hangisine ulaşılamaz?"
+      - "Aşağıdakilerden hangisi tabloya göre yanlıştır?"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 4
+    word_count_max: 14
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "mismatch"
+
+gorsel:
+  required: true
+  tur: "sade_veri_tablosu"
+  amac: "Öğrencinin sayıları okuyup karşılaştırma yapmasını sağlamak"
+  kurallar:
+    - "Tabloda en az 4 kategori bulunmalıdır."
+    - "Kategori adları kısa ve okunaklı olmalıdır."
+    - "Her kategorinin karşısında tek bir sayı yer almalıdır."
+    - "Tablo 2. sınıf öğrencisinin kolayca okuyabileceği kadar sade olmalıdır."
+    - "Görsel süsleyici değil, çözüm için zorunlu olmalıdır."
+    - "Renk kullanılsa bile sayıların okunmasını zorlaştırmamalıdır."
+
+olculen_beceri:
+  tanim: "Tablodaki sayıları okuyup karşılaştırma yapma ve söylenemeyen ifadeyi ayırt etme"
+  bilesenler:
+    - "veri_okuma"
+    - "karsilastirma"
+    - "sirayi_inceleme"
+    - "yanlis_yargiyi_belirleme"
+
+dogru_cevap:
+  tanim: "Tablodaki sayılarla desteklenmeyen ifade"
+  kurallar:
+    - "Doğru cevap tabloya göre söylenemeyen seçenek olmalıdır."
+    - "Yanlış seçenekler tabloyla açıkça doğrulanabilir olmalıdır."
+    - "En az bir seçenek iki sayıyı karşılaştırmalıdır."
+    - "En az bir seçenek artış-azalış ya da sıralama yorumu içerebilir."
+    - "Doğru cevap dikkatli veri okuma ile bulunmalıdır."
+
+distractors:
+  stratejiler:
+    - ad: "TERS_KARSILASTIRMA"
+      aciklama: "Büyük olanı küçük, küçük olanı büyük gibi sunma"
+      ornek: "Şubat ayında mayıstan daha fazla satılmıştır."
+    - ad: "DUZENLI_ARTIS_YANILGISI"
+      aciklama: "Sayılar genel olarak yüksek görünse de her adımda artmış gibi düşündürme"
+      ornek: "Her ay düzenli olarak artmıştır."
+    - ad: "YAKIN_SAYI_YANILGISI"
+      aciklama: "Birbirine yakın iki sayıyı karıştırmaya uygun ifade yazma"
+      ornek: "Haziranda şubattan daha az satılmıştır."
+    - ad: "DOGRU_GIBI_GORUNEN_YANLIS_IFADE"
+      aciklama: "İlk bakışta doğru sanılan ama tabloyla uyuşmayan cümle kurma"
+      ornek: "En az satış mayıs ayında yapılmıştır."
+
+use_shared_strategies: false
+
+tymm_uyum_kurallari:
+  - "2. sınıf seviyesine uygun kısa ve açık cümleler kullanılmalıdır."
+  - "Sayılar öğrencinin temel karşılaştırma becerisine uygun olmalıdır."
+  - "Soruda yalnızca doğrudan veri okuma ve basit karşılaştırma beklenmelidir."
+  - "Çok adımlı işlem gerektirilmemelidir."
+  - "Olumsuz soru kökü açık olmalı; 'söylenemez' ya da 'doğru değildir' ifadesi belirgin olmalıdır."
+  - "Görsel olmadan doğru cevap kesinleşmemelidir."
+  - "Seçenekler aynı temsil düzeyinde, yani hepsi yargı cümlesi biçiminde olmalıdır."
+  - "3 seçenekli yapıda iki çeldirici de güçlü olmalıdır."
+
+izinli_icerikler:
+  - "aylar"
+  - "satış sayıları"
+  - "oyuncak sayıları"
+  - "kitap sayıları"
+  - "meyve sayıları"
+  - "öğrencilerin topladığı nesne sayıları"
+  - "basit karşılaştırma ifadeleri"
+
+yasakli_icerikler:
+  - "karmaşık tablo yapıları"
+  - "iki aşamadan fazla işlem gerektiren sorular"
+  - "grafik ve tabloyu aynı anda zorunlu kullandıran yoğun yapı"
+  - "çarpma, bölme, oran yüzdesi gerektiren yorumlar"
+  - "birden fazla doğru seçenek"
+  - "metinden çözülebilen soru yapısı"
+
+ornek_sablon:
+  ust_metin: "Aşağıda ... ile ilgili bir tablo verilmiştir."
+  gorsel: "Kategori adları ve karşılarında sayılar bulunan sade tablo"
+  soru_koku: "Bu tablodan hareketle aşağıdakilerden hangisi söylenemez?"
+  secenekler:
+    A: "................................"
+    B: "................................"
+    C: "................................"

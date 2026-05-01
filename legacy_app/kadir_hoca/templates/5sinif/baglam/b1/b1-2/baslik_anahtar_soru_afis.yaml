@@ -1,0 +1,122 @@
+# B1.2 — Afişli/İnfografikli Başlık/Anahtar Sözcük/Soru Cevap (3Q)
+# basit_senaryo_12 bazlı + image_type: infografik
+meta:
+  id: "baslik_anahtar_soru_afis"
+  ad: "Afişli — Başlık/Anahtar/Soru Cevap (3 Soru)"
+  sinif_seviyesi: 5
+  aciklama: "Senaryo + AI afiş/infografik görseli üzerinden başlık, anahtar sözcük ve soru-cevap soruları"
+  kaynak: "kadirhocasorukokleri.md"
+  frequency: "Medium"
+
+context:
+  type: "baslik_anahtar_soru_afis"
+  question_count: 3
+  question_count_min: 3
+  question_count_max: 3
+  generation:
+    word_count_min: 80
+    word_count_max: 140
+    image_type: "afis"
+    structure:
+      - "KONUYA GİRİŞ yapan kısa bir senaryo oluştur (4-6 cümle)"
+      - "Senaryo konunun GENEL ÇERÇEVESİNİ çizsin — detaylı bilgileri afiş/infografik görseli verecek"
+      - "Senaryoda bir veya birkaç karakter olmalı (isimli)"
+      - "Senaryonun net bir başlığı çıkarılabilir olmalı"
+      - "Senaryoda en az 2-3 anahtar sözcük belirgin olmalı"
+      - "Senaryoda bazı soruların cevabı verilirken bazılarının cevabı olmayacak şekilde yazılmalı"
+      - "KRİTİK — SENARYO AİŞ/İNFOGRAFİĞİ ANLATMAMALI: Senaryo afişin/infografiğin içeriğini, görselini veya detaylarını TANIMLAMAZ. Senaryo sadece konuya merak uyandıran bir giriş yapar."
+      - "YASAK: 'Aşağıdaki afiş...', 'İnfografikte görüldüğü gibi...', 'Görselde yer alan...' gibi afiş/görsele referans veren ifadeler"
+      - "YASAK: HTML tablosu (<table>) EKLEME — sadece düz metin yaz"
+      - "NOT: Bu metin için AI tarafından afiş/infografik görseli üretilecektir — görsel konunun DETAYLARINI verecek"
+    kurallar:
+      - "KRİTİK — BAŞLIK YASAĞI: Metne ve görsele konunun ana fikrini veren başlık KOYMA! 1. soruda en uygun başlık sorulacak"
+      - "Senaryo 5. sınıf seviyesinde, anlaşılır ve günlük hayattan olmalı"
+      - "Senaryo konuya GİRİŞ yapmalı — afişi/görseli ANLATMAMALI"
+      - "Senaryonun bir ana fikri/mesajı olmalı (başlık çıkarılabilsin)"
+      - "Anahtar sözcükler metinde doğal olarak geçmeli"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+    - slot: 1
+      type: "baslik"
+      soru_kokleri:
+        - "<b>Bu afişin başlığı aşağıdakilerden hangisi olabilir?</b>"
+        - "<b>Bu hikâyeye başlık olarak aşağıdakilerden hangisi gelebilir?</b>"
+      options_style: "headline_title"
+      word_count_min: 2
+      word_count_max: 6
+      beceri:
+        katman: "KB2"
+        bilesenler: ["ozetleme"]
+        surec_bileseni: "bilgiyi_cikartma"
+    - slot: 2
+      type: "anahtar_sozcuk"
+      soru_kokleri:
+        - "<b>Bu afişteki anahtar sözcükler aşağıdakilerden hangileri olabilir?</b>"
+        - "<b>Bu hikâyedeki anahtar sözcükler neler olabilir?</b>"
+      options_style: "keyword_set"
+      word_count_min: 2
+      word_count_max: 8
+      beceri:
+        katman: "KB2"
+        bilesenler: ["cozumleme"]
+        surec_bileseni: "bilgiyi_cikartma"
+    - slot: 3
+      type: "soru_cevap"
+      soru_kokleri:
+        - "<b>Bu afişte aşağıdaki sorulardan hangisinin cevabı <u>yoktur</u>?</b>"
+        - "<b>…Özne… yaptığı araştırmalarla aşağıdaki soruların hangisine cevap <u>veremez</u>?</b>"
+        - "<b>Aşağıdakilerden hangisi …Özne…'nin araştırmasında cevap arayacağı sorulardan biri <u>olamaz</u>?</b>"
+      options_style: "question_sentence"
+      word_count_min: 4
+      word_count_max: 15
+      beceri:
+        katman: "KB3"
+        bilesenler: ["cikarim_yapma", "mantiksal_denetleme"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+header_template: "1-3. soruları aşağıdaki bilgilere göre birbirinden bağımsız olarak cevaplayınız."
+
+format:
+  type: "llm_generated_html"
+  description: "Afişli senaryo üzerinden başlık, anahtar sözcük, soru-cevap soruları"
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 140
+    sentence_count_min: 4
+    sentence_count_max: 6
+  stem:
+    required: true
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 15
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+dogru_cevap:
+  tanim: "Afiş/infografik ve hikâyeden doğru çıkarılan başlık, anahtar sözcük veya soru-cevap"
+  kurallar:
+    - "HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer"
+    - "Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK"
+    - "BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ. Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı"
+    - "Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı"
+    - "Başlık sorusunda doğru cevap hikâyenin ana fikrini/konusunu yansıtan kısa ifade olmalı"
+    - "Anahtar sözcük sorusunda doğru cevap metinde geçen ve anlam bütünlüğü sağlayan sözcükler olmalı"
+    - "Soru-cevap sorusunda doğru cevap metinde cevabı BULUNMAYAN soru olmalı"
+
+distractors:
+  stratejiler:
+    - ad: "YAKIN_BASLIK"
+      aciklama: "Ana fikirle ilişkili ama tam karşılamayan başlık"
+    - ad: "EKSIK_ANAHTAR"
+      aciklama: "Metinde geçen ama anahtar sözcük olmayan kelimeleri sunma"
+    - ad: "CEVABI_VAR"
+      aciklama: "Soru-cevap sorusunda metinde cevabı OLAN soruyu çeldirici olarak sunma"
+
+use_shared_strategies: false

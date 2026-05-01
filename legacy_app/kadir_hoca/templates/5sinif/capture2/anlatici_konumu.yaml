@@ -1,0 +1,171 @@
+# templates/capture2/anlatici_konumu.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Bolum 2 - Anlatici Turleri
+#
+# ANLATICI KONUMU FORMATI (tum anlatici sorularinin ~%20'si)
+# 4 mini paragraf verilir, ogrenci anlaticinin olayin icinde mi disinda mi oldugunu belirler
+#
+# ONEMLI: Ana paragraf YOK, secenekler paragraftir
+# Olayin icinde = 1. Kisi agzi (Ben/Biz) - kahraman anlatici
+# Olayin disinda = 3. Kisi agzi (O/Onlar) - gozlemci anlatici
+
+meta:
+  id: "anlatici_konumu"
+  ad: "Anlatıcı Konumu (İçinde/Dışında)"
+  sinif_seviyesi: 5
+  aciklama: "Anlatıcının olayın kahramanı mı yoksa gözlemcisi mi olduğunu belirleme"
+  kaynak: "data/anlatici_turleri.pdf"
+  frequency: "Medium (~20% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Soru kökü + 4 paragraf seçenek (veya tek paragraf + yorum)"
+
+  paragraph:
+    required: false  # Ana paragraf YOK, secenekler paragraf
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 25
+    word_count_max: 45
+    style: "mini_paragraph"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 4 varyasyon, Sayfa 98-101)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Aşağıdaki metinlerin hangisinde anlatımı yapan olayın içindedir?</b>"
+  - "<b>Aşağıdaki metinlerin hangisinde anlatımı yapan gözlemci konumundadır?</b>"
+  - "<b>Aşağıdaki metinlerin hangisinde anlatıcı olayın kahramanlarından biridir?</b>"
+  - "<b>Aşağıdaki metinlerin hangisinde anlatıcı bu metnin anlatıcısı ile özdeştir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Soru kokune gore olayin icinde veya disinda olan anlaticiyi iceren metin"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Olayın içindedir = 1. Kişi ağzı (Ben/Biz)"
+    - "Gözlemci konumundadır = 3. Kişi ağzı (O/Onlar)"
+    - "Kelime sayısı bakımından en uzun şık olmamalı"
+  ornekler:
+    - paragraf: "Sabah erkenden kalktım ve bahçeye çıktım. Kuşların sesini dinlerken bir kelebek gördüm."
+      dogru: "Olayın içinde (kahraman anlatıcı)"
+      neden: "Anlatici olayi bizzat yasiyor: kalktim, ciktim, gordum"
+    - paragraf: "Küçük çocuk sabah erkenden kalktı ve bahçeye çıktı. Kuşları dinlerken bir kelebek gördü."
+      dogru: "Olayın dışında (gözlemci anlatıcı)"
+      neden: "Anlatici olayi disaridan anlatiyor: kalkti, cikti, gordu"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM:
+# - 1 mini-paragraf istenen konumda (dogru cevap)
+# - 3 mini-paragraf diger konumda (celdiriciler)
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cozumleme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select stem that specifies narrator position"
+      details: |
+        Soru kokune gore:
+        - 'olayin icinde' / 'kahraman' soruluyorsa: dogru cevap 1. kisi agzi
+        - 'gozlemci konumunda' / 'disinda' soruluyorsa: dogru cevap 3. kisi agzi
+
+    - step: 2
+      action: "Generate 1 mini-paragraph with requested narrator position (correct answer)"
+      details: |
+        25-45 kelimelik mini paragraf:
+        - Olayin icinde ise: Ben/Biz dili, sahis ekleri (-m, -k)
+        - Gozlemci ise: O/Onlar dili, sahis eki yok veya -lar/ler
+
+    - step: 3
+      action: "Generate 3 mini-paragraphs with opposite narrator position (distractors)"
+      details: |
+        Her biri 25-45 kelimelik mini paragraf:
+        - Dogru cevap 1. kisi ise, celdiriciler 3. kisi agziyla
+        - Dogru cevap 3. kisi ise, celdiriciler 1. kisi agziyla
+        - Farkli konular/olaylar anlatmali
+
+    - step: 4
+      action: "Verify narrator position consistency"
+      details: |
+        - Dogru cevapta anlatici konumu net olmali
+        - Celdiricilerde anlatici konumu acikca farkli olmali
+        - Karisik konum kullanilmamali
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR (Sayfa 98-101)
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 99
+    konu: "Olayin icindeki anlatici"
+    soru_koku: "Aşağıdaki metinlerin hangisinde anlatımı yapan olayın içindedir?"
+    dogru_cevap: "B"
+    dogru_cevap_icerigi: "1. kişi ağzıyla yazılmış, anlatıcının olayı bizzat yaşadığı metin"
+    celdirici_aciklama: "Diğer 3 seçenek 3. kişi ağzıyla, gözlemci konumunda yazılmış metinler"
+
+  - sayfa: 100
+    konu: "Gozlemci anlatici"
+    soru_koku: "Aşağıdaki metinlerin hangisinde anlatımı yapan gözlemci konumundadır?"
+    dogru_cevap: "A"
+    dogru_cevap_icerigi: "3. kişi ağzıyla yazılmış, anlatıcının olayı dışarıdan gözlemlediği metin"
+    celdirici_aciklama: "Diğer 3 seçenek 1. kişi ağzıyla, kahramanın kendi ağzından yazılmış metinler"
+
+  - sayfa: 101
+    konu: "Kahraman anlatici"
+    soru_koku: "Aşağıdaki metinlerin hangisinde anlatıcı olayın kahramanlarından biridir?"
+    dogru_cevap: "D"
+    dogru_cevap_icerigi: "1. kişi ağzıyla yazılmış, anlatıcının olayın kahramanı olduğu metin"
+    celdirici_aciklama: "Diğer 3 seçenek gözlemci anlatıcı ile yazılmış metinler"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Her secenek 25-45 kelime arasinda mi?"
+    - "Her paragrafta anlatici konumu tutarli mi?"
+    - "Karisik konum kullanilmamis mi?"
+
+  correct_answer:
+    - "Istenen anlatici konumunda mi? (icinde/disinda)"
+    - "Sahis ekleri dogru mu?"
+    - "Anlatici konumu acikca belirlenebilir mi?"
+
+  distractors:
+    - "Tum celdiriciler diger konumda mi?"
+    - "Her biri farkli bir konu/olay mi anlatiyor?"
+    - "Anlatici konumu acikca farkli mi?"
+    - "Tum secenekler ayni uzunluk araliginda mi? (25-45 kelime)"

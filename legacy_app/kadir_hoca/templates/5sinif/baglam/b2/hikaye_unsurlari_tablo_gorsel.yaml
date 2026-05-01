@@ -1,0 +1,111 @@
+# Hikaye Unsurları — Tablo görselli (data_table CSS)
+# Hikâye + unsur tablosu → stilize data-table
+
+meta:
+  id: "hikaye_unsurlari_tablo_gorsel"
+  ad: "Hikâye Unsurları — Tablo Görselli"
+  sinif_seviyesi: 5
+  aciklama: "Hikâye + unsur karşılaştırma tablosu (data-table stili), hikâye unsurları soruları"
+  frequency: "Medium"
+
+context:
+  type: "hikaye_unsurlari_tablo_gorsel"
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 100
+    word_count_max: 160
+    image_type: "tablo_gorseli"
+    structure:
+      - "Kısa bir hikâye/öykü oluştur (3-4 cümle)"
+      - "Hikâyede yer, zaman, kişiler ve olay açıkça bulunabilir olmalı"
+      - "En az 2 ana karakter olmalı"
+      - "Hikâyenin ardından, FARKLI BİR BAKIŞ AÇISIYLA unsur analizi tablosu ekle:"
+      - "<table><tr><th>Hikâye Unsuru</th><th>Hikâyedeki Durum</th><th>Değerlendirme</th></tr>"
+      - "En az 4 satır (Kişiler, Mekân, Zaman, Olay)"
+      - "3. sütun (Değerlendirme): Unsur hakkında YORUM veya EK BİLGİ içermeli — hikâyede olmayan bir çıkarım"
+      - "KRİTİK — TABLO HİKÂYEYİ AYNEN ÖZETLEMEMELİ! Tablo şunları yapmalı:"
+      - "  1) Hikâyedeki ifadeleri FARKLI KELİMELERLE yeniden ifade etmeli (anlamca özdesi)"
+      - "  2) En az 1 satırda hikâyede DOĞRUDAN YAZILMAYAN ama çıkarılabilen bir bilgi olmalı"
+      - "  3) En az 1 satırda KASITLI BİR EKSİKLİK veya BELİRSİZLİK olmalı (soru çıkarımı için)"
+      - "  4) Tablodaki 'Değerlendirme' sütunu hikâyede OLMAYAN yeni bilgi/yorum içermeli"
+      - "Örnek: Hikâyede 'güneşli bir sabah' yazıyorsa tabloda 'mevsim: ilkbahar ortası' gibi ÇIKARIM yazılmalı"
+    kurallar:
+      - "5. sınıf seviyesinde"
+      - "Hikâye unsurları (yer, zaman, kişi, olay) açıkça belirlenebilir olmalı"
+      - "YASAK: Tablonun hikâyeyi birebir özetlemesi — tablo YORUM ve ÇIKARIM içermeli"
+      - "YASAK: Tablodaki ifadelerin hikâyedeki cümlelerle kelimesi kelimesine aynı olması"
+      - "Tablo, hikâyeyle birlikte değerlendirildiğinde yeni bir anlam katmalı"
+      - "Karakterlerin isimleri Türkçe olmalı"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+    - slot: 1
+      type: "hikaye_cikarim"
+      soru_kokleri:
+        - "<b>Hikâye ve tablodaki değerlendirmeler birlikte ele alındığında aşağıdaki çıkarımlardan hangisine ulaşılır?</b>"
+        - "<b>Tablodaki yorumlar ile hikâyedeki olaylar karşılaştırıldığında aşağıdakilerden hangisi doğru bir çıkarımdır?</b>"
+        - "<b>Hikâye ve tablodaki bilgiler birlikte değerlendirildiğinde unsurlar hakkında aşağıdakilerden hangisi söylenebilir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 5
+      word_count_max: 18
+      beceri:
+        katman: "KB2"
+        bilesenler: ["karsilastirma", "eslestirme"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+    - slot: 2
+      type: "unsur_uyumsuzluk"
+      soru_kokleri:
+        - "<b>Hikâye ve tablodaki bilgiler birlikte değerlendirildiğinde aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+        - "<b>Tablodaki unsurlar düşünüldüğünde hikâyeye aşağıdakilerden hangisi eklenseydi <u>uyumsuz</u> olurdu?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 5
+      word_count_max: 20
+      beceri:
+        katman: "KB3"
+        bilesenler: ["degerlendirme", "cikarim_yapma"]
+        surec_bileseni: "problemi_yapilandirma"
+
+header_template: "1-2. soruları aşağıdaki bilgilere göre birbirinden bağımsız olarak cevaplayınız."
+
+format:
+  type: "llm_generated_html"
+  paragraph:
+    required: true
+    word_count_min: 100
+    word_count_max: 160
+    sentence_count_min: 3
+    sentence_count_max: 8
+  stem:
+    required: true
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 5
+    word_count_max: 20
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+dogru_cevap:
+  tanim: "Hikâye ve tablodaki unsurlardan doğru eşleştirme veya çıkarım"
+  kurallar:
+    - "HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer"
+    - "Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK"
+    - "BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ. Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı"
+    - "Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı"
+
+distractors:
+  stratejiler:
+    - ad: "YANLIS_UNSUR"
+      aciklama: "Hikâyede geçmeyen bir unsuru tabloya uygunmuş gibi sunma"
+    - ad: "UNSUR_KARISTIRMA"
+      aciklama: "Yer ile zamanı, kişi ile olayı karıştırma"
+    - ad: "KAPSAM_KAYDIRMA"
+      aciklama: "Doğru unsuru genişleterek veya daraltarak sunma"
+
+use_shared_strategies: false

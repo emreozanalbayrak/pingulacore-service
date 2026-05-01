@@ -1,0 +1,359 @@
+meta:
+  id: "paragraf_olusturma_sinif3_standart_gorselli_dort_secenekli"
+  ad: "Paragraf Oluşturma"
+  sinif_seviyesi: 3
+  ders: "Türkçe"
+  bolum: "3. Sınıf Türkçe Paragraf Kitabı"
+  alt_bolum: "7. Paragraf Oluşturma"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    3. sınıf öğrencisi için karışık verilen numaralanmış cümleleri
+    anlam bütünlüğüne veya olayların oluş sırasına göre düzenleyerek
+    kısa ve anlamlı bir metin oluşturmayı ölçen, görsel destekli ve
+    4 seçenekli standart soru üretim şablonu.
+  kullanim_notu: >
+    Bu şablon, harici olarak kullanılan 3. Sınıf TYMM Ortak Kuralları YAML'ı,
+    3. sınıf öğretim programı ve 3. sınıf MEB Türkçe kitapları ile birlikte
+    doğrulanmalıdır.
+
+format:
+  type: "llm_generated_html"
+  description: "Görsel + numaralanmış cümleler + soru kökü + 4 sıralama seçeneği"
+
+  question_variant:
+    allowed:
+      - "olaylarin_olus_sirasina_gore_siralama"
+      - "anlamli_metin_olusturma"
+    default: "anlamli_metin_olusturma"
+
+  sentence_set:
+    required: true
+    sentence_count_min: 4
+    sentence_count_max: 5
+    numbering_required: true
+    style: "simple_clear_primary_text"
+    kurallar:
+      - "Cümleler 3. sınıf öğrencisinin anlayabileceği kadar açık, sade ve akıcı olmalıdır."
+      - "Cümleler karışık sırada verilmelidir."
+      - "Tüm cümleler bir araya geldiğinde tek bir anlamlı metin oluşturmalıdır."
+      - "Olay sırası sorularında cümleler açık bir zaman veya oluş sırası içermelidir."
+      - "Anlamlı metin oluşturma sorularında cümleler konu bütünlüğü, kişi-zamir ilişkisi, neden-sonuç ve anlatım akışı bakımından birbirine bağlanmalıdır."
+      - "Cümleler dış bilgi gerektirmemelidir."
+      - "Doğru sıralama yalnız tüm cümleler birlikte düşünülerek bulunabilmelidir."
+      - "Cümle sayısı 4 veya 5 ile sınırlı tutulmalıdır."
+      - "Tamamen serbest, soyut ve tartışmacı paragraf yapısı kullanılmamalıdır."
+      - "Metin, kısa ve tamamlanmış bir bütün oluşturmalıdır."
+
+  sentence_design_rules:
+    kurallar:
+      - "İlk cümle doğal bir başlangıç niteliği taşımalıdır."
+      - "Son cümle metni doğal biçimde bitirmelidir."
+      - "Ortadaki cümleler birbirini açıklayan, sürdüren veya olay sırasını ilerleten yapıda olmalıdır."
+      - "Doğru sıralamada zamir, bağlaç, zaman ve neden-sonuç ilişkileri doğal akmalıdır."
+      - "Yanlış sıralamalarda en az bir anlam bozukluğu, akış kırılması veya olay sırası sorunu oluşmalıdır."
+    yasaklar:
+      - "Birden fazla doğru sıralamaya izin veren belirsiz cümle kümeleri"
+      - "Sadece tek bağlaç ipucuyla çözülen aşırı basit yapı"
+      - "Ağır soyut ve çok katmanlı anlatım"
+      - "Dil bilgisi terimi bilgisi gerektiren kurgu"
+
+  visual:
+    required: true
+    description: "Cümlelerin konusu, olayı veya bağlamını destekleyen işlevsel görsel"
+    placement: "sentence_set_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illüstrasyon"
+      - "tek sahneli fotoğraf benzeri çizim"
+      - "tek olay veya tek varlık odaklı sahne"
+      - "numaralanmış cümlelerin ana bağlamını destekleyen sade konu görseli"
+    kurallar:
+      - "Her soru için görsel zorunludur."
+      - "Görsel cümlelerin ortak konusunu desteklemelidir."
+      - "Görsel süs olmamalı, bağlamı anlamayı kolaylaştırmalıdır."
+      - "Görsel tek başına doğru sıralamayı vermemelidir."
+      - "Görsel ve cümleler birlikte değerlendirildiğinde doğru sıralama daha anlaşılır hâle gelebilir."
+      - "Görsel dikkat dağıtıcı gereksiz ayrıntılar içermemelidir."
+    yasaklar:
+      - "dekoratif ve cümlelerle ilgisiz görsel"
+      - "çok sahneli karmaşık kolaj"
+      - "cevabı doğrudan açık eden sıralı çizgi roman yapısı"
+
+  stem:
+    required: true
+    selection: "random_from_list_by_variant"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    correct_count: 1
+    style: "number_sequence"
+    kurallar:
+      - "3. sınıfta her soru 4 seçenekli olmalıdır."
+      - "Tüm seçenekler yalnız sıralama dizisi biçiminde verilmelidir."
+      - "Her seçenekte tüm cümle numaraları birer kez kullanılmalıdır."
+      - "Hiçbir seçenekte numara eksikliği veya tekrar olmamalıdır."
+      - "Doğru seçenek cümleleri anlamlı ve doğal sıraya koymalıdır."
+      - "Yanlış seçenekler ilk bakışta makul görünebilir; ancak akış veya olay sırası bakımından sorunlu olmalıdır."
+      - "Birden fazla makul doğru seçenek oluşmamalıdır."
+
+soru_kokleri:
+  olaylarin_olus_sirasina_gore_siralama:
+    - "Numaralanmış cümlelerin olayların oluş sırasına göre sıralanışı hangi seçenekte doğru verilmiştir?"
+    - "Numaralanmış cümlelerin olayların oluş sırasına göre doğru sıralanışı hangisidir?"
+    - "Olayların oluş sırasına göre cümleler hangi seçenekte doğru sıralanmıştır?"
+    - "Bu cümleler olayların oluş sırasına göre nasıl sıralanmalıdır?"
+    - "Numaralanmış cümleler olay sırasına göre dizildiğinde doğru sıralama hangisi olur?"
+
+  anlamli_metin_olusturma:
+    - "Numaralanmış cümlelerle anlamlı bir metin oluşturulduğunda sıralama aşağıdakilerden hangisi olur?"
+    - "Numaralanmış cümelerle anlamlı bir paragraf oluşturulursa doğru sıralama hangisi olur?"
+    - "Bu cümleler anlamlı bir metin oluşturacak şekilde nasıl sıralanmalıdır?"
+    - "Numaralanmış cümeler anlam bütünlüğüne göre dizildiğinde doğru sıralama hangisidir?"
+    - "Aşağıdaki cümelerle anlamlı bir metin oluşturmak için doğru sıralama hangisidir?"
+
+beceri_odagi:
+  birincil_beceri:
+    - "Karışık cümleleri doğru sıraya koyarak anlamlı metin oluşturma"
+  ikincil_beceriler:
+    - "Olayların oluş sırasını belirleme"
+    - "Cümleler arası anlam bağını fark etme"
+    - "Başlangıç, gelişme ve bitiş akışını sezme"
+    - "Neden-sonuç ve zaman ilişkisini izleme"
+    - "Görsel ve metni birlikte değerlendirerek bağlamı netleştirme"
+
+dogru_cevap:
+  tanim: "Numaralanmış cümeleri doğal, anlamlı ve akıcı biçimde bir araya getiren tek doğru sıralama"
+  kurallar:
+    - "Doğru cevap tüm cümeleri anlamlı bir bütün hâline getirmelidir."
+    - "Doğru cevapta olay sırası bozulmamalıdır."
+    - "Doğru cevapta zamir, bağlaç, neden-sonuç ve zaman ilişkileri doğal akmalıdır."
+    - "İlk cümle başlangıç, son cümle bitiş işlevi taşımalıdır."
+    - "Doğru cevap dış bilgi gerektirmemelidir."
+    - "Doğru cevap 3. sınıf öğrencisinin dikkatli okuyarak bulabileceği açıklıkta olmalıdır."
+
+yanlis_secenek_stratejileri:
+  count_per_question: 3
+  strategy_pool:
+    - id: "ilk_cumleyi_yanlis_secmek"
+      tanim: "Metnin doğal başlangıcı olmayan bir cümleyi başa getiren sıralama"
+
+    - id: "son_cumleyi_yanlis_secmek"
+      tanim: "Metni doğal biçimde bitirmeyen bir cümleyi sona koyan sıralama"
+
+    - id: "orta_blok_karisikligi"
+      tanim: "Başlangıç ve bitiş doğru görünse de ortadaki cümleleri yanlış dizen seçenek"
+
+    - id: "olay_sirasi_bozma"
+      tanim: "Önce olanı sona, sonra olanı başa taşıyan sıralama"
+
+    - id: "neden_sonuc_tersligi"
+      tanim: "Sonuç cümlesini neden cümlesinden önce getiren sıralama"
+
+    - id: "zamir_ve_baglam_kopuklugu"
+      tanim: "Kimin veya neyin anlatıldığı anlaşılmadan ilgili cümleyi öne çeken sıralama"
+
+  secim_kurali:
+    - "Her soruda 3 yanlış seçenek farklı stratejilerden seçilmelidir."
+    - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+    - "En az 1 yanlış seçenek başlangıç veya bitiş işlevini bozmalıdır."
+    - "Olay sırası varyantında en az 1 yanlış seçenek zaman sırasını bozmalıdır."
+    - "Anlamlı metin varyantında en az 1 yanlış seçenek bağlam veya zamir kopukluğu oluşturmalıdır."
+
+zorluk_duzeyleri:
+  kolay:
+    sentence_set:
+      sentence_count_min: 4
+      sentence_count_max: 4
+      kurallar:
+        - "İlk ve son cümle açıkça ayırt edilebilir olmalıdır."
+        - "Olay sırası veya anlam bağı güçlü olmalıdır."
+        - "Zamir ve bağlaç kullanımı öğrenciyi fazla zorlamamalıdır."
+    preferred_variants:
+      - "olaylarin_olus_sirasina_gore_siralama"
+      - "anlamli_metin_olusturma"
+    distractors:
+      kurallar:
+        - "1 seçenek ilk cümleyi yanlış seçmelidir."
+        - "1 seçenek son cümleyi yanlış seçmelidir."
+        - "1 seçenek yalnız iki orta cümleyi karıştırabilir."
+    difficulty_note: >
+      Kolay düzeyde öğrenci başlangıç ve bitiş cümlelerini belirleyip
+      olay veya anlam akışını rahatça kurabilir.
+
+  orta:
+    sentence_set:
+      sentence_count_min: 4
+      sentence_count_max: 5
+      kurallar:
+        - "Başlangıç veya bitiş çoğu zaman açık kalmalı; ancak orta bölüm dikkat gerektirmelidir."
+        - "Cümleler arasında neden-sonuç, zaman veya bağlam ilişkisi bulunmalıdır."
+        - "Doğru sıralama için birkaç ipucu birlikte değerlendirilmelidir."
+    preferred_variants:
+      - "anlamli_metin_olusturma"
+      - "olaylarin_olus_sirasina_gore_siralama"
+    distractors:
+      kurallar:
+        - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+        - "Yanlış seçeneklerden biri orta blok karışıklığı taşımalıdır."
+        - "Yanlış seçeneklerden biri olay veya neden-sonuç sırasını bozmalıdır."
+    difficulty_note: >
+      Orta düzeyde öğrenci yalnız ilk ve son cümleye bakmadan,
+      cümleler arasındaki bağı dikkatle kurmalıdır.
+
+  zor:
+    sentence_set:
+      sentence_count_min: 5
+      sentence_count_max: 5
+      kurallar:
+        - "Cümleler arasında birden fazla anlam bağı bulunabilir."
+        - "Doğru sıralama için zamir, zaman ve olay akışı birlikte düşünülmelidir."
+        - "Zor düzeyde bile metin kısa ve somut kalmalıdır."
+        - "Tamamen serbest yorum gerektiren yapı kurulamaz."
+    preferred_variants:
+      - "anlamli_metin_olusturma"
+      - "olaylarin_olus_sirasina_gore_siralama"
+    distractors:
+      kurallar:
+        - "3 yanlış seçeneğin en az 2'si metne yakın görünmelidir."
+        - "Yanlış seçeneklerden biri yalnız iki orta cümleyi yanlış yerleştirebilir."
+        - "Yanlış seçeneklerden biri başlangıç veya sonuç işlevini bozar."
+        - "Yanlış seçeneklerden biri olay sırasını ters kurar."
+    difficulty_note: >
+      Zor düzeyde öğrencinin tüm cümleleri birlikte düşünerek
+      doğal akışı bulması beklenir; ancak görev hâlâ 3. sınıf düzeyinde kalır.
+
+difficulty_selection_policy:
+  default: "Orta"
+  allowed_values: ["Kolay", "Orta", "Zor"]
+  hard_limits:
+    - "Her soru 4 seçenekli olmalıdır."
+    - "Her soru için görsel zorunludur."
+    - "Cümle sayısı 5'i geçmemelidir."
+    - "Metin 3. sınıf düzeyini aşan ağır soyutluk içermemelidir."
+    - "Zor düzey seçilse bile soru 4. sınıf düzeyinde uzun, tartışmacı veya çok katmanlı paragraf çözümlemesine dönüşemez."
+    - "Kolay düzeyde aşırı yakın çeldirici yükü kurulmamalıdır."
+
+sinif_uygunluk_kurallari:
+  uygundur:
+    - "Karışık cümleler kısa ve somut bir metin oluşturuyorsa"
+    - "Öğrenciden olayların oluş sırasını ya da anlamlı cümle dizilimini kurması bekleniyorsa"
+    - "Okuduğunu kendi ifadeleriyle yeniden kurma becerisinin çoktan seçmeli karşılığı olarak kısa sıralama görevi kullanılıyorsa"
+    - "Görsel metnin bağlamını destekliyorsa"
+  yasaktir:
+    - "Tamamen serbest, açık uçlu, uzun paragraf yazdırma"
+    - "Aşırı soyut, tartışmacı veya çok katmanlı paragraf sıralatma"
+    - "Dil bilgisi terimleriyle cümle işlevi çözdürme"
+    - "Metin dışı dünya bilgisi gerektiren sıralama"
+  ucuncu_sinifa_kayar:
+    - "Karışık cümlelerden kısa anlamlı metin kurma"
+    - "Olayları oluş sırasına göre dizme"
+    - "Okuduğunu kendi cümleleriyle yeniden kurma yönünde hazırlık yapan düzenleme görevleri"
+  dorduncu_sinifa_kayar:
+    - "Uzun paragrafın örgüsünü gerekçeli biçimde savundurma"
+    - "Birden fazla mantıklı sıralamayı tartıştırma"
+    - "Soyut ve tartışmacı metinlerin yapısını çözümletme"
+
+konu_alani:
+  izinli_ornekler:
+    - "günlük yaşam olayları"
+    - "sağlık durumu ve belirtiler"
+    - "hayvanlar ve özellikleri"
+    - "bilim insanları ve buluşlar"
+    - "kısa bilgi verici metinler"
+    - "okul yaşamı"
+    - "doğa ve çevre"
+    - "basit neden-sonuç ilişkili olaylar"
+  kurallar:
+    - "Konu 3. sınıf öğrencisinin anlayabileceği kadar somut ve açık olmalıdır."
+    - "Cümleler birlikte kısa ve anlamlı bir metin oluşturabilmelidir."
+    - "Görselle desteklenebilen konular tercih edilmelidir."
+    - "Sıralama görevi dış bilgi gerektirmeden çözülebilmelidir."
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "3. sınıfa uygun, kısa metin oluşturmaya elverişli somut bir konu seç"
+    - step: 2
+      action: "Seçilen konu için 4 veya 5 cümlelik kısa ve anlamlı bir metin yaz"
+      details:
+        - "Başlangıç cümlesi belirgin olsun"
+        - "Gelişen olay veya bilgi akışı kur"
+        - "Doğal bir bitiş cümlesi oluştur"
+    - step: 3
+      action: "Cümleleri karışık sıraya koy ve numaralandır"
+      details:
+        - "Doğru sıralama tek olsun"
+        - "Yanlış sıralamalar makul görünsün"
+    - step: 4
+      action: "Metni destekleyen işlevsel görsel tasarla"
+      details:
+        - "Görsel bağlamı desteklesin"
+        - "Görsel zorunlu olsun"
+        - "Görsel tek başına cevabı vermesin"
+    - step: 5
+      action: "Soru varyantını seç"
+      details:
+        - "olaylarin_olus_sirasina_gore_siralama"
+        - "anlamli_metin_olusturma"
+    - step: 6
+      action: "1 doğru ve 3 yanlış sıralama seçeneği oluştur"
+      details:
+        - "Her seçenekte tüm numaralar bir kez kullanılsın"
+        - "Yanlışlardan biri ilk cümleyi yanlış seçsin"
+        - "Yanlışlardan biri son cümleyi yanlış seçsin"
+        - "Yanlışlardan biri orta akışı bozsun"
+    - step: 7
+      action: "Soru kökünü listeden rastgele seç"
+    - step: 8
+      action: "Şıkları A-B-C-D olarak yerleştir"
+    - step: 9
+      action: "Harici 3. Sınıf TYMM Ortak Kuralları ile doğrulama yap"
+
+validation_checklist:
+  sentence_set:
+    - "Cümle sayısı 4 veya 5 mi?"
+    - "Cümleler 3. sınıf düzeyinde açık ve sade mi?"
+    - "Cümleler birlikte tek ve anlamlı bir metin oluşturuyor mu?"
+    - "Doğru sıralama tek mi?"
+    - "Olay sırası varsa gerçekten belirlenebilir mi?"
+    - "Dış bilgi gerektiriyor mu? Gerektiriyorsa reddet."
+
+  visual:
+    - "Görsel zorunlu olarak var mı?"
+    - "Görsel cümlelerin ortak bağlamıyla uyumlu mu?"
+    - "Görsel destekleyici ama tek başına cevap verici değil mi?"
+    - "Görsel dekoratif kalmıyor mu?"
+
+  stem:
+    - "Soru kökü seçilen varyanta uygun mu?"
+    - "Soru kökü açık ve 3. sınıf düzeyinde mi?"
+    - "Ekstra beceri yüklemiyor mu?"
+
+  options:
+    - "Toplam 4 seçenek var mı?"
+    - "Her seçenekte tüm numaralar yalnız bir kez kullanılmış mı?"
+    - "Doğru seçenek doğal ve akıcı bir metin oluşturuyor mu?"
+    - "Yanlış seçenekler gerçekten akışı bozuyor mu?"
+    - "Birden fazla makul doğru seçenek oluşuyor mu? Oluşuyorsa reddet."
+
+  difficulty:
+    - "Zorluk seçilen düzeye göre cümle sayısı ve çeldirici kuralları uygulanmış mı?"
+    - "Zor düzey bile 3. sınıf sınırında mı?"
+    - "4. sınıfa kayan uzun ve soyut metin çözümleme var mı?"
+
+hard_fail_rules:
+  - "Seçenek sayısı 4 değilse"
+  - "Görsel yoksa"
+  - "Cümle sayısı 5'i geçiyorsa"
+  - "Bir seçenekte numara tekrarı veya eksikliği varsa"
+  - "İki veya daha fazla seçenek makul doğruysa"
+  - "Metin 3. sınıf için fazla soyut veya ağırsa"
+  - "Soru paragraf oluşturma yerine akışı bozan cümle sorusuna kayıyorsa"
+  - "Soru 4. sınıfa kayan ileri yapı çözümlemesine dönüşüyorsa"
+  - "Görsel metinle uyumsuzsa"
+
+ornek_bicim_notlari:
+  - "Hiperimezi metninde numaralanmış cümleler anlamlı bilgi akışına göre sıralanmalıdır."
+  - "Tat ve koku duyularının azalması örneğinde olayların oluş sırası belirlenmelidir."
+  - "Bu bölümde amaç, karışık cümlelerden kısa ve anlamlı bir metin kurmaktır."
+  - "Bu bölüm, 'akışı bozan cümle' bölümünden farklıdır; burada tek bir cümleyi elemek değil, tüm cümleleri doğru sıraya koymak esastır."

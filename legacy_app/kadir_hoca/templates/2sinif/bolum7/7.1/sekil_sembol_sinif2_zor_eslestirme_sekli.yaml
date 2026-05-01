@@ -1,0 +1,116 @@
+# Zor duzey — eslestirme_sekli varyanti
+# Referans: sekil_sembol_ve_isaretler_referans.yaml → zorluk_duzeyleri.zor
+
+meta:
+  id: "sekil_sembol_sinif2_zor_eslestirme_sekli"
+  ad: "2. Sinif - Sekil Sembol Isaretler (Zor) - Eslestirme Sekli"
+  sinif_seviyesi: 2
+  aciklama: "Zor duzey — eslestirme_sekli: Semboller ve aciklamalar dogru eslestirildiginde olusan baglanti seklini bulma. 3 sembol, cift kaynakli."
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Gorsel (3 sembol) + kisa metin blogu + soru koku + 3 secenek (zor, eslestirme sekli)"
+
+  paragraph:
+    required: true
+    word_count_min: 25
+    word_count_max: 55
+    sentence_count_min: 3
+    sentence_count_max: 5
+    stil: "kisa_aciklama"
+    background_color: "#fce8e8"
+    kurallar:
+      - "Paragraf IKI BOLUMLUK olmali:"
+      - "BOLUM 1 — SEMBOL TANIMLARI: 2-3 sembol/isaret ve anlamlari aciklanir."
+      - "BOLUM 2 — SENARYO: Bir karakter veya durum verilir, sembol durumlarini dolayli belirtir."
+      - "Senaryo tek basina TUM sembollerin durumunu kesin verMEMELI."
+      - "2. sinif duzeyinde sade, gunluk hayata yakin semboller kullan."
+      - "Semboller: trafik isaretleri, hava durumu, telefon ikonlari, geri donusum, guvenlik isareti gibi."
+      - "Soyut veya teknik semboller YASAK."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 10
+    word_count_max: 40
+    style: "image_description"
+    image_style: "photo"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Her soruda 3 secenek olmalidir."
+      - "Dogru secenek yalniz gorsel ve metin birlikte kullanildiginda bulunabilmelidir."
+      - "Yanlis secenekler gorsel veya metinden birine kismen uyabilir; fakat ikisine birden uymamaiidir."
+      - "Secenekler 2. sinif duzeyinde kisa ve sade olmalidir."
+      - "Secenek sekilleri birbirine yakin ama ayirt edilebilir olmalidir."
+      - "2 yanlis secenek de gorsel ve metnin yalniz bir kismina uyabilir gorunmelidir."
+      - "Dogru cevap ancak iki kaynagi tam birlestiren ogrenci tarafindan bulunabilmelidir."
+
+soru_kokleri:
+  - "<b>Verilen semboller ve açıklamalar doğru eşleştirildiğinde aşağıdaki şekillerden hangisi oluşur?</b>"
+  - "<b>Görsel ve metindeki bilgiler doğru birleştirildiğinde hangi bağlantı şekli oluşur?</b>"
+  - "<b>Semboller ile anlamlar doğru çizgilerle eşleştirildiğinde hangi şekil ortaya çıkar?</b>"
+  - "<b>Şekiller ve açıklamalar birlikte incelendiğinde doğru eşleştirme şekli hangisi olur?</b>"
+
+dogru_cevap:
+  tanim: "Yalniz gorsel ve metin birlikte incelendiginde bulunabilen dogru eslestirme sekli"
+  kurallar:
+    - "Dogru cevap baglanti cizgilerinin olusturdugu sekle dayanmalidir."
+    - "Dogru cevap yalniz metinden cikarilamamalidir."
+    - "Dogru cevap yalniz gorselden cikarilamamalidir."
+    - "Dogru cevap 2. sinif ogrencisinin iki kaynagi birlikte kullanarak bulabilecegi aciklikta olmalidir."
+    - "Ogrenci metindeki anlamlari okuyup gorseldeki sembollerle esleyerek sekli bulmalidir."
+
+celdirici_stratejileri:
+  - ad: "TERS_BAGLANTI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Dogru eslestirmeye yakin ama cizgi yonleri veya baglantilari hatali duzen"
+    nasil_olusturulur: |
+      Dogru eslestirme sekline yakin gorunen ama baglanti yonleri veya cizgileri hatali olan sekil olustur.
+      Zor duzey: iki yanlis secenek de dikkatli cift kaynak incelemesi gerektirir.
+    kategori: "semantic"
+
+  - ad: "YANLIS_ESLESTIRME"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Eslestirmelerin bir veya iki baglantisi yanlis olan secenek"
+    nasil_olusturulur: |
+      Dogru eslestirmedeki bir veya iki baglanti yonunu degistirerek yanlis sekil olustur.
+      Zor duzey: iki yanlis secenek de dikkatli cift kaynak incelemesi gerektirir.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+visual_requirement: "answer_critical"
+visual_type: "symbol_pair"
+visual_spec:
+  sembol_sayisi: 3
+  aciklama: "3 sembol ve anlamlari, karmasik eslestirme gerektiren"
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["sembol_anlamlandirma", "cift_kaynak_okuma", "eslestirme", "sekil_olusturma"]
+  surec_bileseni: "metni_anlama"
+
+sinif2_ek_kurallar:
+  cift_kaynak:
+    - "Soru yalniz metin okunarak cozulemez."
+    - "Soru yalniz gorsel incelenerek cozulemez."
+    - "Dogru cevap icin hem gorsel hem metin birlikte kullanilmalidir."
+  gorsel:
+    sembol_sayisi_min: 3
+    sembol_sayisi_max: 3
+    kurallar:
+      - "Gorselde 3 sembol ya da 3 anlam iliskisi bulunmalidir."
+      - "Gorsel sade olmali, gereksiz susleme icermemelidir."
+      - "Semboller net, buyuk ve tek bakista ayirt edilebilir olmalidir."
+      - "Zor duzey bile olsa semboller 2. sinif duzeyini asamaz."
+  yasak_alanlar:
+    - "Yalniz gorsele bakilarak cevap secme YASAK"
+    - "Yalniz metin okunarak cevap secme YASAK"
+    - "2. sinif duzeyini asan teknik ikon kumeleri YASAK"
+    - "Eslestirme sekilleri takip edilemeyecek kadar karisik YASAK"

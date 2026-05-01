@@ -1,0 +1,142 @@
+# Referans: paragrafta_ana_dusunce_yardimci_dusunce_sinif3_referans.yaml → zorluk_duzeyleri.zor
+# Zor duzey — ana_dusunce varyanti
+
+meta:
+  id: "ana_dusunce_sinif3_zor"
+  ad: "3. Sinif - Paragrafta Ana Dusunce (Zor)"
+  sinif_seviyesi: 3
+  aciklama: "Zor duzey — ana_dusunce: Ana Dusunce. 4 secenekli, gorselli."
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Gorsel + tek paragraf + soru koku + 4 secenek (zor, ana_dusunce)"
+
+  paragraph:
+    required: true
+    word_count_min: 82
+    word_count_max: 105
+    sentence_count_min: 6
+    sentence_count_max: 8
+    stil: "simple_clear_primary_text"
+    background_color: "#fce8e8"
+    kurallar:
+      - "Metin tek baskin konu veya tek baskin olay etrafinda kurulmalidir."
+      - "Metin 3. sinif ogrencisinin anlayabilecegi kadar acik, sade ve akici olmalidir."
+      - "Metin 2. sinifa gore biraz daha ayrintili olabilir; ancak dagnik olmamalidir."
+      - "Metinde ana dusunceyi destekleyen en az 2 yardimci bilgi bulunmalidir."
+      - "Ana dusunce, metnin tamami dusunuldugunde belirlenebilir olmalidir."
+      - "Yardimci bilgiler ana dusunceyi desteklemeli, ama onun yerine gecmemelidir."
+      - "Metin dis bilgi gerektirmemelidir."
+      - "Metin 4. sinif duzeyinde kaynak sorgulama, yazar niyeti cozumleme veya ileri elestirel yorum gerektirmemelidir."
+      - "Bilgilendirici metinlerde ana bilgi ile sonuc bolumu uyumlu olmalidir."
+      - "Oykuleyici metinlerde olay, kisi ve durum acikca izlenebilir olmalidir."
+      - "Metinde en az bir dogrudan cevaplanabilir soru alani ve gerekiyorsa en az bir cevaplanamayan alan dogal bicimde bulunabilir olmalidir."
+      - "Metinde ana dusunce ile onu destekleyen birkac farkli yardimci bilgi birlikte bulunmalidir."
+      - "Yan ayrintilar celdirici uretimine malzeme verebilir."
+      - "Hangi sorunun cevabi yoktur varyantinda cevaplanabilen sorular dogrudan ve dolayli bilgi karisimi icerebilir."
+      - "Zor duzeyde bile soru 4. sinifa kayan kaynak sorgulama, tartisma veya ayrintili gerekcelendirme istememelidir."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  visual:
+    required: true
+    description: "Metnin ana icerigini destekleyen islevsel gorsel"
+    placement: "paragraph_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illustrasyon"
+      - "tek sahneli fotograf benzeri cizim"
+      - "tek olay veya tek varlik odakli sahne"
+      - "bilgilendirici metni destekleyen konu gorseli"
+    kurallar:
+      - "Her soru icin gorsel zorunludur."
+      - "Gorsel metnin ana icerigiyle acik uyumlu olmalidir."
+      - "Gorsel sus olmamali, cozumde etkili destek sunmalidir."
+      - "Gorsel tek basina dogru cevabi acikca vermemelidir."
+      - "Gorsel ile metin birlikte degerlendirildiginde ana dusunce veya yardimci bilgi daha netlesebilir."
+      - "Gorsel dikkat dagitici gereksiz ayrintilar icermemelidir."
+      - "Gorsel yanlis secenegi acikca isaret edecek kadar yaniltici olmamalidir."
+    yasaklar:
+      - "dekoratif ve metinden bagimsiz gorsel"
+      - "cok sahneli karmasik kolaj"
+      - "grafik, tablo veya infografik yogunlugu tasiyan tasarim"
+      - "metnin asil odagini gizleyen karisik arka plan"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir (ana_dusunce varyanti)"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 3
+    word_count_max: 12
+    style: "short_judgment"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "3. sinifta her soru 4 secenekli olmalidir."
+      - "Secenekler kisa, sade ve 3. sinif duzeyinde olmalidir."
+      - "Yalniz bir secenek tam dogru olmalidir."
+      - "Yanlis secenekler metne yakin gorunmeli ama dikkatli okuyunca elenebilmelidir."
+      - "Ayni soruda birden fazla makul dogru secenek olusmamalidir."
+      - "Ana dusunce sorularinda secenekler yargi cumlesi veya kisa yargi ifadesi biciminde olmalidir."
+      - "3 yanlis secenegin en az 2'si metne yakin gorunmelidir."
+      - "Ana dusunce sorularinda bir secenek yardimci dusunce, bir secenek tema icinde yanlis vurgu, bir secenek cok genel mesaj olabilir."
+      - "Cevabi yoktur sorularinda yalniz 1 soru gercekten metinden cevaplanamamalidir."
+
+soru_kokleri:
+  - "<b>Bu metnin ana dusuncesi asagidakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Bu parcada asil anlatilmak istenen asagidakilerden hangisidir?</b>"
+  - "<b>Bu metinde asil vurgulanmak istenen asagidakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Bu parcanin vermek istedigi dusunce asagidakilerden hangisidir?</b>"
+  - "<b>Asagidakilerden hangisi bu metnin ana dusuncesidir?</b>"
+  - "<b>Bu metnin ana fikri asagidakilerden hangisidir?</b>"
+
+dogru_cevap:
+  tanim: "Metnin tamaminda asil vurgulanmak istenen temel dusunce"
+  kurallar:
+    - "KRITIK PARAPHRASE: Dogru cevap paragraftaki cumleleri/ifadeleri AYNEN KULLANMA — paragraf kelimelerini es anlamli sozcuklerle degistir ve farkli cumle yapisiyla yeniden ifade et. En az %50 kelime farkliligi zorunlu. Ornek: paragrafta 'kitap okumak zihni aydinlatir' → secenek 'okuma aliskanligi dusunceyi gelistirir' (dogru paraphrase), DEGIL 'kitap okumak zihni aydinlatir' (kopyalama)."
+    - "Dogru cevap dis bilgi gerektirmemelidir."
+    - "Dogru cevap 3. sinif ogrencisinin dikkatli okuyarak bulabilecegi aciklikta olmalidir."
+    - "Ana dusunce, metnin tamami dusunulerek bulunmalidir."
+    - "Ana dusunce bir ayrinti veya ornek olmamalidir."
+    - "Ana dusunce, mesajlastirilmis asiri soyut slogan bicimine donusmemelidir."
+
+celdirici_stratejileri:
+  - ad: "YARDIMCI_DUSUNCEYI_ANA_DUSUNCE_GIBI_SUNMA"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metindeki bir yardimci bilgiyi ana dusunce yerine koyan secenek"
+    nasil_olusturulur: |
+      Metinde gecen yardimci bir bilgiyi, ana dusunce yargisi gibi sun.
+    kategori: "semantic"
+
+  - ad: "COK_GENEL_MESAJ"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metinden fazla uzak, asiri genel bir ders veya mesaj"
+    nasil_olusturulur: |
+      Metnin ana dusuncesine gore fazla genel, asiri kapsayici bir mesaj secenegi olustur.
+      Ornek: 'Calismak faydalidir', 'Her seyin bir sonu vardir' gibi genel sloganlar.
+    kategori: "semantic"
+
+  - ad: "TEMA_ICI_YANLIS_VURGU"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Ayni konu alaninda durur ama asil vurguyu kaydirir"
+    nasil_olusturulur: |
+      Metnin tema alanina yakin ama asil vurguyu kaydiran bir yargi olustur.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["ana_dusunce_bulma", "yardimci_dusunce_ayirt_etme"]
+  surec_bileseni: "metni_anlama"
+
+sinif3_ek_kurallar:
+  yasak_alanlar:
+    - "Yazarin gizli amaci, kaynak guvenilirligi veya ileri elestirel yorum sorulmasi YASAK"
+    - "Ana dusunce yerine soyut hayat dersi ya da slogan sectirme YASAK"
+    - "Metin disi dunya bilgisi gerektiren secenekler YASAK"
+    - "Bilginin kaynagini sorgulama (4. sinif) YASAK"
+    - "Yazarin amaci, bakis acisi veya mesajini gerekceli tartistirma (4. sinif) YASAK"
+    - "Birden fazla yorumun savunulmasini isteme (4. sinif) YASAK"

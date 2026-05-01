@@ -1,0 +1,147 @@
+meta:
+  id: "gorsel_davranis_orneklerinden_uygun_olmayani_belirleme"
+  ad: "Görsel Davranış Örneklerinden Uygun Olmayanı Belirleme"
+  ders: "Türkçe"
+  sinif_seviyesi: "2. Sınıf"
+  tema: "Görsel Okuma ve Yorumlama"
+  model: "TYMM"
+  format_turu: "llm_generated_html"
+  aciklama: "Bilgilendirici bir görselde verilen davranış örneklerinden hareketle, ilgili duruma uymayan davranışı seçtiren 3 seçenekli soru formatı"
+  frequency: "orta"
+
+context:
+  type: "bilgilendirici_gorsel_davranis_listesi"
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 20
+    word_count_max: 60
+    structure:
+      - "Önce kısa ve sade bir tanıtım cümlesi verilir."
+      - "Ardından belirli bir durum, özellik ya da farklılık hakkında açıklayıcı 1-2 cümle yazılır."
+      - "Bu açıklama doğrudan cevabı vermemeli, yalnızca görseli anlamlandırmalıdır."
+      - "Sonrasında aynı duruma ait davranış örneklerini gösteren bir bilgi görseli yer almalıdır."
+    kurallar:
+      - "Metin 2. sınıf seviyesine uygun, sade ve kısa olmalıdır."
+      - "Açıklamalar korkutucu, damgalayıcı ya da dışlayıcı olmamalıdır."
+      - "Metin ve görsel birlikte çalışmalı; soru yalnızca metinden çözülememelidir."
+      - "Davranış örnekleri günlük yaşamdan ve çocuğun anlayabileceği düzeyde olmalıdır."
+      - "Yargılayıcı değil, tanıtıcı ve nötr bir dil kullanılmalıdır."
+
+format:
+  type: "llm_generated_html"
+  description: "Kısa bilgilendirici metin + davranış örnekleri görseli + tek soru + 3 seçenek"
+
+  paragraph:
+    required: true
+    word_count_min: 20
+    word_count_max: 60
+    sentence_count_min: 2
+    sentence_count_max: 4
+
+  visual:
+    required: true
+    count: 1
+    description: "Aynı özelliğe ya da duruma ait 6-8 davranış örneğini küçük sahneler ya da simgelerle gösteren bilgi afişi"
+
+  stem:
+    required: true
+    sentence_count_min: 1
+    sentence_count_max: 1
+    soru_koku_ornekleri:
+      - "Buna göre aşağıdakilerden hangisi [ilgili_durumdaki] birinin yapacağı davranış değildir?"
+      - "Bu görsele göre aşağıdakilerden hangisi bu duruma uygun değildir?"
+      - "Verilen örneklere göre aşağıdakilerden hangisi farklıdır?"
+      - "Aşağıdakilerden hangisi görselde anlatılan duruma örnek olmaz?"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 3
+    word_count_max: 12
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "mismatch"
+
+gorsel:
+  required: true
+  tur: "bilgilendirici_afis"
+  amac: "Aynı duruma ait birden fazla davranış örneğini birlikte göstermesi"
+  kurallar:
+    - "Görselde 6 ila 8 davranış örneği bulunmalıdır."
+    - "Her davranış küçük resim ve kısa açıklama ile desteklenmelidir."
+    - "Davranış örnekleri birbirinden açıkça ayrılmalıdır."
+    - "Görsel sade, temiz ve çocuk seviyesine uygun olmalıdır."
+    - "Görseldeki kısa açıklamalar Türkçe ve okunabilir olmalıdır."
+    - "Görsel süsleyici değil, çözüm için zorunlu olmalıdır."
+    - "Olumsuz çağrışım yaratacak aşırı dramatik yüz ifadeleri kullanılmamalıdır."
+    - "Farklılık anlatılırken saygılı ve kapsayıcı görsel dil kullanılmalıdır."
+
+olculen_beceri:
+  tanim: "Görselde verilen örnek davranışlardan ortak özelliği çıkarma ve buna uymayan davranışı ayırt etme"
+  bilesenler:
+    - "gorsel_okuma"
+    - "ornekten_kural_cikarma"
+    - "davranis_siniflama"
+    - "uygun_olmayan_ornegi_belirleme"
+
+dogru_cevap:
+  tanim: "Görselde verilen ortak davranış örnekleriyle uyuşmayan seçenek"
+  kurallar:
+    - "Doğru cevap, görseldeki ortak davranış örneklerinden farklı olan seçenek olmalıdır."
+    - "Yanlış seçenekler görselde verilen örneklerle açıkça uyumlu olmalıdır."
+    - "Doğru cevap yalnızca dikkatli karşılaştırma ile bulunmalıdır."
+    - "Doğru seçenek, çocuk düzeyinde açık ama çok yüzeysel olmayacak biçimde ayrışmalıdır."
+    - "3 seçenekli yapıda iki çeldirici de güçlü ve görselle uyumlu olmalıdır."
+
+distractors:
+  stratejiler:
+    - ad: "YAKIN_DAVRANIS"
+      aciklama: "Görseldeki davranış örneklerine benzeyen ama küçük ifade farkı olan seçenekler sunma"
+      ornek: "Tek başına oynamak yerine kalabalıkta sessiz durmak gibi yakın davranış kullanma"
+    - ad: "YUZEYSEL_BENZERLIK"
+      aciklama: "İlk bakışta benzer görünen ama dikkatli okuyunca farklı olan ifade kullanma"
+      ornek: "Rahatsız olup uzaklaşmak yerine merak edip yaklaşmak"
+    - ad: "OLUMLU_DAVRANIS_CELDIRICISI"
+      aciklama: "Görseldeki örneklerin tersine sosyal ya da rahat bir davranışı seçenek yapma"
+      ornek: "Arkadaşlarıyla hemen oyuna katılmak"
+    - ad: "KISA_IFADE_YANILGISI"
+      aciklama: "Çok kısa ama anlamı farklı seçenekle öğrenciyi yanıltma"
+      ornek: "Sık soru sormak"
+
+use_shared_strategies: false
+
+tymm_uyum_kurallari:
+  - "2. sınıf seviyesine uygun, sade ve kısa cümleler kullanılmalıdır."
+  - "Seçenekler çocuğun günlük yaşamda anlayabileceği davranışlardan oluşmalıdır."
+  - "Soyut psikoloji terimleri seçeneklerde ağır biçimde kullanılmamalıdır."
+  - "Soru, damgalayıcı ya da küçültücü dil içermemelidir."
+  - "Olumsuz soru kökü açık olmalı; 'değildir' ifadesi vurgulu biçimde verilmelidir."
+  - "Görsel olmadan doğru cevap kesinleşmemelidir."
+  - "Seçenekler aynı temsil düzeyinde, yani hepsi davranış cümlesi biçiminde olmalıdır."
+  - "3 seçenekli yapıda çeldiriciler zayıf kalmamalı, ikisi de gerçekçi olmalıdır."
+
+izinli_icerikler:
+  - "günlük yaşam davranışları"
+  - "oyun oynama biçimleri"
+  - "ses, kalabalık, iletişim gibi çocuk dünyasına yakın durumlar"
+  - "görselde listelenmiş davranış örnekleri"
+  - "çocuğun karşılaştırabileceği kısa davranış cümleleri"
+
+yasakli_icerikler:
+  - "ağır tıbbi açıklamalar"
+  - "korkutucu ya da travmatik sahneler"
+  - "alaycı, dışlayıcı ya da etiketleyici ifadeler"
+  - "uzun soyut tanımlar"
+  - "tek başına metinden çözülebilecek yapı"
+  - "birden fazla doğru seçenek"
+
+ornek_sablon:
+  ust_metin: "Kısa açıklayıcı bilgi metni"
+  gorsel: "Aynı duruma ait davranış örneklerini gösteren bilgilendirici afiş"
+  soru_koku: "Buna göre aşağıdakilerden hangisi [ilgili_durumdaki] birinin yapacağı davranış değildir?"
+  secenekler:
+    A: "................................"
+    B: "................................"
+    C: "................................"

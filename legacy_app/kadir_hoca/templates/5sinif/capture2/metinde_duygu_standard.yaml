@@ -1,0 +1,208 @@
+# templates/capture2/metinde_duygu_standard.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Metinde Duygu
+#
+# STANDART DUYGU FORMATI (tum duygu sorularinin ~%60'i)
+# Duygusal icerikli oykuleyici paragraf veya siir verilir,
+# ogrenci kahramanin icinde bulundugu baskin duyguyu secer
+#
+# MANTIK: Duygu ismi metinde dogrudan gecmez, olaylar/davranislar uzerinden sezdirilir
+# Secenekler KISA KAVRAM formatindadir (1-3 kelime)
+
+meta:
+  id: "metinde_duygu_standard"
+  ad: "Metinde Duygu (Baskın Duygu)"
+  sinif_seviyesi: 5
+  aciklama: "Metindeki kahramanın içinde bulunduğu duygusal durumu belirleme"
+  kaynak: "data/metinde_duygu.pdf"
+  frequency: "High (~60% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Duygusal içerikli öyküleyici paragraf veya şiir + soru kökü + duygu seçenekleri"
+
+  paragraph:
+    required: true
+    word_count_min: 40
+    word_count_max: 90
+    sentence_count_min: 3
+    sentence_count_max: 6
+    stil: "oykuleyici"
+    kurallar:
+      - "Duygu ismi metinde doğrudan geçmemeli (Örn: 'Çok üzüldü' yerine 'Gözleri doldu, başını önüne eğdi' denmeli)."
+      - "Olay veya durum, belirli bir duyguyu (pişmanlık, sitem, özlem, kaygı) güçlü şekilde hissettirmeli."
+      - "Şiir formatı da kullanılabilir (Özlem, Yurt sevgisi vb. temalı)."
+      - "Paragrafta konuyla ilgili AÇIKLAMA, TANIM veya EK BİLGİ verme! Paragraf SADECE hikâyeyi/olayı anlatsın"
+      - "YASAK: 'Duyular insanın çevresini algılamasını sağlar', 'Karakter özellikleri kişinin davranışlarını belirler' gibi ders kitabı açıklamaları"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 3
+    style: "concept"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 4 varyasyon)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metinde bahsedilen kişinin hissettiği duygu aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu şiire hâkim olan duygu aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metinde bahsedilen çocuğun ... karşı hissettiği duygu hangisidir?</b>"
+  - "<b>Bu metinde aşağıdaki duygulardan hangisine yer verilmiştir?</b>"
+  # Duygu beklentisi/öngörüsü (ARI Paragraf 2025 kaynak)
+  - "<b>Bu metne göre …Karakter…'ın aşağıdaki duygulardan hangisine sahip olması beklenir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metindeki durumu en iyi özetleyen duygu kavramı"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Duygu ismi metinde dogrudan gecmemeli, davranislardan cikarilmali"
+    - "1-3 kelimelik kisa kavram olmali"
+    - "Paragraftaki olaylarla birebir ortusmeli"
+  ornekler:
+    - paragraf: "Keşke o gün annemi dinleseydim..."
+      dogru: "Pişmanlık"
+      neden: "'Keske' ifadesi gecmiste yapilan bir hatadan duyulan pisamanligi gosterir"
+    - paragraf: "Nerede o eski bayramlar, o eski sokaklar..."
+      dogru: "Özlem"
+      neden: "Gecmiste kalan guzel gunlere duyulan ozlem ifade edilmis"
+    - paragraf: "Herkesi çağırmışsın, bir beni unutmuşsun..."
+      dogru: "Sitem"
+      neden: "Kisiye yonelik serzeniste bulunma, sitem duygusu hakim"
+    - paragraf: "Acaba sınavdan düşük mü alacağım?"
+      dogru: "Kaygı / Endişe"
+      neden: "Gelecekte olabilecek olumsuz bir duruma yonelik kaygi"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI BILGILERI
+# ═══════════════════════════════════════════════════════════════
+# LLM paragraf iceriğine gore en uygun 3 celdiriciyi secer
+# Benzer ama yanlis duygular veya zit duygular kullanilir
+
+distractors:
+  notlar:
+    - "Benzer ama yanlış duygular (Örn: Sitem yerine Yakınma, Kaygı yerine Korku)"
+    - "Zıt duygular (Örn: Sevinç yerine Üzüntü)"
+    - "Metinde iz bulunmayan duygular secilmeli"
+    - "Tum secenekler ayni formatta olmali (1-3 kelimelik duygu kavrami)"
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["yorumlama"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select emotion and context"
+      details: |
+        Bir baskin duygu sec (pismanlik, sitem, ozlem, kaygi, mutluluk, saskinlik, umut, hayal kirikligi vb.)
+        ve bu duyguyu sezdirecek bir olay/durum kurgula.
+
+    - step: 2
+      action: "Generate emotional paragraph (40-90 words)"
+      details: |
+        Paragrafta:
+        - Duygu ismi DOGRUDAN gecmemeli
+        - Davranislar, beden dili, ic monolog ile duygu sezdirilmeli
+        - Oykuleyici veya siir formati kullanilabilir
+        - Ornek: Pismanlik icin "Keske..." ile baslayan ic monolog
+
+    - step: 3
+      action: "Set correct answer = dominant emotion"
+      details: "Paragraftaki baskin duygu 1-3 kelimelik kavram olarak dogru cevap yapilir"
+
+    - step: 4
+      action: "Generate 3 distractors"
+      details: |
+        3 yanlis duygu secenegi olustur:
+        - Benzer ama farkli duygular (sitem/yakinma, kaygi/korku)
+        - Zit duygular (sevinc/uzuntu)
+        - Her biri 1-3 kelimelik kavram
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR (Sayfa 109-113)
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 109
+    konu: "Pismanlik duygusu"
+    paragraf: "Keşke o gün annemi dinleseydim. Belki de hiçbir şey bu kadar kötü olmazdı..."
+    dogru_cevap: "Pişmanlık"
+    celdirici_1: "Özlem"
+    celdirici_2: "Üzüntü"
+    celdirici_3: "Kaygı"
+
+  - sayfa: 110
+    konu: "Ozlem duygusu"
+    paragraf: "Nerede o eski bayramlar, o eski sokaklar, o eski komsuluk iliskileri..."
+    dogru_cevap: "Özlem"
+    celdirici_1: "Sitem"
+    celdirici_2: "Üzüntü"
+    celdirici_3: "Hayal kırıklığı"
+
+  - sayfa: 112
+    konu: "Sitem duygusu"
+    paragraf: "Herkesi çağırmışsın, bir beni unutmuşsun. Hiç mi aklına gelmedim?"
+    dogru_cevap: "Sitem"
+    celdirici_1: "Kızgınlık"
+    celdirici_2: "Özlem"
+    celdirici_3: "Üzüntü"
+
+  - sayfa: 113
+    konu: "Kaygi duygusu"
+    paragraf: "Acaba sınavdan düşük mü alacağım? Ya arkadaşlarım benden yüksek alırsa?"
+    dogru_cevap: "Kaygı / Endişe"
+    celdirici_1: "Korku"
+    celdirici_2: "Üzüntü"
+    celdirici_3: "Hayal kırıklığı"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 40-90 arasinda mi?"
+    - "Cumle sayisi 3-6 arasinda mi?"
+    - "Oykuleyici veya siir formatinda mi?"
+    - "Duygu ismi metinde dogrudan gecmiyor mu?"
+    - "Belirli bir duygu guclu sekilde hissettiriliyor mu?"
+    - "Davranislar/olaylar uzerinden duygu sezdiriliyor mu?"
+
+  correct_answer:
+    - "1-3 kelime kavram adi mi?"
+    - "Paragraftaki baskin duyguyla ortusuyur mu?"
+    - "Duygu ismi dogru yazilmis mi (Turkce karakterler)?"
+
+  distractors:
+    - "Her celdirici farkli bir duygu mu?"
+    - "Celdiriciler 1-3 kelime kavram adi mi?"
+    - "Hicbiri paragraftaki baskin duyguyla ortusmuyur mu?"
+    - "Benzer/zit duygu stratejisi kullanilmis mi?"
+    - "Tum secenekler ayni gramer yapida mi? (kavram adi)"

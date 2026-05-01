@@ -1,0 +1,112 @@
+# templates/2sinif/bolum4/paragraf_olusturma_sinif2_kolay.yaml
+# 2. Sinif — Paragraf Olusturma — KOLAY zorluk
+# 3 cumle, acik zaman/sira ipuclari, celdiriciler kolay elenebilir
+
+meta:
+  id: "paragraf_olusturma_sinif2_kolay"
+  ad: "2. Sinif - Paragraf Olusturma (Kolay)"
+  sinif_seviyesi: 2
+  aciklama: "Kolay duzey — 3 cumle, acik zaman/sira ipuclari, celdiriciler kolay elenebilir, 3 secenekli"
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Numaralanmis karisik cumleler + soru koku + 3 siralama secenegi (kolay)"
+
+  paragraph:
+    required: true
+    numbered_sentences: true
+    word_count_min: 20
+    word_count_max: 40
+    sentence_count_min: 3
+    sentence_count_max: 3
+    stil: "siralama"
+    background_color: "#e8f8e8"
+    kurallar:
+      - "3 cumle kullanilmalidir."
+      - "Cumleler numaralanmis ve KARISIK sirada verilmelidir."
+      - "Cumleler ARAP RAKAMLARI (1., 2., 3.) ile numaralandirilmalidir. Roma rakami (I, II, III) KULLANILMAMALIDIR."
+      - "Cumleler birlikte anlamli ve dogal bir paragraf olusturmalidir."
+      - "Cumleler tek baskin konu veya tek olay akisi etrafinda kurulmalidir."
+      - "Cumleler 2. sinif ogrencisinin anlayabilecegi kadar sade, kisa ve somut olmalidir."
+      - "Her cumle tek bir acik bilgi veya tek bir acik adim icermelidir."
+      - "Dogru siralama; zaman, olus sirasi veya islem basamaklari bakimindan acik olmalidir."
+      - "Baslangic cumlesi belirgin olmalidir."
+      - "Son cumle sureci, olayi veya dusunceyi dogal bicimde tamamlamalidir."
+      - "Cumleler dis bilgi gerektirmeden yalniz kendi ic iliskileriyle siralanabilir olmalidir."
+      - "Ilk cumle acikca giris niteliginde olmalidir."
+      - "Son cumle acikca bitis niteliginde olmalidir."
+      - "Siralama cogunlukla zaman veya islem basamaklarina dayali olmalidir."
+      - "Baglayicilar belirgin olabilir: ilk olarak, sonra, en sonunda gibi."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    style: "roman_numeral_combination"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Tum secenekler yalniz sira dizisi biciminde verilmelidir."
+      - "Siralama, cumle numaralari tire ile ayrilmis bicimde yazilmalidir."
+      - "3 cumle icin secenekler ornegin 1-2-3 biciminde olmalidir."
+      - "Secenekler yalnizca Arap rakamlari ve tire ile yazilmalidir (ornek: 2-1-3). Roma rakami (I, II, III) asla kullanilmamalidir."
+      - "Dogru secenek anlamli paragraf sirasini vermelidir."
+      - "Yanlis secenekler rastgele degil, makul ama hatali dizilislerden secilmelidir."
+      - "1 yanlis secenek tamamen ters sira gibi belirgin yanlis olabilir."
+      - "1 yanlis secenek yalniz orta ve sonu karistirabilir."
+      - "Yanlis secenekler kolay elenebilir olmalidir."
+
+soru_kokleri:
+  - "<b>Numaralanmis cumlelerin olaylarin olus sirasina gore siralanisi hangi secenekte dogru verilmistir?</b>"
+  # KULLANILDI: - "<b>Numaralanmis cumlelerle anlamli bir paragraf olusturulmak istenirse siralama nasil olmalidir?</b>"
+  - "<b>Bu cumlelerle anlamli bir paragraf olusturmak icin dogru siralama hangisidir?</b>"
+  # KULLANILDI: - "<b>Numaralanmis cumlelerin dogru siralanisi asagidakilerden hangisidir?</b>"
+  - "<b>Bu cumleler anlamli bir paragraf olusturacak sekilde nasil siralanmalidir?</b>"
+  - "<b>Asagidaki numaralanmis cumlelerle bir paragraf olusturulursa dogru sira hangisi olur?</b>"
+  - "<b>Karisik verilen cumlelerle anlamli bir paragraf olusturulursa siralama nasil olur?</b>"
+  - "<b>Numaralanmis cumleler dusuncenin akisina gore nasil siralanmalidir?</b>"
+  - "<b>Bu cumlelerin anlamli bir paragraf olusturmasi icin siralama hangi secenekte dogru verilmistir?</b>"
+  - "<b>Bu cumleler olaylarin olus sirasina gore dizilirse hangi sira olusur?</b>"
+
+dogru_cevap:
+  tanim: "Numaralanmis cumleleri anlamli ve dogal bir paragraf olusturacak bicimde siralayan secenek"
+  kurallar:
+    - "Dogru cevap paragrafin dogal baslangicini dogru cumleyle baslatmalidir."
+    - "Dogru cevap cumleler arasinda acik zaman, neden-sonuc veya islem akisi kurmalidir."
+    - "Dogru cevap paragraffi dogal bir sonla tamamlamalidir."
+    - "Dogru cevap yalniz tek bir dogru dizilis birakmalicidr."
+    - "Dogru sira 2. sinif ogrencisinin acik ipuclariyla fark edebilecegi nitelikte olmalidir."
+
+celdirici_stratejileri:
+  - ad: "TERS_SIRA"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Tamamen ters sira gibi belirgin yanlis dizilim"
+    nasil_olusturulur: |
+      Cumleleri tamamen ters veya belirgin sekilde yanlis bir sirada diz.
+      Kolay duzey: bu secenek acikca yanlis oldugu belli olmali.
+    kategori: "cognitive"
+
+  - ad: "ORTA_SON_KARISIK"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Yalniz orta ve sonu karistiran dizilim"
+    nasil_olusturulur: |
+      Dogru baslangici koru ama orta ve son cumleleri karistir.
+      Kolay duzey: bu secenek ilk bakista makul gorunebilir ama devami yanlistir.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB1"
+  bilesenler: ["siralama", "paragraf_olusturma"]
+  surec_bileseni: "metni_anlama"
+
+sinif2_ek_kurallar:
+  yasak_alanlar:
+    - "Ana dusunce / ana duygu odakli sorular YASAK"
+    - "Cok katmanli mantik gerektiren dizilim YASAK"
+    - "4 cumle kullanilmamali — kolay duzey 3 cumle"

@@ -1,0 +1,194 @@
+# templates/capture2/hikaye_unsurlari_tablo.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Hikaye Unsurlari
+#
+# TABLO/ESLESTIRME FORMATI (tum hikaye unsurlari sorularinin ~%20'si)
+# Oykuleyici paragraf verilir, ogrenci tum unsurlari dogru eslestiren secenegi secer
+#
+# MANTIK: 1 secenek tum unsurlari dogru eslestirir (dogru cevap), 3 secenekte en az 1 hata vardir
+# Secenekler "Yer: X, Zaman: Y, Olay: Z, Kisi: T" formatindadir
+
+meta:
+  id: "hikaye_unsurlari_tablo"
+  ad: "Hikâye Unsurları (Tablo/Eşleştirme)"
+  sinif_seviyesi: 5
+  aciklama: "Metnin tüm hikâye unsurlarını doğru eşleştiren seçeneği bulma"
+  kaynak: "data/hikaye_unsurlari.pdf"
+  frequency: "Medium (~20% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Oykuleyici paragraf + soru koku + tablo/liste formatinda secenekler"
+
+  paragraph:
+    required: true
+    word_count_min: 60
+    word_count_max: 110
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "oykuleyici"
+    kurallar:
+      - "Metin; Olay, Yer, Zaman ve Kisi unsurlarinin tamamini net bir sekilde icermelidir."
+      - "Orn: 'Saffet Bey (Kisi), emekli olunca dogdugu sahil kasabasina (Yer) yerlesmeye karar verdi. Bir sonbahar gunu (Zaman) koye vardi...'"
+      - "Her unsur acik ve kesin olmali, yorum gerektirmemeli"
+      - "Olay orgusu net bir baslangic-gelisim-sonuc icermeli"
+      - "Kisi isim veya unvan ile belirtilmeli"
+      - "Yer ve Zaman acik ifadelerle verilmeli (orn: 'pazar sabahi', 'koydeki cesmede')"
+      - "Paragrafta hikâye unsurlarıyla ilgili AÇIKLAMA veya EK BİLGİ verme! (Örn: 'Bu hikâyede mekân unsuru parkır', 'Olayın geçtiği yer şehirdir' gibi açıklamalar YASAK)"
+      - "Paragraf SADECE hikâyeyi anlatsın — unsur analizi veya tanımlaması YAPMA"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 10
+    word_count_max: 25
+    style: "structured_list"
+    correct_count: 1
+    kurallar:
+      - "Seçeneklerde olay, yer, kişi, zaman gibi unsurlar yan yana DEĞİL, tablo formatında sunulmalı"
+      - "Her seçenek unsurları alt alta veya tablo hücresi gibi göstermeli"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 2 varyasyon)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metnin hikâye unsurları aşağıdakilerin hangisinde doğru olarak verilmiştir?</b>"
+  - "<b>Bu metindeki hikâye unsurları ile ilgili aşağıdakilerden hangisi doğrudur?</b>"
+  - "<b>Yukarıdaki metnin yer, zaman, kişi ve olay unsurları aşağıdakilerin hangisinde doğru eşleştirilmiştir?</b>"
+  - "<b>Bu metindeki hikâye unsurlarının doğru sıralanışı aşağıdakilerin hangisinde verilmiştir?</b>"
+  - "<b>Metnin hikâye unsurları göz önüne alındığında aşağıdakilerin hangisi doğru bir eşleştirmedir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Tum unsurlarin metinle birebir ortustugu secenek"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Yer, Zaman, Olay ve Kisi unsurlarinin dordu de metinle birebir ortusmelidir"
+    - "Hicbir unsurda carpitma veya degistirme olmamali"
+    - "Her unsur metinde acikca gecen ifadelerle eslestirilmeli"
+    - "Secenek her unsuru ayri satirda icermeli: Yer: X<br>Zaman: Y<br>Olay: Z<br>Kisi: T formatinda (<br> ile ayir, virgul ile AYIRMA!)"
+  ornekler:
+    - metin: "Saffet Bey, emekli olunca dogdugu sahil kasabasina yerlesmeye karar verdi. Bir sonbahar gunu koye vardi ve eski evini onarmaya basladi."
+      dogru: "Yer: sahil kasabasi<br>Zaman: sonbahar<br>Olay: eve yerlesmek<br>Kisi: Saffet Bey"
+    - metin: "Ali, yaz tatilinde dedesinin koyune gitti. Orada bahcede calisti ve hayvanlara bakti."
+      dogru: "Yer: dedesinin koyu<br>Zaman: yaz tatili<br>Olay: bahcede calismak<br>Kisi: Ali"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Celdiricilerde en az 1 unsur yanlis/carpitilmis olarak verilir
+# Tipik hatalar:
+# - Yer yerine farkli bir yer yazma
+# - Zaman bilgisini degistirme
+# - Olayi farkli yorumlama
+# - Kisiyi karistirma
+
+distractors:
+  stratejiler:
+    - ad: "TEK_UNSUR_HATASI"
+      aciklama: "4 unsurdan sadece 1 tanesi yanlis verilir, diger 3 dogru"
+      ornek: "Yer dogru, Zaman dogru, Olay YANLIS, Kisi dogru"
+    - ad: "UNSUR_TAKASI"
+      aciklama: "Iki unsurun yerleri degistirilir veya biri digerinin yerine yazilir"
+      ornek: "Yer unsuruna Zaman bilgisi yazilir"
+    - ad: "DETAY_CARPITMASI"
+      aciklama: "Unsur dogru ama detayi yanlis verilir"
+      ornek: "Yer: sahil kasabasi yerine dag koyu yazilir"
+  notlar:
+    - "Her celdiricide en az 1, en fazla 2 unsur yanlis olmali"
+    - "3 veya 4 yanlis unsur secenegi cok kolay olur, kacinilmali"
+    - "Yanlis unsur makul gorunmeli (tamamen alakasiz degil)"
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cozumleme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Oykuleyici paragraf olustur (60-110 kelime)"
+      details: |
+        Paragrafta 4 unsur NET olarak yer almali:
+        - Olay: Bir durum degisimi veya eylem dizisi
+        - Yer: Belirli bir mekan (isim veya tanimlama ile)
+        - Zaman: Belirli bir zaman dilimi (gun, mevsim, saat vb.)
+        - Kisi: En az 1 karakter (isim veya unvan ile)
+
+    - step: 2
+      action: "Dogru cevabi olustur (4 unsur dogru eslestirmesi)"
+      details: |
+        Her unsuru metinden birebir cikar (her unsur <br> ile AYRI SATIRDA):
+        - "Yer: [metindeki yer]<br>Zaman: [metindeki zaman]<br>Olay: [metindeki olay]<br>Kisi: [metindeki kisi]"
+
+    - step: 3
+      action: "3 celdirici secenek olustur (en az 1 unsur yanlis)"
+      details: |
+        Her celdiricide:
+        - En az 1, en fazla 2 unsur yanlis/carpitilmis olmali
+        - Yanlis unsurler makul gorunmeli
+        - Farkli celdiricilerde farkli unsurlar yanlis olmali
+        - Ornek: Birinde Yer yanlis, digerinde Zaman yanlis, ucuncude Olay yanlis
+
+    - step: 4
+      action: "Secenekleri rastgele sirala"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 5
+      action: "Soru kokunu sec"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 96
+    konu: "Hikaye unsurlari - Tablo eslestirme"
+    metin: "Saffet Bey, emekli olunca dogdugu sahil kasabasina yerlesmeye karar verdi. Bir sonbahar gunu koye vardi..."
+    dogru_cevap: "Yer: sahil kasabasi<br>Zaman: sonbahar<br>Olay: eve yerlesmek<br>Kisi: Saffet Bey"
+    celdirici_1: "Yer: dag koyu<br>Zaman: sonbahar<br>Olay: eve yerlesmek<br>Kisi: Saffet Bey"
+    celdirici_2: "Yer: sahil kasabasi<br>Zaman: ilkbahar<br>Olay: eve yerlesmek<br>Kisi: Saffet Bey"
+    celdirici_3: "Yer: sahil kasabasi<br>Zaman: sonbahar<br>Olay: tatile gitmek<br>Kisi: Saffet Bey"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 60-110 arasinda mi?"
+    - "Cumle sayisi 4-7 arasinda mi?"
+    - "Oykuleyici bir uslupla mi yazilmis?"
+    - "4 unsur (Olay, Yer, Zaman, Kisi) tamamiyla acik ve net mi?"
+    - "Hicbir unsur belirsiz birakilmamis mi?"
+
+  correct_answer:
+    - "10-25 kelime arasinda mi?"
+    - "Tum 4 unsur dogru olarak eslestirilmis mi?"
+    - "Yapilandirilmis liste formatinda mi (Yer: X<br>Zaman: Y<br>Olay: Z<br>Kisi: T — her unsur ayri satirda)?"
+
+  distractors:
+    - "Her celdiricide en az 1 unsur yanlis mi?"
+    - "Yanlis unsurler makul gorunuyor mu?"
+    - "Farkli celdiricilerde farkli unsurlar mi yanlis?"
+    - "3 veya 4 unsur birden yanlis olan secenek var mi? (olmamali)"
+    - "Tum secenekler ayni formatta mi?"

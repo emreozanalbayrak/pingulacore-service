@@ -1,0 +1,493 @@
+meta:
+  id: "grafik_yorumlama_sinif2_grafik_merkezli_uc_secenekli"
+  ad: "Grafik Yorumlama"
+  sinif_seviyesi: 2
+  ders: "Türkçe"
+  bolum: "2. Sınıf Paragraf Soru Bankası"
+  alt_bolum: "7.6 Grafik Yorumlama"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    2. sınıf öğrencisi için grafikte verilen verileri okuyup yorumlayarak
+    söylenebilen, söylenemeyen, çıkarılabilen veya çıkarılamayan bilgileri
+    ayırt ettirmeye; ayrıca metindeki ya da veri listesindeki bilgileri içeren
+    doğru grafiği seçtirmeye yönelik, grafik zorunlu ve 3 seçenekli standart
+    soru üretim şablonu.
+  kullanim_notu: >
+    Bu şablonda grafik soru çözümünün ana kaynağıdır. Varsa kısa bağlam metni
+    yalnız yönlendirme yapar; tek başına çözüm sağlamaz. Metinden grafik seçme
+    varyantında ise hem metin/veri listesi hem grafik seçenekleri birlikte
+    kullanılmalıdır. Harici 2. Sınıf TYMM Ortak Kuralları ile birlikte doğrulanmalıdır.
+
+format:
+  tip: "llm_generated_html"
+  aciklama: "İsteğe bağlı kısa bağlam metni + ana grafik veya grafik seçenekleri + soru kökü + 3 seçenek"
+
+  soru_varyanti:
+    izinli:
+      - "grafikten_hangisi_soylenebilir"
+      - "grafikten_hangisi_soylenemez"
+      - "grafikten_hangisi_cikarilabilir"
+      - "grafikten_hangisi_cikarilamaz"
+      - "metindeki_bilgileri_veren_grafik"
+    varsayilan: "grafikten_hangisi_soylenebilir"
+
+  cozum_kaynagi_politikasi:
+    grafik_tabanli_varyantlar:
+      kapsar:
+        - "grafikten_hangisi_soylenebilir"
+        - "grafikten_hangisi_soylenemez"
+        - "grafikten_hangisi_cikarilabilir"
+        - "grafikten_hangisi_cikarilamaz"
+      ana_kaynak: "ana_grafik"
+      kurallar:
+        - "Ana grafik zorunludur."
+        - "Varsa bağlam metni tek başına çözüm vermemelidir."
+        - "Doğru cevap grafik incelenmeden bulunamamalıdır."
+        - "Grafikteki başlık, eksen, sembol, renk, sayı veya sütun yüksekliği çözümde gerçek işlev taşımalıdır."
+    metinden_grafik_secme_varyanti:
+      kapsar:
+        - "metindeki_bilgileri_veren_grafik"
+      ana_kaynaklar:
+        - "metin_veya_veri_listesi"
+        - "grafik_secenekleri"
+      kurallar:
+        - "Metin veya veri listesi zorunludur."
+        - "3 grafik seçeneği zorunludur."
+        - "Doğru cevap için hem metin/liste hem grafik seçenekleri birlikte kullanılmalıdır."
+        - "Yalnız metne bakarak doğru grafik seçilememelidir."
+        - "Yalnız grafik seçeneklerine bakarak da doğru cevap kesin seçilememelidir."
+
+  baglam_metni:
+    gerekli: false
+    aciklama: "Grafiğin neyi gösterdiğini açıklayan kısa bilgi alanı"
+    cumle_sayisi_min: 1
+    cumle_sayisi_max: 3
+    kelime_sayisi_min: 8
+    kelime_sayisi_max: 30
+    kurallar:
+      - "Bağlam metni varsa kısa, sade ve açıklayıcı olmalıdır."
+      - "Bağlam metni grafikteki sayıların veya sembollerin neyi gösterdiğini söyleyebilir."
+      - "Bağlam metni doğru seçeneği tek başına vermemelidir."
+      - "Bağlam metni 2. sınıf düzeyinde olmalıdır."
+    yasaklar:
+      - "grafiği okumadan cevabı açıkça veren açıklama"
+      - "uzun ve karmaşık paragraf"
+      - "teknik grafik dili"
+
+  ana_grafik:
+    gerekli_varyantlarda:
+      - "grafikten_hangisi_soylenebilir"
+      - "grafikten_hangisi_soylenemez"
+      - "grafikten_hangisi_cikarilabilir"
+      - "grafikten_hangisi_cikarilamaz"
+    tipler:
+      - "basit sütun grafik"
+      - "şekil grafiği"
+      - "resimli grafik"
+      - "renkli çubuk grafik"
+      - "tek değişkenli karşılaştırma grafiği"
+    kurallar:
+      - "Grafik sade, okunabilir ve 2. sınıf düzeyine uygun olmalıdır."
+      - "Grafik başlığı açıkça verilmelidir."
+      - "Grafikte eksen veya kategori adları açıkça yazılmalıdır."
+      - "Sayısal değerler veya görsel semboller net biçimde takip edilebilir olmalıdır."
+      - "Şekil grafiği kullanılıyorsa her şeklin neyi temsil ettiği açıkça gösterilmelidir."
+      - "Grafikte en az 3 veri noktası bulunmalıdır."
+      - "Grafikte tek bir bağlam içinde karşılaştırma yapılmalıdır."
+      - "Doğru cevap grafik okunmadan bulunamamalıdır."
+      - "Grafik çok yoğun ve karmaşık olmamalıdır."
+      - "Renkler okunabilirliği desteklemeli, tek bilgi kaynağı olmamalıdır."
+    yasaklar:
+      - "çok küçük yazılı karmaşık grafik"
+      - "2. sınıf düzeyini aşan çok eksenli grafik"
+      - "oran, yüzde veya ileri istatistik gerektiren grafik"
+      - "başlıksız ve belirsiz grafik"
+      - "görsel süsün veriyi gölgelediği grafik"
+
+  metin_veya_veri_listesi:
+    gerekli_varyantlarda:
+      - "metindeki_bilgileri_veren_grafik"
+    tipler:
+      - "kısa açıklama metni"
+      - "madde madde veri listesi"
+      - "kişi-sayı, gün-sayı, nesne-sayı ilişkisi veren kısa bilgiler"
+    cumle_sayisi_min: 2
+    cumle_sayisi_max: 5
+    kelime_sayisi_min: 18
+    kelime_sayisi_max: 56
+    kurallar:
+      - "Metin veya liste grafikte hangi verilerin olması gerektiğini anlatmalıdır."
+      - "Bilgiler açık ve sade olmalıdır."
+      - "Doğru grafiği seçmek için metin dikkatle okunmalıdır."
+      - "Metin tek başına doğru cevabı söylememeli; grafik seçenekleriyle karşılaştırma gerektirmelidir."
+      - "Liste veya metin 2. sınıf düzeyine uygun olmalıdır."
+
+  grafik_secenekleri:
+    gerekli_varyantlarda:
+      - "metindeki_bilgileri_veren_grafik"
+    secenek_sayisi: 3
+    etiketler: ["A", "B", "C"]
+    stil: "kucuk_grafik_gorseli"
+    kurallar:
+      - "Her seçenek grafik biçiminde verilmelidir."
+      - "3 grafik de biçimce paralel olmalıdır."
+      - "Doğru grafik metindeki bilgileri tam karşılamalıdır."
+      - "Yanlış grafikler yakın ama hatalı veri taşımalıdır."
+      - "Grafik seçenekleri 2. sınıf düzeyinde okunabilir olmalıdır."
+      - "Grafik seçenekleri yalnız renk veya şekil farkıyla değil, veri farkıyla ayırt edilmelidir."
+
+  soru_koku:
+    gerekli: true
+    secim: "listeden_rastgele"
+
+  secenekler:
+    grafik_tabanli_varyantlarda:
+      sayi: 3
+      etiketler: ["A", "B", "C"]
+      dogru_sayisi: 1
+      stil: "kisa_yargi"
+      kelime_sayisi_min: 3
+      kelime_sayisi_max: 14
+      kurallar:
+        - "Seçenekler kısa, sade ve 2. sınıf düzeyinde olmalıdır."
+        - "Doğru seçenek grafiğe dayanmalıdır."
+        - "Yanlış seçenekler grafiğe yakın ama hatalı olmalıdır."
+        - "Seçenekler kendi aralarında biçimce paralel olmalıdır."
+
+soru_kokleri:
+  grafikten_hangisi_soylenebilir:
+    - "Grafiğe göre aşağıdakilerden hangisi söylenebilir?"
+    - "Bu grafikten hareketle aşağıdakilerden hangisi söylenebilir?"
+    - "Grafikteki bilgilere göre aşağıdakilerden hangisi doğrudur?"
+    - "Aşağıdakilerden hangisi grafiğe uygundur?"
+    - "Grafik incelendiğinde aşağıdakilerden hangisi söylenebilir?"
+
+  grafikten_hangisi_soylenemez:
+    - "Grafiğe göre aşağıdakilerden hangisi söylenemez?"
+    - "Bu grafikten hareketle aşağıdakilerden hangisi söylenemez?"
+    - "Grafikteki bilgilere göre aşağıdakilerden hangisi doğru değildir?"
+    - "Aşağıdakilerden hangisi grafiğe uygun değildir?"
+    - "Grafik incelendiğinde aşağıdakilerden hangisi söylenemez?"
+
+  grafikten_hangisi_cikarilabilir:
+    - "Grafikten aşağıdakilerden hangisi çıkarılabilir?"
+    - "Bu grafikten hareketle aşağıdakilerden hangisi çıkarılabilir?"
+    - "Grafikteki verilere göre aşağıdakilerden hangisine ulaşılabilir?"
+    - "Grafik incelendiğinde aşağıdakilerden hangisi bulunabilir?"
+    - "Aşağıdakilerden hangisi grafiğe göre belirlenebilir?"
+
+  grafikten_hangisi_cikarilamaz:
+    - "Grafikten aşağıdakilerden hangisi çıkarılamaz?"
+    - "Bu grafikten hareketle aşağıdakilerden hangisine ulaşılamaz?"
+    - "Grafikteki verilere göre aşağıdakilerden hangisi bulunamaz?"
+    - "Grafik incelendiğinde aşağıdakilerden hangisi belirlenemez?"
+    - "Aşağıdakilerden hangisi grafiğe göre çıkarılamaz?"
+
+  metindeki_bilgileri_veren_grafik:
+    - "Grafiklerden hangisi metindeki bilgileri içermektedir?"
+    - "Aşağıdaki grafiklerden hangisi metindeki bilgilere uygundur?"
+    - "Verilen bilgilere göre doğru grafik hangisidir?"
+    - "Metindeki bilgilere göre oluşturulan grafik aşağıdakilerden hangisidir?"
+    - "Aşağıdaki grafiklerden hangisi verilen bilgileri doğru göstermektedir?"
+
+beceri_odagi:
+  birincil_beceri:
+    - "Grafikten bilgi çıkarma ve grafiği yorumlama"
+  ikincil_beceriler:
+    - "Grafik başlığını ve kategorileri doğru okuma"
+    - "Sayıların veya sembollerin neyi gösterdiğini anlama"
+    - "En çok, en az, eşit, fazla, az gibi ilişkileri fark etme"
+    - "Grafikten ulaşılabilen ve ulaşılamayan bilgileri ayırt etme"
+    - "Metindeki bilgileri grafikle eşleştirme"
+
+dogru_cevap:
+  tanim: "Grafikte yer alan açık bilgiye veya grafikten doğrudan çıkarılabilen basit sonuca dayanan doğru seçenek"
+  kurallar:
+    - "Doğru cevap grafiğe dayanmalıdır."
+    - "Doğru cevap dış bilgi gerektirmemelidir."
+    - "Doğru cevap 2. sınıf öğrencisinin grafiği inceleyerek bulabileceği açıklıkta olmalıdır."
+    - "Söylenemez / çıkarılamaz sorularında doğru cevap grafikten gerçekten bulunamayan bilgi olmalıdır."
+    - "Metinden grafik seçme varyantında doğru cevap metindeki bilgileri tam karşılayan grafik olmalıdır."
+
+yanlis_secenek_stratejileri:
+  count_per_question: 2
+  strateji_havuzu:
+    - id: "yakın_sayi_hatasi"
+      tanim: "Grafikteki değere çok yakın ama yanlış sayı kullanma"
+      ornek_mantik:
+        - "40 yerine 30 söylemek"
+        - "38 yerine 32 söylemek"
+
+    - id: "kategori_karistirma"
+      tanim: "Bilgiyi yanlış kişi, gün, ay, meslek veya başlıkla eşleştirme"
+      ornek_mantik:
+        - "Ali'nin bilgisini Cemil'e bağlama"
+        - "Esnaf yerine işçiyi söyleme"
+
+    - id: "kismi_dogru_kismi_yanlis"
+      tanim: "İfadenin bir kısmı grafiğe uyar ama tamamı yanlış olur"
+      ornek_mantik:
+        - "her gün matematik vardır ama Türkçe yoktur"
+        - "en az meslek grubunu doğru söyleyip en çok grubu yanlış söylemek"
+
+    - id: "ulasilamaz_bilgi"
+      tanim: "Grafikte bulunmayan ayrıntıyı sorma ya da söyleme"
+      ornek_mantik:
+        - "hangi dersten soru çözdüğü"
+        - "soruları hangi saatte çözdüğü"
+        - "en sevdiği dersin hangisi olduğu"
+
+    - id: "yanlis_karsilastirma"
+      tanim: "En çok, en az, daha fazla, eşit gibi ilişkileri yanlış kurma"
+      ornek_mantik:
+        - "işçi veli sayısı esnaftan fazladır"
+        - "haziran satışı ocaktan azdır"
+
+    - id: "yanlis_grafik_eslesmesi"
+      tanim: "Metindeki bilgilerin bir kısmını doğru, bir kısmını yanlış gösteren grafik"
+      ornek_mantik:
+        - "iki sütun doğru, bir sütun yanlış"
+        - "bir kategori yeri değişmiş grafik"
+
+  secim_kurali:
+    - "Her soruda 2 yanlış seçenek farklı stratejilerden seçilmelidir."
+    - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+    - "Çıkarılamaz / söylenemez sorularında diğer iki seçenek grafikle desteklenmelidir."
+    - "Metinden grafik seçme varyantında iki yanlış grafik de metne kısmen benzeyebilir."
+
+soru_varyanti_kurallari:
+  grafikten_hangisi_soylenebilir:
+    kurallar:
+      - "1 seçenek grafik ile desteklenmelidir."
+      - "2 seçenek grafik ile desteklenmemelidir."
+      - "Doğru seçenek doğrudan okuma veya çok basit karşılaştırma ile bulunmalıdır."
+
+  grafikten_hangisi_soylenemez:
+    kurallar:
+      - "2 seçenek grafik ile desteklenmelidir."
+      - "1 seçenek grafik ile desteklenmemelidir."
+      - "Doğru seçenek grafikte yer almayan ya da grafiğe aykırı bilgi olmalıdır."
+
+  grafikten_hangisi_cikarilabilir:
+    kurallar:
+      - "Doğru seçenek grafikteki bilgilerden çıkarılabilen basit bir sonuç olmalıdır."
+      - "Çıkarım en fazla 1-2 adımlı olmalıdır."
+      - "Soyut yorum gerektirmemelidir."
+
+  grafikten_hangisi_cikarilamaz:
+    kurallar:
+      - "Doğru seçenek grafikten bulunamayan bilgi olmalıdır."
+      - "Diğer 2 seçenek grafikten doğrudan veya basit karşılaştırmayla bulunabilmelidir."
+
+  metindeki_bilgileri_veren_grafik:
+    kurallar:
+      - "3 grafik seçeneği bulunmalıdır."
+      - "1 grafik metindeki bilgileri tam karşılamalıdır."
+      - "2 grafik yakın ama hatalı veri taşımalıdır."
+      - "Doğru cevap için hem metin/liste hem grafik seçenekleri birlikte incelenmelidir."
+
+zorluk_duzeyleri:
+  kolay:
+    ana_grafik:
+      bilgi_yogunlugu: "dusuk"
+      kurallar:
+        - "Grafikte 3-4 kategori bulunmalıdır."
+        - "Doğru cevap doğrudan okuma, en çok / en az bulma gibi açık görevlerden gelmelidir."
+        - "Toplam gerektiren görevler mümkünse kullanılmamalıdır."
+        - "Şekil grafiği veya çok sade sütun grafik tercih edilmelidir."
+    tercih_edilen_varyantlar:
+      - "grafikten_hangisi_soylenebilir"
+      - "grafikten_hangisi_soylenemez"
+    celdiriciler:
+      kurallar:
+        - "1 seçenek yakın sayı hatası içerebilir."
+        - "1 seçenek ulaşılamaz bilgi veya kategori karışıklığı olabilir."
+        - "Yanlış seçenekler kolay elenebilir olmalıdır."
+    zorluk_notu: >
+      Kolay düzeyde öğrenci grafiği okuyarak açık bilgileri seçer.
+      Zorluk düşük tutulur.
+
+  orta:
+    ana_grafik:
+      bilgi_yogunlugu: "orta"
+      kurallar:
+        - "Grafikte 4-6 kategori bilgisi olabilir."
+        - "Doğru cevap için basit karşılaştırma veya küçük toplam gerekebilir."
+        - "Sütun grafik, resimli grafik veya sade karşılaştırma grafiği kullanılabilir."
+    tercih_edilen_varyantlar:
+      - "grafikten_hangisi_cikarilabilir"
+      - "grafikten_hangisi_cikarilamaz"
+      - "grafikten_hangisi_soylenemez"
+      - "metindeki_bilgileri_veren_grafik"
+    celdiriciler:
+      kurallar:
+        - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+        - "Yanlış seçenekler yakın ama hatalı karşılaştırma içerebilir."
+    zorluk_notu: >
+      Orta düzeyde öğrenci grafiği okuyup karşılaştırma yapar ve hangi bilginin
+      çıkarılabildiğini ayırt eder.
+
+  zor:
+    ana_grafik:
+      bilgi_yogunlugu: "orta_yuksek"
+      kurallar:
+        - "Grafikte birden fazla kategori ilişkisi bulunabilir."
+        - "Doğru cevap için iki bilgiyi birleştirmek gerekebilir."
+        - "En çok, en az, eşitlik, fark veya küçük toplam karşılaştırması olabilir."
+        - "Zor düzeyde bile en fazla 2 adımlı işlem yapılmalıdır."
+        - "Zor düzeyde de 2. sınıf sadeliği korunmalıdır."
+    tercih_edilen_varyantlar:
+      - "grafikten_hangisi_cikarilamaz"
+      - "grafikten_hangisi_cikarilabilir"
+      - "metindeki_bilgileri_veren_grafik"
+    celdiriciler:
+      kurallar:
+        - "2 yanlış seçenek de makul görünmelidir."
+        - "1 yanlış seçenek yakın karşılaştırma hatası içermelidir."
+        - "1 yanlış seçenek kategori veya veri eşleştirme hatası içermelidir."
+    zorluk_notu: >
+      Zor düzey 2. sınıfta derin grafik analizi değildir.
+      Zorluk, grafikteki birden fazla bilgiyi dikkatle kullanarak doğru sonuca ulaşma düzeyindedir.
+
+zorluk_secim_politikasi:
+  varsayilan: "Orta"
+  izinli_degerler: ["Kolay", "Orta", "Zor"]
+  kesin_sinirlar:
+    - "Tüm düzeylerde grafik zorunludur."
+    - "Grafik tabanlı varyantlarda çözümün ana kaynağı grafik olmalıdır."
+    - "Metinden grafik seçme varyantında hem metin/liste hem grafik seçenekleri zorunludur."
+    - "Tüm düzeylerde 3 seçenek kullanılmalıdır."
+    - "Zor düzey seçilse bile 2 adımdan fazla işlem gerektiren yapı kurulamaz."
+    - "Zor düzey seçilse bile dış bilgi, soyut yorum veya ana düşünce gerektiren soru kurulamaz."
+
+konu_alani:
+  izinli_ornekler:
+    - "çözülen soru sayıları"
+    - "veli meslekleri"
+    - "aylara göre satış sayıları"
+    - "okunan kitap sayıları"
+    - "haftalık etkinlik sayıları"
+    - "öğrenci puanları"
+    - "hayvan sayıları"
+    - "oyuncak sayıları"
+    - "günlere göre etkinlikler"
+    - "basit sınıf verileri"
+  kurallar:
+    - "Konu 2. sınıf öğrencisinin anlayabileceği kadar somut ve açık olmalıdır."
+    - "Grafikteki sayı ve bilgiler neyi gösterdiği belli olacak şekilde verilmelidir."
+    - "Konu dış bilgi gerektirmeden çözülebilmelidir."
+    - "Grafik çocukların okul ve günlük yaşamına yakın olmalıdır."
+
+uretim_mantigi:
+  adimlar:
+    - adim: 1
+      eylem: "2. sınıfa uygun, grafik ile gösterilebilir açık bir veri konusu seç"
+    - adim: 2
+      eylem: "Soru varyantını belirle"
+      detaylar:
+        - "grafikten_hangisi_soylenebilir"
+        - "grafikten_hangisi_soylenemez"
+        - "grafikten_hangisi_cikarilabilir"
+        - "grafikten_hangisi_cikarilamaz"
+        - "metindeki_bilgileri_veren_grafik"
+    - adim: 3
+      eylem: "Varyanta göre ana grafiği ya da metin+grafik seçeneklerini oluştur"
+      detaylar:
+        - "Grafik sade ve okunabilir olsun"
+        - "Doğru cevabı belirleyecek veri açık biçimde yer alsın"
+    - adim: 4
+      eylem: "Gerekirse kısa bağlam metni ekle"
+      detaylar:
+        - "Grafiğin neyi gösterdiğini açıklasın"
+        - "Çözümü tek başına vermesin"
+    - adim: 5
+      eylem: "1 doğru ve 2 yanlış seçenek oluştur"
+      detaylar:
+        - "Yanlışlardan biri yakın sayı/karşılaştırma hatası olsun"
+        - "Yanlışlardan biri ulaşılamaz bilgi veya kategori karışıklığı olsun"
+    - adim: 6
+      eylem: "Soru kökünü listeden rastgele seç"
+    - adim: 7
+      eylem: "Şıkları A-B-C olarak karıştır"
+    - adim: 8
+      eylem: "Grafik bağımlılığını doğrula"
+      detaylar:
+        - "Grafik kaldırıldığında soru çözülemiyor mu?"
+        - "Varsa bağlam metni tek başına yetmiyor mu?"
+        - "Doğru cevap grafik incelenince tekleşiyor mu?"
+
+validation_checklist:
+  grafik_bagimliligi:
+    - "Grafik zorunlu olarak var mı?"
+    - "Çözümün ana kaynağı grafik mi?"
+    - "Grafik kaldırıldığında soru çözülemez hâle geliyor mu?"
+    - "Varsa bağlam metni tek başına yetmiyor mu?"
+    - "Doğru cevap grafikteki bilgiye dayanıyor mu?"
+
+  ana_grafik:
+    - "Grafik sade ve okunabilir mi?"
+    - "Başlık ve kategori adları açık mı?"
+    - "Grafikteki sayıların veya sembollerin neyi gösterdiği belli mi?"
+    - "Grafik dekoratif kalmıyor mu?"
+    - "Grafikte en az 3 veri noktası var mı?"
+
+  metin_veya_veri_listesi:
+    - "Yalnız metinden grafik seçme varyantında zorunlu alanlar var mı?"
+    - "Metin/liste kısa ve sade mi?"
+    - "Metin/liste doğru grafiği karşılaştırmalı seçtirecek kadar açık mı?"
+    - "Metin/liste tek başına cevabı vermiyor mu?"
+
+  soru_koku:
+    - "Soru kökü kısa ve açık mı?"
+    - "Soru kökü grafiğe yönlendiriyor mu?"
+    - "Soru kökü cevabı açıklamıyor mu?"
+
+  secenekler:
+    - "Toplam 3 seçenek var mı?"
+    - "Doğru seçenek grafikle doğrulanabiliyor mu?"
+    - "Yanlış seçenekler yakın ama hatalı mı?"
+    - "Söylenemez / çıkarılamaz sorularında diğer iki seçenek grafikle destekleniyor mu?"
+    - "Metinden grafik seçme varyantında yalnız 1 grafik tam uyumlu mu?"
+
+  zorluk:
+    - "Zorluk seçilen düzeye göre bilgi yoğunluğu ayarlanmış mı?"
+    - "Zor düzey bile 2. sınıf sınırında mı?"
+    - "Kolay düzey gereksiz yere karmaşık değil mi?"
+
+hard_fail_rules:
+  - "Grafik yoksa"
+  - "Soru yalnız bağlam metninden çözülebiliyorsa"
+  - "Doğru cevap grafikte doğrulanamıyorsa"
+  - "Seçenek sayısı 3 değilse"
+  - "İki veya daha fazla seçenek makul doğruysa"
+  - "Grafik 2. sınıf için fazla karmaşıksa"
+  - "Soru ana düşünce, gizli mesaj veya soyut yorum sorusuna kayıyorsa"
+  - "Doğru cevap dış bilgi gerektiriyorsa"
+  - "Bağlam metni cevabı doğrudan veriyorsa"
+  - "Metinden grafik seçme varyantında grafik seçenekleri birbirinden ayırt edilemiyorsa"
+
+ornek_bicim_notlari:
+  - "Çözülen soru sayıları grafiğinde öğrencilerin kaç soru çözdüğü, en çok çözen kişi veya ulaşılamayan bilgiler sorulabilir."
+  - "Veli meslekleri grafiğinde en çok ve en az görülen meslek ya da yanlış karşılaştırmalar sorulabilir."
+  - "Aylara göre satış grafiğinde hangi ayda daha fazla satış olduğu veya hangi sonuca ulaşılamadığı sorulabilir."
+  - "Bu bölümde temel amaç, grafikte verilen bilgileri okuyup doğru yargıya ulaşmaktır."
+
+output_contract:
+  required_fields:
+    - "soru_varyanti"
+    - "stem"
+    - "answer"
+    - "difficulty"
+    - "topic"
+  conditional_required_fields:
+    grafik_tabanli_varyantlar:
+      - "ana_grafik"
+      - "options"
+    metindeki_bilgileri_veren_grafik:
+      - "metin_veya_veri_listesi"
+      - "grafik_secenekleri"
+  optional_fields:
+    - "baglam_metni"
+  answer_format:
+    - "answer yalnızca A/B/C olarak verilebilir"
+    - "difficulty yalnızca Kolay / Orta / Zor olabilir"

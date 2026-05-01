@@ -1,0 +1,33 @@
+# Test: baglam_cikarim template (2 soru / 1 grup)
+
+topics_file: ../../konular/kadirhocaistekler/baglam/b1_1_fen.txt
+subject: "Fen Bilimleri"
+grade: 5
+
+models:
+  paragraph_writer: gemini-3-flash-preview
+  question_crafter: gemini-3-flash-preview
+  validator: gemini-3-flash-preview
+
+grounding:
+  enabled: true
+  pdf_path: "../../../../meb_books/fen_bilimleri_5_1_compressed.pdf"
+  cache_ttl: 3600
+
+validation:
+  max_fix_iterations: 3
+  required_checks:
+    - question_format
+    - grade_level
+    - distractors
+    - turkish
+
+image_generation:
+  enabled: false
+
+output:
+  dir: ../../../../output/test_baglam_cikarim
+
+context_generation_plan:
+  - topics: "4"
+    template: baglam_cikarim_eski

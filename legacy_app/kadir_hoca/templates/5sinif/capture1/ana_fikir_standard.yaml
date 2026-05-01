@@ -1,0 +1,272 @@
+# templates/ana_fikir_standard.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Metinde Ana Fikir (Ana Duygu)
+#
+# STANDART ANA FIKIR FORMATI
+# Paragraf verilir, ogrenci ana fikri/ana duyguyu secer
+#
+# ANA FIKIR vs KONU FARKI:
+# - Konu = Metin NE HAKKINDA (icerik odakli, isim tamlamasi)
+# - Ana Fikir = Yazar NE SOYLEMEK ISTIYOR (mesaj odakli, tam cumle)
+#
+# Ornek:
+# - Konu: "Kahvaltinin onemi" (kisa ifade)
+# - Ana Fikir: "Iyi bir kahvalti, saglikli bir yasam surmek icin gereklidir." (tam cumle)
+
+meta:
+  id: "ana_fikir_standard"
+  ad: "Metinde Ana Fikir (Standart)"
+  sinif_seviyesi: 5
+  aciklama: "Paragrafin ana fikrini/dusuncesini belirleme sorulari"
+  kaynak: "data/metinde_ana_fikir.pdf"
+  frequency: "~100% of ana fikir questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 4 tam cumle secenek"
+
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 100
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "bilgilendirici"
+    kurallar:
+      - "Acik ve net bir ana fikir/mesaj icermeli"
+      - "Ana fikri destekleyen 2-4 yardimci bilgi/ornek icermeli"
+      - "Yazarin bir yargisi/degerlendirmesi hissedilmeli"
+      - "Detaylar ana fikri destekler nitelikte olmali"
+      - "Tek bir mesaj etrafinda sekillendirilmeli"
+      - "Yazarin bakis acisi/tutumu paragrafta sezilmeli"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 6
+    word_count_max: 25
+    style: "complete_sentence"  # TAM CUMLE (Konu'dan farkli!)
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 12 varyasyon)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # Altı çizili kelime YOK (tüm soru kökü bold)
+  - "<b>Bu metnin ana fikri aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metinde vurgulanan düşünce aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metinde anlatılmak istenen aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metnin ana düşüncesi aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metinde vurgulanmak istenen düşünce hangisidir?</b>"
+  - "<b>Bu parçanın ana düşüncesi aşağıdakilerden hangisidir?</b>"
+  # "yakınılan/yakındığı" - underline YOK (PDF'de altı çizili değil!)
+  - "<b>Bu metinde yakınılan durum aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metinde yazarın yakındığı durum aşağıdakilerden hangisidir?</b>"
+  # "asıl" altı çizili
+  - "<b>Bu metinde <u>asıl</u> anlatılmak istenen aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu parçada <u>asıl</u> anlatılmak istenen aşağıdakilerden hangisidir?</b>"
+  # "en kapsamlı" altı çizili
+  - "<b>Bu metinden çıkarılabilecek <u>en kapsamlı</u> yargı aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metinden hareketle ulaşılabilecek <u>en kapsamlı</u> yargı aşağıdakilerden hangisidir?</b>"
+  # Topic-embedded varyasyonlar ({topic} → leaf topic, ör: "Yerçekimi kuvveti")
+  - "\"{topic}\" <b>ile ilgili bu metnin ana fikri aşağıdakilerden hangisidir?</b>"
+  - "\"{topic}\" <b>ile ilgili bu metinde <u>asıl</u> anlatılmak istenen aşağıdakilerden hangisidir?</b>"
+  - "\"{topic}\" <b>konulu bu metinden çıkarılabilecek <u>en kapsamlı</u> yargı aşağıdakilerden hangisidir?</b>"
+  # "en yakın" vurgulu varyasyonlar
+  - "<b>Aşağıdakilerden hangisi bu metinde anlatılan düşünceye <u>en yakındır</u>?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metinde anlatılmak istenen düşünceye <u>en yakındır</u>?</b>"
+  # "en gerçekçi" vurgulu
+  - "<b>Bu araştırmalardan çıkarılabilecek <u>en gerçekçi</u> sonuç aşağıdakilerden hangisidir?</b>"
+  # Destekleme soruları
+  - "<b>Bu metinde anlatılanlar aşağıdakilerden hangisini destekler?</b>"
+  - "<b>Bu metinde anlatılmak istenen düşünceyi aşağıdakilerden hangisi <u>desteklemez</u>?</b>"
+  # Önem vurgusu
+  - "<b>Bu metinde aşağıdakilerden hangisinin önemi vurgulanmaktadır?</b>"
+  # Topic-embedded basit varyasyon
+  - "<b>Bu metinde</b> \"{topic}\" <b>ile ilgili anlatılmak istenen aşağıdakilerden hangisidir?</b>"
+  # Eleştiri ve tutum analizi
+  - "<b>Bu metinde eleştirilen tutum aşağıdakilerden hangisidir?</b>"
+  # Tavsiye amacı
+  - "<b>Bu metinde yapılan tavsiyelerin amacı aşağıdakilerden hangisidir?</b>"
+  # Amaç/niyet çıkarımı
+  - "<b>Böyle diyen birinin amacı aşağıdakilerden hangisidir?</b>"
+  - "<b>Düşüncelerini bu şekilde dile getiren biri neyi anlatmak istemektedir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Yazarin okuyucuya vermek istedigi temel mesaj veya yargi"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Paragrafin butununu kapsayan bir yargi icermeli"
+    - "Yazarin bakis acisini/degerlendirmesini yansitmali"
+    - "Tam cumle formatinda olmali (ozne + yuklem)"
+    - "Ne cok genel ne cok dar olmali"
+    - "Paragraftaki tum bilgileri kapsayici nitelikte olmali"
+    - "Paragrafin TUMUNDEN cikariabilecek bir sonuc olmali"
+    - "Kelime sayisi bakimindan en uzun sik olmamali"
+  ornekler:
+    - paragraf: "Saglikli beslenmede kahvalti, atlanmamasi gereken ogunlerdendir. Is yerinde bir pogaca yemek yerine, saglikli ve bol proteinli bir kahvalti yapmak gerekir. Uyandiktan sonraki ilk 1 saat icerisinde yapilmasi tavsiye edilen kahvalti, metabolizmanin hizlanmasi ve gune hizli bir sekilde devam edilmesi icin oldukca onemlidir."
+      dogru: "İyi bir kahvaltı, sağlıklı bir yaşam sürmek için gereklidir."
+    - paragraf: "Uzun sureli televizyon izlemek goz sagligina zarar verir. Ekrana uzun sure bakmak gozlerde kuruluk ve yorgunluga neden olur. Ayrica goz kaslari yorulur ve gorme problemleri olusabilir."
+      dogru: "Uzun süreli televizyon izlemek göz sağlığına zarar verir."
+    - paragraf: "Depremler ani ve yikici dogal olaylardir. Depremin ne zaman olacagini onceden bilmek mumkun degildir. Bu nedenle depreme karsi her zaman hazirlikli olmak ve deprem aninda dogru davranislari bilmek hayati onem tasir."
+      dogru: "Depreme karşı her zaman hazırlıklı olmak gerekir."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM paragraf iceriğine gore en uygun 3 stratejiyi secer
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cikarim_yapma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+
+  generation_rules:
+    - "Yazarin bir yargi/mesaj verebilecegi konulari tercih et"
+    - "Sadece bilgi degil, degerlendirme/oneri iceren paragraflar ideal"
+    - "Paragrafta acik bir ana fikir/mesaj olmali"
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic with main idea potential"
+      details: "Ana fikir/mesaj olusturmaya uygun konu sec"
+
+    - step: 2
+      action: "Generate paragraph (55-100 words) with clear main idea"
+      details: |
+        Paragrafta:
+        - Acik bir ana fikir/mesaj olmali
+        - Yazarin bakis acisi/degerlendirmesi sezilmeli
+        - Destekleyici bilgiler ana fikri guclendirmeli
+
+    - step: 3
+      action: "Extract correct answer (complete sentence, 6-25 words)"
+      details: |
+        Ana fikir, paragrafin tumunden cikan temel mesaj:
+        - Tam cumle formatinda (ozne + yuklem)
+        - Yazarin okuyucuya iletmek istedigi yargi
+        - Ne cok genis ne cok dar
+        Ornekler:
+        - "Iyi bir kahvalti, saglikli bir yasam surmek icin gereklidir."
+        - "Uzun sureli televizyon izlemek goz sagligina zarar verir."
+
+    - step: 4
+      action: "Generate 3 distractors using strategies"
+      details: |
+        Her celdirici tam cumle olmali (6-25 kelime):
+        - 1x detay_tuzagi (paragraftaki bir detay)
+        - 1x cok_genis veya cok_dar
+        - 1x paragrafta_olmayan veya yanlis_sonuc
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from 12 variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 1
+    soru_no: 1
+    konu: "Kahvaltinin saglik icin onemi"
+    paragraf: "Saglikli beslenmede kahvalti, atlanmamasi gereken ogunlerdendir. Is yerinde bir pogaca yemek yerine, saglikli ve bol proteinli bir kahvalti yapmak gerekir..."
+    dogru_cevap: "İyi bir kahvaltı, sağlıklı bir yaşam sürmek için gereklidir."
+    celdirici_1: "Kahvaltı sabahın erken saatlerinde yapılmalıdır."  # detay_tuzagi
+    celdirici_2: "Öğünler arasındaki aralıkların az olması kilo almaya sebep olur."  # paragrafta_olmayan
+    celdirici_3: "Kahvaltı alışkanlığı küçük yaşlardan itibaren kazandırılmalıdır."  # yanlis_sonuc
+
+  - sayfa: 2
+    soru_no: 4
+    konu: "Televizyonun goz sagligina zararlari"
+    paragraf: "Uzun sureli televizyon izlemek goz sagligina zarar verir. Ekrana uzun sure bakmak gozlerde kuruluk ve yorgunluga neden olur..."
+    dogru_cevap: "Uzun süreli televizyon izlemek göz sağlığına zarar verir."
+    celdirici_1: "Ekrana bakmak gözlerde kuruluk yapar."  # cok_dar
+    celdirici_2: "Teknoloji kullanımı sağlık sorunlarına yol açar."  # cok_genis
+    celdirici_3: "Televizyonda nitelikli yayınlar izlenmelidir."  # paragrafta_olmayan
+
+  - sayfa: 3
+    soru_no: 7
+    konu: "Depreme karsi hazirlikli olmak"
+    paragraf: "Depremler ani ve yikici dogal olaylardir. Depremin ne zaman olacagini onceden bilmek mumkun degildir. Bu nedenle depreme karsi her zaman hazirlikli olmak..."
+    dogru_cevap: "Depreme karşı her zaman hazırlıklı olmak gerekir."
+    celdirici_1: "Deprem anında masanın altına saklanmalıdır."  # cok_dar
+    celdirici_2: "Doğal afetler önlenemez."  # cok_genis
+    celdirici_3: "Depremler önlenemeyeceği için tedbir almanın anlamı yoktur."  # yanlis_sonuc
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 55-100 arasinda mi?"
+    - "Acik bir ana fikir/mesaj var mi?"
+    - "Yazarin bakis acisi/degerlendirmesi seziliyor mu?"
+    - "Destekleyici bilgiler ana fikri guclendiriyor mu?"
+
+  correct_answer:
+    - "6-25 kelime arasinda mi?"
+    - "Tam cumle formatinda mi? (ozne + yuklem)"
+    - "Paragrafin tumunu kapsayan bir yargi mi?"
+    - "Yazarin mesajini dogru yansıtıyor mu?"
+
+  distractors:
+    - "Her celdirici farkli bir strateji kullaniyor mu?"
+    - "Tum celdiriciler tam cumle mi?"
+    - "Celdiriciler makul gorunuyor mu?"
+    - "Hicbiri dogru cevapla karistirilabilir durumda degil mi?"

@@ -1,0 +1,382 @@
+meta:
+  id: "paragrafta_duygu_siirde_ana_duygu_sinif3_standart_gorselli_dort_secenekli"
+  ad: "Paragrafta Duygu – Şiirde Ana Duygu"
+  sinif_seviyesi: 3
+  ders: "Türkçe"
+  bolum: "3. Sınıf Türkçe Paragraf Kitabı"
+  alt_bolum: "4.1 Paragrafta Duygu – Şiirde Ana Duygu"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    3. sınıf öğrencisi için bir metinde işlenen duyguyu veya bir şiirde ana duyguyu
+    buldurmaya yönelik, görsel destekli ve 4 seçenekli standart soru üretim şablonu.
+  kullanim_notu: >
+    Bu şablon, harici olarak kullanılan 3. Sınıf TYMM Ortak Kuralları YAML'ı,
+    3. sınıf öğretim programı ve 3. sınıf MEB Türkçe kitapları ile birlikte
+    doğrulanmalıdır.
+
+format:
+  type: "llm_generated_html"
+  description: "Görsel + metin veya şiir + soru kökü + 4 duygu seçeneği"
+
+  question_variant:
+    allowed:
+      - "metinde_islenen_duygu"
+      - "metne_hakim_duygu"
+      - "siirde_ana_duygu"
+    default: "metinde_islenen_duygu"
+
+  text:
+    required: true
+    text_variant_allowed:
+      - "metin"
+      - "siir"
+
+    metin:
+      sentence_count_min: 4
+      sentence_count_max: 6
+      word_count_min: 40
+      word_count_max: 82
+      kurallar:
+        - "Metin 3. sınıf öğrencisinin anlayabileceği kadar açık, sade ve akıcı olmalıdır."
+        - "Metinde baskın bir duygu açık biçimde hissedilmelidir."
+        - "Duygu, olaylar, durumlar, ifadeler veya anlatım tonu ile desteklenmelidir."
+        - "Birden fazla duygu bulunabilir; ancak biri açık biçimde baskın olmalıdır."
+        - "Metin 4. sınıfa kayan derin psikolojik çözümleme gerektirmemelidir."
+        - "Duygu metnin tamamı düşünülerek bulunabilmelidir."
+        - "Duygu, yalnız tek kelimelik ipucuyla değil, bütün anlatımla desteklenmelidir."
+
+    siir:
+      line_count_min: 4
+      line_count_max: 8
+      word_count_min: 18
+      word_count_max: 50
+      kurallar:
+        - "Şiir açık dize düzeninde verilmelidir."
+        - "Şiirde baskın bir ana duygu bulunmalıdır."
+        - "Şiirin dili 3. sınıf düzeyine uygun olmalıdır."
+        - "Şiirde ağır sembolizm ve çok kapalı imgeler kullanılmamalıdır."
+        - "Ana duygu, şiirin genel havasından ve dizelerden çıkarılabilmelidir."
+        - "Şiirde tema ile ana duygu karıştırılmamalıdır."
+
+  visual:
+    required: true
+    description: "Metin ya da şiirin ana içeriğini ve baskın duygusunu destekleyen işlevsel görsel"
+    placement: "text_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illüstrasyon"
+      - "tek sahneli fotoğraf benzeri çizim"
+      - "tek olay veya tek varlık odaklı sahne"
+      - "şiirin duygu alanını destekleyen sade görsel"
+    kurallar:
+      - "Her soru için görsel zorunludur."
+      - "Görsel metnin veya şiirin içeriğiyle açık uyumlu olmalıdır."
+      - "Görsel süs olmamalı, çözümde etkili destek sunmalıdır."
+      - "Görsel tek başına doğru cevabı açıkça vermemelidir."
+      - "Görsel ile metin/şiir birlikte değerlendirildiğinde baskın duygu daha netleşmelidir."
+      - "Görsel dikkat dağıtıcı gereksiz ayrıntılar içermemelidir."
+      - "Görsel yanlış seçeneği açıkça işaret edecek kadar yanıltıcı olmamalıdır."
+    yasaklar:
+      - "dekoratif ve metinden bağımsız görsel"
+      - "çok sahneli karmaşık kolaj"
+      - "grafik, tablo veya infografik yoğunluğu taşıyan tasarım"
+      - "duyguyu aşırı doğrudan yazıyla etiketleyen görsel"
+
+  stem:
+    required: true
+    selection: "random_from_list_by_variant"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    correct_count: 1
+    style: "emotion_label"
+    word_count_min: 1
+    word_count_max: 3
+    kurallar:
+      - "3. sınıfta her soru 4 seçenekli olmalıdır."
+      - "Seçenekler duygu adı biçiminde olmalıdır."
+      - "Seçenekler kısa, sade ve 3. sınıf düzeyinde olmalıdır."
+      - "Doğru seçenek metindeki veya şiirdeki baskın duyguyu karşılamalıdır."
+      - "Yanlış seçenekler metne/şiire yakın görünebilir; ancak dikkatli okuyunca elenebilmelidir."
+      - "Birden fazla makul doğru seçenek oluşmamalıdır."
+
+soru_kokleri:
+  metinde_islenen_duygu:
+    - "Bu metinde işlenen duygu aşağıdakilerden hangisidir?"
+    - "Bu metinde hangi duygu işlenmiştir?"
+    - "Metinde anlatılan baskın duygu aşağıdakilerden hangisidir?"
+    - "Bu metinde öne çıkan duygu hangisidir?"
+    - "Aşağıdakilerden hangisi bu metinde işlenen duygudur?"
+
+  metne_hakim_duygu:
+    - "Bu metne hâkim olan duygu aşağıdakilerden hangisidir?"
+    - "Metne egemen olan duygu hangisidir?"
+    - "Parçada hâkim olan duygu aşağıdakilerden hangisidir?"
+    - "Bu parçada baskın olan duygu hangisidir?"
+    - "Aşağıdakilerden hangisi bu metne hâkim olan duygudur?"
+
+  siirde_ana_duygu:
+    - "Bu şiirin ana duygusu aşağıdakilerden hangisidir?"
+    - "Şiirde işlenen ana duygu hangisidir?"
+    - "Bu şiirde hissedilen ana duygu aşağıdakilerden hangisidir?"
+    - "Aşağıdakilerden hangisi bu şiirin ana duygusudur?"
+    - "Şiire hâkim olan duygu hangisidir?"
+
+duygu_havuzu:
+  izinli_duygular:
+    - "Sevinç"
+    - "Öfke"
+    - "Acıma"
+    - "Huzur"
+    - "Özlem"
+    - "Şaşkınlık"
+    - "Hayranlık"
+    - "Yaşama sevinci"
+    - "Korku"
+    - "Karamsarlık"
+    - "Heyecan"
+    - "Üzüntü"
+    - "Mutluluk"
+  kullanim_kurallari:
+    - "Her soruda doğru duygu metin veya şiirle açıkça desteklenmelidir."
+    - "Seçenekler arasında anlamca aşırı yakın ve ayırt edilmesi güç dört duygu birlikte kullanılmamalıdır."
+    - "İlk aşamada daha somut ve öğrencinin aşina olduğu duygular tercih edilmelidir."
+    - "Mutluluk ve sevinç birlikte kullanılacaksa metin bunları ayırmayı gerçekten desteklemelidir; aksi halde yalnız biri tercih edilmelidir."
+    - "Özlem, huzur, heyecan, korku, üzüntü gibi daha belirgin duygu çiftleri tercih edilebilir."
+
+beceri_odagi:
+  birincil_beceri:
+    - "Metinde işlenen duygu veya şiirde ana duyguyu bulma"
+  ikincil_beceriler:
+    - "Duyguyu destekleyen ifadeleri fark etme"
+    - "Olay ve anlatım tonu ile duygu arasında bağ kurma"
+    - "Baskın duygu ile yardımcı duyguları ayırt etme"
+    - "Görsel ve metni birlikte değerlendirerek duyguyu belirleme"
+
+dogru_cevap:
+  tanim: "Metne veya şiire hâkim olan, en baskın biçimde hissedilen duygu"
+  kurallar:
+    - "Doğru cevap metnin veya şiirin tamamında baskın biçimde hissedilen duygu olmalıdır."
+    - "Doğru cevap tek bir sözcük ya da ayrıntıya değil, bütün anlatıma dayanmalıdır."
+    - "Doğru cevap duygu ile konu arasındaki farkı korumalıdır."
+    - "Şiirde ana duygu, şiirin temasıyla karıştırılmamalıdır."
+    - "Doğru cevap dış bilgi gerektirmemelidir."
+    - "Doğru cevap 3. sınıf öğrencisinin dikkatli okuyarak bulabileceği açıklıkta olmalıdır."
+
+yanlis_secenek_stratejileri:
+  count_per_question: 3
+  strategy_pool:
+    - id: "yakın_duygu"
+      tanim: "Metne yakın görünen ama baskın olmayan duygu"
+      ornek_mantik:
+        - "Mutluluk yerine heyecan"
+        - "Özlem yerine üzüntü"
+        - "Huzur yerine sevinç"
+
+    - id: "olaydan_bagimsiz_duygu"
+      tanim: "Metnin olay örgüsüyle uyumlu görünmeyen duygu"
+      ornek_mantik:
+        - "Korku"
+        - "Öfke"
+        - "Karamsarlık"
+
+    - id: "yardimci_duyguyu_baskin_gibi_sunma"
+      tanim: "Metinde kısa süreli hissedilen ama asıl duygu olmayan seçeneği öne çıkarma"
+
+    - id: "konu_duygu_karistirma"
+      tanim: "Duygu yerine nesneye, kişiye ya da duruma bağlanan yanlış çağrışım sonucu seçilen duygu"
+      ornek_mantik:
+        - "Oyuncak sevgisi çağrışımından sevinç"
+        - "Bayram çağrışımından yalnız heyecan"
+
+  secim_kurali:
+    - "Her soruda 3 yanlış seçenek farklı stratejilerden seçilmelidir."
+    - "En az 1 yanlış seçenek doğru duyguya yakın görünmelidir."
+    - "En az 1 yanlış seçenek metinle belirgin biçimde uyuşmamalıdır."
+    - "Şiir sorularında en az 1 yanlış seçenek tema çağrışımından gelebilecek yakın duygu olmalıdır."
+    - "Birden fazla seçenek aynı ölçüde doğru görünmemelidir."
+
+zorluk_duzeyleri:
+  kolay:
+    text:
+      kurallar:
+        - "Baskın duygu açık ifadelerle verilmelidir."
+        - "Duygu olay veya durum üzerinden kolayca hissedilmelidir."
+        - "Yan duygular çok sınırlı olmalıdır."
+    preferred_variants:
+      - "metinde_islenen_duygu"
+      - "metne_hakim_duygu"
+      - "siirde_ana_duygu"
+    distractors:
+      kurallar:
+        - "1 seçenek yakın duygu"
+        - "1 seçenek metinle açıkça uyumsuz duygu"
+        - "1 seçenek yardımcı duyguyu baskın gibi sunma"
+        - "Yanlış seçenekler kolay elenebilir olmalıdır."
+    difficulty_note: >
+      Kolay düzeyde öğrenci metindeki veya şiirdeki baskın duyguyu rahatça fark eder.
+
+  orta:
+    text:
+      kurallar:
+        - "Duygu açık olmalı; fakat metnin tamamına bakmayı gerektirmelidir."
+        - "Metinde kısa süreli yan duygular bulunabilir."
+        - "Şiirde ana duygu, birkaç dize birlikte okununca belirginleşmelidir."
+    preferred_variants:
+      - "metinde_islenen_duygu"
+      - "metne_hakim_duygu"
+      - "siirde_ana_duygu"
+    distractors:
+      kurallar:
+        - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+        - "1 yanlış seçenek yakın duygu"
+        - "1 yanlış seçenek yardımcı duyguyu baskın gibi sunma"
+        - "1 yanlış seçenek olaydan bağımsız duygu"
+    difficulty_note: >
+      Orta düzeyde öğrenci baskın duygu ile kısa süreli yardımcı duygu arasında ayrım yapmalıdır.
+
+  zor:
+    text:
+      kurallar:
+        - "Metinde veya şiirde baskın duygu açık kalmalı; ancak birkaç ayrıntıdan birlikte çıkarılmalıdır."
+        - "Yan duygular çeldirici üretimine malzeme verebilir."
+        - "Zor düzeyde bile ağır sembolik yorum gerekmemelidir."
+        - "Şiirde tema ile ana duygu ayrımı daha dikkatli yapılmalıdır."
+    preferred_variants:
+      - "metne_hakim_duygu"
+      - "siirde_ana_duygu"
+    distractors:
+      kurallar:
+        - "3 yanlış seçeneğin en az 2'si metne yakın görünmelidir."
+        - "1 seçenek yakın duygu"
+        - "1 seçenek yardımcı duyguyu baskın gibi sunma"
+        - "1 seçenek tema çağrışımına dayalı yanlış duygu olabilir"
+    difficulty_note: >
+      Zor düzeyde öğrencinin baskın duygu ile yakın görünen başka duygular arasındaki farkı ayırt etmesi beklenir; ancak görev hâlâ duygu bulma düzeyindedir.
+
+difficulty_selection_policy:
+  default: "Orta"
+  allowed_values: ["Kolay", "Orta", "Zor"]
+  hard_limits:
+    - "Her soru 4 seçenekli olmalıdır."
+    - "Her soru için görsel zorunludur."
+    - "Metin veya şiir 3. sınıf düzeyini aşan ağır soyutluk içermemelidir."
+    - "Zor düzey seçilse bile soru 4. sınıf düzeyinde sembolik katman çözümleme veya ayrıntılı edebî yorum sorusuna dönüşemez."
+    - "Kolay düzeyde aşırı yakın duygu çeldiricileri üst üste kullanılmamalıdır."
+
+sinif_uygunluk_kurallari:
+  uygundur:
+    - "Metin veya şiirde baskın duygu açık biçimde hissediliyorsa"
+    - "Öğrenci duyguyu olay, ifade ve anlatım tonundan çıkarabiliyorsa"
+    - "Şiirde ana duygu, tema ile karıştırılmadan bulunabiliyorsa"
+  yasaktir:
+    - "Ağır sembolik ve çok katmanlı şiir yorumları"
+    - "Psikolojik derinlik gerektiren karakter çözümlemesi"
+    - "Duygu yerine değer, mesaj veya ders sorduran yapı"
+  ucuncu_sinifa_kayar:
+    - "Yakın duygular arasında metnin tamamına bakarak ayrım yapma"
+    - "Yardımcı duyguyu baskın duygudan ayırma"
+  dorduncu_sinifa_kayar:
+    - "Sembollerden hareketle gizli duygu çözümleme"
+    - "Yazarın amacıyla duygu arasında ayrıntılı ilişki kurdurma"
+    - "Birden fazla yorumun gerekçeli savunulmasını isteme"
+
+konu_alani:
+  izinli_ornekler:
+    - "bayram sevinci"
+    - "çocukluk özlemi"
+    - "bahar neşesi"
+    - "doğa huzuru"
+    - "ayrılık üzüntüsü"
+    - "başarı heyecanı"
+    - "korku veren olaylar"
+    - "hayranlık uyandıran kişiler"
+    - "sevindirici günlük olaylar"
+    - "şiirde çocukluk anıları"
+  kurallar:
+    - "Konu 3. sınıf öğrencisinin anlayabileceği kadar somut ve açık olmalıdır."
+    - "Şiirde veya metinde duygu, içerikle doğal biçimde bağlantılı olmalıdır."
+    - "Görselle desteklenebilen duygusal alanlar tercih edilmelidir."
+    - "Duygu anlatımı çocuk düzeyine uygun sade bir dil ile kurulmalıdır."
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "3. sınıfa uygun, baskın duygusu açık bir metin ya da şiir konusu seç"
+    - step: 2
+      action: "Seçilen varyanta göre metin veya şiir oluştur"
+      details:
+        - "Metinde veya şiirde baskın duyguyu açıkça kur"
+        - "Gerekirse kısa süreli yan duygular ekle"
+        - "3. sınıf sözcük düzeyinde kal"
+    - step: 3
+      action: "İçeriği destekleyen işlevsel görsel tasarla"
+      details:
+        - "Görsel duyguyu desteklesin"
+        - "Görsel zorunlu olsun"
+        - "Görsel tek başına cevabı vermesin"
+    - step: 4
+      action: "Soru varyantını seç"
+      details:
+        - "metinde_islenen_duygu"
+        - "metne_hakim_duygu"
+        - "siirde_ana_duygu"
+    - step: 5
+      action: "1 doğru ve 3 yanlış duygu seçeneği oluştur"
+      details:
+        - "Bir yakın duygu kullan"
+        - "Bir yardımcı duyguyu baskın gibi sun"
+        - "Bir belirgin uyumsuz duygu ekle"
+    - step: 6
+      action: "Soru kökünü listeden rastgele seç"
+    - step: 7
+      action: "Şıkları A-B-C-D olarak karıştır"
+    - step: 8
+      action: "Harici 3. Sınıf TYMM Ortak Kuralları ile doğrulama yap"
+
+validation_checklist:
+  text:
+    - "Metin ya da şiir seçilen varyanta uygun mu?"
+    - "Metin/şiir 3. sınıf düzeyinde açık ve sade mi?"
+    - "Baskın duygu açıkça hissediliyor mu?"
+    - "Duygu birden fazla seçeneğe eşit dağılmıyor mu?"
+    - "Ağır sembolik veya soyut yorum gerektiriyor mu? Gerektiriyorsa reddet."
+
+  visual:
+    - "Görsel zorunlu olarak var mı?"
+    - "Görsel metin/şiirin içeriğiyle uyumlu mu?"
+    - "Görsel destekleyici ama tek başına cevap verici değil mi?"
+    - "Görsel dekoratif kalmıyor mu?"
+
+  stem:
+    - "Soru kökü seçilen varyanta uygun mu?"
+    - "Soru kökü duygu bulmayı açıkça istiyor mu?"
+    - "Ekstra beceri yüklemiyor mu?"
+
+  options:
+    - "Toplam 4 seçenek var mı?"
+    - "Seçenekler duygu adı biçiminde mi?"
+    - "Doğru seçenek baskın duyguyu karşılıyor mu?"
+    - "En az 1 yanlış seçenek yakın duygu mu?"
+    - "Birden fazla makul doğru seçenek oluşuyor mu? Oluşuyorsa reddet."
+
+  difficulty:
+    - "Zorluk seçilen düzeye göre metin/şiir, görsel ve çeldirici kuralları uygulanmış mı?"
+    - "Zor düzey bile 3. sınıf sınırında mı?"
+    - "4. sınıfa kayan ileri edebî yorum var mı?"
+
+hard_fail_rules:
+  - "Seçenek sayısı 4 değilse"
+  - "Görsel yoksa"
+  - "Doğru cevap dış bilgi gerektiriyorsa"
+  - "İki veya daha fazla duygu eşit ölçüde doğru görünüyorsa"
+  - "Metin/şiir 3. sınıf için fazla soyut veya ağırsa"
+  - "Soru tema, konu veya mesaj sorusuna kayıyorsa"
+  - "Soru 4. sınıfa kayan ileri yorum sorusuna dönüşüyorsa"
+  - "Görsel metinle uyumsuzsa"
+
+ornek_bicim_notlari:
+  - "Bayram sabahı metninde baskın duygu mutluluk olabilir."
+  - "Çocukluk üzerine şiirde ana duygu çocukluk özlemi olabilir."
+  - "Bahar, oyun ve neşeli hareketler içeren şiirde sevinç ya da yaşama sevinci öne çıkabilir."
+  - "Bu bölümde duygu sorulurken konu veya ana fikir sorulmuş gibi bir yapı kurulmamaktadır."

@@ -1,0 +1,138 @@
+# templates/baglam/hikaye_unsurlari_senaryo.yaml
+# Bağlam Tipi: Bölüm 2 — Hikâye Unsurları Senaryosu
+# Soru Sayısı: 2
+# Kaynak: kaynak-soru-kokleri.md — Bölüm 2
+# Soru Tipleri: Unsur belirleme + Unsur çıkarımı
+
+meta:
+  id: "hikaye_unsurlari_senaryo"
+  ad: "Hikâye Unsurları Senaryosu"
+  sinif_seviyesi: 5
+  aciklama: "Bir hikâye verilir, hikâye unsurları (yer, zaman, kişi, olay) sorulur — belirleme ve çıkarım"
+  kaynak: "kaynak-soru-kokleri.md"
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# BAĞLAM KONFİGÜRASYONU
+# ═══════════════════════════════════════════════════════════════
+
+context:
+  type: "hikaye_unsurlari_senaryo"
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 120
+    word_count_max: 180
+    structure:
+      - "Kısa bir hikâye/öykü oluştur"
+      - "Hikâyede yer, zaman, kişiler ve olay açıkça bulunabilir olmalı"
+      - "En az 2 ana karakter olmalı"
+      - "Hikâyede bir çatışma veya problem olmalı"
+      - "Mekân ve zaman dilimi somut olarak belirtilmeli"
+      - "Ana olay ve yan olaylar ayırt edilebilir olmalı"
+    kurallar:
+      - "5. sınıf seviyesinde, günlük hayattan veya okul ortamından bir hikâye"
+      - "Öyküleyici anlatım kullanılmalı"
+      - "Karakterlerin isimleri Türkçe olmalı"
+      - "Hikâye unsurları (yer, zaman, kişi, olay) açıkça belirlenebilir olmalı"
+      - "Yer ve zaman doğrudan ifade edilmeli veya güçlü ipuçlarıyla çıkarılabilir olmalı"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+    - slot: 1
+      type: "unsur_etkilesim"
+      soru_kokleri:
+        - "<b>Aşağıdakilerden hangisi okuduğunuz hikâyedeki olay, yer, zaman ve şahıs kadrosu arasındaki etkileşimi doğru biçimde yansıtmaktadır?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 8
+      word_count_max: 25
+      beceri:
+        katman: "KB2"
+        bilesenler: ["cikarim_yapma", "siniflandirma", "karsilastirma"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+    - slot: 2
+      type: "unsur_cikarim"
+      soru_kokleri:
+        - "<b>Okuduğunuz metinden hareketle aşağıdakilerden hangisine ulaşılabilir?</b>"
+        - "<b>Bu hikâyedeki olayların akışı düşünüldüğünde aşağıdakilerden hangisine ulaşılabilir?</b>"
+        - "<b>Bu hikâye unsurlarından yer ve zaman unsuru değiştirildiğinde aşağıdaki hikâyelerden hangisi ortaya çıkar?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 8
+      word_count_max: 25
+      beceri:
+        katman: "KB3"
+        bilesenler: ["cikarim_yapma", "degerlendirme"]
+        surec_bileseni: "problemi_yapilandirma"
+
+header_template: "1-2. soruları aşağıdaki hikâyeye göre cevaplayınız."
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Hikâye unsurları üzerinden belirleme ve çıkarım soruları"
+
+  paragraph:
+    required: true
+    word_count_min: 120
+    word_count_max: 180
+    sentence_count_min: 5
+    sentence_count_max: 10
+
+  stem:
+    required: true
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 22
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+# ═══════════════════════════════════════════════════════════════
+# DOĞRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Hikâyedeki unsurla doğrudan eşleşen veya ana olayı doğru yansıtan cevap"
+  kurallar:
+    - "KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI"
+    - "Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI"
+    - "Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil"
+    - "YASAK: Tablodaki değeri aynen şıkka yazmak (örn: 'yalıtımı azdır' tabloda yazıyorsa şıkta aynen yazmamalı)"
+    - "Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli"
+
+    - "Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı"
+    - "Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı"
+    - "Unsur belirleme sorusunda doğru cevap hikâyede açıkça bulunan yer/zaman/konu olmalı"
+    - "Unsur çıkarımı sorusunda doğru cevap hikâyenin ana olayını/çatışmasını tam olarak karşılamalı"
+    - "Çeldiriciler hikâyede geçen ama sorulan unsurla eşleşmeyen detaylar olmalı"
+    - "HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer"
+    - "Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK"
+    - "BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: 'teleskop' → 'mercekli araç' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı"
+
+# ═══════════════════════════════════════════════════════════════
+# ÇELDİRİCİ STRATEJİLERİ
+# ═══════════════════════════════════════════════════════════════
+
+distractors:
+  stratejiler:
+    - ad: "DETAY_UNSUR_KARISTIRMA"
+      aciklama: "Hikâyedeki yan bir detayı ana unsur gibi gösterme"
+      ornek: "Yan bir olayı ana olay olarak sunma veya geçici mekânı ana mekân olarak gösterme"
+    - ad: "YAKIN_UNSUR"
+      aciklama: "Sorulan unsura yakın ama tam doğru olmayan bir seçenek sunma"
+      ornek: "Ana olay yerine olayın sonucunu veya nedenini önerme"
+    - ad: "KAPSAM_HATA"
+      aciklama: "Unsuru çok dar veya çok geniş kapsamda sunma"
+      ornek: "Mekânı çok genel ('dışarı') veya çok spesifik ('masanın sol köşesi') gösterme"
+
+use_shared_strategies: false

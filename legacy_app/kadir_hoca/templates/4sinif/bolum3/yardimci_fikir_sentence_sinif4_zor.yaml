@@ -1,0 +1,123 @@
+# Kaynak: yardimci_fikir_sentence_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.zor
+# 4. sinif yardimci fikir cumle — zor duzey
+
+meta:
+  id: "yardimci_fikir_sentence_sinif4_zor"
+  ad: "4. Sinif - Yardimci Fikir Cumle (Zor)"
+  sinif_seviyesi: 4
+  aciklama: "Zor duzey — 4. sinif tam cumle yardimci fikir sorusu. Metnin yardimci dusuncesini en iyi yansitan cumleyi secme."
+  frequency: "High"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 4 tam cumle secenegi (zor)"
+
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 100
+    background_color: "#fce8e8"
+    sentence_count_min: 5
+    sentence_count_max: 7
+    stil: "bilgilendirici"
+    kurallar:
+      - "Paragraf bir ana fikir etrafinda birden fazla (en az 4) yardimci fikir icermelidir."
+      - "Yardimci fikirler ana fikri destekler (ornek, gerekce, aciklama, sonuc)."
+      - "Zor seviyede yardimci fikirler dolayli veya farkli ifadelerle verilebilir; yuzeysel kelime eslesmesiyle degil anlamca kanitlanmali."
+      - "Paragraf daha yuksek bilgi yogunlugu tasiyabilir ama yine de 4. sinif duzeyinde acik kalmalidir."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+      - "Dis bilgi gerektirmemelidir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 5
+    word_count_max: 10
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Tum secenekler tam cumle biciminde olmali."
+      - "Dogru secenek metnin yardimci fikirlerinden birini dogru yansitmali."
+      - "Celdirici secenekler ana fikri veya alakasiz bilgileri yansitmali."
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Bu metne göre aşağıdakilerden hangisi söylenebilir?</b>"
+  - "<b>Bu metinden aşağıdakilerden hangisine ulaşılabilir?</b>"
+  - "<b>Bu metinden hareketle aşağıdakilerden hangisi doğrudur?</b>"
+  - "<b>Bu metinde aşağıdakilerden hangisi anlatılmaktadır?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metinden çıkarılabilir?</b>"
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metnin ana fikrini destekleyen yardimci fikri tam ve dogru bicimde yansitan cumle"
+  kurallar:
+    - "Dogru secenek paragrafta ACIKCA bulunan bir yardimci fikri yansitmalidir."
+    - "Dogru secenek metindeki bilgilerden dogrudan veya dolayli bicimde kanitlanabilmelidir."
+    - "Dogru secenek ana fikir DEGIL, destekleyici yardimci fikir olmalidir."
+    - "Dogru secenek yuzeysel kelime eslesmesiyle degil, anlamca metinle uyumlu olmalidir."
+    - "Dogru secenek metindeki hicbir cumleyi kelimesi kelimesine tekrarlamamalidir."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+
+celdirici_stratejileri:
+  - ad: "ANA_FIKIR_TUZAGI_GUCLU"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metnin ana fikrini yardımcı fikir olarak sunan güçlü tuzak"
+    nasil_olusturulur: |
+      Metnin ana fikrini (yardımcı fikir değil) yansıtan güçlü bir cümle oluştur.
+      Zor seviyede ana-yardımcı fikir farkı ince olmalı — öğrenci kapsamı dikkatle analiz etmeli.
+      Tam cümle, 5-10 kelime.
+    kategori: "content"
+
+  - ad: "METINDE_OLMAYAN_GUCLU"
+    bilisssel_hata_kategorisi: "dis_bilgi_karisimi"
+    aciklama: "Konuyla güçlü semantik bağ kuran ama metinde desteklenmeyen yargı"
+    nasil_olusturulur: |
+      Paragrafın konusuyla güçlü semantik bağ kuran ama metinde açıkça desteklenmeyen bir yargı oluştur.
+      Zor seviyede bu seçenek çok makul görünmeli — öğrenci metinden kanıt arayarak elemelidir.
+      Tam cümle, 5-10 kelime.
+    kategori: "semantic"
+
+  - ad: "CARPITILMIS_CIKARIM_GUCLU"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Metindeki bilgileri abartarak/genelleyerek yanlış çıkarıma ulaşan güçlü seçenek"
+    nasil_olusturulur: |
+      Paragraftaki bilgileri genelleyerek, abartarak veya kapsam kaydırarak yanlış bir yargı oluştur.
+      Zor seviyede çarpıtma ince olmalı — öğrenci kesinlik/kapsam bakımından fark etmeli.
+      Tam cümle, 5-10 kelime.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cikarim_yapma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

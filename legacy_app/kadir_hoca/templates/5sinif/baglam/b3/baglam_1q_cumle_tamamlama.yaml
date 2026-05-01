@@ -1,0 +1,102 @@
+meta:
+  id: baglam_1q_cumle_tamamlama
+  ad: 1Q Baglam Cumle Tamamlama
+  sinif_seviyesi: 5
+  aciklama: Eksik cumle iceren metin uzerinden dogru cumleyi bulma sorusu
+  kaynak: baglamb3sorukoku.md
+  frequency: Medium
+context:
+  type: baglam_senaryo_1q
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 60
+    word_count_max: 120
+    structure:
+    - Bir karakter (Turkce isimli) bir metin bulur, son cumlesi eksik (3-5 cumle senaryo)
+    - Metin 3-4 cumleden olusur ve son cumle yerine '----' isareti konur
+    - Eksik cumlenin yeri metnin SONUNDA olmali
+    - Metnin anlam akisi ve konusu net olmali
+    - 'Senaryo: Ogrenci dergide/kitapta bir metin bulur ve eksik cumleyi tamamlayacak'
+    kurallar:
+    - Senaryo 5. sinif seviyesinde, gunluk hayattan olmali
+    - Karakter ismi Turkce olmali (Elif, Mert, Zeynep, Can vb.)
+    - Metin bilgilendirici veya oykuleyici olabilir
+    - Eksik cumle metnin anlam butunlugunu tamamlamali
+    - 'YASAK: Cumleyi yarida kesip tamamlatmak — TAM cumle secenekleri sunulmali'
+    - Turkce karakterler dogru kullanilmali (s, i, g, u, o, c)
+  questions:
+  - slot: 1
+    type: cumle_tamamlama
+    soru_kokleri:
+    - <b>Bu etkinlige gore hangi ogrenci metnin sonuna dogru bir cumle eklemistir?</b>
+    - <b>Buna gore asagidakilerden hangisi paragrafin son cumlesi olabilir?</b>
+    - <b>...Ogrenci... bu metne asagidaki cumlelerden hangisini eklemis olabilir?</b>
+    options_style: complete_sentence
+    word_count_min: 8
+    word_count_max: 22
+    beceri:
+      katman: KB2
+      bilesenler:
+      - yapilandirma
+      - tamamlama
+      surec_bileseni: bilgiyi_yapilandirma
+soru_kokleri:
+- <b>Bu etkinlige gore hangi ogrenci metnin sonuna dogru bir cumle eklemistir?</b>
+- <b>Buna gore asagidakilerden hangisi paragrafin son cumlesi olabilir?</b>
+- <b>...Ogrenci... bu metne asagidaki cumlelerden hangisini eklemis olabilir?</b>
+header_template: null
+format:
+  type: llm_generated_html
+  description: 1Q baglam senaryo uzerinden cumle tamamlama sorusu
+  paragraph:
+    required: true
+    word_count_min: 60
+    word_count_max: 120
+    sentence_count_min: 3
+    sentence_count_max: 8
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 8
+    word_count_max: 22
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Metnin anlam akisini ve butunlugunu en iyi tamamlayan cumle
+  kurallar:
+  - 'KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI'
+  - Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI
+  - Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil
+  - 'YASAK: Tablodaki değeri aynen şıkka yazmak (örn: ''yalıtımı azdır'' tabloda yazıyorsa şıkta aynen yazmamalı)'
+  - Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli
+  - Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı
+  - Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı
+  - Dogru secenek paragraftaki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI
+  - Dogru cumle metnin konusuna, anlatim tonuna ve akisina uygun olmali
+  - TAM cumle olmali — yarim cumle veya cumle parcasi YASAK
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: ''teleskop'' → ''mercekli araç'' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: KONUYLA_ILGILI_AMA_AKISA_UYMAYAN
+    aciklama: Ayni konuda ama metnin anlam akisini bozan cumle
+    ornek: Konuyla ilgili ama paragrafin mantik sirasina uymayan bir bilgi
+  - ad: FARKLI_ALT_KONU
+    aciklama: Ayni ana konunun farkli bir alt konusuna yonelen cumle
+    ornek: Fen konusunda metnin bahsetmedigi bir alt daldan cumle
+  - ad: TON_UYUMSUZLUGU
+    aciklama: Konuya uygun ama anlatim tonuyla celisen cumle
+    ornek: Bilgilendirici metne duygusal/oykuleyici bir cumle ekleme
+use_shared_strategies: false

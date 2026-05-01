@@ -1,0 +1,277 @@
+# templates/beceri_sosyal_medya.yaml
+# Kaynak: MEB Beceri Temelli Soru Bankasi - Sosyal Medya
+#
+# BECERI TEMELLI SOSYAL MEDYA FORMATI
+# Sosyal medya paylasimi verilir, ogrenci elestirsel dusunme sorusunu cevaplar
+#
+# MANTIK: 1 secenekte dogru cevap, 4 secenekte yanlis cevaplar
+# Secenekler TAM CUMLE formatindadir (3-20 sozcuk)
+
+meta:
+  id: "beceri_sosyal_medya"
+  ad: "Beceri Temelli - Sosyal Medya"
+  sinif_seviyesi: 5
+  aciklama: "Sosyal medya paylasiimlari uzerinden beceri temelli sorular"
+  kaynak: "MEB Beceri Temelli Soru Bankasi"
+  frequency: "~10% of beceri temelli questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Sosyal medya baglami + soru koku + 5 tam cumle secenek (beceri temelli)"
+
+  paragraph:
+    required: true
+    word_count_min: 40
+    word_count_max: 80
+    sentence_count_min: 2
+    sentence_count_max: 5
+    stil: "bilgilendirici"
+    kurallar:
+      - "Sosyal medya paylasimi formati kullan"
+      - "Kisa ve etkili ifadeler"
+      - "Guncel bir konuyu ele alsin"
+      - "Elestirsel dusunme gerektiren unsurlar icersin"
+      - "Kullanici adi ve paylasim formati belirtilsin"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 5
+    labels: ["A", "B", "C", "D", "E"]
+    word_count_min: 3
+    word_count_max: 20
+    style: "complete_sentence"
+    correct_type: "matches"
+    correct_count: 1
+
+  questions_per_context: 1
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ALANLARI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  context_type: "SOSYAL_MEDYA"
+  context_label: "Sosyal Medya"
+  skill_level: "KB3"
+  process_component: "Sosyal medya iceriginde elestirsel okuma, amac ve hedef kitle analizi"
+  skill_areas:
+    - "elestirsel_dusunme"
+    - "degerlendirme"
+    - "analiz"
+    - "yorumlama"
+    - "sorgulama"
+  answer_key_explanation: true
+  question_patterns:
+    - "Bu paylasimin amaci nedir?"
+    - "Paylasimda verilmek istenen mesaj nedir?"
+    - "Paylasimin hedef kitlesi kimdir?"
+    - "Paylasim elestirsel olarak nasil degerlendirilir?"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # Amaç / Mesaj
+  - "<b>Bu paylaşımın temel amacı aşağıdakilerden hangisidir?</b>"
+  - "<b>Paylaşıma göre aşağıdakilerden hangisi doğrudur?</b>"
+  - "<b>Bu paylaşıma göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Bu paylaşımdan aşağıdaki <u>çıkarımlardan hangisi yapılamaz</u>?</b>"
+  # Eleştirel Okuma / Analiz
+  - "<b>Bu paylaşımda aşağıdaki bilgilerden hangisine ulaşılabilir?</b>"
+  - "<b>Bu paylaşımın hedef kitlesi aşağıdakilerden hangisidir?</b>"
+  - "<b>Paylaşımdaki bilgiler değerlendirildiğinde aşağıdakilerden hangisi söylenebilir?</b>"
+  - "<b>Bu paylaşımın hangi amaçla yapıldığı aşağıdakilerden hangisinde doğru verilmiştir?</b>"
+  # Güvenilirlik / Eleştirel Değerlendirme / Veri Madenciliği (PDF kaynak)
+  - "<b>Bu paylaşımdaki bilgilerin güvenilirliği değerlendirildiğinde aşağıdakilerden hangisi söylenebilir?</b>"
+  - "<b>Paylaşımdaki bilgiler eleştirel bir bakış açısıyla incelendiğinde aşağıdakilerden hangisi <u>desteklenemez</u>?</b>"
+  - "<b>Bu paylaşımın toplum üzerindeki olası etkisi düşünüldüğünde aşağıdakilerden hangisine ulaşılabilir?</b>"
+  - "<b>Aşağıdakilerden hangisi bu paylaşımda veri madenciliğinden <u>yararlanılmadığını</u> gösterir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Paylasim icerigiyle uyumlu, elestirsel okuma gerektiren cevap"
+  kurallar:
+    - "Paylasim icerigiyle desteklenmeli"
+    - "Elestirsel dusunme becerisi gerektirmeli"
+    - "Tam cumle formatinda olmali (3-20 sozcuk)"
+    - "Paylasimin ana mesajini dogru yansitmali"
+    - "Baglam olmadan cevaplanamaz olmali"
+    - "Ust duzey dusunme becerisi gerektirmeli"
+    - "Bilissel surec bilesenini hedeflemeli"
+  ornekler:
+    - paylasim: "@CevreDernegiTR: Plastik posete HAYIR! Her yil 8 milyon ton plastik okyanuslara karisiyor. Bez canta kullanarak fark yaratabilirsin! #PlastigeSavaş"
+      dogru: "Plastik tuketimini azaltmak icin insanlari bez canta kullanmaya tesvik etmek"
+      neden: "Paylasimin temel amaci plastik tuketimini azaltmaya yonelik farkindalik"
+    - paylasim: "@SaglikBilgisi: Gunde 10.000 adim atmak saglikli bir yasam icin onemli! Hareketsiz kalmak birçok hastaliga yol acabilir."
+      dogru: "Fiziksel aktivitenin saglik icin onemini vurgulamak"
+      neden: "Paylasim fiziksel aktiviteyi tesvik etmeyi amacliyor"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM paylasim iceriğine gore en uygun 4 stratejiyi secer
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic suitable for social media post format"
+      details: "Sosyal medya paylasimina uygun, guncel ve ilgi cekici bir konu sec"
+
+    - step: 2
+      action: "Generate social media post (40-80 words) with clear message"
+      details: |
+        Paylasim metninde:
+        - Sosyal medya formati kullanilmali (kullanici adi, hashtag vb.)
+        - Kisa ve etkili ifadeler olmali
+        - Guncel bir konuyu ele almali
+        - Elestirsel dusunme gerektiren unsurlar icermeli
+
+    - step: 3
+      action: "Create correct answer as complete sentence"
+      details: |
+        Dogru cevap:
+        - Paylasimin amaci veya mesajini dogrudan yansitmali
+        - Tam cumle formatinda olmali (3-20 sozcuk)
+        - Paylasim icerigiyle kanitlanabilir olmali
+
+    - step: 4
+      action: "Create 4 wrong answers using strategies"
+      details: |
+        Her yanlis secenek icin farkli strateji kullan:
+        - 1x paylasimin detayindan turetilmis ama ana amac olmayan
+        - 1x konuyla iliskili ama paylasimda desteklenmeyen
+        - 1x paylasimin tonunu yanlis yorumlayan
+        - 1x mantikli gorunen ama icerigi carpitan
+        Tum secenekler ayni formatta olmali (tam cumle, 3-20 sozcuk)
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D-E seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - konu: "Cevre bilinclendirme paylasimi"
+    dogru_cevap: "B"
+    secenekler:
+      A: "Okyanuslardaki plastik miktarini bildirmek"
+      B: "Plastik tuketimini azaltmak icin insanlari bez canta kullanmaya tesvik etmek"
+      C: "Bez cantalarin fiyatlarini tanitmak"
+      D: "Cevre derneginin faaliyetlerini duyurmak"
+      E: "Plastik uretim surecini aciklamak"
+    dogru_cevap_icerigi: "Plastik tuketimini azaltmak icin insanlari bez canta kullanmaya tesvik etmek"
+    neden: "Paylasimin temel amaci plastik tuketimini azaltmaya yonelik farkindalik"
+
+  - konu: "Saglikli yasam paylasimi"
+    dogru_cevap: "A"
+    secenekler:
+      A: "Fiziksel aktivitenin saglik icin onemini vurgulamak"
+      B: "Adim sayarlarinin ozelliklerini tanitmak"
+      C: "Hastaliklarin nedenlerini aciklamak"
+      D: "Spor salonlarini onermek"
+      E: "Gunluk kalori ihtiyacini bildirmek"
+    dogru_cevap_icerigi: "Fiziksel aktivitenin saglik icin onemini vurgulamak"
+    neden: "Paylasim fiziksel aktiviteyi tesvik etmeyi amacliyor"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  # Asama 0: Kimlik ve Olcme Niyeti
+  identity:
+    - "Soru bir beceriyi mi olcuyor, bilgi hatirlamayi mi?"
+    - "Hedef beceri seviyesi uygun mu?"
+    - "Surec bileseni dogru hedeflenmis mi?"
+
+  # Asama 1: Baglam Secimi
+  context:
+    - "Baglam olmadan soru cozulebilir mi? (Hayir olmali)"
+    - "Baglam fonksiyonel mi? (Dekoratif degil)"
+    - "Baglam cevabi dogrudan veriyor mu? (Vermemeli)"
+    - "Baglam otantik mi? (Gercek hayattan)"
+    - "Kelime sayisi 40-80 arasinda mi?"
+    - "Sosyal medya paylasim formati kullanilmis mi?"
+    - "Kisa ve etkili ifadeler var mi?"
+    - "Elestirsel dusunme gerektiren unsurlar iceriyor mu?"
+
+  # Asama 2: Soru ve Secenekler
+  question:
+    - "Soru koku net ve anlasilir mi?"
+    - "Cift olumsuz var mi? (Olmamali)"
+    - "Tek dogru cevap var mi?"
+
+  options:
+    - "Celdiriciler belirli bilissel hatalari temsil ediyor mu?"
+    - "Eleme yoluyla cevaplanabilir mi? (Olmamali)"
+    - "Format farkliligi ile dogru cevap belli oluyor mu? (Olmamali)"
+    - "Tum secenekler benzer uzunlukta mi?"
+    - "5 secenek var mi (A-B-C-D-E)?"
+
+  # Asama 3: Etik
+  ethics:
+    - "Cinsiyet/etnik onyargi var mi? (Olmamali)"
+    - "Yas grubuna uygun mu?"
+
+  # Asama 4: Dil
+  language:
+    - "Turkce dil bilgisi dogru mu?"
+    - "Sinif seviyesine uygun mu?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+
+  generation_rules:
+    - "Sosyal medya paylasimina uygun guncel konulari tercih et"
+    - "Farkindalik ve bilinclendirme konulari ideal"
+    - "Elestirsel dusunmeye yoneltecek konulari sec"

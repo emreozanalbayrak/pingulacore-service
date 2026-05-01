@@ -163,4 +163,7 @@ npm run dev -- --host "$FRONTEND_HOST" --port "$FRONTEND_PORT" &
 FRONTEND_PID=$!
 
 echo "[ok] Fullstack dev ortami calisiyor. Cikmak icin Ctrl+C."
-wait -n "$BACKEND_PID" "$FRONTEND_PID"
+# Portable wait-any: sleep until either child dies, then exit
+while kill -0 "$BACKEND_PID" 2>/dev/null && kill -0 "$FRONTEND_PID" 2>/dev/null; do
+  sleep 1
+done

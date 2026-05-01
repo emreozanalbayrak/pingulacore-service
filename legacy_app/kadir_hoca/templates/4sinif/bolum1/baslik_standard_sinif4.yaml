@@ -1,0 +1,205 @@
+# Kaynak: 5sinif/capture1/baslik_standard.yaml — 4. sinif icin adapte edildi (sinif_seviyesi 5->4)
+# templates/baslik_standard.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Metinde Baslik
+#
+# STANDART BASLIK FORMATI (tum baslik sorularinin ~%95'i)
+# Paragraf verilir, ogrenci uygun basligi secer
+#
+# BASLIK vs KONU FARKI:
+# - Konu = Metin NE HAKKINDA (aciklayici, tanimi yapan)
+# - Baslik = Metne NE AD VERILIR (yaratici, dikkat cekici, gazete manseti tarzi)
+#
+# Ornek:
+# - Konu: "Guvercinlerin yon bulma yetenekleri"
+# - Baslik: "Guvercinlerin Pusulasi"
+
+meta:
+  id: "baslik_standard_sinif4"
+  ad: "Metinde Baslik (Standart)"
+  sinif_seviyesi: 4
+  aciklama: "Paragraf icin uygun basligi belirleme sorulari"
+  kaynak: "data/metinde_baslik.pdf"
+  frequency: "~95% of baslik questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 4 baslik secenegi"
+
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 90
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "bilgilendirici"
+    kurallar:
+      - "Tek ve net bir konu etrafinda olusturulmali"
+      - "Ilginc/sasirtici bir bilgi veya aci icermeli (baslik malzemesi)"
+      - "Konuyu aciklayan 2-4 destekleyici bilgi icermeli"
+      - "Yaratici bir baslik olusturmaya uygun benzersiz bir aci sunmali"
+      - "Metafora veya benzetmeye acik unsurlar icermeli"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 6
+    style: "headline_title"  # Gazete manseti tarzi, yaratici basliklar
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 6 varyasyon)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # Tip 1: "olabilir" - sadece bold, underline yok (PDF S.1 Q1, Q6, Q8, Q9)
+  - "<b>Bu metnin başlığı aşağıdakilerden hangisi olabilir?</b>"
+  # Tip 2: "en uygun ... hangisidir" - bold + "en uygun" underlined (PDF S.1 Q4, Q5, Q7)
+  - "<b>Bu metne verilebilecek <u>en uygun</u> başlık aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metne <u>en uygun</u> başlık aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metne getirilebilecek <u>en uygun</u> başlık aşağıdakilerden hangisidir?</b>"
+  # Tip 3: "en uygundur" - bold + "en uygundur" underlined (PDF S.1 Q2, Q3, Q10)
+  - "<b>Aşağıdakilerden hangisi bu metnin başlığı olmaya <u>en uygundur</u>?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metne başlık olmaya <u>en uygundur</u>?</b>"
+  # Topic-embedded varyasyonlar ({topic} → leaf topic, ör: "Yerçekimi kuvveti")
+  - "\"{topic}\" <b>ile ilgili yazılmış bu metne verilebilecek <u>en uygun</u> başlık aşağıdakilerden hangisidir?</b>"
+  - "\"{topic}\" <b>konulu bu metne <u>en uygun</u> başlık aşağıdakilerden hangisidir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metnin benzersiz acisini yakalayan, yaratici ve dikkat cekici baslik"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Gazete manseti tarzi olmali - kisa, vurucu, akilda kalici"
+    - "Paragrafin ilginc/benzersiz yonunu one cikarmali"
+    - "Metafor veya ilginc bir cerceveleme kullanabilir"
+    - "Sadece konuyu tanimlamamali, yaratici bir ad vermeli"
+    - "Okuyucunun merakini uyandirmali"
+    - "Paragrafin tamamiyla uyumlu olmali"
+  ornekler:
+    - paragraf: "Guvercinler, eskiden mektup tasimak icin kullanirilirdi. Bu kuslar, binlerce kilometre uzaktaki yuvalarini bulabilir. Bilim insanlari, guvercinlerin bu yeteneklerini arastirmaktadir. Guvercinlerin beyninde pusula gorevini goren ozel hucreler..."
+      dogru: "Guvercinlerin Pusulasi"
+      neden: "Pusula metaforu, guvercinlerin yon bulma yetenegini yaratici sekilde ifade ediyor"
+    - paragraf: "Bazi palmiye agaclari, yuruyen gibi gorulur. Kokleri zamanla kayarak agaci farkli bir yere tasir. Bu ilginc olay, tropik ormanlarda gorulur..."
+      dogru: "Yuruyen Palmiye Agaclari"
+      neden: "Sasirtici 'yuruyen' ifadesi dikkat ceker"
+    - paragraf: "Mantis karidesi, okyanusun en guclu yumruklarina sahip. Bir yumrukla avini bayiltabilir. Bilim insanlari bu karidesi inceliyor..."
+      dogru: "Denizlerdeki Boksor Karides"
+      neden: "'Boksor' metaforu guc ozelligini yaratici sekilde anlatir"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM paragraf iceriğine gore en uygun 3 stratejiyi secer
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["ozetleme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic with interesting angle potential"
+      details: "Ilginc bir baslik olusturmaya uygun konu sec"
+
+    - step: 2
+      action: "Generate paragraph (55-90 words) with unique angle"
+      details: "Paragrafta ilginc/sasirtici bilgi ver, metafor malzemesi olustur"
+
+    - step: 3
+      action: "Create headline-style correct answer (2-6 words)"
+      details: |
+        Baslik, paragrafin ilginc yonunu yaratici sekilde ifade etmeli:
+        - Gazete manseti tarzi
+        - Metafor veya ilginc cerceveleme kullanabilir
+        - "X'in Y'si" tarzi isim tamlamalari iyi calisir
+        Ornekler: "Guvercinlerin Pusulasi", "Denizlerin Boksoru"
+
+    - step: 4
+      action: "Generate 3 distractors using strategies"
+      details: |
+        - 1x yakin_baslik (ZORUNLU! dogru basliga yakin ama odagi/yaraticiligi zayif)
+        - 1x cok_dar VEYA yanlis_vurgu
+        - 1x cok_genis VEYA iliskili_ama_farkli
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 1
+    soru_no: 1
+    konu: "Guvercinlerin yon bulma ozelligi"
+    dogru_cevap: "Guvercinlerin Pusulasi"
+    celdirici_1: "Kuslarin Ozellikleri"  # cok_genis
+    celdirici_2: "Guvercinlerin Beyin Yapisi"  # cok_dar
+    celdirici_3: "Mektup Tasiyan Kuslar"  # yanlis_vurgu
+
+  - sayfa: 1
+    soru_no: 2
+    konu: "Yuruyen palmiye agaclari"
+    dogru_cevap: "Yuruyen Palmiye Agaclari"
+    celdirici_1: "Bitkilerin Hareketleri"  # cok_genis
+    celdirici_2: "Tropik Orman Agaclari"  # yanlis_vurgu
+    celdirici_3: "Kok Cesitleri"  # cok_dar
+
+  - sayfa: 2
+    soru_no: 3
+    konu: "Mantis karidesinin gucu"
+    dogru_cevap: "Denizlerdeki Boksor Karides"
+    celdirici_1: "Deniz Canlilari"  # cok_genis
+    celdirici_2: "Karidesler Nasil Avlanir"  # cok_dar
+    celdirici_3: "Karideslerin Yasam Alanlari"  # iliskili_ama_farkli
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 55-90 arasinda mi?"
+    - "Ilginc/sasirtici bir bilgi veya aci var mi?"
+    - "Metafor veya yaratici baslik malzemesi var mi?"
+
+  correct_answer:
+    - "2-6 kelime arasinda mi?"
+    - "Gazete manseti tarzi mi? (yaratici, dikkat cekici)"
+    - "Paragrafin ilginc yonunu yakaladi mi?"
+    - "Sadece konu tanimlayan degil, yaratici bir baslik mi?"
+
+  distractors:
+    - "Her celdirici farkli bir strateji kullaniyor mu?"
+    - "Celdiriciler makul gorunuyor mu?"
+    - "Yaraticilik acidan dogru cevaptan zayif mi?"
+    - "Hepsi ayni gramer yapida mi?"

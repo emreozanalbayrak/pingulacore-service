@@ -1,0 +1,98 @@
+meta:
+  id: test_newspaper
+  ad: TEST — Gazete Haberi
+  sinif_seviyesi: 5
+  aciklama: Düz haber metni → gazete haberi formatına dönüştürülür
+  frequency: Medium
+context:
+  type: test_newspaper
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 80
+    word_count_max: 150
+    visual_format: newspaper
+    structure:
+    - Bir gazete haberi yaz — ama SADECE DÜZ METİN olarak, HTML etiketleri KULLANMA
+    - 'İlk satır: Haberin başlığı (kalın, kısa — max 5 kelime). <b>Başlık</b> formatında yaz'
+    - 'İkinci satır: Alt başlık (haberin tek cümlelik özeti)'
+    - 'Sonraki satırlar: Haber metni (3-5 cümle)'
+    - Haberde isim, yer, tarih gibi detaylar olmalı
+    - 'Haber konusu: toplumsal dayanışma, çevre, eğitim, kültürel etkinlik, spor'
+    - 'NOT: Bu metin otomatik olarak gazete haberi formatına dönüştürülecektir'
+    kurallar:
+    - Senaryo 5. sınıf seviyesinde olmalı
+    - Gazete haberi gerçekçi ve inandırıcı olmalı
+    - Haber pozitif/yapıcı içerikli olmalı
+    - Türkçe karakterler doğru kullanılmalı
+  questions:
+  - slot: 1
+    type: ana_fikir
+    soru_kokleri:
+    - <b>Gazete haberine göre olayın temel amacı aşağıdakilerden hangisidir?</b>
+    - <b>Haberde anlatılan olayın ana fikri aşağıdakilerden hangisidir?</b>
+    options_style: complete_sentence
+    word_count_min: 5
+    word_count_max: 18
+    beceri:
+      katman: KB2
+      bilesenler:
+      - ana_fikir_bulma
+      - yorumlama
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 2
+    type: cikarim
+    soru_kokleri:
+    - <b>Haberdeki bilgilere göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>
+    - <b>Gazete haberine göre aşağıdaki çıkarımlardan hangisine ulaşılabilir?</b>
+    options_style: complete_sentence
+    word_count_min: 5
+    word_count_max: 18
+    beceri:
+      katman: KB3
+      bilesenler:
+      - cikarim_yapma
+      - degerlendirme
+      surec_bileseni: problemi_yapilandirma
+header_template: 1-2. soruları aşağıdaki gazete haberine göre birbirinden bağımsız olarak cevaplayınız.
+format:
+  type: llm_generated_html
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 150
+    sentence_count_min: 3
+    sentence_count_max: 8
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 5
+    word_count_max: 18
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Gazete haberinden doğru çıkarılan ana fikir veya yargı
+  kurallar:
+  - Doğru cevap haberdeki bilgilere dayanmalı
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ. Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: YANLIS_NEDEN
+    aciklama: Haberdeki olayın nedenini yanlış gösterme
+  - ad: KAPSAM_KAYDIRMA
+    aciklama: Haberin kapsamını genişletme veya daraltma
+  - ad: GENELLEME_HATASI
+    aciklama: Haberde olmayan genelleme yapma
+use_shared_strategies: false

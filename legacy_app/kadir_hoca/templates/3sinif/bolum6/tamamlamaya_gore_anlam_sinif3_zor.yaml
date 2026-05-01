@@ -1,0 +1,169 @@
+# Referans: paragraf_tamamlama_sinif3_referans.yaml → zorluk_duzeyleri.zor
+# Zor duzey — tamamlamaya_gore_anlam varyanti
+
+meta:
+  id: "tamamlamaya_gore_anlam_sinif3_zor"
+  ad: "3. Sinif - Paragraf Tamamlama / Tamamlamaya Gore Anlam (Zor)"
+  sinif_seviyesi: 3
+  aciklama: "Zor duzey — tamamlamaya_gore_anlam: Tamamlamaya Gore Anlam. 4 secenekli, gorselli."
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Gorsel + bosluklu paragraf + soru koku + 4 cumle secenegi (zor)"
+
+  paragraph:
+    required: true
+    word_count_min: 76
+    word_count_max: 105
+    sentence_count_min: 6
+    sentence_count_max: 7
+    stil: "paragraf_tamamlama"
+    background_color: "#fce8e8"
+    kurallar:
+      - "Metin 3. sinif ogrencisinin anlayabilecegi kadar acik, sade ve akici olmalidir."
+      - "Metinde yalniz bir bosluk bulunmalidir."
+      - "Bosluk, metnin ortasinda veya sonunda olabilir."
+      - "Bos birakilan yere getirilecek cumle metnin konusu ile uyumlu olmalidir."
+      - "Bos birakilan yere getirilecek cumle dusuncenin akisini bozmamalidir."
+      - "Bos birakilan yere getirilecek cumle anlatim tonuna uygun olmalidir."
+      - "Metin dis bilgi gerektirmemelidir."
+      - "Dogru secenek, yalniz sozcuk benzerligine degil anlam butunlugune dayanmalidir."
+      - "Yanlis secenekler metne yakin gorunebilir; ancak konu, ton, akis veya mantik acisindan bozulma yaratmalidir."
+      - "Paragraf tamamlama sorusu, metnin bolumleri sorusuna donusmemelidir."
+      - "Bu bolumde asil amac, uygun devam cumlesini secmektir; giris-gelisme-sonuc islevi dogrudan olculmez."
+      - "Metin, tahmin ederek surdurme ve nasil sonuclanacagini ongorme becerisine uygun olmalidir."
+      - "Bosluk <b>_ _ _ _</b> formatinda isaretlenmelidir."
+      - "Bosluk anlam butunlugu acisindan kritik yerde olmalidir."
+      - "Metinde birkac ayrinti bulunabilir; ancak dogru secenek butun parcayi birlestirmelidir."
+      - "Zor duzeyde bile soru 4. sinifa kayan cok katmanli soyut yorum gerektirmemelidir."
+      - "Bosluk, anlamca kritik bir yerde bulunmalidir."
+      - "Bosluk doldurulduğunda metin dogal ve akici okunmalidir."
+      - "Boslugun yeri yalniz dil bilgisiyle degil, anlam iliskisiyle cozulebilmelidir."
+      - "Bosluktan onceki ve sonraki cumleler dogru cevabi desteklemelidir."
+      - "Bosluk sonunda ise dogru secenek metni dogal bicimde bitirmelidir."
+      - "Bosluk ortadaysa dogru secenek oncesi ve sonrasi ile baglanti kurmalidir."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  visual:
+    required: true
+    description: "Paragrafin ana icerigini ve baglamini destekleyen islevsel gorsel"
+    placement: "paragraph_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illustrasyon"
+      - "tek sahneli fotograf benzeri cizim"
+      - "tek olay veya tek varlik odakli sahne"
+      - "metindeki ana durumu destekleyen sade konu gorseli"
+    kurallar:
+      - "Her soru icin gorsel zorunludur."
+      - "Gorsel metnin ana icerigiyle acik uyumlu olmalidir."
+      - "Gorsel cozumde destekleyici rol oynamalidir."
+      - "Gorsel sus olmamalidir."
+      - "Gorsel tek basina dogru cevabi acikca vermemelidir."
+      - "Gorsel ile metin birlikte degerlendirildiginde dogru tamamlama daha netlesebilir."
+      - "Gorsel dikkat dagitici gereksiz ayrintilar icermemelidir."
+    yasaklar:
+      - "dekoratif ve metinden bagimsiz gorsel"
+      - "cok sahneli karmasik kolaj"
+      - "grafik, tablo veya infografik yogunlugu tasiyan tasarim"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir (tamamlamaya_gore_anlam varyanti)"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 3
+    word_count_max: 18
+    style: "sentence_option"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "3. sinifta her soru 4 secenekli olmalidir."
+      - "Secenekler anlamli ve kurallı cumlelerden olusmalidir."
+      - "Dogru secenek metnin konusu, akisi ve tonuyla tam uyumlu olmalidir."
+      - "Yanlis secenekler ilk bakista makul gorunebilir; ancak dusuncenin akisini bozmalidir."
+      - "Yanlis secenekler tamamen ilgisiz olmamali; metne belli olcude yakin gorunmelidir."
+      - "Birden fazla makul dogru secenek olusmamalidir."
+      - "3 yanlis secenegin en az 2'si metne yakin gorunmelidir."
+      - "Yanlis secenekler ton, anlam yonu veya sonuc etkisi bakimindan ayrilmalidir."
+      - "Dogru secenek ancak metnin tamami okununca netlesmelidir."
+
+soru_kokleri:
+  - "<b>Bu parca asagidakilerden hangisi ile tamamlanirsa anlatilan kisi hakkinda belirli bir dusunce anlasilir?</b>"
+  # KULLANILDI: - "<b>Metnin sonuna asagidakilerden hangisi getirilirse istenen anlam olusur?</b>"
+  - "<b>Bu parcanin anlamina gore asagidaki cumlelerden hangisi uygun tamamlamadir?</b>"
+  # KULLANILDI: - "<b>Asagidakilerden hangisi getirilirse parcadan belirtilen anlam cikarilabilir?</b>"
+
+dogru_cevap:
+  tanim: "Bos birakilan yere veya metnin devamina, konuya ve dusuncenin akisina en uygun dusen cumle"
+  kurallar:
+    - "KRITIK PARAPHRASE: Dogru cevap paragraftaki cumleleri/ifadeleri AYNEN KULLANMA — paragraf kelimelerini es anlamli sozcuklerle degistir ve farkli cumle yapisiyla yeniden ifade et. En az %50 kelime farkliligi zorunlu. Paragrafa cok benzer secenekler FAIL olur."
+    - "Dogru cevap metnin konusu ile tam uyumlu olmalidir."
+    - "Dogru cevap onceki cumlelerle anlam iliskisi kurmalidir."
+    - "Dogru cevap varsa sonraki cumle ile de dogal bag kurmalidir."
+    - "Dogru cevap anlatim tonunu bozmamalidir."
+    - "Dogru cevap dis bilgi gerektirmemelidir."
+    - "Dogru cevap 3. sinif ogrencisinin metni dikkatle okuyarak bulabilecegi aciklikta olmalidir."
+    - "Tamamlamaya gore anlam varyantinda dogru secenek istenen anlami acikca olusturmalidir."
+
+celdirici_stratejileri:
+  - ad: "KONUYA_YAKIN_AMA_AKIS_BOZAN"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metnin konusu ile iliskili gorunur ama dusuncenin akisini bozuyor"
+    nasil_olusturulur: |
+      Konuyla baglantili gorunen ama akisi kesintiye ugratan bir cumle olustur.
+    kategori: "semantic"
+
+  - ad: "TONA_AYKIRI"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Metnin duygusuna, uslubuna veya genel havasina uymayan secenek"
+    nasil_olusturulur: |
+      Metnin anlatim tonuna (ciddi/samimi/bilgilendirici) uymayan bir cumle olustur.
+    kategori: "cognitive"
+
+  - ad: "FAZLA_GENEL_VEYA_BELIRSIZ"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metne cok genel baglanan ama boslugu dogru doldurmayan secenek"
+    nasil_olusturulur: |
+      Cok genel ya da belirsiz; boslugu tam doldurmayan bir cumle olustur.
+    kategori: "semantic"
+
+  - ad: "YENI_BILGI_ASIRI_YUKLEME"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metinde olmayan yeni ve agir bir bilgi ekleyen secenek"
+    nasil_olusturulur: |
+      Metnin kapsami disinda yeni ve yuklu bilgi getiren bir cumle olustur.
+    kategori: "cognitive"
+
+  - ad: "KISMI_UYUMLU"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Bir cumleyle uyumlu gorunur ama tum paragrafla tam uyumlu degildir"
+    nasil_olusturulur: |
+      Metnin bir cumlesiyle kismen uyumlu ama butunle bagdasmayan bir cumle olustur.
+    kategori: "cognitive"
+
+  - ad: "ISTENEN_ANLAMI_OLUSTURMAYAN"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Cumle dil bilgisel olarak uygun gorunur ama sorudaki hedef anlami vermez"
+    nasil_olusturulur: |
+      Cumle yapisi dogru ama sorunun hedeflediği anlami olusturmayan bir cumle sec.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["paragraf_tamamlama", "anlam_butunlugu_koruma", "akis_izleme"]
+  surec_bileseni: "metni_anlama"
+
+sinif3_ek_kurallar:
+  yasak_alanlar:
+    - "Soru yalniz giris-gelisme-sonuc islevine odaklaniyorsa YASAK"
+    - "Bosluk yalniz baglac bilgisiyle cozulebiliyorsa YASAK"
+    - "Asiri soyut veya cok belirsiz devam cumlesi istiyorsa YASAK"
+    - "Metin disi dunya bilgisi gerektiriyorsa YASAK"
+    - "Birden fazla yorumu savunmayi gerektiren acik uclu tamamlama (4. sinif) YASAK"
+    - "Ileri duzey ortuk anlam ve yazar tutumu cozumleme (4. sinif) YASAK"
+    - "Agir soyut ve cok katmanli bosluk tamamlama (4. sinif) YASAK"

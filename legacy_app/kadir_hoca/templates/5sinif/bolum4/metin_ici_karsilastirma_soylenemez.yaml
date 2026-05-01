@@ -1,0 +1,187 @@
+# templates/bolum4/metin_ici_karsilastirma_soylenemez.yaml
+# Bolum 4.1 - Ozel Bolum: Metin Ici Karsilastirma (Soylenemez)
+#
+# SOYLENEMEZ FORMATI (INVERSE)
+# Karsilastirmali metin verilir, ogrenci metinden DESTEKLENMEYEN yargiyi bulur
+# correct_type: does_not_belong — dogru cevap metinden cikarimlanamaz
+
+meta:
+  id: "metin_ici_karsilastirma_soylenemez"
+  ad: "Metin İçi Karşılaştırma - Söylenemez"
+  sinif_seviyesi: 5
+  aciklama: "Metinde karşılaştırılan unsurlara ilişkin çıkarımlardan hangisinin yapılamayacağını buldurur"
+  frequency: "High (~40% of comparison questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Karşılaştırmalı paragraf + soru kökü + 4 yargı seçeneği (1 söylenemez)"
+
+  paragraph:
+    required: true
+    word_count_min: 50
+    word_count_max: 90
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "karsilastirmali_metin"
+    kurallar:
+      - "En az iki kişi, varlık veya durum açık biçimde karşılaştırılmalı"
+      - "Karşılaştırma en az iki farklı eksende (mizaç, davranış, tutum vb.) kurulmalı"
+      - "Karşılaştırma sinyalleri metinde bulunmalı: gibi, kadar, daha, ise, oysa, buna karşın, benzer, farklı"
+      - "Metinden en az 3 farklı çıkarım yapılabilecek zenginlikte olmalı"
+      - "Karşılaştırılan unsurlar arasında hem benzerlik hem farklılık bulunmalı"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 8
+    word_count_max: 25
+    style: "complete_sentence"
+    correct_type: "does_not_belong"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Metinde karşılaştırılan unsurlar dikkate alındığında aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Bu kişilere ilişkin aşağıdakilerden hangisine <u>ulaşılamaz</u>?</b>"
+  - "<b>Metne göre aşağıdaki yargılardan hangisi <u>çıkarılamaz</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metindeki karşılaştırmadan doğrudan ya da dolaylı olarak desteklenmeyen yargı"
+  kurallar:
+    - "KRITIK: Dogru secenekte paragraftaki hicbir cumle kelimesi kelimesine TEKRARLANMAMALI — es anlamli sozcuklerle yeniden ifade edilmeli"
+    - "Paragraftaki ifadelerle en az %40 kelime farkliligi olmali — kopyala-yapistir YASAK"
+    - "Ayni anlam korunmali ama farkli sozcukler ve cumle yapilari kullanilmali"
+    - "Metinde desteklenmeyen ama makul görünen bir yargı olmalı"
+    - "Doğru seçenek paragraftaki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI — eş anlamlı sözcüklerle yeniden ifade edilmeli"
+    - "Paragraftaki ifadelerle en az %40 kelime farklılığı olmalı — kopyala-yapıştır YASAK"
+    - "Aynı anlam korunmalı ama farklı sözcükler ve cümle yapıları kullanılmalı"
+    - "Tamamen alakasız değil, konuya yakın ama metinden çıkarılamaz olmalı"
+    - "8-25 kelime, tam bir cümle formatında olmalı"
+    - "Aşırı genelleme, eksen kaydırma veya ima edileni kesinleştirme içerebilir"
+  ornekler:
+    - paragraf: "Ali düzenli ve planlı çalışır, her işini zamanında bitirir. Veli ise yaratıcı fikirler üretir ama zaman yönetiminde zorlanır. Her ikisi de ekip çalışmasına önem verir."
+      dogru: "Ali ve Veli'nin iş anlayışları her yönüyle birbirinin zıttıdır."
+      neden: "Metinde yalnızca bazı yönlerden fark var; ama 'her yönüyle zıt' aşırı genelleme"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI (CUSTOM — karsilastirma soylenemez icin ozel)
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "ORTAKLIK_ASIRI_GENELLEME"
+    bilisssel_hata_kategorisi: "asiri_genelleme"
+    aciklama: "Metinde iki unsurun yalnızca bir ortak yönü verilmiştir; seçenek bunu gereğinden fazla genişletir."
+    nasil_olusturulur: |
+      Metindeki sınırlı bir ortaklığı alıp kapsamını abartılı biçimde genişlet.
+      Örnek: "Aynı iş yerindeler" → "İş anlayışları tamamen aynıdır" gibi aşırı yorum.
+      Bu seçenek söylenemez olur çünkü sınırlı ortaklık tüm alana yayılmış.
+    kategori: "scope"
+
+  - ad: "ZITLIK_ABARTISI"
+    bilisssel_hata_kategorisi: "asiri_genelleme"
+    aciklama: "Metinde belli bir alanda zıtlık vardır; seçenek bunu tüm kişiliğe yayar."
+    nasil_olusturulur: |
+      Metindeki tek bir eksen üzerindeki farklılığı, unsurların tüm yapısına genelleyen yargı yaz.
+      Örnek: "biri güler yüzlü, biri soğuk" → "hayata bakışları her yönüyle zıttır"
+      Öğrenci kısmi zıtlığı tüm kişiliğe taşıma hatasına düşebilir.
+    kategori: "semantic"
+
+  - ad: "DOLAYLI_BILGIYI_DOGRUDAN_SANMA"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Metinde ima edilen ama kesinleşmeyen bir bilgi, seçenekte kesin yargı gibi sunulur."
+    nasil_olusturulur: |
+      Metinden dolaylı olarak sezilen ama açıkça söylenmeyen bir bilgiyi kesin yargı biçiminde yaz.
+      Öğrenci metinde ipucu gördüğü için bunu doğru sanabilir.
+      Doğru seçeneklerde ise metinden açıkça desteklenen yargılar bulunmalı.
+    kategori: "cognitive"
+
+  - ad: "AYNI_EKSEN_KAYDIRMASI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metindeki karşılaştırma bir eksendedir, seçenek bunu başka eksene kaydırır."
+    nasil_olusturulur: |
+      Metindeki karşılaştırma belirli bir eksen üzerinden yapılmışken, seçenek başka bir eksen hakkında kesin hüküm kurar.
+      Örnek: İnsan ilişkileri üzerinden karşılaştırma yapılırken seçenek çalışma disiplini hakkında kesin hüküm kurar.
+      Bu seçenek söylenemez olur çünkü o eksende bilgi yoktur.
+    kategori: "content"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ETIKETI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB3"
+  bilesenler: ["karsilastirma", "cikarim"]
+  surec_bileseni: "karar_verme"
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Karşılaştırılacak iki unsur seç"
+      details: |
+        İki kişi, nesne, yer, yaklaşım veya dönem seç.
+        Karşılaştırma eksenlerini belirle (en az 2, ideal 3):
+        karakter, davranış, görünüş, iş yapma biçimi, düşünce tarzı, tercih.
+
+    - step: 2
+      action: "Karşılaştırmalı metin yaz (50-90 kelime)"
+      details: |
+        - Karşılaştırma sinyalleri metinde açıkça bulunmalı
+        - Hem benzerlik hem farklılık kurulmalı
+        - 4-7 cümle, akıcı ve bilgilendirici
+
+    - step: 3
+      action: "3 söylenebilir yargı + 1 söylenemez yargı oluştur"
+      details: |
+        Söylenebilir yargılar:
+        - 1 açık benzerlik yargısı
+        - 1 açık farklılık yargısı
+        - 1 yorumla ulaşılabilen ama desteklenen çıkarım
+        Söylenemez yargı:
+        - Aşırı genelleme, eksen kaydırma veya desteksiz kesinlik içermeli
+        - Ama tamamen alakasız olmamalı
+
+    - step: 4
+      action: "Seçenekleri rastgele sırala"
+      details: "A-B-C-D seçeneklerini rastgele sırala"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayısı 50-90 arasında mı?"
+    - "Karşılaştırılan en az iki unsur açık mı?"
+    - "Karşılaştırma en az iki farklı yönden kurulmuş mu?"
+    - "Karşılaştırma ifadeleri metinde görünür mü?"
+
+  correct_answer:
+    - "8-25 kelime tam cümle mi?"
+    - "Metinden gerçekten desteklenmiyor mu?"
+    - "Makul görünen ama söylenemez bir yargı mı?"
+
+  distractors:
+    - "3 seçenek gerçekten söylenebilir mi?"
+    - "Her çeldirici farklı bir doğruluk türü mü (benzerlik, fark, çıkarım)?"
+    - "Tüm seçenekler aynı formatta mı?"

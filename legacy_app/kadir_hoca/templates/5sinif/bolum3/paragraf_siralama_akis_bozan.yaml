@@ -1,0 +1,322 @@
+# templates/bolum3/paragraf_siralama_akis_bozan.yaml
+# Bolum 3 - Yapi Yonu: Akisi Bozan Cumle
+#
+# AKIS BOZAN FORMATI
+# Numarali cumleler verilir, ogrenci akisi bozan cumleyi bulur
+# correct_type: does_not_belong — dogru cevap akisa UYMAYAN cumle
+
+#TODO: Template kontrolu saglanıcak, şıklar tamamen roma rakamı olmalı. roma rakamı olurken A: I, B: II, C: III, D: IV formatı olmalı. bazı sorularda A: I., B: II., C: III., D: IV. boyle noktalama kullanmış bunun olmaması gerekıyor. ve sadece roma rakamı olmalı.
+meta:
+  id: "paragraf_siralama_akis_bozan"
+  ad: "Paragraf Sıralama (Akışı Bozan Cümle)"
+  sinif_seviyesi: 5
+  aciklama: "Numaralı cümlelerden akışı bozan cümleyi tespit etme"
+  frequency: "Medium (~30% of structure questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Numaralı cümleler + soru kökü + 4 seçenek (numaralı veya numarasız sunum)"
+
+  paragraph:
+    required: true
+    word_count_min: 50
+    word_count_max: 90
+    sentence_count_min: 4
+    sentence_count_max: 4
+    numbered_sentences: true
+    stil: "bilgilendirici"
+    kurallar:
+      - "4 cümle üret, Roma rakamlarıyla numarala: (I), (II), (III), (IV)"
+      - "3 cümle aynı konu hakkında tutarlı ve doğal bir anlatım akışı oluştursun"
+      - "1 cümle aynı konuyla ilgili olmalı ancak paragrafın anlatım akışına uymamalı"
+      - "Akışı bozan cümle konu dışı olmamalı; yalnızca paragrafın yönü, amacı, sırası veya işleviyle uyumsuz olmalı"
+      - "Akışı bozan cümle BARİZ bir kopuş oluşturmamalı; ilk bakışta doğru görünebilmeli"
+      - "Akışı bozan cümle, paragraftaki diğer cümlelerle aynı tema alanında kalmalı"
+      - "Akışı bozan cümle dil, üslup ve konu bakımından paragrafa ait görünmeli"
+      - "Akışı bozan cümle yalnızca farklı bir ayrıntı vermemeli; anlatımın doğal ilerleyişini bozmalı"
+      - "Akışı bozan cümle yer değiştirince düzelecek türden olmamalı; paragraftan çıkarıldığında akış belirgin biçimde güçlenmeli"
+      - "Doğru 3 cümle kendi içinde giriş-gelişme-sonuç, zaman sırası, neden-sonuç, süreç veya açıklama akışı kurabilmeli"
+      - "Her cümle 10-22 kelime arasında olmalı"
+      - "Paragraf TEK bir metin bloğu olarak yazılmalı"
+      - "SADECE ROMA RAKAMI (I, II, III, IV) KULLAN — Arap rakamı (1, 2, 3) KULLANMA"
+      - "Seçeneklerde SADECE Roma rakamı verilmeli — cümle metni YAZILMAMALI"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+    kurallar:
+      - "Soru kökünde SADECE tek bir soru cümlesi olmalı"
+      - "YASAK: Paragrafı herhangi bir formatta tekrar yazmak"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    style: "short_phrase"
+    word_count_min: 1
+    word_count_max: 5
+    correct_type: "does_not_belong"
+    correct_count: 1
+    kurallar:
+      - "Seçenekler SADECE Roma rakamından oluşmalı: A) I, B) II, C) III, D) IV"
+      - "YASAK: Seçeneklerde cümle metni yazmak"
+      - "YASAK: Arap rakamı (1, 2, 3) kullanmak"
+      - "Paragraftaki 4 numaralı cümlenin her biri birer seçenek olarak Roma rakamıyla verilmeli"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Yukarıdaki cümlelerden hangisi metnin anlam akışını <u>bozmaktadır</u>?</b>"
+  - "<b>Yukarıdaki cümlelerden hangisi konunun farklı yönünden <u>bahsetmektedir</u>?</b>"
+  - "<b>Bu cümlelerden hangisi metnin bütünlüğünü <u>bozmaktadır</u>?</b>"
+  - "<b>Numaralanmış cümlelerden hangisi paragrafın akışını bozmaktadır?</b>"
+  - "<b>Bu metinden numaralanmış cümlelerden hangisi çıkarılırsa metnin anlam bütünlüğü sağlanmış olur?</b>"
+  - "<b>Bu metnin anlamlı bir bütün oluşturması için numaralanmış cümlelerden hangileri yer değiştirmelidir?</b>"
+  - "<b>Bu metnin anlamlı bir bütün oluşturması için numaralanmış cümlelerden hangisi metinden çıkarılmalıdır?</b>"
+  # Farklı yönden bahsetme varyasyonu (ARI Paragraf 2025 kaynak)
+  - "<b>Bu metinde numaralanmış cümlelerden hangisinde konunun farklı bir yönünden bahsedilmiştir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI (TERS MANTIK)
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Paragrafta anlatım akışını bozan cümle, konu dışı olmayan; ancak paragrafın ana yönü, amacı, sırası veya işleviyle uyumsuz olan cümledir."
+
+  akisi_bozan_cumle_olcutleri:
+    - "Cümle paragrafın ana konusuyla aynı tema alanında olmalı"
+    - "Cümle konu dışı, absürt veya bariz biçimde alakasız olmamalı"
+    - "Cümle paragrafın ana yönünü, amacını, sırasını veya işlevini sürdürmemeli"
+    - "Sapma ince olmalı; ilk bakışta doğru görünebilmeli"
+    - "Cümle çıkarıldığında paragraf daha akıcı ve tutarlı hâle gelmeli"
+    - "Cümle başka bir yere taşındığında doğal akışı kurtarmamalı"
+    - "Öğrenci doğru cevabı yalnızca yüzeysel anahtar kelimelerle değil, anlatım akışını inceleyerek bulabilmeli"
+
+  ornekler:
+    - paragraf: "(I) Sabah erken saatlerde pazarcılar tezgâhlarını kurmaya başladı. (II) Bir süre sonra müşteriler taze sebze ve meyveleri incelemeye koyuldu. (III) Pazarda bazı tezgâhlarda elektronik mutfak aletleri de satılıyordu. (IV) Öğleye doğru alışveriş yapanların sayısı daha da arttı."
+      dogru: "III"
+      neden: "I, II ve IV pazar yerindeki zaman akışını anlatır. III. cümle konuya tamamen yabancı değildir; ancak anlatımın zaman temelli doğal ilerleyişini zayıflatır."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI (CUSTOM)
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_genel_kurallar:
+  - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+  - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+  - "Akışa uygun 3 cümle, paragrafın ana yönünü sürdürmeli ve birlikte okunduğunda tutarlı bir anlatım oluşturmalı"
+  - "Akışı bozan cümle konu dışı görünmemeli; ilk bakışta doğru görünebilmelidir"
+  - "Çeldirici cümle, yalnızca farklı bir bilgi vermemeli; anlatımın doğal akışını zayıflatmalıdır"
+  - "Çeldirici cümle çıkarıldığında paragrafın akışı belirgin biçimde güçlenmelidir"
+  - "Öğrenci doğru cevabı bariz konu dışılık üzerinden değil, anlatım akışını inceleyerek bulmalıdır"
+
+celdirici_stratejileri:
+  - ad: "ANLATIM_YONU_SAPMASI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Cümle ana konuyla ilgili görünür; ancak paragrafın gittiği anlatım yönüne uymaz"
+    nasil_olusturulur: |
+      Paragraftaki 3 cümle aynı yönü izlesin: örneğin süreç anlatsın, zaman ilerletsin,
+      bir fikri açıklasın veya bir durumu gerekçelendirsin.
+      Akışı bozan cümle ise aynı konudan söz etsin ama bu ana yönü sürdürmesin.
+      Cümle konu dışı değilmiş gibi görünmeli; fakat paragrafın ne yaptığına tam uymamalıdır.
+    kategori: "core"
+
+  - ad: "ISLEV_UYUMSUZLUGU"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Cümle doğru konuda fakat paragraftaki işlev sırasına uymaz"
+    nasil_olusturulur: |
+      Paragraftaki 3 cümle aynı işlev zincirinde yer alsın: tanıtma, açıklama, örnekleme,
+      sonuçlandırma, aşama ilerletme gibi.
+      Akışı bozan cümle ise aynı konuyla ilgili olsun ama farklı işlev üstlensin.
+      Örneğin açıklama akışı içinde gereksiz yan bilgi, süreç akışı içinde tanımsal bilgi,
+      sonuç cümleleri arasında ek ayrıntı türünde olabilir.
+    kategori: "core"
+
+  - ad: "AKIS_ICI_YAN_KOLA_SAPME"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Cümle ana akıştan kopmaz; fakat anlatımı kısa süreliğine başka kola çeker"
+    nasil_olusturulur: |
+      Paragrafın ana akışı belirgin olsun.
+      Akışı bozan cümle bu ana akışla aynı konu alanında kalsın; fakat ana çizgiyi ilerletmek yerine
+      yan bir ayrıntıya, yan bilgiye, yardımcı bir özelliğe veya ikincil bir noktaya yönelsin.
+      Böylece öğrenci cümleyi ilgili bulur; ancak dikkatli okuyunca akıştan saptığını fark eder.
+    kategori: "core"
+
+  - ad: "YUZEYDE_UYUMLU_ANLAMDA_GEREKSIZ"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Kelime ve konu uyumu vardır; fakat cümle paragrafın ilerleyişine katkı yapmaz"
+    nasil_olusturulur: |
+      Çeldirici cümlede paragraftaki anahtar kavramlar, özne veya bağlam korunabilir.
+      Ancak bu cümle, paragrafı ileri taşımayan; sadece ilgili görünen ama akışı beslemeyen
+      bir bilgi içermelidir.
+      Öğrenci yalnızca kelime benzerliğine bakarsa bu cümleyi doğru sanabilir.
+    kategori: "core"
+
+celdirici_uretme_kisitlari:
+  - ad: "BARIZ_KONU_DISILIK_YASAGI"
+    bilisssel_hata_kategorisi: "hizli_eleme"
+    aciklama: "Çeldirici cümle açıkça alakasız görünmemeli"
+    nasil_uygulanir: |
+      Akışı bozan cümle paragraftan tamamen kopuk, absürt, şaşırtıcı veya başka bir dünyaya ait görünmemelidir.
+      Öğrenci ilk bakışta 'bu zaten alakasız' diyerek doğru cevaba ulaşamamalıdır.
+    kategori: "filter"
+
+  - ad: "ASIRI_BELIRGIN_GECIS_YASAGI"
+    bilisssel_hata_kategorisi: "hizli_eleme"
+    aciklama: "Çeldirici cümle, açıkça fazlalık veya gereksiz bilgi gibi bağırmamalı"
+    nasil_uygulanir: |
+      Akışı bozan cümle çok belirgin dipnot, ansiklopedik bilgi veya aşırı teknik ayrıntı gibi durmamalıdır.
+      Cümle paragrafa aitmiş gibi görünmeli; yalnızca dikkatli okuyunca akışa tam oturmadığı anlaşılmalıdır.
+    kategori: "filter"
+
+  - ad: "YER_DEGISTIRINCE_DUZELME_YASAGI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Akışı bozan cümle sadece yanlış yerde duran cümle olmamalı"
+    nasil_uygulanir: |
+      Çeldirici cümle paragrafta başka bir yere taşınınca doğal biçimde düzelmemelidir.
+      Sorun cümlenin konumundan değil, paragrafın ana yönüyle kurduğu uyumsuzluktan kaynaklanmalıdır.
+    kategori: "filter"
+
+  - ad: "INCE_SAPMA_ZORUNLULUGU"
+    bilisssel_hata_kategorisi: "erken_karar_verme"
+    aciklama: "Çeldirici cümle ince sapma oluşturmalı"
+    nasil_uygulanir: |
+      Akışı bozan cümle, diğer 3 cümleyle aynı konu alanında kalmalıdır.
+      Ancak paragrafın asıl yönünü, amacını veya ilerleyişini sürdürmemelidir.
+      Öğrenci doğru cevabı ancak anlatım ilişkilerini karşılaştırarak bulabilmelidir.
+    kategori: "filter"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ETIKETI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siralama", "degerlendirme"]
+  surec_bileseni: "metin_yapisini_analiz_etme"
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Konu seç ve ana akış planla"
+      details: |
+        Konuyla ilgili 3 cümlelik tutarlı bir anlatım akışı planla.
+        Akışın yönü, amacı ve işlevi baştan net olmalıdır.
+
+    - step: 2
+      action: "Akışa uygun 3 cümleyi yaz"
+      details: |
+        3 cümle aynı konu etrafında yazılmalıdır.
+        Bu 3 cümle birlikte okunduğunda doğal, tutarlı ve akıcı bir anlatım oluşturmalıdır.
+        Her cümle paragrafın ana yönünü sürdürmelidir.
+        Her cümle 10-22 kelime arasında olmalıdır.
+
+    - step: 3
+      action: "1 akış bozan cümle üret"
+      details: |
+        1 cümle aynı konu alanında kalmalıdır; ancak paragrafın ana yönüne, amacına,
+        sırasına veya işlevine tam uymamalıdır.
+        Bu cümle açıkça konu dışı, absürt veya bariz biçimde alakasız olmamalıdır.
+        Sapma ince olmalıdır.
+        Cümle çıkarıldığında paragrafın akışı belirgin biçimde güçlenmelidir.
+        Cümle başka bir yere taşındığında doğal akışı kurtarmamalıdır.
+
+    - step: 4
+      action: "4 cümleyi tek paragraf hâline getir"
+      details: |
+        4 cümle tek bir paragraf hâlinde birleştirilmelidir.
+        Paragraf dış görünüşte doğal ve bütünlüklü olmalıdır.
+        Akışı bozan cümle ilk bakışta paragrafa ait görünebilmelidir.
+        Öğrenci doğru cevabı ancak anlatım ilişkilerini inceleyerek bulabilmelidir.
+
+    - step: 5
+      action: "Paragrafın sunum biçimine karar ver"
+      details: |
+        Sistem paragrafın numaralı mı yoksa numarasız mı sunulacağına karar vermelidir.
+        Seçilen sunum biçimi, paragraf görünüşünü ve seçenek formatını belirler.
+
+    - step: 6
+      action: "Paragrafı seçilen sunum biçimine göre hazırla"
+      details: |
+        Eğer numaralı sunum seçildiyse, cümleler (1), (2), (3), (4) biçiminde gösterilmelidir.
+        Eğer numarasız sunum seçildiyse, paragraf düz metin olarak verilmelidir
+        ve cümlelerin başına numara konulmamalıdır.
+
+    - step: 7
+      action: "Doğru cevabı belirle"
+      details: |
+        Doğru cevap, anlatım akışını bozan cümle olmalıdır.
+        Eğer numaralı sunum seçildiyse doğru cevap '1. cümle', '2. cümle', '3. cümle' veya '4. cümle' biçiminde verilmelidir.
+        Eğer numarasız sunum seçildiyse doğru cevap, akışı bozan cümlenin
+        paragraftaki birebir tam metni olmalıdır.
+
+    - step: 8
+      action: "Seçenekleri oluştur"
+      details: |
+        Toplam 4 seçenek oluşturulmalıdır.
+        Eğer numaralı sunum seçildiyse seçenekler '1. cümle', '2. cümle',
+        '3. cümle', '4. cümle' biçiminde verilmelidir.
+        Eğer numarasız sunum seçildiyse seçeneklerde paragraftaki 4 cümle
+        birebir ve tam metin olarak yer almalıdır.
+        Cümleler kısaltılmamalı, özetlenmemeli, yorumlanmamalı ve yeniden yazılmamalıdır.
+
+    - step: 9
+      action: "Seçenekleri rastgele sırala"
+      details: |
+        1 doğru cevap ve 3 çeldirici oluşturulduktan sonra
+        seçenekleri A-B-C-D sırasına rastgele yerleştir.
+        Paragrafın sunum biçimi ile seçeneklerin sunum biçimi birbiriyle tam uyumlu olmalıdır.
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph_core:
+    - "Paragraf toplam 4 cümleden oluşuyor mu?"
+    - "3 cümle aynı konu etrafında doğal ve tutarlı bir anlatım akışı oluşturuyor mu?"
+    - "1 cümle konu alanı içinde kaldığı hâlde anlatım akışına uymuyor mu?"
+    - "Akışı bozan cümle açıkça konu dışı, absürt veya bariz alakasız değil mi?"
+    - "Sapma ince mi; ilk bakışta paragrafın parçası gibi görünebiliyor mu?"
+    - "Akışı bozan cümle çıkarıldığında paragraf daha akıcı ve tutarlı hâle geliyor mu?"
+    - "Akışı bozan cümle başka bir yere taşındığında doğal akışı kurtarmıyor mu?"
+
+  presentation_format:
+    - "Paragrafın sunum biçimi açıkça belirlenmiş mi: numaralı veya numarasız?"
+    - "Eğer numaralı sunum seçildiyse, cümleler (1), (2), (3), (4) biçiminde gösterilmiş mi?"
+    - "Eğer numarasız sunum seçildiyse, paragraf düz metin olarak yazılmış mı?"
+    - "Paragrafın sunum biçimi ile seçeneklerin sunum biçimi birbiriyle uyumlu mu?"
+
+  correct_answer:
+    - "Doğru cevap gerçekten anlatım akışını bozan cümleyi gösteriyor mu?"
+    - "Doğru cevap konu dışı olanı değil, akış yönüne uymayan cümleyi mi işaret ediyor?"
+    - "Eğer numaralı sunum seçildiyse, doğru cevap '1. cümle', '2. cümle', '3. cümle' veya '4. cümle' biçiminde mi?"
+    - "Eğer numarasız sunum seçildiyse, doğru cevap akışı bozan cümlenin birebir tam metni mi?"
+    - "Doğru cevap, yüzeysel kelime benzerliğiyle değil anlatım akışıyla bulunabilecek nitelikte mi?"
+
+  options:
+    - "Toplam 4 seçenek var mı?"
+    - "Seçenekler A, B, C, D olarak etiketlenmiş mi?"
+    - "Her seçenek paragraftaki bir cümleye karşılık geliyor mu?"
+    - "Eğer numaralı sunum seçildiyse, tüm seçenekler yalnızca cümle numarası biçiminde mi verilmiş?"
+    - "Eğer numarasız sunum seçildiyse, tüm seçenekler paragraftaki cümlelerin birebir tam metni mi?"
+    - "Numarasız sunumda seçenekler kısaltılmadan, özetlenmeden, yorumlanmadan ve yeniden yazılmadan verilmiş mi?"
+    - "Tüm seçenekler aynı sunum formatında mı?"
+
+  distractors:
+    - "3 çeldirici, akışa uygun olan 3 cümleyi gösteriyor mu?"
+    - "Çeldirici seçenekler kendi içinde paragrafın ana yönüyle uyumlu mu?"
+    - "Çeldiriciler bariz yanlış, açık konu dışı veya kolay elenebilir değil mi?"
+    - "Çeldiriciler ile doğru cevap arasındaki fark, konu farkından çok akış farkına mı dayanıyor?"
+    - "Öğrenci doğru cevabı yalnızca yüzeysel ipuçlarıyla değil, anlatım akışını analiz ederek bulmak zorunda mı?"

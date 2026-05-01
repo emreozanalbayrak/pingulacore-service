@@ -1,0 +1,284 @@
+# templates/beceri_metinler_arasi.yaml
+# Kaynak: MEB Beceri Temelli Soru Bankasi - Metinler Arasi
+#
+# BECERI TEMELLI METINLER ARASI FORMATI
+# Birden fazla metin/kaynak verilir, ogrenci karsilastirma ve sentez yapar
+#
+# MANTIK: 1 secenekte dogru cevap, 4 secenekte yanlis cevaplar
+# Secenekler TAM CUMLE formatindadir (3-25 sozcuk)
+
+meta:
+  id: "beceri_metinler_arasi"
+  ad: "Beceri Temelli - Metinler Arasi"
+  sinif_seviyesi: 5
+  aciklama: "Birden fazla metin/kaynak uzerinden beceri temelli sorular"
+  kaynak: "MEB Beceri Temelli Soru Bankasi"
+  frequency: "~8% of beceri temelli questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Metinler arasi baglam + soru koku + 5 tam cumle secenek (beceri temelli)"
+
+  paragraph:
+    required: true
+    word_count_min: 120
+    word_count_max: 200
+    sentence_count_min: 6
+    sentence_count_max: 12
+    stil: "bilgilendirici"
+    kurallar:
+      - "2-3 farkli kaynak/goruş sun"
+      - "Kaynaklar arasinda benzerlik ve farkliliklar olsun"
+      - "Karsilastirma ve sentez gerektirsin"
+      - "Her kaynagin yazari/kaynagi belirtilsin"
+      - "Metinler arasi iliskiler acikca cikarilabilir olmali"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 5
+    labels: ["A", "B", "C", "D", "E"]
+    word_count_min: 3
+    word_count_max: 25
+    style: "complete_sentence"
+    correct_type: "matches"
+    correct_count: 1
+
+  questions_per_context: 3
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ALANLARI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  context_type: "METINLER_ARASI"
+  context_label: "Metinler Arasi"
+  skill_level: "KB3"
+  process_component: "Birden fazla metni karsilastirma, sentezleme ve tutarlilik degerlendirmesi"
+  skill_areas:
+    - "analiz"
+    - "sentez"
+    - "elestirsel_dusunme"
+    - "degerlendirme"
+    - "karsilastirma"
+    - "iliskilendirme"
+  answer_key_explanation: true
+  question_patterns:
+    - "Her iki metinde ortak olan dusunce nedir?"
+    - "Metinler arasindaki temel fark nedir?"
+    - "Hangi metinde hangi bilgi yer almaktadir?"
+    - "Metinler birlikte degerlendirildiginde hangi sonuca ulasilir?"
+    - "Metinler arasi tutarlilik nasil degerlendirilir?"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # Karşılaştırma / Ortak Nokta
+  - "<b>Her iki metinde ortak olan düşünce aşağıdakilerden hangisidir?</b>"
+  - "<b>Birinci ve ikinci metnin ortak noktası aşağıdakilerden hangisidir?</b>"
+  - "<b>Metinler arasındaki temel fark aşağıdakilerden hangisidir?</b>"
+  # Çıkarım / Sentez
+  - "<b>Metinlerden aşağıdaki çıkarımlardan hangisi yapılabilir?</b>"
+  - "<b>Metinlere göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Metinlerden aşağıdaki <u>çıkarımlardan hangisi yapılamaz</u>?</b>"
+  - "<b>Her iki metin birlikte değerlendirildiğinde aşağıdakilerden hangisine ulaşılabilir?</b>"
+  # Analiz / Değerlendirme
+  - "<b>Birinci metinde yer alıp ikinci metinde <u>yer almayan</u> bilgi aşağıdakilerden hangisidir?</b>"
+  - "<b>Metinlerin ortak teması aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metinlerin bakış açıları karşılaştırıldığında aşağıdakilerden hangisi doğrudur?</b>"
+  - "<b>Metinler birlikte düşünüldüğünde aşağıdakilerden hangisi en kapsamlı değerlendirmedir?</b>"
+  - "<b>Metinlerdeki bilgiler bir arada değerlendirildiğinde aşağıdakilerden hangisi <u>desteklenemez</u>?</b>"
+  # Kapsamlı Sonuç / İddia-Veri / Yazılış Amacı (PDF kaynak)
+  - "<b>Metinlerdeki bilgiler bir arada değerlendirildiğinde aşağıdakilerden hangisi en kapsamlı sonuçtur?</b>"
+  - "<b>Birinci metindeki iddia ile ikinci metindeki veriler karşılaştırıldığında aşağıdakilerden hangisi doğrudur?</b>"
+  - "<b>Metinlerin yazılış amaçları düşünüldüğünde aşağıdakilerden hangisi en doğru değerlendirmedir?</b>"
+  - "<b>Bu metinlerden sadece birinde yer alan bilgi aşağıdakilerden hangisidir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Birden fazla metni karsilastirip sentez yapmaya dayali cevap"
+  kurallar:
+    - "Her iki/uc metin icerigiyle desteklenmeli"
+    - "Karsilastirma ve sentez becerisi gerektirmeli"
+    - "Tam cumle formatinda olmali (3-25 sozcuk)"
+    - "Metinler arasi iliskiyi dogru yansitmali"
+    - "Baglam olmadan cevaplanamaz olmali"
+    - "Ust duzey dusunme becerisi gerektirmeli"
+    - "Bilissel surec bilesenini hedeflemeli"
+  ornekler:
+    - metinler: "Metin 1: Gunes enerjisi temiz bir enerji kaynagi... Metin 2: Ruzgar enerjisi de cevreye zarar vermeden elektrik uretir..."
+      dogru: "Her iki metin de yenilenebilir enerji kaynaklarinin cevre dostu oldugunu vurgular"
+      neden: "Iki metin de temiz/cevre dostu enerji vurgusunda ortaktir"
+    - metinler: "Metin 1: Kitap okuma aliskanligini cocuklukta kazanmak onemli... Metin 2: Dijital cagda ekran basinda gecirilen sure artiyor..."
+      dogru: "Birinci metin okuma aliskanligini, ikinci metin dijital tuketimi ele almaktadir"
+      neden: "Metinler farkli konulari ele alsa da her ikisi de cocuklarin aliskanliklarini inceler"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM metinler arasi iceriğe gore en uygun 4 stratejiyi secer
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic suitable for multi-text comparison"
+      details: "Birden fazla bakis acisi veya kaynak sunulabilecek bir konu sec"
+
+    - step: 2
+      action: "Generate multi-text passage (120-200 words) with 2-3 sources"
+      details: |
+        Metinler arasi icerikte:
+        - 2-3 farkli kaynak/goruş sunulmali
+        - Kaynaklar arasi benzerlik ve farkliliklar olmali
+        - Her kaynagin yazari/kaynagi belirtilmeli
+        - Karsilastirma ve sentez yapmaya uygun olmali
+
+    - step: 3
+      action: "Create correct answer as complete sentence"
+      details: |
+        Dogru cevap:
+        - Metinler arasi iliskiyi dogru yansitmali
+        - Karsilastirma/sentez icermeli
+        - Tam cumle formatinda olmali (3-25 sozcuk)
+
+    - step: 4
+      action: "Create 4 wrong answers using strategies"
+      details: |
+        Her yanlis secenek icin farkli strateji kullan:
+        - 1x tek metne dayali ama sentez gerektirmeyen
+        - 1x metinlerin iliskisini yanlis kuran
+        - 1x kismen dogru ama genelleme yapan
+        - 1x mantikli gorunen ama metinlerde desteklenmeyen
+        Tum secenekler ayni formatta olmali (tam cumle, 3-25 sozcuk)
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D-E seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - konu: "Yenilenebilir enerji kaynaklari"
+    dogru_cevap: "A"
+    secenekler:
+      A: "Her iki metin de yenilenebilir enerji kaynaklarinin cevre dostu oldugunu vurgular"
+      B: "Birinci metin gunes enerjisinin daha verimli oldugunu savunur"
+      C: "Ikinci metin ruzgar enerjisinin dezavantajlarindan bahseder"
+      D: "Metinler enerji kaynaklarinin maliyetlerini karsilastirir"
+      E: "Her iki metin de fosil yakit kullanimini destekler"
+    dogru_cevap_icerigi: "Her iki metin de yenilenebilir enerji kaynaklarinin cevre dostu oldugunu vurgular"
+    neden: "Iki metnin ortak noktasi cevre dostu enerji vurgusu"
+
+  - konu: "Okuma aliskanliği ve dijital cag"
+    dogru_cevap: "C"
+    secenekler:
+      A: "Her iki metin de ekran kullanimini elestirmektedir"
+      B: "Metinler birbirleriyle celismektedir"
+      C: "Birinci metin okuma aliskanligini ikinci metin dijital tuketimi ele almaktadir"
+      D: "Iki metin de ayni sonuca ulasmaktadir"
+      E: "Metinlerde cocuklarin egitimi hakkinda ortak gorusler vardir"
+    dogru_cevap_icerigi: "Birinci metin okuma aliskanligini ikinci metin dijital tuketimi ele almaktadir"
+    neden: "Her metin farkli bir konuyu ele alir ama her ikisi de cocuklarin aliskanliklarini inceler"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  # Asama 0: Kimlik ve Olcme Niyeti
+  identity:
+    - "Soru bir beceriyi mi olcuyor, bilgi hatirlamayi mi?"
+    - "Hedef beceri seviyesi uygun mu?"
+    - "Surec bileseni dogru hedeflenmis mi?"
+
+  # Asama 1: Baglam Secimi
+  context:
+    - "Baglam olmadan soru cozulebilir mi? (Hayir olmali)"
+    - "Baglam fonksiyonel mi? (Dekoratif degil)"
+    - "Baglam cevabi dogrudan veriyor mu? (Vermemeli)"
+    - "Baglam otantik mi? (Gercek hayattan)"
+    - "Kelime sayisi 120-200 arasinda mi?"
+    - "2-3 farkli kaynak/goruş sunulmus mu?"
+    - "Kaynaklar arasi benzerlik ve farkliliklar var mi?"
+    - "Kaynak/yazar bilgisi belirtilmis mi?"
+
+  # Asama 2: Soru ve Secenekler
+  question:
+    - "Soru koku net ve anlasilir mi?"
+    - "Cift olumsuz var mi? (Olmamali)"
+    - "Tek dogru cevap var mi?"
+
+  options:
+    - "Celdiriciler belirli bilissel hatalari temsil ediyor mu?"
+    - "Eleme yoluyla cevaplanabilir mi? (Olmamali)"
+    - "Format farkliligi ile dogru cevap belli oluyor mu? (Olmamali)"
+    - "Tum secenekler benzer uzunlukta mi?"
+    - "5 secenek var mi (A-B-C-D-E)?"
+
+  # Asama 3: Etik
+  ethics:
+    - "Cinsiyet/etnik onyargi var mi? (Olmamali)"
+    - "Yas grubuna uygun mu?"
+
+  # Asama 4: Dil
+  language:
+    - "Turkce dil bilgisi dogru mu?"
+    - "Sinif seviyesine uygun mu?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+
+  generation_rules:
+    - "Birden fazla bakis acisi sunulabilecek konulari tercih et"
+    - "Karsilastirma ve senteze uygun konular ideal"
+    - "Farkli kaynaklardan bilgi toplanabilecek konulari sec"

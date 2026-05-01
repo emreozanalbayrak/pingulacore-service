@@ -1,0 +1,134 @@
+# templates/2sinif/bolum4/paragraf_olusturma_sinif2_zor.yaml
+# 2. Sinif — Paragraf Olusturma — ZOR zorluk
+# 4 cumle, birkac ipucunun birlikte kullanimi, 2 yanlis secenek de dogru siraya yakin
+
+meta:
+  id: "paragraf_olusturma_sinif2_zor"
+  ad: "2. Sinif - Paragraf Olusturma (Zor)"
+  sinif_seviyesi: 2
+  aciklama: "Zor duzey — 4 cumle, birkac ipucunun birlikte kullanimi, 2 yanlis secenek de dogru siraya yakin, 3 secenekli"
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Numaralanmis karisik cumleler + soru koku + 3 siralama secenegi (zor)"
+
+  paragraph:
+    required: true
+    numbered_sentences: true
+    word_count_min: 28
+    word_count_max: 52
+    sentence_count_min: 4
+    sentence_count_max: 4
+    stil: "siralama"
+    background_color: "#fce8e8"
+    kurallar:
+      - "4 cumle kullanilmalidir."
+      - "Cumleler numaralanmis ve KARISIK sirada verilmelidir."
+      - "Cumleler ARAP RAKAMLARI (1., 2., 3., 4.) ile numaralandirilmalidir. Roma rakami (I, II, III, IV) KULLANILMAMALIDIR."
+      - "Cumleler birlikte anlamli ve dogal bir paragraf olusturmalidir."
+      - "Cumleler tek baskin konu veya tek olay akisi etrafinda kurulmalidir."
+      - "Cumleler 2. sinif ogrencisinin anlayabilecegi kadar sade, kisa ve somut olmalidir."
+      - "Her cumle tek bir acik bilgi veya tek bir acik adim icermelidir."
+      - "Siralama birkac ipucunun birlikte kullanilmasini gerektirebilir."
+      - "Baglayicilarin bir kismi acik, bir kismi ortuk olabilir."
+      - "Cumleler birbirine yakin gorunebilir; ancak dogru sira yine tek olmalidir."
+      - "Zor duzeyde bile ana dusunce veya yorum gerektiren yapi kurulamaz."
+      - "Cumleler dis bilgi gerektirmeden yalniz kendi ic iliskileriyle siralanabilir olmalidir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    style: "roman_numeral_combination"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Tum secenekler yalniz sira dizisi biciminde verilmelidir."
+      - "Siralama, cumle numaralari tire ile ayrilmis bicimde yazilmalidir."
+      - "4 cumle icin secenekler ornegin 2-3-4-1 biciminde olmalidir."
+      - "Secenekler yalnizca Arap rakamlari ve tire ile yazilmalidir (ornek: 2-3-4-1). Roma rakami (I, II, III, IV) asla kullanilmamalidir."
+      - "Dogru secenek anlamli paragraf sirasini vermelidir."
+      - "Yanlis secenekler rastgele degil, makul ama hatali dizilislerden secilmelidir."
+      - "2 yanlis secenek de dogru siraya yakin hata tasimalidir."
+      - "1 yanlis secenek orta bolum kaymasi icermelidir."
+      - "1 yanlis secenek neden-sonuc veya islem sirasini bozmalidir."
+
+soru_kokleri:
+  - "<b>Numaralanmis cumlelerin olaylarin olus sirasina gore siralanisi hangi secenekte dogru verilmistir?</b>"
+  # KULLANILDI: - "<b>Numaralanmis cumlelerle anlamli bir paragraf olusturulmak istenirse siralama nasil olmalidir?</b>"
+  # KULLANILDI: - "<b>Bu cumlelerle anlamli bir paragraf olusturmak icin dogru siralama hangisidir?</b>"
+  - "<b>Numaralanmis cumlelerin dogru siralanisi asagidakilerden hangisidir?</b>"
+  - "<b>Bu cumleler anlamli bir paragraf olusturacak sekilde nasil siralanmalidir?</b>"
+  # KULLANILDI: - "<b>Asagidaki numaralanmis cumlelerle bir paragraf olusturulursa dogru sira hangisi olur?</b>"
+  # KULLANILDI: - "<b>Karisik verilen cumlelerle anlamli bir paragraf olusturulursa siralama nasil olur?</b>"
+  - "<b>Numaralanmis cumleler dusuncenin akisina gore nasil siralanmalidir?</b>"
+  - "<b>Bu cumlelerin anlamli bir paragraf olusturmasi icin siralama hangi secenekte dogru verilmistir?</b>"
+  - "<b>Bu cumleler olaylarin olus sirasina gore dizilirse hangi sira olusur?</b>"
+
+dogru_cevap:
+  tanim: "Numaralanmis cumleleri anlamli ve dogal bir paragraf olusturacak bicimde siralayan secenek"
+  kurallar:
+    - "KRITIK SIRALAMA CESITLILIGI: Dogru cevap sirasi '2-4-1-3' veya '2 - 4 - 1 - 3' OLMAMALIDIR. Bu siralamayi KESINLIKLE KULLANMA! Farkli siralamalar tercih et: 3-1-4-2, 4-2-1-3, 1-3-2-4, 2-1-4-3, 3-4-1-2, 1-4-2-3, 4-1-3-2 gibi. Her soru icin FARKLI bir dogru siralama pattern'i olusturulmalidir."
+    - "Dogru cevap paragrafin dogal baslangicini dogru cumleyle baslatmalidir."
+    - "Dogru cevap cumleler arasinda acik zaman, neden-sonuc veya islem akisi kurmalidir."
+    - "Dogru cevap paragraffi dogal bir sonla tamamlamalidir."
+    - "Dogru cevap yalniz tek bir dogru dizilis birakmalicidr."
+    - "Dogru sira 2. sinif ogrencisinin acik ipuclariyla fark edebilecegi nitelikte olmalidir."
+
+celdirici_stratejileri:
+  - ad: "ORTA_BOLUM_KAYMASI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Baslangic ve bitis daha makul gorunur ama orta kisim bozulmustur"
+    nasil_olusturulur: |
+      Baslangic ve bitis cumlelerini dogru konumda birak, orta kismi karistir.
+      Zor duzey: bu secenek ilk bakista makul gorunmeli.
+    kategori: "cognitive"
+
+  - ad: "NEDEN_SONUC_TERS"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Sonuc cumlesi sebep cumlesinden once verilmistir"
+    nasil_olusturulur: |
+      Neden-sonuc iliskisindeki cumleleri ters sirada ver.
+      Zor duzey: mantik hatasi dikkatli okumadan fark edilmeyebilir.
+    kategori: "cognitive"
+
+  - ad: "DOGRU_BASLANGIC_YANLIS_DEVAM"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Ilk cumle dogruya yakindir ama devam sirasi bozulmustur"
+    nasil_olusturulur: |
+      Dogru baslangic cumlesini koru ama devam sirasini boz.
+      Zor duzey: baslangic dogru gorunur ama devami hatali.
+    kategori: "cognitive"
+
+  - ad: "YANLIS_BASLANGIC_DOGRU_BITIS"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Son cumle dogruya yakin gorunur ama baslangic yanlictir"
+    nasil_olusturulur: |
+      Dogru bitis cumlesini koru ama baslangici yanlis sec.
+      Zor duzey: sonu dogru gorunmeli ama basi yanlis olmali.
+    kategori: "cognitive"
+
+  - ad: "ISLEM_BASAMAGI_KARISIK"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Islem veya olus sirasindaki iki yakin adim yer degistirmistir"
+    nasil_olusturulur: |
+      Ardisik iki adimi yer degistir.
+      Zor duzey: sadece dikkatli okuyan ogrenci fark edebilir.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB1"
+  bilesenler: ["siralama", "paragraf_olusturma"]
+  surec_bileseni: "metni_anlama"
+
+sinif2_ek_kurallar:
+  yasak_alanlar:
+    - "Ana dusunce / ana duygu odakli sorular YASAK"
+    - "Cok katmanli mantik gerektiren dizilim YASAK"
+    - "Zor duzey bile ana dusunce duzeyine TASMAMALI"

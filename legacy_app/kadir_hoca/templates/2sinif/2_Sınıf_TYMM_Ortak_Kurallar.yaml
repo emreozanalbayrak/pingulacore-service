@@ -1,0 +1,192 @@
+tymm_ortak_kurallar:
+  meta:
+    id: "sinif2_turkce_paragraf_tymm_ortak_kurallar_v1"
+    ad: "2. Sınıf Türkçe Paragraf - TYMM Ortak Kurallar"
+    hedef_sinif: 2
+    kullanim_amaci: "2. sınıf paragraf soru bankasındaki tüm soru kalıplarının müfredata uygunluk, seviye uygunluğu ve taşma kontrolü için ortak doğrulama bloğu"
+
+  kaynak_politikasi:
+    ana_referans:
+      - "İlkokul Türkçe Dersi 2. Sınıf Türkiye Yüzyılı Maarif Modeli öğretim programı"
+      - "2. sınıf MEB Türkçe ders kitabı örnek etkinlik yapıları"
+    tasma_kontrol_referansi:
+      - "İlkokul Türkçe Dersi 3. Sınıf Türkiye Yüzyılı Maarif Modeli"
+      - "İlkokul Türkçe Dersi 4. Sınıf Türkiye Yüzyılı Maarif Modeli"
+    yorumlama_ilkesi:
+      - "Şüpheli durumlarda soru daha alt bilişsel düzeye çekilmelidir."
+      - "Bir kazanım 2. sınıfta açık ve güvenli değilse soru 2. sınıf çekirdek alanına geri indirgenmelidir."
+      - "Müfredatta yer alsa bile 2. sınıf paragraf soru bankasında yoğun yorum ve çok adımlı muhakeme ana eksen yapılmamalıdır."
+
+  sinif_2_profil_ozeti:
+    temel_hedef:
+      - "Öğrencinin kısa ve açık metinleri anlaması"
+      - "Başlık ve görsellerden konu/olay tahmini yapması"
+      - "Metindeki karakter, olay ve açık bilgileri fark etmesi"
+      - "Metnin konusunu bulması"
+      - "Eksik cümle veya yarım metni açık ipuçlarıyla tamamlaması"
+      - "Olayları oluş sırasına göre anlatması veya yazması"
+      - "Bağlamdan sözcük anlamı tahmini yapması"
+      - "Basit ve açık yönergeleri anlaması veya yazması"
+    temel_duzey_tanimi:
+      - "Somut"
+      - "Yakın çevre ve günlük yaşam odaklı"
+      - "Tek ana konu veya tek ana olay odaklı"
+      - "Kısa, açık, doğrudan ve yüksek görünür ipuçlu"
+      - "Örtük anlam yükü düşük"
+
+  metin_tasarim_kurallari:
+    zorunlu_ozellikler:
+      - "Metin 2 ila 6 kısa cümle aralığında olmalıdır."
+      - "Metinde tek baskın konu veya tek baskın olay zinciri bulunmalıdır."
+      - "Metin çocuk dünyasına ve günlük yaşama yakın olmalıdır."
+      - "Karakter, olay ve bilgi açıkça izlenebilir olmalıdır."
+      - "Zamir referansları açık olmalıdır."
+      - "Neden-sonuç varsa açık ve tek adımlı olmalıdır."
+      - "Sözcükler çoğunlukla somut ve yüksek frekanslı olmalıdır."
+    tercih_edilen_yapi:
+      - "Tek olaylı kısa anlatı"
+      - "Açık bilgi veren kısa paragraf"
+      - "Görselle desteklenen kısa metin"
+      - "Sıralı iki veya üç olaylı basit akış"
+    sinirlandirmalar:
+      - "Aynı metinde birden fazla ana düşünce hattı kurulamaz."
+      - "Yoğun zaman atlaması kullanılamaz."
+      - "Paralel olay örgüsü kullanılamaz."
+      - "Çok sayıda karakter kullanılamaz."
+      - "Metinde çocuğun dış bilgiye mecbur bırakıldığı boşluklar bırakılamaz."
+      - "Soyut, felsefi, toplumsal veya tartışmalı düzeyde anlam yükü kurulamaz."
+
+  izinli_soru_davranislari:
+    cekirdek:
+      - "Başlığa göre konu tahmini"
+      - "Görsele göre konu veya olay tahmini"
+      - "Metindeki karakteri bulma"
+      - "Metindeki olayı bulma"
+      - "Metindeki açık bilgiyi bulma"
+      - "Metnin konusunu bulma"
+      - "Olayların oluş sırasını belirleme"
+      - "Eksik cümleyi tamamlama"
+      - "Yarım bırakılan metni tamamlama"
+      - "Bağlamdan sözcük anlamı tahmini"
+      - "Görsel ile cümle eşleştirme"
+      - "Basit yönergeyi anlama"
+      - "Basit yönerge yazma"
+      - "Şiire veya metne uygun başlık seçme"
+      - "Şiir / öyküleyici / bilgilendirici metni doğrudan tanıma"
+    sinirli_izinli:
+      - "Metindeki çok açık bir görüşe katılıp katılmadığını kısa ve tek gerekçeyle söyleme"
+      - "Metindeki kişi veya nesnelerin çok açık benzer ve farklı yönlerini belirtme"
+      - "Çok açık bir davranış veya olay hakkında kısa kişisel yanıt verme"
+    sinirli_izinli_kosullari:
+      - "Gerekçe tek adımlı ve doğrudan metindeki açık bilgiye dayanmalıdır."
+      - "Öğrenci soyut mesaj, ders veya ana düşünce üretmek zorunda bırakılmamalıdır."
+      - "Kişisel yanıt açık metin desteği olmadan değerlendirilemez yapıda olmamalıdır."
+
+  gorsel_destek_kurallari:
+    izinli:
+      - "Başlık + görsel + kısa metin kombinasyonu"
+      - "Tek sahneli açık görseller"
+      - "Çok basit tablo veya görsel eşleştirme"
+      - "Açık işaret ve semboller"
+    yasak:
+      - "Yoğun veri içeren grafikler"
+      - "Çok değişkenli tablo yorumlama"
+      - "Görselden çok aşamalı dolaylı çıkarım"
+      - "Birden fazla görsel arasında karmaşık ilişki kurdurma"
+
+  soru_koku_kurallari:
+    zorunlu:
+      - "Soru kökü kısa ve tek görevli olmalıdır."
+      - "Öğrenciden tek baskın beceri beklenmelidir."
+      - "Soru kökü doğrudan ne istendiğini açıkça söylemelidir."
+    yasak:
+      - "Aynı anda iki veya daha fazla bilişsel işlemi zorunlu kılan kökler"
+      - "Belirsiz ve yorum ağırlıklı kökler"
+      - "Öğrenciyi metin dışı genel kültüre zorlayan kökler"
+      - "Ana fikir, ana duygu, yazarın amacı, metnin mesajı gibi üst düzey kökler"
+
+  secenek_ve_cevap_kurallari:
+    zorunlu:
+      - "Doğru cevap metindeki açık bilgiye, açık akışa veya açık ipuçlarına dayanmalıdır."
+      - "Yanlış seçenekler metne yakın ama dikkatli okuyunca elenebilir olmalıdır."
+      - "Yanlış seçenekler yeni olay, yeni karakter veya metinde olmayan güçlü bilgi eklememelidir."
+      - "Seçenek dili 2. sınıf düzeyinde sade olmalıdır."
+    yasak:
+      - "Birden fazla makul doğru seçenek"
+      - "Aşırı yakın ve yetişkin düzeyi ayrım gerektiren çeldiriciler"
+      - "Metinde hiç temeli olmayan dikkat dağıtıcı bilgi yığılması"
+      - "Uzun ve iç içe cümleli seçenekler"
+
+  acikca_yasak_alanlar:
+    - "Ana fikir / ana duygu odaklı düzenli soru setleri"
+    - "Paragrafın ana düşüncesini bulma"
+    - "Metnin vermek istediği mesajı bulma"
+    - "Yazarın amacını, niyetini veya tutumunu bulma"
+    - "Akışı bozan cümle / paragraf bütünlüğü odaklı kurgu"
+    - "Giriş-gelişme-sonuç gibi biçimsel paragraf bölümleri öğretimi"
+    - "Ayrıntılı metin türleri öğretimi"
+    - "Bağımsız sözel mantık bölümü"
+    - "Yoğun grafik yorumlama"
+    - "Uzun serbest paragraf yazdırma"
+    - "Açıklayıcı, tartışmacı, ikna edici paragraf yazdırma"
+    - "Çok katmanlı örtük anlam çözümleme"
+    - "İnce ton, söylem, üslup ve alt mesaj çözümleme"
+
+  tasma_noktalari:
+    ucuncu_sinifa_kayar:
+      - "Ana fikir veya ana duygu bulduruluyorsa"
+      - "Başlık ve görsellerden hareketle metnin içeriği hakkında görüş oluşturuluyorsa"
+      - "Karakter, olay, bilgi ve duygular daha sistematik ve birlikte açıklatılıyorsa"
+      - "Olayların sırası yalnız açık akış değil, daha bağımsız tahmin ve yeniden kurma gerektiriyorsa"
+      - "Neden-sonuç ilişkisi düzenli soru ekseni hâline geliyorsa"
+      - "Temel metin türleri bilinçli ve sistematik biçimde ayırt ettiriliyorsa"
+      - "Konu dışı cümle veya akışı bozan cümle bağımsız ölçme alanı yapılıyorsa"
+    dorduncu_sinifa_kayar:
+      - "Metnin günlük yaşamla ilişkisi açıklatılıyorsa"
+      - "Metnin biçimsel ve tanıtıcı özelliklerinden içerik yorumu yaptırılıyorsa"
+      - "Metne katılma veya katılmama nedenleri ayrıntılı ve gerekçeli yazdırılıyorsa"
+      - "Metinde kabul edilmeyen fikirlere öneri geliştirtliyorsa"
+      - "Karakter, olay, bilgi veya duygu analiz ettiriliyorsa"
+      - "Yazma amacı, yazma stratejisi veya yazma ortamı seçtiriliyorsa"
+      - "Ayrıntılı yönerge yazdırılıyorsa"
+      - "Bilginin ve kaynağın doğruluğu sorgulatılıyorsa"
+
+  tema_bagimli_izinli_genislemeler:
+    kosul: "yalnız ilgili tema veya kazanım açıkça destekliyorsa kullanılabilir"
+    alanlar:
+      - "Çok basit benzerlik / farklılık"
+      - "Çok açık görüşe kısa tepki"
+      - "Basit benzetme"
+      - "Basit işaret / sembol fark etme"
+    sinirlama:
+      - "Bu alanlar ana bölüm veya baskın soru tipi hâline getirilemez."
+      - "Bu alanlar her zaman çekirdek 2. sınıf anlama düzeyine geri bağlanmalıdır."
+
+  validation_checklist:
+    zorunlu_kontroller:
+      - "Metin 2. sınıf düzeyinde kısa mı?"
+      - "Metinde tek baskın konu veya tek baskın olay var mı?"
+      - "Soru açık ve tek görevli mi?"
+      - "Doğru cevap metnin açık içeriğine dayanıyor mu?"
+      - "Öğrenciden ana fikir / ana duygu üretmesi beklenmiyor mu?"
+      - "Öğrenciden yazar amacı veya gizli mesaj çıkarması beklenmiyor mu?"
+      - "Soru 3. sınıf veya 4. sınıf taşma maddelerinden birine girmiyor mu?"
+      - "Seçenekler 2. sınıf dil düzeyine uygun mu?"
+      - "Yanlış seçenekler metne yakın ama açıkça elenebilir mi?"
+      - "Görsel varsa tek bakışta anlaşılır ve doğrudan destekleyici mi?"
+      - "Metin dışı özel bilgi gerekmiyor mu?"
+      - "Örtük anlam yükü düşük mü?"
+    red_sebepleri:
+      - "Ana fikir, ana duygu, mesaj, yazar amacı, tutum, alt mesaj, metin türü analizi içeriyorsa"
+      - "Paragraf bütünlüğü, akışı bozan cümle veya giriş-gelişme-sonuç öğretimi içeriyorsa"
+      - "Ağır grafik, tablo veya çok adımlı mantık gerektiriyorsa"
+      - "Birden fazla makul doğru cevap varsa"
+      - "Metin 2. sınıf için uzun, soyut veya çok katmanlıysa"
+      - "Soru kökü iki ya da daha fazla beceriyi aynı anda zorunlu kılıyorsa"
+      - "Gerekçelendirme açık metin desteğini aşıyorsa"
+      - "3. sınıf veya 4. sınıf taşma maddelerinden herhangi biri gerçekleşiyorsa"
+
+  uygulama_notu:
+    - "Bu ortak blok, soru özelindeki alan kurallarıyla birlikte çalıştırılmalıdır."
+    - "Soru özelindeki kural ile bu ortak blok çelişirse ortak blok önceliklidir."
+    - "Şüpheli durumda soru daha açık, daha kısa, daha somut ve daha doğrudan hâle getirilmelidir."

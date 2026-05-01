@@ -1,0 +1,141 @@
+# templates/baglam/gorselli_baglam_senaryo.yaml
+# Baglam Tipi: Gorselli Senaryo (infografik destekli)
+# Soru Sayisi: 3
+# Kaynak: kadirhocasorukokleri.md
+# Soru Tipleri: Gorsel Yorum + Ana Fikir + Cikarim
+# Ozellik: AI-uretilen infografik gorsel icerir
+
+meta:
+  id: "gorselli_baglam_senaryo"
+  ad: "Gorselli Baglam Senaryo"
+  sinif_seviyesi: 5
+  aciklama: "Senaryo ve AI uretilen infografik gorsel uzerinden 3 soru"
+  kaynak: "kadirhocasorukokleri.md"
+  frequency: "Medium"
+
+# ======================================================================
+# BAGLAM KONFIGURASYONU
+# ======================================================================
+
+context:
+  type: "gorselli_baglam_senaryo"
+  question_count: 3
+  question_count_min: 3
+  question_count_max: 3
+  generation:
+    word_count_min: 80
+    word_count_max: 140
+    image_type: "infografik"
+    structure:
+      - "Bir karakter (isimli) bir konuyu arastiran senaryo olustur (4-6 cumle)"
+      - "Senaryoda bir infografik gorseline atifta bulun"
+      - "Senaryoda somut veriler, sayisal bilgiler veya karsilastirmalar icermeli"
+      - "Infografikte gosterilecek temel verileri metinde belirt"
+      - "Metin hem gorsel hem de metin uzerinden soru sorulabilecek zenginlikte olmali"
+    kurallar:
+      - "Senaryo 5. sinif seviyesinde, anlasilir ve gunluk hayattan olmali"
+      - "Karakter arastirmaci bir ogrenci olmali"
+      - "Metin somut bilgiler icermeli (sayilar, oranlar, karsilastirmalar)"
+      - "Infografige atif yapilmali (ornegin: 'hazirladigi infografikte...')"
+      - "Turkce karakterler dogru kullanilmali (s, i, g, u, o, c)"
+
+  questions:
+    - slot: 1
+      type: "gorsel_yorum"
+      soru_kokleri:
+        - "<b>Senaryodaki bilgilere gore asagidakilerden hangisi soylenebilir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 5
+      word_count_max: 20
+      beceri:
+        katman: "KB2"
+        bilesenler: ["yorumlama"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+    - slot: 2
+      type: "ana_fikir"
+      soru_kokleri:
+        - "<b>Bu senaryonun ana fikri asagidakilerden hangisidir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 5
+      word_count_max: 20
+      beceri:
+        katman: "KB2"
+        bilesenler: ["ozetleme"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+    - slot: 3
+      type: "cikarim"
+      soru_kokleri:
+        - "<b>Senaryodaki bilgilerden hareketle asagidaki cikarimlardan hangisi <u>yapilamaz</u>?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 5
+      word_count_max: 20
+      beceri:
+        katman: "KB3"
+        bilesenler: ["cikarim_yapma", "mantiksal_denetleme"]
+        surec_bileseni: "problemi_yapilandirma"
+
+header_template: "1-3. sorulari asagidaki senaryo ve infografige gore cevaplayiniz."
+
+# ======================================================================
+# FORMAT
+# ======================================================================
+
+format:
+  type: "llm_generated_html"
+  description: "Senaryo + infografik gorsel baglami uzerinden 3 soru"
+
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 140
+    sentence_count_min: 4
+    sentence_count_max: 6
+
+  stem:
+    required: true
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 5
+    word_count_max: 20
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+# ======================================================================
+# DOGRU CEVAP KURALLARI
+# ======================================================================
+
+dogru_cevap:
+  tanim: "Senaryo ve infografikteki bilgilerle dogrudan desteklenen cevap"
+  kurallar:
+    - "Gorsel yorum sorusunda dogru cevap senaryodaki verilerle tutarli olmali"
+    - "Ana fikir sorusunda dogru cevap senaryonun genel mesajini yansitmali"
+    - "Cikarim sorusunda dogru cevap metinden CIKARILMAYACAK bir ifade olmali"
+    - "Her soru farkli bir beceriyi olcmeli"
+    - "HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer"
+    - "Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK"
+    - "BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: 'teleskop' → 'mercekli araç' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı"
+
+# ======================================================================
+# CELDIRICI STRATEJILERI
+# ======================================================================
+
+distractors:
+  stratejiler:
+    - ad: "VERI_CARPITMA"
+      aciklama: "Senaryodaki verileri yanlis yorumlama"
+      ornek: "Sayisal verileri degistirerek veya yanlis karsilastirma yaparak celdirici olusturma"
+    - ad: "KAPSAM_KAYDIRMA"
+      aciklama: "Senaryonun kapsamini daraltma veya genisletme"
+      ornek: "Senaryoda bahsedilen konuyu farkli bir alana kaydirma"
+    - ad: "YAKIN_CIKARIM"
+      aciklama: "Metinden cikarilamayan ama akla yatkın bir cikarim sunma"
+      ornek: "Dogru gibi gorunen ama metinde destegi olmayan bir yorum verme"
+
+use_shared_strategies: false

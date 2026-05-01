@@ -1,0 +1,85 @@
+# templates/2sinif/bolum6/metin_turleri_sinif2_kolay_siir.yaml
+# 2. Sinif — Metin Turleri — KOLAY — SIIR turu
+meta:
+  id: "metin_turleri_sinif2_kolay_siir"
+  ad: "2. Sinif - Metin Turleri (Kolay) - Siir"
+  sinif_seviyesi: 2
+  aciklama: "Kolay — siir turu belirleme"
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Siir turu belirleme sorusu (kolay)"
+
+  paragraph:
+    required: true
+    word_count_min: 10
+    word_count_max: 48
+    sentence_count_min: 3
+    sentence_count_max: 6
+    stil: "siir"
+    background_color: "#e8f8e8"
+    kurallar:
+      - "Metin acik DIZE duzeninde SIIR olmalidir. Her dize ayri satirda, <br> ile ayrilmali."
+      - "Metin 2. sinif ogrencisinin anlayabilecegi kadar sade, somut ve acik olmalidir."
+      - "Metin dis bilgi gerektirmemelidir."
+      - "Tur ayirt etme, metnin gorunur ozelliklerinden yapilabilmelidir."
+      - "2. sinif ogrencisinin anlayabilecegi sadelikte kelime hazinesi kullanilmalidir."
+
+  stem:
+    required: true
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 1
+    word_count_max: 3
+    style: "concept"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Tum secenekler metin turu adi biciminde olmalidir."
+      - "Dogru secenek: şiir"
+      - "Yanlis secenekler: bilgilendirici metin, masal"
+      - "Secenekler kendi aralarinda bicimce paralel olmalidir."
+
+soru_kokleri:
+  - "<b>Bu metnin turu asagidakilerden hangisidir?</b>"
+  - "<b>Asagidakilerden hangisi bu metnin turudur?</b>"
+  - "<b>Bu metin hangi ture girer?</b>"
+  - "<b>Bu yazinin turu asagidakilerden hangisidir?</b>"
+  - "<b>Bu metin asagidaki turlerden hangisine ornektir?</b>"
+  - "<b>Bu metnin turunu asagidakilerden hangisi gosterir?</b>"
+  - "<b>Asagidakilerden hangisi bu metnin turunu soyler?</b>"
+  - "<b>Bu metin hangi turdedir?</b>"
+  - "<b>Bu parca hangi metin turune ornektir?</b>"
+  - "<b>Bu yazi asagidaki metin turlerinden hangisidir?</b>"
+  - "<b>Metnin turu asagidakilerden hangisi olabilir?</b>"
+  - "<b>Bu metin icin <u>en uygun</u> tur hangisidir?</b>"
+
+dogru_cevap:
+  tanim: "Bu metnin turu: şiir"
+  kurallar:
+    - "Dogru cevap 'şiir' olmalidir."
+    - "Dogru cevap metnin gorunur ozelliklerinden cikarilabilmelidir."
+
+celdirici_stratejileri:
+  - ad: "YAKIN_TUR"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Dogru ture yakin ama farkli bir metin turu"
+    nasil_olusturulur: |
+      Metne yakin gorunen ama tur olarak farkli secenegi sun.
+    kategori: "semantic"
+  - ad: "UZAK_TUR"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Metinden acikca farkli bir tur"
+    nasil_olusturulur: |
+      Acikca farkli turden bir secenek sun.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB1"
+  bilesenler: ["metin_turu_ayirt_etme"]
+  surec_bileseni: "metni_anlama"

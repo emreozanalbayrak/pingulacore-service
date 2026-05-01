@@ -1,0 +1,144 @@
+# templates/2sinif/bolum1/siirde_baslik_sinif2_zor.yaml
+# 2. Sinif — Siirde Baslik — ZOR zorluk
+# Siirin konusu birkac ozellige dagilmis, 2 yanlis secenek de siirle iliskili gorunur
+# NOT: Zor duzey bile ana duygu veya mesaj sorusuna donusmemeli!
+
+meta:
+  id: "siirde_baslik_sinif2_zor"
+  ad: "2. Sinif - Siirde Baslik (Zor)"
+  sinif_seviyesi: 2
+  aciklama: "Zor duzey — siirin konusu birkac ozellige dagilmis, 2 yanlis secenek de siirle iliskili gorunur, 3 secenekli"
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Kisa siir + soru koku + 3 baslik secenegi (zor)"
+
+  paragraph:
+    required: true
+    word_count_min: 28
+    word_count_max: 48
+    sentence_count_min: 8
+    sentence_count_max: 8
+    stil: "siir"
+    background_color: "#fce8e8"
+    kurallar:
+      - "ONEMLI: Bu bir SIIR olmalidir — duz paragraf degil! Her dize ayri satirda, <br> ile ayrilmali."
+      - "Siir 4'er DIZEDEN 2 KITA (toplam 8 dize) olmalidir."
+      - "Kitalar arasinda BOS SATIR birakilmalidir (iki ardisik <br><br>)."
+      - "Siirin ana konusu acik kalmalidir fakat birkac ozellige dagilmis olabilir."
+      - "Siirde 1 yakin alan unsuru bulunabilir ve bu unsur celdirici uretimine malzeme verebilir."
+      - "Dogru baslik, siirdeki tum ipuclarini en iyi toplayan secenek olmalidir."
+      - "Zor duzeyde bile soru ana duygu veya mesaj sorusuna donusmemelidir."
+      - "Siir 2. sinif ogrencisinin anlayabilecegi kadar sade, acik ve somut olmalidir."
+      - "Siirde kullanilan sozcukler yuksek frekansli, tanidik ve kisa olmalidir."
+      - "Siir bir butun olarak tek bir uygun baslikla kapsanabilmelidir."
+      - "Siirde asiri soyutluk, yogun mecaz, kapali anlam ve yetiskin dili kullanilmamalidir."
+      - "Siir dis bilgi gerektirmemelidir."
+      - "Kafiye ve ses tekrarlari olabilir ancak anlami golgelememelidir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 1
+    word_count_max: 4
+    style: "headline_title"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Tum secenekler baslik biciminde olmalidir (1-4 sozcuk)."
+      - "Secenekler kisa, sade ve 2. sinif duzeyinde olmalidir."
+      - "Dogru secenek siirin tamamini kapsamalidir."
+      - "Dogru baslik tek ayrinti degil butun odak icin en uygun secenek olmalidir."
+      - "Dogru baslik sade kalmali, yaratici ama soyut olmamalidir."
+      - "Dogru baslik gereginden genis olmamalidir."
+      - "2 yanlis secenegin ikisi de siirle iliskili gorunmelidir."
+      - "1 yanlis secenek fazla genel olmalidir."
+      - "1 yanlis secenek siirdeki yan unsurdan ya da yakin varliktan uretilmis yakin celdirici olmalidir."
+      - "Tum secenekler bicimce paralel olmalidir."
+
+soru_kokleri:
+  - "<b>Bu siirin basligi asagidakilerden hangisi olabilir?</b>"
+  # KULLANILDI: - "<b>Bu siire getirilebilecek <u>en uygun</u> baslik asagidakilerden hangisidir?</b>"
+  - "<b>Bu siire <u>en uygun</u> baslik hangisidir?</b>"
+  # KULLANILDI: - "<b>Siir icin <u>en uygun</u> baslik asagidakilerden hangisidir?</b>"
+  - "<b>Yukaridaki siirin basligi hangisi olabilir?</b>"
+  - "<b>Bu siirin basligi ne olabilir?</b>"
+  - "<b>Bu siire verilebilecek <u>en uygun</u> baslik hangisidir?</b>"
+  - "<b>Asagidakilerden hangisi bu siirin basligi olmaya <u>en uygundur</u>?</b>"
+  - "<b>Bu siire konulabilecek <u>en uygun</u> baslik hangisidir?</b>"
+  - "<b>Siirde anlatilanlara gore <u>en uygun</u> baslik hangisidir?</b>"
+  - "<b>Bu siirde anlatilanlara uygun baslik hangisidir?</b>"
+  - "<b>Asagidakilerden hangisi bu siire baslik olarak <u>en uygundur</u>?</b>"
+  - "<b>Bu siirin konusuna <u>en uygun</u> baslik hangisidir?</b>"
+  - "<b>Siirin basligi asagidakilerden hangisi olabilir?</b>"
+  - "\"{topic}\" <b>konulu bu siire <u>en uygun</u> baslik asagidakilerden hangisidir?</b>"
+
+dogru_cevap:
+  tanim: "Siirin tamamini kapsayan en uygun kisa baslik"
+  kurallar:
+    - "Dogru cevap siirin tek baskin konusunu veya ana varligini yansitmalidir."
+    - "Dogru baslik tek ayrinti degil butun odak icin en uygun secenek olmalidir."
+    - "Dogru baslik sade kalmali, yaratici ama soyut olmamalidir."
+    - "Dogru baslik gereginden genis olmamalidir."
+    - "Dogru cevap cok genel olmamalidir."
+    - "Dogru cevap cok dar olmamalidir."
+    - "Dogru cevap cocuk duzeyini asan mecazli veya soyut kullanim icermemelidir."
+    - "Dogru cevap genellikle 1-4 sozcuk arasinda olmalidir."
+    - "Dogru secenek siirdeki hicbir dizeyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farkliligi olmali"
+
+celdirici_stratejileri:
+  - ad: "COK_GENIS"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Siirle iliskili ama odagi gereginden fazla genis baslik"
+    nasil_olusturulur: |
+      Siirin konusuyla ayni alan icinde ama cok genel bir baslik olustur.
+      Zor duzey: bu secenek ilk bakista makul gorunmeli, sadece dikkatli dusununce genis oldugu anlasilmali.
+    kategori: "semantic"
+
+  - ad: "YAKIN_CELDIRICI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Siirdeki yan unsur veya yakin varliktan uretilmis yakin celdirici"
+    nasil_olusturulur: |
+      Siirde gercekten gecen bir yan bilgiyi veya yakin bir varligi baslik haline getir.
+      Zor duzey: bu secenek siirle dogrudan iliskili gorunmeli, sadece siirin TAMAMINI degil bir BOLUMUNU kapsamasi yuzunden yanlis olmali.
+    kategori: "cognitive"
+
+  - ad: "YANLIS_VARLIK"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Siire yakin alandan ama yanlis nesne veya varlik secen baslik"
+    nasil_olusturulur: |
+      Siirin konusuna yakin alandan ama farkli bir varlik sec.
+      Zor duzey: bu secenek ayni konunun farkli bir yonune odaklanir, ogrenciyi yaniltabilir.
+    kategori: "cognitive"
+
+  - ad: "ILISKILI_AMA_FARKLI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Ayni tema alaninda duran ama siirin gercek odagini karsilamayan baslik"
+    nasil_olusturulur: |
+      Siirin alaniyla iliskili ama siirin asil konusundan farkli bir baslik olustur.
+      Zor duzey: bu secenek ayni temanin farkli bir yonune odaklanir.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB1"
+  bilesenler: ["konu_belirleme", "baslik_eslestirme"]
+  surec_bileseni: "metni_anlama"
+
+sinif2_ek_kurallar:
+  metin_tasarim:
+    - "Siir 4'er KISA DIZEDEN 2 KITA (toplam 8 dize) olusmalidir."
+    - "Siirde tek baskin konu veya tek baskin varlik bulunmalidir."
+    - "Siir cocuk dunyasina ve gunluk yasama yakin olmalidir."
+  yasak_alanlar:
+    - "Ana duygu / ana mesaj odakli sorular YASAK"
+    - "Siirin vermek istedigi mesaji bulma YASAK"
+    - "Cok katmanli ortuk anlam cozumleme YASAK"
+    - "Zor duzey bile ana duygu duzeyine TASMAMALI"

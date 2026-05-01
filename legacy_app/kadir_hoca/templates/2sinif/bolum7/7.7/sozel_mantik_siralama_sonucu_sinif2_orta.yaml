@@ -1,0 +1,121 @@
+# templates/2sinif/bolum7/7.7/sozel_mantik_siralama_sonucu_sinif2_orta_1q.yaml
+# 2. Sinif — Sozel Mantik: Siralama Sonucu Belirleme — ORTA zorluk
+# 4 kisi/nesne, 2 ipucu, iki ipucu birlikte kullanilmali
+
+meta:
+  id: "sozel_mantik_siralama_sonucu_sinif2_orta"
+  ad: "2. Sinif - Siralama Sonucu Belirleme (Orta)"
+  sinif_seviyesi: 2
+  aciklama: "Orta duzey — 4 kisi/nesne, 2 ipucu, dogru siralama icin iki ipucu birlikte kullanilmali, 3 secenekli"
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Gorsel + 2 kisa ipucu blogu + soru koku + 3 siralama secenegi (orta)"
+
+  paragraph:
+    required: true
+    word_count_min: 12
+    word_count_max: 35
+    sentence_count_min: 2
+    sentence_count_max: 2
+    stil: "ipucu_blogu"
+    background_color: "#f8f0e0"
+    kurallar:
+      - "Tam olarak 2 ipucu cumlesi verilmelidir."
+      - "Dogru siralama icin iki ipucu birlikte kullanilmalidir."
+      - "Tek bir ipucu tek basina dogru siralamaya yetmemelidir."
+      - "Ipuclari kisa, acik ve 2. sinif duzeyinde olmalidir."
+      - "Ipuclari celiskili olmamalidir."
+      - "Karsi-olgusal agir yapi (gecebilseydi, olsaydi, olurdu) YASAK."
+      - "4 adimdan uzun eleme mantigi YASAK."
+      - "Ipuclari goruntuyle birlikte kullanildiginda tek bir dogru siralama uretmelidir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 4
+    word_count_max: 16
+    style: "short_phrase"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Secenekler siralama biciminde verilmelidir (ornek: Ali - Ayse - Mehmet - Elif)."
+      - "Her secenekte tum 4 kisi/nesne bulunmalidir."
+      - "Yalniz bir secenek tum gorsel ve ipuculariyla tam uyumlu olmalidir."
+      - "Yanlis secenekler kismi uyum tasiyabilir ama en az bir ipucu ile celismelidir."
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Buna göre doğru sıralama aşağıdakilerden hangisidir?</b>"
+  - "<b>Verilen bilgilere göre sonuç hangi seçenekte doğru verilmiştir?</b>"
+  # KULLANILDI: - "<b>Buna göre birinci, ikinci, üçüncü ve dördüncü sıralama hangisidir?</b>"
+
+dogru_cevap:
+  tanim: "Tum gorsel ve ipucularina tam uyumlu olan tek dogru siralama"
+  kurallar:
+    - "Dogru cevap hem gorseldeki bilgiyle hem de tum ipuculariyla tutarli olmalidir."
+    - "Dogru cevap tek ve kesin olmalidir."
+    - "Dogru cevap yalniz gorselden veya yalniz metinden cikarilamamali, ikisi birlikte gerekmelidir."
+    - "Dogru siralamaya ulasmak icin iki ipucunun birlikte degerlendirilmesi gerekmelidir."
+
+celdirici_stratejileri:
+  - ad: "TEK_IPUCU_UYUMLU"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Bir ipucuyla uyumlu ama diger ipucuyla celisen siralama"
+    nasil_olusturulur: |
+      Iki ipucundan yalniz birine uyan bir siralama olustur.
+      Ogrenci tek ipucuya bakarak bu secenegi dogru sanabilir.
+    kategori: "cognitive"
+
+  - ad: "GORSEL_TABANLI_YANILTMA"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Gorseldeki konuma dayanan ama ipucularina uymayan siralama"
+    nasil_olusturulur: |
+      Gorseldeki soldan saga veya basa yakin konuma gore siralama yap.
+      Ogrenci ipuculari okumadan yalniz gorsele bakarak yanilir.
+    kategori: "surface"
+
+  - ad: "KISMI_DOGRU_SIRALAMA"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Siralamadaki bazi pozisyonlar dogru ama tum siralama yanlis"
+    nasil_olusturulur: |
+      Ilk veya son eleman dogru olacak sekilde ama ara siralamasi yanlis bir secenek olustur.
+      Ogrenci kismi uyumu gorur ve tam kontrol yapmadan secer.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+visual_requirement: "answer_critical"
+visual_type: "scene"
+visual_spec:
+  scene_type: "siralama_sahnesi"
+  kisi_sayisi_min: 3
+  kisi_sayisi_max: 5
+  aciklama: "Yaris, kuyruk, masa etrafinda oturma, kaydirak gibi sirali kisi/nesne sahnesi"
+
+beceri:
+  katman: "KB1"
+  bilesenler: ["siralama_kurma", "ipucu_birlestirme", "eleme_yapma"]
+  surec_bileseni: "gorsel_metin_baglama"
+
+sinif2_ek_kurallar:
+  gorsel_kurallar:
+    - "Gorselde en fazla 4 kisi/nesne kullanilmalidir."
+    - "Gorselde kisi veya nesneler acikca ayirt edilebilir olmalidir."
+    - "Renk, konum ve yon bilgisi destekleyici olabilir."
+    - "Gorsel tek basina dogru siralamaya vermemelidir."
+    - "5 ve uzeri kisi/nesne YASAK."
+    - "Cok karisik sahne YASAK."
+    - "Tek bakista cevabi veren kurgu YASAK."
+  cift_kaynak_kurali:
+    - "Soru yalniz gorselle cozulememeli."
+    - "Soru yalniz metinle cozulememeli."
+    - "Gorsel + ipuculari birlikte kullanilarak tek dogru siralama bulunmali."
+  yasak_alanlar:
+    - "Karsi-olgusal ve soyut siralama dili YASAK"
+    - "5 ve uzeri oge YASAK"
+    - "Uzun eleme zinciri YASAK"

@@ -1,0 +1,158 @@
+# templates/baglam/senaryo_infografik.yaml
+# Baglam Tipi: Senaryo + Infografik
+# Soru Sayisi: 3
+# Soru Tipleri: Siniflandirma/kategori + Cikarim + Karsilastirma
+
+meta:
+  id: "senaryo_infografik"
+  ad: "Senaryo + Infografik"
+  sinif_seviyesi: 5
+  aciklama: "Infografik (bilgi grafigi) iceren senaryo uzerinden siniflandirma, cikarim ve karsilastirma sorulari"
+  kaynak: "kaynak-soru-kokleri.md"
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# BAGLAM KONFIGURASYONU
+# ═══════════════════════════════════════════════════════════════
+
+context:
+  type: "senaryo_infografik"
+  question_count: 3
+  question_count_min: 2
+  question_count_max: 3
+  generation:
+    word_count_min: 100
+    word_count_max: 180
+    image_type: "infografik"
+    structure:
+      - "Bir karakter (isimli) bir konu hakkinda bilgi toplayan/sunan senaryo olustur (2-3 cumle)"
+      - "Bilgileri INFOGRAFIK (bilgi grafigi) olarak sun — asagidaki turlerden birini sec:"
+      - "TUR A — SINIFLANDIRMA KARTLARI: <div class='info-title'>Baslik</div><div class='info-grid'><div class='info-card'><div class='info-card-title'>Kategori</div><div class='info-card-body'><ul><li>Ozellik</li></ul></div></div></div> (3-4 kart)"
+      - "TUR B — SUREC DIYAGRAMI: <div class='info-title'>Baslik</div><div class='process-flow'><div class='process-step'><div class='process-step-title'>Adim</div><div class='process-step-desc'>Aciklama</div></div><div class='process-arrow'>→</div></div> (3-5 adim)"
+      - "TUR C — KARSILASTIRMA KARTLARI: info-grid ile 2-3 kavram/kategoriyi yan yana karsilastir"
+      - "Konuya en uygun infografik turunu sec"
+    kurallar:
+      - "5. sinif seviyesinde, mufredatla uyumlu konu"
+      - "KRİTİK — SENARYO KAPSAMI: Senaryo sadece DURUMU ve MERAKı anlatsın, CEVAPLARI vermesin!"
+      - "Detaylı bilgiler ve veriler SADECE tablo/grafikte olmalı — senaryo bunları içermemeli"
+      - "Soruların cevabı senaryodan değil tablo/grafikten çıkarılmalı"
+      - "Infografik gercekci ve dogrulanabilir bilgiler icermeli"
+      - "Her bilgi sorunun cozumune katki saglamali (dekoratif bilgi ekleme)"
+      - "Bilgi hiyerarsisi acik olmali (baslik → alt bilgi → detay)"
+      - "Turkce karakterler dogru kullanilmali (s, i, g, u, o, c)"
+
+  questions:
+    - slot: 1
+      type: "siniflandirma_cikarim"
+      soru_kokleri:
+        - "<b>Infografikteki bilgilere gore asagidakilerden hangisi dogrudur?</b>"
+        - "<b>Bu bilgi grafiklerine gore asagidakilerden hangisine ulasilabilir?</b>"
+        - "<b>Infografikteki verilere gore asagidakilerden hangisi soylenebilir?</b>"
+        - "<b>Bu …İnfografik Yapısı…'na göre …İnfografik İçeriği… ile ilgili aşağıdakilerden hangisi söylenebilir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 6
+      word_count_max: 20
+      beceri:
+        katman: "KB2"
+        bilesenler: ["siniflandirma", "cikarimlama"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+    - slot: 2
+      type: "karsilastirma"
+      soru_kokleri:
+        - "<b>Infografikteki bilgilere gore asagidakilerden hangisi <u>soylenemez</u>?</b>"
+        - "<b>Bu bilgi grafiklerinden hareketle asagidaki yargIlardan hangisine <u>ulasilamaz</u>?</b>"
+        - "<b>Infografikteki verilere gore asagidakilerden hangisi <u>yanlistir</u>?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 6
+      word_count_max: 20
+      beceri:
+        katman: "KB3"
+        bilesenler: ["degerlendirme", "karsilastirma"]
+        surec_bileseni: "problemi_yapilandirma"
+
+    - slot: 3
+      type: "uygulama"
+      soru_kokleri:
+        - "<b>Infografikteki bilgiler dogrultusunda asagidakilerden hangisi yapilmalidir?</b>"
+        - "<b>Bu bilgilere gore asagidaki durumlardan hangisi beklenir?</b>"
+        - "<b>Buna göre bir …Karakter…, …İnfografikteki Simgeler…'i sırasıyla kullandığında aşağıdakilerden hangisi doğru olur?</b>"
+        - "<b>Bu …İnfografik Yapısı…'ndaki …Özellik…'e aşağıdaki açıklamalardan hangisi anlamca en yakındır?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 6
+      word_count_max: 20
+      beceri:
+        katman: "KB2"
+        bilesenler: ["uygulama", "cikarimlama"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+header_template: "1-3. sorulari asagidaki senaryo ve infografige gore cevaplayiniz."
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Senaryo + infografik uzerinden siniflandirma, cikarim ve uygulama sorulari"
+
+  paragraph:
+    required: true
+    word_count_min: 100
+    word_count_max: 180
+    sentence_count_min: 3
+    sentence_count_max: 10
+
+  stem:
+    required: true
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 6
+    word_count_max: 20
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Infografikteki bilgilerle desteklenen dogru cikarim veya yargi"
+  kurallar:
+    - "KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI"
+    - "Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI"
+    - "Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil"
+    - "YASAK: Tablodaki değeri aynen şıkka yazmak (örn: 'yalıtımı azdır' tabloda yazıyorsa şıkta aynen yazmamalı)"
+    - "Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli"
+
+    - "Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı"
+    - "Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı"
+    - "Dogru cevap infografikteki SPESIFIK bilgilerle dogrudan desteklenmeli"
+    - "Soylenemez sorusunda dogru cevap infografikle CELISEN veya DESTEKLENMEYEN yargi olmali"
+    - "Uygulama sorusunda dogru cevap infografikteki bilgiye dayanan mantikli bir sonuc olmali"
+    - "HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer"
+    - "Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK"
+    - "BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: 'teleskop' → 'mercekli araç' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+distractors:
+  stratejiler:
+    - ad: "KATEGORI_KARISTIRMA"
+      aciklama: "Infografikteki bir kategorinin ozelligini baska bir kategoriye atfetme"
+      ornek: "Bitki hucresinin ozelligini hayvan hucresi gibi gosterme"
+    - ad: "KISMI_DOGRU"
+      aciklama: "Kismen dogru ama en az bir bilgiyi yanlis iceren ifade sunma"
+      ornek: "3 bilgisi dogru ama 1 bilgisi yanlis olan yargi"
+    - ad: "ASIRI_GENELLEME"
+      aciklama: "Infografikteki ozel bir bilgiden cok genis bir genelleme yapma"
+      ornek: "Tek bir ornekten tum kategori hakkinda kesin yargi cikarma"
+
+use_shared_strategies: false

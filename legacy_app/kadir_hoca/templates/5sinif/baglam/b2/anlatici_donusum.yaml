@@ -1,0 +1,114 @@
+meta:
+  id: anlatici_donusum
+  ad: Anlatıcı Dönüşüm Senaryosu
+  sinif_seviyesi: 5
+  aciklama: 3. kişi anlatıcıyla yazılmış bir hikâye verilir — 1. kişiye dönüşüm ve değişim etkisi
+  kaynak: kaynak-soru-kokleri.md
+  frequency: Medium
+context:
+  type: anlatici_donusum
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 100
+    word_count_max: 160
+    structure:
+    - 3. kişi anlatıcıyla yazılmış kısa bir hikâye oluştur
+    - Hikâyede bir ana karakter ve onun eylemleri/düşünceleri anlatılmalı
+    - Anlatıcı 'o', 'onun', '-dı/-di' gibi 3. kişi kalıpları kullanmalı
+    - Hikâyede karakterin iç dünyasına (düşünceleri, hisleri) dışarıdan bakış açısı verilmeli
+    - Hikâyenin 1. kişiye dönüştürülebilir net cümleleri olmalı
+    - Soruda KESİNLİKLE tablo kullanılMAMALIDIR.
+    - En az 1 duygu/düşünce cümlesi ve 1 eylem cümlesi bulunmalı
+    kurallar:
+    - 5. sınıf seviyesinde, günlük hayattan veya okul ortamından bir hikâye
+    - 3. kişi anlatıcı açıkça belli olmalı (o, onun, -dı/-di kalıpları)
+    - Karakterin adı Türkçe olmalı
+    - Hikâye öyküleyici anlatım türünde olmalı
+    - 1. kişiye dönüşüm yapıldığında anlam değişiklikleri fark edilebilir olmalı
+    - Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)
+  questions:
+  - slot: 1
+    type: donusum_secimi
+    soru_kokleri:
+    - <b>Bu metin 1. kişi anlatıcıyla yazılsaydı aşağıdakilerden hangisi olurdu?</b>
+    - <b>Hikâye kahramanın ağzından anlatılsaydı aşağıdakilerden hangisi doğru olurdu?</b>
+    - <b>Bu metni 1. kişili anlatımla yazılacak olursa aşağıdaki metinlerden hangisi yazılabilir?</b>
+    options_style: mini_paragraph
+    word_count_min: 25
+    word_count_max: 45
+    beceri:
+      katman: KB3
+      bilesenler:
+      - donusturme
+      - yorumlama
+      surec_bileseni: problemi_yapilandirma
+  - slot: 2
+    type: anlatici_degisim_etkisi
+    soru_kokleri:
+    - <b>Anlatıcı değiştirildiğinde metnin hangi özelliği değişir?</b>
+    - <b>Bu metinden benzetme/kişileştirme/konuşturma/karşılaştırma içeren cümle çıkarılmak istenirse hangi cümlenin çıkarılması gerekir?</b>
+    options_style: complete_sentence
+    word_count_min: 5
+    word_count_max: 22
+    beceri:
+      katman: KB3
+      bilesenler:
+      - degerlendirme
+      - analiz
+      surec_bileseni: problemi_yapilandirma
+header_template: 1-2. soruları aşağıdaki hikâyeye göre cevaplayınız.
+format:
+  type: llm_generated_html
+  description: 3. kişi anlatıcı hikâye üzerinden dönüşüm ve etki soruları
+  paragraph:
+    required: true
+    word_count_min: 100
+    word_count_max: 160
+    sentence_count_min: 5
+    sentence_count_max: 10
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 8
+    word_count_max: 45
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: 3. kişiden 1. kişiye doğru dönüştürülmüş metin veya anlatıcı değişiminin doğru etkisi
+  kurallar:
+  - 'KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI'
+  - Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI
+  - Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil
+  - 'YASAK: Tablodaki değeri aynen şıkka yazmak (örn: ''yalıtımı azdır'' tabloda yazıyorsa şıkta aynen yazmamalı)'
+  - Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli
+  - Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı
+  - Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı
+  - Dönüşüm sorusunda doğru cevap TÜM zamirleri ve bakış açısını doğru dönüştürmüş metin olmalı
+  - Etki sorusunda doğru cevap anlatıcı değişiminin gerçek etkisini (bakış açısı, samimiyet, bilgi sınırı) yansıtmalı
+  - Çeldiriciler kısmi dönüşüm veya yanlış etki yorumu içermeli
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: ''teleskop'' → ''mercekli araç'' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: KISMI_DONUSUM
+    aciklama: Bazı cümleleri doğru dönüştürüp bazılarını 3. kişi olarak bırakma
+    ornek: İlk cümleyi 'ben' ile başlatıp sonraki cümlelerde 'o' kullanmaya devam etme
+  - ad: ANLATICI_HATA
+    aciklama: Yanlış zamir veya kip kullanarak hatalı dönüşüm yapma
+    ornek: '''O düşündü'' yerine ''Biz düşündük'' gibi yanlış çoğul zamir kullanma'
+  - ad: YAKIN_AMA_YANLIS
+    aciklama: Dönüşümde anlam kaymasına neden olan ince değişiklik yapma
+    ornek: Anlatıcı değişiminin bakış açısını değil konuyu değiştirdiğini iddia etme
+use_shared_strategies: false

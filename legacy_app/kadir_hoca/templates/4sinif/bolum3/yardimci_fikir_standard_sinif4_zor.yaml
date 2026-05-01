@@ -1,0 +1,119 @@
+# Kaynak: yardimci_fikir_standard_sinif4_zorluk_tam_eklenmis.yaml → zorluk_duzeyleri.zor
+# 4. sinif yardimci fikir standart — zor duzey
+
+meta:
+  id: "yardimci_fikir_standard_sinif4_zor"
+  ad: "4. Sinif - Yardimci Fikir Standart (Zor)"
+  sinif_seviyesi: 4
+  aciklama: "Zor duzey — 4. sinif kisa ifade yardimci fikir sorusu. Metnin yardimci dusuncesini en iyi yansitan kisa ifadeyi secme."
+  frequency: "High"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 4 kisa ifade secenegi (zor)"
+
+  paragraph:
+    required: true
+    word_count_min: 81
+    word_count_max: 90
+    background_color: "#fce8e8"
+    sentence_count_min: 6
+    sentence_count_max: 7
+    stil: "bilgilendirici"
+    kurallar:
+      - "Paragrafta anlatilan yonler birbirine semantik olarak yakin olabilir."
+      - "Metinde deginilmeyen yon/ozellik konuya cok yakin ama kesin olarak paragrafta yer almayan bir nokta olmali."
+      - "Yanlis secenekler paragrafta gecen bilgilerin daha yakin ve incelikli yeniden ifade edilmis halleri olabilir."
+      - "Dogru cevap, dikkatli okuma ve kapsam kontrolu gerektirmeli."
+      - "Metin uzunlugu ust banda yakin tutulmali."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+      - "Dis bilgi gerektirmemelidir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 5
+    word_count_max: 10
+    style: "short_phrase"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Secenekler kisa ifade biciminde olmali."
+      - "Dogru secenek metnin bir yardimci fikrini dogru yansitmali."
+      - "Celdirici secenekler ana fikri veya alakasiz konulari yansitmali."
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metne göre aşağıdakilerden hangisi söylenebilir?</b>"
+  # KULLANILDI: - "<b>Bu metinden hareketle aşağıdakilerden hangisine ulaşılabilir?</b>"
+  # KULLANILDI: - "<b>Aşağıdakilerden hangisi bu metne göre doğrudur?</b>"
+  # KULLANILDI: - "<b>Bu metinden aşağıdakilerden hangisi çıkarılabilir?</b>"
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metnin ana fikrini destekleyen yardimci fikri yansitan kisa ifade"
+  kurallar:
+    - "Dogru secenek metindeki bir yardimci fikri ifade etmeli."
+    - "Ana fikri degil, yardimci fikri yansitmali."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+
+celdirici_stratejileri:
+  - ad: "YAKIN_AMA_EKSIK"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metindeki bir yöne çok yakın ama kapsam bakımından eksik kalan seçenek"
+    nasil_olusturulur: |
+      Metinde anlatılan bir yönün neredeyse doğru ama biraz eksik ya da kaymış versiyonunu oluştur.
+      Zor seviyede paragrafla semantik bağ güçlü — öğrenci dikkatli kapsam kontrolü yapmalı.
+      Yanlış seçenekler paragraftaki bilgilerin daha yakın ve incelikli yeniden ifade edilmiş halleri olabilir.
+    kategori: "semantic"
+
+  - ad: "DOLAYLI_CIKARIM_YANLIS"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Paragraftaki iki bilgiden dolaylı ama yanlış çıkarım yapılan güçlü seçenek"
+    nasil_olusturulur: |
+      Paragraftaki iki farklı bilgiyi birleştirerek savunulabilir görünen ama gerçekte metinde yer almayan bir çıkarım oluştur.
+      Zor seviyede bu seçenek paragrafla güçlü bağ kurmalı — öğrenci her iki bilgiyi de doğrulamalı.
+    kategori: "cognitive"
+
+  - ad: "ES_ANLAMLI_KAPSAM_TUZAGI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Eş anlamlı sözcüklerle yeniden ifade edilmiş, kapsam kayması taşıyan güçlü seçenek"
+    nasil_olusturulur: |
+      Metindeki gerçek bir yardımcı fikri eş anlamlı kelimelerle yeniden kur ama kapsam biraz kaydır.
+      Zor seviyede iki seçenek arasındaki fark yalnızca kapsam inceliğinde olmalı.
+      Doğru cevap dikkatli okuma ve kapsam kontrolü gerektirmeli.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cikarim_yapma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

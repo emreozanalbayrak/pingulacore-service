@@ -1,0 +1,361 @@
+# 104 Uzamsal Iliskiler ve Simetri
+
+meta:
+  id: mat_3_uzamsal_iliskiler_ve_simetri_iki_yanlis_bir_dogru_tamamlama
+  ad: Iki Yanlis Bir Dogru Tamamlama
+  sinif_seviyesi: 3
+  aciklama: Ogrencinin eksik bir simetrik duzeni tamamlarken iki farkli yanlis parcayi elemesi ve yalnizca dogru tamamlama secenegini bulmasini saglayan soru kalibi.
+  kaynak: 104_paylastirmada_carpim_dusuncesiyle_bolme
+  frequency: Medium
+
+context:
+  type: uzamsal_iliskiler_ve_simetri_iki_yanlis_bir_dogru_tamamlama
+  question_count: 1
+  generation:
+    word_count_min: 35
+    word_count_max: 95
+    image_type: ortak_gorsel
+    structure:
+      - Bir okul panosunda, sanat etkinliginde, bahce duzenlemesinde, atolyede, kutuphane kosesinde ya da benzeri dogal bir baglamda gecen 3-5 cumlelik kisa bir senaryo yaz
+      - Ana sahnede bir sekil, desen ya da nesne grubunun eksik kalan yarisi bulunmali; ogrenci bu eksigi dogru tamamlayacak parcayi gorselden secmeli
+      - Yanlis seceneklerden biri yon hatasi, digeri ayrinti ya da konum hatasi icermeli; boylece iki farkli eleme yapisi kurulabilmeli
+      - Metin, duzeni tamamlama amacini dogal bicimde anlatmali; ancak gorseldeki parcayi, yonu, ayrintiyi ya da sayisal bilgiyi dogrudan soylememeli
+      - Soru, ogrenciden yalnizca gozle sayma degil, parca-butun iliskisi, simetri ve gorsel karsilastirma kurarak dogru parcayi bulmasini istemeli
+      - Senaryo, soru koku ve siklar ana sahnenin disinda verilmeli; gerekirse A, B, C ile etiketlenmis mini parca gorselleri ana gorselin alt bolmesinde bulunmali
+      - Insan ismi kullanilacaksa farkli ve genis bir isim havuzundan secilmeli
+    kurallar:
+      - 3. sinif seviyesinde olmali
+      - Soru gorsel olmadan cozulmemeli
+      - Sorunun basligi olmamali
+      - Soru koku mutlaka soru cumlesi olmali
+      - Senaryo metni gorseli anlatmamali
+      - Sorular yalniz kavramsal tanimla degil, gorsel uzerindeki iliskiyi dusundurarak cozulmeli
+      - Ayni tur nesneler ana gorselde ayni bicimde cizilmeli
+      - Tek dogru cevap olmali
+      - Secenekler yalnizca metin icermeli
+      - Gorsel ile metin birbiriyle tam tutarli olmali
+  questions:
+    - slot: 1
+      type: iki_yanlis_bir_dogru_tamamlama
+      soru_kokleri:
+        - "<b>Eksik bolumu dogru tamamlayan parca hangisidir?</b>"
+        - "<b>Gorseldeki duzeni tamamlamak icin hangi secenek secilmelidir?</b>"
+        - "<b>Simetriye uygun tamamlama hangi parcayla yapilabilir?</b>"
+      beceri:
+        katman: KB2
+        bilesenler:
+          - gorsel_okuma
+          - simetriyi_ayirt_etme
+          - parca_butun_iliskisi
+          - yon_konum_karsilastirma
+          - ayrinti_tarama
+          - secenek_elemesi
+          - kontrol
+        surec_bileseni: cozum_olusturma
+
+format:
+  type: llm_generated_html
+  soru_koku: Kisa, tek cumlelik ve soru isaretiyle biten soru koku. Ogrenciden eksik yarimi ya da parcayi dogru tamamlayan secenegi bulmasini ister.
+  paragraph:
+    required: true
+    word_count_min: 35
+    word_count_max: 90
+    sentence_count_min: 3
+    sentence_count_max: 5
+  options:
+    count: 3
+    labels:
+      - A
+      - B
+      - C
+    style: text_only
+    word_count_min: 2
+    word_count_max: 12
+    correct_count: 1
+
+dogru_cevap:
+  tanim: Ana gorseldeki eksik bolumle tam uyum kuran, simetriyi, yonu, konumu ve ayrintilari ayni anda dogru koruyan tek metin secenegi.
+  kurallar:
+    - Dogru cevap yalnizca gorsel okunarak ve simetri iliskisi kurularak bulunabilmeli
+    - Dogru cevap, eksik parcayi hem yon hem ayrinti hem de konum bakimindan dogru tamamlamali
+    - Dogru cevap secenegi acik, kisa ve tek anlamli olmali
+    - Dogru cevap gorseldeki duzenle tam uyumlu olmali
+    - Ogrenci yalnizca terim ezberiyle sonuca ulasamamali
+
+distractors:
+  kurallar:
+    - Bir celdirici dogru parcaya benzemeli ancak sag-sol ya da ust-alt yonunde hatali olmali
+    - Bir celdirici dogru yone yakin gorunmeli ancak ayrinti, cikinti, cizgi, benek ya da konum bakimindan bozuk olmali
+    - Yanlis secenekler birbiriyle ayni hata turunu tekrar etmemeli
+    - Secenekler birbirine yakin gorunen ama farkli mantik hatalari icermeli
+    - Yanlis secenekler tahmin degil, gorsel karsilastirma hatasina dayanarak uretilmeli
+  yasaklar:
+    - Dogru cevabi neredeyse aynen tekrar eden secenekler
+    - Iki farkli dogru yoruma izin veren muğlak ifadeler
+    - Sadece kavram tanimi soran secenekler
+    - Bariz sacma veya konu disi celdiriciler
+
+gorsel:
+  ana_gorsel:
+    kurallar:
+      - Ana sahnede eksik kalan yarim sekil, desen ya da duzen acikca gorunmeli
+      - Simetri dogrusu, yon iliskisi ya da gorsel esleme ogrenci tarafindan fark edilebilir olmali
+      - Pano susleri, rozetler, kelebekler, yaprak desenleri, pencere bolmeleri, seramik motifleri, kutu kapaklari, oyuncak raflari ya da benzeri 3. sinif duzeyine uygun gorseller kullanilabilir
+      - Ayni tur nesneler ayni gorsel ozelliklerle cizilmeli
+      - Gorsel sus olmamali; cozum icin gerekli bilgiyi tasimali
+      - Gorselde yer alan sayi, parca, yon ve konum bilgileri metinle celismemeli
+      - Gorsel icerigi ile soruda ve metinde ifade edilen sayisal veriler tutarli olmali; farkli sayisal verileri yansitmamali
+  sik_gorseli:
+    gerekli: true
+    kurallar:
+      - Secenekler metin odakli verilmeli
+      - Siklarda gorsel bulunmamali
+      - A, B, C ile isaretlenmis mini tamamlama parcalari gerekirse ana gorselin alt bolmesinde verilmeli
+      - Mini parcalar yalnizca dogru parcayi ve iki farkli hata turunu gosterecek sekilde hazirlanmali
+      - Siklarda yalniz bu harflerin yazili karsiliklari yer almali
+      - Secenekler yalnizca sorunun istedigi tamamlama secimine odaklanmali
+
+tymm_uyum_kurallari:
+  ogrenme_ciktisi: "Uzamsal iliskiler ve simetri baglaminda yer-yon-konum bilgisini kullanma, simetrik olanı ayirt etme, kare-dikdortgen-daire gibi sekillerde birden fazla simetri dogrusunu fark etme, bir parcasi verilen simetrik sekli yatay ve dikey simetri dogrusuna gore tamamlama ve basit yonerge-kodlama ile simetri olusturma"
+  tema_siniri: "Yalnizca 2. ve 3. sinif duzeyinde yer-yon-konum, hedefe ulasma icin basit strateji secme, simetrik olanı ayirt etme, kare-dikdortgen-dairede birden fazla simetri dogrusunu belirleme, bir parcasi verilen sekli yatay ve dikey simetri dogrusuna gore tamamlama, kareli veya noktalı zeminde basit yonerge takibi ile simetri olusturma odagi korunmali"
+  gorsel_metin_tutarliligi: "Gorselde verilen parca, simetri dogrusu, yon bilgisi ve metindeki ifadeler birbiriyle tam tutarli olmali; gorseldeki yarim sekil, eksen ve secenekler farkli veya celiskili bir simetri iliskisi yansitmamalidir."
+  sayisal_tutarlilik: "Gorsel icerigi ile soruda ve metinde ifade edilen sayisal veriler tutarli olmali; farkli sayisal verileri yansitmamali"
+  izinli_icerik:
+    kavramlar:
+      - "yer"
+      - "yon"
+      - "konum"
+      - "mesafe"
+      - "hedefe ulasma"
+      - "uygun yol"
+      - "simetri"
+      - "simetrik"
+      - "simetri dogrusu"
+      - "birden fazla simetri dogrusu"
+      - "es parca"
+      - "es goruntu"
+      - "kat izi"
+      - "yatay"
+      - "dikey"
+      - "sag"
+      - "sol"
+      - "yukari"
+      - "asagi"
+      - "kare"
+      - "dikdortgen"
+      - "daire"
+      - "desen"
+      - "figür"
+      - "sekil tamamlama"
+      - "yarim sekil"
+      - "kareli zemin"
+      - "noktali zemin"
+      - "yonerge"
+      - "kodlama"
+      - "baslangic noktasi"
+      - "bitis noktasi"
+      - "gorsel karsilastirma"
+      - "parca-butun iliskisi"
+    beceriler:
+      - "Yer, yon ve konum bildiren ifadeleri gorsel uzerinde ayirt etme ve kullanma"
+      - "Hedefe ulasmak icin basit olcut belirleme ve uygun secenegi secme"
+      - "Gorseller arasinda konum ve yon karsilastirmasi yapma"
+      - "Verilen sekiller arasindan simetrik olani ayirt etme"
+      - "Simetri dogrusuna gore olusan iki parçanin es oldugunu fark etme"
+      - "Kare, dikdortgen ve dairenin birden fazla simetri dogrusu olabilecegini belirleme"
+      - "Bir parcasi verilen simetrik sekli inceleyerek eksik parcayi tahmin etme"
+      - "Bir parcasi verilen sekli yatay simetri dogrusuna gore tamamlama"
+      - "Bir parcasi verilen sekli dikey simetri dogrusuna gore tamamlama"
+      - "Seklin eksik kismini renk, buyukluk ve konum iliskilerini koruyarak tamamlama"
+      - "Kareli veya noktali zeminde verilen basit yonergeleri takip etme"
+      - "Verilen yonergeyi kendi ifadesiyle yeniden kurma"
+      - "Basit kodlama adimlariyla seklin simetrik kismini olusturma"
+      - "Olusan seklin simetrik olup olmadigini kontrol etme"
+      - "Gorsel ipuclari ile secenekler arasinda mantiksal denetleme yapma"
+      - "Parca-butun iliskisini kullanarak dogru tamamlamayi secme"
+  yasaklar:
+    - "4. sinif duzeyinde dogruya gore simetri kavramini acikca kurdurma"
+    - "Aynaya gore simetri ile dogruya gore simetri arasindaki iliskiyi sorgulatma"
+    - "Ayna simetrisi kavramini teknik bir geometri diliyle isleme"
+    - "Seklin dogruya gore simetrisini kurala dayali olarak cizdirme"
+    - "Simetri dogrusuna esit uzaklik ilkesini acik kural olarak kullandirma"
+    - "Yansima noktasi belirletme"
+    - "Dogrunun obur tarafina geometrik yansima yerlestirme turunde teknik kurgu"
+    - "Egik simetri dogrusu"
+    - "Capraz veya egik eksene gore simetri tamamlama"
+    - "Geometrik nesneler ve sekiller uzerinden aynaya gore simetriyi yorumlatma"
+    - "4. sinif duzeyinde seklin dogruya gore simetrisini yapilandirma"
+    - "Geometrik sekillere dayali yapi olusturma"
+    - "Kopru, model veya anlamli geometrik yapi tasarlatma"
+    - "Cok adimli kodlama stratejisi gelistirtme"
+    - "Ogrenciden kendi kodunu uretmesini gerektiren acik uclu tasarim gorevleri"
+    - "Sekillerden cisim, cisimlerden yapi kurmaya dayali ileri duzey kurgu"
+    - "3 boyutlu geometrik yapi veya tasarim gorevleri"
+    - "Cok adimli, uzun ve soyut mantiksal aciklama gerektiren soru yapilari"
+    - "Gorselden bagimsiz, yalnizca teknik tanimla cozulmesi beklenen sorular"
+    - "Ust sinif duzeyinde teknik geometri dili"
+    - "Doğru, yansıma, izdüşüm, dönüşüm gibi kavramlari ogretim hedefi haline getirme"
+    - "Simetriyi analitik veya kural-merkezli ispat duzeyine tasima"
+    - "Gorsel yerine soyut sembolik anlatimla simetri kurdurma"
+    - "2. ve 3. sinif kapsamini asan performans gorevi niteligindeki karmasik yapilandirma sorulari"
+
+izinli_icerikler:
+  kavramlar:
+    - simetri
+    - simetri dogrusu
+    - yer
+    - yon
+    - konum
+    - parca-butun iliskisi
+    - eksik parca
+    - tamamlama
+    - gorsel esleme
+    - ayrinti kontrolu
+    - yon kontrolu
+    - konum kontrolu
+  beceriler:
+    - eksik parcayi simetriye gore tahmin etme
+    - iki farkli yanlis parcayi eleme
+    - dogru yone bakan parcayi ayirt etme
+    - ayrinti uyumunu kontrol etme
+    - konum iliskisini karsilastirma
+    - secenekler arasinda mantikli eleme yapma
+  soru_islemleri:
+    - eksik parcayi tamamlama
+    - iki yanlis secenegi eleme
+    - dogru parcayi secme
+    - simetriye uygun esleme yapma
+  nesneler:
+    - pano susleri
+    - kagit rozetler
+    - yaprak desenleri
+    - kelebek kanatlari
+    - pencere bolmeleri
+    - seramik motifleri
+    - cicek desenleri
+    - kutu kapaklari
+    - oyuncak rafindaki sekiller
+    - kumaş desenleri
+  mekanlar:
+    - sinif panosu
+    - koridor sergisi
+    - sanat atolyesi
+    - okul bahcesi
+    - kutuphane kosesi
+    - etkinlik masasi
+    - drama kosesi
+    - kulup panosu
+    - muze atolyesi
+    - oyun odasi
+  isim_havuzu:
+    - Ada
+    - Adar
+    - Afra
+    - Aksel
+    - Alara
+    - Alp
+    - Alper
+    - Aras
+    - Arda
+    - Asel
+    - Asya
+    - Atlas
+    - Aylin
+    - Ayse
+    - Azra
+    - Baran
+    - Baris
+    - Batu
+    - Beril
+    - Beren
+    - Bora
+    - Buse
+    - Can
+    - Cansu
+    - Ceren
+    - Cem
+    - Defne
+    - Demir
+    - Deniz
+    - Derin
+    - Dila
+    - Doruk
+    - Duru
+    - Ece
+    - Ecrin
+    - Efe
+    - Ela
+    - Elif
+    - Eylul
+    - Emir
+    - Eren
+    - Esila
+    - Gokce
+    - Gunes
+    - Hira
+    - Ipek
+    - Ilayda
+    - Irmak
+    - Kerem
+    - Kuzey
+    - Lara
+    - Lila
+    - Lina
+    - Mavi
+    - Melis
+    - Mert
+    - Mertcan
+    - Mete
+    - Mina
+    - Miray
+    - Narin
+    - Naz
+    - Nehir
+    - Nil
+    - Nisa
+    - Omer
+    - Onur
+    - Oyku
+    - Pars
+    - Pelin
+    - Poyraz
+    - Ruzgar
+    - Sarp
+    - Selin
+    - Serra
+    - Simay
+    - Su
+    - Tanem
+    - Taha
+    - Toprak
+    - Tuna
+    - Umay
+    - Umut
+    - Yagiz
+    - Yagmur
+    - Yaren
+    - Yasemin
+    - Yusuf
+    - Zeynep
+
+zorluk_seviyesi: orta-ust
+
+varyant:
+  - ad: Yon Hatasini Eleyip Dogru Parcayi Bulma
+    aciklama: Yanlis seceneklerden biri sag-sol ya da ust-alt yonunde hatalidir; diger secenek ayrinti ya da konum farki tasir. Ogrenci dogru tamamlama parcasi ile yon hatasini ayirt eder.
+    cevap_bicimi: coktan_secmeli
+    secenek_tipi: yalnizca_metin
+    secenek_sayisi: 3
+    gorsel_notu: Ana gorselde belirgin bir simetri dogrusu ve seklin yalniz yarisi cizilmeli; eksik bolge tamamen bos birakilmalidir. Alt bolmede A, B, C ile etiketli uc mini parca yer almali; biri eksene tam uyan dogru tamamlama olmali, biri ayni parcanin sag-sol ya da ust-alt yonu cevrilmis hatali hali olmali, biri ise dogru yone yakin gorunup ayrinti veya konum bakimindan kucuk farkla bozuk olmalidir.
+  - ad: Ayrinti Hatasini Eleyip Dogru Parcayi Bulma
+    aciklama: Parcalar genel bicimce benzerdir; ancak bir yanlis secenekte benek, cizgi, cikinti ya da ic bolme ayrintisi bozulmustur. Ogrenci yalniz sekil degil ayrinti uyumunu da kontrol eder.
+    cevap_bicimi: coktan_secmeli
+    secenek_tipi: yalnizca_metin
+    secenek_sayisi: 3
+    gorsel_notu: Ana gorselde simetri dogrusu ve verilen yarim seklin icinde sayilabilir benek, cizgi ya da kucuk cikinti gibi ic ayrintilar acikca okunabilir olmali. Alt bolmedeki A, B, C aday parcalarin dis hatlari ayni olmali; biri tum ayrintilari dogru korumali, birinde benek sayisi ya da cizgi bicimi farkli olmali, birinde ise yon hatasi tasinmalidir. Aday parcalar ayni olcu ve ayni cizgi diliyle cizilmelidir.
+  - ad: Konum Hatasini Eleyip Dogru Parcayi Bulma
+    aciklama: Parca dogru gorunse de yerlestirilmesi gereken bolgeye tam uymaz; bir secenek yon olarak yakin, digeri konum olarak yanlistir. Ogrenci iki farkli yanlisi eleyerek tek dogruyu bulur.
+    cevap_bicimi: coktan_secmeli
+    secenek_tipi: yalnizca_metin
+    secenek_sayisi: 3
+    gorsel_notu: Ana gorselde simetri dogrusu net olmali; eksik kalan bolge belirli bir satir-sutun yapisina (ornegin iki sira iki sutun) sahip cerceveli bir alan olarak bos durmalidir. Alt bolmedeki A, B, C aday parcalarin tumu ayni satir-sutun yapisinda olmali; biri yon ve konumu tam tutturmali, biri yon olarak yakin durup konum bakimindan kaymis olmali, biri ise dogru parcaya benzeyip yerlestirme noktasinda eslesmeyen ic bolmelere sahip olmalidir.

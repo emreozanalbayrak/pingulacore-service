@@ -1,0 +1,138 @@
+# Kaynak: soru_cevap_standard_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.orta
+# 4. sinif soru-cevap standart — orta duzey
+
+meta:
+  id: "soru_cevap_standard_sinif4_orta"
+  ad: "4. Sinif - Metinde Soru ve Cevap Standart (Orta)"
+  sinif_seviyesi: 4
+  aciklama: "Orta duzey — paragrafin hangi soruya cevap oldugunu belirleme. En az bir celdirici ilk bakista makul gorunur."
+  frequency: "High"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 4 soru cumlesi secenek (orta)"
+
+  paragraph:
+    required: true
+    word_count_min: 60
+    word_count_max: 82
+    background_color: "#f8f0e0"
+    sentence_count_min: 5
+    sentence_count_max: 6
+    stil: "bilgilendirici"
+    kurallar:
+      - "Paragraf belirli bir soruya acik cevap vermeli ama tum paragraf okunmadan tam netlesmemeli."
+      - "2-4 destekleyici bilgi icermeli."
+      - "En az bir destekleyici detay celdirici malzemesi olarak kullanilabilmeli."
+      - "Konu dar ve odakli olmali."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 4
+    word_count_max: 15
+    style: "question_sentence"
+    correct_type: "matches"
+    correct_count: 1
+    kurallar:
+      - "Tum secenekler soru cumlesi formatinda ('?' ile bitmeli)."
+      - "Dogru soru paragrafin TAMAMINI kapsamali."
+      - "Dogru secenek paragraftaki baskin aciklama alanini hedeflemeli."
+      - "Detay sorusu ya da gereksiz genis soru olmamali."
+      - "1 yakin_soru ZORUNLU ve guclu olmali."
+      - "1 detay_sorusu celdirici olmali."
+      - "1 genis_kapsamli veya iliskili_ama_farkli celdirici olmali."
+      - "En az bir celdirici ilk bakista dogruya aday gibi gorunmeli."
+      - "YASAK: Tum celdiricilerin kolayca alakasiz olmasi."
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Bu metin aşağıdaki sorulardan hangisine cevap olarak söylenmiştir?</b>"
+  # KULLANILDI: - "<b>Bu metin aşağıdaki sorulardan hangisine cevap olarak yazılmıştır?</b>"
+  # KULLANILDI: - "<b>Bu metin aşağıdaki sorulardan hangisine cevap olarak yazılmış olabilir?</b>"
+  # KULLANILDI: - "<b>Bu metin aşağıdaki sorulardan hangisine cevap vermek için yazılmıştır?</b>"
+  # KULLANILDI: - "<b>Bu metin aşağıdaki soruların hangisine cevap olarak yazılmıştır?</b>"
+  # KULLANILDI: - "<b>Bu metin aşağıdaki sorulardan hangisine cevap vermek amacıyla yazılmıştır?</b>"
+  - "\"{topic}\" <b>ile ilgili bu metin aşağıdaki sorulardan hangisine cevap olarak yazılmıştır?</b>"
+  - "\"{topic}\" <b>konulu bu metin aşağıdaki sorulardan hangisine cevap vermek için yazılmıştır?</b>"
+  - "<b>Bu metinde aşağıdakilerden hangisi açıklanmıştır?</b>"
+  - "<b>Bu metni okuyan biri aşağıdakilerden hangisini anlamış olur?</b>"
+  - "<b>Bu metinde söz edilen değişim neye bağlıdır?</b>"
+  - "<b>Bu metinden</b> \"{topic}\" <b>ile ilgili aşağıdakilerden hangisine kesin olarak ulaşılır?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Paragrafin butunuyle cevap verdigi soru cumlesi"
+  kurallar:
+    - "Dogru secenek paragraftaki hicbir cumleyi kelimesi kelimesine tekrarlamamali."
+    - "Paragrafin TUMUNU kapsayan bir soru olmali."
+    - "Soru cumlesi formatinda olmali ('?' ile bitmeli)."
+    - "Paragraftaki bilgilerin COGUNLUGU bu soruya cevap vermeli."
+    - "Ne cok genis ne cok dar olmali."
+    - "4-15 kelime uzunlugunda olmali."
+    - "Dogru secenek metnin ana cevap cizgisini en iyi temsil eden sorudur."
+    - "Kelime sayisi bakimindan en uzun secenek olmamali."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "YAKIN_SORU_GUCLU"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "İlk bakışta doğru gibi görünen, güçlü yakın soru celdirici"
+    nasil_olusturulur: |
+      Paragrafın cevapladığı soruya çok yakın ama tam örtüşmeyen güçlü bir soru oluştur.
+      Orta seviyede ilk bakışta doğru aday gibi görünmeli — öğrenci tüm paragrafı okuyarak ayırt etmeli.
+      4-15 kelime, ? ile bitmeli.
+    kategori: "semantic"
+
+  - ad: "DETAY_SORUSU_GUCLU"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Paragraftaki güçlü bir destekleyici detaya odaklanan soru"
+    nasil_olusturulur: |
+      Paragrafta güçlü yer tutan ama ana soru olmayan bir ayrıntıyı soru olarak sun.
+      Orta seviyede bu ayrıntı paragrafta önemli görünmeli — öğrenci "belki bu" diyebilmeli.
+      4-15 kelime, ? ile bitmeli.
+    kategori: "cognitive"
+
+  - ad: "KAPSAM_FARKLI_SORU"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Aynı genel alanda ama paragrafın cevaplamadığı farklı soru"
+    nasil_olusturulur: |
+      Paragrafın konusuyla aynı alanda ama paragrafın tam olarak cevaplamadığı bir soru oluştur.
+      Orta seviyede bu soru makul görünmeli ama paragrafın asıl cevap ekseni farklı olmalı.
+      4-15 kelime, ? ile bitmeli.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cikarim_yapma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "Ana fikir sorusu gibi davranan secenekler YASAK (soru cumlesi olmali)"
+    - "5. sinifa kayan soyut yorum sorulari YASAK"
+    - "Paragrafin dogrudan cevaplamadigı sorular dogru cevap olamaz"

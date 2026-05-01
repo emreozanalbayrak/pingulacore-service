@@ -1,0 +1,216 @@
+# templates/capture2/metinler_arasi_karsilastirma_oncullu.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Bolum 2 - Metinler Arasi Karsilastirma
+#
+# ONCULLU FORMAT (tum metinler arasi karsilastirma sorularinin ~%10'u)
+# Iki metin verilir, I/II/III/IV numarali yargilar soru kokunde listelenir
+# Secenekler "I ve II", "II ve IV" gibi birlesik formatindadir
+#
+# MANTIK: 4 numarali yargi → 2 ortaklik gosteren (metinde desteklenen) + 2 ortaklik gostermeyen
+# Dogru cevap = Ortak olan yargilarin birlesimi
+
+meta:
+  id: "metinler_arasi_karsilastirma_oncullu"
+  ad: "Metinler Arası Karşılaştırma (Öncüllü)"
+  sinif_seviyesi: 5
+  aciklama: "Numaralanmış yargıların ortaklık durumunu analiz etme"
+  kaynak: "data/metinler_arasi_karsilastirma.pdf"
+  frequency: "Low (~10% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "İki metin + öncüller + soru kökü"
+
+  paragraph:
+    required: true
+    count: 2
+    labels: ["1. Metin", "2. Metin"]
+    word_count_min: 35
+    word_count_max: 65
+    stil: "bilgilendirici"
+    kurallar:
+      - "İki metin ayni ust baslik altinda farkli varliklari anlatmali."
+      - "Her iki metinde en az 2 ortak ozellik bulunmali (desteklenen ifadeler icin)."
+      - "Her metinde kendine ozgu detaylar olmali (desteklenmeyen ifadeler icin)."
+      - "Numarali ifadeler icin yeterli bilgi icermeli."
+      - "İki metin AYRI AYRI yazılmalı — düzyazı olarak birleştirilmemeli"
+      - "Her metnin başına '1. Metin' ve '2. Metin' etiketi konulmalı"
+      - "İki metin arasında boşluk bırakılmalı (<br><br> ile)"
+      - "Metinler devam eden tek paragraf gibi DEĞİL, birbirinden bağımsız iki ayrı metin bloğu olmalı"
+
+  stem:
+    required: true
+    description: "Soru kokleri pattern listesinden rastgele secilir, {statements} placeholder ile"
+    kurallar:
+      - "Soru kökü MUTLAKA <b> tagi ile kalın yazılmalı"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    style: "roman_numeral_combination"
+    correct_count: 1
+    preserve_order: true
+    layout: "two_column"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 2 varyasyon)
+# {statements} placeholder: I/II/III/IV ifadeler buraya gelir
+# Sayfa 121, 124
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metinler ile ilgili;</b>\n{statements}\n<b>ifadelerinden hangileri ortaktır?</b>"
+  - "<b>Bu metinlerle ilgili numaralanmış ifadelerden hangilerinin ortak olduğu söylenebilir?</b>"
+  - "<b>Bu metinler ile ilgili;</b>\n{statements}\n<b>numaralanmış bilgilerden hangileri her iki metin için de geçerlidir?</b>"
+  - "<b>Bu iki metne göre;</b>\n{statements}\n<b>ifadelerinden hangileri her iki metin için de doğrudur?</b>"
+  - "<b>Bu metinlerle ilgili;</b>\n{statements}\n<b>yargılarından hangileri her iki metinde de desteklenmektedir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Her iki metinde de desteklenen numaralanmış ifadelerin birleşimi"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "4 numarali ifade olusturulmali (I, II, III, IV)"
+    - "2 ifade her iki metinde de desteklenmeli (ortak - dogru cevap bileseni)"
+    - "2 ifade sadece bir metinde desteklenmeli veya hic desteklenmemeli"
+    - "Secenekler ikili birlesimler: 'I ve II', 'I ve III', 'II ve IV', 'III ve IV', 'I ve IV', 'II ve III' gibi"
+    - "Her ifade tam cumle olmali (8-20 kelime)"
+  ornekler:
+    - metin_1: "Ezan cicegi bahcede ve saksida yetisir, sonbaharda cicer."
+      metin_2: "Kasimpati bahcede yetisir, sonbaharin simgesidir."
+      ifadeler:
+        I: "Her ikisi de bahçede yetiştirilebilir."
+        II: "İkisi de yalnızca sıcak iklimlerde yetişir."
+        III: "Sonbahar aylarında çiçek açarlar."
+        IV: "Her ikisi de tıbbi amaçlarla kullanılır."
+      dogru: "I ve III"
+      neden: "I ve III her iki metinde de destekleniyor, II ve IV desteklenmiyor"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# Numarali format: 2 ifade ORTAK (desteklenen) + 2 ifade ORTAK DEGIL (desteklenmeyen)
+# Strateji havuzu "desteklenmeyen" ifadeleri olusturmak icin kullanilir
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["karsilastirma", "cikarim_yapma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic with two comparable entities"
+      details: "Ayni ust baslik altinda farkli varlik/durumlari sec"
+
+    - step: 2
+      action: "Generate two paragraphs (35-65 words each)"
+      details: |
+        Her metin:
+        - Farkli bir varligi/durumu anlatmali
+        - En az 2 ortak ozellik icermeli (desteklenen ifadeler icin)
+        - Kendine ozgu detaylar icermeli (desteklenmeyen ifadeler icin)
+
+    - step: 3
+      action: "Create 4 numbered statements (I, II, III, IV)"
+      details: |
+        Her biri tam cumle (8-20 kelime):
+        - 2 ifade: her iki metinde de DESTEKLENEN (ortak)
+        - 2 ifade: sadece bir metinde desteklenen veya hic desteklenmeyen
+        - Siralama rastgele olmali
+
+    - step: 4
+      action: "Create 4 combination options"
+      details: |
+        Secenekler ikili birlesimler:
+        - Dogru cevap: ortak olan 2 ifadenin birlesimi
+        - Diger 3 secenek: karisik birlesimleri
+        Ornek: A) I ve II  B) I ve III  C) II ve IV  D) III ve IV
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem and embed statements"
+      details: |
+        soru_kokleri listesinden rastgele sec
+        {statements} yerine numarali ifadeleri yerlestir:
+        I. [ifade 1]
+        II. [ifade 2]
+        III. [ifade 3]
+        IV. [ifade 4]
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR (Sayfa 121, 124)
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 121
+    konu: "Cicekler - Ezan Cicegi ve Kasimpati"
+    metin_1: "Ezan cicegi bahcede ve saksida yetisir, sonbaharda cicer, dik gorunusludur."
+    metin_2: "Kasimpati bahcede yetisir, sonbaharin simgesidir, renkli ciceleri vardir."
+    ifadeler:
+      I: "Her ikisi de bahçede yetiştirilebilir."
+      II: "İkisi de yalnızca sıcak iklimlerde yetişir."
+      III: "Sonbahar aylarında çiçek açarlar."
+      IV: "Her ikisi de tıbbi amaçlarla kullanılır."
+    secenekler:
+      A: "I ve II"
+      B: "I ve III"
+      C: "II ve IV"
+      D: "III ve IV"
+    dogru_cevap: "B"
+    neden: "I ve III her iki metinde de destekleniyor"
+
+  - sayfa: 124
+    konu: "Hedef oyunlari - Curling ve Bocce"
+    metin_1: "Curling buzda oynanan bir hedef oyunudur, takim sporudur."
+    metin_2: "Bocce toprakta oynanan bir hedef oyunudur, bireysel de oynanabilir."
+    ifadeler:
+      I: "Her ikisi de hedef oyunlarıdır."
+      II: "İkisi de takım sporlarıdır."
+      III: "Aynı tür zeminde oynanırlar."
+      IV: "Belirli kurallara göre oynanırlar."
+    secenekler:
+      A: "I ve II"
+      B: "I ve IV"
+      C: "II ve III"
+      D: "III ve IV"
+    dogru_cevap: "B"
+    neden: "I ve IV her iki metinde de destekleniyor, II ve III desteklenmiyor"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Her iki metin de 35-65 kelime arasinda mi?"
+    - "Iki metin ayni ust baslik altinda farkli varliklari mi anlatiyor?"
+    - "En az 2 ortak ozellik ve en az 2 farkli detay var mi?"
+
+  statements:
+    - "Tam 4 numarali ifade var mi (I, II, III, IV)?"
+    - "Her ifade tam cumle mi (8-20 kelime)?"
+    - "2 ifade her iki metinde de destekleniyor mu?"
+    - "2 ifade ortak degil mi (sadece birinde veya hicbirinde yok)?"
+
+  options:
+    - "4 secenek ikili birlesim mi ('X ve Y' formati)?"
+    - "Dogru cevap ortak olan 2 ifadenin birlesimi mi?"
+    - "Diger secenekler karisik birlesimler mi?"

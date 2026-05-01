@@ -1,0 +1,389 @@
+# Kaynak: metin_turleri_standard_sinif4.yaml → zorluk_duzeyleri.orta
+# 4. sinif metin turleri — orta duzey
+
+meta:
+  id: "b12_metin_turleri_standard_sinif4_orta"
+  ad: "Metin Türleri (Standart) (Orta)"
+  sinif_seviyesi: 4
+  aciklama: "Orta duzey — metnin turunu gorunur yapi ve icerik ozelliklerinden belirleme sorulari"
+  kaynak: "Kullanici notlari: Metin Turleri"
+  frequency: "yaygin"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Gorsel + kisa metin + soru koku + 4 kisa secenek (orta)"
+
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 75
+    background_color: "#f8f0e0"
+    sentence_count_min: 5
+    sentence_count_max: 6
+    stil: "tur_ayirt_etmeye_uygun"
+    kurallar:
+      - "Metin tek ve net bir ture ait olusturulmali"
+      - "Turun ayirt edici 2-4 gorunur ozelligi metinde hissedilmeli"
+      - "Metin birden fazla ture esit derecede yaklasmamali"
+      - "Tur, hem bicimsel hem iceriksel ipuclariyla belirlenebilir olmali"
+      - "Metin 4. sinif duzeyinde acik, sade ve yonetilebilir olmali"
+      - "Gereksiz dolgu cumleleri turu bulandirmamali"
+      - "★★★ KRITIK: Metin DOGRUDAN secilen turun ORNEGI olmali — bilgilendirici/ansiklopedik dil YASAK ★★★"
+      - "Eger tur Hikâye ise: olay anlatimi, kahraman, zaman/mekan yapisiyla yazilmali"
+      - "Eger tur Masal ise: 'bir varmis bir yokmus' havasi, hayali karakterler, mucizevi olaylar"
+      - "Eger tur Fabl ise: hayvanlarin insan gibi konusmasi, kisa olay, ahlaki ders"
+      - "Eger tur Anı ise: birinci tekil anlatim, gecmiste yasanmis gercek bir olay (ben/benim gordugum)"
+      - "Eger tur Günlük ise: tarih + birinci tekil gunluk kayit, kisisel duygu/dusunce"
+      - "Eger tur Şiir ise: kısa dize yapisi, ritim/kafiye, imgeler (dize sonlarinda <br> kullanilmalidir)"
+      - "YASAK: 'X nedir, ne zaman ortaya cikti, kim icindir' tarzi tanim/aciklama cumleleri — bu BILGILENDIRICI, tur degil"
+      - "YASAK: 'Hikayeler eglence icin anlatilir', 'Masallar cocuklara ogut verir' gibi tur HAKKINDA bilgi — turun KENDISI olacak metin"
+      - "Tur acik kalmali fakat yakin bir turle yuzeysel benzerlik tasiyabilmeli"
+      - "Metinde en az bir yan ozellik celdirici uretimine malzeme vermeli"
+      - "Ogrenci hem ne anlatildigina hem nasil anlatildigina bakmali"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 2
+    style: "text_type_label"
+    correct_count: 1
+    kurallar:
+      - "★★★ KRITIK FORMAT ★★★"
+      - "Secenekler SADECE su 6 metin turunden secilebilir: Hikâye, Masal, Fabl, Anı, Günlük, Şiir."
+      - "4 secenek = 6 turden 4 tanesi. Geriye kalan 2 tur secenekler disinda kalir."
+      - "Her secenek TEK KELIME olarak yazilacak (veya en fazla 2 kelime): Hikâye / Masal / Fabl / Anı / Günlük / Şiir."
+      - "Ornek dogru format: A) Hikâye  B) Masal  C) Fabl  D) Anı"
+      - "Ornek dogru format: A) Günlük  B) Şiir  C) Hikâye  D) Fabl"
+      - "★★★ MUTLAK YASAKLAR ★★★"
+      - "YASAK: Bu 6 tur disinda hicbir kelime secenek olarak kullanilamaz."
+      - "YASAK: Roman, deneme, makale, mektup, haber, biyografi, otobiyografi, destan, efsane, tiyatro, mani, ninni, tekerleme, bilmece, atasozu — bunlar 4. sinif seviyesinde BU template'te YOK."
+      - "YASAK: Somut icerik ('Ayşe'nin hikayesi', 'Bir gece rüyası' gibi) — sadece tur adi yazilacak."
+      - "YASAK: Parantez, aciklama, ornek ('Hikâye (anı olarak da olabilir)' gibi)."
+      - "★★★"
+      - "Dogru secenek: metnin GERCEK turu."
+      - "3 yanlis secenek: diger 5 turden 3 tanesi."
+      - "Izinli secenekler (SADECE bunlar): Hikâye, Hikaye, Masal, Fabl, Anı, Ani, Günlük, Gunluk, Şiir, Siir. Turkce karakterli veya karaktersiz yazimi kabul."
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metnin türü aşağıdakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Aşağıdakilerden hangisi bu metnin türüdür?</b>"
+  # KULLANILDI: - "<b>Bu metin hangi türe girer?</b>"
+  - "<b>Bu yazının türü aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metin aşağıdaki türlerden hangisine örnektir?</b>"
+  # KULLANILDI: - "<b>Bu metin hangi türdedir?</b>"
+  - "<b>Bu parça hangi metin türüne örnektir?</b>"
+  - "<b>Bu yazı aşağıdaki metin türlerinden hangisidir?</b>"
+  - "<b>Metnin türü aşağıdakilerden hangisi olabilir?</b>"
+  - "<b>Bu metin için en uygun tür hangisidir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metnin gorunur bicimsel ve iceriksel ozelliklerini en dogru karsilayan metin turu"
+  kurallar:
+    - "Dogru secenek metnin acik tur ozelliklerini karsilamali"
+    - "Dogru cevap hem yapisal hem iceriksel ipuclariyla bulunabilmeli"
+    - "Dogru cevap ileri duzey edebi analiz gerektirmemeli"
+    - "Dogru cevap 4. sinif ogrencisinin metne bakarak ayirt edebilecegi aciklikta olmali"
+    - "Hikâye secilecekse olay, kisi, yer veya zaman unsurlari belirgin olmali"
+    - "Masal secilecekse olaganustu olay ya da varlik acikca gorunmeli"
+    - "Fabl secilecekse insan disi varliklar insanlar gibi konusup davranmali"
+    - "Ani secilecekse yasanmis bir olay sonradan anlatiliyor olmali"
+    - "Gunluk secilecekse gunu gunune yazilma ve icten anlatim hissedilmeli"
+    - "Siir secilecekse metin acik dize duzeninde verilmis olmali"
+    - "Dogru cevap metnin tam turunu temsil etmeli"
+    - "Dogru secenek baska turlerle karisabilecek yuzey benzerligine ragmen en dengeli secenek olmali"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI KURALLARI (ORTA)
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_genel_kurallar:
+  - "1x en yakin tur (zorunlu ve guclu)"
+  - "1x icerikce yakin ama bicimce yanlis tur"
+  - "1x yapica yakin ama amacca yanlis tur"
+  - "En az bir celdirici ilk bakista dogruya aday gibi gorunmeli"
+
+celdirici_yasaklar:
+  - "Butun celdiricilerin cok kolay elenmesi"
+
+beklenen_cozum:
+  - "Ogrenci metindeki tur ipuclarini birlikte degerlendirir"
+  - "Dogru secenek, metnin turunu en iyi kapsayan secenektir"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+use_shared_strategies: false
+
+yanlis_secenek_stratejileri:
+  strategy_pool:
+    - id: "hikaye_masal_karistirma"
+      tanim: "Gercekci olay anlatimi ile olaganustu olay anlatimini karistiran celdirici"
+
+    - id: "fabl_masal_karistirma"
+      tanim: "Konusan hayvanlar varsa her metni masal sanmaya yonelten celdirici"
+
+    - id: "ani_gunluk_karistirma"
+      tanim: "Gunu gunune yazilan ile sonradan anlatilan metni karistiran celdirici"
+
+    - id: "siiri_duz_yazi_sanma"
+      tanim: "Icerige bakip siiri baska bir duz yazi turuyle karistiran celdirici"
+
+    - id: "olaya_yakin_ama_amaca_yanlis"
+      tanim: "Olay var diye hikâye, ders var diye fabl secmeye yonelten celdirici"
+
+  secim_kurali:
+    - "Her soruda 3 yanlis secenek kullanilmalidir"
+    - "Yanlis secenekler hedef ture en yakin gorunen turlerden secilmelidir"
+    - "Orta duzeyde en az bir cok yakin tur bulunmalidir"
+    - "Gunluk hedef turse yanlislardan biri mutlaka Ani olmali"
+    - "Ani hedef turse yanlislardan biri mutlaka Gunluk olmali"
+    - "Fabl hedef turse yanlislardan biri mutlaka Masal olmali"
+    - "Masal hedef turse yanlislardan biri mutlaka Hikâye veya Fabl olmali"
+
+# ═══════════════════════════════════════════════════════════════
+# METIN TURU HAVUZU
+# ═══════════════════════════════════════════════════════════════
+
+metin_turu_havuzu:
+  hedef_turler:
+    - id: "hikaye"
+      etiket: "Hikâye"
+      temel_ipuclari:
+        - "Olmus veya olabilecek olaylar anlatilir."
+        - "Yer, zaman ve kisi unsurlari bulunur."
+        - "Olay akisi gercekci ve duzenlidir."
+
+    - id: "masal"
+      etiket: "Masal"
+      temel_ipuclari:
+        - "Gercekustu olaylar veya varliklar bulunur."
+        - "Yer ve zaman tam belli olmayabilir."
+        - "Oretici bir mesaj tasiyabilir."
+
+    - id: "fabl"
+      etiket: "Fabl"
+      temel_ipuclari:
+        - "Kahramanlar insan disi varliklardir."
+        - "Hayvanlar veya bitkiler insanlar gibi konusur ve davranir."
+        - "Ders verme amaci tasir."
+
+    - id: "ani"
+      etiket: "Anı"
+      temel_ipuclari:
+        - "Yazarin basindan gecmis bir olay anlatilir."
+        - "Olay bir sure sonra yaziya gecirilir."
+        - "Yasanmislik hissi vardir."
+
+    - id: "gunluk"
+      etiket: "Günlük"
+      temel_ipuclari:
+        - "Olaylar gunu gunune yazilir."
+        - "Yazilanlar icten ve samimidir."
+        - "Tarih bulunabilir."
+
+    - id: "siir"
+      etiket: "Şiir"
+      temel_ipuclari:
+        - "Dizeler halinde yazilir."
+        - "Duygu, dusunce ve hayal anlatimi olabilir."
+        - "Ahenkli ve duzenli bir yapi hissedilir."
+
+  kullanim_notu:
+    - "Her soruda 4 secenek kullanilir."
+    - "Hedef ture gore en yakin 3 yanlis tur secilmelidir."
+
+question_type_pairing_rules:
+  target_siir:
+    preferred_option_sets:
+      - ["Şiir", "Hikâye", "Masal", "Günlük"]
+      - ["Şiir", "Hikâye", "Anı", "Masal"]
+    text_rules:
+      - "Metin mutlaka dize duzeninde olmalidir."
+      - "Duz paragraf gorunumu kullanilmamalidir."
+
+  target_hikaye:
+    preferred_option_sets:
+      - ["Hikâye", "Masal", "Anı", "Günlük"]
+      - ["Hikâye", "Masal", "Fabl", "Anı"]
+    text_rules:
+      - "Metinde olay akisi bulunmalidir."
+      - "Gercekci bir anlatim baskin olmalidir."
+
+  target_masal:
+    preferred_option_sets:
+      - ["Masal", "Hikâye", "Fabl", "Şiir"]
+      - ["Masal", "Hikâye", "Anı", "Fabl"]
+    text_rules:
+      - "Metinde acik olaganustu unsur bulunmalidir."
+      - "Gercekci gundelik akis baskin olmamalidir."
+
+  target_fabl:
+    preferred_option_sets:
+      - ["Fabl", "Masal", "Hikâye", "Şiir"]
+      - ["Fabl", "Masal", "Anı", "Hikâye"]
+    text_rules:
+      - "Insan disi varliklar insanlar gibi davranmalidir."
+      - "Ders verme amaci hissedilmelidir."
+
+  target_ani:
+    preferred_option_sets:
+      - ["Anı", "Günlük", "Hikâye", "Masal"]
+      - ["Anı", "Günlük", "Hikâye", "Fabl"]
+    text_rules:
+      - "Yasanmis bir olay sonradan anlatilmalidir."
+      - "Gecmise donuk hatirlama hissi olmali"
+
+  target_gunluk:
+    preferred_option_sets:
+      - ["Günlük", "Anı", "Hikâye", "Şiir"]
+      - ["Günlük", "Anı", "Masal", "Hikâye"]
+    text_rules:
+      - "Gunu gunune yazilma hissi bulunmalidir."
+      - "Mumkunse tarih kullanilmalidir."
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siniflandirma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "4. sinifa uygun, gorselle desteklenebilir tek ve acik bir metin turu sec"
+
+    - step: 2
+      action: "Secilen ture uygun kisa metin olustur"
+      details:
+        - "Turun gorunur ozelliklerini acikca yerlestir"
+        - "4. sinif sozcuk dagarciginda kal"
+        - "Turu tekleyecek kadar net yaz"
+
+    - step: 3
+      action: "Metnin ana icerigiyle uyumlu gorsel tasarla"
+      details:
+        - "Gorsel turu desteklesin"
+        - "Gorsel sade ve tek sahneli olsun"
+        - "Gorsel cevabi tamamen ele vermesin"
+
+    - step: 4
+      action: "Dogru metin turu secenegini belirle"
+
+    - step: 5
+      action: "Hedef ture gore en yakin 3 yanlis turu sec"
+      details:
+        - "Yukaridaki option pairing rules kullanilmali"
+
+    - step: 6
+      action: "Soru kokunu listeden rastgele sec"
+
+    - step: 7
+      action: "Siklari A-B-C-D olarak karistir"
+
+# ═══════════════════════════════════════════════════════════════
+# VALIDATION
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  text:
+    - "Metin secilen turle acikca uyumlu mu?"
+    - "Metin 4. sinif duzeyinde acik, anlasilir ve yonetilebilir mi?"
+    - "Siir ise dize duzeni acik mi?"
+    - "Hikâye ise olay akisi var mi?"
+    - "Masal ise olaganustu unsur acik mi?"
+    - "Fabl ise insan disi kahramanlar insan gibi davraniyor mu?"
+    - "Ani ise yasanmis bir olayin sonradan anlatildigi belli mi?"
+    - "Gunluk ise gunu gunune yazilma ozelligi seziliyor mu?"
+    - "Metin tur bakimindan belirsiz degil mi?"
+
+  visual:
+    - "Gorsel zorunlu olarak var mi?"
+    - "Gorsel metnin ana icerigiyle uyumlu mu?"
+    - "Gorsel tek bakista anlasilir mi?"
+    - "Gorsel destekleyici ama yaniltici degil mi?"
+    - "Gorsel dekoratif kalmiyor mu?"
+
+  stem:
+    - "Soru koku metin turunu acikca soruyor mu?"
+    - "Soru koku ek beceri yuklemiyor mu?"
+
+  options:
+    - "Toplam 4 secenek var mi?"
+    - "Secenekler tur adi biciminde mi?"
+    - "Dogru secenek metnin turunu karsiliyor mu?"
+    - "Yanlis secenekler en yakin turlerden mi secilmis?"
+    - "Secenekler kendi arasinda paralel mi?"
+
+  difficulty:
+    - "Orta duzeyde celdiriciler dogruya yakin tur(ler) icermeli mi?"
+    - "Orta duzey 4. sinif sinirinda mi?"
+
+hard_fail_rules:
+  - "Secenek sayisi 4 degilse"
+  - "Gorsel yoksa"
+  - "Metin secilen turle acikca uyusmuyorsa"
+  - "Iki veya daha fazla secenek makul dogruysa"
+  - "Metin 4. sinif icin fazla soyut veya karmasiksa"
+  - "Soru tur ayirt etmek yerine ana fikir, mesaj veya yazar amaci sorusuna kayiyorsa"
+  - "Siir bicimsel olarak duz yazi gibi verilmisse"
+  - "Masalda olaganustu unsur yoksa"
+  - "Hikâyede olay akisi yoksa"
+  - "Fablda insan disi kahramanlar insan gibi davranmiyorsa"
+  - "Anida sonradan yazilma hissi yoksa"
+  - "Gunlukte gunu gunune yazilma ozelligi gorulmuyorsa"
+  - "Gorsel metinle uyumsuzsa"
+
+ornek_bicim_notlari:
+  - "Gercekci bir okul olayi anlatiliyorsa dogru secenek 'Hikâye' olabilir."
+  - "Tarih atilmis, icten ve gunu gunune yazilmis metinlerde dogru secenek 'Günlük' olabilir."
+  - "Yazarin yillar once yasadigi bir olayi anlattigi metinlerde dogru secenek 'Anı' olabilir."
+  - "Konusan hayvanlar ve ders verme amaci varsa dogru secenek 'Fabl' olabilir."
+  - "Olaganustu olaylar ve belirsiz zaman-yer varsa dogru secenek 'Masal' olabilir."
+  - "Dizeler halinde ve duygu agirlikli yazilmis metinlerde dogru secenek 'Şiir' olabilir."
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"
+
+output_contract:
+  required_fields:
+    - "text"
+    - "text_variant"
+    - "visual_description"
+    - "stem"
+    - "options"
+    - "answer"
+    - "difficulty"
+    - "target_type"
+    - "topic"
+  answer_format:
+    - "answer yalnizca A/B/C/D olarak verilebilir"
+    - "difficulty yalnizca Kolay / Orta / Zor olabilir"
+    - "text_variant yalnizca siir / duz_yazi olabilir"

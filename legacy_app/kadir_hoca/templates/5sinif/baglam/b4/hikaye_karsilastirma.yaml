@@ -1,0 +1,114 @@
+meta:
+  id: hikaye_karsilastirma
+  ad: Hikâye Karşılaştırma
+  sinif_seviyesi: 5
+  aciklama: Bir hikâye verilir, kahramanlar karşılaştırılır — ulaşılamaz yargı ve karakter tavrı çıkarımı
+  kaynak: kaynak-soru-kokleri.md
+  frequency: Medium
+context:
+  type: hikaye_karsilastirma
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 3
+  generation:
+    word_count_min: 100
+    word_count_max: 180
+    structure:
+    - En az 2 ana karakteri olan bir hikâye/senaryo oluştur
+    - Karakterler farklı yaklaşımlara, değerlere veya tepkilere sahip olmalı
+    - Hikâyede karakterlerin kararları ve eylemleri açıkça anlatılmalı
+    - Karakterler arasında karşılaştırma yapılabilecek net farklılıklar olmalı
+    - Bir karakterin belirli bir durumda ne diyeceği/yapacağı tahmin edilebilir olmalı
+    - Hikâyede somut olaylar üzerinden soyut değerler/tutumlar yansıtılmalı
+    kurallar:
+    - 5. sınıf seviyesinde, günlük hayattan veya okul ortamından bir hikâye
+    - Öyküleyici anlatım kullanılmalı
+    - Karakterlerin isimleri Türkçe olmalı
+    - Her karakterin belirgin bir kişilik özelliği/tutumu olmalı
+    - Hikâyede çatışma veya farklı bakış açıları bulunmalı
+    - Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)
+  questions:
+  - slot: 1
+    type: ulasilamaz_yargi
+    soru_kokleri:
+    - <b>Kahramanlar karşılaştırıldığında aşağıdaki yargılardan hangisine <u>ulaşılamaz</u>?</b>
+    - <b>Bu hikâyeden hareketle kahramanlarla ilgili aşağıdakilerden hangisi <u>söylenemez</u>?</b>
+    - <b>...Karakter...nin buldugu bu bilgilerin ortak noktasi asagidakilerden hangisidir?</b>
+    options_style: complete_sentence
+    options_format_rule: 'Seceneklerde birden fazla karakter hakkinda yargi veriliyorsa her karakterin ozelligi AYRI SATIRDA olmali. Format: Karakter1 → ozellik<br>Karakter2 → ozellik'
+    word_count_min: 8
+    word_count_max: 25
+    beceri:
+      katman: KB3
+      bilesenler:
+      - cikarim_yapma
+      - degerlendirme
+      surec_bileseni: problemi_yapilandirma
+  - slot: 2
+    type: karakter_tavri
+    soru_kokleri:
+    - <b>…Karakter 1… "…Cümle…" deseydi …Karakter 2…'nin tavrı aşağıdakilerden hangisi olabilirdi?</b>
+    - <b>…Karakter 1… farklı bir durum karşısında …Karakter 2…'ye yardım isteseydi, …Karakter 2…'nin tepkisi ne olurdu?</b>
+    options_style: complete_sentence
+    word_count_min: 8
+    word_count_max: 25
+    beceri:
+      katman: KB3
+      bilesenler:
+      - cikarim_yapma
+      - yorumlama
+      surec_bileseni: problemi_yapilandirma
+header_template: 1-2. soruları aşağıdaki hikâyeye göre cevaplayınız.
+format:
+  type: llm_generated_html
+  description: Hikâye karşılaştırması üzerinden ulaşılamaz yargı ve karakter tavrı soruları
+  paragraph:
+    required: true
+    word_count_min: 100
+    word_count_max: 180
+    sentence_count_min: 5
+    sentence_count_max: 10
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 8
+    word_count_max: 25
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Hikâyedeki karakter karşılaştırmasından çıkarılamayacak yargı veya beklenen tavır
+  kurallar:
+  - 'KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI'
+  - Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI
+  - Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil
+  - 'YASAK: Tablodaki değeri aynen şıkka yazmak (örn: ''yalıtımı azdır'' tabloda yazıyorsa şıkta aynen yazmamalı)'
+  - Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli
+  - Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı
+  - Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı
+  - Ulaşılamaz yargı sorusunda doğru cevap metinle ÇELIŞEN veya desteklenmeyen yargı olmalı
+  - Karakter tavrı sorusunda doğru cevap karakterin kişilik özelliğiyle tutarlı tepki olmalı
+  - Çeldiriciler metinden çıkarılabilir yargılar veya mantıklı ama yanlış tahminler olmalı
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: ''teleskop'' → ''mercekli araç'' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: KARAKTER_KARISTIRMA
+    aciklama: Bir karakterin özelliğini diğerine yükleyerek yanlış yargı oluşturma
+    ornek: Mehmet'in özelliğini Ayşe'ye atfeden bir yargı sunma
+  - ad: ASIRI_GENELLEME
+    aciklama: Metindeki tek bir olaydan çok geniş bir genelleme yapma
+    ornek: Bir davranıştan tüm kişilik hakkında kesin yargıya varma
+  - ad: MANTIKLI_AMA_DESTEKSIZ
+    aciklama: Mantıklı görünen ama metinde kanıtı olmayan çıkarım sunma
+    ornek: Karakterin geçmişi hakkında metinde olmayan bir varsayım yapma
+use_shared_strategies: false

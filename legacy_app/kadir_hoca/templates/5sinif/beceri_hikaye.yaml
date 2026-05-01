@@ -1,0 +1,290 @@
+# templates/beceri_hikaye.yaml
+# Kaynak: MEB Beceri Temelli Soru Bankasi - Hikaye
+#
+# BECERI TEMELLI HIKAYE FORMATI
+# Hikaye metni verilir, ogrenci cikarimsal dusunme sorusunu cevaplar
+#
+# MANTIK: 1 secenekte dogru cevap, 4 secenekte yanlis cevaplar
+# Secenekler TAM CUMLE formatindadir (3-25 sozcuk)
+
+meta:
+  id: "beceri_hikaye"
+  ad: "Beceri Temelli - Hikaye"
+  sinif_seviyesi: 5
+  aciklama: "Hikaye metinleri uzerinden beceri temelli sorular"
+  kaynak: "MEB Beceri Temelli Soru Bankasi"
+  frequency: "~12% of beceri temelli questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Hikaye baglami + soru koku + 5 tam cumle secenek (beceri temelli)"
+
+  paragraph:
+    required: true
+    word_count_min: 100
+    word_count_max: 180
+    sentence_count_min: 5
+    sentence_count_max: 10
+    stil: "hikaye"
+    kurallar:
+      - "Kisa bir anlatimsal metin olustur"
+      - "Baslangic, gelisme ve sonuc yapisi olsun"
+      - "Karakterlerin duygu ve dusunceleri yansitilsin"
+      - "Neden-sonuc iliskisi olsun"
+      - "5. sinif seviyesine uygun tema ve dil kullan"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 5
+    labels: ["A", "B", "C", "D", "E"]
+    word_count_min: 3
+    word_count_max: 25
+    style: "complete_sentence"
+    correct_type: "matches"
+    correct_count: 1
+
+  questions_per_context: 2
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ALANLARI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  context_type: "HIKAYE"
+  context_label: "Hikaye"
+  skill_level: "KB2"
+  process_component: "Anlatimsal metinde karakter, olay ve duygu analizi ile cikarim yapma"
+  skill_areas:
+    - "anlama"
+    - "cikarimlama"
+    - "degerlendirme"
+    - "yorumlama"
+    - "neden_sonuc"
+    - "problem_cozme"
+  answer_key_explanation: true
+  question_patterns:
+    - "Hikayenin ana dusuncesi nedir?"
+    - "Karakterin davranisinin nedeni nedir?"
+    - "Hikayeden cikarilabilecek sonuc nedir?"
+    - "Hikayede hangi duygu on plandadir?"
+    - "Olaylarin neden-sonuc iliskisi nasil kurulmustur?"
+    - "Olay-yer-zaman-sahis kadrosu etkilesimi nasil yansitilmistir?"
+    - "Karakterin etkinlige katilmama sebebi nedir?"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # Anlam / Ana Fikir
+  - "<b>Bu hikâyenin vermek istediği mesaj aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu hikâyenin ana düşüncesi aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu hikâyeye göre aşağıdakilerden hangisi doğrudur?</b>"
+  - "<b>Hikâyeden aşağıdaki <u>çıkarımlardan hangisi yapılamaz</u>?</b>"
+  - "<b>Bu hikâyeye göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  # Anlatım / Hikâye Ögeleri
+  - "<b>Hikâyedeki karakterin davranışının nedeni aşağıdakilerden hangisidir?</b>"
+  - "<b>Hikâyenin devamında aşağıdakilerden hangisinin olması beklenir?</b>"
+  - "<b>Hikâyedeki olayların oluş sırası aşağıdakilerden hangisinde doğru verilmiştir?</b>"
+  - "<b>Hikâyedeki ana karakterin temel özelliği aşağıdakilerden hangisidir?</b>"
+  # Duygu / Karakter / Çıkarım
+  - "<b>Hikâyede hâkim olan duygu aşağıdakilerden hangisidir?</b>"
+  - "<b>Hikâyedeki karakterin yaşadığı değişim aşağıdakilerden hangisidir?</b>"
+  - "<b>Hikâyeden çıkarılabilecek en kapsamlı sonuç aşağıdakilerden hangisidir?</b>"
+  - "<b>Hikâyedeki olayların nedeni aşağıdakilerden hangisidir?</b>"
+  # Olay-Yer-Zaman-Şahıs Etkileşimi (PDF kaynak)
+  - "<b>Aşağıdakilerden hangisi okuduğunuz hikâyedeki olay, yer, zaman ve şahıs kadrosu arasındaki etkileşimi doğru biçimde yansıtmaktadır?</b>"
+  - "<b>Metinde belirtilen andan itibaren olayın gelişimi kahramanlar arasındaki ilişkiyi nasıl etkilemiştir?</b>"
+  # Katılmama/Yapamama Nedeni (PDF kaynak)
+  - "<b>Metne göre ana karakterin etkinliğe katılmama sebebi aşağıdakilerden hangisidir?</b>"
+  # Yüklenen Anlam / Ulaşılabilirlik (PDF kaynak)
+  - "<b>Ana karakterin nesneye veya olaya yüklediği anlam aşağıdakilerden hangisiyle ilişkilidir?</b>"
+  - "<b>Okuduğunuz metinden hareketle aşağıdakilerden hangisine ulaşılabilir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Hikayenin icerigi ve mesajiyla uyumlu, cikarimsal dusunme gerektiren cevap"
+  kurallar:
+    - "Hikaye icerigiyle desteklenmeli"
+    - "Cikarim yapma becerisi gerektirmeli"
+    - "Yuzeysel okuma ile bulunamaz olmali"
+    - "Tam cumle formatinda olmali (3-25 sozcuk)"
+    - "Baglam olmadan cevaplanamaz olmali"
+    - "Ust duzey dusunme becerisi gerektirmeli"
+    - "Bilissel surec bilesenini hedeflemeli"
+  ornekler:
+    - hikaye: "Kucuk Emre, her gun bahcedeki cicekleri sulardi. Bir gun sulamayi unuttu ve cicekler solmaya basladi. Emre cicekleri gorunce cok uzuldu ve o gunden sonra hic unutmadi."
+      dogru: "Sorumluluk sahibi olmak ve gorevleri aksatmamak onemlidir"
+      neden: "Hikaye sorumluluk bilincinin onemini vurgular"
+    - hikaye: "Elif sinava calismak yerine televizyon izledi. Sinavda beklediginden kotu sonuc aldi. Arkadaslari ise calisarak basarili oldu. Elif pismanlık duydu."
+      dogru: "Basari icin duzenli calisma gerektigi ve ihmalin sonuclari oldugu mesajı verilmektedir"
+      neden: "Hikaye calismama-basarisizlik ve calisma-basari iliskisini gosterir"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM hikaye iceriğine gore en uygun 4 stratejiyi secer
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select theme with a clear message/lesson"
+      details: "Net bir mesaj veren, cikarim yapmaya uygun bir hikaye temasi sec"
+
+    - step: 2
+      action: "Generate story text (100-180 words) with narrative structure"
+      details: |
+        Hikaye metninde:
+        - Baslangic, gelisme ve sonuc yapisi olmali
+        - Karakterlerin duygu ve dusunceleri yansitilmali
+        - Neden-sonuc iliskisi olmali
+        - 5. sinif seviyesine uygun olmali
+
+    - step: 3
+      action: "Create correct answer as complete sentence"
+      details: |
+        Dogru cevap:
+        - Hikayenin mesajini veya cikarimini yansitmali
+        - Tam cumle formatinda olmali (3-25 sozcuk)
+        - Yuzeysel okuma ile degil cikarim ile ulasilabilir olmali
+
+    - step: 4
+      action: "Create 4 wrong answers using strategies"
+      details: |
+        Her yanlis secenek icin farkli strateji kullan:
+        - 1x hikayedeki bir detaydan turetilmis ama ana mesaj olmayan
+        - 1x karakterin davranisini yanlis yorumlayan
+        - 1x temayla iliskili ama hikayede desteklenmeyen
+        - 1x mantikli gorunen ama mesaji carpitan
+        Tum secenekler ayni formatta olmali (tam cumle, 3-25 sozcuk)
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D-E seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - konu: "Cicek sulama hikayesi"
+    dogru_cevap: "A"
+    secenekler:
+      A: "Sorumluluk sahibi olmak ve gorevleri aksatmamak onemlidir"
+      B: "Cicek yetistirmek zor bir istir"
+      C: "Emre bahcecilikten hoslanmamaktadir"
+      D: "Cicekler hic sulanmasa da yasayabilir"
+      E: "Emre cicekleri bilerek sulamamistir"
+    dogru_cevap_icerigi: "Sorumluluk sahibi olmak ve gorevleri aksatmamak onemlidir"
+    neden: "Hikaye sorumluluk bilincinin onemini vurgular"
+
+  - konu: "Sinav calisma hikayesi"
+    dogru_cevap: "C"
+    secenekler:
+      A: "Televizyon izlemek her zaman zararlidir"
+      B: "Elif'in arkadaslari daha zekidir"
+      C: "Basari icin duzenli calisma gerektigi ve ihmalin sonuclari oldugu mesajı verilmektedir"
+      D: "Sinavlar ogrenciler icin gereksizdir"
+      E: "Elif sinavi gecmis ama mutlu olmamistir"
+    dogru_cevap_icerigi: "Basari icin duzenli calisma gerektigi ve ihmalin sonuclari oldugu mesajı verilmektedir"
+    neden: "Hikaye calismama-basarisizlik iliskisini gosterir"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  # Asama 0: Kimlik ve Olcme Niyeti
+  identity:
+    - "Soru bir beceriyi mi olcuyor, bilgi hatirlamayi mi?"
+    - "Hedef beceri seviyesi uygun mu?"
+    - "Surec bileseni dogru hedeflenmis mi?"
+
+  # Asama 1: Baglam Secimi
+  context:
+    - "Baglam olmadan soru cozulebilir mi? (Hayir olmali)"
+    - "Baglam fonksiyonel mi? (Dekoratif degil)"
+    - "Baglam cevabi dogrudan veriyor mu? (Vermemeli)"
+    - "Baglam otantik mi? (Gercek hayattan)"
+    - "Kelime sayisi 100-180 arasinda mi?"
+    - "Baslangic, gelisme ve sonuc yapisi var mi?"
+    - "Karakterlerin duygu ve dusunceleri yansitilmis mi?"
+    - "Neden-sonuc iliskisi var mi?"
+
+  # Asama 2: Soru ve Secenekler
+  question:
+    - "Soru koku net ve anlasilir mi?"
+    - "Cift olumsuz var mi? (Olmamali)"
+    - "Tek dogru cevap var mi?"
+
+  options:
+    - "Celdiriciler belirli bilissel hatalari temsil ediyor mu?"
+    - "Eleme yoluyla cevaplanabilir mi? (Olmamali)"
+    - "Format farkliligi ile dogru cevap belli oluyor mu? (Olmamali)"
+    - "Tum secenekler benzer uzunlukta mi?"
+    - "5 secenek var mi (A-B-C-D-E)?"
+
+  # Asama 3: Etik
+  ethics:
+    - "Cinsiyet/etnik onyargi var mi? (Olmamali)"
+    - "Yas grubuna uygun mu?"
+
+  # Asama 4: Dil
+  language:
+    - "Turkce dil bilgisi dogru mu?"
+    - "Sinif seviyesine uygun mu?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+
+  generation_rules:
+    - "Hikaye formatina uygun ahlaki ve ogretici konulari tercih et"
+    - "Neden-sonuc iliskisi kurulabilecek konular ideal"
+    - "Cikarim yapmaya uygun, derin mesajli konulari sec"

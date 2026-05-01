@@ -1,0 +1,192 @@
+# templates/bolum4/paragraf_turu_standard.yaml
+# Bolum 4.3 - Ozel Bolum: Paragraf Turu Belirleme
+#
+# STANDART PARAGRAF TURU FORMATI
+# Paragraf verilir, ogrenci hangi ture ait oldugunu belirler
+# Secenekler kavram adi formatinda (1-3 kelime)
+
+meta:
+  id: "paragraf_turu_standard"
+  ad: "Paragraf Türü Belirleme (Standart)"
+  sinif_seviyesi: 5
+  aciklama: "Verilen paragrafın hangi türe ait olduğunu belirleme"
+  frequency: "High (~50% of paragraph type questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Paragraf + soru kökü + 4 kavramsal seçenek (tür adları)"
+
+  paragraph:
+    required: true
+    word_count_min: 50
+    word_count_max: 90
+    sentence_count_min: 4
+    sentence_count_max: 6
+    stil: "bilgilendirici veya oykuleyici"
+    kurallar:
+      - "Belirgin bir paragraf türüne ait metin oluştur"
+      - "Paragraf türleri: Betimleme, Öyküleme, Tanıtma, Sıralı-Kronolojik Metin"
+      - "Türe ait belirteçler metinde açıkça bulunmalı"
+      - "Ama paragraf türü doğrudan adıyla anılmamalı"
+      - "Betimleme: Duyu organlarıyla algılanan detaylar ('renkli', 'kokulu', 'serin')"
+      - "Öyküleme: Olay anlatımı, karakter, zaman akışı"
+      - "Tanıtma: Bir kavramın tanımlandığı veya bir kişinin ya da nesnenin tanıtıldığı paragraflara tanıtma paragrafı denir"
+      - "Sıralı-Kronolojik Metin: Bir olayın kronolojik akışı içinde, bir uygulamanın işlem basamakları hâlinde sunulduğu metinlere sıralı-kronolojik metin denir. Genellikle bir kişinin yaşam öyküsünün anlatıldığı, deneylerin aşamalarının anlatıldığı, bir yemek tarifinin verildiği metinlerde kullanılır."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 3
+    style: "concept"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metin aşağıdaki paragraf türlerinden hangisine aittir?</b>"
+  - "<b>Bu paragrafın yazılış amacı düşünüldüğünde hangi paragraf türüne örnektir?</b>"
+  - "<b>Metnin anlatım özellikleri dikkate alındığında hangi paragraf türünden yararlanılmıştır?</b>"
+  # Yazılış amacı ve tür tespiti varyasyonları (ARI Paragraf 2025 kaynak)
+  - "<b>Bu metnin yazılış amacı aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu paragrafın türü ile ilgili aşağıdakilerden hangisi söylenebilir?</b>"
+  - "<b>Buna göre aşağıdaki metinlerden hangisi öyküleyici bir paragraftır?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Paragrafın ait olduğu tür adı"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Paragraftaki baskın tür doğru belirlenmiş olmalı"
+    - "1-3 kelime kavram adı formatında olmalı"
+    - "Türe ait belirteçler paragrafta açıkça bulunmalı"
+    - "Paragraf türleri: Betimleme, Öyküleme, Tanıtma, Sıralı-Kronolojik Metin"
+  ornekler:
+    - paragraf: "Sevgi, insanları bir arada tutan en önemli bağlardan biridir. Sevginin olmadığı yerde öfke ve düşmanlık vardır. Varlığıyla insana huzur veren sevgi, insan ruhunun en önemli besin kaynağıdır. Acıkan bir canlının beslenerek yaşamını sağlıklı bir şekilde devam ettirmesi gibi ruhun da sağlıklı olabilmesini sağlayan en önemli unsur sevgidir"
+      dogru: "Tanıtma"
+    - paragraf: "Güneş batarken gökyüzü kızıla boyandı. Denizden esen serin rüzgâr yüzümüzü okşuyordu. Kuşların cıvıltıları arasında çiçeklerin mis gibi kokusu burnumuza geliyordu."
+      dogru: "Betimleme"
+      neden: "Duyusal detaylar (görme, dokunma, işitme, koklama) kullanılmış"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI (CUSTOM — paragraf turu icin ozel)
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "TUR_BENZERLIK_TUZAGI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Doğru türe en çok benzeyen paragraf türünün öğrenciye yakın görünmesini sağlama."
+    nasil_olusturulur: |
+      Paragraf ana türünü korurken, ona en yakın başka türün yüzeysel belirtilerinden sınırlı biçimde yararlan.
+      Öğrenci türler arasındaki farkı iyi bilmezse karıştırabilir.
+      Örnek tür bazlı uygulamalar:
+      - Betimleme doğruysa: Hafif bir olay akışı eklenebilir ama olay gelişimi baskın olmamalı. Olası tuzak: Öyküleme
+      - Öyküleme doğruysa: Mekân ya da kişi tasviri yapılabilir ama asıl unsur olay ilerleyişi olmalı. Olası tuzak: Betimleme
+      - Tanıtma doğruysa: Konu örneklerle anlatılabilir ama amaç bir kavramı/kişiyi/nesneyi tanıtmak olmalı. Olası tuzak: Sıralı-Kronolojik Metin veya zayıf biçimde Öyküleme
+      - Sıralı-Kronolojik Metin doğruysa: Aşamalar net verilir ama birkaç küçük açıklama cümlesi bulunabilir. Olası tuzak: Tanıtma
+    kategori: "semantic"
+
+  - ad: "IKINCIL_BELIRTEC_YANILTMASI"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Paragrafta ikinci planda bulunan başka bir türe ait bazı işaretlerin yer alması."
+    nasil_olusturulur: |
+      Metnin baskın türünü bozmayacak ölçüde, başka bir türe ait 1-2 belirteç serpiştir.
+      Örnek mantıklar:
+      - Betimleme paragrafında: "sabah", "sonra", "bir süre sonra" gibi zaman ifadesi bulunabilir; fakat olay zinciri oluşmamalı.
+      - Öyküleme paragrafında: "serin", "parlak", "sessiz" gibi betimleyici sözcükler olabilir; fakat bunlar olayın önüne geçmemeli.
+      - Tanıtma paragrafında: "ilk olarak, ardından" gibi sıralama ifadesi geçebilir; fakat bunlar işlem basamağı değil, açıklama düzeni olmalı.
+      - Sıralı-Kronolojik metinde: Araç, kişi ya da nesne hakkında kısa bilgi verilebilir; fakat metin tanım vermeye değil adım göstermeye dayanmalı.
+    kategori: "content"
+
+  - ad: "BASKIN_AMAC_KARISTIRMASI"
+    bilisssel_hata_kategorisi: "asiri_genelleme"
+    aciklama: "Öğrencinin metindeki yüzey unsurlarıyla yazılış amacını karıştırmasını hedefler."
+    nasil_olusturulur: |
+      Metinde birden fazla tür işareti bulunabilir; ancak doğru cevap, "metnin asıl amacı" üzerinden belirlenir. Öğrenci "metinde ne var?" sorusuyla değil, "metin neden yazılmış?" sorusuyla düşünmeye zorlanır.
+      Örnek ayrımlar:
+      - Güzel sıfatlar var diye metin hemen Betimleme olmaz.
+      - Bir kişi geçti diye metin hemen Öyküleme olmaz.
+      - Bilgi veriliyor diye her metin Tanıtma olmaz.
+      - "Önce-sonra" var diye her metin Sıralı-Kronolojik olmaz.
+    kategori: "scope"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ETIKETI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siniflandirma", "analiz"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Paragraf türü seç"
+      details: |
+        4 türden birini seç:
+        - Betimleme: Bir varlığı, mekânı, kişiyi ya da anı duyu ayrıntılarıyla canlandırmak
+        - Öyküleme: Bir olayın gelişimini aktarmak
+        - Tanıtma: Bir kavramı, kişiyi ya da nesneyi tanıtmak / açıklamak
+        - Sıralı-Kronolojik Metin: Bir süreci, aşamayı, yaşam akışını veya işlem basamaklarını sırayla vermek
+
+    - step: 2
+      action: "Türe uygun paragraf yaz (50-90 kelime)"
+      details: |
+        - Seçilen türün belirteçleri metinde açıkça bulunmalı
+        - Tür doğrudan adıyla anılmamalı
+        - 4-6 cümle, akıcı ve tutarlı
+
+    - step: 3
+      action: "Doğru cevap = tür adı (1-3 kelime)"
+      details: "Paragrafın ait olduğu tür"
+
+    - step: 4
+      action: "3 çeldirici tür adı oluştur"
+      details: |
+        - Benzer ama farklı türler
+        - Her biri 1-3 kelime kavram adı
+
+    - step: 5
+      action: "Seçenekleri rastgele sırala"
+      details: "A-B-C-D seçeneklerini rastgele sırala"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayısı 50-90 arasında mı?"
+    - "Belirgin bir paragraf türüne ait mi?"
+    - "Türe ait belirteçler açıkça var mı?"
+    - "Tür doğrudan adıyla anılmamış mı?"
+
+  correct_answer:
+    - "1-3 kelime kavram adı mı?"
+    - "Paragraftaki baskın tür doğru belirlenmiş mi?"
+
+  distractors:
+    - "Her çeldirici farklı bir paragraf türü mü?"
+    - "Çeldiriciler 1-3 kelime kavram adı mı?"
+    - "Tüm seçenekler aynı gramer yapıda mı?"

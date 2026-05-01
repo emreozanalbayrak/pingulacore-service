@@ -1,0 +1,133 @@
+# Kaynak: paragraf_siralama_akis_bozan_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.zor
+# 4. sinif paragraf siralama akis bozan cumle — zor duzey
+
+meta:
+  id: "paragraf_siralama_akis_bozan_sinif4_zor"
+  ad: "Paragraf Sıralama (Akışı Bozan Cümle) (Zor)"
+  sinif_seviyesi: 4
+  aciklama: "Zor duzey — numaralı cümlelerden akışı bozan cümleyi tespit etme"
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Numaralı cümleler + soru kökü + 4 seçenek (zor)"
+
+  paragraph:
+    required: true
+    word_count_min: 77
+    word_count_max: 90
+    background_color: "#fce8e8"
+    sentence_count_min: 4
+    sentence_count_max: 4
+    numbered_sentences: true
+    stil: "bilgilendirici"
+    kurallar:
+      - "4 cümle üret, Arap rakamlarıyla numarala: (1), (2), (3), (4)"
+      - "3 cümle aynı konu hakkında tutarlı ve doğal bir anlatım akışı oluştursun"
+      - "1 cümle aynı konuyla ilgili olmalı ancak paragrafın anlatım akışına uymamalı"
+      - "★★★ KRITIK: Akışı bozan cümlenin konumunu RASTGELE belirle — (1), (2), (3) veya (4) olabilir. HER ZAMAN 3. cümleye koyma! Üretimlerde dağılım dengeli olmalı."
+      - "Akışı bozan cümle konu dışı olmamalı; yalnızca paragrafın yönü, amacı, sırası veya işleviyle uyumsuz olmalı"
+      - "3 uyumlu cümle arasındaki bağ daha ince ve daha sıkı kurulmalıdır"
+      - "Akışı bozan cümle tema alanında oldukça uyumlu görünmeli; sapma ancak paragrafın yönü dikkatle incelenerek anlaşılmalı"
+      - "Doğru cevap ancak anlatım akışı dikkatle çözümlenerek bulunabilmelidir"
+      - "Her cümle 10-22 kelime arasında olmalı"
+      - "Paragraf TEK bir metin bloğu olarak yazılmalı"
+      - "★★★ SADECE ARAP RAKAMI (1, 2, 3, 4) KULLAN — Roma rakamı (I, II, III, IV) KESINLIKLE KULLANMA ★★★"
+      - "Seçeneklerde SADECE Arap rakamı verilmeli — cümle metni YAZILMAMALI"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+    kurallar:
+      - "Soru kökünde SADECE tek bir soru cümlesi olmalı"
+      - "YASAK: Paragrafı herhangi bir formatta tekrar yazmak"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    style: "short_phrase"
+    word_count_min: 1
+    word_count_max: 5
+    correct_type: "does_not_belong"
+    correct_count: 1
+    kurallar:
+      - "Seçenekler SADECE Arap rakamından oluşmalı: A) 1, B) 2, C) 3, D) 4"
+      - "YASAK: Seçeneklerde cümle metni yazmak"
+      - "★★★ YASAK: Roma rakamı (I, II, III, IV) KESINLIKLE kullanmak — SADECE Arap rakamı"
+      - "Paragraftaki 4 numaralı cümlenin her biri birer seçenek olarak Arap rakamıyla verilmeli"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Yukarıdaki cümlelerden hangisi metnin anlam akışını <u>bozmaktadır</u>?</b>"
+  # KULLANILDI: - "<b>Yukarıdaki cümlelerden hangisi konunun farklı yönünden <u>bahsetmektedir</u>?</b>"
+  # KULLANILDI: - "<b>Bu cümlelerden hangisi metnin bütünlüğünü <u>bozmaktadır</u>?</b>"
+  # KULLANILDI: - "<b>Numaralanmış cümlelerden hangisi paragrafın akışını bozmaktadır?</b>"
+  # KULLANILDI: - "<b>Bu metinden numaralanmış cümlelerden hangisi çıkarılırsa metnin anlam bütünlüğü sağlanmış olur?</b>"
+  - "<b>Bu metnin anlamlı bir bütün oluşturması için numaralanmış cümlelerden hangisi metinden çıkarılmalıdır?</b>"
+  # KULLANILDI: - "<b>Bu metinde numaralanmış cümlelerden hangisinde konunun farklı bir yönünden bahsedilmiştir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Paragrafta anlatım akışını bozan cümle — konu dışı olmayan ama paragrafın yönü, amacı, sırası veya işleviyle uyumsuz olan cümledir."
+  akisi_bozan_cumle_olcutleri:
+    - "Cümle paragrafın ana konusuyla aynı tema alanında olmalı"
+    - "Cümle konu dışı, absürt veya bariz biçimde alakasız olmamalı"
+    - "Sapma ince olmalı; tema alanında oldukça uyumlu görünmeli"
+    - "Cümle çıkarıldığında paragraf daha akıcı ve tutarlı hâle gelmeli"
+    - "Doğru cevap ancak anlatım akışı dikkatle çözümlenerek bulunabilmeli"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_genel_kurallar:
+  - "Akışa uygun 3 cümle, paragrafın ana yönünü sürdürmeli ve birlikte okunduğunda tutarlı bir anlatım oluşturmalı"
+  - "Akışı bozan cümle konu dışı görünmemeli; ilk bakışta doğru görünebilmelidir"
+  - "Çeldirici cümle çıkarıldığında paragrafın akışı belirgin biçimde güçlenmelidir"
+  - "Öğrenci doğru cevabı bariz konu dışılık üzerinden değil, anlatım akışını inceleyerek bulmalıdır"
+
+celdirici_stratejileri:
+  - ad: "GUCLU_YAKIN_CELDIRICILER"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Celdiriciler güçlü ve birbirine yakın görünen — güçlü akış tuzağı"
+    nasil_olusturulur: |
+      Akışı bozan cümle tema alanında oldukça uyumlu görünmeli; sapma paragrafın yönü veya işlevi üzerinden anlaşılmalı.
+      Celdiriciler güçlü ve birbirine yakın görünmeli.
+      Zor seviyede paragraf üst sınıra yakın uzunlukta kullan.
+    kategori: "semantic"
+
+  - ad: "YON_ISLEVI_SAPMA"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Yalnızca paragrafın yönü veya işlevi üzerinden anlaşılabilen sapma"
+    nasil_olusturulur: |
+      3 uyumlu cümle arasındaki bağ daha ince ve sıkı kurulmalı.
+      Akışı bozan cümle yalnızca paragrafın yönü veya işlevi değerlendirilerek ayırt edilebilmeli.
+      Zor seviyede öğrenci derin anlam bağlantısı analizi yapmalıdır.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siralama", "degerlendirme"]
+  surec_bileseni: "metin_yapisini_analiz_etme"
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

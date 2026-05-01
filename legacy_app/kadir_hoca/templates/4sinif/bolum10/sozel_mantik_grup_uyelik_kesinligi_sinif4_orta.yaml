@@ -1,0 +1,176 @@
+# Kaynak: sozel_mantik_grup_uyelik_kesinligi_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.orta
+# 4. sinif sözel mantık grup üyelik kesinliği sorusu — orta duzey
+
+meta:
+  id: "sozel_mantik_grup_uyelik_kesinligi_sinif4_orta"
+  ad: "Sözel Mantık ve Muhakeme - Grup Üyelik Kesinliği Sorusu (Orta)"
+  sinif_seviyesi: 4
+  aciklama: "Orta duzey — 5-6 kişi, 2-3 grup, 4 koşul, en az 2 dolaylı çıkarım, en az 1 aktif kapasite kısıtı."
+  frequency: "High"
+
+grup_uyelik_senaryolari:
+  - ad: "uzay_istasyonu_modul_dagilimi"
+    aciklama: "Astronotların uzay istasyonundaki farklı görev modüllerine dağıtılması"
+    ornek_setup: "Bir uzay istasyonunda görevli altı astronot; Keşif, Bakım ve Haberleşme modüllerinden birinde görevlendirilmiştir."
+
+  - ad: "arkeolojik_kazi_alanlari"
+    aciklama: "Arkeologların antik kentteki farklı kazı bölgelerine dağıtılması"
+    ornek_setup: "Antik kent kazısında çalışan beş arkeolog; Tapınak, Saray ve Mezarlık bölgelerinden birine gönderilmiştir."
+
+  - ad: "denizalti_arastirma_zonlari"
+    aciklama: "Dalgıçların batık gemideki farklı araştırma alanlarına ayrılması"
+    ornek_setup: "Bir batık gemiyi inceleyen yedi dalgıç; Güverte, Makine Dairesi ve Kaptan Köşkü alanlarından yalnızca birinde görev almıştır."
+
+  - ad: "film_seti_cekim_mekanlari"
+    aciklama: "Oyuncuların gün içindeki farklı çekim mekanlarına dağıtılması"
+    ornek_setup: "Bir filmin oyuncu kadrosundaki altı kişi; Stüdyo, Orman ve Şehir Merkezi setlerinden birine gitmiştir."
+
+  - ad: "robotik_fabrika_hatlari"
+    aciklama: "Mühendislerin veya robotların fabrikadaki farklı üretim hatlarına atanması"
+    ornek_setup: "Fabrikada çalışan beş mühendis; Kaynak, Boya ve Paketleme hatlarından yalnızca birinde görevlendirilmiştir."
+
+  - ad: "biyolojik_gozlem_kabinleri"
+    aciklama: "Biyologların farklı iklim simülasyon kabinlerine yerleşmesi"
+    ornek_setup: "Araştırma merkezindeki altı biyolog; Yağmur Ormanı, Çöl ve Tundra kabinlerinden birinde gözlem yapmaktadır."
+
+  - ad: "orkestra_calgi_gruplari"
+    aciklama: "Müzisyenlerin orkestradaki farklı enstrüman gruplarına dağılması"
+    ornek_setup: "Bir gençlik orkestrasındaki yedi müzisyen; Vurmalı, Yaylı ve Üflemeli çalgılar gruplarından birine katılmıştır."
+
+  - ad: "dedektif_sorusturma_bolgeleri"
+    aciklama: "Dedektiflerin şehirdeki farklı soruşturma bölgelerine atanması"
+    ornek_setup: "Bir olayı araştıran beş dedektif; Liman, Sanayi ve Merkez bölgelerinden yalnızca birine gönderilmiştir."
+
+  - ad: "sihir_akademisi_kuleleri"
+    aciklama: "Büyücü çıraklarının akademideki farklı element kulelerine seçilmesi"
+    ornek_setup: "Akademiye yeni başlayan altı çırak; Ateş, Su ve Toprak kulelerinden birine yerleştirilmiştir."
+
+  - ad: "iklim_istasyonu_zirveleri"
+    aciklama: "Meteorologların dağdaki farklı rakım istasyonlarına dağıtılması"
+    ornek_setup: "Dağda görev yapan yedi meteorolog; Zirve, Yamaç ve Vadi istasyonlarından birine atanmıştır."
+
+  - ad: "hayvanat_bahcesi_bakim_alanlari"
+    aciklama: "Veterinerlerin hayvanat bahçesindeki farklı habitatlara dağılması"
+    ornek_setup: "Hayvanat bahçesinde çalışan altı veteriner; Savan, Sürüngen Evi ve Akvaryum bölümlerinden birinde görevlidir."
+
+  - ad: "kurtarma_operasyonu_timleri"
+    aciklama: "Arama kurtarma personelinin farklı afet bölgelerine veya timlerine dağılması"
+    ornek_setup: "Tatbikattaki altı kurtarma personeli; Çığ, Sel ve Deprem timlerinden birine katılmıştır."
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Setup cümlesi + maddeli koşullar + soru kökü + 4 tekil kişi adı seçeneğinden oluşan grup üyelik kesinliği sorusu (orta)"
+
+  paragraph:
+    required: true
+    word_count_min: 35
+    word_count_max: 90
+    sentence_count_min: 2
+    sentence_count_max: 8
+    stil: "mantik_bulmacasi"
+
+    amac: >
+      Öğrencinin, belirli gruplara/yerlere dağıtılan kişilerle ilgili verilen
+      ilişkisel koşulları (aynı/farklı grupta olma, grup kapasiteleri) birlikte değerlendirerek
+      gizli dağılımı kurması gerekir.
+      Orta düzey: 5-6 kişi, 2-3 grup, 4 koşul, en az 2 dolaylı çıkarım, en az 1 aktif kapasite kısıtı.
+      Öğrenci tek bir blok yerleştirme ile sonuca ulaşamamalı; birkaç aday arasında eleme yapmalıdır.
+
+    kurallar:
+      - "Paragraf iki bölümden oluşur: (1) SETUP CÜMLESİ + (2) MADDELİ KOŞULLAR"
+      - "SETUP CÜMLESİ (1-2 cümle): Dağılımın neye ait olduğunu açıklar; kaç kişi olduğu, hangi grupların bulunduğu ve grupların temel kapasiteleri (varsa) tanıtılır"
+      - "Kurgu kişi ve grup merkezli olmalıdır"
+      - "MADDELİ KOŞULLAR 4 madde olmalıdır; her koşul • ile başlamalı ve <br> ile ayrılmalıdır"
+      - "FORMAT ŞEKLİ şu mantıkta olmalıdır: Setup cümlesi.<br>Bu dağılımla ilgili aşağıdaki bilgiler verilmektedir:<br>• Koşul 1<br>• Koşul 2<br>• Koşul 3<br>• Koşul 4"
+      - "YASAK: Düz paragraf yazma; mutlaka setup + • maddeli koşul yapısı kullanılmalıdır"
+      - "YASAK: <ul>, <li>, <ol> tag'leri kullanma; yalnızca • karakteri ve <br> kullanılmalıdır"
+      - "Orta düzey: kişi sayısı 5-6, grup sayısı 2-3 olabilir"
+      - "Orta düzey: en az 2 koşul dolaylı çıkarım gerektirmelidir"
+      - "Orta düzey: en az 1 kapasite/kontenjan kısıtı aktif çözüm adımı üretmelidir"
+      - "Orta düzey: aynı grupta olma, farklı grupta olma ve dışlama türlerinden en az ikisi birlikte kullanılmalıdır"
+      - "Önce gizli doğru grup dağılımı (kontenjan tablosu) kurulmalı; ardından yalnızca bu dağılıma götüren koşullar yazılmalıdır"
+      - "Koşullar arasında çelişki olmamalıdır"
+      - "Paragrafta hikâye unsurlarıyla ilgili AÇIKLAMA veya EK BİLGİ verme!"
+      - "Paragraf SADECE mantık bulmacasını anlatsın — unsur analizi veya tanımlaması YAPMA"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir; [Grup Adı] yer tutucusu gerçek grup adıyla değiştirilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 3
+    style: "tekil_kisi_adi"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu bilgilere göre aşağıdakilerden hangisi kesinlikle [Grup Adı] grubuna aittir/gitmiştir?</b>"
+  - "<b>Bu bilgilere göre aşağıdakilerden hangisinin [Grup Adı] grubunda yer aldığı kesin olarak söylenebilir?</b>"
+  - "<b>Bu bilgilere göre aşağıdakilerden hangisinin hangi gruba gittiği/katıldığı kesin olarak bilinmektedir?</b>"
+  - "<b>Bu bilgilere göre aşağıdakilerden hangisi kesinlikle [Grup Adı] grubunda yer <u>alamaz</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: >
+    Doğru cevap, yalnızca verilen tüm koşullar birlikte değerlendirilip gizli grup dağılımı
+    ve grupların kontenjan/kapasite kısıtları kurulduktan sonra, belirtilen duruma uyması
+    mantıksal olarak KESİN (zorunlu) olan kişidir.
+  kurallar:
+    - "Doğru cevap SADECE tüm koşullar ve grup kapasiteleri birlikte değerlendirildiğinde ulaşılabilir olmalıdır"
+    - "Doğru cevap 1-3 kelime arasında, SADECE kişi veya varlık adı olmalıdır"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "DOLAYLICIKARIM_EKSIKLIĞI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Dolaylı çıkarım gerektiren koşulu doğrudan uygulayarak hatalı gruplama yapan seçenek"
+    nasil_olusturulur: |
+      İki koşulun birlikte yorumlanması gereken adımı tek koşulla çözen ve 1-2 kişiyi yanlış gruba atan bir dağılım oluştur.
+    kategori: "cognitive"
+
+  - ad: "KAPASİTE_AŞIMI_KAYMASI"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Kapasite kısıtı aktif bir çözüm adımı gerektirirken bu adımı atlayan dağılım"
+    nasil_olusturulur: |
+      Kapasite baskısının bir kişiyi diğer gruba itmesi gerektiği durumda bu baskıyı görmezden gelen ve fazla kişiyi aynı grupta bırakan bir seçenek sun.
+    kategori: "semantic"
+
+  - ad: "ÇOKLU_ILISKI_ÇAKIŞMASI"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Aynı/farklı grup ve dışlama koşullarını birlikte izleyemeyerek yapılan gruplama hatası"
+    nasil_olusturulur: |
+      En az iki farklı ilişki türü varsa bunları bağımsız uygulayan ama birlikte değerlendirildiğinde çelişen bir dağılım oluştur.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB3"
+  bilesenler: ["mantiksal_cikarim", "kategorizasyon", "degerlendirme", "sorgulama"]
+  surec_bileseni: "karar_verme"
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

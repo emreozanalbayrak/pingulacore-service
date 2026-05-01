@@ -1,0 +1,99 @@
+# Kaynak: hikaye_unsurlari_yoktur_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.zor
+# 4. sinif hikaye unsurlari yoktur — zor duzey
+
+meta:
+  id: "b12_hikaye_unsurlari_yoktur_sinif4_zor"
+  ad: "Hikâye Unsurları (Hangisi Yoktur?) (Zor)"
+  sinif_seviyesi: 4
+  aciklama: "Zor duzey — metinde olay, yer, zaman veya kişi unsurlarından hangisinin belirgin olmadığını tespit etme"
+  frequency: "Very High"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Oykuleyici paragraf + soru koku + 4 kisa secenek (zor)"
+
+  paragraph:
+    required: true
+    word_count_min: 83
+    word_count_max: 100
+    sentence_count_min: 6
+    sentence_count_max: 7
+    stil: "oykuleyici"
+    kurallar:
+      - "Bir olay orgusu mutlaka bulunmalidir (bir durumdan baska bir duruma gecis)"
+      - "Belirsiz birakilan unsur daha ince bicimde yok birakilmali; ogrenci bunu sistemli kontrolle fark etmeli"
+      - "Diger 3 unsur acikca vardir; ancak bunlarin bazilari metne dagitilmis bicimde sunulabilir"
+      - "Kisi kadrosu belirgin olmalidir (isim veya unvan: 'Kemal', 'Bakkal', 'Teyze')"
+      - "Paragraf daha uzun olmali ve unsur bilgileri birden fazla cumleye dagitilabilmeli"
+      - "Paragrafta hikâye unsurlarıyla ilgili AÇIKLAMA veya EK BİLGİ verme!"
+      - "Paragraf SADECE hikâyeyi anlatsın — unsur analizi veya tanımlaması YAPMA"
+    background_color: "#f8d7da"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 3
+    style: "concept"
+    correct_type: "does_not_belong"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metinde aşağıdaki hikâye unsurlarından hangisi <u>yoktur</u>?</b>"
+  - "<b>Bu metinde aşağıdaki hikâye unsurlarından hangisine <u>yer verilmemiştir</u>?</b>"
+  - "<b>Bu metinde aşağıdaki hikâye unsurlarından hangisi ile ilgili bir bilgi <u>yoktur</u>?</b>"
+  - "<b>Bu metinde aşağıdaki hikâye unsurlarından hangisi <u>kullanılmamıştır</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metinde acikca belirtilmeyen veya belirsiz birakilan unsur"
+  mantik: "INVERSE - diger 3 secenek metinde acikca bulunan unsurlar, dogru cevap metinde belirsiz/yok"
+  kurallar:
+    - "Metinde NET olarak belirtilmeyen unsur olmali"
+    - "Belirsiz birakilan unsur icin metinde hicbir ipucu olmamali"
+    - "EKSIK_UNSUR_KISITI: Dogru cevap (eksik unsur) SADECE {Yer, Zaman, Kisi} kumesinden olabilir. Olay ASLA eksik birakilmaz — olaysiz paragraf olusmaz."
+    - "Prompt'ta 'HEDEF EKSIK UNSUR' alani verilirse, paragraf SADECE o unsur eksik olacak sekilde yazilir ve dogru cevap o unsur olur."
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI BILGILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "INCE_YOKLUK_TUZAGI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Yokluğu sistemli kontrolle fark edilebilen ince yapı"
+    nasil_olusturulur: |
+      Belirsiz bırakılan unsur daha ince biçimde yok bırakılmalı — öğrenci bunu doğrudan değil sistematik kontrolle fark etmeli.
+      Diğer 3 unsur açıkça var ama metne dağıtılmış biçimde sunulabilir.
+      Paragraf daha uzun ve unsur bilgileri birden fazla cümleye dağıtılabilir.
+    kategori: "cognitive"
+
+  - ad: "DAGINIK_UNSUR_TAKIBI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metne dağıtılmış unsurları sistematik takip gerektiren güçlü tuzak"
+    nasil_olusturulur: |
+      Unsur bilgileri birden fazla cümleye dağıtılmalı.
+      Zor seviyede celdiriciler birbirine daha yakın görünmeli — doğru cevap ancak dikkatli tarama ile seçilebilmeli.
+    kategori: "content"
+
+use_shared_strategies: false
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

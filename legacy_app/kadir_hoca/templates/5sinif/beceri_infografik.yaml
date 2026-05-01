@@ -1,0 +1,287 @@
+# templates/beceri_infografik.yaml
+# Kaynak: MEB Beceri Temelli Soru Bankasi - Infografik
+#
+# BECERI TEMELLI INFOGRAFIK FORMATI
+# Infografik icerik verilir, ogrenci beceri temelli soruyu cevaplar
+#
+# MANTIK: 1 secenekte dogru cevap, 4 secenekte yanlis cevaplar
+# Secenekler TAM CUMLE formatindadir (3-25 sozcuk)
+#
+# AFIS'TEN FARKI:
+# - Afis: Kisa slogan, tek mesaj, davranis yonlendirme
+# - Infografik: Cok katmanli veri, kategoriler, surec, karsilastirma
+# - Afis sorusu: "Bu afisin mesaji nedir?"
+# - Infografik sorusu: "Bu veriden ne cikarilir?", "Hangi kategoriye aittir?"
+
+meta:
+  id: "beceri_infografik"
+  ad: "Beceri Temelli - Infografik"
+  sinif_seviyesi: 5
+  aciklama: "Infografik icerikler uzerinden beceri temelli sorular"
+  kaynak: "MEB Beceri Temelli Soru Bankasi"
+  frequency: "~10% of questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Infografik baglami + soru koku + 5 tam cumle secenek (beceri temelli)"
+
+  paragraph:
+    required: true
+    word_count_min: 40
+    word_count_max: 200
+    sentence_count_min: 2
+    sentence_count_max: 10
+    stil: "infografik"
+    kurallar:
+      - "Bilgiyi kategorilere ayirarak veya surec olarak duzenlenmis sekilde sun"
+      - "Sayisal veri, tablo, grafik veya siniflandirma icersin"
+      - "Baslik ve alt basliklar ile bilgi hiyerarsisi kur"
+      - "Veri odakli, acik ve sistematik bir dil kullan (slogan KULLANMA)"
+      - "Bilgiler arasinda karsilastirma veya iliski kurulabilir olmali"
+      - "Gercekci ve dogrulanabilir veriler icermeli"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 5
+    labels: ["A", "B", "C", "D", "E"]
+    word_count_min: 3
+    word_count_max: 25
+    style: "complete_sentence"
+    correct_type: "matches"
+    correct_count: 1
+
+  questions_per_context: 1
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ALANLARI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  context_type: "INFOGRAFIK"
+  context_label: "Infografik"
+  skill_level: "KB2"
+  process_component: "Gorsel bilgi duzenini analiz ederek veri yorumlama ve cikarim yapma"
+  skill_areas:
+    - "anlama"
+    - "analiz"
+    - "cikarimlama"
+    - "karsilastirma"
+    - "degerlendirme"
+    - "yorumlama"
+    - "siniflandirma"
+  answer_key_explanation: true
+  question_patterns:
+    - "Bu infografikteki ana bilgi nedir?"
+    - "Infografige gore hangi cikarim yapilabilir?"
+    - "Veriler arasindaki iliski nedir?"
+    - "Hangi bilgi infografikte yer almamaktadir?"
+  image_context: true
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # Ana Bilgi / Amaç
+  - "<b>Bu infografiğe göre aşağıdakilerden hangisi doğrudur?</b>"
+  - "<b>İnfografiğin hazırlanma amacı aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu infografiğe göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Bu infografikten aşağıdaki <u>çıkarımlardan hangisi yapılamaz</u>?</b>"
+  # Veri Analizi / Karşılaştırma
+  - "<b>İnfografiğe göre aşağıdakilerden hangisi en doğru değerlendirmedir?</b>"
+  - "<b>İnfografikteki bilgilerden yola çıkarak aşağıdakilerden hangisine ulaşılabilir?</b>"
+  - "<b>İnfografikteki verilere göre aşağıdaki karşılaştırmalardan hangisi doğrudur?</b>"
+  - "<b>İnfografikteki bilgi düzeni dikkate alındığında aşağıdakilerden hangisi doğrudur?</b>"
+  # Başlık-Veri Uyumu / Sınıflandırma
+  - "<b>İnfografiğin başlığı ile içeriği birlikte düşünüldüğünde aşağıdakilerden hangisine ulaşılabilir?</b>"
+  - "<b>İnfografikteki sınıflandırmaya göre aşağıdakilerden hangisi doğrudur?</b>"
+  - "<b>İnfografikteki bilgileri desteklemek için aşağıdakilerden hangisi kullanılmıştır?</b>"
+  - "<b>Bu infografiğe bakarak aşağıdakilerden hangisi <u>çıkarılamaz</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Infografik icerigiyle desteklenen, veri analizine dayali cevap"
+  kurallar:
+    - "Infografik icerigiyle dogrudan desteklenmeli"
+    - "Veri analizi veya karsilastirma gerektirmeli"
+    - "Infografigin verilerinden kanitlanabilir olmali"
+    - "Tam cumle formatinda olmali (3-25 sozcuk)"
+    - "Baglam olmadan cevaplanamaz olmali"
+    - "Ust duzey dusunme becerisi gerektirmeli"
+    - "Bilissel surec bilesenini hedeflemeli"
+  ornekler:
+    - infografik: "Turkiye'de yenilenebilir enerji kaynaklarinin dagilimi: Ruzgar %35, Gunes %28, Jeotermal %22, Biyokutle %15"
+      dogru: "Ruzgar enerjisi Turkiye'de en yaygin kullanilan yenilenebilir enerji kaynagindir"
+      neden: "Verilere gore en yuksek oran ruzgar enerjisine aittir"
+    - infografik: "Geri donusum sureci: Toplama → Ayristirma → Isleme → Yeniden Kullanim"
+      dogru: "Geri donusum surecinde atiklar once siniflandirilir sonra islenir"
+      neden: "Surecte ayristirma adimi islemeden once gelmektedir"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM infografik iceriğine gore en uygun 4 stratejiyi secer
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic suitable for infographic format"
+      details: "Infografik formatina uygun bir konu sec (siniflandirma, karsilastirma, surec, veri sunumu iceren konular)"
+
+    - step: 2
+      action: "Generate infographic content (40-120 words) with structured data"
+      details: |
+        Infografik icerikte:
+        - Bilgi kategorilere ayrilmis veya surec olarak duzenlenmis olmali
+        - Sayisal veri veya siniflandirma icermeli
+        - Baslik ve alt basliklar ile bilgi hiyerarsisi kurulmali
+        - Veri odakli, sistematik dil kullanilmali (slogan DEGIL)
+
+    - step: 3
+      action: "Create correct answer as complete sentence"
+      details: |
+        Dogru cevap:
+        - Infografikteki verilerle dogrudan desteklenmeli
+        - Tam cumle formatinda olmali (3-25 sozcuk)
+        - Veri analizi veya karsilastirma gerektirmeli
+
+    - step: 4
+      action: "Create 4 wrong answers using strategies"
+      details: |
+        Her yanlis secenek icin farkli strateji kullan:
+        - 1x infografikteki veriden turetilmis ama yanlis cikarim yapan
+        - 1x konuyla iliskili ama infografikte desteklenmeyen bilgi
+        - 1x verileri yanlis karsilastiran veya yorumlayan
+        - 1x mantikli gorunen ama icerigi carpitan
+        Tum secenekler ayni formatta olmali (tam cumle, 3-25 sozcuk)
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D-E seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - konu: "Yenilenebilir enerji kaynaklari infografigi"
+    dogru_cevap: "B"
+    secenekler:
+      A: "Gunes enerjisi en yaygin kullanilan yenilenebilir enerji kaynagindir"
+      B: "Ruzgar enerjisi Turkiye'de en yuksek paya sahip yenilenebilir kaynaktir"
+      C: "Jeotermal enerji toplam uretimin yarisini olusturmaktadir"
+      D: "Biyokutle enerjisi diger kaynaklardan daha fazla uretilmektedir"
+      E: "Yenilenebilir enerji kaynaklari esit oranlarda dagılmaktadir"
+    dogru_cevap_icerigi: "Ruzgar enerjisi Turkiye'de en yuksek paya sahip yenilenebilir kaynaktir"
+    neden: "Infografikteki verilere gore ruzgar enerjisi %35 ile en yuksek orana sahiptir"
+
+  - konu: "Geri donusum sureci infografigi"
+    dogru_cevap: "D"
+    secenekler:
+      A: "Geri donusum surecinin ilk adimi atiklarin islenmesidir"
+      B: "Ayristirma surec icinde son asamadir"
+      C: "Toplama ve isleme asamalari es zamanli gerceklesir"
+      D: "Geri donusum surecinde atiklar once siniflandirilir sonra islenir"
+      E: "Yeniden kullanim ayristirmadan once gelmektedir"
+    dogru_cevap_icerigi: "Geri donusum surecinde atiklar once siniflandirilir sonra islenir"
+    neden: "Infografikteki surec sirasina gore ayristirma isleme adimından once gelmektedir"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  # Asama 0: Kimlik ve Olcme Niyeti
+  identity:
+    - "Soru bir beceriyi mi olcuyor, bilgi hatirlamayi mi?"
+    - "Hedef beceri seviyesi uygun mu?"
+    - "Surec bileseni dogru hedeflenmis mi?"
+
+  # Asama 1: Baglam Secimi
+  context:
+    - "Baglam olmadan soru cozulebilir mi? (Hayir olmali)"
+    - "Baglam fonksiyonel mi? (Dekoratif degil)"
+    - "Baglam cevabi dogrudan veriyor mu? (Vermemeli)"
+    - "Baglam otantik mi? (Gercek hayattan)"
+    - "Kelime sayisi 40-120 arasinda mi?"
+    - "Veri veya sayisal bilgi iceriyor mu?"
+    - "Bilgi hiyerarsisi var mi? (baslik, alt baslik, veri)"
+    - "Slogan yerine veri odakli dil kullanilmis mi?"
+
+  # Asama 2: Soru ve Secenekler
+  question:
+    - "Soru koku net ve anlasilir mi?"
+    - "Cift olumsuz var mi? (Olmamali)"
+    - "Tek dogru cevap var mi?"
+
+  options:
+    - "Celdiriciler belirli bilissel hatalari temsil ediyor mu?"
+    - "Eleme yoluyla cevaplanabilir mi? (Olmamali)"
+    - "Format farkliligi ile dogru cevap belli oluyor mu? (Olmamali)"
+    - "Tum secenekler benzer uzunlukta mi?"
+    - "5 secenek var mi (A-B-C-D-E)?"
+
+  # Asama 3: Etik
+  ethics:
+    - "Cinsiyet/etnik onyargi var mi? (Olmamali)"
+    - "Yas grubuna uygun mu?"
+
+  # Asama 4: Dil
+  language:
+    - "Turkce dil bilgisi dogru mu?"
+    - "Sinif seviyesine uygun mu?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+
+  generation_rules:
+    - "Infografik formatina uygun veri iceren konulari tercih et"
+    - "Siniflandirma, karsilastirma, surec iceren konular ideal"
+    - "Sayisal veri cikarilabilecek konulari sec"

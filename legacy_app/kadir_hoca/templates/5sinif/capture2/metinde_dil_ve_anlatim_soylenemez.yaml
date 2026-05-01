@@ -1,0 +1,205 @@
+# templates/capture2/metinde_dil_ve_anlatim_soylenemez.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Bolum 2 - Metinde Dil ve Anlatim
+#
+# SOYLENEMEZ FORMATI (tum dil ve anlatim sorularinin ~%60'i)
+# Zengin icerikli paragraf verilir, ogrenci metinde OLMAYAN anlatim ozelligini secer
+#
+# MANTIK: 3 secenek metinde acikca bulunan ozellikler, 1 tanesi metinde yok (dogru cevap)
+# Ozellikler: Benzetme, Kisilelstirme, Deyim, Ikileme, Oznel/Nesnel yargi, 1. Kisi, Soru cumlesi
+
+meta:
+  id: "metinde_dil_ve_anlatim_soylenemez"
+  ad: "Metinde Dil ve Anlatım (Söylenemez)"
+  sinif_seviyesi: 5
+  aciklama: "Metnin dil ve anlatım özelliklerini (söz sanatları, anlatım biçimi) analiz etme"
+  kaynak: "data/metinde_dil_ve_anlatim.pdf"
+  frequency: "Very High (~60% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Zengin içerikli paragraf + soru kökü + seçenekler"
+
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 100
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "karma"
+    kurallar:
+      - "Metin, dil bilgisi ve anlatım özellikleri açısından zengin olmalı."
+      - "Şu özelliklerden en az 3 tanesini içermeli: Benzetme, Kişileştirme, Deyim, İkileme, Öznel yargı, Nesnel yargı, 1. Kişi ağzı, Soru cümlesi."
+      - "Örn: 'Güneş bir altın top gibi parlıyordu (Benzetme). Rüzgar kulağıma fısıldadı (Kişileştirme).'"
+      - "Her ozellik metinde acikca ve kolayca tespit edilebilir olmali."
+      - "Paragraf dogal ve akici bir dil ile yazilmali, yapay hissettirmemeli."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 4
+    word_count_max: 15
+    style: "complete_sentence"
+    correct_type: "does_not_belong"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# ORNEK SECENEKLER (Olusturulacak secenekler icin referans)
+# ═══════════════════════════════════════════════════════════════
+
+sample_options:
+  - "Benzetme yapılmıştır."
+  - "İkilemelere yer verilmiştir."
+  - "Kişileştirmeden yararlanılmıştır."
+  - "Deyim kullanılmıştır."
+  - "Olay birinci kişi ağzından anlatılmıştır."
+  - "Öznel ifadelere yer verilmiştir."
+  - "Soru yoluyla anlatıma doğallık kazandırılmıştır."
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 2 varyasyon)
+# Sayfa 127-130
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metnin dil ve anlatımı ile ilgili aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Bu metnin dil ve anlatımıyla ilgili aşağıdakilerden hangisi yanlıştır?</b>"
+  - "<b>Bu metnin anlatım özellikleriyle ilgili aşağıdakilerden hangisi <u>doğru değildir</u>?</b>"
+  - "<b>Bu metinde aşağıdaki anlatım özelliklerinden hangisine <u>yer verilmemiştir</u>?</b>"
+  - "<b>Bu metnin dil ve anlatımıyla ilgili aşağıdaki yargılardan hangisine <u>ulaşılamaz</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI (TERS MANTIK!)
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metinde örneği bulunmayan teknik özellik"
+  mantik: "INVERSE - diger 3 secenek metinde bulunan ozellikler, dogru cevap metinde YOK"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Metinde ornegi bulunmayan bir anlatim ozelligi olmali"
+    - "Ogrenci icin 'bu ozellik metinde var mi?' analizi yapmak zorunda kalmali"
+    - "Dogru cevap makul bir teknik ozellik olmali (rastgele degil)"
+    - "Ornekler: Benzetme, Kisilelstirme, Deyim, Ikileme, Oznel yargi, Nesnel yargi, 1. Kisi agzi, Soru cumlesi"
+    - "Kelime sayısı bakımından en uzun şık olmamalı."
+  ornekler:
+    - metin: "Gunes bir altin top gibi parliyordu (Benzetme). Ruzgar kulagima fisildadi (Kisilelstirme). Bu guzel gun usul usul gecip gidiyordu (Ikileme)."
+      dogru: "Deyim kullanılmıştır."
+      neden: "Metinde deyim ornegi bulunmuyor, diger ozellikler mevcut"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# Celdiriciler: Metinde acikca bulunan anlatim ozellikleri (yanlis secenekler)
+
+distractors:
+  kurallar:
+    - "Metinde acikca bulunan 3 farkli anlatim ozelligi"
+    - "Her biri farkli bir teknik ozellik olmali"
+    - "Ornekler: 'Benzetme yapilmistir.', 'Kisilelstirmeden yararlanilmistir.'"
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["yorumlama", "mantiksal_denetleme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic and determine 3 literary features to include"
+      details: |
+        Kullanilabilecek ozellikler:
+        - Benzetme (gibi, sanki, andiran)
+        - Kisilelstirme (insana ait ozellik atfetme)
+        - Deyim (kaliplesmis ifade)
+        - Ikileme (usul usul, yavas yavas)
+        - Oznel yargi (kisisel degerlendirme)
+        - Nesnel yargi (bilimsel/olculebilir bilgi)
+        - 1. Kisi agzi (ben, benim, bana)
+        - Soru cumlesi (soru ile anlatim)
+
+    - step: 2
+      action: "Generate paragraph (55-100 words) with 3 chosen features"
+      details: |
+        Paragrafta:
+        - Secilen 3 ozellik acikca ve dogal bir sekilde yer almali
+        - 1 ozellik kasitli olarak KULLANILMAMALI (dogru cevap)
+        - Metin dogal ve akici olmali, yapay hissettirmemeli
+
+    - step: 3
+      action: "Set correct answer = feature NOT present in text"
+      details: "Metinde ornegi bulunmayan ozellik dogru cevaptir"
+
+    - step: 4
+      action: "Generate 3 distractors from features present in text"
+      details: |
+        - 3x metinde acikca bulunan anlatim ozelligi
+        - Her biri 4-15 kelimelik tam cumle
+        - Ornek: "Benzetme yapilmistir.", "Ikileme kullanilmistir."
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR (Sayfa 127-130)
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 127
+    konu: "Dogada bir gun - dil ve anlatim"
+    metin: "Gunes bir altin top gibi parliyordu. Ruzgar kulagima fisildadi. Bu guzel gun usul usul gecip gidiyordu."
+    dogru_cevap: "Deyim kullanılmıştır."
+    celdirici_1: "Benzetme yapılmıştır."
+    celdirici_2: "Kişileştirmeden yararlanılmıştır."
+    celdirici_3: "İkilemelere yer verilmiştir."
+
+  - sayfa: 129
+    konu: "Cocukluk anilari - dil ve anlatim"
+    metin: "O gunlerde agaclar bile gulumsuyordu gozumde. Annem beni her sabah sicak bir kahvaltiyla karsilardi. Gunler ne cabuk gecti!"
+    dogru_cevap: "Nesnel ifadelere yer verilmiştir."
+    celdirici_1: "Kişileştirmeden yararlanılmıştır."
+    celdirici_2: "Öznel ifadelere yer verilmiştir."
+    celdirici_3: "Olay birinci kişi ağzından anlatılmıştır."
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 55-100 arasinda mi?"
+    - "Cumle sayisi 4-7 arasinda mi?"
+    - "En az 3 farkli anlatim ozelligi iceriyor mu?"
+    - "Ozellikler acikca tespit edilebilir mi?"
+    - "Metin dogal ve akici mi?"
+
+  correct_answer:
+    - "4-15 kelime arasinda mi?"
+    - "Metinde gercekten ornegi bulunmayan bir ozellik mi?"
+    - "Makul bir teknik ozellik mi?"
+
+  distractors:
+    - "Her celdirici metinde acikca bulunan bir ozellik mi?"
+    - "Celdiriciler dogrulanabilir mi (metinde ornekleri var mi)?"
+    - "Tum secenekler ayni gramer yapida mi? (tam cumle)"
+    - "Hicbiri dogru cevapla karistirilabilir degil mi?"

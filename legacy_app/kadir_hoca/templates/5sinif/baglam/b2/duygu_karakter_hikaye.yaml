@@ -1,0 +1,117 @@
+meta:
+  id: duygu_karakter_hikaye
+  ad: Duygu ve Karakter Hikâyesi
+  sinif_seviyesi: 5
+  aciklama: En az 2 karakterli hikâye — karakterlerin baskın duygusu ve olası tavrı
+  kaynak: kaynak-soru-kokleri.md
+  frequency: Medium
+context:
+  type: duygu_karakter_hikaye
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 120
+    word_count_max: 180
+    structure:
+    - En az 2 ana karakteri olan bir hikâye oluştur
+    - Karakterlerin duygusal tepkileri belirgin ve ayırt edilebilir olmalı
+    - Her karakterin farklı bir baskın duygusu olmalı (sevinç, üzüntü, heyecan, korku, hayal kırıklığı vb.)
+    - Karakterlerin kişilik özellikleri davranışlarından anlaşılmalı
+    - Hikâyede bir olay/durum karşısında karakterlerin farklı tepkileri gösterilmeli
+    - Karakterlerin farklı bir durumda nasıl davranacağı tahmin edilebilir olmalı
+    kurallar:
+    - 5. sınıf seviyesinde, günlük hayattan veya okul ortamından bir hikâye
+    - Öyküleyici anlatım kullanılmalı
+    - Karakterlerin isimleri Türkçe olmalı
+    - Bir tablo oluşturulacaksa, oluşturulan tablodaki veriler sorunun çözülmesinde mutlaka etkili olmalı. Tablo işlevsiz olMAMALI.
+    - Duygular doğrudan söylenmemeli — davranışlardan çıkarılabilir olmalı
+    - Kişilik özellikleri tutarlı ve net olmalı
+    - Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)
+  questions:
+  - slot: 1
+    type: duygu_belirleme
+    soru_kokleri:
+    - <b>Hikâyede …Karakter…'in baskın duygusu aşağıdakilerden hangisidir?</b>
+    - <b>…Karakter… bu olayda aşağıdaki duygulardan hangisini yaşamaktadır?</b>
+    - <b>Metinde …Olay…'ın gerçekleştiği andan itibaren olayın gelişimi kahramanlar arasındaki ilişkiyi nasıl etkilemiştir?</b>
+    - <b>...Karakter...in ...Nesne...ye yukledigi anlam asagidakilerden hangisiyle iliskilidir?</b>
+    options_style: concept
+    word_count_min: 1
+    word_count_max: 3
+    beceri:
+      katman: KB2
+      bilesenler:
+      - cikarim_yapma
+      - yorumlama
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 2
+    type: karakter_tavri
+    soru_kokleri:
+    - <b>…Karakter… farklı bir durumla karşılaşsaydı tavrı aşağıdakilerden hangisi olurdu?</b>
+    - <b>…Karakter… benzer bir olayla karşılaştığında aşağıdakilerden hangisini yapardı?</b>
+    - <b>…Karakter…'in …Nesne…'ye yüklediği anlam aşağıdakilerden hangisiyle ilişkilidir?</b>
+    - <b>Metindeki olayin gelisimi kahramanlar arasindaki iliskiyi nasil etkilemistir?</b>
+    options_style: complete_sentence
+    word_count_min: 8
+    word_count_max: 22
+    beceri:
+      katman: KB3
+      bilesenler:
+      - cikarim_yapma
+      - degerlendirme
+      surec_bileseni: problemi_yapilandirma
+header_template: 1-2. soruları aşağıdaki hikâyeye göre cevaplayınız.
+format:
+  type: llm_generated_html
+  description: Duygu ve karakter analizi hikâyesi üzerinden belirleme ve çıkarım soruları
+  paragraph:
+    required: true
+    word_count_min: 120
+    word_count_max: 180
+    sentence_count_min: 5
+    sentence_count_max: 10
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 1
+    word_count_max: 22
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Karakterin davranışlarından doğru çıkarılan duygu veya tutarlı tavır tahmini
+  kurallar:
+  - 'KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI'
+  - Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI
+  - Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil
+  - 'YASAK: Tablodaki değeri aynen şıkka yazmak (örn: ''yalıtımı azdır'' tabloda yazıyorsa şıkta aynen yazmamalı)'
+  - Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli
+  - Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı
+  - Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı
+  - Duygu belirleme sorusunda doğru cevap karakterin davranışlarından açıkça çıkarılan baskın duygu olmalı
+  - Karakter tavrı sorusunda doğru cevap karakterin kişilik özelliğiyle tutarlı ve mantıklı bir tahmin olmalı
+  - Çeldiriciler yakın ama yanlış duygular veya karakterle uyumsuz tavırlar olmalı
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: ''teleskop'' → ''mercekli araç'' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: DUYGU_KARISTIRMA
+    aciklama: Baskın duyguya yakın ama farklı bir duygu sunma
+    ornek: Üzüntü yerine hayal kırıklığı, heyecan yerine tedirginlik önerme
+  - ad: KARAKTER_KARISTIRMA
+    aciklama: Bir karakterin duygusunu/tavrını diğer karaktere yükleme
+    ornek: Ayşe'nin duygusunu Mehmet'in duygusu olarak sunma
+  - ad: ASIRI_GENELLEME
+    aciklama: Bir davranıştan çok geniş bir kişilik genellemesi yapma
+    ornek: Tek bir korkak davranıştan 'her zaman korkaktır' çıkarımı yapma
+use_shared_strategies: false

@@ -1,0 +1,168 @@
+# templates/capture2/anlatici_turleri_farkli_olan.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Bolum 2 - Anlatici Turleri
+#
+# FARKLI OLANI BULMA FORMATI (tum anlatici sorularinin ~%30'u)
+# 4 mini paragraf verilir, ogrenci anlatici turu digerlerinden farkli olani bulur
+#
+# ONEMLI: Ana paragraf YOK, secenekler paragraftir
+# 3 secenek ayni sahis agziyla (orn: 1. kisi), 1 secenek farkli (orn: 3. kisi)
+# Dogru cevap = Digerlerinden farkli sahis eki kullanan metin
+
+meta:
+  id: "anlatici_turleri_farkli_olan"
+  ad: "Anlatıcı Türleri (Farklı Olanı Bulma)"
+  sinif_seviyesi: 5
+  aciklama: "Seçenekler arasından anlatıcı türü diğerlerinden farklı olan metni bulma"
+  kaynak: "data/anlatici_turleri.pdf"
+  frequency: "High (~30% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Soru kökü + 4 paragraf seçenek"
+
+  paragraph:
+    required: false  # Ana paragraf YOK, secenekler paragraf
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 25
+    word_count_max: 45
+    style: "mini_paragraph"
+    correct_type: "does_not_belong"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 3 varyasyon, Sayfa 98-99)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Aşağıdaki metinlerin hangisinde anlatıcı diğerlerinden farklıdır?</b>"
+  - "<b>Aşağıdaki metinlerden hangisi diğerlerinden farklı bir kişi ağzıyla yazılmıştır?</b>"
+  - "<b>Aşağıdakilerin hangisinde farklı bir kişi ağzıyla anlatım yapılmıştır?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI (FARKLI OLAN = DOGRU CEVAP)
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Diğer 3 seçenekten farklı kişi eki kullanan metin"
+  mantik: "INVERSE - 3 secenek ayni sahis agziyla, 1 secenek farkli sahis agziyla"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "3 secenek ayni sahis agziyla yazilmali (ornegin hepsi 1. kisi)"
+    - "1 secenek farkli sahis agziyla yazilmali (ornegin 3. kisi)"
+    - "Farkli olan secenek dogru cevaptir"
+    - "Sahis ekleri acikca belirlenebilir olmali"
+    - "Kelime sayısı bakımından en uzun şık olmamalı"
+  ornekler:
+    - A: "Geldim (1. kişi)"
+      B: "Gördüm (1. kişi)"
+      C: "Koştum (1. kişi)"
+      D: "Baktı (3. kişi - Doğru Cevap)"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM:
+# - 3 mini-paragraf ayni sahis agziyla olusturur (celdiriciler)
+# - 1 mini-paragraf farkli sahis agziyla olusturur (dogru cevap)
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["karsilastirma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Decide majority narrator type"
+      details: |
+        Rastgele sec:
+        - Cogunluk 1. kisi, farkli olan 3. kisi
+        - VEYA cogunluk 3. kisi, farkli olan 1. kisi
+
+    - step: 2
+      action: "Generate 3 mini-paragraphs with majority narrator (distractors)"
+      details: |
+        Her biri 25-45 kelimelik mini paragraf:
+        - Farkli konular/olaylar anlatmali
+        - Sahis ekleri tutarli ve net olmali
+        - 1. kisi ise: geldim, gorduk, yaptim vb.
+        - 3. kisi ise: geldi, gordu, yapti vb.
+
+    - step: 3
+      action: "Generate 1 mini-paragraph with different narrator (correct answer)"
+      details: |
+        25-45 kelimelik mini paragraf:
+        - Diger 3 secenekten farkli sahis agziyla yazilmali
+        - Sahis ekleri acikca farkli olmali
+        - Konusu diger seceneklerle benzer zorlukta olmali
+
+    - step: 4
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR (Sayfa 98-99)
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 98
+    konu: "Farkli anlatici bulma"
+    soru_koku: "Aşağıdaki metinlerin hangisinde anlatıcı diğerlerinden farklıdır?"
+    secenekler:
+      A: "1. kişi ağzıyla yazılmış metin (geldim, gördüm)"
+      B: "1. kişi ağzıyla yazılmış metin (koştum, izledim)"
+      C: "1. kişi ağzıyla yazılmış metin (yaptım, bildim)"
+      D: "3. kişi ağzıyla yazılmış metin (baktı, gördü) - Doğru Cevap"
+    dogru_cevap: "D"
+    neden: "A, B, C 1. kisi agziyla, D ise 3. kisi agziyla yazilmis"
+
+  - sayfa: 99
+    konu: "Farkli anlatici bulma (ters)"
+    soru_koku: "Aşağıdaki metinlerden hangisi diğerlerinden farklı bir kişi ağzıyla yazılmıştır?"
+    secenekler:
+      A: "3. kişi ağzıyla yazılmış metin (geldi, gördü)"
+      B: "1. kişi ağzıyla yazılmış metin (geldim, gördüm) - Doğru Cevap"
+      C: "3. kişi ağzıyla yazılmış metin (koştu, izledi)"
+      D: "3. kişi ağzıyla yazılmış metin (yaptı, bildi)"
+    dogru_cevap: "B"
+    neden: "A, C, D 3. kisi agziyla, B ise 1. kisi agziyla yazilmis"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Her secenek 25-45 kelime arasinda mi?"
+    - "Her paragrafta sahis ekleri tutarli mi?"
+    - "Karisik sahis eki kullanilmamis mi?"
+
+  correct_answer:
+    - "Diger 3 secenekten farkli sahis agziyla mi yazilmis?"
+    - "Sahis ekleri acikca farkli mi?"
+    - "Farklilik kolayca tespit edilebilir mi?"
+
+  distractors:
+    - "3 celdirici ayni sahis agziyla mi yazilmis?"
+    - "Her biri farkli bir konu/olay mi anlatiyor?"
+    - "Sahis ekleri net ve tutarli mi?"
+    - "Tum secenekler ayni uzunluk araliginda mi? (25-45 kelime)"

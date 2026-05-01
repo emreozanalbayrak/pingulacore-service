@@ -1,0 +1,200 @@
+# templates/capture2/dusunceyi_gelistirme_negative.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Bolum 2 - Dusunceyi Gelistirme Yollari
+#
+# NEGATIF DUSUNCEYI GELISTIRME FORMATI (tum dusunceyi gelistirme sorularinin ~%15'i)
+# Paragrafta KULLANILMAYAN dusunceyi gelistirme yolunu tespit etme
+#
+# MANTIK: 3 secenek metinde KULLANILAN teknikler (yanlis), 1 tanesi KULLANILMAYAN (dogru cevap)
+# Paragraf en az 3 farkli teknik icermeli, seceneklerden biri metinde olmamali
+
+meta:
+  id: "dusunceyi_gelistirme_negative"
+  ad: "Düşünceyi Geliştirme (Kullanılmayanı Bulma)"
+  sinif_seviyesi: 5
+  aciklama: "Paragrafta yer verilmeyen düşünceyi geliştirme yolunu tespit etme"
+  kaynak: "data/dusunceyi_gelistirme_yollari.pdf"
+  frequency: "Medium (~15% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Zengin içerikli paragraf + soru kökü + 4 kavramsal seçenek"
+
+  paragraph:
+    required: true
+    word_count_min: 60
+    word_count_max: 100
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "bilgilendirici veya oykuleyici"
+    kurallar:
+      - "Metin, şıklarda verilen 3 tekniği birden içermelidir (Örn: Hem benzetme, hem karşılaştırma, hem de tanımlama olmalı)."
+      - "Metinde benzetme, karşılaştırma, tanımlama, sayısal verilerden yararlanma ve örneklendirme tekniklerinden herhangi 3 tanesi kullanılmalıdır."
+      - "Metin kurgusu bu teknikleri doğal bir akışla birleştirmeli."
+      - "Örn: 'Aslan ormanların kralıdır (Tanımlama/Metafor). Kükremesi gök gürültüsü gibidir (Benzetme). Diğer hayvanlardan daha güçlüdür (Karşılaştırma).'"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 3
+    style: "concept"
+    correct_type: "does_not_belong"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 3 varyasyon)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metinde aşağıdaki düşünceyi geliştirme yollarından hangisi <u>kullanılmamıştır</u>?</b>"
+  - "<b>Bu metnin anlatımında aşağıdakilerden hangisine <u>başvurulmamıştır</u>?</b>"
+  - "<b>Aşağıdaki metinlerin hangisinde yay ayraç içinde verilen düşünceyi geliştirme yolu <u>kullanılmamıştır</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI (TERS MANTIK!)
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metinde örneği bulunmayan teknik"
+  mantik: "INVERSE - diger 3 secenek metinde kullanilan teknikler, dogru cevap kullanilmayan"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Paragrafta KULLANILMAYAN bir dusunceyi gelistirme yolu olmali"
+    - "Paragraftaki 3 teknik diger seceneklere dagitilmali"
+    - "Dogru cevap paragrafta hicbir ornegi olmayan bir teknik olmali"
+    - "1-3 kelime kavram adi formatinda olmali"
+  ornekler:
+    - paragraf: "Aslan ormanlarin kralidir. Kukremesi gok gurultusu gibidir. Diger hayvanlardan daha gucludur."
+      dogru: "Örneklendirme"
+      neden: "Metinde Tanimlama ('...dir'), Benzetme ('gibi') ve Karsilastirma ('daha') var. Orneklendirme YOK."
+    - paragraf: "Agaclarin budanmasinin pek cok nedeni vardir. Bunlar arasinda hastalikli dallarin temizlenmesi, agacin daha iyi buyumesi ve meyve veriminin arttirilmasi sayilabilir. Budama islemi bir cerrah gibi ozenle yapilmalidir."
+      dogru: "Karşılaştırma"
+      neden: "Metinde Orneklendirme ('bunlar arasinda'), Benzetme ('gibi') ve Tanimlama (dolayli) var. Karsilastirma YOK."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# Ters mantik sorularinda LLM:
+# - 3 "metinde kullanilan teknik" secer (yanlis secenekler)
+# - 1 "metinde kullanilmayan teknik" secer (dogru cevap)
+# Strateji havuzu paragraf icerigi belirlemek icin kullanilir
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siniflandirma", "mantiksal_denetleme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic with rich content potential"
+      details: "Birden fazla dusunceyi gelistirme yolunun dogal kullanilabilecegi bir konu sec"
+
+    - step: 2
+      action: "Determine 3 techniques to USE and 1 to EXCLUDE"
+      details: |
+        4 ana teknikten 3'u paragrafta kullanilacak:
+        - Tanimlama, Karsilastirma, Benzetme, Orneklendirme
+        - Kalan 1 teknik dogru cevap olacak (kullanilmayan)
+
+    - step: 3
+      action: "Generate paragraph (60-100 words) containing 3 techniques"
+      details: |
+        Paragrafta:
+        - 3 farkli teknik dogal bir akisla kullanilmali
+        - Her teknige ait belirtecler acikca bulunmali
+        - 4. teknigin hicbir belirteci OLMAMALI
+        - Teknikler arasindaki gecis dogal olmali
+
+    - step: 4
+      action: "Set correct answer = excluded technique"
+      details: "Paragrafta kullanilmayan teknik dogru cevaptir"
+
+    - step: 5
+      action: "Set 3 distractors = used techniques"
+      details: |
+        Paragrafta kullanilan 3 teknik celdirici (yanlis secenek) olur:
+        - Her biri 1-3 kelimelik kavram adi
+
+    - step: 6
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 85
+    soru_no: 6
+    konu: "Aslan ve ozellikleri"
+    paragraf: "Aslan ormanların kralıdır. Kükremesi gök gürültüsü gibidir. Diğer hayvanlardan daha güçlüdür."
+    secenekler:
+      A: "Benzetme"
+      B: "Örneklendirme"
+      C: "Karşılaştırma"
+      D: "Tanımlama"
+    dogru_cevap: "B"
+    neden: "Metinde Tanimlama, Benzetme ve Karsilastirma var. Orneklendirme kullanilmamis."
+
+  - sayfa: 88
+    soru_no: 1
+    konu: "Zeytinyagi ve kullanim alanlari"
+    paragraf: "Zeytinyağı binlerce yıldır Akdeniz ülkelerinde kullanılmaktadır. Altın sıvı olarak da adlandırılır. Örneğin yemeklerde, cilt bakımında ve ilaç yapımında tercih edilir. Diğer yağlara göre daha sağlıklıdır."
+    secenekler:
+      A: "Tanımlama"
+      B: "Benzetme"
+      C: "Örneklendirme"
+      D: "Karşılaştırma"
+    dogru_cevap: "A"
+    neden: "Metinde Benzetme ('altin sivi'), Orneklendirme ('ornegin') ve Karsilastirma ('gore daha') var. Tanimlama kullanilmamis."
+
+  - sayfa: 88
+    soru_no: 5
+    konu: "Agac budama islemleri"
+    paragraf: "Ağaçların budanmasının pek çok nedeni vardır. Bunlar arasında hastalıklı dalların temizlenmesi, daha iyi büyüme ve meyve veriminin artırılması sayılabilir. Budama bir cerrah gibi özenle yapılmalıdır."
+    secenekler:
+      A: "Benzetme"
+      B: "Karşılaştırma"
+      C: "Örneklendirme"
+      D: "Tanımlama"
+    dogru_cevap: "B"
+    neden: "Metinde Orneklendirme ('bunlar arasinda'), Benzetme ('gibi') var. Karsilastirma kullanilmamis."
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 60-100 arasinda mi?"
+    - "En az 3 farkli teknik kullanilmis mi?"
+    - "Her teknigin belirtecleri acikca var mi?"
+    - "Kullanilmayan teknigin hicbir belirteci yok mu?"
+
+  correct_answer:
+    - "1-3 kelime kavram adi mi?"
+    - "Paragrafta gercekten kullanilmayan bir teknik mi?"
+    - "Paragrafta bu teknige ait hicbir belirtec yok mu?"
+
+  distractors:
+    - "Her biri 1-3 kelime kavram adi mi?"
+    - "Hepsi paragrafta gercekten kullanilan teknikler mi?"
+    - "Her birinin paragrafta acik bir ornegi var mi?"
+    - "Tum secenekler ayni gramer yapida mi? (kavram adi)"

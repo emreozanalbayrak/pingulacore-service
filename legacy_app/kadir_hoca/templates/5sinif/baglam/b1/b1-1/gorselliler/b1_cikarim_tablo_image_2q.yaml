@@ -1,0 +1,108 @@
+# B1.1 — 2Q Image Tablo (Tek Kriter + Çoklu Kriter)
+# Görsel: tablo_gorseli (AI stilize tablo görseli üretilecek)
+# Soru Tipleri: Tek Kriter + Çoklu Kriter — B1.1 soru kökleri
+
+meta:
+  id: "b1_cikarim_tablo_image_2q"
+  ad: "2Q Tablo Görseli — Tek Kriter/Çoklu Kriter"
+  sinif_seviyesi: 5
+  aciklama: "Senaryo + AI tablo görseli üzerinden tek kriter ve çoklu kriter karar soruları"
+  kaynak: "baglamb1sorukoku.md"
+  frequency: "Medium"
+
+context:
+  type: "b1_cikarim_tablo_image_2q"
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 80
+    word_count_max: 150
+    image_type: "tablo_gorseli"
+    structure:
+      - "Bir karakterin (isimli) bir problemi fark ettiği kısa senaryo oluştur (3-4 cümle)"
+      - "Karakter bu durum üzerine araştırma yapar ve karşılaştırma tablosuna ulaşır"
+      - "KRİTİK: Senaryoda tablo verilerini YAZMA — veriler sadece tabloda olmalı"
+      - "HTML tablosu ekle: <table> ile, en az 3 sütun, en az 4 satır"
+      - "Tablo: Seçenek | Özellik 1 | Özellik 2 | Sayısal Veri formatında"
+      - "Tablodaki veriler karşılaştırılabilir ve karar vermeye uygun olmalı"
+      - "NOT: Bu tablo AI tarafından stilize tablo görseline dönüştürülecektir"
+    kurallar:
+      - "Senaryo 5. sınıf seviyesinde, günlük hayattan bir karar verme durumu olmalı"
+      - "KRİTİK — SENARYO KAPSAMI: Senaryo sadece DURUMU ve MERAKı anlatsın, CEVAPLARI vermesin!"
+      - "Tabloda hem olumlu hem olumsuz özellikler olmalı (tek seçenek en iyi olmamalı)"
+      - "Farklı kriterlere göre farklı seçenekler öne çıkmalı"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+    - slot: 1
+      type: "tek_kriter"
+      soru_kokleri:
+        - "<b>Tablodaki bilgiler [belirli_kriter] yönünden incelendiğinde aşağıdakilerden hangisi doğrudur?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 5
+      word_count_max: 18
+      beceri:
+        katman: "KB2"
+        bilesenler: ["cozumleme", "yorumlama", "cikarim_yapma"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+    - slot: 2
+      type: "coklu_kriter"
+      soru_kokleri:
+        - "<b>[Karakter], [kriter_1] ve [kriter_2] birlikte dikkate aldığında hangi yöntemi tercih etmelidir?</b>"
+      options_style: "short_phrase"
+      word_count_min: 2
+      word_count_max: 10
+      beceri:
+        katman: "KB3"
+        bilesenler: ["karar_verme", "karsilastirma", "yorumlama", "cikarim_yapma"]
+        surec_bileseni: "problemi_yapilandirma"
+
+header_template: "1-2. soruları aşağıdaki bilgilere göre birbirinden bağımsız olarak cevaplayınız."
+
+format:
+  type: "llm_generated_html"
+  description: "2Q tablo görseli üzerinden tek kriter ve çoklu kriter karar"
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 150
+    sentence_count_min: 3
+    sentence_count_max: 6
+  stem:
+    required: true
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 18
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+dogru_cevap:
+  tanim: "Tablodaki verilerle doğrudan desteklenen kriter analizi veya karar"
+  kurallar:
+    - "KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI"
+    - "Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI"
+    - "Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil"
+    - "HATALI YAKLASIM: Metinde/tabloda geçen bir cümlenin AYNEN seçeneklerde kullanılması YASAK"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin ANLAMCA ÖZDESİ olmalı"
+    - "En az %40 kelime farklılığı olmalı"
+    - "BİLİMSEL TERİM KORUMASI: Teknik terimler değiştirilmemeli"
+    - "Doğru şık en uzun şık OLMAMALI"
+
+distractors:
+  stratejiler:
+    - ad: "TEK_KRITER_YANILGISI"
+      aciklama: "Çoklu kriter sorusunda sadece tek kriterle en iyi olanı sunma"
+      ornek: "İki kriteri dikkate alması gerekirken sadece birini değerlendirme"
+    - ad: "VERI_CARPITMA"
+      aciklama: "Tablodaki bir veriyi yanlış aktarma"
+      ornek: "Olumsuz özelliği olumlu gibi sunma"
+    - ad: "YANLIS_KARSILASTIRMA"
+      aciklama: "Tablodaki seçenekleri yanlış karşılaştırma"
+      ornek: "Daha düşük puanlı seçeneği daha yüksek gibi gösterme"
+
+use_shared_strategies: false

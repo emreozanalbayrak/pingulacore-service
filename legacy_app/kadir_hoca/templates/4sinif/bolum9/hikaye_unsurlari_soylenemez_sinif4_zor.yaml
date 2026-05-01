@@ -1,0 +1,102 @@
+# Kaynak: hikaye_unsurlari_soylenemez_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.zor
+# 4. sinif hikaye unsurlari soylenemez — zor duzey
+
+meta:
+  id: "hikaye_unsurlari_soylenemez_sinif4_zor"
+  ad: "Hikâye Unsurları (Söylenemez) (Zor)"
+  sinif_seviyesi: 4
+  aciklama: "Zor duzey — hikâye unsurları hakkında yapılan yanlış çıkarımı bulma"
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Paragraf + soru koku + cumle seklinde secenekler (zor)"
+
+  paragraph:
+    required: true
+    word_count_min: 83
+    word_count_max: 100
+    sentence_count_min: 6
+    sentence_count_max: 7
+    stil: "oykuleyici"
+    kurallar:
+      - "Oykuleyici bir metin olmali (olay orgusu, karakter, mekan vb.)"
+      - "Hikaye unsurlari (Olay, Yer, Zaman, Kisi) hakkinda cikarim yapilabilir olmali"
+      - "En az 3 unsur acikca bulunmali"
+      - "Anlatici bakis acisi (1. tekil, 3. tekil vb.) belirgin olmali"
+      - "Hikaye unsurlari paragraf icine daha daginik yerlestirilebilir"
+      - "Metinle celisen yargi daha makul gorunmeli ve yuzeysel okumada dogru sanilabilir olmali"
+      - "En az iki celdirici hikaye unsurlari bakimindan kuvvetli anlamsal yakinlik tasimali"
+      - "Paragrafta hikâye unsurlarıyla ilgili AÇIKLAMA veya EK BİLGİ verme!"
+      - "Paragraf SADECE hikâyeyi anlatsın — unsur analizi veya tanımlaması YAPMA"
+    background_color: "#f8d7da"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 5
+    word_count_max: 20
+    style: "complete_sentence"
+    correct_type: "does_not_belong"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metindeki hikâye unsurları ile ilgili olarak hangisi <u>söylenemez</u>?</b>"
+  - "<b>Bu metnin hikâye unsurları ile ilgili aşağıdakilerden hangisi yanlıştır?</b>"
+  - "<b>Bu metnin hikâye unsurları dikkate alındığında aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Yukarıdaki metne göre hikâye unsurları ile ilgili aşağıdaki yargılardan hangisi <u>doğru değildir</u>?</b>"
+  - "<b>Bu metindeki hikâye unsurları hakkında aşağıdakilerden hangisine <u>ulaşılamaz</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metinle celisen yargi"
+  mantik: "INVERSE - diger 3 secenek metinden cikariabilecek dogru yargilar, dogru cevap metinle celisiyor"
+  kurallar:
+    - "Hikaye unsurlari hakkinda metinle celisen bir yargi olmali"
+    - "Tam cumle formatinda olmali (ozne + yuklem)"
+    - "Makul gorunmeli ama paragraftaki bilgilerle celismeli"
+    - "5-20 kelime arasinda olmali"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "COK_YAKIN_SOYLENEMEZ"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metinden söylenebilenlere çok yakın ama desteklenmeyen seçenek — güçlü tuzak"
+    nasil_olusturulur: |
+      Doğru cevap metinde yer alan bilgilere çok yakın ama açıkça desteklenmeyen bir bilgi içermeli.
+      Zor seviyede öğrenci her seçeneği metinle sistematik karşılaştırarak bulmalıdır.
+    kategori: "semantic"
+
+  - ad: "SISTEMATIK_METIN_TARAMA"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Tüm seçeneklerin sistematik metin taraması gerektirdiği güçlü yapı"
+    nasil_olusturulur: |
+      Tüm seçenekler makul görünmeli — öğrenci yalnızca sistematik metin taramasıyla doğru cevabı bulabilmeli.
+      Zor seviyede celdiriciler birbirine çok yakın görünmeli.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

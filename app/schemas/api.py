@@ -300,3 +300,101 @@ class AgentRunGetResponse(BaseModel):
 
 
 ExplorerTreeNode.model_rebuild()
+
+
+LegacyPipelineKind = Literal["geometry", "turkce"]
+
+
+class LegacyPipelineDescriptor(BaseModel):
+    kind: LegacyPipelineKind
+    label: str
+    enabled: bool
+    yaml_root: str
+    default_params: dict[str, Any] = Field(default_factory=dict)
+
+
+class LegacyPipelinesResponse(BaseModel):
+    pipelines: list[LegacyPipelineDescriptor]
+
+
+class LegacyYamlFilesResponse(BaseModel):
+    kind: LegacyPipelineKind
+    files: list[str] = Field(default_factory=list)
+
+
+class LegacyYamlUploadResponse(BaseModel):
+    kind: LegacyPipelineKind
+    yaml_path: str
+
+
+class LegacyYamlInfoResponse(BaseModel):
+    kind: LegacyPipelineKind
+    yaml_path: str
+    has_variants: bool
+    variant_count: int
+    variant_names: list[str] = Field(default_factory=list)
+
+
+class LegacyYamlContentResponse(BaseModel):
+    kind: LegacyPipelineKind
+    yaml_path: str
+    content: str
+    is_repo_yaml: bool
+
+
+class LegacyYamlContentUpdateRequest(BaseModel):
+    yaml_path: str
+    content: str
+
+
+class LegacyBatchItem(BaseModel):
+    yaml_path: str
+    params: dict[str, Any] = Field(default_factory=dict)
+    variants: list[str] = Field(default_factory=list)
+
+
+class LegacyBatchRunRequest(BaseModel):
+    items: list[LegacyBatchItem]
+    parallelism: int | None = None
+    stream_key: str | None = None
+
+
+class LegacyBatchRunResponse(BaseModel):
+    batch_id: str
+    run_ids: list[str]
+    status: str
+    stream_key: str | None = None
+
+
+class LegacyOutputNode(BaseModel):
+    name: str
+    type: Literal["dir", "file"]
+    url: str | None = None
+    size: int | None = None
+    rel_path: str
+    children: list["LegacyOutputNode"] = Field(default_factory=list)
+
+
+class LegacyRunDetail(BaseModel):
+    run_id: str
+    kind: LegacyPipelineKind
+    yaml_path: str
+    variant_name: str | None = None
+    status: str
+    error: str | None = None
+    started_at: str
+    finished_at: str | None = None
+    outputs: list[LegacyOutputNode] = Field(default_factory=list)
+
+
+class LegacyRunDetailResponse(LegacyRunDetail):
+    pass
+
+
+class LegacyBatchDetailResponse(BaseModel):
+    batch_id: str
+    kind: LegacyPipelineKind
+    runs: list[LegacyRunDetail] = Field(default_factory=list)
+
+
+LegacyOutputNode.model_rebuild()

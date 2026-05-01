@@ -1,0 +1,107 @@
+# Pattern: ["yer_zaman_kisi_olay", "konu"] (referans satir 419)
+# Kolay duzey, 2 soru: yer/zaman/kisi/olay + konu
+
+meta:
+  id: metin_inceleme_sinif2_kolay_yerzaman_konu_2q
+  ad: "2. Sinif - Metin Inceleme (Kolay) - Yer/Zaman/Kisi/Olay + Konu"
+  sinif_seviyesi: 2
+  aciklama: "Kolay baglam — 2 soru: yer_zaman_kisi_olay (slot 1) + konu (slot 2)"
+  frequency: "Medium"
+
+context:
+  type: metin_inceleme_sinif2_kolay_yerzaman_konu_2q
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 42
+    word_count_max: 58
+    image_type: "illustration"
+    structure:
+      - "4-5 kisa cumle, tek baskin konu/olay/kisi etrafinda."
+      - "Metinde acik kisi/olay/yer/zaman bilgisi bulunmali (slot 1 icin)."
+      - "Metnin konusu cok gorunur olmali (slot 2 icin)."
+      - "Karakter ozelligi/zit anlam/benzetme YASAK (kolay duzey)."
+    kurallar:
+      - "2. sinif duzeyinde, sade ve gunluk hayata yakin metin."
+      - "Karakter ismi Turkce olmali (Ali, Ayse, Mehmet, Elif gibi)."
+      - "Tek baskin konu, dis bilgi gerektirmeyen icerik."
+      - "Turkce karakterler dogru kullanilmali."
+
+      - "Tablo/grafik/sayi listesi KULLANMA — sadece akici Turkce anlatim. Gorsel ayrica illustrasyon olarak uretilecek."
+  questions:
+    - slot: 1
+      type: yer_zaman_kisi_olay
+      soru_kokleri:
+        - "<b>Metne gore olay nerede gecmektedir?</b>"
+        - "<b>Metne gore bu olay ne zaman olmustur?</b>"
+        - "<b>Metne gore asagidakilerden hangisi yapilmistir?</b>"
+      options_style: short_phrase
+      word_count_min: 1
+      word_count_max: 5
+      beceri:
+        katman: KB1
+        bilesenler: [acik_bilgi_okuma]
+        surec_bileseni: bilgiyi_okuma
+
+    - slot: 2
+      type: konu
+      soru_kokleri:
+        - "<b>Bu metnin konusu asagidakilerden hangisidir?</b>"
+        - "<b>Bu metinde ele alinan konu asagidakilerden hangisidir?</b>"
+        - "<b>Bu metinde asagidakilerden hangisine deginilmistir?</b>"
+        - "<b>Paragrafta anlatilan konu asagidakilerden hangisidir?</b>"
+        - "<b>Metinde en cok ne anlatilmaktadir?</b>"
+      options_style: short_phrase
+      word_count_min: 1
+      word_count_max: 5
+      beceri:
+        katman: KB1
+        bilesenler: [konu_belirleme]
+        surec_bileseni: metni_anlama
+
+header_template: "1-2. sorulari asagidaki metne gore cevaplayiniz."
+
+format:
+  type: llm_generated_html
+  description: "2 baglam sorusu (kolay): yer/zaman/kisi/olay + konu"
+  paragraph:
+    required: true
+    word_count_min: 42
+    word_count_max: 58
+    sentence_count_min: 4
+    sentence_count_max: 5
+    stil: "bilgilendirici_veya_oykusel"
+    background_color: "#e8f8e8"
+  stem:
+    required: true
+  options:
+    count: 3
+    labels: [A, B, C]
+    word_count_min: 1
+    word_count_max: 5
+    style: short_phrase
+    correct_count: 1
+    correct_type: matches
+
+dogru_cevap:
+  tanim: "Metinden acikca cikarilabilen dogru cevap"
+  kurallar:
+    - "Slot 1: dogru cevap metindeki acik kisi/olay/yer/zaman bilgisine dayanmali."
+    - "Slot 2: dogru cevap metnin tamamini kapsamali (konu)."
+    - "Yanlis secenekler kolay elenebilir olmali."
+distractors:
+  stratejiler:
+    - ad: METNE_YAKIN_AMA_YANLIS
+      aciklama: "Metne yakin gorunur ama acik bilgiye uymayan secenek"
+    - ad: COK_GENIS
+      aciklama: "Konu sorusunda metnin alaniyla ilgili ama cok genel secenek"
+    - ad: COK_DAR
+      aciklama: "Konu sorusunda metindeki tek ayrintiya odaklanan secenek"
+
+use_shared_strategies: false
+
+beceri:
+  katman: KB1
+  bilesenler: [baglam_okuma, acik_bilgi]
+  surec_bileseni: metni_anlama

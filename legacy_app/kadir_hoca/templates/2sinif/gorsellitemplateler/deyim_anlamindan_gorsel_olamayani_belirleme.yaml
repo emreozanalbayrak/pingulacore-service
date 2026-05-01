@@ -1,0 +1,145 @@
+meta:
+  id: "deyim_anlamindan_gorsel_olamayani_belirleme"
+  ad: "Deyim Anlamından Görsel Olamayanı Belirleme"
+  ders: "Türkçe"
+  sinif_seviyesi: "2. Sınıf"
+  tema: "Söz Varlığı ve Görsel Okuma"
+  model: "TYMM"
+  format_turu: "llm_generated_html"
+  aciklama: "Verilen deyimlerin anlamlarından hareketle, bu deyimlerden hiçbirini anlatmayan görseli seçtiren 3 seçenekli soru formatı"
+  frequency: "orta"
+
+context:
+  type: "deyim_anlam_gorsel_eslestirme"
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 20
+    word_count_max: 70
+    structure:
+      - "Önce deyimlerin ne olduğuna dair kısa ve sade bir açıklama verilir."
+      - "Ardından 2 veya 3 deyim kısa anlamlarıyla birlikte yazılır."
+      - "Sonrasında bu deyimlerle ilişkili ya da ilişkisiz 3 görsel seçenek sunulur."
+      - "Öğrenciden, verilen deyimlerden hiçbirine ait olmayan görseli bulması istenir."
+    kurallar:
+      - "Metin 2. sınıf seviyesine uygun ve sade olmalıdır."
+      - "Deyim açıklamaları kısa, açık ve çocukların anlayabileceği şekilde verilmelidir."
+      - "Ağır, soyut ya da çok katmanlı açıklamalardan kaçınılmalıdır."
+      - "Görseller doğrudan gerçek anlamı değil, deyim anlamını düşündürebilecek şekilde kurgulanmalıdır."
+      - "Metin tek başına cevabı vermemelidir."
+      - "Görsel olmadan doğru cevap kesinleşmemelidir."
+
+format:
+  type: "llm_generated_html"
+  description: "Kısa açıklama + 2-3 deyim ve anlamları + 3 görsel seçenek + tek soru"
+
+  paragraph:
+    required: true
+    word_count_min: 20
+    word_count_max: 70
+    sentence_count_min: 3
+    sentence_count_max: 6
+
+  visual:
+    required: true
+    count: 3
+    description: "Her seçenekte bir deyimi çağrıştıran ya da çağrıştırmayan tek bir sahne görseli"
+
+  stem:
+    required: true
+    sentence_count_min: 1
+    sentence_count_max: 1
+    soru_koku_ornekleri:
+      - "Buna göre aşağıdakilerden hangisi sözü edilen deyimlerden herhangi birinin görseli olamaz?"
+      - "Verilen deyimlere göre aşağıdaki görsellerden hangisi uygun değildir?"
+      - "Bu açıklamalara göre aşağıdakilerden hangisi deyimlerden biriyle eşleşmez?"
+      - "Aşağıdaki görsellerden hangisi verilen deyimlerden hiçbirini anlatmaz?"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    style: "image_choice"
+    correct_count: 1
+    correct_type: "mismatch"
+
+gorsel:
+  required: true
+  tur: "deyim_anlami_sahne_gorseli"
+  amac: "Öğrencinin deyim anlamı ile görsel arasında ilişki kurmasını sağlamak"
+  kurallar:
+    - "Her seçenek tek bir sahne ya da durum göstermelidir."
+    - "En az iki görsel verilen deyimlerden biriyle ilişkilendirilebilir olmalıdır."
+    - "Bir görsel ise verilen deyimlerden hiçbirine uymamalıdır."
+    - "Görseller açık, anlaşılır ve 2. sınıf seviyesine uygun olmalıdır."
+    - "Görseller aşırı karışık olmamalıdır."
+    - "Karakterlerin yüz ifadeleri ve beden dili anlam kurmaya yardımcı olabilir."
+    - "Görsel süsleyici değil, çözüm için zorunlu olmalıdır."
+
+olculen_beceri:
+  tanim: "Deyim anlamlarını okuyup bunlarla uyuşan ya da uyuşmayan görselleri ayırt etme"
+  bilesenler:
+    - "okudugunu_anlama"
+    - "sozcuk_anlami"
+    - "gorsel_yorumlama"
+    - "eslestirme"
+    - "uygun_olmayan_ornegi_belirleme"
+
+dogru_cevap:
+  tanim: "Verilen deyimlerden hiçbirinin anlamını yansıtmayan görsel"
+  kurallar:
+    - "Doğru cevap, verilen deyim anlamlarıyla eşleşmeyen görsel olmalıdır."
+    - "Yanlış olmayan seçenekler, en az bir deyimin anlamıyla ilişkilendirilebilir olmalıdır."
+    - "Doğru cevap yalnızca deyim anlamları ve görseller birlikte değerlendirilirse bulunmalıdır."
+    - "Görseller gerçek anlamı değil, deyimin anlatmak istediği durumu düşündürmelidir."
+    - "Doğru seçenek, dikkatli anlam karşılaştırması gerektirmelidir."
+
+distractors:
+  stratejiler:
+    - ad: "GERCEK_ANLAM_YANILGISI"
+      aciklama: "Deyimin gerçek anlamını düşündüren ama asıl anlamıyla uyumsuz sahne kullanma"
+      ornek: "Söz öbeğindeki kelimeleri gerçekten yapan bir karakter gösterme"
+    - ad: "YAKIN_DURUM_CELDIRICISI"
+      aciklama: "Deyim anlamına kısmen benzeyen ama tam karşılamayan sahne sunma"
+      ornek: "Heyecanlı olma ile şaşkın olmayı karıştıran görsel"
+    - ad: "DUYGUSAL_BENZERLIK"
+      aciklama: "Benzer duygu taşıyan ama verilen deyimlerden birine karşılık gelmeyen görsel sunma"
+      ornek: "Utanma ile korkmayı karıştıran sahne"
+    - ad: "YUZEYSEL_ESLESME"
+      aciklama: "İlk bakışta uygun görünen ama anlamı karşılamayan görsel kullanma"
+      ornek: "Geveze biri yerine sadece konuşan biri gösterme"
+
+use_shared_strategies: false
+
+tymm_uyum_kurallari:
+  - "2. sınıf seviyesine uygun, kısa ve açık cümleler kullanılmalıdır."
+  - "Deyim anlamları çocukların anlayabileceği sadelikte verilmelidir."
+  - "Çok soyut, kültürel olarak ağır ya da karmaşık deyimlerden kaçınılmalıdır."
+  - "Görseller anlam kurmaya yardımcı olmalı, ancak cevabı aşırı kolaylaştırmamalıdır."
+  - "Soru kökündeki 'olamaz' ifadesi açık ve belirgin olmalıdır."
+  - "Görsel olmadan doğru cevap kesinleşmemelidir."
+  - "3 seçenekli yapıda iki görsel anlamca güçlü çeldirici olmalıdır."
+  - "Birden fazla doğru seçeneğe izin verilmemelidir."
+
+izinli_icerikler:
+  - "çocukların anlayabileceği yaygın deyimler"
+  - "kısa deyim açıklamaları"
+  - "basit duygu ve davranış durumları"
+  - "tek kişilik ya da iki kişilik açık ve anlaşılır sahneler"
+  - "beden diliyle desteklenen anlatımlar"
+
+yasakli_icerikler:
+  - "çok soyut deyimler"
+  - "argo veya yaş düzeyine uygun olmayan ifadeler"
+  - "aşırı kalabalık görseller"
+  - "birden fazla doğru seçenek"
+  - "şiddet, korku ya da uygunsuz içerik"
+
+ornek_sablon:
+  ust_metin: "Deyimlerle ilgili kısa açıklama ve 2-3 deyimin anlamı"
+  gorsel: "Her seçenekte tek sahneli bir görsel"
+  soru_koku: "Buna göre aşağıdakilerden hangisi sözü edilen deyimlerden herhangi birinin görseli olamaz?"
+  secenekler:
+    A: "Görsel"
+    B: "Görsel"
+    C: "Görsel"

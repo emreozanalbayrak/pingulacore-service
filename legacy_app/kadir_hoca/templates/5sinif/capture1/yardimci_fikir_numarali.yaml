@@ -1,0 +1,295 @@
+# templates/yardimci_fikir_numarali.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Metinde Yardimci Fikir
+#
+# NUMARALI FORMAT (~%17 - 48 sorudan 8'i)
+# Paragraf verilir, I/II/III/IV numarali ifadeler soru kokunde listelenir
+# Secenekler "I ve II", "II ve IV" gibi birlesik formatindadir
+#
+# ⚠️ BU TEMPLATE OZEL GENERATOR DESTEGI GEREKTIRIR
+# Mevcut HTMLQuestionGenerator bu formati desteklemiyor.
+# Gerekli kod degisiklikleri:
+# 1. Yeni output schema (4 numarali ifade + 2 dogru/2 yanlis belirleme)
+# 2. Birlesik secenek olusturucu ("I ve II", "II ve IV")
+# 3. HTML renderer (numarali ifadelerin soru kokunde listelenmesi)
+#
+# HEM NEGATIF HEM POZITIF soru kokleri desteklenir:
+# - Negatif: "hangileri çıkarılamaz?" (dogru cevap = metinde OLMAYAN 2 ifade)
+# - Pozitif: "hangilerine ulaşılabilir?" (dogru cevap = metinde OLAN 2 ifade)
+
+meta:
+  id: "yardimci_fikir_numarali"
+  ad: "Metinde Yardimci Fikir (Numarali)"
+  sinif_seviyesi: 5
+  aciklama: "I/II/III/IV numarali ifadeler + birlesik secenek formatinda yardimci fikir sorulari"
+  kaynak: "data/metinde_yardimci_fikir.pdf"
+  frequency: "~17% of yardimci fikir questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Paragraf + soru kokunde I/II/III/IV ifadeler + 'I ve II' tarzi birlesik secenekler"
+
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 100
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "bilgilendirici"
+    kurallar:
+      - "Konuyla ilgili birden fazla bilgi icermeli"
+      - "En az 2 bilgi acikca metinde olmali (dogrulanabilir)"
+      - "En az 2 bilgi metinde olmamali veya desteklenmemeli"
+      - "Hem dogrudan hem dolayli cikarimlar icin uygun olmali"
+
+  stem:
+    required: true
+    description: "Soru kokleri pattern listesinden rastgele secilir, {statements} placeholder ile"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 6
+    style: "roman_numeral_combination"
+    correct_count: 1
+    preserve_order: true  # Roman numeral şıklar sıralı kalmalı (shuffle yok)
+    layout: "two_column"  # PDF'deki 2 sütun layout (A-B / C-D)
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 6 varyasyon)
+# Hem negatif hem pozitif soru kokleri
+# {statements} placeholder: I/II/III/IV ifadeler buraya gelir
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # NEGATİF (metinden çıkarılaMIYACAK olanlar)
+  # NOT: {statements} NORMAL font (bold DEĞİL!), sadece başlangıç ve bitiş bold
+  - "<b>Bu metinden,</b>\n{statements}\n<b>numaralanmış ifadelerden hangileri <u>çıkarılamaz</u>?</b>"
+  - "<b>Bu metinde,</b>\n{statements}\n<b>numaralanmış bilgilerden hangilerine <u>yer verilmemiştir</u>?</b>"
+  - "<b>Bu metinden</b> \"{topic}\" <b>ile ilgili,</b>\n{statements}\n<b>bilgilerinden hangilerine <u>ulaşılamaz</u>?</b>"
+  - "<b>Bu metinde,</b>\n{statements}\n<b>maddelerinden hangileri ile ilgili bilgi <u>verilmemiştir</u>?</b>"
+  # POZİTİF (metinden çıkarılABİLECEK olanlar)
+  - "<b>Bu metinden,</b>\n{statements}\n<b>bilgilerinden hangilerine ulaşılabilir?</b>"
+  - "<b>Bu metinden</b> \"{topic}\" <b>ile ilgili,</b>\n{statements}\n<b>numaralanmış bilgilerden hangilerine ulaşılabilir?</b>"
+  # Yargı/çıkarım odaklı (negatif ve pozitif karışık)
+  - "<b>Bu metinde</b> \"{topic}\" <b>ile ilgili,</b>\n{statements}\n<b>yargılarından hangileri kesin olarak <u>çıkarılamaz</u>?</b>"
+  - "<b>Bu metinde,</b>\n{statements}\n<b>konularından hangileri ele alınmıştır?</b>"
+  - "<b>Bu metinden</b> \"{topic}\" <b>ile ilgili,</b>\n{statements}\n<b>yargılarından hangileri <u>çıkarılamaz</u>?</b>"
+  - "<b>Bu metinden hareketle</b> \"{topic}\" <b>ile ilgili,</b>\n{statements}\n<b>yargılarından hangilerine ulaşılabilir?</b>"
+  - "<b>Bu metinden hareketle,</b>\n{statements}\n<b>yargılarından hangileri kesin olarak söylenebilir?</b>"
+  - "<b>Bu metinden,</b>\n{statements}\n<b>yargılarından hangileri çıkarılabilir?</b>"
+  - "<b>Bu metne göre</b> \"{topic}\" <b>ile ilgili,</b>\n{statements}\n<b>yargılarından hangileri söylenebilir?</b>"
+  - "<b>Bu metne göre,</b>\n{statements}\n<b>yargılarından hangileri yanlıştır?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "4 numarali ifadeden 2 tanesinin birlesimi - negatif sorularda metinde OLMAYAN 2 ifade, pozitif sorularda metinde OLAN 2 ifade"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "4 numarali ifade olusturulmali (I, II, III, IV)"
+    - "Negatif soru: 2 ifade metinde var (yanlis), 2 ifade metinde yok (dogru cevap)"
+    - "Pozitif soru: 2 ifade metinde var (dogru cevap), 2 ifade metinde yok (yanlis)"
+    - "Secenekler ikili birlesimler: 'I ve II', 'I ve III', 'II ve IV', 'III ve IV', 'I ve IV', 'II ve III' gibi"
+    - "Her ifade tam cumle olmali (8-20 kelime)"
+  ornekler:
+    - paragraf: "Zeytinyagi binlerce yildir Akdeniz ulkelerinde kullanilmaktadir. Zeytin agaci cok uzun omurlu olup bazi agaclar 2000 yili askin yasayabilir. Zeytinin meyvesinden yag, yapraklarindan cay, agacindan mobilya uretilir."
+      ifadeler:
+        I: "Zeytin ağacı oldukça uzun ömürlü bir ağaçtır."
+        II: "Zeytinyağının besin değeri diğer yağlara oranla daha yüksektir."
+        III: "Zeytinin meyvesinden ve ağacından farklı alanlarda yararlanılır."
+        IV: "Zeytinyağı üretimi zor ve pahalı bir yağ türüdür."
+      dogru: "II ve IV"
+      neden: "II ve IV metinde desteklenmiyor - negatif soruda dogru cevap"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# Numarali format (I/II/III/IV ifadeler + "I ve II" tarzi secenekler):
+# - 2 ifade metinde DESTEKLENEN
+# - 2 ifade metinde DESTEKLENMEYEN
+# Strateji havuzu "desteklenmeyen" ifadeleri olusturmak icin kullanilir
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siniflandirma", "cikarim_yapma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic with rich content"
+      details: "Birden fazla bilgi iceren bir konu sec"
+
+    - step: 2
+      action: "Generate paragraph (55-100 words)"
+      details: |
+        Paragrafta:
+        - En az 2 acik bilgi olmali (dogrulanabilir ifadeler icin)
+        - En az 2 bilgi kasitli olarak atlanmali (desteklenmeyen ifadeler icin)
+
+    - step: 3
+      action: "Create 4 numbered statements (I, II, III, IV)"
+      details: |
+        Her biri tam cumle (8-20 kelime):
+        - 2 ifade: paragrafta DESTEKLENEN (metinden cikariabilir)
+        - 2 ifade: paragrafta DESTEKLENMEYEN (metinden cikarilamaz)
+        - Siralama rastgele olmali
+
+    - step: 4
+      action: "Create 4 combination options"
+      details: |
+        Secenekler ikili birlesimler:
+        - Negatif soru icin dogru cevap: desteklenmeyen 2 ifadenin birlesimi
+        - Pozitif soru icin dogru cevap: desteklenen 2 ifadenin birlesimi
+        - Diger 3 secenek: karisik birlesimleri
+        Ornek: A) I ve II  B) I ve III  C) II ve IV  D) III ve IV
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem and embed statements"
+      details: |
+        soru_kokleri listesinden rastgele sec
+        {statements} yerine numarali ifadeleri yerlestir:
+        I. [ifade 1]
+        II. [ifade 2]
+        III. [ifade 3]
+        IV. [ifade 4]
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 2
+    soru_no: 7
+    konu: "Zeytinyagi"
+    tip: "negatif"
+    paragraf: "Zeytinyagi binlerce yildir Akdeniz ulkelerinde kullanilmaktadir..."
+    soru_koku: "Bu metinden, I/II/III/IV numaralanmis ifadelerden hangileri cikarilAmaz?"
+    ifadeler:
+      I: "Zeytin ağacı oldukça uzun ömürlü bir ağaçtır."
+      II: "Zeytinyağının besin değeri diğer yağlara oranla daha yüksektir."
+      III: "Zeytinin meyvesinden ve ağacından farklı alanlarda yararlanılır."
+      IV: "Zeytinyağı üretimi zor ve pahalı bir yağ türüdür."
+    secenekler:
+      A: "I ve II"
+      B: "I ve III"
+      C: "II ve IV"
+      D: "III ve IV"
+    dogru_cevap: "C"
+    neden: "II ve IV paragrafta desteklenmiyor"
+
+  - sayfa: 4
+    soru_no: 6
+    konu: "Feslegen"
+    tip: "pozitif"
+    paragraf: "Feslegen, sicak iklimlerde yetisen aromatik bir bitkidir..."
+    soru_koku: "Bu metinden, I/II/III/IV bilgilerinden hangilerine ulasilabilir?"
+    ifadeler:
+      I: "Fesleğen sıcak iklimlerde yetişir."
+      II: "Fesleğen yaprakları kurutularak saklanabilir."
+      III: "Fesleğen yemeklere lezzet katar."
+      IV: "Fesleğen tohumları ilaç yapımında kullanılır."
+    secenekler:
+      A: "I ve II"
+      B: "I ve III"
+      C: "II ve IV"
+      D: "III ve IV"
+    dogru_cevap: "B"
+    neden: "I ve III paragrafta destekleniyor"
+
+  - sayfa: 7
+    soru_no: 3
+    konu: "Dag kecileri"
+    tip: "negatif"
+    paragraf: "Dag kecileri, sarp kayaliklarda yasayan dayanikli hayvanlardir..."
+    soru_koku: "Bu metinden 'dağ keçileri' ile ilgili, I/II/III/IV bilgilerinden hangilerine ulasilamaz?"
+    ifadeler:
+      I: "Sarp kayalıklarda yaşarlar."
+      II: "Kış aylarında göç ederler."
+      III: "Toynaklarıyla kayalıklara tutunurlar."
+      IV: "Sürüler hâlinde avlanırlar."
+    secenekler:
+      A: "I ve II"
+      B: "I ve III"
+      C: "II ve IV"
+      D: "III ve IV"
+    dogru_cevap: "C"
+    neden: "II ve IV paragrafta desteklenmiyor"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 55-100 arasinda mi?"
+    - "En az 2 dogrulanabilir bilgi var mi?"
+    - "En az 2 desteklenmeyen bilgi alani var mi?"
+
+  statements:
+    - "Tam 4 numarali ifade var mi (I, II, III, IV)?"
+    - "Her ifade tam cumle mi (8-20 kelime)?"
+    - "2 ifade metinde destekleniyor mu?"
+    - "2 ifade metinde desteklenmiyor mu?"
+
+  options:
+    - "4 secenek ikili birlesim mi ('X ve Y' formati)?"
+    - "Dogru cevap dogru 2 ifadenin birlesimi mi?"
+    - "Diger secenekler karisik birlesimler mi?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+
+  generation_rules:
+    - "Birden fazla dogrulanabilir bilgi iceren konulari tercih et"
+    - "Konuyla ilgili ama metinde olmayan makul bilgiler uretileebilecek konulari sec"
+    - "Hem desteklenen hem desteklenmeyen ifadeler icin zengin icerik gerekli"

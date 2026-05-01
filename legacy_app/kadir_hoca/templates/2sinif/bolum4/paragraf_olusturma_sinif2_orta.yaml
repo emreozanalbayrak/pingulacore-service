@@ -1,0 +1,129 @@
+# templates/2sinif/bolum4/paragraf_olusturma_sinif2_orta.yaml
+# 2. Sinif — Paragraf Olusturma — ORTA zorluk
+# 4 cumle, olay akisi/islem basamaklari, 1 yanlis secenek ilk bakista makul
+
+meta:
+  id: "paragraf_olusturma_sinif2_orta"
+  ad: "2. Sinif - Paragraf Olusturma (Orta)"
+  sinif_seviyesi: 2
+  aciklama: "Orta duzey — 4 cumle, olay akisi/islem basamaklari, 1 yanlis secenek ilk bakista makul, 3 secenekli"
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Numaralanmis karisik cumleler + soru koku + 3 siralama secenegi (orta)"
+
+  paragraph:
+    required: true
+    numbered_sentences: true
+    word_count_min: 28
+    word_count_max: 52
+    sentence_count_min: 4
+    sentence_count_max: 4
+    stil: "siralama"
+    background_color: "#f8f0e0"
+    kurallar:
+      - "4 cumle kullanilmalidir."
+      - "Cumleler numaralanmis ve KARISIK sirada verilmelidir."
+      - "Cumleler ARAP RAKAMLARI (1., 2., 3., 4.) ile numaralandirilmalidir. Roma rakami (I, II, III, IV) KULLANILMAMALIDIR."
+      - "Cumleler birlikte anlamli ve dogal bir paragraf olusturmalidir."
+      - "Cumleler tek baskin konu veya tek olay akisi etrafinda kurulmalidir."
+      - "Cumleler 2. sinif ogrencisinin anlayabilecegi kadar sade, kisa ve somut olmalidir."
+      - "Her cumle tek bir acik bilgi veya tek bir acik adim icermelidir."
+      - "Siralama, olay akisi veya islem basamaklari uzerinden kurulmalidir."
+      - "En az iki cumle arasinda dogrudan baglayici bulunabilir; diger iliskiler anlamdan cikarilmalidir."
+      - "Baslangic ve bitis makul duzende ayirt edilebilir olmalidir."
+      - "Cumleler dis bilgi gerektirmeden yalniz kendi ic iliskileriyle siralanabilir olmalidir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    style: "roman_numeral_combination"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Tum secenekler yalniz sira dizisi biciminde verilmelidir."
+      - "Siralama, cumle numaralari tire ile ayrilmis bicimde yazilmalidir."
+      - "4 cumle icin secenekler ornegin 2-3-4-1 biciminde olmalidir."
+      - "Secenekler yalnizca Arap rakamlari ve tire ile yazilmalidir (ornek: 2-3-4-1). Roma rakami (I, II, III, IV) asla kullanilmamalidir."
+      - "Dogru secenek anlamli paragraf sirasini vermelidir."
+      - "Yanlis secenekler rastgele degil, makul ama hatali dizilislerden secilmelidir."
+      - "1 yanlis secenek dogru baslangica yakin ama devami yanlis olmalidir."
+      - "1 yanlis secenek dogru sona yakin ama basi ya da ortasi yanlis olmalidir."
+      - "En az 1 yanlis secenek ilk bakista makul gorunmelidir."
+
+soru_kokleri:
+  - "<b>Numaralanmis cumlelerin olaylarin olus sirasina gore siralanisi hangi secenekte dogru verilmistir?</b>"
+  - "<b>Numaralanmis cumlelerle anlamli bir paragraf olusturulmak istenirse siralama nasil olmalidir?</b>"
+  - "<b>Bu cumlelerle anlamli bir paragraf olusturmak icin dogru siralama hangisidir?</b>"
+  # KULLANILDI: - "<b>Numaralanmis cumlelerin dogru siralanisi asagidakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Bu cumleler anlamli bir paragraf olusturacak sekilde nasil siralanmalidir?</b>"
+  - "<b>Asagidaki numaralanmis cumlelerle bir paragraf olusturulursa dogru sira hangisi olur?</b>"
+  - "<b>Karisik verilen cumlelerle anlamli bir paragraf olusturulursa siralama nasil olur?</b>"
+  - "<b>Numaralanmis cumleler dusuncenin akisina gore nasil siralanmalidir?</b>"
+  - "<b>Bu cumlelerin anlamli bir paragraf olusturmasi icin siralama hangi secenekte dogru verilmistir?</b>"
+  - "<b>Bu cumleler olaylarin olus sirasina gore dizilirse hangi sira olusur?</b>"
+
+dogru_cevap:
+  tanim: "Numaralanmis cumleleri anlamli ve dogal bir paragraf olusturacak bicimde siralayan secenek"
+  kurallar:
+    - "Dogru cevap paragrafin dogal baslangicini dogru cumleyle baslatmalidir."
+    - "Dogru cevap cumleler arasinda acik zaman, neden-sonuc veya islem akisi kurmalidir."
+    - "Dogru cevap paragraffi dogal bir sonla tamamlamalidir."
+    - "Dogru cevap yalniz tek bir dogru dizilis birakmalicidr."
+    - "Dogru sira 2. sinif ogrencisinin acik ipuclariyla fark edebilecegi nitelikte olmalidir."
+
+celdirici_stratejileri:
+  - ad: "DOGRU_BASLANGIC_YANLIS_DEVAM"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Ilk cumle dogruya yakindir ama devam sirasi bozulmustur"
+    nasil_olusturulur: |
+      Dogru baslangic cumlesini koru ama devam sirasini boz.
+      Orta duzey: bu secenek ilk bakista makul gorunmeli ama devami yanlistir.
+    kategori: "cognitive"
+
+  - ad: "YANLIS_BASLANGIC_DOGRU_BITIS"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Son cumle dogruya yakin gorunur ama baslangic yanlictir"
+    nasil_olusturulur: |
+      Dogru bitis cumlesini koru ama baslangici yanlis sec.
+      Orta duzey: bu secenek sonu dogru gorunmeli ama basi yanlis olmali.
+    kategori: "cognitive"
+
+  - ad: "ISLEM_BASAMAGI_KARISIK"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Islem veya olus sirasindaki iki yakin adim yer degistirmistir"
+    nasil_olusturulur: |
+      Ardisik iki adimi yer degistir — baslangic ve bitis dogru gorunur ama orta kisim yanlistir.
+    kategori: "cognitive"
+
+  - ad: "NEDEN_SONUC_TERS"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Sonuc cumlesi sebep cumlesinden once verilmistir"
+    nasil_olusturulur: |
+      Neden-sonuc iliskisindeki cumleleri ters sirada ver.
+      Orta duzey: mantik hatasi iceriyor ama ilk bakista fark edilmeyebilir.
+    kategori: "cognitive"
+
+  - ad: "ORTA_BOLUM_KAYMASI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Baslangic ve bitis daha makul gorunur ama orta kisim bozulmustur"
+    nasil_olusturulur: |
+      Baslangic ve bitis cumlelerini dogru konumda birak, orta kismi karistir.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB1"
+  bilesenler: ["siralama", "paragraf_olusturma"]
+  surec_bileseni: "metni_anlama"
+
+sinif2_ek_kurallar:
+  yasak_alanlar:
+    - "Ana dusunce / ana duygu odakli sorular YASAK"
+    - "Cok katmanli mantik gerektiren dizilim YASAK"

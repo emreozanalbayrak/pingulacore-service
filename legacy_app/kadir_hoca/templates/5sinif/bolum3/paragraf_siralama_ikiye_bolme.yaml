@@ -1,0 +1,253 @@
+# templates/bolum3/paragraf_siralama_ikiye_bolme.yaml
+# Bolum 3 - Yapi Yonu: Paragraf Ikiye Bolme
+#
+# IKIYE BOLME FORMATI
+# Numarali cumleler verilir, ogrenci metni ikiye bolme noktasini bulur
+# Ikinci paragrafin hangi cumleyle basladigini secer
+#TODO: Template kontrolu saglanıcak, şıklar tamamen roma rakamı olmalı. roma rakamı olurken A: I, B: II, C: III, D: IV formatı olmalı. bazı sorularda A: I., B: II., C: III., D: IV. boyle noktalama kullanmış bunun olmaması gerekıyor. ve sadece roma rakamı olmalı.
+
+meta:
+  id: "paragraf_siralama_ikiye_bolme"
+  ad: "Paragraf Sıralama (İkiye Bölme)"
+  sinif_seviyesi: 5
+  aciklama: "Numaralı cümlelerden oluşan metni iki paragrafa ayırma noktasını bulma"
+  frequency: "High (~37 questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Numaralı cümleler + soru kökü + 4 kısa ifade seçenek"
+
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 95
+    sentence_count_min: 5
+    sentence_count_max: 6
+    numbered_sentences: true
+    stil: "bilgilendirici"
+    kurallar:
+      - "Metin toplam 5-6 cümleden oluşmalı"
+      - "Metin tek bir metin bloğu olarak yazılmalı"
+      - "Metin görünüşte tek blok hâlinde verilse de içerik olarak iki paragrafa ayrılabilecek yapıda olmalı"
+      - "İlk 2-3 cümle birinci alt konuyu, son 2-3 cümle ikinci alt konuyu ele almalı"
+      - "İki paragraf arasında belirgin ama yapay durmayan bir geçiş noktası bulunmalı"
+      - "Geçiş noktası, ikinci paragrafın doğal olarak başlaması gereken cümleyi oluşturmalı"
+      - "Her cümle 10-20 kelime arasında olmalı"
+      - "Cümleler doğru sırada yazılmalı, karıştırılmamalı"
+      - "Cümleler arasında mantıksal bağlantı bulunmalı"
+      - "Metinde paragraf bölme işareti, satır boşluğu veya fiziksel paragraf ayrımı konulmamalı"
+      - "Cümleleri Roma rakamlarıyla numarala: (I), (II), (III), (IV), (V), (VI)"
+      - "SADECE ROMA RAKAMI (I, II, III, IV, V, VI) KULLAN — Arap rakamı (1, 2, 3) KULLANMA"
+      - "Seçeneklerde SADECE Roma rakamı verilmeli — cümle metni YAZILMAMALI"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+    kurallar:
+      - "Soru kökü SADECE tek bir soru cümlesi olmalı"
+      - "Soru kökü paragrafı yeniden yazmamalı veya özetlememeli"
+      - "YASAK: Soru kökünde (I)... (II)... (III)... şeklinde cümle listesi yazmak"
+      - "YASAK: Paragrafı herhangi bir formatta tekrar yazmak"
+      - "Soru kökü yalnızca ikinci paragrafın hangi cümleyle başlayacağını sormalı"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    style: "short_phrase"
+    word_count_min: 1
+    word_count_max: 5
+    correct_count: 1
+    kurallar:
+      - "Toplam 4 seçenek olmalı"
+      - "Seçenekler SADECE Roma rakamından oluşmalı: A) III, B) IV, C) V, D) II"
+      - "YASAK: Seçeneklerde cümle metni yazmak"
+      - "YASAK: Arap rakamı (1, 2, 3) kullanmak"
+      - "İkinci paragrafın başlangıcı olamayacak cümleler seçeneklere alınmamalıdır"
+      - "I. cümle seçeneklerde yer almamalıdır"
+      - "Seçenek havuzu, metni iki anlamlı paragrafa bölebilecek cümleler arasından oluşturulmalıdır"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metin iki paragrafa ayrılacak olursa ikinci paragraf hangi cümleyle başlar?</b>"
+  - "<b>Metin iki paragrafa bölündüğünde ikinci paragrafın ilk cümlesi hangisidir?</b>"
+  - "<b>Bu metin iki bölüme ayrıldığında ikinci bölüm hangi cümleyle başlamalıdır?</b>"
+  # Farklı soru formülasyonları (ARI Paragraf 2025 kaynak)
+  - "<b>Bu metin iki parçaya bölünmek istenirse ilk parçanın son cümlesi numaralanmış cümlelerden hangisi olur?</b>"
+  - "<b>Bu metin iki paragrafa bölünmek istenirse ikinci metin kaç numaralı cümle ile başlar?</b>"
+  - "<b>Bu metin iki paragrafa bölünmek istenirse ikinci paragrafın ilk cümlesi numaralanmış cümlelerden hangisi olur?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metnin ikinci paragrafının doğal olarak başladığı cümlenin Roma rakamı"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Doğru cevap, metni iki anlamlı ve tutarlı paragrafa ayırabilmeli"
+    - "Doğru cevap belirlendiğinde, önceki cümleler birinci paragrafı; sonraki cümleler ikinci paragrafı oluşturabilmeli"
+    - "Geçiş noktası yapay değil, doğal bir konu / alt konu / bakış açısı değişimi taşımalı"
+    - "Doğru cevap I. cümle olamaz"
+    - "Doğru cevap SADECE Roma rakamı olarak verilmeli: II, III, IV, V, VI vb."
+
+  ornekler:
+    - paragraf: "(I) Güneş, Güneş Sistemi'nin merkezindeki yıldızdır. (II) Gezegenler Güneş'in çevresinde dolanır. (III) Bu hareketler belirli yörüngeler üzerinde gerçekleşir. (IV) Ay ise Dünya'nın doğal uydusu olarak bilinir. (V) Ay, Dünya'nın çevresinde yaklaşık 27 günde döner. (VI) Dolunay ve hilal gibi evreleri gözlemlenir."
+      dogru: "IV"
+      neden: "İlk üç cümle Güneş ve gezegenlerin düzeniyle ilgilidir. IV. cümleden itibaren odak Ay ve özelliklerine geçer. Bu nedenle ikinci paragraf doğal olarak IV. cümleyle başlar."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI (CUSTOM — ikiye bolme icin ozel)
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "YAKIN_BOLME_NOKTASI"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Doğru bölme noktasına yakın ama yanlış cümleyi paragraf başlangıcı olarak sunma"
+    nasil_olusturulur: |
+      Doğru geçiş noktasından bir önceki veya sonraki cümleyi ikinci paragrafın başlangıcı olarak sun.
+      Öğrenci yakın cümleye aldanabilir çünkü konu geçişi o civarda.
+      Örnek: Doğru bölme "4. cümle" ise "3. cümle" veya "5. cümle" sun.
+    kategori: "cognitive"
+
+  - ad: "KONU_DEVAMLILIK_TUZAGI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Aynı konunun devam ettiği bir noktayı bölme noktası olarak sunma"
+    nasil_olusturulur: |
+      Birinci alt konunun ortasındaki bir cümleyi ikinci paragraf başlangıcı gibi sun.
+      Cümlede yeni bir detay verilse de aslında aynı alt konu devam ediyordur.
+      Öğrenci detay değişikliğini konu değişikliği sanabilir.
+    kategori: "cognitive"
+
+  - ad: "GECIS_SOZCUGU_ALDATMACASI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Geçiş sözcüğü olan ama bölme noktası olmayan cümleyi sunma"
+    nasil_olusturulur: |
+      "Ayrıca", "Bunun yanında", "Öte yandan" gibi geçiş sözcükleri içeren
+      ama aslında aynı alt konuyu devam ettiren cümleyi bölme noktası gibi sun.
+      Öğrenci geçiş sözcüğüne aldanarak yeni paragraf başlangıcı sanabilir.
+    kategori: "linguistic"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ETIKETI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["yapilandirma", "analiz"]
+  surec_bileseni: "metin_yapisini_analiz_etme"
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Konu seç ve iki alt konu planla"
+      details: |
+        Konuyla ilgili tek bir ana tema içinde iki ilişkili alt konu belirle.
+        İki alt konu arasında doğal bir konu / bakış açısı / boyut değişimi bulunmalıdır.
+        İki alt konu arasındaki geçiş yapay değil, metnin akışı içinde doğal görünmelidir.
+
+    - step: 2
+      action: "Metnin ana akışını kur"
+      details: |
+        Metin toplam 6-8 cümleden oluşmalıdır.
+        İlk 3-4 cümle birinci alt konuyu işlemelidir.
+        Son 3-4 cümle ikinci alt konuyu işlemelidir.
+        Tüm cümleler doğru sırada yazılmalı, karıştırılmamalıdır.
+        Her cümle 10-20 kelime arasında olmalıdır.
+        Metin dış görünüşte tek blok hâlinde verilse de içerik olarak iki paragrafa ayrılabilecek yapıda olmalıdır.
+
+    - step: 3
+      action: "Bölme noktasını belirle"
+      details: |
+        İkinci alt konunun doğal olarak başladığı cümleyi belirle.
+        Bu cümle doğru cevap olacaktır.
+        Doğru cevap I. cümle olamaz.
+        Doğru cevap seçildiğinde metin iki anlamlı ve tutarlı paragrafa ayrılabilmelidir.
+
+    - step: 4
+      action: "Metni Roma rakamlarıyla numaralandır"
+      details: |
+        Cümleler (I), (II), (III), (IV), (V), (VI) ... biçiminde Roma rakamlarıyla numaralandırılmalıdır.
+        SADECE Roma rakamı kullanılmalı — Arap rakamı (1, 2, 3) KULLANILMAMALI.
+        Metin tek bir blok hâlinde sunulmalıdır; paragraf bölme işareti veya satır boşluğu konulmamalıdır.
+
+    - step: 5
+      action: "Doğru cevabı Roma rakamı olarak oluştur"
+      details: |
+        Doğru cevap, ikinci paragrafın başladığı cümlenin Roma rakamı olmalıdır.
+        Format: II, III, IV, V, VI vb.
+
+    - step: 6
+      action: "Çeldirici seçenekleri oluştur"
+      details: |
+        3 çeldirici, ikinci paragrafın başlangıcı olabilecekmiş gibi görünen ama metni doğal biçimde bölemeyen cümlelerin Roma rakamlarından seçilmelidir.
+        I. cümle seçeneklere alınmamalıdır.
+        Çeldiriciler mümkün olduğunca yakın bölme noktası, aynı alt konunun devamı veya geçiş izlenimi veren yanlış adaylar arasından seçilmelidir.
+
+    - step: 7
+      action: "Seçenekleri hazırla"
+      details: |
+        Toplam 4 seçenek olmalıdır: 1 doğru cevap + 3 çeldirici.
+        Seçenekler SADECE Roma rakamından oluşmalı: A) III, B) IV, C) V, D) II
+        Seçeneklerde cümle metni YAZILMAMALI.
+
+    - step: 8
+      action: "Seçenekleri rastgele sırala"
+      details: |
+        1 doğru cevap ve 3 çeldirici oluşturulduktan sonra
+        seçenekleri A-B-C-D sırasına rastgele yerleştir.
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph_core:
+    - "Metin toplam 6-8 cümleden oluşuyor mu?"
+    - "Her cümle 10-20 kelime arasında mı?"
+    - "Metin tek bir ana tema içinde iki ilişkili alt konu içeriyor mu?"
+    - "İlk 3-4 cümle birinci alt konuyu, son 3-4 cümle ikinci alt konuyu ele alıyor mu?"
+    - "Metin dış görünüşte tek blok hâlinde olsa da içerik olarak iki paragrafa ayrılabilecek yapıda mı?"
+    - "İki alt konu arasında doğal ve anlamlı bir geçiş noktası var mı?"
+    - "Geçiş noktası yapay değil mi?"
+
+  presentation_format:
+    - "Cümleler Roma rakamlarıyla numaralandırılmış mı: (I), (II), (III), (IV), (V), (VI) ...?"
+    - "Arap rakamı (1, 2, 3) kullanılmamış mı?"
+    - "Metinde paragraf bölme işareti, satır boşluğu veya fiziksel paragraf ayrımı kullanılmamış mı?"
+
+  correct_answer:
+    - "Doğru cevap, ikinci paragrafın doğal olarak başladığı cümlenin Roma rakamını gösteriyor mu?"
+    - "Doğru cevap I. cümle değil mi?"
+    - "Doğru cevap seçildiğinde metin iki anlamlı ve tutarlı paragrafa ayrılıyor mu?"
+    - "Birinci paragraf kendi içinde anlamlı mı?"
+    - "İkinci paragraf kendi içinde anlamlı mı?"
+
+  options:
+    - "Toplam 4 seçenek var mı?"
+    - "Seçenekler A, B, C, D olarak etiketlenmiş mi?"
+    - "Her seçenek SADECE Roma rakamından mı oluşuyor?"
+    - "I. cümle seçeneklerde yer almıyor mu?"
+    - "Seçeneklerde cümle metni yok mu?"
+    - "Arap rakamı kullanılmamış mı?"
+
+  distractors:
+    - "3 çeldirici, ikinci paragrafın başlangıcı olabilecekmiş gibi görünen ama yanlış adaylardan oluşuyor mu?"
+    - "Çeldiriciler makul görünüyor mu?"
+    - "Çeldiriciler bariz yanlış veya kolay elenebilir değil mi?"
+    - "Çeldiriciler metni iki anlamlı paragrafa doğal biçimde ayırmayan noktalardan seçilmiş mi?"
+    - "Çeldiriciler mümkünse farklı yanılgı türlerine dayanıyor mu?"
+    - "Öğrenci doğru cevabı yalnızca yüzeysel ipuçlarıyla değil, metin yapısını analiz ederek bulmak zorunda mı?"

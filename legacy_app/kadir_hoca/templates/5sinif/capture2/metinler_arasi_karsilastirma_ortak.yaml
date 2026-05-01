@@ -1,0 +1,191 @@
+# templates/capture2/metinler_arasi_karsilastirma_ortak.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Bolum 2 - Metinler Arasi Karsilastirma
+#
+# ORTAK YON FORMATI (tum metinler arasi karsilastirma sorularinin ~%50'si)
+# Iki metin verilir, ogrenci iki metnin ORTAK ozelligini secer
+#
+# ONEMLI: Bu template IKI AYRI PARAGRAF kullanir (1. Metin, 2. Metin)
+# Her iki metin ayni ust baslik altinda farkli varlik/durumlari anlatir
+# Ortak ozellik: yetisme yeri, kullanim amaci, oyun kurali vb.
+
+meta:
+  id: "metinler_arasi_karsilastirma_ortak"
+  ad: "Metinler Arası Karşılaştırma (Ortak Yön)"
+  sinif_seviyesi: 5
+  aciklama: "İki metnin ortak noktasını (konu, özellik, çıkarım) belirleme"
+  kaynak: "data/metinler_arasi_karsilastirma.pdf"
+  frequency: "High (~50% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "İki ayrı metin (1. Metin, 2. Metin) + soru kökü + seçenekler"
+
+  paragraph:
+    required: true
+    count: 2
+    labels: ["1. Metin", "2. Metin"]
+    word_count_min: 35
+    word_count_max: 65
+    stil: "bilgilendirici"
+    kurallar:
+      - "İki metin de aynı üst başlık altında farklı varlıkları veya durumları anlatmalı."
+      - "Örn: Metin 1: Ezan Çiçeği, Metin 2: Kasımpatı Çiçeği (İkisi de çiçek)."
+      - "Örn: Metin 1: Curling oyunu, Metin 2: Bocce oyunu (İkisi de hedef oyunları)."
+      - "Metinler arasında en az bir belirgin ortak özellik (yetişme yeri, kullanım amacı, oyun kuralı vb.) bulunmalı."
+      - "İki metin AYRI AYRI yazılmalı — düzyazı olarak birleştirilmemeli"
+      - "Her metnin başına '1. Metin' ve '2. Metin' etiketi konulmalı"
+      - "İki metin arasında boşluk bırakılmalı (<br><br> ile)"
+      - "Metinler devam eden tek paragraf gibi DEĞİL, birbirinden bağımsız iki ayrı metin bloğu olmalı"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+    kurallar:
+      - "Soru kökü MUTLAKA <b> tagi ile kalın yazılmalı"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 8
+    word_count_max: 25
+    style: "complete_sentence"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 3 varyasyon)
+# Sayfa 121-124
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metinlerde bahsedilen ... ile ilgili aşağıdakilerden hangisi ortaktır?</b>"
+  - "<b>Bu metinlerde bahsedilen ... ile ilgili aşağıdakilerden hangisinin ortak olduğu söylenebilir?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metinlerdeki ... ile ilgili ulaşılabilecek ortak bir bilgidir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Her iki metinde de geçen veya çıkarılabilen yargı"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Her iki metinde de acikca gecen veya cikarilabilen ortak bilgi olmali"
+    - "Ortak ozellik belirgin ve dogrulanabilir olmali"
+    - "Tam cumle formatinda olmali (8-25 kelime)"
+    - "Sadece bir metne ait bilgi olmamali, her iki metin icin de gecerli olmali"
+    - "Kelime sayısı bakımından en uzun şık olmamalı."
+  ornekler:
+    - metin_1: "Ezan çiçeği bahçede yetişir."
+      metin_2: "Kasımpatı her bahçeye eşlik eder."
+      dogru: "Evde ve bahçede yetiştirilebilirler."
+      neden: "Her iki cicek de bahcede yetistirilebilir - ortak ozellik"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# Celdiriciler: Sadece 1. metne ait, sadece 2. metne ait, veya iki metinde de gecmeyen bilgiler
+
+distractors:
+  kurallar:
+    - "Sadece 1. metinde geçen özellik"
+    - "Sadece 2. metinde geçen özellik"
+    - "İki metinde de geçmeyen genel bir bilgi"
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["karsilastirma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic with two comparable entities"
+      details: "Ayni ust baslik altinda farkli varlik/durumlari sec (orn: iki cicek, iki oyun, iki sehir)"
+
+    - step: 2
+      action: "Generate two paragraphs (35-65 words each)"
+      details: |
+        Her metin:
+        - Farkli bir varligi/durumu anlatmali
+        - En az bir ortak ozellik icermeli
+        - Kendine ozgu detaylar da icermeli (celdirici malzemesi)
+
+    - step: 3
+      action: "Identify common feature as correct answer"
+      details: |
+        Ortak ozellik:
+        - Her iki metinde de acikca gecen veya cikarilabilen bilgi
+        - Tam cumle formatinda (8-25 kelime)
+        - Ornek: "Evde ve bahcede yetistirilebilirler."
+
+    - step: 4
+      action: "Generate 3 distractors"
+      details: |
+        - 1x sadece 1. metinde gecen ozellik
+        - 1x sadece 2. metinde gecen ozellik
+        - 1x iki metinde de gecmeyen genel bilgi
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from variations"
+      details: "soru_kokleri listesinden rastgele sec, '...' yerine varliklarin adini yerlestir"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR (Sayfa 121-124)
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 121
+    konu: "Cicekler - Ezan Cicegi ve Kasimpati"
+    metin_1: "Ezan cicegi bahcede yetisir, sonbaharda cicer."
+    metin_2: "Kasimpati her bahceye eslik eder, sonbaharin simgesidir."
+    dogru_cevap: "Evde ve bahcede yetistirilebilirler."
+    celdirici_1: "Sonbaharin en dayanikli cicekleridir."
+    celdirici_2: "Yalnizca sicak iklimlerde yetisirler."
+    celdirici_3: "Her ikisi de tibbi amaclarla kullanilir."
+
+  - sayfa: 123
+    konu: "Hedef oyunlari - Curling ve Bocce"
+    metin_1: "Curling buzda oynanan bir hedef oyunudur."
+    metin_2: "Bocce toprakta oynanan bir hedef oyunudur."
+    dogru_cevap: "Her ikisi de bir hedefe isabet ettirme amaci tasir."
+    celdirici_1: "Sadece kis sporlarinda yer alirlar."
+    celdirici_2: "Ayni tur zeminlerde oynanirlar."
+    celdirici_3: "Olimpik sporlar arasinda yer alirlar."
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Her iki metin de 35-65 kelime arasinda mi?"
+    - "Iki metin ayni ust baslik altinda farkli varliklari mi anlatiyor?"
+    - "En az bir belirgin ortak ozellik var mi?"
+    - "Her metin kendine ozgu detaylar da iceriyor mu?"
+
+  correct_answer:
+    - "8-25 kelime arasinda mi?"
+    - "Her iki metinde de desteklenen bir bilgi mi?"
+    - "Tam cumle formatinda mi?"
+
+  distractors:
+    - "Her celdirici farkli bir kaynaktan mi? (sadece 1. metin, sadece 2. metin, iki metinde de yok)"
+    - "Celdiriciler makul gorunuyor mu?"
+    - "Hicbiri her iki metin icin de gecerli degil mi?"
+    - "Tum secenekler ayni gramer yapida mi? (tam cumle)"

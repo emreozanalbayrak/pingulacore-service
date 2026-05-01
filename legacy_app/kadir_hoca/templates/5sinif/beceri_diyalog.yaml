@@ -1,0 +1,283 @@
+# templates/beceri_diyalog.yaml
+# Kaynak: MEB Beceri Temelli Soru Bankasi - Diyalog/Konusma
+#
+# BECERI TEMELLI DIYALOG FORMATI
+# Diyalog/konusma metni verilir, ogrenci gorusleri anlama ve cikarim sorusunu cevaplar
+#
+# MANTIK: 1 secenekte dogru cevap, 4 secenekte yanlis cevaplar
+# Secenekler TAM CUMLE formatindadir (3-20 sozcuk)
+
+meta:
+  id: "beceri_diyalog"
+  ad: "Beceri Temelli - Diyalog"
+  sinif_seviyesi: 5
+  aciklama: "Diyalog/konusma metinleri uzerinden beceri temelli sorular"
+  kaynak: "MEB Beceri Temelli Soru Bankasi"
+  frequency: "~8% of beceri temelli questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Diyalog baglami + soru koku + 5 tam cumle secenek (beceri temelli)"
+
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 140
+    sentence_count_min: 4
+    sentence_count_max: 8
+    stil: "diyalog"
+    kurallar:
+      - "Iki veya daha fazla kisi arasinda dogal konusma yaz"
+      - "Konusmacilarin adlarini belirt"
+      - "Farkli bakis acilarini yansitsin"
+      - "Gunluk konusma diline yakin ama ogretici olsun"
+      - "Konusmacilarin gorusleri net ayirt edilebilir olmali"
+      - "Her yeni konusmacinin sozu <br> etiketi ile yeni satirda baslamali"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 5
+    labels: ["A", "B", "C", "D", "E"]
+    word_count_min: 3
+    word_count_max: 20
+    style: "complete_sentence"
+    correct_type: "matches"
+    correct_count: 1
+
+  questions_per_context: 2
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ALANLARI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  context_type: "DIYALOG"
+  context_label: "Diyalog"
+  skill_level: "KB2"
+  process_component: "Diyalog metninde bakis acisi, uslup ve amac analizi"
+  skill_areas:
+    - "anlama"
+    - "cikarimlama"
+    - "elestirsel_dusunme"
+    - "karsilastirma"
+    - "yorumlama"
+  answer_key_explanation: true
+  question_patterns:
+    - "Konusmada hangi gorusten bahsediliyor?"
+    - "Konusmacilarin ortak noktasi nedir?"
+    - "Konusmacilarin bakis acilari nasil farklilasiyor?"
+    - "Diyalogda hangi amac on plandadir?"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # Anlam / Çıkarım
+  - "<b>Bu konuşmaya göre aşağıdakilerden hangisi doğrudur?</b>"
+  - "<b>Bu diyaloğa göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Konuşmadan aşağıdaki çıkarımlardan hangisi yapılabilir?</b>"
+  - "<b>Konuşmadan aşağıdaki <u>çıkarımlardan hangisi yapılamaz</u>?</b>"
+  # Bakış Açısı / Karakter
+  - "<b>Konuşmacıların ortak görüşü aşağıdakilerden hangisidir?</b>"
+  - "<b>Konuşmacılar arasındaki temel görüş ayrılığı aşağıdakilerden hangisidir?</b>"
+  - "<b>Konuşmadaki kişilerin bakış açıları karşılaştırıldığında aşağıdakilerden hangisi doğrudur?</b>"
+  # Amaç / Üslup
+  - "<b>Konuşmanın ana konusu aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu diyalogdan çıkarılabilecek en kapsamlı sonuç aşağıdakilerden hangisidir?</b>"
+  - "<b>Konuşmada savunulan ana düşünce aşağıdakilerden hangisidir?</b>"
+  # Değinilmeme / Destekleme (PDF kaynak)
+  - "<b>Konuşmada aşağıdaki bilgilerden hangisine <u>değinilmemiştir</u>?</b>"
+  - "<b>Konuşmacılardan hangisinin görüşü aşağıdaki ifadeyle desteklenebilir?</b>"
+  - "<b>Bu konuşmalardan hareketle ulaşılan sonuç aşağıdakilerden hangisidir?</b>"
+  # Bakış Açısı Özeti (PDF kaynak)
+  - "<b>Konuşmada ifade edilen görüşler dikkate alındığında aşağıdakilerden hangisi en kapsamlı değerlendirmedir?</b>"
+  - "<b>Diyalogdaki kişilerin farklı bakış açıları aşağıdakilerden hangisinde doğru özetlenmiştir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Diyalog icerigiyle uyumlu, konusmacilarin goruslerini dogru yansitan cevap"
+  kurallar:
+    - "Konusma icerigiyle desteklenmeli"
+    - "Farkli bakis acilarini ayirt edebilmeli"
+    - "Tam cumle formatinda olmali (3-20 sozcuk)"
+    - "Konusmacilarin goruslerini dogru atfetmeli"
+    - "Baglam olmadan cevaplanamaz olmali"
+    - "Ust duzey dusunme becerisi gerektirmeli"
+    - "Bilissel surec bilesenini hedeflemeli"
+  ornekler:
+    - diyalog: "Ayse: Bence kitap okumak en faydali hobidir. Bilgi edinirsin ve hayal gucun gelisir. Mehmet: Katiliyorum ama spor da onemli. Hem saglikli kaliriz hem de disiplin ogreniriz."
+      dogru: "Her iki konusmaci da hobilerin kisisel gelisim icin onemli oldugunu dusunmektedir"
+      neden: "Ayse kitap, Mehmet spor vurgulasa da ikisi de hobilerin faydasinda hemfikir"
+    - diyalog: "Ali: Teknoloji hayatimizi kolaylastiriyor. Zeynep: Evet ama fazla ekran kullanimi goz sagligina zararlı. Dengeli kullanmak lazim."
+      dogru: "Zeynep teknolojinin faydali oldugunu kabul ederken dengeli kullanim onerilmektedir"
+      neden: "Zeynep hem faydasini kabul eder hem de dikkatli kullanimi vurgular"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM diyalog iceriğine gore en uygun 4 stratejiyi secer
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic with multiple viewpoints"
+      details: "Farkli bakis acilari sunulabilecek bir konu sec"
+
+    - step: 2
+      action: "Generate dialogue text (80-140 words) between 2+ speakers"
+      details: |
+        Diyalog metninde:
+        - Iki veya daha fazla konusmaci olmali
+        - Konusmacilarin adlari belirtilmeli
+        - Farkli bakis acilari yansitilmali
+        - Dogal konusma diline yakin olmali
+
+    - step: 3
+      action: "Create correct answer as complete sentence"
+      details: |
+        Dogru cevap:
+        - Konusmacilarin goruslerini dogru yansitmali
+        - Tam cumle formatinda olmali (3-20 sozcuk)
+        - Diyalog icerigiyle kanitlanabilir olmali
+
+    - step: 4
+      action: "Create 4 wrong answers using strategies"
+      details: |
+        Her yanlis secenek icin farkli strateji kullan:
+        - 1x bir konusmacinin gorusunu diger konusmaciya atfeden
+        - 1x konuyla iliskili ama diyalogda desteklenmeyen
+        - 1x ksmen dogru ama genellemis
+        - 1x mantikli gorunen ama gorusleri carpitan
+        Tum secenekler ayni formatta olmali (tam cumle, 3-20 sozcuk)
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D-E seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - konu: "Hobiler hakkinda konusma"
+    dogru_cevap: "B"
+    secenekler:
+      A: "Ayse spor yapmayi gereksiz bulmaktadir"
+      B: "Her iki konusmaci da hobilerin kisisel gelisim icin onemli oldugunu dusunmektedir"
+      C: "Mehmet kitap okumayi zaman kaybi olarak gormektedir"
+      D: "Konusmacilarin gorusleri tamamen birbirine zittir"
+      E: "Ayse ve Mehmet ayni hobiyi paylaasmaktadir"
+    dogru_cevap_icerigi: "Her iki konusmaci da hobilerin kisisel gelisim icin onemli oldugunu dusunmektedir"
+    neden: "Ikisi de hobilerin faydasinda hemfikir"
+
+  - konu: "Teknoloji kullanimi konusmasi"
+    dogru_cevap: "D"
+    secenekler:
+      A: "Ali teknolojinin zararlı oldugunu savunmaktadir"
+      B: "Zeynep teknoloji kullanimina tamamen karsidir"
+      C: "Her iki konusmaci da ekran kullanimini desteklemektedir"
+      D: "Zeynep teknolojinin faydali oldugunu kabul ederken dengeli kullanim onermektedir"
+      E: "Ali goz sagliği konusunda endiselidir"
+    dogru_cevap_icerigi: "Zeynep teknolojinin faydali oldugunu kabul ederken dengeli kullanim onermektedir"
+    neden: "Zeynep hem faydasini kabul eder hem de dikkatli kullanimi vurgular"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  # Asama 0: Kimlik ve Olcme Niyeti
+  identity:
+    - "Soru bir beceriyi mi olcuyor, bilgi hatirlamayi mi?"
+    - "Hedef beceri seviyesi uygun mu?"
+    - "Surec bileseni dogru hedeflenmis mi?"
+
+  # Asama 1: Baglam Secimi
+  context:
+    - "Baglam olmadan soru cozulebilir mi? (Hayir olmali)"
+    - "Baglam fonksiyonel mi? (Dekoratif degil)"
+    - "Baglam cevabi dogrudan veriyor mu? (Vermemeli)"
+    - "Baglam otantik mi? (Gercek hayattan)"
+    - "Kelime sayisi 80-140 arasinda mi?"
+    - "Iki veya daha fazla konusmaci var mi?"
+    - "Konusmacilarin adlari belirtilmis mi?"
+    - "Farkli bakis acilari yansitilmis mi?"
+
+  # Asama 2: Soru ve Secenekler
+  question:
+    - "Soru koku net ve anlasilir mi?"
+    - "Cift olumsuz var mi? (Olmamali)"
+    - "Tek dogru cevap var mi?"
+
+  options:
+    - "Celdiriciler belirli bilissel hatalari temsil ediyor mu?"
+    - "Eleme yoluyla cevaplanabilir mi? (Olmamali)"
+    - "Format farkliligi ile dogru cevap belli oluyor mu? (Olmamali)"
+    - "Tum secenekler benzer uzunlukta mi?"
+    - "5 secenek var mi (A-B-C-D-E)?"
+
+  # Asama 3: Etik
+  ethics:
+    - "Cinsiyet/etnik onyargi var mi? (Olmamali)"
+    - "Yas grubuna uygun mu?"
+
+  # Asama 4: Dil
+  language:
+    - "Turkce dil bilgisi dogru mu?"
+    - "Sinif seviyesine uygun mu?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+
+  generation_rules:
+    - "Farkli bakis acilari sunulabilecek konulari tercih et"
+    - "Tartismali veya fikir ayriligi yaratabilecek konular ideal"
+    - "Diyalog formatina uygun gunluk yasam konulari sec"

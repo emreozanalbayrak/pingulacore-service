@@ -1,0 +1,95 @@
+# Kaynak: metinde_karakter_ozellik_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.orta
+# 4. sinif metinde karakter ozellik — orta duzey
+
+meta:
+  id: "metinde_karakter_ozellik_sinif4_orta"
+  ad: "Metinde Karakter - Kişilik Özelliği (Orta)"
+  sinif_seviyesi: 4
+  aciklama: "Orta duzey — metindeki kişinin karakter özelliğini analiz etme."
+  frequency: "High"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Karakter odaklı paragraf + soru kökü + sıfat/kavram seçenekler (orta)"
+
+  paragraph:
+    required: true
+    word_count_min: 66
+    word_count_max: 82
+    background_color: "#f8f0e0"
+    sentence_count_min: 3
+    sentence_count_max: 7
+    stil: "oykuleyici"
+    kurallar:
+      - "Kişinin belirgin bir davranışı anlatılmalı."
+      - "Kişilik özelliği doğrudan söylenmemeli, olaylar üzerinden sezdirilmeli."
+      - "Davranışlar açık ama bir miktar yorum gerektirmeli."
+      - "Metinde tek bir baskın kişilik özelliği ön plana çıkmalı."
+      - "Paragrafta konuyla ilgili AÇIKLAMA, TANIM veya EK BİLGİ verme! Paragraf SADECE hikâyeyi/olayı anlatsın."
+      - "YASAK: Ders kitabı açıklamaları yapma."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 3
+    style: "concept"
+    correct_count: 1
+    correct_type: "matches"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Bu metinde sözü edilen kişinin aşağıdaki özelliklerden hangisine sahip olduğu söylenebilir?</b>"
+  # KULLANILDI: - "<b>Bu metinde bahsedilen kişi için aşağıdakilerden hangisi söylenebilir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Davranışla örtüşen kişilik sıfatı"
+  kurallar:
+    - "Kisilik ozelligi metindeki davranislarla birebir ortusmeli."
+    - "1-3 kelimelik kisa kavram olmali."
+    - "Ozellik dogrudan soylenmemeli, davranislardan cikarilmali."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI BILGILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "YAKIN_OZELLIK_TUZAGI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Doğru özelliğe anlamsal olarak yakın, ilk bakışta doğru gibi görünen seçenek"
+    nasil_olusturulur: |
+      Karakterin doğru özelliğine anlamsal olarak yakın ama farklı bir özellik seç.
+      Orta seviyede en az 1 celdirici doğru cevaba yakın görünmeli — öğrenci metnin tamamını değerlendirerek ayırt etmeli.
+      Karakter özelliği birden fazla davranış üzerinden desteklenmeli.
+    kategori: "semantic"
+
+  - ad: "YORUM_GEREKTIREN_OZELLIK"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Paragraftaki ipuçlarından yorum gerektiren, orta güçlükte çıkarım tuzağı"
+    nasil_olusturulur: |
+      Karakterin davranışlarından dolaylı ama yanlış çıkarılabilecek bir özellik oluştur.
+      Orta seviyede paragrafta açık ipucu olmalı ama öğrenci yorum da yapmalıdır.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

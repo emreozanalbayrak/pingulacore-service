@@ -1,0 +1,427 @@
+meta:
+  id: "paragraf_gorsel_iliskisi_sinif2_cift_kaynakli_gorsel_secenekli"
+  ad: "Paragraf-Görsel İlişkisi"
+  sinif_seviyesi: 2
+  ders: "Türkçe"
+  bolum: "2. Sınıf Paragraf Soru Bankası"
+  alt_bolum: "7.3 Paragraf-Görsel İlişkisi"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    2. sınıf öğrencisi için kısa bir metin ile görsel seçenekler arasındaki ilişkiyi
+    kurdurarak doğru görseli seçtirmeye yönelik, metin ve görselin birlikte
+    kullanılmasını zorunlu kılan 3 seçenekli standart soru üretim şablonu.
+  kullanim_notu: >
+    Bu şablonda soru yalnız metin okunarak çözülemez. Yalnız görsellere bakılarak da
+    çözülemez. Doğru cevap için metin ile seçenek görselleri birlikte incelenmelidir.
+    Harici 2. Sınıf TYMM Ortak Kuralları ile birlikte doğrulanmalıdır.
+
+format:
+  tip: "llm_generated_html"
+  aciklama: "Kısa metin + soru kökü + 3 görsel seçenek"
+
+  cift_kaynak_zorunlu: true
+  sadece_metinle_cozum_yasak: true
+  sadece_gorselle_cozum_yasak: true
+
+  soru_varyanti:
+    izinli:
+      - "konu_ile_ilgili_degildir"
+      - "en_iyi_ifade_eden_gorsel"
+      - "parcada_soz_edilen_yer"
+      - "metne_uygun_gorsel"
+      - "metne_uymayan_gorsel"
+    varsayilan: "en_iyi_ifade_eden_gorsel"
+
+  metin:
+    gerekli: true
+    yapi:
+      cumle_sayisi_min: 4
+      cumle_sayisi_max: 6
+      kelime_sayisi_min: 38
+      kelime_sayisi_max: 78
+    metin_modlari:
+      - "simple_info"
+      - "short_narrative"
+    kurallar:
+      - "Metin tek baskın konu, olay, durum veya yer etrafında kurulmalıdır."
+      - "Metin 2. sınıf öğrencisinin anlayabileceği kadar sade, açık ve somut olmalıdır."
+      - "Metin, görsellerle ilişki kurmaya elverişli net içerik taşımalıdır."
+      - "Metin dış bilgi gerektirmemelidir."
+      - "Metin yalnız başına doğru görseli kesin olarak seçtirmemelidir."
+      - "Metin, görseller incelendiğinde doğru seçeneği tekleyecek kadar açık olmalıdır."
+      - "Metinde konu, düşünce veya anlam görselle ilişkilendirilebilir biçimde verilmelidir."
+      - "Metin ana düşünce, gizli mesaj veya soyut yorum gerektirmemelidir."
+      - "Metin ile doğru görsel arasında açık ama doğrudan kopya olmayan bir bağ olmalıdır."
+
+  gorsel_secenekler:
+    gerekli: true
+    secenek_sayisi: 3
+    etiketler: ["A", "B", "C"]
+    stil: "yalniz_gorsel_veya_cok_kisa_etiketli_gorsel"
+    gorsel_turleri:
+      - "tek sahneli illüstrasyon"
+      - "tek kavramı temsil eden çizim"
+      - "tek yer veya tek olay odaklı sahne"
+      - "temayı simgeleyen sade kompozisyon"
+    kurallar:
+      - "Her seçenek bir görsel içermelidir."
+      - "Görseller metinle ilişki kurmayı gerektirmelidir."
+      - "Doğru görsel metnin konusu, düşüncesi veya açık anlamıyla uyumlu olmalıdır."
+      - "Yanlış görsellerden en az biri metne yakın ama eksik/yanlış ilişki kurmalıdır."
+      - "Yanlış görsellerden en az biri metinle belirgin biçimde ilgisiz ya da daha uzak olmalıdır."
+      - "Görseller kendi aralarında biçimce paralel olmalıdır."
+      - "Görseller sade, temiz ve 2. sınıf düzeyinde ayırt edilebilir olmalıdır."
+      - "Görseller yalnız başına doğru cevabı açıkça ele vermemelidir."
+      - "Metin olmadan üç görsel arasından doğru olan kesin seçilememelidir."
+    yasaklar:
+      - "çok karmaşık kolaj"
+      - "birden fazla ana fikir içeren görsel"
+      - "aşırı soyut sanat çalışması"
+      - "2. sınıf düzeyini aşan sembolik anlatım"
+      - "metinle açık bağ kurulamayan dekoratif görseller"
+
+  soru_koku:
+    gerekli: true
+    secim: "listeden_rastgele"
+
+  secenekler:
+    sayi: 3
+    etiketler: ["A", "B", "C"]
+    dogru_sayisi: 1
+    stil: "gorsel_secenek"
+    kurallar:
+      - "Seçenekler esas olarak görsel biçiminde olmalıdır."
+      - "Görsel altı açıklama kullanılacaksa çok kısa ve nötr olmalıdır."
+      - "Doğru seçenek yalnız metin ve görsel birlikte incelendiğinde bulunabilmelidir."
+      - "Yanlış seçenekler metinle kısmi benzerlik taşıyabilir ama tam uyumlu olmamalıdır."
+      - "Seçenekler arasında yalnız 1 görsel tam uyumlu olmalıdır."
+
+soru_kokleri:
+  konu_ile_ilgili_degildir:
+    - "Aşağıdaki görsellerden hangisi metinde geçen konu ile ilgili değildir?"
+    - "Aşağıdaki görsellerden hangisi metinle ilgili değildir?"
+    - "Metne göre aşağıdaki görsellerden hangisi uygun değildir?"
+    - "Aşağıdaki görsellerden hangisi bu parça ile ilişkilendirilemez?"
+    - "Metnin konusu ile ilgili olmayan görsel hangisidir?"
+
+  en_iyi_ifade_eden_gorsel:
+    - "Metinde anlatılanları en iyi ifade eden görsel hangi seçenekte verilmiştir?"
+    - "Aşağıdaki görsellerden hangisi metni en iyi anlatmaktadır?"
+    - "Metne en uygun görsel aşağıdakilerden hangisidir?"
+    - "Bu parçada anlatılanları en iyi yansıtan görsel hangisidir?"
+
+  parcada_soz_edilen_yer:
+    - "Aşağıdaki görsellerden hangisi parçada sözü edilen yerlerden biridir?"
+    - "Metinde geçen yer aşağıdaki görsellerden hangisinde verilmiştir?"
+    - "Parçada anlatılan yer aşağıdaki görsellerden hangisi olabilir?"
+    - "Aşağıdaki görsellerden hangisi metindeki yer ile ilgilidir?"
+
+  metne_uygun_gorsel:
+    - "Aşağıdaki görsellerden hangisi metne uygundur?"
+    - "Metinle uyumlu olan görsel hangisidir?"
+    - "Bu parçaya uygun görsel aşağıdakilerden hangisidir?"
+    - "Aşağıdaki görsellerden hangisi metinle ilişkilendirilebilir?"
+    - "Metnin içeriğine uygun olan görsel hangisidir?"
+
+  metne_uymayan_gorsel:
+    - "Aşağıdaki görsellerden hangisi metne uymaz?"
+    - "Metinle uyuşmayan görsel hangisidir?"
+    - "Bu parçaya uygun olmayan görsel aşağıdakilerden hangisidir?"
+    - "Aşağıdaki görsellerden hangisi metinle ilişkilendirilemez?"
+    - "Metnin içeriğine uymayan görsel hangisidir?"
+
+beceri_odagi:
+  birincil_beceri:
+    - "Metin ile görsel arasında ilişki kurma"
+  ikincil_beceriler:
+    - "Metindeki ana konu veya açık anlamı fark etme"
+    - "Görseller arasından en uygun olanı seçme"
+    - "İlgili ve ilgisiz görselleri ayırt etme"
+    - "Yer, durum, olay veya tema ile görseli eşleştirme"
+
+dogru_cevap:
+  tanim: "Metindeki konu, düşünce veya açık anlam ile en doğru ilişkiyi kuran görsel"
+  kurallar:
+    - "Doğru cevap metnin baskın içeriğiyle uyumlu olmalıdır."
+    - "Doğru cevap metinde anlatılanları en iyi karşılayan görsel olmalıdır."
+    - "Doğru cevap yalnız metinden seçilememeli, görsel inceleme gerektirmelidir."
+    - "Doğru cevap yalnız görsele bakılarak da seçilememelidir; metin desteği gerektirmelidir."
+    - "Doğru görsel 2. sınıf öğrencisinin ilişki kurabileceği açıklıkta olmalıdır."
+    - "Metinde sözü edilen yer soruluyorsa doğru görsel yer bilgisini karşılamalıdır."
+    - "İlgili değildir / uymaz türünde sorularda doğru cevap metinle açık ilişki kurmayan görsel olmalıdır."
+
+yanlis_secenek_stratejileri:
+  count_per_question: 2
+  strateji_havuzu:
+    - id: "yakin_ama_tam_uyusmayan"
+      tanim: "Metinle aynı genel alanda durur ama asıl konuya tam uymaz"
+      ornek_mantik:
+        - "çevre kirliliği yerine küresel ısınma vurgulu görsel"
+        - "ekran bağımlılığı yerine genel teknoloji kullanımı görseli"
+
+    - id: "yan_konu"
+      tanim: "Metindeki yan unsura yakın ama ana içeriği karşılamayan görsel"
+      ornek_mantik:
+        - "metindeki yer yerine sadece nesneyi gösteren görsel"
+        - "metindeki olay yerine yalnız bir ayrıntıyı gösteren görsel"
+
+    - id: "ilgisiz_gorsel"
+      tanim: "Metinle açık ilişki kurmayan daha uzak görsel"
+      ornek_mantik:
+        - "çevre kirliliği metninde tamamen alakasız şehir manzarası"
+        - "ekran bağımlılığı metninde konu dışı açık hava etkinliği"
+
+    - id: "kismi_dogru_kismi_yanlis"
+      tanim: "Metindeki bazı unsurları taşır gibi görünür ama bütünü karşılamaz"
+      ornek_mantik:
+        - "hava durumu sırası sorusunda sıranın bir kısmını doğru veren dizi"
+        - "metindeki yer ile aynı türde ama yanlış yer görseli"
+
+  secim_kurali:
+    - "Her soruda 2 yanlış seçenek farklı stratejilerden seçilmelidir."
+    - "En az 1 yanlış seçenek metne yakın ama tam uyumsuz olmalıdır."
+    - "Zor düzeyde iki yanlış seçenek de ilk bakışta makul görünmelidir."
+    - "İlgili değildir / uymaz sorularında diğer iki görsel metinle ilişkilendirilebilir olmalıdır."
+    - "En iyi ifade eden sorularında bir görsel tam uyumlu, diğerleri kısmi uyumlu ya da yan odaklı olmalıdır."
+
+soru_varyanti_kurallari:
+  konu_ile_ilgili_degildir:
+    kurallar:
+      - "2 görsel metnin konusu ile ilişkilendirilebilir olmalıdır."
+      - "1 görsel metinle açık biçimde ilgisiz ya da belirgin uyumsuz olmalıdır."
+      - "Doğru cevap yalnız görselden değil, metindeki konu okunarak belirlenmelidir."
+
+  en_iyi_ifade_eden_gorsel:
+    kurallar:
+      - "1 görsel metnin ana içeriğini en iyi karşılamalıdır."
+      - "1 görsel yakın ama yan odaklı olmalıdır."
+      - "1 görsel daha uzak veya kısmi uyumlu olmalıdır."
+      - "Doğru seçim, metnin tamamı düşünülerek yapılmalıdır."
+
+  parcada_soz_edilen_yer:
+    kurallar:
+      - "Metinde açıkça sözü edilen yer bulunmalıdır."
+      - "1 görsel bu yeri ya da yer türünü uygun biçimde göstermelidir."
+      - "Diğer 2 görsel yer bakımından uyumsuz olmalıdır."
+
+  metne_uygun_gorsel:
+    kurallar:
+      - "1 görsel metinle açık uyumlu olmalıdır."
+      - "2 görsel uyumsuz ya da daha zayıf ilişkili olmalıdır."
+
+  metne_uymayan_gorsel:
+    kurallar:
+      - "2 görsel metinle ilişkilendirilebilir olmalıdır."
+      - "1 görsel açık biçimde metne uyumsuz olmalıdır."
+
+zorluk_duzeyleri:
+  kolay:
+    metin:
+      cumle_sayisi_min: 4
+      cumle_sayisi_max: 4
+      kelime_sayisi_min: 38
+      kelime_sayisi_max: 52
+      kurallar:
+        - "Metnin konusu çok açık olmalıdır."
+        - "Metin ile doğru görsel arasındaki bağ görünür olmalıdır."
+        - "Yanlış görsellerden biri belirgin biçimde ilgisiz olabilir."
+    gorsel_secenekler:
+      kurallar:
+        - "Görseller birbirinden açıkça ayrılabilmelidir."
+        - "Doğru görsel metni belirgin biçimde desteklemelidir."
+    tercih_edilen_varyantlar:
+      - "metne_uygun_gorsel"
+      - "en_iyi_ifade_eden_gorsel"
+      - "parcada_soz_edilen_yer"
+    celdiriciler:
+      kurallar:
+        - "1 yanlış seçenek açıkça ilgisiz olabilir."
+        - "1 yanlış seçenek yakın ama yanlış odaklı olabilir."
+    zorluk_notu: >
+      Kolay düzeyde öğrenci metni ve görselleri karşılaştırarak en uygun olanı seçer.
+      İlişki açık kurulur.
+
+  orta:
+    metin:
+      cumle_sayisi_min: 4
+      cumle_sayisi_max: 5
+      kelime_sayisi_min: 46
+      kelime_sayisi_max: 64
+      kurallar:
+        - "Metinde 1 yan ayrıntı bulunabilir."
+        - "Doğru görseli seçmek için metnin tamamına bakmak gerekebilir."
+        - "Yanlış görsellerden en az biri metne yakın görünmelidir."
+    gorsel_secenekler:
+      kurallar:
+        - "Görseller aynı tema alanında olabilir ama yalnız biri tam uyumlu olmalıdır."
+        - "Doğru cevap için hem metin hem görseller dikkatle incelenmelidir."
+    tercih_edilen_varyantlar:
+      - "konu_ile_ilgili_degildir"
+      - "en_iyi_ifade_eden_gorsel"
+      - "metne_uymayan_gorsel"
+    celdiriciler:
+      kurallar:
+        - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+        - "Yanlış seçenekler kısmi uyum taşıyabilir."
+    zorluk_notu: >
+      Orta düzeyde öğrenci metnin konusu ile görseller arasındaki ince farkları ayırt eder.
+      Ancak görev yine de 2. sınıf düzeyinde somut kalır.
+
+  zor:
+    metin:
+      cumle_sayisi_min: 5
+      cumle_sayisi_max: 6
+      kelime_sayisi_min: 58
+      kelime_sayisi_max: 78
+      kurallar:
+        - "Metin açık kalmalıdır ama doğru görsel için birkaç cümleyi birlikte değerlendirmek gerekebilir."
+        - "Metinde ana konu ile yan ayrıntılar birlikte bulunabilir."
+        - "Zor düzeyde bile soru soyut yoruma dönüşmemelidir."
+    gorsel_secenekler:
+      kurallar:
+        - "2 yanlış görsel de ilk bakışta makul görünmelidir."
+        - "Doğru görsel metnin tamamını en iyi karşılayan seçenek olmalıdır."
+        - "Görseller yine sade ve 2. sınıf düzeyinde olmalıdır."
+    tercih_edilen_varyantlar:
+      - "konu_ile_ilgili_degildir"
+      - "en_iyi_ifade_eden_gorsel"
+      - "metne_uymayan_gorsel"
+    celdiriciler:
+      kurallar:
+        - "1 yanlış seçenek aynı tema alanında ama farklı vurgu taşımalıdır."
+        - "1 yanlış seçenek metindeki yan unsura dayalı kısmi uyum taşımalıdır."
+    zorluk_notu: >
+      Zor düzey 2. sınıfta derin analiz değildir.
+      Zorluk, metnin asıl içeriğini en iyi karşılayan görseli yakın görseller arasından ayırt etme düzeyindedir.
+
+zorluk_secim_politikasi:
+  varsayilan: "Orta"
+  izinli_degerler: ["Kolay", "Orta", "Zor"]
+  kesin_sinirlar:
+    - "Tüm düzeylerde metin zorunludur."
+    - "Tüm düzeylerde görsel seçenekler zorunludur."
+    - "Tüm düzeylerde soru yalnız metinden çözülemez."
+    - "Tüm düzeylerde soru yalnız görsellerden çözülemez."
+    - "Tüm düzeylerde doğru cevap için metin ve görseller birlikte kullanılmalıdır."
+    - "Tüm düzeylerde 3 seçenek kullanılmalıdır."
+    - "Zor düzey seçilse bile soru ana düşünce, gizli mesaj veya soyut yorum gerektiremez."
+
+konu_alani:
+  izinli_ornekler:
+    - "çevre kirliliği"
+    - "ekran bağımlılığı"
+    - "hava durumu"
+    - "doğa olayları"
+    - "çevreyi koruma"
+    - "sağlıklı yaşam"
+    - "günlük yaşam"
+    - "şehir ve doğa"
+    - "okul çevresi"
+    - "çocukların alışkanlıkları"
+    - "tarihi veya turistik yerler"
+    - "doğal alanlar"
+  kurallar:
+    - "Konu 2. sınıf öğrencisinin anlayabileceği kadar açık ve somut olmalıdır."
+    - "Metin ile görseller arasında anlam ilişkisi kurulabilmelidir."
+    - "Görseller aynı temayı farklı yönlerden yansıtabilir."
+    - "Konu dış bilgi gerektirmeden çözülebilmelidir."
+
+uretim_mantigi:
+  adimlar:
+    - adim: 1
+      eylem: "2. sınıfa uygun, görsellerle ilişkilendirilebilir tek ve açık bir konu seç"
+    - adim: 2
+      eylem: "Seçilen konu için kısa ve sade bir metin oluştur"
+      detaylar:
+        - "Tek baskın konu kur"
+        - "Metni görsellerle ilişki kurduracak açıklıkta yaz"
+        - "Metin tek başına doğru cevabı vermesin"
+    - adim: 3
+      eylem: "Soru varyantını seç"
+      detaylar:
+        - "konu_ile_ilgili_degildir"
+        - "en_iyi_ifade_eden_gorsel"
+        - "parcada_soz_edilen_yer"
+        - "metne_uygun_gorsel"
+        - "metne_uymayan_gorsel"
+    - adim: 4
+      eylem: "1 doğru ve 2 yanlış görsel seçenek tasarla"
+      detaylar:
+        - "Doğru görsel metne tam uyumlu olsun"
+        - "En az 1 yanlış görsel yakın ama yanlış odaklı olsun"
+        - "Gerekirse 1 yanlış görsel daha uzak ya da ilgisiz olsun"
+    - adim: 5
+      eylem: "Soru kökünü listeden rastgele seç"
+    - adim: 6
+      eylem: "Görselleri A-B-C olarak yerleştir"
+    - adim: 7
+      eylem: "Çift kaynak zorunluluğunu doğrula"
+      detaylar:
+        - "Metin kaldırıldığında soru çözülemiyor mu?"
+        - "Görseller kaldırıldığında soru çözülemiyor mu?"
+        - "Doğru cevap ikisi birlikte kullanıldığında tekleşiyor mu?"
+
+validation_checklist:
+  cift_kaynak_bagimliligi:
+    - "Soru yalnız metinden çözülemiyor mu?"
+    - "Soru yalnız görsellerden çözülemiyor mu?"
+    - "Doğru cevap için hem metin hem görseller gerçekten gerekli mi?"
+    - "Metin kaldırıldığında doğru cevap belirsizleşiyor mu?"
+    - "Görseller kaldırıldığında doğru cevap belirsizleşiyor mu?"
+    - "Metin ile görseller birbirini tamamlıyor mu?"
+
+  metin:
+    - "Metin zorunlu olarak var mı?"
+    - "Metin kısa, sade ve 2. sınıf düzeyinde mi?"
+    - "Metin tek baskın konu taşıyor mu?"
+    - "Metin görsellerle ilişki kurduruyor mu?"
+    - "Metin cevabı doğrudan söylemiyor mu?"
+
+  gorsel_secenekler:
+    - "3 görsel seçenek var mı?"
+    - "Görseller ayırt edilebilir mi?"
+    - "Doğru görsel metinle açık uyumlu mu?"
+    - "Yanlış görseller tam uyumsuz ya da kısmi uyumlu mu?"
+    - "Görseller dekoratif kalmıyor mu?"
+
+  soru_koku:
+    - "Soru kökü kısa ve açık mı?"
+    - "Soru kökü metin-görsel ilişkisini kurduruyor mu?"
+    - "Soru kökü cevabı açıklamıyor mu?"
+
+  zorluk:
+    - "Zorluk seçilen düzeye göre metin ve görsel yakınlığı ayarlanmış mı?"
+    - "Zor düzey bile 2. sınıf sınırında mı?"
+    - "Kolay düzey gereksiz yere karmaşık değil mi?"
+
+hard_fail_rules:
+  - "Metin yoksa"
+  - "Görsel seçenekler yoksa"
+  - "Seçenek sayısı 3 değilse"
+  - "Soru yalnız metinden çözülebiliyorsa"
+  - "Soru yalnız görsellerden çözülebiliyorsa"
+  - "Doğru cevap iki kaynağı birlikte gerektirmiyorsa"
+  - "İki veya daha fazla görsel makul doğruysa"
+  - "Metin 2. sınıf için fazla soyut veya karmaşıksa"
+  - "Görseller 2. sınıf için fazla soyut veya karışıksa"
+  - "Soru ana düşünce, gizli mesaj veya soyut yorum sorusuna kayıyorsa"
+  - "Metin ile doğru görsel arasında açık bağ kurulamıyorsa"
+
+ornek_bicim_notlari:
+  - "Çevre kirliliği metninde doğru görsel, metindeki ana sorunu en iyi yansıtan çevre kirliliği görseli olmalıdır."
+  - "Ekran bağımlılığı metninde ilgisiz olan görsel, metindeki konu ile açık bağ kurmayan görsel olmalıdır."
+  - "Hava durumu anlatılan günlükte doğru seçenek, metindeki sıraya uygun sembol dizisi olmalıdır."
+  - "Bu bölümde temel amaç, metindeki konu ve anlam ile görseller arasındaki ilişkiyi kurmaktır."
+
+output_contract:
+  required_fields:
+    - "soru_varyanti"
+    - "metin"
+    - "stem"
+    - "visual_options"
+    - "answer"
+    - "difficulty"
+    - "topic"
+  answer_format:
+    - "answer yalnızca A/B/C olarak verilebilir"
+    - "difficulty yalnızca Kolay / Orta / Zor olabilir"

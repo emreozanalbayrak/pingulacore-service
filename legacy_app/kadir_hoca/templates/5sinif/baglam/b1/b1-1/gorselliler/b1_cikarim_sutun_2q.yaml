@@ -1,0 +1,111 @@
+# B1.1 — 2Q Sütun Grafik (Grafik Okuma + Grafik Çıkarım)
+# Görsel: infografik (AI sütun grafiğine dönüştürülecek)
+# Soru Tipleri: Grafik Okuma + Grafik Çıkarım — B1.1 soru kökleri
+
+meta:
+  id: "b1_cikarim_sutun_2q"
+  ad: "2Q Sütun Grafik — Grafik Okuma/Çıkarım"
+  sinif_seviyesi: 5
+  aciklama: "Senaryo + AI sütun grafiği üzerinden grafik okuma ve çıkarım soruları"
+  kaynak: "baglamb1sorukoku.md"
+  frequency: "Medium"
+
+context:
+  type: "b1_cikarim_sutun_2q"
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 60
+    word_count_max: 120
+    image_type: "infografik"
+    structure:
+      - "Bir karakter (isimli) bir araştırma, gözlem veya anket yapmıştır (2-3 cümle senaryo)"
+      - "Karakter topladığı verileri bir SÜTUN GRAFİĞİ ile göstermiştir"
+      - "Senaryoda grafikteki verilerin ne olduğunu KISA ÖZETle (ör: 'Sonuçları aşağıdaki grafikle göstermiştir.')"
+      - "KRİTİK: Senaryoda sayısal değerleri YAZMA — veriler sadece grafikte olmalı"
+      - "Ardından bir HTML tablosu ekle — bu tablo grafiğin VERİ KAYNAĞI olacak:"
+      - "<table><tr><th>Kategori</th><th>Değer</th></tr><tr><td>...</td><td>sayısal değer</td></tr>...</table>"
+      - "En az 3, en fazla 6 kategori"
+      - "Değerler sayısal olmalı (tam sayı veya yüzde)"
+      - "NOT: Bu tablo AI tarafından sütun grafiğine dönüştürülecektir. Tablo son çıktıda GÖRÜNMEYECEKTİR."
+    kurallar:
+      - "Senaryo 5. sınıf seviyesinde olmalı"
+      - "KRİTİK — SENARYO KAPSAMI: Senaryo sadece DURUMU ve MERAKı anlatsın, CEVAPLARI vermesin!"
+      - "Konuyla ilgili gerçekçi veriler üret"
+      - "Değerler arasında karşılaştırma yapılabilir belirgin farklar olmalı"
+      - "Kategoriler kısa ve okunabilir olmalı"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+    - slot: 1
+      type: "grafik_okuma"
+      soru_kokleri:
+        - "<b>Grafiğe göre aşağıdaki yargılardan hangisine ulaşılabilir?</b>"
+        - "<b>Grafik incelendiğinde aşağıdakilerden hangisi doğrudur?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 4
+      word_count_max: 18
+      beceri:
+        katman: "KB2"
+        bilesenler: ["grafik_okuma", "yorumlama"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+    - slot: 2
+      type: "grafik_cikarim"
+      soru_kokleri:
+        - "<b>Grafikteki veriler karşılaştırıldığında aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 5
+      word_count_max: 20
+      beceri:
+        katman: "KB3"
+        bilesenler: ["cikarim_yapma", "karsilastirma", "degerlendirme"]
+        surec_bileseni: "problemi_yapilandirma"
+
+header_template: "1-2. soruları aşağıdaki bilgilere göre birbirinden bağımsız olarak cevaplayınız."
+
+format:
+  type: "llm_generated_html"
+  description: "2Q sütun grafik üzerinden grafik okuma ve çıkarım"
+  paragraph:
+    required: true
+    word_count_min: 60
+    word_count_max: 120
+    sentence_count_min: 2
+    sentence_count_max: 6
+  stem:
+    required: true
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 4
+    word_count_max: 20
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+dogru_cevap:
+  tanim: "Grafikteki verilerden doğru okunan veya çıkarılan bilgi"
+  kurallar:
+    - "KRİTİK: Doğru cevap grafiği OKUYARAK ve YORUMLAYARAK bulunmalı — ham veri tekrarı değil"
+    - "Doğru cevap hem senaryoyu hem grafik verilerini birlikte değerlendirmeyi gerektirmeli"
+    - "Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı"
+    - "HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin AYNEN seçeneklerde kullanılması YASAK"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin ANLAMCA ÖZDESİ olmalı"
+    - "En az %40 kelime farklılığı olmalı"
+    - "BİLİMSEL TERİM KORUMASI: Teknik terimler değiştirilmemeli"
+
+distractors:
+  stratejiler:
+    - ad: "VERI_CARPITMA"
+      aciklama: "Grafikteki değeri yanlış okuma veya aktarma"
+      ornek: "En yüksek değeri yanlış kategoriye atama"
+    - ad: "YANLIS_KARSILASTIRMA"
+      aciklama: "Kategorileri/sütunları yanlış karşılaştırma"
+      ornek: "İki kategori arasındaki farkı ters gösterme"
+    - ad: "GENELLEME_HATASI"
+      aciklama: "Grafikte olmayan bir sonuca genelleme yapma"
+      ornek: "Verinin kapsamı dışında bir çıkarım sunma"
+
+use_shared_strategies: false

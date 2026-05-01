@@ -1,0 +1,143 @@
+# Kaynak: soru_cevap_standard_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.zor
+# 4. sinif soru-cevap standart — zor duzey
+
+meta:
+  id: "b12_soru_cevap_standard_sinif4_zor"
+  ad: "4. Sinif - Metinde Soru ve Cevap Standart (Zor)"
+  sinif_seviyesi: 4
+  aciklama: "Zor duzey — paragrafin hangi soruya cevap oldugunu belirleme. Zengin detaylar, en az 2 guclu celdirici; dogru soru icin paragrafin tamami degerlendirilmeli."
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 4 soru cumlesi secenek (zor)"
+
+  paragraph:
+    required: true
+    word_count_min: 78
+    word_count_max: 105
+    background_color: "#fce8e8"
+    sentence_count_min: 6
+    sentence_count_max: 7
+    stil: "bilgilendirici"
+    kurallar:
+      - "Paragraf tek bir soruya cevap vermeye devam etmeli fakat daha zengin detay icermeli."
+      - "En az 2 destekleyici detay celdirici uretimine uygun olmali."
+      - "Dogru soruya yakin ama kapsamca farkli alanlar olusabilmeli."
+      - "Dogru soruya karar vermek icin paragrafin TAMAMI degerlendirilmeli."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 7
+    word_count_max: 12
+    style: "question_sentence"
+    correct_type: "matches"
+    correct_count: 1
+    kurallar:
+      - "Tum secenekler soru cumlesi formatinda ('?' ile bitmeli)."
+      - "Dogru soru paragrafin baskin cevap eksenini yakalamali."
+      - "Dogru secenek bir detay sorusuna dusmeden metnin tumune cevap olmali."
+      - "Asiri genel bir ust soru olmamali."
+      - "1 yakin_soru ZORUNLU ve cok guclu olmali."
+      - "1 detay_sorusu veya paragraftaki baskin alt boyuta odaklanan soru olmali."
+      - "1 genis_kapsamli veya iliskili_ama_farkli celdirici olmali."
+      - "En az iki celdirici paragrafla kuvvetli semantik bag kurmali."
+      - "YASAK: Dogru cevabi yalniz kelime benzerligiyle belli eden zayif celdiriciler."
+      - "YASAK: Birden fazla sorunun paragrafi esit derecede tam kapsar hale gelmesi."
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Bu metin aşağıdaki sorulardan hangisine cevap olarak söylenmiştir?</b>"
+  # KULLANILDI: - "<b>Bu metin aşağıdaki sorulardan hangisine cevap olarak yazılmıştır?</b>"
+  # KULLANILDI: - "<b>Bu metin aşağıdaki sorulardan hangisine cevap olarak yazılmış olabilir?</b>"
+  # KULLANILDI: - "<b>Bu metin aşağıdaki sorulardan hangisine cevap vermek için yazılmıştır?</b>"
+  # KULLANILDI: - "<b>Bu metin aşağıdaki soruların hangisine cevap olarak yazılmıştır?</b>"
+  # KULLANILDI: - "<b>Bu metin aşağıdaki sorulardan hangisine cevap vermek amacıyla yazılmıştır?</b>"
+  # KULLANILDI: - "\"{topic}\" <b>ile ilgili bu metin aşağıdaki sorulardan hangisine cevap olarak yazılmıştır?</b>"
+  # KULLANILDI: - "\"{topic}\" <b>konulu bu metin aşağıdaki sorulardan hangisine cevap vermek için yazılmıştır?</b>"
+  # KULLANILDI: - "<b>Bu metinde aşağıdakilerden hangisi açıklanmıştır?</b>"
+  # KULLANILDI: - "<b>Bu metni okuyan biri aşağıdakilerden hangisini anlamış olur?</b>"
+  - "<b>Bu metinde söz edilen değişim neye bağlıdır?</b>"
+  - "<b>Bu metinde sözü edilen gözlemin sonucu aşağıdakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Bu metinde sözü edilen olay aşağıdakilerden hangisini destekler?</b>"
+  - "<b>Bu metinden</b> \"{topic}\" <b>ile ilgili aşağıdakilerden hangisine kesin olarak ulaşılır?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Paragrafin butunuyle cevap verdigi soru cumlesi"
+  kurallar:
+    - "Dogru secenek paragraftaki hicbir cumleyi kelimesi kelimesine tekrarlamamali."
+    - "Paragrafin TUMUNU kapsayan bir soru olmali."
+    - "Soru cumlesi formatinda olmali ('?' ile bitmeli)."
+    - "Paragraftaki bilgilerin COGUNLUGU bu soruya cevap vermeli."
+    - "Ne cok genis ne cok dar olmali."
+    - "4-15 kelime uzunlugunda olmali."
+    - "Dogru secenek paragrafi en dengeli ve tam kapsayan soru olarak secilmeli."
+    - "Kelime sayisi bakimindan en uzun secenek olmamali."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "YAKIN_SORU_COK_GUCLU"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Doğru cevaba semantik olarak çok yakın, güçlü soru tuzağı"
+    nasil_olusturulur: |
+      Paragrafın gerçek sorusuna çok benzeyen ama kapsamı biraz farklı güçlü bir soru oluştur.
+      Zor seviyede bu yakınlık maksimum — öğrenci derin okuma yapmadan doğru sanabilmeli.
+      Yalnızca kapsam veya odak farkıyla ayırt edilebilmeli.
+      4-15 kelime, ? ile bitmeli.
+    kategori: "semantic"
+
+  - ad: "BASKIN_ALT_BOYUT_SORUSU"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Paragraftaki en baskın alt konuya odaklanan güçlü soru"
+    nasil_olusturulur: |
+      Paragrafın en baskın alt boyutunu veya en güçlü ayrıntısını kapsayan bir soru oluştur.
+      Zor seviyede bu soru paragrafla güçlü bağ kurmalı ama asıl cevap ekseni farklı olduğu için elenmelidir.
+      4-15 kelime, ? ile bitmeli.
+    kategori: "cognitive"
+
+  - ad: "GENIS_KAPSAMLI_SORU_GUCLU"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Paragrafın konusunu kapsayan ama çok geniş üst soru"
+    nasil_olusturulur: |
+      Paragrafın gerçek sorusunu içine alan ama çok daha geniş bir soru oluştur.
+      Zor seviyede bu genişlik hemen belli olmamalı — öğrenci kapsamı analiz etmeli.
+      Tam paragraf değerlendirilince çok geniş olduğu anlaşılmalı.
+      4-15 kelime, ? ile bitmeli.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cikarim_yapma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "Ana fikir sorusu gibi davranan secenekler YASAK (soru cumlesi olmali)"
+    - "5. sinifa kayan soyut yorum sorulari YASAK"
+    - "Paragrafin dogrudan cevaplamadigı sorular dogru cevap olamaz"

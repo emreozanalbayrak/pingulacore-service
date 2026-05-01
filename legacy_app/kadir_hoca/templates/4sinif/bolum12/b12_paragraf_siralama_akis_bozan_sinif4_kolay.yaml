@@ -1,0 +1,129 @@
+# Kaynak: paragraf_siralama_akis_bozan_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.kolay
+# 4. sinif paragraf siralama akis bozan cumle — kolay duzey
+
+meta:
+  id: "b12_paragraf_siralama_akis_bozan_sinif4_kolay"
+  ad: "Paragraf Sıralama (Akışı Bozan Cümle) (Kolay)"
+  sinif_seviyesi: 4
+  aciklama: "Kolay duzey — numaralı cümlelerden akışı bozan cümleyi tespit etme"
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Numaralı cümleler + soru kökü + 4 seçenek (kolay)"
+
+  paragraph:
+    required: true
+    word_count_min: 50
+    word_count_max: 62
+    background_color: "#e8f8e8"
+    sentence_count_min: 4
+    sentence_count_max: 4
+    numbered_sentences: true
+    stil: "bilgilendirici"
+    kurallar:
+      - "4 cümle üret, Arap rakamlarıyla numarala: (1), (2), (3), (4)"
+      - "3 cümle aynı konu hakkında tutarlı ve doğal bir anlatım akışı oluştursun"
+      - "1 cümle aynı konuyla ilgili olmalı ancak paragrafın anlatım akışına uymamalı"
+      - "★★★ KRITIK: Akışı bozan cümlenin konumunu RASTGELE belirle — (1), (2), (3) veya (4) olabilir. HER ZAMAN 3. cümleye koyma! Üretimlerde dağılım dengeli olmalı."
+      - "Akışı bozan cümle konu dışı olmamalı; yalnızca paragrafın yönü, amacı, sırası veya işleviyle uyumsuz olmalı"
+      - "Kolay düzeyde akışı bozan cümle daha fark edilebilir olmalı; ancak hâlâ konu dışı görünmemeli"
+      - "3 uyumlu cümle arasındaki ortak yön daha belirgin olmalıdır"
+      - "Her cümle 10-22 kelime arasında olmalı"
+      - "Paragraf TEK bir metin bloğu olarak yazılmalı"
+      - "★★★ SADECE ARAP RAKAMI (1, 2, 3, 4) KULLAN — Roma rakamı (I, II, III, IV) KESINLIKLE KULLANMA ★★★"
+      - "Seçeneklerde SADECE Arap rakamı verilmeli — cümle metni YAZILMAMALI"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+    kurallar:
+      - "Soru kökünde SADECE tek bir soru cümlesi olmalı"
+      - "YASAK: Paragrafı herhangi bir formatta tekrar yazmak"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    style: "short_phrase"
+    word_count_min: 1
+    word_count_max: 5
+    correct_type: "does_not_belong"
+    correct_count: 1
+    kurallar:
+      - "Seçenekler SADECE Arap rakamından oluşmalı: A) 1, B) 2, C) 3, D) 4"
+      - "YASAK: Seçeneklerde cümle metni yazmak"
+      - "★★★ YASAK: Roma rakamı (I, II, III, IV) KESINLIKLE kullanmak — SADECE Arap rakamı"
+      - "Paragraftaki 4 numaralı cümlenin her biri birer seçenek olarak Arap rakamıyla verilmeli"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Yukarıdaki cümlelerden hangisi metnin anlam akışını <u>bozmaktadır</u>?</b>"
+  - "<b>Yukarıdaki cümlelerden hangisi konunun farklı yönünden <u>bahsetmektedir</u>?</b>"
+  - "<b>Bu cümlelerden hangisi metnin bütünlüğünü <u>bozmaktadır</u>?</b>"
+  - "<b>Numaralanmış cümlelerden hangisi paragrafın akışını bozmaktadır?</b>"
+  - "<b>Bu metinden numaralanmış cümlelerden hangisi çıkarılırsa metnin anlam bütünlüğü sağlanmış olur?</b>"
+  - "<b>Bu metnin anlamlı bir bütün oluşturması için numaralanmış cümlelerden hangisi metinden çıkarılmalıdır?</b>"
+  - "<b>Bu metinde numaralanmış cümlelerden hangisinde konunun farklı bir yönünden bahsedilmiştir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Paragrafta anlatım akışını bozan cümle — konu dışı olmayan ama paragrafın yönü, amacı, sırası veya işleviyle uyumsuz olan cümledir."
+  akisi_bozan_cumle_olcutleri:
+    - "Cümle paragrafın ana konusuyla aynı tema alanında olmalı"
+    - "Cümle konu dışı, absürt veya bariz biçimde alakasız olmamalı"
+    - "Cümle paragrafın ana yönünü, amacını, sırasını veya işlevini sürdürmemeli"
+    - "Cümle çıkarıldığında paragraf daha akıcı ve tutarlı hâle gelmeli"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_genel_kurallar:
+  - "Akışa uygun 3 cümle, paragrafın ana yönünü sürdürmeli ve birlikte okunduğunda tutarlı bir anlatım oluşturmalı"
+  - "Akışı bozan cümle konu dışı görünmemeli; ilk bakışta doğru görünebilmelidir"
+  - "Çeldirici cümle çıkarıldığında paragrafın akışı belirgin biçimde güçlenmelidir"
+
+celdirici_stratejileri:
+  - ad: "BELIRGIN_AKIS_SAPMA"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Akışı bozan cümlenin sapması kolay fark edilebilir"
+    nasil_olusturulur: |
+      3 uyumlu cümle arasındaki ortak yön daha belirgin olmalı.
+      Akışı bozan cümle konu alanında kalmalı ama akıştan sapması daha kolay fark edilebilir olmalı.
+      Doğru cevap bariz konu dışı olmamalı ama yön sapması belirgin olabilir.
+    kategori: "cognitive"
+
+  - ad: "UYUMLU_CUMLELER_BELIRGIN"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "3 uyumlu cümle arasındaki ortak yönün belirgin olması"
+    nasil_olusturulur: |
+      Paragraf daha kısa ve açık kurulmalı.
+      3 uyumlu cümle arasındaki akış belirgin olmalı — öğrenci uyumlu cümleleri hızlıca tanıyıp sapanı bulabilmeli.
+    kategori: "content"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siralama", "degerlendirme"]
+  surec_bileseni: "metin_yapisini_analiz_etme"
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

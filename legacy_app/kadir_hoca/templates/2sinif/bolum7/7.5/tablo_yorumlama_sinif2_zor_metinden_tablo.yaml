@@ -1,0 +1,109 @@
+# Varyant: metindeki_bilgileri_veren_tablo (referans zorluk_duzeyleri.zor)
+# Zor duzey, 1 soru: metin/liste + tablo secenekleri — dogru tabloyu secme
+
+meta:
+  id: tablo_yorumlama_sinif2_zor_metinden_tablo
+  ad: "2. Sinif - Tablo Yorumlama (Zor) - Metinden Tablo Secme"
+  sinif_seviyesi: 2
+  aciklama: "Zor baglam — 1 soru: metindeki bilgileri dogru gosteren tabloyu secme (birden fazla veri karsilastirmasi)"
+  frequency: "Medium"
+
+context:
+  type: tablo_yorumlama_sinif2_zor_metinden_tablo
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 18
+    word_count_max: 52
+    structure:
+      - "Metin veya liste tablodaki verilerin ne olmasi gerektigini anlatmali."
+      - "Bilgiler acik ve sade olmali."
+      - "Dogru tabloyu secmek icin metin dikkatle okunmali."
+      - "Metin tek basina dogru cevabi soylememeli; tablo secenekleriyle karsilastirma gerektirmeli."
+      - "Liste veya metin 2. sinif duzeyine uygun olmali."
+      - "Metin 2-5 cumle icermeli."
+      - "Birden fazla veri noktasi icermeli (zor duzey icin karsilastirma gerektirir)."
+    kurallar:
+      - "2. sinif duzeyinde, sade ve gunluk hayata yakin icerik."
+      - "Kisa aciklama metni, madde madde veri listesi veya kisi-nesne-sayi iliskisi veren kisa bilgiler olabilir."
+      - "Metin/liste dogru tabloyu karsilastirmali sectirecek kadar acik olmali."
+      - "Metin/liste tek basina cevabi vermemeli."
+      - "Zor duzeyde bile 2. sinif sadeligi korunmali."
+      - "Turkce karakterler dogru kullanilmali."
+
+  questions:
+    - slot: 1
+      type: metindeki_bilgileri_veren_tablo
+      soru_kokleri:
+        - "<b>Tablolardan hangisi metindeki bilgileri içermektedir?</b>"
+        - "<b>Aşağıdaki tablolardan hangisi metindeki bilgilere uygundur?</b>"
+        - "<b>Verilen bilgilere göre doğru tablo hangisidir?</b>"
+        - "<b>Metindeki bilgilere göre oluşturulan tablo aşağıdakilerden hangisidir?</b>"
+        - "<b>Aşağıdaki tablolardan hangisi verilen bilgileri doğru göstermektedir?</b>"
+      options_style: image_description
+      image_style: table
+      word_count_min: 15
+      word_count_max: 50
+      slot_rules:
+        - "3 tablo secenegi bulunmali."
+        - "1 tablo metindeki bilgileri tam karsilamali."
+        - "2 tablo yakin ama hatali veri tasimali."
+        - "Dogru cevap icin hem metin/liste hem tablo secenekleri birlikte incelenmeli."
+        - "2 yanlis tablo da makul gorunmeli."
+        - "1 yanlis tablo yakin toplam/karsilastirma hatasi icermeli."
+        - "1 yanlis tablo satir-sutun ya da veri eslestirme hatasi icermeli."
+      beceri:
+        katman: KB2
+        bilesenler: [metin_tablo_eslestirme, karsilastirma, cok_adimli_cikarim]
+        surec_bileseni: metni_yorumlama
+
+header_template: "Asagidaki bilgileri okuyarak soruyu cevaplayiniz."
+
+format:
+  type: llm_generated_html
+  description: "1 baglam sorusu (zor): metin/liste + tablo secenekleri — dogru tabloyu secme"
+  paragraph:
+    required: true
+    word_count_min: 18
+    word_count_max: 52
+    sentence_count_min: 2
+    sentence_count_max: 5
+    stil: "bilgilendirici_liste"
+    background_color: "#fce8e8"
+  stem:
+    required: true
+  options:
+    count: 3
+    labels: [A, B, C]
+    word_count_min: 15
+    word_count_max: 50
+    style: image_description
+    image_style: table
+    correct_count: 1
+    correct_type: matches
+
+dogru_cevap:
+  tanim: "Metindeki bilgileri tam karsilayan tablo secenegi"
+  kurallar:
+    - "Dogru cevap metindeki bilgileri tam karsilayan tablo olmali."
+    - "Yalniz metne bakarak dogru tablo secilememelidir."
+    - "Yalniz tablo seceneklerine bakarak da dogru cevap kesin secilememelidir."
+    - "Dogru cevap dis bilgi gerektirmemeli."
+    - "2 yanlis secenek de makul gorunmeli."
+
+distractors:
+  stratejiler:
+    - ad: YANLIS_TABLO_ESLESMESI
+      aciklama: "Metindeki bilgilerin bir kismini dogru, bir kismini yanlis gosteren tablo"
+    - ad: TOPLAM_HATASI
+      aciklama: "Toplam veya karsilastirma gerektiren durumda yanlis toplama/cikarma"
+    - ad: SATIR_SUTUN_KARISTIRMA
+      aciklama: "Bilgiyi yanlis kisi, gun, ders veya baslikla eslestirme"
+
+use_shared_strategies: false
+
+beceri:
+  katman: KB2
+  bilesenler: [metin_tablo_eslestirme, karsilastirma, cok_adimli_cikarim]
+  surec_bileseni: metni_yorumlama

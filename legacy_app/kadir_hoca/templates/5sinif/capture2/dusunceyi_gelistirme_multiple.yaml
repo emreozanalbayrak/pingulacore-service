@@ -1,0 +1,235 @@
+# templates/capture2/dusunceyi_gelistirme_multiple.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Bolum 2 - Dusunceyi Gelistirme Yollari
+#
+# COKLU SECIM FORMATI (tum dusunceyi gelistirme sorularinin ~%10'u)
+# Paragraf verilir, I/II/III/IV numarali teknikler soru kokunde listelenir
+# Secenekler "I ve II", "II ve IV" gibi birlesik formatindadir
+#
+# MANTIK: Metinde kullanilan 2 teknigi tespit et
+# 4 teknikten 2'si metinde VAR, 2'si metinde YOK
+
+meta:
+  id: "dusunceyi_gelistirme_multiple"
+  ad: "Düşünceyi Geliştirme (Çoklu Seçim)"
+  sinif_seviyesi: 5
+  aciklama: "Metinde birden fazla tekniğin kullanıldığını belirleme"
+  kaynak: "data/dusunceyi_gelistirme_yollari.pdf"
+  frequency: "Low (~10% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Paragraf + numaralı öncüller + birleşik seçenekler"
+
+  paragraph:
+    required: true
+    word_count_min: 50
+    word_count_max: 95
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "bilgilendirici"
+    kurallar:
+      - "Metin en az 2 belirgin teknik içermelidir (Örn: Tanımlama ve Karşılaştırma)."
+      - "Kullanilan tekniklerin belirtecleri acikca paragrafta bulunmali."
+      - "Kullanilmayan tekniklerin hicbir belirteci paragrafta olmamali."
+
+  stem:
+    required: true
+    description: "Soru kokleri pattern listesinden rastgele secilir, {statements} placeholder ile"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 6
+    style: "roman_numeral_combination"
+    correct_count: 1
+    preserve_order: true
+    layout: "two_column"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI ({statements} placeholder ile)
+# {statements} placeholder: I/II/III/IV teknik adlari buraya gelir
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metinde;</b>\n{statements}\n<b>numaralanmış düşünceyi geliştirme yollarından hangileri kullanılmıştır?</b>"
+  - "<b>Bu metnin anlatımında,</b>\n{statements}\n<b>düşünceyi geliştirme yollarının hangilerinden yararlanılmıştır?</b>"
+  - "<b>Bu metinde;</b>\n{statements}\n<b>düşünceyi geliştirme yollarından hangilerine başvurulmuştur?</b>"
+  - "<b>Bu metnin yazarı;</b>\n{statements}\n<b>düşünceyi geliştirme yollarından hangilerini kullanmıştır?</b>"
+  - "<b>Bu metinde;</b>\n{statements}\n<b>numaralanmış anlatım yollarından hangileri yer almaktadır?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "4 numarali teknikten 2 tanesinin birlesimi - metinde KULLANILAN 2 teknik"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "4 numarali teknik adi olusturulmali (I, II, III, IV)"
+    - "2 teknik metinde KULLANILMALI (dogru cevap bunlarin birlesimi)"
+    - "2 teknik metinde KULLANILMAMALI (yanlis seceneklere dagitilir)"
+    - "Secenekler ikili birlesimler: 'I ve II', 'I ve III', 'II ve IV', 'III ve IV', 'I ve IV', 'II ve III' gibi"
+    - "Her ifade bir teknik adi olmali (1-3 kelime): Tanimlama, Benzetme, Karsilastirma, Orneklendirme"
+  ornekler:
+    - paragraf: "Baykal Gölü dünyanın en derin gölüdür. Bir ayna gibi berrak sularıyla ünlüdür. Hazar Denizi ise yüzölçümü bakımından en büyük göldür. Mesela Baykal Gölü'nde 300'den fazla nehir bulunmaktadır."
+      ifadeler:
+        I: "Tanımlama"
+        II: "Benzetme"
+        III: "Karşılaştırma"
+        IV: "Örneklendirme"
+      dogru: "II ve III"
+      neden: "Metinde Benzetme ('ayna gibi') ve Karsilastirma ('en derin', 'ise', 'en buyuk') var. Tanimlama net degil, Orneklendirme sinirli."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# Numarali format (I/II/III/IV teknikler + "I ve II" tarzi secenekler):
+# - 2 teknik metinde KULLANILAN
+# - 2 teknik metinde KULLANILMAYAN
+# Strateji havuzu paragraf icerigini cesiitlendirmek icin kullanilir
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siniflandirma", "sentezleme"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic with rich content potential"
+      details: "Birden fazla teknigin dogal kullanilabilecegi bir konu sec"
+
+    - step: 2
+      action: "Determine 2 techniques to USE and 2 to EXCLUDE"
+      details: |
+        4 ana teknikten 2'si paragrafta kullanilacak:
+        - Tanimlama, Karsilastirma, Benzetme, Orneklendirme
+        - Kalan 2 teknik seceneklerde ama metinde olmayacak
+
+    - step: 3
+      action: "Generate paragraph (50-95 words) containing exactly 2 techniques"
+      details: |
+        Paragrafta:
+        - Tam 2 farkli teknik belirgin sekilde kullanilmali
+        - Her teknige ait belirtecler acikca bulunmali
+        - Diger 2 teknige ait hicbir belirtec olmamali
+
+    - step: 4
+      action: "Create 4 numbered technique names (I, II, III, IV)"
+      details: |
+        4 teknik adini numarala:
+        - 2 tanesi metinde KULLANILAN teknikler
+        - 2 tanesi metinde KULLANILMAYAN teknikler
+        - Siralama rastgele olmali
+
+    - step: 5
+      action: "Create 4 combination options"
+      details: |
+        Secenekler ikili birlesimler:
+        - Dogru cevap: kullanilan 2 teknigin birlesimi
+        - Diger 3 secenek: karisik birlesimleri
+        Ornek: A) I ve II  B) I ve III  C) II ve IV  D) III ve IV
+
+    - step: 6
+      action: "Select random stem and embed technique names"
+      details: |
+        soru_kokleri listesinden rastgele sec
+        {statements} yerine numarali teknik adlarini yerlestir:
+        I. Tanimlama
+        II. Benzetme
+        III. Karsilastirma
+        IV. Orneklendirme
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 85
+    soru_no: 4
+    konu: "Goller ve ozellikleri"
+    paragraf: "Baykal Gölü dünyanın en derin gölüdür. Bir ayna gibi berrak sularıyla ünlüdür..."
+    soru_koku: "Bu metinde; I/II/III/IV numaralanmis dusunceyi gelistirme yollarindan hangileri kullanilmistir?"
+    ifadeler:
+      I: "Tanımlama"
+      II: "Benzetme"
+      III: "Karşılaştırma"
+      IV: "Örneklendirme"
+    secenekler:
+      A: "I ve II"
+      B: "I ve III"
+      C: "II ve III"
+      D: "III ve IV"
+    dogru_cevap: "C"
+    neden: "Metinde Benzetme ('ayna gibi') ve Karsilastirma ('en derin', 'ise') var"
+
+  - sayfa: 85
+    soru_no: 10
+    konu: "Aricilik ve bal uretimi"
+    paragraf: "Bal arıları doğadaki en çalışkan canlılardandır. Bir kilogram bal üretmek için milyonlarca çiçeği ziyaret ederler. Örneğin çam balı, çiçek balı ve karakovan balı en bilinen türlerdir."
+    soru_koku: "Bu metnin anlatiminda, I/II/III/IV dusunceyi gelistirme yollarinin hangilerinden yararlanilmistir?"
+    ifadeler:
+      I: "Karşılaştırma"
+      II: "Örneklendirme"
+      III: "Tanımlama"
+      IV: "Benzetme"
+    secenekler:
+      A: "I ve II"
+      B: "I ve IV"
+      C: "II ve III"
+      D: "III ve IV"
+    dogru_cevap: "C"
+    neden: "Metinde Orneklendirme ('ornegin') ve Tanimlama ('...canlilarindan') var"
+
+  - sayfa: 88
+    soru_no: 4
+    konu: "Deprem ve etkileri"
+    paragraf: "Deprem, yer kabuğundaki kırıklar boyunca biriken enerjinin aniden serbest kalmasıdır. Şiddetli depremler bir canavar gibi her şeyi yıkar. Örneğin 1999 Marmara depremi büyük yıkıma neden olmuştur."
+    soru_koku: "Bu metinde; I/II/III/IV numaralanmis dusunceyi gelistirme yollarindan hangileri kullanilmistir?"
+    ifadeler:
+      I: "Benzetme"
+      II: "Karşılaştırma"
+      III: "Tanımlama"
+      IV: "Örneklendirme"
+    secenekler:
+      A: "I ve II"
+      B: "I ve IV"
+      C: "II ve III"
+      D: "III ve IV"
+    dogru_cevap: "B"
+    neden: "Metinde Benzetme ('canavar gibi') ve Orneklendirme ('ornegin 1999 Marmara') var"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 50-95 arasinda mi?"
+    - "Tam 2 belirgin teknik kullanilmis mi?"
+    - "Kullanilan tekniklerin belirtecleri acikca var mi?"
+    - "Kullanilmayan tekniklerin hicbir belirteci yok mu?"
+
+  statements:
+    - "Tam 4 numarali teknik adi var mi (I, II, III, IV)?"
+    - "Her ifade 1-3 kelime teknik adi mi?"
+    - "2 teknik metinde kullanilmis mi?"
+    - "2 teknik metinde kullanilmamis mi?"
+
+  options:
+    - "4 secenek ikili birlesim mi ('X ve Y' formati)?"
+    - "Dogru cevap kullanilan 2 teknigin birlesimi mi?"
+    - "Diger secenekler karisik birlesimler mi?"

@@ -1,0 +1,6 @@
+GEOMETRİK ŞEKİLLER / Üçgende Açılar / İç Açılar Toplamı 180 Derece Kuralı
+GEOMETRİK ŞEKİLLER / Tümler ve Bütünler Açılar / Tümler ve Bütünler Açı Hesaplama
+GEOMETRİK ŞEKİLLER / Çember ile Üçgen İnşası / Eşkenar Üçgen İnşası
+GEOMETRİK ŞEKİLLER / Eşit Uzunluktaki Doğru Parçaları / Orta Nokta Kavramı
+GEOMETRİK ŞEKİLLER / Kesişen Doğru Açıları / Ters Açılar ve Komşu Açılar
+GEOMETRİK ŞEKİLLER / Doğruya Dikme Çizme / Noktanın Doğruya Uzaklığı

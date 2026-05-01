@@ -1,0 +1,404 @@
+meta:
+  id: "infografikler_sinif2_gorsel_merkezli_uc_secenekli"
+  ad: "İnfografikler"
+  sinif_seviyesi: 2
+  ders: "Türkçe"
+  bolum: "2. Sınıf Paragraf Soru Bankası"
+  alt_bolum: "7.4 İnfografikler"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    2. sınıf öğrencisi için bilgilendirici görselleri inceleyerek açık bilgileri,
+    çıkarılabilen bilgileri ve çıkarılamayan bilgileri ayırt ettirmeye yönelik,
+    infografik zorunlu ve 3 seçenekli standart soru üretim şablonu.
+  kullanim_notu: >
+    Bu şablonda çözümün ana kaynağı infografiktir. Varsa kısa üst metin yalnız
+    bağlam kurar; doğru cevap tek başına bu üst metinden çıkarılamaz.
+    Öğrenci infografiği incelemeden soruyu çözememelidir.
+    Harici 2. Sınıf TYMM Ortak Kuralları ile birlikte doğrulanmalıdır.
+
+format:
+  tip: "llm_generated_html"
+  aciklama: "İsteğe bağlı kısa üst metin + infografik + soru kökü + 3 seçenek"
+
+  cozum_kaynagi_politikasi:
+    infografik_zorunlu: true
+    infografik_ana_kaynak: true
+    sadece_ust_metinle_cozum_yasak: true
+    sadece_dis_bilgiyle_cozum_yasak: true
+
+  soru_varyanti:
+    izinli:
+      - "hangisi_soylenebilir"
+      - "hangisi_soylenemez"
+      - "hangi_yargiya_ulasilabilir"
+      - "hangi_yargiya_ulasilamaz"
+      - "hangisi_infografikle_uyumludur"
+      - "hangisi_infografikle_uyumlu_degildir"
+    varsayilan: "hangisi_soylenebilir"
+
+  ust_metin:
+    gerekli: false
+    aciklama: "İnfografiğin konusunu tanıtan kısa bağlam metni"
+    cumle_sayisi_min: 1
+    cumle_sayisi_max: 3
+    kelime_sayisi_min: 8
+    kelime_sayisi_max: 32
+    kurallar:
+      - "Üst metin varsa kısa, sade ve açıklayıcı olmalıdır."
+      - "Üst metin infografiğin konusunu tanıtabilir."
+      - "Üst metin doğru cevabı tek başına vermemelidir."
+      - "Üst metin çözümün asıl kaynağı olmamalıdır."
+      - "Üst metin 2. sınıf düzeyini aşan teknik bilgi içermemelidir."
+    yasaklar:
+      - "doğru seçeneği açıkça söyleyen açıklama"
+      - "infografiğe bakmadan çözülebilen uzun paragraf"
+      - "karmaşık ve teknik tanımlar"
+
+  infografik:
+    gerekli: true
+    aciklama: "Bilginin görsel düzen içinde sunulduğu ana bilgi alanı"
+    konum: "ust"
+    izinli_turler:
+      - "maddelemeli bilgilendirici görsel"
+      - "ikon destekli bilgi panosu"
+      - "sıra veya süreç gösteren görsel şema"
+      - "karşılaştırmalı sade bilgi afişi"
+      - "belirti, kural veya öneri listesi"
+      - "hava durumu, sağlık, çevre, davranış, güvenlik temalı bilgi görseli"
+    kurallar:
+      - "İnfografik soru çözümünün ana kaynağı olmalıdır."
+      - "İnfografikte en az 3 açık bilgi bulunmalıdır."
+      - "İnfografik tek bakışta anlaşılır ama dikkatli inceleme gerektirir olmalıdır."
+      - "Bilgiler kısa ifadeler, semboller, ikonlar veya görsel sahnelerle desteklenebilir."
+      - "İnfografik sade ve düzenli olmalıdır."
+      - "Başlık varsa açık ve anlaşılır olmalıdır."
+      - "Her bilgi parçası görsel olarak ayırt edilebilir olmalıdır."
+      - "Doğru cevap infografik incelenmeden bulunamamalıdır."
+      - "İnfografik 2. sınıf öğrencisinin takip edebileceği sadelikte olmalıdır."
+      - "İnfografik içeriği metin, ikon ve yerleşim açısından birbirini desteklemelidir."
+    yasaklar:
+      - "aşırı yoğun veri panosu"
+      - "küçük yazılarla dolu karmaşık görsel"
+      - "tek başına dekoratif ve bilgi taşımayan afiş"
+      - "2. sınıf düzeyini aşan teknik istatistikler"
+      - "çözümü dış bilgi gerektiren uzmanlık içeriği"
+
+  soru_koku:
+    gerekli: true
+    secim: "listeden_rastgele"
+
+  secenekler:
+    sayi: 3
+    etiketler: ["A", "B", "C"]
+    dogru_sayisi: 1
+    stil: "kisa_yargi"
+    kelime_sayisi_min: 3
+    kelime_sayisi_max: 12
+    kurallar:
+      - "Her soruda 3 seçenek olmalıdır."
+      - "Seçenekler kısa, sade ve 2. sınıf düzeyinde olmalıdır."
+      - "Doğru seçenek infografikteki bilgiye dayanmalıdır."
+      - "Yanlış seçenekler infografiğe yakın görünmeli ama dikkatli inceleyince elenebilmelidir."
+      - "Yanlış seçeneklerden en az biri infografikte olmayan ayrıntı ekleyebilir."
+      - "Yanlış seçeneklerden en az biri infografikteki bilgiyi kısmen bozabilir."
+      - "Seçenekler kendi aralarında biçimce paralel olmalıdır."
+
+soru_kokleri:
+  hangisi_soylenebilir:
+    - "İnfografiğe göre aşağıdakilerden hangisi söylenebilir?"
+    - "Bu infografiğe göre aşağıdakilerden hangisi söylenebilir?"
+    - "İnfografikten hareketle aşağıdakilerden hangisi söylenebilir?"
+    - "İnfografikte verilen bilgilere göre aşağıdakilerden hangisi doğrudur?"
+
+  hangisi_soylenemez:
+    - "İnfografiğe göre aşağıdakilerden hangisi söylenemez?"
+    - "Bu infografiğe göre aşağıdakilerden hangisi söylenemez?"
+    - "İnfografikten hareketle aşağıdakilerden hangisi söylenemez?"
+    - "İnfografikte verilen bilgilere göre aşağıdakilerden hangisi doğru değildir?"
+
+beceri_odagi:
+  birincil_beceri:
+    - "İnfografikten bilgi çıkarma"
+  ikincil_beceriler:
+    - "Görsel düzen içindeki açık bilgileri fark etme"
+    - "Bilgiye ulaşılabilen ve ulaşılamayan yargıları ayırt etme"
+    - "İnfografikte verilen bilgileri kısa yargılarla eşleştirme"
+    - "Yakın ama yanlış bilgiyi eleme"
+
+dogru_cevap:
+  tanim: "İnfografikte yer alan açık bilgiye veya infografikten doğrudan çıkarılabilen sonuca dayanan doğru seçenek"
+  kurallar:
+    - "Doğru cevap infografikteki bilgiye dayanmalıdır."
+    - "Doğru cevap yalnız üst metinden çıkarılamamalıdır."
+    - "Doğru cevap dış bilgi gerektirmemelidir."
+    - "Doğru cevap yorumdan çok gözlem ve basit çıkarıma dayanmalıdır."
+    - "Söylenemez / ulaşılamaz sorularında doğru cevap infografikte yer almayan veya infografikten çıkarılamayan bilgi olmalıdır."
+    - "Doğru cevap 2. sınıf öğrencisinin infografiği inceleyerek bulabileceği açıklıkta olmalıdır."
+
+yanlis_secenek_stratejileri:
+  count_per_question: 2
+  strateji_havuzu:
+    - id: "infografikte_yok"
+      tanim: "İnfografikte yer almayan ama konu alanına yakın bilgi"
+      ornek_mantik:
+        - "A vitamini tüketmek bilgisi varsa, belirli bir yiyecek adını uydurmak"
+        - "hava durumu sırası veriliyorsa, araya olmayan bir sembol eklemek"
+
+    - id: "kismi_dogru_kismi_yanlis"
+      tanim: "İfadenin bir kısmı infografiğe uyar gibi görünür ama tamamı doğru değildir"
+      ornek_mantik:
+        - "ekran süresini azaltmak yerine telefonu tamamen atmak"
+        - "seslerden rahatsız olur bilgisinden gürültüyü sever sonucuna gitmek"
+
+    - id: "sirayi_bozma"
+      tanim: "İnfografikteki süreç, sıra veya dizilimi karıştıran seçenek"
+      ornek_mantik:
+        - "hava durumu sembollerinin yerini değiştirmek"
+        - "adımları ters sırada vermek"
+
+    - id: "yakın_ama_farkli_vurgu"
+      tanim: "Aynı tema alanında ama infografiğin söylediğinden farklı vurgu taşıyan seçenek"
+      ornek_mantik:
+        - "sigara dumanından uzak dur yerine sigara hiç içmemek"
+        - "tek başına oynamayı tercih eder yerine hiç oyun oynamaz"
+
+  secim_kurali:
+    - "Her soruda 2 yanlış seçenek farklı stratejilerden seçilmelidir."
+    - "En az 1 yanlış seçenek infografiğe yakın görünmelidir."
+    - "Zor düzeyde iki yanlış seçenek de ilk bakışta makul görünmelidir."
+    - "Söylenemez / ulaşılamaz türünde sorularda diğer 2 seçenek infografikle açıkça desteklenmelidir."
+
+soru_varyanti_kurallari:
+  hangisi_soylenebilir:
+    kurallar:
+      - "1 seçenek infografikten desteklenmelidir."
+      - "Diğer 2 seçenek ya infografikte yok ya da kısmen bozuktur."
+
+  hangisi_soylenemez:
+    kurallar:
+      - "2 seçenek infografikle desteklenmelidir."
+      - "1 seçenek infografikte yer almamalı ya da infografikten çıkarılamamalıdır."
+
+  hangi_yargiya_ulasilabilir:
+    kurallar:
+      - "Doğru seçenek infografikteki bilgilerin kısa ve doğal sonucu olmalıdır."
+      - "Derin yorum, soyut mesaj veya uzun gerekçe gerektirmemelidir."
+
+  hangi_yargiya_ulasilamaz:
+    kurallar:
+      - "Doğru seçenek infografiğin desteklemediği yargı olmalıdır."
+      - "Diğer iki seçenek infografikten açıkça çıkarılabilir olmalıdır."
+
+  hangisi_infografikle_uyumludur:
+    kurallar:
+      - "Doğru seçenek infografikle açık uyum göstermelidir."
+      - "Yanlış seçenekler kısmi uyum ya da yakın ama hatalı bilgi içerebilir."
+
+  hangisi_infografikle_uyumlu_degildir:
+    kurallar:
+      - "Doğru seçenek infografik ile açık çelişki taşımalı ya da infografikte yer almamalıdır."
+      - "Diğer iki seçenek infografikle uyumlu olmalıdır."
+
+zorluk_duzeyleri:
+  kolay:
+    infografik:
+      bilgi_yogunlugu: "dusuk"
+      kurallar:
+        - "İnfografikte 3-5 açık bilgi bulunmalıdır."
+        - "Bilgiler kısa ifadelerle verilmelidir."
+        - "Doğru cevap infografikte neredeyse doğrudan görülebilir olmalıdır."
+    ust_metin:
+      kurallar:
+        - "Varsa yalnız kısa konu tanıtımı yapmalıdır."
+    tercih_edilen_varyantlar:
+      - "hangisi_soylenebilir"
+      - "hangisi_infografikle_uyumludur"
+      - "hangi_yargiya_ulasilabilir"
+    celdiriciler:
+      kurallar:
+        - "1 seçenek infografikte açıkça yok olmalıdır."
+        - "1 seçenek kısmi doğru-kısmi yanlış olabilir."
+        - "Yanlış seçenekler kolay elenebilir olmalıdır."
+    zorluk_notu: >
+      Kolay düzeyde öğrenci infografikte verilen bilgileri doğrudan okuyarak
+      doğru seçeneği bulur.
+
+  orta:
+    infografik:
+      bilgi_yogunlugu: "orta"
+      kurallar:
+        - "İnfografikte 5-7 bilgi bulunabilir."
+        - "Doğru cevap için birden fazla bilgi parçası birlikte düşünülmesi gerekebilir."
+        - "Sıra, belirti, öneri veya özellik listesi kullanılabilir."
+    ust_metin:
+      kurallar:
+        - "Varsa konu tanıtımı yapmalı ama çözümü vermemelidir."
+    tercih_edilen_varyantlar:
+      - "hangisi_soylenemez"
+      - "hangi_yargiya_ulasilabilir"
+      - "hangi_yargiya_ulasilamaz"
+      - "hangisi_infografikle_uyumlu_degildir"
+    celdiriciler:
+      kurallar:
+        - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+        - "Yanlış seçenekler yakın ama hatalı çıkarım taşıyabilir."
+    zorluk_notu: >
+      Orta düzeyde öğrenci infografikteki bilgileri karşılaştırarak hangi yargının
+      desteklenip desteklenmediğini ayırt eder.
+
+  zor:
+    infografik:
+      bilgi_yogunlugu: "orta_yuksek"
+      kurallar:
+        - "İnfografikte 6-8 bilgi ya da sembol dizisi bulunabilir."
+        - "Doğru cevap için iki veya daha fazla parçayı birleştirmek gerekebilir."
+        - "Sıra veya düzen bilgisi kullanılıyorsa seçenekler birbirine yakın olabilir."
+        - "Zor düzeyde bile 2. sınıf sadeliği korunmalıdır."
+    ust_metin:
+      kurallar:
+        - "Varsa bağlam kurar ama tek başına çözüm sağlamaz."
+    tercih_edilen_varyantlar:
+      - "hangisi_soylenemez"
+      - "hangi_yargiya_ulasilamaz"
+      - "hangisi_infografikle_uyumlu_degildir"
+    celdiriciler:
+      kurallar:
+        - "2 yanlış seçenek de makul görünmelidir."
+        - "1 yanlış seçenek infografikteki bilgiyi hafifçe bozmalıdır."
+        - "1 yanlış seçenek yakın ama dış bilgi karıştıran yapı taşıyabilir."
+    zorluk_notu: >
+      Zor düzey 2. sınıfta derin analiz değildir.
+      Zorluk, infografikteki bilgileri dikkatle karşılaştırıp doğru yargıyı seçme düzeyindedir.
+
+zorluk_secim_politikasi:
+  varsayilan: "Orta"
+  izinli_degerler: ["Kolay", "Orta", "Zor"]
+  kesin_sinirlar:
+    - "Tüm düzeylerde infografik zorunludur."
+    - "Tüm düzeylerde çözümün ana kaynağı infografik olmalıdır."
+    - "Varsa üst metin tek başına çözüm sağlamamalıdır."
+    - "Tüm düzeylerde 3 seçenek kullanılmalıdır."
+    - "Zor düzey seçilse bile dış bilgi, soyut yorum veya ana düşünce gerektiren yapı kurulamaz."
+
+konu_alani:
+  izinli_ornekler:
+    - "göz sağlığını koruma"
+    - "sağlıklı yaşam"
+    - "otizm belirtileri"
+    - "hava durumu sırası"
+    - "çevreyi koruma"
+    - "güvenlik kuralları"
+    - "okul kuralları"
+    - "temizlik alışkanlıkları"
+    - "doğru beslenme"
+    - "günlük yaşam önerileri"
+  kurallar:
+    - "Konu 2. sınıf öğrencisinin anlayabileceği kadar somut ve açık olmalıdır."
+    - "İnfografik görsel ve kısa yazılı bilgiyle desteklenebilir olmalıdır."
+    - "Konu dış bilgi gerektirmeden çözülebilmelidir."
+    - "Bilgiler çocuk düzeyinde sade cümlelerle verilmelidir."
+
+uretim_mantigi:
+  adimlar:
+    - adim: 1
+      eylem: "2. sınıfa uygun, infografik ile anlatılabilir açık bir konu seç"
+    - adim: 2
+      eylem: "İnfografik düzenini oluştur"
+      detaylar:
+        - "Başlık varsa kısa ve açık olsun"
+        - "Bilgileri madde, ikon, sıra veya kısa açıklamalarla ver"
+        - "İnfografiği ana bilgi kaynağı yap"
+    - adim: 3
+      eylem: "Gerekirse kısa bir üst metin ekle"
+      detaylar:
+        - "Bağlam kursun"
+        - "Çözümü tek başına vermesin"
+    - adim: 4
+      eylem: "Soru varyantını seç"
+      detaylar:
+        - "hangisi_soylenebilir"
+        - "hangisi_soylenemez"
+    - adim: 5
+      eylem: "1 doğru ve 2 yanlış seçenek oluştur"
+      detaylar:
+        - "Doğru seçenek infografik ile açıkça desteklensin"
+        - "Yanlışlardan biri infografikte olmasın"
+        - "Yanlışlardan biri yakın ama bozulmuş bilgi taşısın"
+    - adim: 6
+      eylem: "Soru kökünü listeden rastgele seç"
+    - adim: 7
+      eylem: "Şıkları A-B-C olarak karıştır"
+    - adim: 8
+      eylem: "İnfografik bağımlılığını doğrula"
+      detaylar:
+        - "İnfografik kaldırıldığında soru çözülemiyor mu?"
+        - "Varsa üst metin tek başına yetmiyor mu?"
+        - "Doğru cevap infografik incelenince tekleşiyor mu?"
+
+validation_checklist:
+  infografik_bagimliligi:
+    - "İnfografik zorunlu olarak var mı?"
+    - "Çözümün ana kaynağı infografik mi?"
+    - "İnfografik kaldırıldığında soru çözülemez hâle geliyor mu?"
+    - "Varsa üst metin tek başına yetmiyor mu?"
+    - "Doğru cevap infografikteki bilgiye dayanıyor mu?"
+
+  infografik:
+    - "İnfografik sade ve anlaşılır mı?"
+    - "Bilgiler ayırt edilebilir mi?"
+    - "Başlık ve alt bilgiler 2. sınıf düzeyine uygun mu?"
+    - "İnfografik dekoratif kalmıyor mu?"
+    - "İnfografikte en az 3 bilgi var mı?"
+
+  ust_metin:
+    - "Üst metin varsa kısa ve sade mi?"
+    - "Üst metin çözümü açıkça vermiyor mu?"
+    - "Üst metin yalnız bağlam kuruyor mu?"
+
+  soru_koku:
+    - "Soru kökü kısa ve açık mı?"
+    - "Soru kökü infografiğe yönlendiriyor mu?"
+    - "Soru kökü cevabı açıklamıyor mu?"
+
+  secenekler:
+    - "Toplam 3 seçenek var mı?"
+    - "Doğru seçenek infografikle doğrulanabiliyor mu?"
+    - "Yanlış seçenekler yakın ama hatalı mı?"
+    - "Söylenemez / ulaşılamaz sorularında diğer iki seçenek infografikle destekleniyor mu?"
+
+  zorluk:
+    - "Zorluk seçilen düzeye göre bilgi yoğunluğu ayarlanmış mı?"
+    - "Zor düzey bile 2. sınıf sınırında mı?"
+    - "Kolay düzey gereksiz yere karmaşık değil mi?"
+
+hard_fail_rules:
+  - "İnfografik yoksa"
+  - "Soru yalnız üst metinden çözülebiliyorsa"
+  - "Doğru cevap infografikte doğrulanamıyorsa"
+  - "Seçenek sayısı 3 değilse"
+  - "İki veya daha fazla seçenek makul doğruysa"
+  - "İnfografik 2. sınıf için fazla karmaşıksa"
+  - "Soru ana düşünce, gizli mesaj veya soyut yorum sorusuna kayıyorsa"
+  - "Doğru cevap dış bilgi gerektiriyorsa"
+  - "Üst metin cevabı doğrudan veriyorsa"
+
+ornek_bicim_notlari:
+  - "Göz sağlığını koruma infografiğinde, verilen önerilerden hangisine ulaşılabildiği ya da ulaşılamadığı sorulabilir."
+  - "Otizm belirtileri infografiğinde, verilen davranışlardan hangisinin bu görselle uyumlu olmadığı sorulabilir."
+  - "Hava durumu sırası veren infografiklerde, metindeki sıraya uygun sembol dizisi sorulabilir."
+  - "Bu bölümde temel amaç, infografikte verilen bilgileri okuyup doğru yargıya ulaşmaktır."
+
+output_contract:
+  required_fields:
+    - "soru_varyanti"
+    - "infografik_tasarimi"
+    - "stem"
+    - "options"
+    - "answer"
+    - "difficulty"
+    - "topic"
+  optional_fields:
+    - "ust_metin"
+  answer_format:
+    - "answer yalnızca A/B/C olarak verilebilir"
+    - "difficulty yalnızca Kolay / Orta / Zor olabilir"

@@ -1,0 +1,402 @@
+meta:
+  id: "paragrafta_ana_dusunce_yardimci_dusunce_sinif3_standart_gorselli_dort_secenekli"
+  ad: "Paragrafta Ana Düşünce – Yardımcı Düşünce"
+  sinif_seviyesi: 3
+  ders: "Türkçe"
+  bolum: "3. Sınıf Türkçe Paragraf Kitabı"
+  alt_bolum: "3. Paragrafta Ana Düşünce – Yardımcı Düşünce"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    3. sınıf öğrencisi için kısa bir metinde asıl vurgulanmak isteneni,
+    metni destekleyen yardımcı bilgileri ve metinde cevabı bulunan/bulunmayan
+    soruları ayırt ettirmeye yönelik, görsel destekli ve 4 seçenekli standart
+    soru üretim şablonu.
+  kullanim_notu: >
+    Bu şablon, harici olarak kullanılan 3. Sınıf TYMM Ortak Kuralları YAML'ı,
+    3. sınıf öğretim programı ve 3. sınıf MEB Türkçe kitapları ile birlikte
+    doğrulanmalıdır.
+
+format:
+  type: "llm_generated_html"
+  description: "Görsel + tek paragraf + soru kökü + 4 seçenek"
+
+  question_variant:
+    allowed:
+      - "ana_dusunce"
+      - "yardimci_dusunce"
+      - "metinden_cikarilamaz"
+      - "hangi_sorunun_cevabi_yoktur"
+    default: "ana_dusunce"
+
+  paragraph:
+    required: true
+    text_modes:
+      - "simple_info"
+      - "short_narrative"
+    sentence_count_min: 5
+    sentence_count_max: 7
+    word_count_min: 55
+    word_count_max: 105
+    style: "simple_clear_primary_text"
+    kurallar:
+      - "Metin tek baskın konu veya tek baskın olay etrafında kurulmalıdır."
+      - "Metin 3. sınıf öğrencisinin anlayabileceği kadar açık, sade ve akıcı olmalıdır."
+      - "Metin 2. sınıfa göre biraz daha ayrıntılı olabilir; ancak dağınık olmamalıdır."
+      - "Metinde ana düşünceyi destekleyen en az 2 yardımcı bilgi bulunmalıdır."
+      - "Ana düşünce, metnin tamamı düşünüldüğünde belirlenebilir olmalıdır."
+      - "Yardımcı bilgiler ana düşünceyi desteklemeli, ama onun yerine geçmemelidir."
+      - "Metin dış bilgi gerektirmemelidir."
+      - "Metin 4. sınıf düzeyinde kaynak sorgulama, yazar niyeti çözümleme veya ileri eleştirel yorum gerektirmemelidir."
+      - "Bilgilendirici metinlerde ana bilgi ile sonuç bölümü uyumlu olmalıdır."
+      - "Öyküleyici metinlerde olay, kişi ve durum açıkça izlenebilir olmalıdır."
+      - "Metinde en az bir doğrudan cevaplanabilir soru alanı ve gerekiyorsa en az bir cevaplanamayan alan doğal biçimde bulunabilir olmalıdır."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  visual:
+    required: true
+    description: "Metnin ana içeriğini destekleyen işlevsel görsel"
+    placement: "paragraph_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illüstrasyon"
+      - "tek sahneli fotoğraf benzeri çizim"
+      - "tek olay veya tek varlık odaklı sahne"
+      - "bilgilendirici metni destekleyen konu görseli"
+    kurallar:
+      - "Her soru için görsel zorunludur."
+      - "Görsel metnin ana içeriğiyle açık uyumlu olmalıdır."
+      - "Görsel süs olmamalı, çözümde etkili destek sunmalıdır."
+      - "Görsel tek başına doğru cevabı açıkça vermemelidir."
+      - "Görsel ile metin birlikte değerlendirildiğinde ana düşünce veya yardımcı bilgi daha netleşebilir."
+      - "Görsel dikkat dağıtıcı gereksiz ayrıntılar içermemelidir."
+      - "Görsel yanlış seçeneği açıkça işaret edecek kadar yanıltıcı olmamalıdır."
+    yasaklar:
+      - "dekoratif ve metinden bağımsız görsel"
+      - "çok sahneli karmaşık kolaj"
+      - "grafik, tablo veya infografik yoğunluğu taşıyan tasarım"
+      - "metnin asıl odağını gizleyen karışık arka plan"
+
+  stem:
+    required: true
+    selection: "random_from_list_by_variant"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    correct_count: 1
+    style_by_variant:
+      ana_dusunce: "short_judgment"
+      yardimci_dusunce: "short_judgment"
+      metinden_cikarilamaz: "short_judgment"
+      hangi_sorunun_cevabi_yoktur: "question_form"
+    word_count_min: 3
+    word_count_max: 12
+    kurallar:
+      - "3. sınıfta her soru 4 seçenekli olmalıdır."
+      - "Seçenekler kısa, sade ve 3. sınıf düzeyinde olmalıdır."
+      - "Ana düşünce sorularında seçenekler yargı cümlesi veya kısa yargı ifadesi biçiminde olmalıdır."
+      - "Yardımcı düşünce sorularında seçenekler metinde geçen destekleyici bilgilerle ilişkili olmalıdır."
+      - "Hangi sorunun cevabı yoktur varyantında tüm seçenekler soru biçiminde olmalıdır."
+      - "Yalnız bir seçenek tam doğru olmalıdır."
+      - "Yanlış seçenekler metne yakın görünmeli ama dikkatli okuyunca elenebilmelidir."
+      - "Aynı soruda birden fazla makul doğru seçenek oluşmamalıdır."
+
+soru_kokleri:
+  ana_dusunce:
+    - "Bu metnin ana düşüncesi aşağıdakilerden hangisidir?"
+    - "Bu parçada asıl anlatılmak istenen aşağıdakilerden hangisidir?"
+    - "Bu metinde asıl vurgulanmak istenen aşağıdakilerden hangisidir?"
+    - "Bu parçanın vermek istediği düşünce aşağıdakilerden hangisidir?"
+    - "Aşağıdakilerden hangisi bu metnin ana düşüncesidir?"
+    - "Bu metnin ana fikri aşağıdakilerden hangisidir?"
+
+  yardimci_dusunce:
+    - "Bu metne göre aşağıdakilerden hangisi söylenebilir?"
+    - "Bu metinde verilen yardımcı düşüncelerden biri aşağıdakilerden hangisidir?"
+    - "Metne göre aşağıdakilerden hangisi doğrudur?"
+    - "Bu parçada aşağıdakilerden hangisine değinilmiştir?"
+    - "Metinde geçen bilgilerden biri aşağıdakilerden hangisidir?"
+
+  metinden_cikarilamaz:
+    - "Bu metinden aşağıdakilerden hangisi çıkarılamaz?"
+    - "Bu metne göre aşağıdakilerden hangisi söylenemez?"
+    - "Parçaya göre aşağıdakilerden hangisine ulaşılamaz?"
+    - "Bu metindeki bilgilere göre aşağıdakilerden hangisi doğru değildir?"
+    - "Aşağıdakilerden hangisi bu metinden çıkarılamaz?"
+
+  hangi_sorunun_cevabi_yoktur:
+    - "Bu metinde aşağıdaki sorulardan hangisinin cevabı yoktur?"
+    - "Bu parçaya göre aşağıdaki sorulardan hangisi cevaplanamaz?"
+    - "Metinde aşağıdaki sorulardan hangisinin cevabı bulunmamaktadır?"
+    - "Aşağıdaki sorulardan hangisinin cevabı bu metinde yoktur?"
+    - "Bu metne göre aşağıdaki sorulardan hangisine cevap verilemez?"
+
+beceri_odagi:
+  birincil_beceri:
+    - "Ana düşünceyi bulma"
+  ikincil_beceriler:
+    - "Ana düşünceyi destekleyen yardımcı bilgileri ayırt etme"
+    - "Metinden çıkarılabilen ve çıkarılamayan bilgileri ayırt etme"
+    - "Metinde cevabı olan ve olmayan soruları ayırt etme"
+    - "Görsel ve metni birlikte değerlendirerek metnin asıl vurgusunu belirleme"
+
+dogru_cevap:
+  ana_dusunce_tanim: "Metnin tamamında asıl vurgulanmak istenen temel düşünce"
+  yardimci_dusunce_tanim: "Metindeki ana düşünceyi destekleyen açık bilgi veya yargı"
+  cevap_yok_tanim: "Metinde açıkça yer almayan ya da cevaplanamayan soru"
+  kurallar:
+    - "Ana düşünce, metnin tamamı düşünülerek bulunmalıdır."
+    - "Ana düşünce bir ayrıntı veya örnek olmamalıdır."
+    - "Ana düşünce, mesajlaştırılmış aşırı soyut slogan biçimine dönüşmemelidir."
+    - "Yardımcı düşünce, metinde açıkça yer alan ve ana düşünceyi destekleyen bilgi olmalıdır."
+    - "Metinden çıkarılamaz sorularında doğru seçenek, metnin desteklemediği yargı olmalıdır."
+    - "Hangi sorunun cevabı yoktur varyantında doğru seçenek, metinde karşılığı bulunmayan soru olmalıdır."
+    - "Doğru cevap dış bilgi gerektirmemelidir."
+    - "Doğru cevap 3. sınıf öğrencisinin dikkatli okuyarak bulabileceği açıklıkta olmalıdır."
+
+yanlis_secenek_stratejileri:
+  count_per_question: 3
+  strategy_pool:
+    ana_dusunce:
+      - id: "yardimci_dusunceyi_ana_dusunce_gibi_sunma"
+        tanim: "Metindeki bir yardımcı bilgiyi ana düşünce yerine koyan seçenek"
+
+      - id: "cok_genel_mesaj"
+        tanim: "Metinden fazla uzak, aşırı genel bir ders veya mesaj"
+
+      - id: "tema_icinde_yanlis_vurgu"
+        tanim: "Aynı konu alanında durur ama asıl vurguyu kaydırır"
+
+    yardimci_dusunce:
+      - id: "ana_dusunceyi_yardimci_dusunce_gibi_sunma"
+        tanim: "Asıl vurguyu yardımcı bilgi gibi sunan seçenek"
+
+      - id: "metinde_olmayan_yakin_bilgi"
+        tanim: "Metne yakın görünür ama metinde geçmeyen bilgi"
+
+      - id: "kismi_dogru_kismi_yanlis"
+        tanim: "Bir bölümü metne uyar gibi görünür ama tamamı doğru değildir"
+
+    metinden_cikarilamaz:
+      - id: "metinde_var_ama_farkli_soylenmis"
+        tanim: "Metindeki bilgiyi farklı sözlerle doğru veren seçenek"
+
+      - id: "dis_bilgi_karisimi"
+        tanim: "Konu alanına yakın ama metinden çıkarılamayan bilgi"
+
+      - id: "yardimci_bilgiyi_buyutme"
+        tanim: "Yardımcı ayrıntıyı gereğinden fazla genişleten seçenek"
+
+    hangi_sorunun_cevabi_yoktur:
+      - id: "metinde_dogrudan_cevabi_var"
+        tanim: "Cevabı metinde açıkça bulunan soru"
+
+      - id: "metinden_basit_cikarsamayla_bulunur"
+        tanim: "Cevabı doğrudan değil ama basit çıkarımla bulunabilen soru"
+
+      - id: "yan_odakli_ama_cevaplanabilir"
+        tanim: "Yan bilgiye dayanır ama yine de metinden cevaplanabilen soru"
+
+  secim_kurali:
+    - "Her soruda 3 yanlış seçenek farklı stratejilerden seçilmelidir."
+    - "Ana düşünce sorularında en az 1 yanlış seçenek yardımcı düşünce olmalıdır."
+    - "Yardımcı düşünce sorularında en az 1 yanlış seçenek metinde hiç geçmeyen ama yakın görünen bilgi olmalıdır."
+    - "Metinden çıkarılamaz ve hangi sorunun cevabı yoktur varyantlarında diğer 3 seçenek metinle desteklenebilir olmalıdır."
+    - "En az 1 yanlış seçenek ilk bakışta güçlü aday gibi görünmelidir."
+
+zorluk_duzeyleri:
+  kolay:
+    paragraph:
+      sentence_count_min: 5
+      sentence_count_max: 5
+      word_count_min: 55
+      word_count_max: 68
+      kurallar:
+        - "Ana düşünce metinde açık biçimde hissedilmelidir."
+        - "Yardımcı bilgiler net ve sınırlı olmalıdır."
+        - "Hangi sorunun cevabı yoktur varyantında doğrudan cevaplanabilir sorular tercih edilmelidir."
+    preferred_variants:
+      - "ana_dusunce"
+      - "yardimci_dusunce"
+    distractors:
+      kurallar:
+        - "1 seçenek yardımcı düşünce"
+        - "1 seçenek çok genel mesaj"
+        - "1 seçenek tema içinde yanlış vurgu"
+        - "Yanlış seçenekler kolay elenebilir olmalıdır."
+    difficulty_note: >
+      Kolay düzeyde öğrenci metnin asıl vurgusunu ve açık yardımcı bilgileri rahatça fark eder.
+
+  orta:
+    paragraph:
+      sentence_count_min: 5
+      sentence_count_max: 6
+      word_count_min: 65
+      word_count_max: 86
+      kurallar:
+        - "Ana düşünce açık olmalı; fakat metnin bütününe bakmayı gerektirmelidir."
+        - "Metinde 2-3 yardımcı bilgi bulunabilir."
+        - "Bir yan ayrıntı çeldirici üretimine malzeme verebilir."
+    preferred_variants:
+      - "ana_dusunce"
+      - "yardimci_dusunce"
+      - "metinden_cikarilamaz"
+      - "hangi_sorunun_cevabi_yoktur"
+    distractors:
+      kurallar:
+        - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+        - "Hangi sorunun cevabı yoktur sorularında 3 soru gerçekten metinden cevaplanabilir olmalıdır."
+        - "Metinden çıkarılamaz sorularında 3 seçenek metinle açıkça desteklenebilir olmalıdır."
+    difficulty_note: >
+      Orta düzeyde öğrenci ana düşünce ile yardımcı bilgiyi ayırt etmeli ve metinden hangi bilginin çıkarılamadığını fark etmelidir.
+
+  zor:
+    paragraph:
+      sentence_count_min: 6
+      sentence_count_max: 7
+      word_count_min: 82
+      word_count_max: 105
+      kurallar:
+        - "Metinde ana düşünce ile onu destekleyen birkaç farklı yardımcı bilgi birlikte bulunmalıdır."
+        - "Yan ayrıntılar çeldirici üretimine malzeme verebilir."
+        - "Hangi sorunun cevabı yoktur varyantında cevaplanabilen sorular doğrudan ve dolaylı bilgi karışımı içerebilir."
+        - "Zor düzeyde bile soru 4. sınıfa kayan kaynak sorgulama, tartışma veya ayrıntılı gerekçelendirme istememelidir."
+    preferred_variants:
+      - "ana_dusunce"
+      - "metinden_cikarilamaz"
+      - "hangi_sorunun_cevabi_yoktur"
+    distractors:
+      kurallar:
+        - "3 yanlış seçeneğin en az 2'si metne yakın görünmelidir."
+        - "Ana düşünce sorularında bir seçenek yardımcı düşünce, bir seçenek tema içinde yanlış vurgu, bir seçenek çok genel mesaj olabilir."
+        - "Cevabı yoktur sorularında yalnız 1 soru gerçekten metinden cevaplanamamalıdır."
+    difficulty_note: >
+      Zor düzeyde öğrencinin metnin asıl vurgusunu yardımcı ayrıntılardan ayırması ve cevaplanabilir/cevaplanamaz ayrımını dikkatle yapması beklenir.
+
+difficulty_selection_policy:
+  default: "Orta"
+  allowed_values: ["Kolay", "Orta", "Zor"]
+  hard_limits:
+    - "Her soru 4 seçenekli olmalıdır."
+    - "Her soru için görsel zorunludur."
+    - "Metin 3. sınıf düzeyini aşan ağır soyutluk içermemelidir."
+    - "Zor düzey seçilse bile soru 4. sınıf düzeyinde bilginin kaynağını sorgulama, ileri yorum veya ayrıntılı nedenlendirme sorusuna dönüşemez."
+    - "Kolay düzeyde aşırı yakın çeldirici yükü kurulmamalıdır."
+
+sinif_uygunluk_kurallari:
+  uygundur:
+    - "Ana düşünce, yardımcı düşünce ve metindeki açık bilgi ayrımı somut biçimde kuruluyorsa"
+    - "Metin 3. sınıf öğrencisinin metnin tamamını okuyarak asıl vurguyu bulabileceği sadelikteyse"
+    - "Hangi sorunun cevabı yoktur türünde sorular doğrudan metin içi bilgiye dayanıyorsa"
+  yasaktir:
+    - "Yazarın gizli amacı, kaynak güvenilirliği veya ileri eleştirel yorum sorulması"
+    - "Ana düşünce yerine soyut hayat dersi ya da slogan seçtirme"
+    - "Metin dışı dünya bilgisi gerektiren seçenekler"
+  dorduncu_sinifa_kayar:
+    - "Bilginin kaynağını sorgulama"
+    - "Yazarın amacı, bakış açısı veya mesajını gerekçeli tartıştırma"
+    - "Birden fazla yorumun savunulmasını isteme"
+
+konu_alani:
+  izinli_ornekler:
+    - "bilim insanları ve buluşlar"
+    - "tarihi yapılar"
+    - "doğa ve hayvanlar"
+    - "yardımlaşma"
+    - "başarı ve emek"
+    - "çevre"
+    - "sağlık"
+    - "teknoloji"
+    - "okul yaşamı"
+    - "çocukların davranışları"
+  kurallar:
+    - "Konu 3. sınıf öğrencisinin anlayabileceği kadar somut ve açık olmalıdır."
+    - "Bilgilendirici metin seçilirse ana düşünce metnin sonunda ya da bütününde açıkça belirginleşmelidir."
+    - "Öyküleyici metin seçilirse olaydan çıkarılacak ana düşünce aşırı soyut olmamalıdır."
+    - "Görselle desteklenebilen konular tercih edilmelidir."
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "3. sınıfa uygun, görselle desteklenebilir tek ve açık bir konu seç"
+    - step: 2
+      action: "Seçilen konu için 5-7 cümlelik kısa ve sade metin oluştur"
+      details:
+        - "Tek baskın konu kur"
+        - "Metne bir ana düşünce ve onu destekleyen yardımcı bilgiler yerleştir"
+        - "Gerekirse cevaplanabilir ve cevaplanamaz soru alanları oluştur"
+    - step: 3
+      action: "Metnin ana içeriğiyle uyumlu işlevsel görsel tasarla"
+      details:
+        - "Görsel ana içeriği desteklesin"
+        - "Görsel zorunlu olsun"
+        - "Görsel tek başına cevabı vermesin"
+    - step: 4
+      action: "Soru varyantını seç"
+      details:
+        - "ana_dusunce"
+        - "yardimci_dusunce"
+        - "metinden_cikarilamaz"
+        - "hangi_sorunun_cevabi_yoktur"
+    - step: 5
+      action: "Varyanta uygun 1 doğru ve 3 yanlış seçenek oluştur"
+      details:
+        - "Ana düşüncede yardımcı düşünceyi çeldirici olarak kullan"
+        - "Yardımcı düşüncede metinde olmayan yakın bilgiyi kullan"
+        - "Cevabı yoktur sorularında 3 sorunun metinden cevaplanabilir olduğundan emin ol"
+    - step: 6
+      action: "Soru kökünü listeden rastgele seç"
+    - step: 7
+      action: "Şıkları A-B-C-D olarak karıştır"
+    - step: 8
+      action: "Harici 3. Sınıf TYMM Ortak Kuralları ile doğrulama yap"
+
+validation_checklist:
+  paragraph:
+    - "Metin 5-7 cümle arasında mı?"
+    - "Metin seçilen zorluk düzeyinin kelime aralığında mı?"
+    - "Metin tek baskın konuya sahip mi?"
+    - "Metinde ana düşünceyi destekleyen yardımcı bilgiler var mı?"
+    - "Metin 3. sınıf düzeyinde açık ve sade mi?"
+    - "Metin dış bilgi gerektiriyor mu? Gerektiriyorsa reddet."
+
+  visual:
+    - "Görsel zorunlu olarak var mı?"
+    - "Görsel metnin ana içeriğiyle uyumlu mu?"
+    - "Görsel destekleyici ama tek başına cevap verici değil mi?"
+    - "Görsel dekoratif kalmıyor mu?"
+
+  stem:
+    - "Soru kökü seçilen varyanta uygun mu?"
+    - "Soru kökü açık ve 3. sınıf düzeyinde mi?"
+    - "Ekstra beceri yüklemiyor mu?"
+
+  options:
+    - "Toplam 4 seçenek var mı?"
+    - "Doğru seçenek seçilen varyantın ölçtüğü şeyi gerçekten karşılıyor mu?"
+    - "Ana düşünce sorularında yanlışlardan biri yardımcı düşünce mi?"
+    - "Hangi sorunun cevabı yoktur varyantında yalnız 1 sorunun cevabı metinde yok mu?"
+    - "Metinden çıkarılamaz varyantında diğer 3 seçenek metinle destekleniyor mu?"
+    - "Birden fazla makul doğru seçenek oluşuyor mu? Oluşuyorsa reddet."
+
+  difficulty:
+    - "Zorluk seçilen düzeye göre metin, görsel ve çeldirici kuralları uygulanmış mı?"
+    - "Zor düzey bile 3. sınıf sınırında mı?"
+    - "4. sınıfa kayan ileri yorum veya kaynak sorgulama var mı?"
+
+hard_fail_rules:
+  - "Seçenek sayısı 4 değilse"
+  - "Görsel yoksa"
+  - "Paragraf 5 cümleden kısa ya da 7 cümleden uzunsa"
+  - "Doğru cevap dış bilgi gerektiriyorsa"
+  - "Ana düşünce yerine yalnız ayrıntı veya slogan seçtiriliyorsa"
+  - "Hangi sorunun cevabı yoktur varyantında birden fazla sorunun cevabı metinde yoksa"
+  - "Metinden çıkarılamaz varyantında birden fazla seçenek çıkarılamıyorsa"
+  - "İki veya daha fazla seçenek makul doğruysa"
+  - "Metin 3. sınıf için fazla soyut veya ağırsa"
+  - "Soru 4. sınıfa kayan ileri yorum sorusuna dönüşüyorsa"
+
+ornek_bicim_notlari:
+  - "Meryem Usturlabi metninde ana düşünce, Meryem’in zor şartlarda önemli bir bilimsel başarı göstermesi olabilir."
+  - "Stonehenge metninde 'hangisi çıkarılamaz' türü soru, metindeki açık bilgiler ile cevaplanamayan bilgileri ayırır."
+  - "Afrikalı çocuklar metninde ana düşünce, birlikte başarmanın ve paylaşmanın değerli olmasıdır."
+  - "Bu metinde aşağıdaki sorulardan hangisinin cevabı yoktur? soru kökü bu bölümde kullanılabilir; ancak cevap metin içinden gerçekten denetlenebilir olmalıdır."

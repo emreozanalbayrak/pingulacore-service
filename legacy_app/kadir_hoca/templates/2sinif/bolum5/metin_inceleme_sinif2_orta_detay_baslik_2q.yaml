@@ -1,0 +1,107 @@
+# Pattern: ["dogrudan_detay", "baslik"] (referans satir 449)
+# Orta duzey, 2 soru: dogrudan_detay + baslik
+
+meta:
+  id: metin_inceleme_sinif2_orta_detay_baslik_2q
+  ad: "2. Sinif - Metin Inceleme (Orta) - Dogrudan Detay + Baslik"
+  sinif_seviyesi: 2
+  aciklama: "Orta baglam — 2 soru: dogrudan_detay (slot 1) + baslik (slot 2)"
+  frequency: "Medium"
+
+context:
+  type: metin_inceleme_sinif2_orta_detay_baslik_2q
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 52
+    word_count_max: 74
+    image_type: "illustration"
+    structure:
+      - "5-6 kisa cumle, tek baskin konu/olay etrafinda."
+      - "1 yan ayrinti bulunabilir, ama ana baglami golgelememeli."
+      - "Metinde acik detay bilgi bulunmali (slot 1 icin)."
+      - "Metnin tamami uygun baslikla kapsanabilir olmali (slot 2 icin)."
+    kurallar:
+      - "2. sinif duzeyinde, sade ve gunluk hayata yakin metin."
+      - "Karakter ismi Turkce olmali."
+      - "Tek baskin konu, dis bilgi gerektirmeyen icerik."
+      - "Turkce karakterler dogru kullanilmali."
+
+      - "Tablo/grafik/sayi listesi KULLANMA — sadece akici Turkce anlatim. Gorsel ayrica illustrasyon olarak uretilecek."
+  questions:
+    - slot: 1
+      type: dogrudan_detay
+      soru_kokleri:
+        - "<b>Bu metne gore asagidakilerden hangisi dogrudur?</b>"
+        - "<b>Bu metne gore asagidakilerden hangisi soylenebilir?</b>"
+        - "<b>Asagidakilerden hangisi metinde verilen bilgilerden biridir?</b>"
+        - "<b>Bu metne gore asagidakilerden hangisi yanlistir?</b>"
+      options_style: complete_sentence
+      word_count_min: 2
+      word_count_max: 8
+      beceri:
+        katman: KB1
+        bilesenler: [acik_bilgi_okuma]
+        surec_bileseni: bilgiyi_okuma
+
+    - slot: 2
+      type: baslik
+      soru_kokleri:
+        - "<b>Bu metne getirilebilecek <u>en uygun</u> baslik asagidakilerden hangisidir?</b>"
+        - "<b>Bu metnin basligi asagidakilerden hangisi olabilir?</b>"
+        - "<b>Asagidakilerden hangisi bu metne baslik olmaya <u>en uygundur</u>?</b>"
+        - "<b>Bu metne verilebilecek <u>en uygun</u> baslik hangisidir?</b>"
+      options_style: short_phrase
+      word_count_min: 1
+      word_count_max: 5
+      beceri:
+        katman: KB1
+        bilesenler: [baslik_eslestirme]
+        surec_bileseni: metni_anlama
+
+header_template: "1-2. sorulari asagidaki metne gore cevaplayiniz."
+
+format:
+  type: llm_generated_html
+  description: "2 baglam sorusu (orta): dogrudan detay + baslik"
+  paragraph:
+    required: true
+    word_count_min: 52
+    word_count_max: 74
+    sentence_count_min: 5
+    sentence_count_max: 6
+    stil: "bilgilendirici_veya_oykusel"
+    background_color: "#f8f0e0"
+  stem:
+    required: true
+  options:
+    count: 3
+    labels: [A, B, C]
+    word_count_min: 1
+    word_count_max: 8
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+
+dogru_cevap:
+  tanim: "Metinden acikca cikarilabilen dogru cevap"
+  kurallar:
+    - "Slot 1: dogru cevap metindeki acik bilgiye dayanmali."
+    - "Slot 2: dogru cevap metnin tamamini kapsamali."
+    - "En az 1 yanlis secenek ilk bakista makul gorunmeli."
+distractors:
+  stratejiler:
+    - ad: METNE_YAKIN_AMA_YANLIS
+      aciklama: "Metne yakin gorunur ama acik bilgiye uymayan secenek"
+    - ad: COK_GENIS
+      aciklama: "Baslik sorusunda metnin alaniyla ilgili ama cok genel"
+    - ad: COK_DAR
+      aciklama: "Baslik sorusunda tek ayrintiya odaklanan secenek"
+
+use_shared_strategies: false
+
+beceri:
+  katman: KB1
+  bilesenler: [baglam_okuma, baslik_eslestirme]
+  surec_bileseni: metni_anlama

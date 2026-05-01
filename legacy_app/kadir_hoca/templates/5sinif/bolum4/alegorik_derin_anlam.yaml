@@ -1,0 +1,205 @@
+# templates/bolum4/alegorik_derin_anlam.yaml
+# Bolum 4.1 - Ozel Bolum: Derin Anlam - Alegorik Mesaji Bulma
+#
+# STANDART FORMAT
+# Masal, fabl veya simgesel anlati verilir, ogrenci temsil edilen derin mesaji bulur
+# correct_type: matches — dogru cevap simgesel mesaji karsilar
+
+meta:
+  id: "alegorik_derin_anlam"
+  ad: "Derin Anlam - Alegorik Mesajı Bulma"
+  sinif_seviyesi: 5
+  aciklama: "Masal, fabl ya da simgesel bir olay örgüsünden hareketle metnin temsil ettiği derin mesajı buldurur"
+  frequency: "Medium (~30% of deep meaning questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Simgesel/alegorik kısa anlatı + soru kökü + 4 soyut yargı seçeneği"
+
+  paragraph:
+    required: true
+    word_count_min: 50
+    word_count_max: 100
+    sentence_count_min: 4
+    sentence_count_max: 8
+    stil: "simgesel_kisa_anlati"
+    kurallar:
+      - "Masalsı, alegorik ya da simgesel bir yapı taşımalı"
+      - "Yüzeydeki olay ile alttaki mesaj farklı katmanlarda kurulmalı"
+      - "Dönüşüm, yolculuk, nesnelerin konuşması, hayvanlar gibi unsurlar olabilir"
+      - "Sembolik karakterler veya büyüsel öğeler kullanılabilir"
+      - "Derin mesaj doğrudan söylenmemeli, sembolizm aracılığıyla aktarılmalı"
+      - "5. sınıf seviyesine uygun basitlikte ama anlamlı bir alegori"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 8
+    word_count_max: 25
+    style: "complete_sentence"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metnin derin anlamı aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu parçada verilmek istenen asıl mesaj nedir?</b>"
+  - "<b>Bu metinden çıkarılabilecek temel düşünce aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu simgesel anlatımın vermek istediği mesaj nedir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metindeki simgesel olayların temsil ettiği asıl içsel ya da düşünsel mesaj"
+  kurallar:
+    - "KRITIK: Dogru secenekte paragraftaki hicbir cumle kelimesi kelimesine TEKRARLANMAMALI — es anlamli sozcuklerle yeniden ifade edilmeli"
+    - "Paragraftaki ifadelerle en az %40 kelime farkliligi olmali — kopyala-yapistir YASAK"
+    - "Ayni anlam korunmali ama farkli sozcukler ve cumle yapilari kullanilmali"
+    - "Yüzey ögeleri değil özü vermeli"
+    - "Doğru seçenek paragraftaki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI — eş anlamlı sözcüklerle yeniden ifade edilmeli"
+    - "Paragraftaki ifadelerle en az %40 kelime farklılığı olmalı — kopyala-yapıştır YASAK"
+    - "Aynı anlam korunmalı ama farklı sözcükler ve cümle yapıları kullanılmalı"
+    - "Metindeki sembolizmi çözmeli"
+    - "8-25 kelime, tam bir cümle formatında olmalı"
+    - "Tek cümlede net soyut mesaj sunmalı"
+    - "Olayların temsil ettiği derin anlamı yakalmalı"
+  ornekler:
+    - paragraf: "Korkak tavşan bir gün aslan kılığına girdi. Herkes ondan kaçtı. Ama bir fırtına kopunca aslan kılığı yırtıldı ve tavşan olduğu ortaya çıktı. Kimse artık ona ne aslan diye saygı duydu ne de tavşan diye güvendi."
+      dogru: "Dış görünüşü değiştirmek, içsel yapıyı değiştirmeye yetmez."
+      neden: "Sembolik: aslan kılığı = dış değişim, tavşan kalma = iç yapının aynı kalması"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI (CUSTOM — alegorik derin anlam icin ozel)
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "POZITIF_ILKE_YANILTMASI"
+    bilisssel_hata_kategorisi: "asiri_genelleme"
+    aciklama: "Olumlu, kulağa doğru gelen ama metnin merkezinde olmayan bir ilke sunulur."
+    nasil_olusturulur: |
+      Kulağa hoş gelen, genel olarak doğru bir ilke yaz ama metnin asıl eksenini kaçır.
+      Örnek: "Cesaret doğuştan kazanılan değil sonradan öğrenilen bir özelliktir."
+      Metin bunu söylemez; mesele öğrenme süreci değil, iç özün değişmemesidir.
+      Öğrenci pozitif ilkeyi derin anlam sanabilir.
+    kategori: "scope"
+
+  - ad: "DIS_DEGISIMI_IC_DEGISIM_SANMA"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metin korku-cesaret veya dış-iç eksenindedir; seçenek başka eksenlere kayar."
+    nasil_olusturulur: |
+      Metnin asıl karşıtlığını (dış/iç, görünüş/öz) farklı bir eksene kaydıran yargı yaz.
+      Örnek: "Cesaret yalnızca iyiliksever insanları başarılı kılar" — iyilikseverlik metnin konusu değildir.
+      Metnin sembolik eksenini doğru çözme becerisini test eder.
+    kategori: "content"
+
+  - ad: "METNI_OZETLEYIP_MESAJ_GIBI_SUNMA"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Seçenek metnin bir parçasını yakalar ama bütün dersi vermez."
+    nasil_olusturulur: |
+      Metindeki olayı veya dönüşümü özetleyen ama soyut mesaja ulaşmayan bir cümle yaz.
+      Metne kısmen yakın görünür ama derin anlam değil olay özetidir.
+      Örnek: "Korkular ile başa çıkmanın en iyi yolu onlarla yüzleşmektir" — yarım doğru.
+    kategori: "cognitive"
+
+  - ad: "YANLIS_SEMBOL_ESLEMESI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Seçenek ya fazla somut kalır ya da gereğinden fazla genişler."
+    nasil_olusturulur: |
+      Sembolik unsurları yanlış eşleyen veya soyutlama seviyesini tutturamayan yargı yaz.
+      Fazla somut: Masaldaki dönüşümleri birebir tekrar eder.
+      Fazla geniş: Hayat dersi gibi görünür ama metin sınırını aşar.
+      Doğru soyutlama seviyesini test eder.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ETIKETI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB3"
+  bilesenler: ["cikarim_yapma", "degerlendirme", "yorumlama"]
+  surec_bileseni: "karar_verme"
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Simgesel ekseni belirle"
+      details: |
+        Temel karşıtlığı seç:
+        - Dış görünüş / iç yapı
+        - Güç / cesaret
+        - Zenginlik / mutluluk
+        - Makam / erdem
+        - Bilgi / bilgelik
+        - Hız / sabır
+
+    - step: 2
+      action: "Kısa alegorik olay kur (50-100 kelime)"
+      details: |
+        Masal, fabl ya da simgesel mini anlatı oluştur:
+        - Dönüşüm, yolculuk, nesnelerin konuşması, hayvanlar
+        - Büyü, temsil, sembolik karakterler
+        - 4-8 cümle, öyküleyici üslup
+
+    - step: 3
+      action: "Alt mesajı belirle"
+      details: |
+        Tek baskın ders seç:
+        - Dış değişim iç değişim olmadan yeterli değildir
+        - Korku güçle değil cesaretle aşılır
+        - Değer görünüşte değil özdedir
+        - Gerçek başarı iç olgunlukla gelir
+
+    - step: 4
+      action: "Doğru cevap = sembolik mesajı çözen soyut yargı"
+      details: |
+        - Yüzey ögelerini değil özü vermeli
+        - Sembolizmi çözmeli
+        - Tek cümlede net soyut mesaj
+
+    - step: 5
+      action: "3 çeldirici yargı oluştur"
+      details: |
+        - 1 pozitif ilke yanıltması (güzel söz ama metnin ekseni değil)
+        - 1 eksen kaydırma (dış değişimi iç değişim sanma)
+        - 1 metni özetleyip mesaj gibi sunma veya yanlış sembol eşlemesi
+        Seçenekleri rastgele sırala.
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayısı 50-100 arasında mı?"
+    - "Simgesel/alegorik yapı açık mı?"
+    - "Olayların altında tek baskın ders var mı?"
+    - "Dış olay ile iç mesaj ayrışıyor mu?"
+
+  correct_answer:
+    - "8-25 kelime tam cümle mi?"
+    - "Metindeki alegoriyi gerçekten çözüyor mu?"
+    - "Mesajı fazla daraltmıyor mu?"
+
+  distractors:
+    - "Yanlış seçenekler metne yakın ama eksenli biçimde yanlış mı?"
+    - "Seçenekler aynı soyutluk düzeyinde mi?"
+    - "Tüm seçenekler aynı formatta mı?"

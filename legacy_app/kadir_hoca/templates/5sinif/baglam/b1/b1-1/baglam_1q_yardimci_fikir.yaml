@@ -1,0 +1,129 @@
+# templates/baglam/baglam_1q_yardimci_fikir.yaml
+# Baglam Tipi: 1Q Yardimci Fikir / Cozum Onerisi
+# Soru Sayisi: 1
+# Kaynak: baglamb1sorukoku.md
+# Soru Tipleri: Durum analizi ve cozum
+
+meta:
+  id: "baglam_1q_yardimci_fikir"
+  ad: "1Q Baglam Yardimci Fikir"
+  sinif_seviyesi: 5
+  aciklama: "Gunluk hayattan bir senaryo uzerinden yardimci fikir/cozum onerisi sorusu"
+  kaynak: "baglamb1sorukoku.md"
+  frequency: "Medium"
+
+# ======================================================================
+# BAGLAM KONFIGURASYONU
+# ======================================================================
+
+context:
+  type: "baglam_senaryo_1q"
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 60
+    word_count_max: 120
+    structure:
+      - "Bir karakter (Turkce isimli) gunluk hayattan bir durumla karsilasir (3-5 cumle)"
+      - "Karakter bir problem veya cozulmesi gereken bir meseleyle karsilasiyor"
+      - "Senaryo somut, 5. sinif seviyesinde ve anlasilir olmali"
+      - "Cozum onerisi veya beklenti cikarimi yapmaya uygun olmali"
+    kurallar:
+      - "Senaryo 5. sinif seviyesinde, gunluk hayattan olmali"
+      - "Karakter ismi Turkce olmali (Elif, Mert, Zeynep, Can vb.)"
+      - "Problemin cozumune yonelik farkli yaklasimlar olusturulabilmeli"
+      - "Turkce karakterler dogru kullanilmali (s, i, g, u, o, c)"
+
+  questions:
+    - slot: 1
+      type: "yardimci_fikir"
+      soru_kokleri:
+        - "<b>... durumunda ne olmasi beklenir?</b>"
+        - "<b>... durumunda cozulmesi gereken asil mesele nedir?</b>"
+        - "<b>Bu cozum hangi durumda ise yarayabilir?</b>"
+        - "<b>Elde edilen sonucun baslangictaki verilerle tutarli olmasi icin hangisi yapilabilir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 8
+      word_count_max: 22
+      beceri:
+        katman: "KB2"
+        bilesenler: ["cikarim_yapma", "degerlendirme"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+soru_kokleri:
+  - "<b>... durumunda ne olmasi beklenir?</b>"
+  - "<b>... durumunda cozulmesi gereken asil mesele nedir?</b>"
+  - "<b>Bu cozum hangi durumda ise yarayabilir?</b>"
+  - "<b>Elde edilen sonucun baslangictaki verilerle tutarli olmasi icin hangisi yapilabilir?</b>"
+
+header_template: null
+
+# ======================================================================
+# FORMAT
+# ======================================================================
+
+format:
+  type: "llm_generated_html"
+  description: "1Q baglam senaryo uzerinden yardimci fikir/cozum onerisi sorusu"
+
+  paragraph:
+    required: true
+    word_count_min: 60
+    word_count_max: 120
+    sentence_count_min: 3
+    sentence_count_max: 8
+
+  stem:
+    required: true
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 8
+    word_count_max: 22
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+# ======================================================================
+# DOGRU CEVAP KURALLARI
+# ======================================================================
+
+dogru_cevap:
+  tanim: "Senaryodaki duruma uygun, mantikli ve tutarli cozum/beklenti"
+  kurallar:
+    - "KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI"
+    - "Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI"
+    - "Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil"
+    - "YASAK: Tablodaki değeri aynen şıkka yazmak (örn: 'yalıtımı azdır' tabloda yazıyorsa şıkta aynen yazmamalı)"
+    - "Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli"
+
+    - "Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı"
+    - "Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı"
+    - "Dogru secenek paragraftaki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Dogru cevap senaryodaki durumla dogrudan iliskili olmali"
+    - "Cozum/beklenti mantiksal olarak metinden cikarilabilir olmali"
+    - "HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer"
+    - "Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK"
+    - "BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: 'teleskop' → 'mercekli araç' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı"
+
+# ======================================================================
+# CELDIRICI STRATEJILERI
+# ======================================================================
+
+distractors:
+  stratejiler:
+    - ad: "ILGISIZ_COZUM"
+      aciklama: "Konuyla ilgili gibi gorunen ama probleme uymayan cozum"
+      ornek: "Genel gecerli ama spesifik duruma uymayan bir oneri"
+    - ad: "KISMI_COZUM"
+      aciklama: "Problemin sadece bir parcasini cozen, butunu gormezden gelen oneri"
+      ornek: "Sorunun bir yonunu cozerken diger yonunu ihmal etme"
+    - ad: "TERS_ETKI"
+      aciklama: "Problemi cozmek yerine derinlestiren bir oneri sunma"
+      ornek: "Cozum gibi gorunen ama sorunu buyutecek bir yaklasim"
+
+use_shared_strategies: false

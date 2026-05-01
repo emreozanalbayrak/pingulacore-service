@@ -1,0 +1,87 @@
+# templates/2sinif/bolum6/metin_turleri_sinif2_zor_bilgilendirici.yaml
+# 2. Sinif — Metin Turleri — ZOR — BILGILENDIRICI turu
+meta:
+  id: "metin_turleri_sinif2_zor_bilgilendirici"
+  ad: "2. Sinif - Metin Turleri (Zor) - Bilgilendirici"
+  sinif_seviyesi: 2
+  aciklama: "Zor — bilgilendirici metin turu belirleme"
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Bilgilendirici turu belirleme sorusu (zor)"
+
+  paragraph:
+    required: true
+    word_count_min: 60
+    word_count_max: 100
+    sentence_count_min: 6
+    sentence_count_max: 8
+    stil: "bilgilendirici"
+    background_color: "#fce8e8"
+    kurallar:
+      - "Metin BILGILENDIRICI olmalidir — bir konu, kavram veya olgu hakkinda acik bilgi vermeli."
+      - "ZORUNLU: Kurgu/karakter/olay anlatimlari OLMAMALI; olgusal ve nesnel bir dil kullanilmali."
+      - "ZORUNLU: '...denir', '...ozelligi vardir', '...yapilir', '...bulunur' gibi bilgi bildiren cumle yapilari ACIKCA yer almali."
+      - "Metin okuyucuya bir seyi ogretmeli; hikaye anlatimlari dili kullanilmamali."
+      - "Tur ayirt etme, metnin gorunur ozelliklerinden yapilabilmelidir — oykuleyici veya hikaye metnin KESINLIKLE yazilmamalidir."
+      - "2. sinif ogrencisinin anlayabilecegi sadelikte kelime hazinesi kullanilmalidir."
+      - "Metin dis bilgi gerektirmemelidir."
+
+  stem:
+    required: true
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 1
+    word_count_max: 3
+    style: "concept"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Tum secenekler metin turu adi biciminde olmalidir."
+      - "Dogru secenek: bilgilendirici metin"
+      - "Yanlis secenekler: öyküleyici metin, hikâye"
+      - "Secenekler kendi aralarinda bicimce paralel olmalidir."
+
+soru_kokleri:
+  - "<b>Bu metnin turu asagidakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Asagidakilerden hangisi bu metnin turudur?</b>"
+  # KULLANILDI: - "<b>Bu metin hangi ture girer?</b>"
+  # KULLANILDI: - "<b>Bu yazinin turu asagidakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Bu metin asagidaki turlerden hangisine ornektir?</b>"
+  # KULLANILDI: - "<b>Bu metnin turunu asagidakilerden hangisi gosterir?</b>"
+  # KULLANILDI: - "<b>Asagidakilerden hangisi bu metnin turunu soyler?</b>"
+  - "<b>Bu metin hangi turdedir?</b>"
+  # KULLANILDI: - "<b>Bu parca hangi metin turune ornektir?</b>"
+  - "<b>Bu yazi asagidaki metin turlerinden hangisidir?</b>"
+  - "<b>Metnin turu asagidakilerden hangisi olabilir?</b>"
+  - "<b>Bu metin icin <u>en uygun</u> tur hangisidir?</b>"
+
+dogru_cevap:
+  tanim: "Bu metnin turu: bilgilendirici metin"
+  kurallar:
+    - "Dogru cevap 'bilgilendirici metin' olmalidir."
+    - "Dogru cevap metnin gorunur ozelliklerinden cikarilabilmelidir."
+
+celdirici_stratejileri:
+  - ad: "YAKIN_TUR"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Dogru ture yakin ama farkli bir metin turu"
+    nasil_olusturulur: |
+      Metne yakin gorunen ama tur olarak farkli secenegi sun.
+    kategori: "semantic"
+  - ad: "UZAK_TUR"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Metinden acikca farkli bir tur"
+    nasil_olusturulur: |
+      Acikca farkli turden bir secenek sun.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB1"
+  bilesenler: ["metin_turu_ayirt_etme"]
+  surec_bileseni: "metni_anlama"

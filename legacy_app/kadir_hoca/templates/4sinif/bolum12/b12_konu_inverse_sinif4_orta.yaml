@@ -1,0 +1,117 @@
+# Kaynak: konu_inverse_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.orta
+# 4. sinif konu yer almaz — orta duzey
+
+meta:
+  id: "b12_konu_inverse_sinif4_orta"
+  ad: "4. Sinif - Metinde Konu (Yer Almaz) Orta"
+  sinif_seviyesi: 4
+  aciklama: "Orta duzey — konuya uymayan secenegi, yakin ama farkli alt konu ayrimi yaparak bulma."
+  frequency: "High"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Konu kokte verilir, konuya uymayan mini-paragraf secilir (orta)"
+
+  paragraph:
+    required: false
+
+  topic_in_stem:
+    required: true
+    description: "Konu soru kokunde acik olmali; alt baslik duzeyinde olabilir"
+
+  stem:
+    required: true
+    pattern: "{topic} konulu bir metin olusturulsa asagidakilerden hangisi bu metinde yer almaz?"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    type: "mini_paragraph"
+    word_count_min: 24
+    word_count_max: 40
+    background_color: "#f8f0e0"
+    sentence_count_min: 2
+    sentence_count_max: 3
+    correct_type: "does_not_belong"
+    correct_count: 1
+    kurallar:
+      - "3 uyan secenek konunun farkli ama gercekten ilgili yonlerini anlatmalidir."
+      - "Uyan secenekler birbirinden gereksiz tekrar icermemelidir."
+      - "Her uyan secenek leaf topic ile dogrudan iliskili olmalidir."
+      - "Dogru cevap sibling topicten gelmeli ve ayni broad domain icinde kalmalidir."
+      - "Ana unsuru koruyup boyut/aspect degistirme mantigi tercih edilmelidir."
+      - "Dogru cevap ilk bakista makul gorunebilir ama leaf topic ile tam ortusmemelidir."
+      - "3 uyan secenekten en az 1'i dogru cevaba gore daha yakin bir alt baslik farki tasiyabilir."
+      - "Orta duzeyde ogrenci alt konu farkini okumak zorunda kalmalidir."
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # KULLANILDI: - "\"{topic}\" <b>konulu bir metin oluşturulsa aşağıdakilerden hangisi bu metinde <u>yer almaz</u>?</b>"
+  # KULLANILDI: - "<b>Aşağıdakilerden hangisi</b> \"{topic}\" <b>konulu bir metinden alınmış <u>olamaz</u>?</b>"
+  # KULLANILDI: - "\"{topic}\" <b>konulu bir bilimsel yazı yazıldığında aşağıdakilerden hangisi bu yazıda <u>yer almaz</u>?</b>"
+  # KULLANILDI: - "\"{topic}\" <b>konusu işlenirken aşağıdakilerden hangisine <u>değinilmez</u>?</b>"
+  - "<b>Aşağıdakilerden hangisi</b> \"{topic}\" <b>konusuyla <u>ilişkilendirilemez</u>?</b>"
+  - "\"{topic}\" <b>hakkında yazılan bir metinde aşağıdakilerden hangisine <u>yer verilmez</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Verilen konuya AIT OLMAYAN mini-paragraf (ters mantik)"
+  mantik: "INVERSE — diger 3 secenek konuya uyar, dogru cevap UYMAZ"
+  kurallar:
+    - "Dogru secenek verilen konunun DISINDA bir icerik olmali."
+    - "Tamamen alakasiz degil; ayni broad domain icinde yakin ama farkli alt konu olmali."
+    - "Sibling topic secimi: ana unsuru koru, sadece aspect/boyutu degistir."
+    - "IDEAL: ayni cisim/varlik/kavram, farkli bilimsel soru veya ozellik."
+    - "YASAK: Tamamen farkli cisim veya alan (cok acik elenir)."
+    - "Dogru cevap ile uyan secenekler benzer uzunlukta olmalidir."
+    - "Kelime sayisi bakimindan en uzun secenek olmamali."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "SIBLING_YAKIN"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Konuya yakın ama farklı alt konudan gelen, makul görünen doğru cevap"
+    nasil_olusturulur: |
+      Doğru cevap için ana unsuru koruyup boyut/odak değiştirme mantığını kullan.
+      Orta seviyede doğru cevap ilk bakışta makul görünmeli ama leaf topic ile tam örtüşmemeli.
+      Örnek: "Ayın keşfi" konusu için doğru cevap "Ayın oluşumu" hakkında.
+    kategori: "semantic"
+
+  - ad: "UYGUN_PARAGRAF_DOLAYLI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "3 uyan seçenekten en az 1 tanesi konuya dolaylı ama gerçek bağla bağlı"
+    nasil_olusturulur: |
+      3 uyan mini-paragrafın her biri konunun farklı yönlerini anlatmalı.
+      Orta seviyede en az 1 uyan seçenek konuya dolaylı ama gerçek bağla bağlanmalı.
+      24-40 kelime, 2-3 cümle kullan.
+    kategori: "content"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["siniflandirma"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "Ana fikir / yardimci fikir sorulari YASAK"
+    - "5. sinifa kayan soyut yorum sorulari YASAK"
+    - "Dogru cevap cok acik alakasiz olmamali (zorluk belirsizlikten degil konu ayrimindan gelmeli)"

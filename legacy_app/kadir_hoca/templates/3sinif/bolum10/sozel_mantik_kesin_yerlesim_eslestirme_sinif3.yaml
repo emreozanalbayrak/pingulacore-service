@@ -1,0 +1,466 @@
+# bolum6/sozel_mantik_kesin_yerlesim_eslestirme_sorusu.yaml
+# Bölüm 6 - Sözel Mantık ve Muhakeme
+#
+# FORMAT: Setup cümlesi + maddeli koşullar (•) + soru kökü + 4 yargı/eşleştirme seçeneği
+# Bu sürüm yalnızca "kesin yerleşim ve eşleştirme sorgulama" kalıbı içindir.
+
+meta:
+  id: "sozel_mantik_kesin_yerlesim_eslestirme_sinif3"
+  ad: "3. Sınıf Sözel Mantık - Kesin Yerleşim Eşleştirme"
+  sinif_seviyesi: 3
+  aciklama: "Belirli bir grubun sınırlı sayıdaki yerlere veya kategorilere dağıtıldığı; aynı/farklı yerde olma ve kapasite kısıtları üzerinden şıklardaki yargıların doğruluğunun veya yanlışlığının sorgulandığı kesinlik sorusu."
+  frequency: "High (~12 questions)"
+
+kesin_yerlesim_senaryolari:
+  - ad: "ofis_kat_paylasimi"
+    aciklama: "Bir şirketin farklı birimlerinde çalışanların 1., 2. ve 3. katlara dağılımı"
+    ornek_setup: "Bir tekstil firmasında çalışan üç arkadaş; Giriş, 1. Kat veya 2. Kat ofislerinden birinde çalışmaktadır."
+
+  - ad: "spor_salonu_alanlari"
+    aciklama: "Sporcuların antrenman için salonun farklı bölümlerine (Kardiyo, Ağırlık, Esneme) dağılması"
+    ornek_setup: "Spor salonuna giden üç arkadaş; Kardiyo, Ağırlık veya Esneme alanlarından yalnızca birinde çalışmaktadır."
+
+  - ad: "mutfak_atolyesi_istasyonlari"
+    aciklama: "Yemek kursuna katılanların hazırlık yaptıkları farklı tezgahlar (Hamur, Pişirme, Sunum)"
+    ornek_setup: "Yemek kursundaki üç öğrenci; Hamur İşleri, Sos Hazırlama veya Pişirme istasyonlarından birinde görev almıştır."
+
+  - ad: "otopark_blok_duzeni"
+    aciklama: "Komşuların araçlarını sitenin farklı otopark bloklarına park etmesi"
+    ornek_setup: "Aynı sitede oturan üç komşu; araçlarını A, B veya C otopark bloklarından yalnızca birine park etmiştir."
+
+  - ad: "kutuphane_okuma_bolumleri"
+    aciklama: "Öğrencilerin kütüphanenin farklı çalışma alanlarına (Sessiz Salon, Grup Odası, Teras) dağılması"
+    ornek_setup: "Sınava hazırlanan üç öğrenci; kütüphanedeki Sessiz Salon, Grup Odası veya Teras bölümlerinden birinde ders çalışmaktadır."
+
+  - ad: "hastane_poliklinik_katlari"
+    aciklama: "Doktorların gün içindeki farklı poliklinik binalarına veya katlarına atanması"
+    ornek_setup: "Bir hastanede görevli üç doktor; Dahiliye, Göz veya Kulak-Burun-Boğaz polikliniklerinden birinde muayene yapmaktadır."
+
+  - ad: "avm_magaza_katlari"
+    aciklama: "Alışverişe çıkan arkadaşların farklı katlardaki mağazalara dağılması"
+    ornek_setup: "Hafta sonu alışverişe çıkan üç arkadaş; Teknoloji, Giyim veya Kitap katlarından birinde vakit geçirmektedir."
+
+  - ad: "yaz_tati_kamp_alanlari"
+    aciklama: "Tatilcilerin kamp alanındaki farklı bölgelere (Orman içi, Göl kenarı, Açık alan) çadır kurması"
+    ornek_setup: "Kampa giden üç arkadaş; çadırlarını Orman içi, Göl kenarı veya Açık alan bölgelerinden yalnızca birine kurmuştur."
+
+  - ad: "tiyatro_loca_numaralari"
+    aciklama: "Seyircilerin tiyatro salonundaki farklı locadan/sıradan oyun izlemesi"
+    ornek_setup: "Tiyatroya giden üç arkadaş; 1, 2 veya 3 numaralı localardan birine oturarak oyunu izlemiştir."
+
+  - ad: "apartman_daire_katlari"
+    aciklama: "Yeni taşınan arkadaş grubunun apartmandaki farklı katlara yerleşmesi"
+    ornek_setup: "Aynı apartmandan daire kiralayan üç arkadaş; 1., 2. veya 3. katlardaki dairelerden yalnızca birine yerleşmiştir."
+
+  - ad: "fuar_stant_kategorileri"
+    aciklama: "Yayıncıların kitap fuarındaki farklı tematik alanlara dağılması"
+    ornek_setup: "Kitap fuarına katılan üç yayınevi; Çocuk Kitapları, Roman veya Tarih stantlarından birinde eserlerini sergilemektedir."
+
+  - ad: "hobi_bahcesi_parselleri"
+    aciklama: "Emeklilerin hobi bahçesindeki farklı numaralı parsellerde çalışması"
+    ornek_setup: "Hobi bahçesinde vakit geçiren üç arkadaş; A, B veya C parsellerinden yalnızca birinde sebze yetiştirmektedir."
+
+  - ad: "otel_kahvalti_bolumleri"
+    ornek_setup: "Otelde konaklayan üç misafir; kahvaltılarını Bahçe, Teras veya Kapalı Salon bölümlerinden birinde yapmaktadır."
+
+  - ad: "tren_vagon_turleri"
+    ornek_setup: "Şehirler arası yolculuk yapan üç yolcu; Ekonomi, İş (Business) veya Yemekli vagonlardan yalnızca birinde bulunmaktadır."
+
+  - ad: "piknik_alani_masalari"
+    ornek_setup: "Pikniğe giden üç aile; masalarını Göl Kıyısı, Ağaç Üç veya Çimenlik alanlarından birine kurmuştur."
+
+  - ad: "okul_kulup_odalari"
+    ornek_setup: "Okulun sosyal kulüplerindeki üç öğrenci; Drama, Müzik veya Satranç odalarından birinde toplantı yapmaktadır."
+
+  - ad: "cafe_calisma_masalari"
+    ornek_setup: "Kitap okumaya giden üç kişi; kafenin Cam Kenarı, Arka Bahçe veya Üst Kat masalarından birine oturmuştur."
+
+  - ad: "kurs_sinif_dagilimi"
+    ornek_setup: "Yabancı dil kursuna giden üç öğrenci; A1, A2 veya B1 seviye sınıflarından yalnızca birinde eğitim almaktadır."
+
+  - ad: "market_reyon_gorevlileri"
+    ornek_setup: "Süpermarkette çalışan üç görevli; Manav, Kasap veya Temizlik reyonlarından birinde düzenleme yapmaktadır."
+
+  - ad: "seminer_salonu_oturma_duzeni"
+    ornek_setup: "Eğitime katılan üç öğretmen; eğitim için Kırmızı, Mavi veya Sarı salonlardan birine geçmiştir."
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Setup cümlesi + maddeli koşullar + soru kökü + 4 yargı cümlesi seçeneğinden oluşan kesinlik sorgulama sorusu"
+
+  paragraph:
+    required: true
+    word_count_min: 30
+    word_count_max: 65
+    sentence_count_min: 2
+    sentence_count_max: 8
+    stil: "mantik_bulmacasi"
+
+    amac: >
+      Öğrencinin, kişilerin sınırlı sayıdaki yerlere/kategorilere dağıtıldığı kurgularda;
+      kapasite kısıtları, aynı/farklı yerde olma ve tek başına bulunma durumlarını analiz ederek
+      gizli dağılım tablosunu kurması gerekir. Seçenekler kişi-yer eşleşmesi veya
+      kişiler arası ilişki bildiren yargılardan oluşur; öğrenci bu yargıların tablodaki
+      kesinlik durumunu (doğru/yanlış) denetlemelidir.
+
+    kurallar:
+      - "Paragraf iki bölümden oluşur: (1) SETUP CÜMLESİ + (2) MADDELİ KOŞULLAR"
+      - "SETUP CÜMLESİ (1-2 cümle): Dağılımın bağlamını açıklar; kaç kişi olduğu, hangi yerlerin/kategorilerin bulunduğu ve genel kapasite yapısı tanıtılır"
+      - "Kurgu kişi-yer ve kapasite merkezli olmalıdır"
+      - "MADDELİ KOŞULLAR 3 madde olmalıdır; her koşul • ile başlamalı ve <br> ile ayrılmalıdır"
+      - "FORMAT ŞEKLİ şu mantıkta olmalıdır: Setup cümlesi.<br>Bu dağılımla ilgili aşağıdaki bilgiler verilmektedir:<br>• Koşul 1<br>• Koşul 2<br>• Koşul 3"
+      - "YASAK: Düz paragraf yazma; mutlaka setup + • maddeli koşul yapısı kullanılmalıdır"
+      - "YASAK: <ul>, <li>, <ol> tag'leri kullanma; yalnızca • karakteri ve <br> kullanılmalıdır"
+
+      - "Önce gizli doğru dağılım tablosu (hangi kişinin nerede olduğu ve kontenjanların doluluğu) kurulmalı; ardından bu tabloya götüren koşullar yazılmalıdır"
+      - "Koşullar tek tek değil, birlikte değerlendirildiğinde anlam kazanmalıdır"
+      - "Her bir madde farklı bilgi taşımalıdır; maddeler birbirini tekrar etmemelidir"
+      - "Aynı sonuca götüren gereksiz veya yinelenen iki ayrı koşul yazılmamalıdır"
+
+      - "Koşullar dağılımın tamamını tek hamlede tarif etmemelidir"
+      - "Maddeler, gizli dağılımın parçalarını, kapasite kısıtlarını (örn: tek başına olma) veya dışlama bilgilerini (örn: gitmeme) vermelidir"
+      - "Öğrenci, verilen kısıtlardan hareketle boş kalan kontenjanları kendi çıkarımıyla doldurmak zorunda kalmalıdır"
+      - "Koşullar çözümü doğrudan ele vermemelidir; şıklarda sorulacak eşleşmeler açıkça maddelerde söylenmemelidir"
+      - "Sorunun çözümü, tek bir koşula bakılarak değil, tüm koşulların ve yer kapasitelerinin analiziyle yapılabilmelidir"
+      - "Şıklara bakmadan önce dağılımın kilit noktaları (kesinlikler) bulunabilir olmalı; şıklar tabloyu kurdurmamalı, kurulmuş tablo üzerinden test edilmelidir"
+      - "Koşullar arasında çelişki olmamalıdır"
+      - "Koşullar birden fazla kesin çözüme izin vermemelidir; hedeflenen kesin doğru/yanlış yargısını net olarak üretmelidir"
+
+      - "Koşullar ağırlıklı olarak yer üyeliği, kapasite (kişi sayısı) ve birliktelik ilişkisi içermelidir"
+      - "Öncelikli ilişki türleri: X ve Y'nin aynı yerde olması/olmaması, bir yerin kapasitesi (en az/en çok), bir kişinin o yerde TEK BAŞINA olması, bir kişinin belirli bir yere gitmemesi"
+      - "Doğrudan eşleştirme bilgisi (Örn: Ali Giriş katındadır) zorunlu olmadıkça kullanılmamalıdır; kullanılırsa en fazla 1 maddede yer almalıdır"
+      - "Koşulların çoğu doğrudan isim-yer eşleştirmek yerine 'sayısal sınır' veya 'ilişkisel mesafe' kurmalıdır"
+      - "En az 2 koşul, dolaylı çıkarım gerektirmelidir; yani bir kişinin yeri, o yerin toplam kişi sayısı bilgisiyle birleşmeden tam netleşmemelidir"
+      - "En az 1 koşul, 'tek başına olma' veya 'kapasite doluluğu' üzerinden diğer seçenekleri elemeyi gerektirmelidir"
+
+      - "3. sınıf seviyesinde 3 kişi, 2-3 yer/kategori ve 3 koşul tercih edilmelidir"
+      - "Kişiler ve yerler; ofis katları, pazar reyonları, kamp alanları gibi günlük yaşam nesnelerinden seçilmelidir"
+      - "Dil açık, kısa ve kesin olmalıdır"
+      - "'aynı yer', 'farklı yer', 'tek başına', 'yalnızca' gibi kavramlar net kullanılmalıdır"
+      - "Kapasite bildiren ifadeler (en az, en çok, sadece X kişi) belirsizlik taşımamalıdır"
+
+    kosul_dagilimi:
+      preferred_structure:
+        - "1 madde: iki kişinin aynı veya farklı yerde bulunma ilişkisi"
+        - "1 madde: yerlerin/kategorilerin toplam kişi kapasitesi veya sayısal doluluğu"
+        - "1 madde: bir kişinin belirli bir yere gitmediği (dışlama) veya bir yerde TEK olduğu bilgisi"
+        - "Gerekirse 1 madde: dolaylı bir özellik üzerinden (örn: tüm kadınlar aynı yerdedir) yapılan gruplandırma"
+      yasaklar:
+        - "3 veya daha fazla maddede doğrudan kimin nerede olduğunu açıkça verme"
+        - "Her kişinin yerini tek tek tarif eden basit cümleler yazma"
+        - "Maddelerde kullanılan ismin şıklarda doğrudan aynı bilgiyle sorulması (Örn: maddede 'Ali 1. kattadır' deyip şıkta 'Ali 1. kattadır'ı doğru yapmak YASAKTIR)"
+
+  visual:
+    required: true
+    description: "Kişi-yer yerleşim sorusunu simgeleyen boş hücreli tablo veya yer dağılım şeması"
+    placement: "paragraph_right_or_top"
+    visual_type_allowed:
+      - "kişi sütunu ve yer sütunundan oluşan boş eşleştirme tablosu"
+      - "boş hücreli 3×3 ızgara (içinde soru işareti)"
+      - "konum kutuları ve bağlantı okları şeması"
+    kurallar:
+      - "Görsel senaryo içeriğini (kişileri, nesneleri veya konumlarını) tasvir etmemelidir"
+      - "Görsel yalnızca soru tipini simgeleyen soyut/sembolik bir ikon veya şema olmalıdır"
+      - "Görsel bulmacayı çözmede ipucu vermemeli; doğru cevabı ima etmemelidir"
+      - "Görsel sade, temiz ve dikkat dağıtmayan bir ikon olmalıdır"
+      - "Görsel içinde kişi adı, konum bilgisi veya bulmacaya ait sayısal veri bulunmamalıdır"
+      - "Tablo veya ızgara görseli kullanılacaksa hücreler boş ya da soru işaretli olmalıdır"
+    yasaklar:
+      - "Senaryo sahnesi — kişileri, nesneleri veya konumlarını gösteren illüstrasyon"
+      - "Bulmacadaki sıra, yerleşim veya eşleşmeleri ele veren gerçekçi tasvir"
+      - "Fotoğraf benzeri sahne görüntüsü"
+      - "Puzzle içeriğine dair somut nesne görseli (sandalye, masa, kişi silueti vb.)"
+
+  stem:
+    required: true
+    description: >
+      Soru kökü, kurulmuş dağılım tablosu üzerinden kesin bir yargının (doğru veya yanlış)
+      denetlenmesini istemelidir.
+    kurallar:
+      - "Soru kökü dağılım kurulduktan sonra cevaplanabilir olmalıdır"
+      - "Soru kökü, 'kesinlikle doğrudur', 'kesinlikle yanlıştır' veya 'hangisi doğrudur/yanlıştır' formatında olmalıdır"
+      - "Soru kökü, öğrenciyi şıklardaki her bir önermeyi tabloyla karşılaştırmaya yöneltmelidir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 3
+    word_count_max: 8
+    style: "yargi_cumlesi" # Örn: "Ali ile Ayşe aynı yerdedir." veya "Can, 2. kattadır."
+    correct_count: 1
+
+
+# ═══════════════════════════════════════════════════════════════
+      # SORU KOKLERI (Yargı Denetimi ve Kesinlik Odaklı)
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # Olumlu Kesinlik
+  # KULLANILDI: - "<b>Bu bilgilere göre aşağıdakilerden hangisi kesinlikle doğrudur?</b>"
+  # KULLANILDI: - "<b>Bu bilgilere göre aşağıdakilerden hangisi doğrudur?</b>"
+  # Olumsuz Kesinlik
+  - "<b>Bu bilgilere göre aşağıdakilerden hangisi kesinlikle yanlıştır?</b>"
+  # KULLANILDI: - "<b>Bu bilgilere göre aşağıdakilerden hangisi yanlıştır?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+  # DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: >
+    Doğru cevap, yalnızca verilen tüm koşullar, kapasite sınırları ve "tek başına bulunma"
+    kısıtları değerlendirilip gizli yerleşim tablosu kurulduktan sonra, doğruluğu veya
+    yanlışlığı mantıksal olarak KESİN (zorunlu) olan yargı cümlesidir. Öğrenciden tek bir
+    eşleşmeye bakması değil, tablodaki boşlukların ve dolaylı kısıtların sonucunu görmesi beklenir.
+
+  temel_ilke: >
+    Gizli dağılım tablosu ve yer kapasiteleri kurulmadan doğru yargı belirlenememelidir.
+    Doğru seçenek, bir veya iki koşuldan doğrudan fark edilebilen değil; ancak kısıtlar
+    (aynı yerde olmama, tek başına olma vb.) tabloya işlendiğinde ortaya çıkan
+    zorunlu birleşme veya ayrışmadır.
+
+  kurallar:
+    - "Doğru cevap SADECE tüm koşullar ve yer kapasiteleri birlikte değerlendirildiğinde ulaşılabilir olmalıdır"
+    - "Doğru cevap bir tek maddeye bakılarak anlaşılmamalıdır"
+    - "Doğru cevap yalnızca iki koşul birleştirilerek doğrudan bulunamamalıdır; öğrenci kapasite doluluğunu ve dışlama kurallarını (örn: gitmeme) hesaplamak zorundadır"
+    - "Öğrenci, seçeneklere geçmeden önce tablodaki kesinleşen yerleri ve ihtimalleri netleştirebilecek durumda olmalıdır"
+    - "Şıkkın doğruluğu doğrudan verilmiş bir bilgiye (Örn: maddede yazan 'Ali X'tedir' bilgisi) değil, kurulmuş tablodan çıkan zorunluluğa dayanmalıdır"
+    - "Doğru cevap, soru köküne göre KESİNLİKLE doğru veya KESİNLİKLE yanlış olan tek yargı olmalıdır"
+    - "Doğru cevap tahmine, sezgiye veya eksik okumaya değil; mantıksal yerleşim zincirine dayanmalıdır"
+    - "Sorunun tek bir doğru cevabı olmalıdır; o şıkkın doğruluğu/yanlışlığı ile yarışacak 2. bir ihtimal (belirsizlik) varsa YASAKTIR"
+    - "Doğru cevap, koşullardan birinin (Örn: 'Ali X yerindedir') doğrudan kopyalanmasıyla üretilmemelidir"
+    - "Doğru cevap 3-8 kelime arasında, tam bir yargı cümlesi olmalıdır"
+    - "Biçimsel olarak diğer şıklardan (diğer yargı cümlelerinden) ayrışmamalıdır"
+
+  yasaklar:
+    - "Doğru cevabın tek bir koşulun yeniden yazılmış ya da kaba bir çıkarımı olması"
+    - "Doğru cevabın iki koşuldan hemen fark edilecek kadar açık olması"
+    - "Gizli yerleşim tablosu kurulmadan ve kapasite hesabı yapılmadan seçenek elemesi yapılabilmesi"
+    - "Doğru cevabın, maddelerde yeri açıkça verilen kişiyi doğrudan tekrar etmesi"
+    - "Doğru cevabın 'X kişi, Y yerindedir' gibi basit bir eşleşme olması (Eğer soru 'kesinlikle doğrudur' diyorsa, doğru cevap tercihen 'aynı yerdedir' gibi ilişkisel bir yargı olmalıdır)"
+
+  kontrol:
+    - "Tek bir koşul çıkarıldığında doğru cevabın kesinliği hâlâ korunuyor mu?"
+    - "Sadece ilk iki koşula bakılarak doğru seçenek (yargı) bulunabiliyor mu?"
+    - "Gizli yerleşim tablosu kurulmadan doğru seçenek tahmin edilebiliyor mu?"
+    - "Doğru seçenekteki yargı, maddelerde doğrudan verilen bir bilgi mi?"
+    - "Doğru seçenek gerçekten tüm koşulların ve kapasite sınırlarının zorlamasıyla mı ortaya çıkıyor?"
+# ═══════════════════════════════════════════════════════════════
+    # CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  temel_ilke: >
+    Bu formatta çeldiriciler, tek bir koşula bakılarak yanlış olduğu anlaşılan
+    yüzeysel yargılar olmamalıdır. Her yanlış seçenek (yargı cümlesi), öğrencinin
+    gizli yerleşim tablosundaki belirsiz (ihtimalli) alanları veya kapasite
+    sınırlarını yanlış yorumlamasının sonucu olmalıdır. Öğrenci "olabilir" bir
+    durumu "kesin" sanmalı veya bir yerin dolduğunu fark etmeyip oraya
+    yeni birini yerleştirmeye çalışmalıdır.
+
+  ana_prensipler:
+    - "Çeldirici yargı, bir koşulun doğrudan zıttı (Örn: maddede 'Ali X'tedir' yazarken şıkta 'Ali X'te değildir' demek) olmamalıdır."
+    - "Çeldiriciler, şıklardaki yargıların her birinin tabloyla tek tek test edilmesini zorunlu kılmalıdır."
+    - "Her çeldirici, tablo tam olarak kilitlenmeden önce (olasılık aşamasında) 'doğruymuş gibi' görünmelidir."
+    - "Yanlış seçenek, tablodaki yer değiştirme ihtimallerinden (kaymalardan) sadece birini gören öğrencinin ulaşacağı yargı olmalıdır."
+    - "Çeldiriciler, çözüm sürecindeki farklı kapasite ve eşleşme hatalarını temsil etmelidir."
+    - "KOMBİNE KULLANIM: Çeldirici stratejileri tek başına kullanılabileceği gibi, şıkkın elenmesini imkânsız kılmak için iki strateji aynı yargıda birleştirilmelidir."
+
+  uretim_proseduru:
+    - "1. Önce doğru gizli yerleşim tablosunu ve tüm ihtimalleri (yer değiştirenleri) kur."
+    - "2. Ardından öğrencinin düşebileceği 3 farklı yanlış kurgu tasarla (Örn: Kapasiteyi unuttuğu kurgu)."
+    - "3. Her yanlış kurgu, koşulların en az bir kısmını sağlamalı ama tablonun bütününe aykırı olmalıdır."
+    - "4. Çeldirici yargıları bu yanlış kurgulardan üret (Örn: Doğru cevap 'Kesin olan' iken, çeldirici 'İhtimalli olan' olsun)."
+    - "5. Bir çeldirici tek bir madde ile hemen eleniyorsa yargıyı daha dolaylı hale getir."
+
+  genel_kurallar:
+    - "Her çeldirici farklı bir yanlış muhakeme (ihtimal/kapasite/dışlama) mantığına dayanmalıdır."
+    - "Çeldiriciler, maddelerde açıkça verilen mutlak bir bilgiyi kopyalayıp bozarak üretilmemelidir."
+    - "Bir çeldirici, yalnızca tablonun tüm olasılıkları test edildiğinde çürütülebilecek güçte olmalıdır."
+    - "Her yanlış seçenek tam bir yargı cümlesi (Örn: 'X ile Y aynı yerdedir') biçiminde olmalıdır."
+    - "Şıklarda 'Hangisi kesinlikle doğrudur?' soruluyorsa, çeldiriciler 'doğru olma ihtimali olan ama kesin olmayan' yargılardan seçilmelidir."
+
+  stratejiler:
+    - ad: "OLASILIGI_KESINLIK_SANMA (İhtimal Tuzağı)"
+      bilisssel_hata_kategorisi: "eksik_analiz"
+      aciklama: "Kişinin iki farklı yere gitme ihtimali varken, şıkta bu ihtimallerden biri 'kesinmiş' gibi sunulur."
+      nasil_olusturulur: |
+        Tabloda Ali'nin 1. veya 2. katta olma ihtimali kalsın. Şıkka "Ali 1. kattadır." yargısını koy.
+        Öğrenci kurduğu ilk tabloda Ali'yi 1'e yerleştirirse bu yargıyı "kesin doğru" sanacaktır.
+
+    - ad: "ILISKIYI_EKSIK_TASIMA (Kapasite Çakışması)"
+      bilisssel_hata_kategorisi: "kurgu_hatasi"
+      aciklama: "Öğrenci iki kişiyi aynı yere yerleştirir ama o yerin kapasitesinin dolduğunu veya orada sadece bir kişinin olabileceğini (tek başına olma) unutur."
+      nasil_olusturulur: |
+        "Ali ve Ayşe aynı yerdedir." yargısını çeldirici yap. Ancak o yerin kontenjanını 1 olarak belirle
+        veya oraya zaten kesinleşmiş başka birini koy.
+
+    - ad: "TEK_BASINA_OLMA_IHLALI (Yalnızlık Kısıtı)"
+      bilisssel_hata_kategorisi: "iliski_yorum_hatasi"
+      aciklama: "Koşullarda bir kişinin belirli bir yerde tek başına olduğu belirtilmiştir. Çeldirici yargı, bu kişinin yanına başka birini yerleştirir."
+      nasil_olusturulur: |
+        Maddede "Can, bulunduğu yerde tek başınadır." bilgisini ver. Şıkta ise "Can ve Deniz aynı yerdedir."
+        yargısını kullan. Öğrenci "tek başına" kısıtını tabloya işlemezse bu yargıyı makul bulabilir.
+
+    - ad: "EKSIK_DISLAMA (Üçüncü İhtimali Unutma)"
+      bilisssel_hata_kategorisi: "dar_bakis_acisi"
+      aciklama: "Öğrenci bir kişinin A yerinde olmadığını bilir ve doğrudan B yerinde olduğunu varsayar. Oysa C yeri de bir ihtimaldir."
+      nasil_olusturulur: |
+        Ali'nin A'da olmadığı kesin olsun. Şıkka "Ali B yerindedir." yaz. Eğer tablo Ali'nin C'ye
+        de gitmesine izin veriyorsa, bu yargı kesin değildir.
+
+  kombine_kullanim_rehberi:
+    tanim: "Öğrenciyi her şıkta 'iki aşamalı' kontrol yapmaya zorlamak için stratejileri birleştir."
+    ornek_kombinasyonlar:
+      - ad: "Kapasite Çakışması + İhtimal Tuzağı Kombosu"
+        nasil_uygulanir: "Öğrenci, Ali'nin X yerinde olabileceğini bulur (İhtimal). Ancak Ali oraya giderse, o yerin kapasitesi dolduğu için Ayşe açıkta kalmaktadır. Şıkka 'Ali X yerindedir.' yargısını koyarak öğrencinin Ayşe'nin durumunu kontrol etmeden karar vermesini sağla."
+      - ad: "Tek Başına Olma + Eksik Dışlama Kombosu"
+        nasil_uygulanir: "Öğrenci bir kişinin A'da olmadığını bilir (Dışlama) ve onu tek başına kalınan B yerine yerleştirir. Oysa o kişi B'ye giderse, B'deki 'tek başına olma' kuralı bozulmaktadır. Şıkka bu hatalı yerleşimi yargı olarak koy."
+
+  yasaklar:
+    - "Maddelerde açıkça 'Ali 1. kattadır' yazarken, şıkta 'Ali 1. kattadır'ı sormak."
+    - "Bir yargıyı sadece bir isim değiştirerek (Örn: Ali yerine Veli yazarak) üretmek."
+    - "Tabloyu kurmadan, sadece şıklardaki isimleri maddelerle eşleştirerek (mekanik eleme) cevaba ulaşılmasına izin vermek."
+    - "Şıklarda 'Hepsi' veya 'Hiçbiri' gibi seçenekler kullanmak."
+
+  kalite_kontrol:
+    - "Bu yargı, tablo tam kurulmadığında 'doğru olabilir' hissi uyandırıyor mu?"
+    - "Yargının yanlışlığı, kapasite veya 'tek başına olma' kısıtı kontrol edilince mi ortaya çıkıyor?"
+    - "Çeldiricilerin her biri farklı bir mantıksal boşluğa (ihtimal, sayı, zıtlık) hitap ediyor mu?"
+# ═══════════════════════════════════════════════════════════════
+    # BECERI ETIKETI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB3"
+  bilesenler: ["mantiksal_cikarim", "kategorizasyon", "degerlendirme", "sorgulama"]
+  surec_bileseni: "karar_verme"
+
+# ═══════════════════════════════════════════════════════════════
+    # URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  temel_ilke: >
+    Bu formatta soru, öğrenciyi sınırlı yerlerin kapasitelerini ve kişilerin
+    birliktelik/yalnızlık durumlarını kullanarak tüm yerleşim tablosunu kurmaya zorlamalıdır.
+    Doğru cevap; tek bir maddeden veya yüzeysel bir isim eşleştirmesinden bulunamamalı;
+    ancak tüm kişilerin yerleri kapasite kısıtlarıyla (Örn: X yerinde sadece bir kişi vardır)
+    test edildikten sonra kesinleşen bir YARGI CÜMLESİ olarak ortaya çıkmalıdır.
+
+  steps:
+    - step: 1
+      action: "Senaryo alanı seç"
+      details: |
+        Kişi-Yer dağılımına uygun günlük hayattan bir bağlam seç.
+        Örnek alanlar: ofis katları, kamp bölgeleri, kurs sınıfları, otopark blokları vb.
+
+    - step: 2
+      action: "Kişileri, yerleri ve kapasite kilitlerini kur"
+      details: |
+        - Önce 5-7 kişiyi ve 3 farklı yer/kategori belirle.
+        - Her yerin kişi kapasitesini (Örn: A katında 2 kişi, B katında 1 kişi vb.) netleştir.
+        - Tabloyu kurarken BİLEREK bir kişinin bir yerde "tek başına" olması kısıtını ekle.
+        - Soru yazımına geçmeden önce kimin nerede olduğu ve hangi yargıların kesinleştiği netleşmiş olmalıdır.
+
+    - step: 3
+      action: "Soru kökünü belirle"
+      details: |
+        Soru kökü kesinlik denetlemelidir.
+        - "Hangisi kesinlikle doğrudur?" veya "Hangisi kesinlikle yanlıştır?" şeklinde yönü belirle.
+
+    - step: 4
+      action: "Koşulları gizli yerleşim tablosundan türet"
+      details: |
+        - 3 madde oluştur.
+        - Maddeler yerlerin kapasitelerini, gitmeme (dışlama) durumlarını ve birliktelikleri içermelidir.
+        - Hiçbir madde şıklarda sorulacak yargı cümlesini doğrudan söylememelidir.
+        - Koşullar tabloyu ancak kapasite sınırlarıyla (örn: o katın dolmasıyla) birlikte değerlendirildiğinde kilitlenmelidir.
+
+    - step: 5
+      action: "Setup cümlesini yaz"
+      details: |
+        - 1-2 cümlede dağılımın çerçevesini tanıt.
+        - Kaç kişi olduğu ve hangi yerlerin bulunduğu net anlaşılsın.
+        - Bağlamın günlük hayata uygun (ofis, pazar vb.) olduğundan emin ol.
+
+    - step: 6
+      action: "Doğru seçeneği (Yargı Cümlesi) üret"
+      details: |
+        - Doğru seçenek, kurulan tabloda KESİN olan bir yargı olmalıdır (Örn: 'Ali ile Ayşe aynı yerdedir.').
+        - Bu yargı, maddelerde açıkça yazan bir bilginin kopyası olmamalıdır.
+        - Öğrenci kapasite hesabını (örn: 'Burası doldu, o halde Ali buraya gelemez') yapmadan bu yargıya ulaşamamalıdır.
+
+    - step: 7
+      action: "3 çeldirici yargı üret"
+      details: |
+        - Her çeldirici farklı bir hata stratejisine (Örn: İhtimali kesin sanma, kapasite çakışması) dayanmalıdır.
+        - Şıklar doğru cevapla aynı yapıda (yargı cümlesi) olmalıdır.
+        - Çeldiriciler, tabloyu yanlış kuran veya bir kısıtı (örn: tek başına olmayı) unutan öğrenciye "mantıklı" gelmelidir.
+
+    - step: 8
+      action: "Seçenekleri dengele ve sırala"
+      details: |
+        - A-B-C-D seçeneklerini rastgele sırala.
+        - Tüm seçenekler tam yargı cümlesi formatında olsun.
+        - Doğru cevap biçimsel olarak (uzunluk vb.) öne çıkmasın.
+
+    - step: 9
+      action: "Tam çözüm testi yap"
+      details: |
+        Aşağıdaki soruları kontrol et:
+        - Öğrenci yerlerin kapasite sınırlarını ve yalnızlık kısıtlarını hesaplamadan doğru yargıyı bulabiliyor mu?
+        - Tek bir madde doğru cevabı ele veriyor mu?
+        - Şıklardaki yargılar metindeki isimlerle ve yerlerle tam uyumlu mu?
+        - "Kesinlikle yanlıştır" soruluyorsa, çeldiriciler "doğru olma ihtimali olan" yargılardan mı seçilmiş?
+        Bu sorulardan hatalı sonuç veren varsa soru yeniden kurulmalıdır.
+
+# ═══════════════════════════════════════════════════════════════
+    # DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Setup cümlesi + maddeli koşul formatında mı?"
+    - "Koşullar 3 madde arasında mı?"
+    - "Her madde farklı bilgi taşıyor mu?"
+    - "Maddeler birbirini tekrar etmiyor mu?"
+    - "Koşullar arasında çelişki yok mu?"
+    - "3. sınıf seviyesine uygun, günlük hayattan (ofis, kamp, kütüphane vb.) bir dil kullanılmış mı?"
+    - "Bir tane madde ile şıklardaki yargılardan herhangi biri hemen çözülüyor mu? ÇÖZÜLMEMELİ."
+
+  hidden_structure:
+    - "Soru yazılmadan önce gizli yerleşim tablosu ve yer kapasiteleri kurulmuş mu?"
+    - "Kimin nerede olduğu ve kimlerin yan yana/yalnız olduğu net mi?"
+    - "Soru metni bu gizli dağılımı doğrudan ele veriyor mu? (Vermemeli, kısıtlarla buldurmalı)."
+    - "Koşullar ancak kapasite doluluğuyla birlikte mi tam sonucu veriyor?"
+
+  condition_quality:
+    - "Tek bir koşul doğru yargıyı doğrudan ele veriyor mu?"
+    - "Koşullar, öğrenciyi 'tek başına bulunma' veya 'kapasite doluluğu' üzerinden eleme yapmaya zorluyor mu?"
+    - "Her koşul çözümün kesinlik aşaması için işlevli mi?"
+    - "Gereksiz veya dekoratif koşul var mı?"
+    - "Koşullardan biri doğrudan soru kökündeki eşleşmeyi söylüyor mu?"
+
+  correct_answer_and_options:
+    - "Tüm seçenekler tam yargı cümlesi (Örn: 'X, Y yerindedir.') formatında mı?"
+    - "Doğru cevap, tablodaki kısıtların (kapasite, dışlama vb.) zorunlu sonucu mu?"
+    - "Doğru cevap maddelerden birinin kaba bir tekrarı değil mi?"
+    - "Tek doğru cevap var mı?"
+    - "Şıklarda kombinasyon (I ve II) veya sadece isim var mı? OLMAMALI (Sadece yargı cümlesi)."
+
+  distractors:
+    - "Her çeldirici yargı farklı bir muhakeme hatasına (Örn: Olasılığı kesinlik sanma, kapasiteyi taşırma) dayanıyor mu?"
+    - "Hiçbir çeldirici tek bir maddeyle yüzeysel olarak hemen elenmiyor mu?"
+    - "Çeldiriciler, tablodaki 'olabilir' durumlarını 'kesin'miş gibi sunuyor mu? (Güçlü tuzak)."
+    - "Tüm seçenekler aynı yargı yapısında mı?"
+    - "Şıklar arasında belirgin bir uzunluk dengesizliği var mı?"
+
+  final_gate:
+    - "Öğrenci yerlerin kapasite sınırlarını ve 'yalnızlık/birliktelik' kurallarını tabloya işlemeden doğru şıkka ulaşabiliyor mu?"
+    - "Soru, basit bir isim eşleştirmesi değil gerçek bir 'kesinlik denetimi' gerektiriyor mu?"
+    - "Doğru yargı, ancak kapasite kilitleri sayesinde mi diğer ihtimallerden ayrışıyor?"

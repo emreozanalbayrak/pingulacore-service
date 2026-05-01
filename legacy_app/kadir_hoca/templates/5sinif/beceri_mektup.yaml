@@ -1,0 +1,276 @@
+# templates/beceri_mektup.yaml
+# Kaynak: MEB Beceri Temelli Soru Bankasi - Mektup
+#
+# BECERI TEMELLI MEKTUP FORMATI
+# Mektup metni verilir, ogrenci yazarin niyeti ve duygularini degerlendirme sorusunu cevaplar
+#
+# MANTIK: 1 secenekte dogru cevap, 4 secenekte yanlis cevaplar
+# Secenekler TAM CUMLE formatindadir (3-20 sozcuk)
+
+meta:
+  id: "beceri_mektup"
+  ad: "Beceri Temelli - Mektup"
+  sinif_seviyesi: 5
+  aciklama: "Mektup formati uzerinden beceri temelli sorular"
+  kaynak: "MEB Beceri Temelli Soru Bankasi"
+  frequency: "~5% of beceri temelli questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Mektup baglami + soru koku + 5 tam cumle secenek (beceri temelli)"
+
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 140
+    sentence_count_min: 4
+    sentence_count_max: 8
+    stil: "mektup"
+    kurallar:
+      - "Mektup formati kullan (hitap, govde, kapaniis)"
+      - "Gonderici ve alici belli olsun"
+      - "Bir amaci/istegi/duyguyu ifade etsin"
+      - "Mektup yaziim kurallarina uygun olsun"
+      - "Samimi ve dogal bir dil kullanilsin"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 5
+    labels: ["A", "B", "C", "D", "E"]
+    word_count_min: 3
+    word_count_max: 20
+    style: "complete_sentence"
+    correct_type: "matches"
+    correct_count: 1
+
+  questions_per_context: 1
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ALANLARI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  context_type: "MEKTUP"
+  context_label: "Mektup"
+  skill_level: "KB2"
+  process_component: "Mektup metninde amac, duygu ve uslup analizi"
+  skill_areas:
+    - "anlama"
+    - "cikarimlama"
+    - "degerlendirme"
+    - "yorumlama"
+  answer_key_explanation: true
+  question_patterns:
+    - "Mektubun yazilis amaci nedir?"
+    - "Mektup yazari ne hissediyor?"
+    - "Mektuptaki uslup ne tur bir iliski gosteriyor?"
+    - "Mektuptan hangi duygu cikarilabilir?"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # Amaç / Mesaj
+  - "<b>Bu mektubun yazılış amacı aşağıdakilerden hangisidir?</b>"
+  - "<b>Mektuba göre aşağıdakilerden hangisi doğrudur?</b>"
+  - "<b>Bu mektuba göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Mektuptan aşağıdaki <u>çıkarımlardan hangisi yapılamaz</u>?</b>"
+  # Duygu / Üslup
+  - "<b>Mektup yazarının duygusu aşağıdakilerden hangisidir?</b>"
+  - "<b>Mektubun yazarı aşağıdakilerden hangisini amaçlamaktadır?</b>"
+  - "<b>Mektuptaki ifadelerden yola çıkarak aşağıdakilerden hangisine ulaşılabilir?</b>"
+  - "<b>Mektubun bütününden çıkarılabilecek en kapsamlı sonuç aşağıdakilerden hangisidir?</b>"
+  # Neden / İlişki / Duygu Değişimi (PDF kaynak)
+  - "<b>Mektup yazarının bu mektubu yazmasının asıl nedeni aşağıdakilerden hangisidir?</b>"
+  - "<b>Mektuptaki ifadeler dikkate alındığında yazar ile alıcı arasındaki ilişki hakkında aşağıdakilerden hangisi söylenebilir?</b>"
+  - "<b>Mektuptan çıkarılabilecek en doğru sonuç aşağıdakilerden hangisidir?</b>"
+  - "<b>Mektup yazarının duygu durumundaki değişim aşağıdakilerden hangisinde doğru verilmiştir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Mektubun icerigi ve amacina uygun cevap"
+  kurallar:
+    - "Mektup icerigiyle desteklenmeli"
+    - "Yazarin niyetini dogru yansitmali"
+    - "Tam cumle formatinda olmali (3-20 sozcuk)"
+    - "Mektuptaki duygu ve amaç ile uyumlu olmali"
+    - "Baglam olmadan cevaplanamaz olmali"
+    - "Ust duzey dusunme becerisi gerektirmeli"
+    - "Bilissel surec bilesenini hedeflemeli"
+  ornekler:
+    - mektup: "Sevgili Annecigim, Kampta cok guzel vakit geciriyorum. Yeni arkadaslar edindim. Dogada yuruyus yaptik ve yildizlari gozlemledik. Seni cok ozluyorum..."
+      dogru: "Cocuk kamptan memnun oldugunu ve annesini ozledigini ifade etmektedir"
+      neden: "Mektupta hem mutlu anlar hem ozlem duygusu var"
+    - mektup: "Degerli Mudurum, Okulumuzun bahcesindeki agaclarin kesilmesine karsi cikiyorum. Bu agaclar hem golgge sagilyor hem de kuslara ev sahipligi yapiyor..."
+      dogru: "Yazar okul bahcesindeki agaclarin kesilmemesi icin mudurden yardim istemektedir"
+      neden: "Mektubun amaci agaclarin korunmasi icin dilekce niteligi tasir"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM mektup iceriğine gore en uygun 4 stratejiyi secer
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic and letter type (personal/official)"
+      details: "Mektup formatina uygun bir konu ve tur sec (kisisel, resmi, dilek vb.)"
+
+    - step: 2
+      action: "Generate letter text (80-140 words) with proper format"
+      details: |
+        Mektup metninde:
+        - Hitap, govde ve kapaniis bolumleri olmali
+        - Gonderici ve alici belli olmali
+        - Bir amac/istek/duygu ifade edilmeli
+        - Mektup yazim kurallarina uygun olmali
+
+    - step: 3
+      action: "Create correct answer as complete sentence"
+      details: |
+        Dogru cevap:
+        - Mektubun amaci veya yazarin duygusunu yansitmali
+        - Tam cumle formatinda olmali (3-20 sozcuk)
+        - Mektup icerigiyle kanitlanabilir olmali
+
+    - step: 4
+      action: "Create 4 wrong answers using strategies"
+      details: |
+        Her yanlis secenek icin farkli strateji kullan:
+        - 1x mektuptaki bir detaydan turetilmis ama ana amac olmayan
+        - 1x yazarin duygusunu yanlis yorumlayan
+        - 1x konuyla iliskili ama mektupta desteklenmeyen
+        - 1x mantikli gorunen ama amaci carpitan
+        Tum secenekler ayni formatta olmali (tam cumle, 3-20 sozcuk)
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D-E seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - konu: "Kamp mektubu"
+    dogru_cevap: "A"
+    secenekler:
+      A: "Cocuk kamptan memnun oldugunu ve annesini ozledigini ifade etmektedir"
+      B: "Cocuk kamptan sikildigi icin eve donmek istemektedir"
+      C: "Cocuk kampta arkadaslaryla tartismistir"
+      D: "Mektup annenin cocuguna yazdigi bir mektuptur"
+      E: "Cocuk kampta hic etkinlik yapmamistir"
+    dogru_cevap_icerigi: "Cocuk kamptan memnun oldugunu ve annesini ozledigini ifade etmektedir"
+    neden: "Mektupta hem mutlu anlar hem ozlem duygusu vardir"
+
+  - konu: "Agac koruma dilekce mektubu"
+    dogru_cevap: "D"
+    secenekler:
+      A: "Yazar okula yeni agac dikilmesini istemektedir"
+      B: "Yazar okul bahcesinin genisletilmesini talep etmektedir"
+      C: "Yazar kuslar icin yuva yapilmasini onermektedir"
+      D: "Yazar okul bahcesindeki agaclarin kesilmemesi icin mudurden yardim istemektedir"
+      E: "Yazar okuldan tasinmayi dusunmektedir"
+    dogru_cevap_icerigi: "Yazar okul bahcesindeki agaclarin kesilmemesi icin mudurden yardim istemektedir"
+    neden: "Mektubun amaci agaclarin korunmasi icin dilekce"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  # Asama 0: Kimlik ve Olcme Niyeti
+  identity:
+    - "Soru bir beceriyi mi olcuyor, bilgi hatirlamayi mi?"
+    - "Hedef beceri seviyesi uygun mu?"
+    - "Surec bileseni dogru hedeflenmis mi?"
+
+  # Asama 1: Baglam Secimi
+  context:
+    - "Baglam olmadan soru cozulebilir mi? (Hayir olmali)"
+    - "Baglam fonksiyonel mi? (Dekoratif degil)"
+    - "Baglam cevabi dogrudan veriyor mu? (Vermemeli)"
+    - "Baglam otantik mi? (Gercek hayattan)"
+    - "Kelime sayisi 80-140 arasinda mi?"
+    - "Mektup formati kullanilmis mi (hitap, govde, kapaniis)?"
+    - "Gonderici ve alici belli mi?"
+    - "Bir amac/istek/duygu ifade ediliyor mu?"
+
+  # Asama 2: Soru ve Secenekler
+  question:
+    - "Soru koku net ve anlasilir mi?"
+    - "Cift olumsuz var mi? (Olmamali)"
+    - "Tek dogru cevap var mi?"
+
+  options:
+    - "Celdiriciler belirli bilissel hatalari temsil ediyor mu?"
+    - "Eleme yoluyla cevaplanabilir mi? (Olmamali)"
+    - "Format farkliligi ile dogru cevap belli oluyor mu? (Olmamali)"
+    - "Tum secenekler benzer uzunlukta mi?"
+    - "5 secenek var mi (A-B-C-D-E)?"
+
+  # Asama 3: Etik
+  ethics:
+    - "Cinsiyet/etnik onyargi var mi? (Olmamali)"
+    - "Yas grubuna uygun mu?"
+
+  # Asama 4: Dil
+  language:
+    - "Turkce dil bilgisi dogru mu?"
+    - "Sinif seviyesine uygun mu?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+
+  generation_rules:
+    - "Mektup formatina uygun kisisel veya resmi konulari tercih et"
+    - "Duygu ifadesi veya dilekce niteligi tasiyabilecek konular ideal"
+    - "Yazarin amaci net belirlenebilecek konulari sec"

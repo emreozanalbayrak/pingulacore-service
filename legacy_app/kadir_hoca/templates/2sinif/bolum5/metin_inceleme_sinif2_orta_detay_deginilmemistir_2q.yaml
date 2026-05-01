@@ -1,0 +1,105 @@
+# Pattern: ["dogrudan_detay", "deginilmemistir"] (referans satir 448)
+# Orta duzey, 2 soru: dogrudan_detay + deginilmemistir
+
+meta:
+  id: metin_inceleme_sinif2_orta_detay_deginilmemistir_2q
+  ad: "2. Sinif - Metin Inceleme (Orta) - Dogrudan Detay + Deginilmemistir"
+  sinif_seviyesi: 2
+  aciklama: "Orta baglam — 2 soru: dogrudan_detay (slot 1) + deginilmemistir (slot 2)"
+  frequency: "Medium"
+
+context:
+  type: metin_inceleme_sinif2_orta_detay_deginilmemistir_2q
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 52
+    word_count_max: 74
+    image_type: "illustration"
+    structure:
+      - "5-6 kisa cumle, tek baskin konu/olay etrafinda."
+      - "1 yan ayrinti bulunabilir."
+      - "Metinde acik detay bilgi bulunmali (slot 1 icin)."
+      - "Slot 2 icin metinde ayirt edici acik bilgiler yer almali — DEGINILMEMISTIR sorusunda diger 2 secenegin metinde gecmesi GEREKLI, dogru cevap metinde GECMEYEN secenek olmali."
+    kurallar:
+      - "2. sinif duzeyinde, sade ve gunluk hayata yakin metin."
+      - "Karakter ismi Turkce olmali."
+      - "Tek baskin konu, dis bilgi gerektirmeyen icerik."
+      - "Turkce karakterler dogru kullanilmali."
+
+      - "Tablo/grafik/sayi listesi KULLANMA — sadece akici Turkce anlatim. Gorsel ayrica illustrasyon olarak uretilecek."
+  questions:
+    - slot: 1
+      type: dogrudan_detay
+      soru_kokleri:
+        - "<b>Bu metne gore asagidakilerden hangisi dogrudur?</b>"
+        - "<b>Bu metne gore asagidakilerden hangisi soylenebilir?</b>"
+        - "<b>Asagidakilerden hangisi metinde verilen bilgilerden biridir?</b>"
+        - "<b>Bu metne gore asagidakilerden hangisi yanlistir?</b>"
+      options_style: complete_sentence
+      word_count_min: 2
+      word_count_max: 8
+      beceri:
+        katman: KB1
+        bilesenler: [acik_bilgi_okuma]
+        surec_bileseni: bilgiyi_okuma
+
+    - slot: 2
+      type: deginilmemistir
+      soru_kokleri:
+        - "<b>Bu metinde asagidakilerden hangisine <u>deginilmemistir</u>?</b>"
+        - "<b>Metinde asagidakilerden hangisinden soz <u>edilmemistir</u>?</b>"
+        - "<b>Bu metinde asagidakilerden hangisine yer <u>verilmemistir</u>?</b>"
+        - "<b>Metne gore asagidakilerden hangisinden bahsedilmemistir?</b>"
+      options_style: short_phrase
+      word_count_min: 1
+      word_count_max: 5
+      beceri:
+        katman: KB1
+        bilesenler: [secici_tarama, eleme]
+        surec_bileseni: metni_anlama
+
+header_template: "1-2. sorulari asagidaki metne gore cevaplayiniz."
+
+format:
+  type: llm_generated_html
+  description: "2 baglam sorusu (orta): dogrudan detay + deginilmemistir"
+  paragraph:
+    required: true
+    word_count_min: 52
+    word_count_max: 74
+    sentence_count_min: 5
+    sentence_count_max: 6
+    stil: "bilgilendirici_veya_oykusel"
+    background_color: "#f8f0e0"
+  stem:
+    required: true
+  options:
+    count: 3
+    labels: [A, B, C]
+    word_count_min: 1
+    word_count_max: 8
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+
+dogru_cevap:
+  tanim: "Metinden acikca cikarilabilen dogru cevap"
+  kurallar:
+    - "Slot 1: dogru cevap metindeki acik bilgiye dayanmali."
+    - "Slot 2: dogru cevap metinde GERCEKTEN GECMEYEN secenek olmali, diger 2 secenek metinde acikca yer almali."
+    - "En az 1 yanlis secenek ilk bakista makul gorunmeli."
+distractors:
+  stratejiler:
+    - ad: METNE_YAKIN_AMA_YANLIS
+      aciklama: "Metne yakin gorunur ama acik bilgiye uymayan secenek"
+    - ad: KONU_DISI
+      aciklama: "Metnin alaniyla iliskili gorunur ama metinde gecmeyen secenek"
+
+use_shared_strategies: false
+
+beceri:
+  katman: KB1
+  bilesenler: [baglam_okuma, secici_tarama]
+  surec_bileseni: metni_anlama

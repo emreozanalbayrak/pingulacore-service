@@ -1,0 +1,123 @@
+# templates/2sinif/bolum3/paragraf_tamamlama_sinif2_kolay.yaml
+# 2. Sinif — Paragraf Tamamlama — KOLAY zorluk
+# Bosluk paragrafin sonunda, sadece pozitif kok, celdiriciler kolay elenebilir
+
+meta:
+  id: "paragraf_tamamlama_sinif2_kolay"
+  ad: "2. Sinif - Paragraf Tamamlama (Kolay)"
+  sinif_seviyesi: 2
+  aciklama: "Kolay duzey — boşluk sonda, pozitif kok, celdiriciler kolay elenebilir, 3 secenekli"
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Bosluklu tek paragraf + soru koku + 3 tamamlama secenegi (kolay)"
+
+  paragraph:
+    required: true
+    word_count_min: 34
+    word_count_max: 46
+    sentence_count_min: 4
+    sentence_count_max: 4
+    stil: "bilgilendirici_veya_oykusel"
+    background_color: "#e8f8e8"
+    kurallar:
+      - 'Paragrafta tam olarak 1 adet boşluk olmalidir. Bosluk CIFT TIRNAK ICINDE "_ _ _ _" olarak isaretlenmelidir.'
+      - "Bosluk paragrafin SONUNDA olmalidir."
+      - "Dogru secenek acik ve dogrudan bir tamamlayici olmalidir."
+      - "Konu ve akis cok gorunur olmalidir."
+      - "Yan bilgi cok az olmalidir."
+      - "Metin tek baskin konu veya tek baskin olay etrafinda kurulmalidir."
+      - "Paragrafın anlam akisi 2. sinif ogrencisi tarafindan izlenebilir olmalidir."
+      - "Bosluk oncesi ve sonrasi arasinda acik bag bulunmalidir."
+      - "Metin kisa, sade, somut ve gunluk yasama yakin olmalidir."
+      - "Cumleler kisa ve dogrudan olmalidir."
+      - "KRITIK: Bosluk YALNIZCA paragrafin kendi cumleleri ve onceki/sonraki cumle ile kurdugu mantik baglantisi uzerinden cozulebilmelidir. Dis bilgi, dunya bilgisi, genel kultur, ezbere bilgi VEYA paragraf disindan herhangi bir bilgi KESINLIKLE gerekmemeli. Sorunun cevabi paragrafin AKISINDAN dogrudan cikmalidir."
+      - "Bosluk yalnizca konuya, olay akışına veya acik bilgiye dayali olarak tamamlanmalidir."
+      - "Metin ana dusunce, ana duygu, ders veya yorum sorusuna kaymamalidir."
+      - "2. sinif ogrencisinin anlayabilecegi sadelikte kelime hazinesi kullanilmalidir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 2
+    word_count_max: 15
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Secenekler boşluğa yerlestirilebilir yapida olmalidir."
+      - "Dogru secenek yerlestirildiginde paragrafin anlami ve akisi tamamlanmalidir."
+      - "Yanlis secenekler metne yakin gorunmeli ama düşüncenin akisini bozmalidir."
+      - "Yanlis secenekler metinde olmayan yeni ana olay veya baskin bilgi getirmemelidir."
+      - "Secenekler kisa, sade ve 2. sinif duzeyinde olmalidir."
+      - "Secenekler kendi aralarinda bicimce paralel olmalidir."
+      - "1 yanlis secenek acik anlam kopuklugu tasimalidir."
+      - "1 yanlis secenek yan odakli veya yanlis sonuclu olmalidir."
+      - "Yanlis secenekler kolay elenebilir olmalidir."
+      - "KRITIK: Paragrafta boslugun yerine gelen yapi (kelime obegi VEYA tam cumle) 3 secenegin yapisini BELIRLER. Eger boşluk bir KELIME OBEGI (isim tamlamasi, sifat obegi) bekliyorsa, 3 secenek de kelime obegi olmalidir. Eger boşluk TAM CUMLE bekliyorsa, 3 secenek de tam cumle olmalidir. KELIME OBEGI-CUMLE KARISIMI KESINLIKLE YASAK."
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Bu parçada boş bırakılan yere düşüncenin akışına göre aşağıdakilerden hangisi getirilebilir?</b>"
+  - "<b>Bu metinde boş bırakılan yere düşüncenin akışına göre aşağıdakilerden hangisi getirilebilir?</b>"
+  - "<b>Bu parçada boş bırakılan yere aşağıdakilerden hangisi getirilmelidir?</b>"
+  - "<b>Bu metinde boş bırakılan yere aşağıdakilerden hangisi getirilmelidir?</b>"
+  # KULLANILDI: - "<b>Bu paragraftaki boşluğa aşağıdakilerden hangisi yazılabilir?</b>"
+  - "<b>Bu paragrafta boş bırakılan yere <u>en uygun</u> ifade hangisidir?</b>"
+  - "<b>Bu metin düşüncenin akışına göre aşağıdakilerden hangisi ile sürdürülebilir?</b>"
+  - "<b>Bu paragraf aşağıdakilerden hangisi ile tamamlanabilir?</b>"
+  - "<b>Bos bırakılan yere aşağıdakilerden hangisi gelirse metin tamamlanmış olur?</b>"
+  - "<b>Paragrafın akışına göre boşluğa hangi ifade getirilmelidir?</b>"
+  - "<b>Bu metni tamamlayan <u>en uygun</u> ifade hangisidir?</b>"
+  - "<b>Asagidakilerden hangisi boş bırakılan yere uygun olur?</b>"
+  - "<b>Bu parçada boş bırakılan yere düşüncenin akışına göre aşağıdakilerden hangisi <u>getirilemez</u>?</b>"
+  - "<b>Bu metinde boş bırakılan yere düşüncenin akışına göre aşağıdakilerden hangisi <u>getirilemez</u>?</b>"
+  - "<b>Bu metin düşüncenin akışına göre aşağıdakilerden hangisi ile <u>sürdürülemez</u>?</b>"
+  - "<b>Bu paragraftaki boşluğa aşağıdakilerden hangisi <u>yazılamaz</u>?</b>"
+
+dogru_cevap:
+  tanim: "Bos birakilan yere getirildiginde paragrafin anlamini ve akisini en uygun bicimde tamamlayan ifade"
+  kurallar:
+    - "Dogru cevap paragrafin konusu ile tam uyumlu olmalidir."
+    - "Dogru cevap boşluk oncesi ve sonrasi ile anlamca bag kurmalidir."
+    - "Dogru cevap yeni bir ana konu baslatmamalidir."
+    - "Dogru cevap paragrafin akisini dogal hale getirmelidir."
+    - "Dogru cevap sade ve dogrudan olmalidir."
+    - "Dogru cevap 2. sinif ogrencisinin anlayabilecegi aciklikta olmalidir."
+    - "Dogru cevap dis bilgi gerektirmemelidir."
+    - "Dogru secenek paragraftaki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farkliligi olmali"
+
+celdirici_stratejileri:
+  - ad: "ANLAM_KOPUKLUGU"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Bosluk oncesi ve sonrasi ile anlam bagi kuramayan ifade"
+    nasil_olusturulur: |
+      Bosluga yerlestirildiginde paragrafin anlam akisini bozan bir ifade olustur.
+      Kolay duzey: bu secenek acikca anlam kopuklugu tasidigi belli olmali.
+    kategori: "cognitive"
+
+  - ad: "YANLIS_ODAK"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Metne yakin gorunur ama ana konu yerine yan bilgiye yonelir"
+    nasil_olusturulur: |
+      Metindeki yan bir bilgiye veya farkli bir odaga yonelen ifade olustur.
+      Kolay duzey: bu secenek acikca yanlis odakta oldugu belli olmali.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB1"
+  bilesenler: ["paragraf_tamamlama", "anlam_butunlugu"]
+  surec_bileseni: "metni_anlama"
+
+sinif2_ek_kurallar:
+  yasak_alanlar:
+    - "Ana dusunce / ana duygu odakli sorular YASAK"
+    - "Metnin vermek istedigi mesaji bulma YASAK"
+    - "Cok katmanli ortuk anlam cozumleme YASAK"

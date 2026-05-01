@@ -1,0 +1,280 @@
+# templates/beceri_siir.yaml
+# Kaynak: MEB Beceri Temelli Soru Bankasi - Siir/Manzume
+#
+# BECERI TEMELLI SIIR FORMATI
+# Siir/manzume metni verilir, ogrenci tema ve imge analizi sorusunu cevaplar
+#
+# MANTIK: 1 secenekte dogru cevap, 4 secenekte yanlis cevaplar
+# Secenekler TAM CUMLE formatindadir (3-20 sozcuk)
+
+meta:
+  id: "beceri_siir"
+  ad: "Beceri Temelli - Siir"
+  sinif_seviyesi: 5
+  aciklama: "Siir/manzume metinleri uzerinden beceri temelli sorular"
+  kaynak: "MEB Beceri Temelli Soru Bankasi"
+  frequency: "~8% of beceri temelli questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Siir baglami + soru koku + 5 tam cumle secenek (beceri temelli)"
+
+  paragraph:
+    required: true
+    word_count_min: 30
+    word_count_max: 60
+    sentence_count_min: 4
+    sentence_count_max: 12
+    stil: "siir"
+    kurallar:
+      - "Dizeler halinde yaz"
+      - "Kafiye ve olcu kullanmaya calis"
+      - "Duygu ve imge icersin"
+      - "Siirin anlamini cikarimlamaya uygun olsun"
+      - "5. sinif seviyesine uygun tema ve dil kullan"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 5
+    labels: ["A", "B", "C", "D", "E"]
+    word_count_min: 3
+    word_count_max: 20
+    style: "complete_sentence"
+    correct_type: "matches"
+    correct_count: 1
+
+  questions_per_context: 1
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ALANLARI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  context_type: "SIIR"
+  context_label: "Siir"
+  skill_level: "KB2"
+  process_component: "Siirsel metinde imge, mecaz ve duygu analizi ile derin anlam cikarimi"
+  skill_areas:
+    - "anlama"
+    - "cikarimlama"
+    - "sentez"
+    - "yorumlama"
+    - "degerlendirme"
+  answer_key_explanation: true
+  question_patterns:
+    - "Siirde anlatilmak istenen nedir?"
+    - "Siirdeki imge neyi ifade eder?"
+    - "Siirin hakim duygusu nedir?"
+    - "Siirde hangi soz sanati kullanilmistir?"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # Anlam / Tema
+  - "<b>Bu şiirde anlatılmak istenen aşağıdakilerden hangisidir?</b>"
+  - "<b>Şiirin teması aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu şiire göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Şiirden aşağıdaki <u>çıkarımlardan hangisi yapılamaz</u>?</b>"
+  # İmge / Mecaz / Sözcük Anlamı
+  - "<b>Şiirdeki altı çizili sözcük aşağıdakilerden hangisi anlamında kullanılmıştır?</b>"
+  - "<b>Şiirdeki imgeler düşünüldüğünde aşağıdakilerden hangisi söylenebilir?</b>"
+  - "<b>Şiirde aşağıdaki duygu ve düşüncelerden hangisi hissedilmektedir?</b>"
+  # Duygu / Hâkim Ton
+  - "<b>Şiirde hâkim olan duygu aşağıdakilerden hangisidir?</b>"
+  - "<b>Şair bu şiirde aşağıdakilerden hangisini anlatmaktadır?</b>"
+  - "<b>Bu şiirin bütününden aşağıdakilerden hangisi çıkarılabilir?</b>"
+  # Yapı Unsurları / Genelleme (PDF kaynak)
+  - "<b>Şairin bu şiirde odaklandığı temel duygu aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu şiirden hareketle şiirle ilgili aşağıdaki genellemelerden hangisi doğrudur?</b>"
+  - "<b>Şiirdeki dizelerin birbiriyle olan ilişkisi düşünüldüğünde aşağıdakilerden hangisi söylenebilir?</b>"
+  - "<b>Aşağıdakilerden hangisi şiirin yapı unsurları ile ilgili sorulabilecek bir sorudur?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Siirin icerigi, temasi ve imgelerine uygun cevap"
+  kurallar:
+    - "Siir icerigiyle desteklenmeli"
+    - "Imge ve anlam analizi gerektirmeli"
+    - "Tam cumle formatinda olmali (3-20 sozcuk)"
+    - "Siirin temasini dogru yansitmali"
+    - "Baglam olmadan cevaplanamaz olmali"
+    - "Ust duzey dusunme becerisi gerektirmeli"
+    - "Bilissel surec bilesenini hedeflemeli"
+  ornekler:
+    - siir: "Yapraklar dokuluyor daldan / Sonbahar geldi mi yoktan / Toprak oertuyor kendini / Kis gelmeden soguyan sokaktan"
+      dogru: "Siirde sonbahar mevsiminin gelisiyle dogadaki degisim anlatilmaktadir"
+      neden: "Yaprak dokulmesi ve soguma imgeleri sonbahari isaret eder"
+    - siir: "Kitaplar birer kapiydir / Bilinmeze acilan yollardir / Her sayfada yeni bir dunya / Okudukca buyur insanlar"
+      dogru: "Siirde kitap okumanin insana yeni ufuklar actiği anlatilmaktadir"
+      neden: "Kapi ve yol imgeleri kitabin insana yeni dunya actiğini simgeler"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM siir iceriğine gore en uygun 4 stratejiyi secer
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select theme suitable for poetry"
+      details: "Siir formatina uygun bir tema sec (doga, dostluk, vatan, zaman, ozlem vb.)"
+
+    - step: 2
+      action: "Generate poem (30-60 words) with imagery and rhyme"
+      details: |
+        Siir metninde:
+        - Dizeler halinde yazilmali
+        - Kafiye ve olcu kullanilmali
+        - Duygu ve imge icermeli
+        - Cikarimlamaya uygun olmali
+
+    - step: 3
+      action: "Create correct answer as complete sentence"
+      details: |
+        Dogru cevap:
+        - Siirin temasini veya ana mesajini yansitmali
+        - Tam cumle formatinda olmali (3-20 sozcuk)
+        - Siir icerigiyle kanitlanabilir olmali
+
+    - step: 4
+      action: "Create 4 wrong answers using strategies"
+      details: |
+        Her yanlis secenek icin farkli strateji kullan:
+        - 1x siirdeki bir imgeyi yanlis yorumlayan
+        - 1x temayla iliskili ama siirde desteklenmeyen
+        - 1x yuzeysel okuma ile ulasilabilecek ama derinliksiz
+        - 1x mantikli gorunen ama siirin mesajini carpitan
+        Tum secenekler ayni formatta olmali (tam cumle, 3-20 sozcuk)
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D-E seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - konu: "Sonbahar siiri"
+    dogru_cevap: "C"
+    secenekler:
+      A: "Siirde kis mevsiminin zorluklari anlatilmaktadir"
+      B: "Sair soguk havadan sikayet etmektedir"
+      C: "Siirde sonbahar mevsiminin gelisiyle dogadaki degisim anlatilmaktadir"
+      D: "Siirde ilkbahar mevsimi ozlenmektedir"
+      E: "Sair yapraklarin yesilligini ovmektedir"
+    dogru_cevap_icerigi: "Siirde sonbahar mevsiminin gelisiyle dogadaki degisim anlatilmaktadir"
+    neden: "Yaprak dokulmesi ve soguma imgeleri sonbahari isaret eder"
+
+  - konu: "Kitap okuma siiri"
+    dogru_cevap: "A"
+    secenekler:
+      A: "Siirde kitap okumanin insana yeni ufuklar actiği anlatilmaktadir"
+      B: "Sair kitaplarin pahali oldugunu dusunmektedir"
+      C: "Siirde yalnizca roman turunden bahsedilmektedir"
+      D: "Sair kitap okumaktan sıkildigini ifade etmektedir"
+      E: "Siirde kutuphanelerin onemi vurgulanmaktadir"
+    dogru_cevap_icerigi: "Siirde kitap okumanin insana yeni ufuklar actiği anlatilmaktadir"
+    neden: "Kapi ve yol imgeleri kitabin yeni dunya actiğini simgeler"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  # Asama 0: Kimlik ve Olcme Niyeti
+  identity:
+    - "Soru bir beceriyi mi olcuyor, bilgi hatirlamayi mi?"
+    - "Hedef beceri seviyesi uygun mu?"
+    - "Surec bileseni dogru hedeflenmis mi?"
+
+  # Asama 1: Baglam Secimi
+  context:
+    - "Baglam olmadan soru cozulebilir mi? (Hayir olmali)"
+    - "Baglam fonksiyonel mi? (Dekoratif degil)"
+    - "Baglam cevabi dogrudan veriyor mu? (Vermemeli)"
+    - "Baglam otantik mi? (Gercek hayattan)"
+    - "Kelime sayisi 30-60 arasinda mi?"
+    - "Dizeler halinde yazilmis mi?"
+    - "Duygu ve imge iceriyor mu?"
+    - "Cikarimlamaya uygun mu?"
+
+  # Asama 2: Soru ve Secenekler
+  question:
+    - "Soru koku net ve anlasilir mi?"
+    - "Cift olumsuz var mi? (Olmamali)"
+    - "Tek dogru cevap var mi?"
+
+  options:
+    - "Celdiriciler belirli bilissel hatalari temsil ediyor mu?"
+    - "Eleme yoluyla cevaplanabilir mi? (Olmamali)"
+    - "Format farkliligi ile dogru cevap belli oluyor mu? (Olmamali)"
+    - "Tum secenekler benzer uzunlukta mi?"
+    - "5 secenek var mi (A-B-C-D-E)?"
+
+  # Asama 3: Etik
+  ethics:
+    - "Cinsiyet/etnik onyargi var mi? (Olmamali)"
+    - "Yas grubuna uygun mu?"
+
+  # Asama 4: Dil
+  language:
+    - "Turkce dil bilgisi dogru mu?"
+    - "Sinif seviyesine uygun mu?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+
+  generation_rules:
+    - "Siir formatina uygun duygu ve tema iceren konulari tercih et"
+    - "Doga, dostluk, vatan, zaman gibi evrensel temalar ideal"
+    - "Imge ve mecaz kullanimina uygun konulari sec"

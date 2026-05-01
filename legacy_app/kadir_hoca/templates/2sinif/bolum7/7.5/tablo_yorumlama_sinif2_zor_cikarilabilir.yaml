@@ -1,0 +1,110 @@
+# Varyant: tablodan_hangisi_cikarilabilir (referans zorluk_duzeyleri.zor)
+# Zor duzey, 1 soru: tablo cikarim — cikarilabilir
+
+meta:
+  id: tablo_yorumlama_sinif2_zor_cikarilabilir
+  ad: "2. Sinif - Tablo Yorumlama (Zor) - Cikarilabilir"
+  sinif_seviyesi: 2
+  aciklama: "Zor baglam — 1 soru: tablodaki bilgilerden cikarilabilen sonucu secme (birden fazla bilgi birlesimi)"
+  frequency: "Medium"
+
+context:
+  type: tablo_yorumlama_sinif2_zor_cikarilabilir
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    image_type: "tablo_gorseli"
+    word_count_min: 8
+    word_count_max: 28
+    visual_format: data_table
+    structure:
+      - "Tabloda birden fazla satir ve sutun iliskisi bulunabilir."
+      - "Dogru cevap icin iki bilgiyi birlestirmek gerekebilir."
+      - "Toplam, esitlik, fark veya odul-esik karsilastirmasi olabilir."
+      - "Zor duzeyde bile en fazla 2 adimli islem yapilmali."
+      - "Zor duzeyde de 2. sinif sadeligi korunmali."
+      - "Tablo sade, okunabilir ve 2. sinif duzeyine uygun olmali."
+      - "Baslık, satir ve sutunlar acikca ayirt edilebilir olmali."
+      - "Tabloda en az 3 veri noktasi bulunmali."
+    kurallar:
+      - "2. sinif duzeyinde, sade ve gunluk hayata yakin tablo konusu."
+      - "Tablo bilgi yogunlugu orta-yuksek seviyede tutulmali."
+      - "Baglam metni varsa kisa, sade ve aciklayici olmali; tek basina cozum vermemeli."
+      - "Dogru cevap tablo incelenmeden bulunamamali."
+      - "Turkce karakterler dogru kullanilmali."
+      - "KRITIK: Paragraf TABLONUN ICERIGINI sadece ozetle, TEKRAR YAZMA — tablo ayri gosterilir"
+      - "Paragraf bir HIKAYE/SENARYO olmali (karakter + durum) + tabloya yonelten kisa cumle"
+      - "Paragraf 3-5 cumle uzunlugunda, ornek: 'Ali'nin sorumluluk tablosunu ailesi hazirladi. Her gorevi icin yildiz aliyor.'"
+      - "Tablo en az 3 satir 3 sutun olmali, daha zengin veri icerebilir (4-6 satir 3-7 sutun)"
+      - "Konu 2. sinif ogrencisinin gunluk hayatindan: haftalik program, sorumluluk listesi, meyve sayilari, sinif etkinlikleri vb."
+
+  questions:
+    - slot: 1
+      type: tablodan_hangisi_cikarilabilir
+      soru_kokleri:
+        - "<b>Tabloya göre aşağıdakilerden hangisi çıkarılabilir?</b>"
+        - "<b>Bu tablodan hareketle aşağıdakilerden hangisi çıkarılabilir?</b>"
+        - "<b>Tablodaki verilere göre aşağıdakilerden hangisine ulaşılabilir?</b>"
+        - "<b>Tablo incelendiğinde aşağıdakilerden hangisi bulunabilir?</b>"
+        - "<b>Aşağıdakilerden hangisi tabloya göre belirlenebilir?</b>"
+      options_style: kisa_yargi
+      word_count_min: 3
+      word_count_max: 14
+      slot_rules:
+        - "Dogru secenek tablodaki bilgilerden cikarilabilen sonuc olmali."
+        - "Cikarim birden fazla bilgiyi birlestirmeyi gerektirebilir (en fazla 2 adim)."
+        - "Soyut yorum gerektirmemeli."
+        - "2 yanlis secenek de makul gorunmeli."
+      beceri:
+        katman: KB2
+        bilesenler: [tablo_okuma, cok_adimli_cikarim]
+        surec_bileseni: metni_yorumlama
+
+header_template: "Asagidaki tabloyu inceleyerek soruyu cevaplayiniz."
+
+format:
+  type: llm_generated_html
+  description: "1 baglam sorusu (zor): tablo cikarim — cikarilabilir"
+  paragraph:
+    required: true
+    word_count_min: 8
+    word_count_max: 28
+    sentence_count_min: 1
+    sentence_count_max: 3
+    stil: "tablo_baglam"
+    background_color: "#fce8e8"
+  stem:
+    required: true
+  options:
+    count: 3
+    labels: [A, B, C]
+    word_count_min: 3
+    word_count_max: 14
+    style: kisa_yargi
+    correct_count: 1
+    correct_type: matches
+
+dogru_cevap:
+  tanim: "Tablodaki bilgilerden cikarilabilen sonuca dayanan dogru secenek"
+  kurallar:
+    - "Dogru cevap tabloya dayanmali."
+    - "Dogru cevap dis bilgi gerektirmemeli."
+    - "Cikarim birden fazla bilgiyi birlestirmeyi gerektirebilir ama en fazla 2 adimli."
+    - "2 yanlis secenek de makul gorunmeli."
+
+distractors:
+  stratejiler:
+    - ad: TOPLAM_HATASI
+      aciklama: "Toplam veya karsilastirma gerektiren durumda yanlis toplama/cikarma"
+    - ad: KISMI_DOGRU_KISMI_YANLIS
+      aciklama: "Ifadenin bir kismi tabloya uyar ama tamami yanlis olur"
+    - ad: SATIR_SUTUN_KARISTIRMA
+      aciklama: "Bilgiyi yanlis kisi, gun, ders veya baslikla eslestirme"
+
+use_shared_strategies: false
+
+beceri:
+  katman: KB2
+  bilesenler: [tablo_okuma, cok_adimli_cikarim]
+  surec_bileseni: metni_yorumlama

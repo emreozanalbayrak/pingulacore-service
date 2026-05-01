@@ -1,0 +1,151 @@
+meta:
+  id: "afisten_cikarilamayani_belirleme"
+  ad: "Afişten Çıkarılamayanı Belirleme"
+  ders: "Türkçe"
+  sinif_seviyesi: 2
+  tema: "Görsel Okuma ve Anlama"
+  model: "TYMM"
+  format_turu: "llm_generated_html"
+  aciklama: "Kısa mesaj içeren bir afişten hareketle açıkça çıkarılamayan sonucu seçtiren 3 seçenekli soru formatı"
+  frequency: "orta"
+
+visual_requirement: "answer_critical"
+visual_type: "illustration"
+visual_spec:
+  gorsel_turu: "afis"
+  konu_ornekleri: ["yardımlaşma", "sağlık", "temizlik", "çevre koruma", "kitap sevgisi"]
+  yapı: "başlık + 2-3 kısa cümle mesaj + konuya uygun basit görsel"
+  aciklama: "Tek bir konuya odaklanan, başlık ve kısa mesaj içeren, 2. sınıf seviyesine uygun sade bir afiş"
+  kurallar:
+    - "Afişte tek bir ana konu bulunmalıdır."
+    - "Yazılar okunaklı ve kısa olmalıdır."
+    - "Görsel çocuk dostu ve sade olmalıdır."
+
+hide_paragraph_after_visual: true
+
+format:
+  type: "llm_generated_html"
+  description: "Kısa tanıtım + afiş görseli + tek soru + 3 seçenek"
+
+  paragraph:
+    required: true
+    word_count_min: 12
+    word_count_max: 35
+    sentence_count_min: 1
+    sentence_count_max: 2
+
+  visual:
+    required: true
+    count: 1
+    description: "Başlık, kısa açıklama ve konuya uygun görsel içeren açık ve anlaşılır afiş"
+
+  stem:
+    required: true
+    sentence_count_min: 1
+    sentence_count_max: 1
+    soru_koku_ornekleri:
+      - "Yukarıdaki afişten aşağıdaki sonuçlardan hangisi çıkarılamaz?"
+      - "Bu afişe göre aşağıdakilerden hangisi söylenemez?"
+      - "Verilen afişe göre aşağıdaki bilgilerden hangisine ulaşılamaz?"
+      - "Aşağıdakilerden hangisi afişten çıkarılamaz?"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 4
+    word_count_max: 12
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "mismatch"
+
+gorsel:
+  required: true
+  tur: "bilgilendirici_afis"
+  amac: "Öğrencinin afişteki açık mesajları okuyup çıkarım yapmasını sağlamak"
+  kurallar:
+    - "Afişte tek bir ana konu bulunmalıdır."
+    - "Kısa ve açık bir başlık yer almalıdır."
+    - "En fazla 2-3 kısa cümlelik açıklama bulunmalıdır."
+    - "Görsel konuya doğrudan destek vermelidir."
+    - "Afiş açık, anlaşılır, temiz ve 2. sınıf seviyesine uygun olmalıdır."
+    - "Görsel süsleyici değil, çözüm için zorunlu olmalıdır."
+    - "Afişteki yazılar okunaklı olmalıdır."
+
+olculen_beceri:
+  tanim: "Afişteki açık bilgi ve mesajları okuyup çıkarılamayan sonucu ayırt etme"
+  bilesenler:
+    - "gorsel_okuma"
+    - "acik_bilgi_bulma"
+    - "afis_mesajini_anlama"
+    - "dogru_yanlis_degerlendirme"
+    - "cikarilamayani_belirleme"
+
+dogru_cevap:
+  tanim: "Afişte açıkça desteklenmeyen veya afişten çıkarılamayan ifade"
+  kurallar:
+    - "Doğru cevap afişte açıkça bulunmayan sonucu içermelidir."
+    - "Yanlış olmayan seçenekler afişin açık mesajlarıyla desteklenebilmelidir."
+    - "Doğru cevap için yorum değil, açık bilgi denetimi gerekmelidir."
+    - "Afişte olmayan kesin hüküm içeren seçenek doğru cevap olabilir."
+
+distractors:
+  stratejiler:
+    - ad: "AFISTEKI_ACIK_MESAJI_TEKRAR_ETME"
+      aciklama: "Afişte doğrudan verilen mesajı seçenekte kullanma"
+      ornek: "Kan bağışı ile yardım edebiliriz."
+    - ad: "AFISTEN_DOGAL_SONUCU_CIKARMA"
+      aciklama: "Afişteki açık bilgiye dayanan basit sonucu seçenek yapma"
+      ornek: "Bir gün bizim de ihtiyacımız olabilir."
+    - ad: "AFISTE_OLMAYAN_KESIN_YARGI"
+      aciklama: "Afişte yer almayan kesin bir hükmü seçenek yapma"
+      ornek: "Kan bağışına sürekli ihtiyaç yoktur."
+    - ad: "TERS_ANLAM_YANILGISI"
+      aciklama: "Afişte söylenenin tersini seçenek yaparak yanıltma"
+      ornek: "Kan bağışı önemli değildir."
+
+soru_kokleri:
+  - "<b>Yukarıdaki afişten aşağıdaki sonuçlardan hangisi <u>çıkarılamaz</u>?</b>"
+  - "<b>Bu afişe göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Verilen afişe göre aşağıdaki bilgilerden hangisine <u>ulaşılamaz</u>?</b>"
+  - "<b>Aşağıdakilerden hangisi afişten <u>çıkarılamaz</u>?</b>"
+
+use_shared_strategies: false
+
+tymm_uyum_kurallari:
+  - "2. sınıf seviyesine uygun kısa ve açık cümleler kullanılmalıdır."
+  - "Afişte tek bir ana konu bulunmalıdır."
+  - "Soru afişteki açık bilgiye dayanmalıdır."
+  - "Ana fikir, mesajın gizli yönü, yazar amacı gibi üst düzey beceriler istenmemelidir."
+  - "'Çıkarılamaz' ifadesi açıkça belirtilmelidir."
+  - "Görsel olmadan doğru cevap kesinleşmemelidir."
+  - "Seçenekler aynı temsil düzeyinde, yani hepsi kısa yargı cümlesi olmalıdır."
+  - "3 seçenekli yapıda iki çeldirici de güçlü olmalıdır."
+
+izinli_icerikler:
+  - "yardımlaşma"
+  - "sağlık"
+  - "temizlik"
+  - "çevre koruma"
+  - "kitap sevgisi"
+  - "hayvan sevgisi"
+  - "tasarruf"
+  - "güvenlik"
+  - "afiş ve kısa mesaj"
+
+yasakli_icerikler:
+  - "çok uzun afiş metinleri"
+  - "birden fazla ana konu"
+  - "soyut ve örtük mesajlar"
+  - "ana fikir / mesaj buldurma"
+  - "birden fazla doğru seçenek"
+  - "yalnızca metinden çözülebilen yapı"
+  - "yoğun veri içeren afişler"
+
+ornek_sablon:
+  ust_metin: "Kısa tanıtım cümlesi"
+  gorsel: "Başlık, kısa açıklama ve konu görseli içeren afiş"
+  soru_koku: "Yukarıdaki afişten aşağıdaki sonuçlardan hangisi çıkarılamaz?"
+  secenekler:
+    A: "................................"
+    B: "................................"
+    C: "................................"

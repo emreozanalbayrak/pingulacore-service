@@ -1,0 +1,278 @@
+# templates/beceri_biyografi.yaml
+# Kaynak: MEB Beceri Temelli Soru Bankasi - Biyografi
+#
+# BECERI TEMELLI BIYOGRAFI FORMATI
+# Biyografi metni verilir, ogrenci kronolojik ve olgusal analiz sorusunu cevaplar
+#
+# MANTIK: 1 secenekte dogru cevap, 4 secenekte yanlis cevaplar
+# Secenekler TAM CUMLE formatindadir (3-25 sozcuk)
+
+meta:
+  id: "beceri_biyografi"
+  ad: "Beceri Temelli - Biyografi"
+  sinif_seviyesi: 5
+  aciklama: "Biyografi metinleri uzerinden beceri temelli sorular"
+  kaynak: "MEB Beceri Temelli Soru Bankasi"
+  frequency: "~6% of beceri temelli questions"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Biyografi baglami + soru koku + 5 tam cumle secenek (beceri temelli)"
+
+  paragraph:
+    required: true
+    word_count_min: 100
+    word_count_max: 160
+    sentence_count_min: 5
+    sentence_count_max: 9
+    stil: "bilgilendirici"
+    kurallar:
+      - "Bir kisinin hayatini anlatan metin olustur"
+      - "Kronolojik siralama kullan"
+      - "Kisinin basarilari ve katkilarini vurgula"
+      - "Tarihsel baglam icersin"
+      - "Gercekci ve dogrulanabilir bilgiler kullan"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 5
+    labels: ["A", "B", "C", "D", "E"]
+    word_count_min: 3
+    word_count_max: 25
+    style: "complete_sentence"
+    correct_type: "matches"
+    correct_count: 1
+
+  questions_per_context: 2
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ALANLARI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  context_type: "BIYOGRAFI"
+  context_label: "Biyografi"
+  skill_level: "KB2"
+  process_component: "Biyografik metinde kronolojik siralama, katki analizi ve deger cikarimi"
+  skill_areas:
+    - "anlama"
+    - "cikarimlama"
+    - "analiz"
+    - "siniflandirma"
+    - "degerlendirme"
+  answer_key_explanation: true
+  question_patterns:
+    - "Bu kisinin en onemli katkisi nedir?"
+    - "Metne gore hangi bilgi dogrudur?"
+    - "Kronolojik siralama nasil kurulmustur?"
+    - "Bu kisinin hayatindan hangi ders cikarilabilir?"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # Anlam / Bilgi
+  - "<b>Bu metne göre aşağıdakilerden hangisi doğrudur?</b>"
+  - "<b>Metne göre aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  - "<b>Metinden aşağıdaki <u>çıkarımlardan hangisi yapılamaz</u>?</b>"
+  # Katkı / Kronoloji
+  - "<b>Bu kişinin en önemli katkısı aşağıdakilerden hangisidir?</b>"
+  - "<b>Metindeki olayların kronolojik sırası aşağıdakilerden hangisinde doğru verilmiştir?</b>"
+  - "<b>Bu kişinin hayatından çıkarılabilecek en önemli ders aşağıdakilerden hangisidir?</b>"
+  # Analiz / Değerlendirme
+  - "<b>Metne göre bu kişiyi başarılı kılan temel özellik aşağıdakilerden hangisidir?</b>"
+  - "<b>Metindeki bilgilere göre aşağıdakilerden hangisine ulaşılabilir?</b>"
+  # Dönüm Noktası / Dönem Koşulları (PDF kaynak)
+  - "<b>Metne göre bu kişinin yaşamındaki dönüm noktası aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu kişinin yaşam öyküsünden çıkarılabilecek en kapsamlı değerlendirme aşağıdakilerden hangisidir?</b>"
+  - "<b>Metindeki bilgilere göre bu kişinin başarısının temel nedeni aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu kişinin yaşadığı dönemin koşulları düşünüldüğünde aşağıdakilerden hangisi söylenebilir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Biyografi icerigiyle uyumlu, kronolojik ve olgusal olarak dogru cevap"
+  kurallar:
+    - "Metin icerigiyle desteklenmeli"
+    - "Kronolojik tutarlilik saglanmali"
+    - "Tam cumle formatinda olmali (3-25 sozcuk)"
+    - "Kisinin basarilarini veya katkilarini dogru yansitmali"
+    - "Baglam olmadan cevaplanamaz olmali"
+    - "Ust duzey dusunme becerisi gerektirmeli"
+    - "Bilissel surec bilesenini hedeflemeli"
+  ornekler:
+    - biyografi: "Ali Kuscu, 15. yuzyilda yasasmis unlu bir Turk astronomudur. Semerkant'ta Ulug Bey'in ogrencisi olmus, daha sonra Istanbul'da Fatih Sultan Mehmet doneminde calislamistir..."
+      dogru: "Ali Kuscu hem Semerkant'ta hem Istanbul'da bilimsel calismalar yapmistir"
+      neden: "Metinde her iki sehirde de calistiği belirtilmektedir"
+    - biyografi: "Cahit Arf, 1910 yilinda Selanik'te dogmus bir Turk matematikcidir. Arf Degismezi matematik dunyasinda buyuk yanki uyandirmistir..."
+      dogru: "Cahit Arf matematikte uluslararasi alanda taninan onemli bir kesfif yapmistir"
+      neden: "Arf Degismezi'nin dunyada taninirligi metinde vurgulanmaktadir"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# LLM biyografi iceriğine gore en uygun 4 stratejiyi secer
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select a notable person for biography"
+      details: "Turk veya dunya tarihinden onemli bir kisinin biyografisini sec"
+
+    - step: 2
+      action: "Generate biography text (100-160 words) with chronological info"
+      details: |
+        Biyografi metninde:
+        - Kronolojik siralama olmali
+        - Kisinin basarilari ve katkilari vurgulanmali
+        - Tarihsel baglam icermeli
+        - Gercekci ve dogrulanabilir bilgiler kullanilmali
+
+    - step: 3
+      action: "Create correct answer as complete sentence"
+      details: |
+        Dogru cevap:
+        - Metindeki bilgilerle desteklenmeli
+        - Kronolojik tutarlilik saglanmali
+        - Tam cumle formatinda olmali (3-25 sozcuk)
+
+    - step: 4
+      action: "Create 4 wrong answers using strategies"
+      details: |
+        Her yanlis secenek icin farkli strateji kullan:
+        - 1x kronolojik siralama hatasi iceren
+        - 1x kisiyle iliskili ama metinde desteklenmeyen bilgi
+        - 1x kismen dogru ama genellemis cevap
+        - 1x mantikli gorunen ama olgusal olarak yanlis cevap
+        Tum secenekler ayni formatta olmali (tam cumle, 3-25 sozcuk)
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D-E seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# ORNEK SORULAR
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - konu: "Ali Kuscu biyografisi"
+    dogru_cevap: "C"
+    secenekler:
+      A: "Ali Kuscu yalnizca Istanbul'da calismistir"
+      B: "Ulug Bey Ali Kuscu'nun ogrencisidir"
+      C: "Ali Kuscu hem Semerkant'ta hem Istanbul'da bilimsel calismalar yapmistir"
+      D: "Ali Kuscu 16. yuzyilda yasamistir"
+      E: "Ali Kuscu edebiyat alaninda unludur"
+    dogru_cevap_icerigi: "Ali Kuscu hem Semerkant'ta hem Istanbul'da bilimsel calismalar yapmistir"
+    neden: "Metinde her iki sehirde de calistiği belirtilmektedir"
+
+  - konu: "Cahit Arf biyografisi"
+    dogru_cevap: "A"
+    secenekler:
+      A: "Cahit Arf matematikte uluslararasi alanda taninan onemli bir kesfif yapmistir"
+      B: "Cahit Arf Istanbul'da dogmustur"
+      C: "Arf Degismezi yalnizca Turkiye'de bilinmektedir"
+      D: "Cahit Arf fizik alaninda calismistir"
+      E: "Cahit Arf 19. yuzyilda yasamistir"
+    dogru_cevap_icerigi: "Cahit Arf matematikte uluslararasi alanda taninan onemli bir kesfif yapmistir"
+    neden: "Arf Degismezi'nin dunyada taninirligi metinde vurgulanmaktadir"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  # Asama 0: Kimlik ve Olcme Niyeti
+  identity:
+    - "Soru bir beceriyi mi olcuyor, bilgi hatirlamayi mi?"
+    - "Hedef beceri seviyesi uygun mu?"
+    - "Surec bileseni dogru hedeflenmis mi?"
+
+  # Asama 1: Baglam Secimi
+  context:
+    - "Baglam olmadan soru cozulebilir mi? (Hayir olmali)"
+    - "Baglam fonksiyonel mi? (Dekoratif degil)"
+    - "Baglam cevabi dogrudan veriyor mu? (Vermemeli)"
+    - "Baglam otantik mi? (Gercek hayattan)"
+    - "Kelime sayisi 100-160 arasinda mi?"
+    - "Kronolojik siralama var mi?"
+    - "Kisinin basarilari ve katkilari vurgulanmis mi?"
+    - "Tarihsel baglam dogru mu?"
+
+  # Asama 2: Soru ve Secenekler
+  question:
+    - "Soru koku net ve anlasilir mi?"
+    - "Cift olumsuz var mi? (Olmamali)"
+    - "Tek dogru cevap var mi?"
+
+  options:
+    - "Celdiriciler belirli bilissel hatalari temsil ediyor mu?"
+    - "Eleme yoluyla cevaplanabilir mi? (Olmamali)"
+    - "Format farkliligi ile dogru cevap belli oluyor mu? (Olmamali)"
+    - "Tum secenekler benzer uzunlukta mi?"
+    - "5 secenek var mi (A-B-C-D-E)?"
+
+  # Asama 3: Etik
+  ethics:
+    - "Cinsiyet/etnik onyargi var mi? (Olmamali)"
+    - "Yas grubuna uygun mu?"
+
+  # Asama 4: Dil
+  language:
+    - "Turkce dil bilgisi dogru mu?"
+    - "Sinif seviyesine uygun mu?"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_1_donem_konular.txt"
+    - "5_sinif_sosyal_bilgiler_2_donem_konular.txt"
+    - "5_sinif_turkce_1_donem_konular.txt"
+    - "5_sinif_turkce_2_donem_konular.txt"
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_din_kulturu_konular.txt"
+
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+        description: "Ana unite"
+      - name: "alt_unite"
+        description: "Alt unite"
+      - name: "konu"
+        description: "Ana konu"
+      - name: "alt_konu"
+        description: "Alt konu"
+
+  generation_rules:
+    - "Biyografi yazilamaya uygun onemli kisileri tercih et"
+    - "Turk bilim insanlari, sanatcilar, tarih kisilikleri ideal"
+    - "Kronolojik bilgi cikarilabilecek kisileri sec"

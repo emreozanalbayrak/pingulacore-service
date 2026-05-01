@@ -1,0 +1,137 @@
+meta:
+  id: senaryo_tablo
+  ad: Senaryo + Tablo
+  sinif_seviyesi: 5
+  aciklama: Senaryo ve tablo/anket üzerinden problem çözme, yorum, koşullu ve tablo yorumlama soruları
+  kaynak: kadirhocasorukokleri.md
+  frequency: High
+context:
+  type: senaryo_tablo
+  question_count: 4
+  question_count_min: 3
+  question_count_max: 4
+  generation:
+    word_count_min: 100
+    word_count_max: 200
+    structure:
+    - Birden fazla karakteri (isimli, çoğul) içeren bir senaryo oluştur (3-5 cümle)
+    - Karakterler bir problemi çözmeye çalışıyor olmalı
+    - Senaryoya uygun bir HTML tablosu ekle (puanlama/kriter tablosu, en az 3 satır, 3-4 sütun)
+    - Tablo <table>, <tr>, <th>, <td> etiketleriyle oluşturulmalı
+    - Tabloda seçeneklerin kriterlere göre puanlandığı veya karşılaştırıldığı bir yapı olmalı
+    - Bağlam metninde karakterlerin YORUMLARI yer ALMAMALI — yorumlar yalnızca soru köklerinde verilmeli. Karakterler senaryo içinde OLAY yaşasın, YORUM yapmasın.
+    kurallar:
+    - Senaryo 5. sınıf seviyesinde, günlük hayattan bir karar verme durumu olmalı
+    - 'KRİTİK — SENARYO KAPSAMI: Senaryo sadece DURUMU ve MERAKı anlatsın, CEVAPLARI vermesin!'
+    - Detaylı bilgiler ve veriler SADECE tablo/grafikte olmalı — senaryo bunları içermemeli
+    - Soruların cevabı senaryodan değil tablo/grafikten çıkarılmalı
+    - Karakterler birlikte karar veriyor olmalı
+    - Tablo verileri somut ve karşılaştırılabilir olmalı
+    - Senaryoda bir olay/durum değişikliği olasılığı bulunmalı (koşullu soru için)
+    - Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)
+  questions:
+  - slot: 1
+    type: problem_cozme
+    soru_kokleri:
+    - <b>…Çoğul Özne…'nin … yaparak çözmeye çalıştığı durum aşağıdakilerden hangisidir?</b>
+    - <b>Bu metne göre …Özne…'nın yaşadığı temel problem aşağıdakilerden hangisidir?</b>
+    - <b>Aşağıdakilerden hangisi …Özne…'nın yaşadığı problemi en iyi şekilde özetlemektedir?</b>
+    - <b>…Özne… durumunda çözülmesi gereken asıl mesele nedir?</b>
+    - <b>Tablodaki verilere dayanilarak asagidaki cikarimlardan hangisi yapilabilir?</b>
+    options_style: complete_sentence
+    word_count_min: 5
+    word_count_max: 20
+    beceri:
+      katman: KB3
+      bilesenler:
+      - cikarim_yapma
+      - degerlendirme
+      surec_bileseni: problemi_yapilandirma
+  - slot: 2
+    type: yorum_hareket
+    soru_kokleri:
+    - <b>…Özne…, arkadaşlarıyla yaptığı konuşmada "…Yorum…" yorumunu yapmıştır. Bu yorumdan hareketle hangi …'yı tercih etmiş olabilirler?</b>
+    options_style: short_phrase
+    word_count_min: 2
+    word_count_max: 12
+    beceri:
+      katman: KB2
+      bilesenler:
+      - yorumlama
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 3
+    type: kosullu
+    soru_kokleri:
+    - <b>…Olay… olursa aşağıdaki durumlardan hangisinin yaşanması beklenebilir?</b>
+    - <b>Eğer mevcut koşullar değiştirilseydi bu durum genel sonucu nasıl etkilerdi?</b>
+    - <b>Eger mevcut kosullar degistirilseydi, bu durum genel sonucu nasil etkilerdi?</b>
+    options_style: complete_sentence
+    word_count_min: 5
+    word_count_max: 20
+    beceri:
+      katman: KB3
+      bilesenler:
+      - cikarim_yapma
+      - degerlendirme
+      surec_bileseni: problemi_yapilandirma
+  - slot: 4
+    type: tablo_anket
+    soru_kokleri:
+    - <b>…Çoğul Özne…'nin puanlamaları dikkate alındığında aşağıdakilerden hangisi söylenebilir?</b>
+    - <b>…Özne…, aşağıdakilerden hangisini yaparsa … yapabilir?</b>
+    options_style: complete_sentence
+    word_count_min: 5
+    word_count_max: 20
+    beceri:
+      katman: KB2
+      bilesenler:
+      - yorumlama
+      surec_bileseni: bilgiyi_cikartma
+header_template: 1-4. soruları aşağıdaki senaryo ve tabloya göre cevaplayınız.
+format:
+  type: llm_generated_html
+  description: Senaryo + Tablo bağlamı üzerinden 4 soru
+  paragraph:
+    required: true
+    word_count_min: 100
+    word_count_max: 200
+    sentence_count_min: 3
+    sentence_count_max: 10
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 2
+    word_count_max: 20
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Senaryo ve/veya tablodaki bilgilerle doğrudan desteklenen cevap
+  kurallar:
+  - Problem çözme sorusunda doğru cevap karakterlerin çözmeye çalıştığı durumu yansıtmalı
+  - Yorum sorusunda doğru cevap yapılan yorumla tutarlı tercih olmalı
+  - Koşullu soruda doğru cevap senaryodaki verilerle mantıksal olarak beklenen sonuç olmalı
+  - Tablo sorusunda doğru cevap tablodaki verilerle kanıtlanabilir olmalı
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: ''teleskop'' → ''mercekli araç'' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: YANLIS_PROBLEM
+    aciklama: Asıl problemi değil yan bir durumu problem olarak sunma
+    ornek: Karakterlerin karşılaştığı esas sorunu yanlış tanımlama
+  - ad: VERI_CARPITMA
+    aciklama: Tablodaki bir veriyi yanlış aktarma veya karıştırma
+    ornek: Tabloda 15 yazarken seçenekte 25 yazma
+  - ad: YANLIS_CIKARIM
+    aciklama: Koşuldan yanlış bir sonuç çıkarma
+    ornek: Koşul gerçekleşse bile beklenmeyecek bir durumu sunma
+use_shared_strategies: false

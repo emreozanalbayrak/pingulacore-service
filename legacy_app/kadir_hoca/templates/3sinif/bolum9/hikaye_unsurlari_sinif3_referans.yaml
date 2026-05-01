@@ -1,0 +1,386 @@
+meta:
+  id: "hikaye_unsurlari_sinif3_standart_gorselli_dort_secenekli"
+  ad: "Hikâye Unsurları"
+  sinif_seviyesi: 3
+  ders: "Türkçe"
+  bolum: "3. Sınıf Türkçe Paragraf Kitabı"
+  alt_bolum: "9. Hikâye Unsurları"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    3. sınıf öğrencisi için kısa bir hikâye ya da öyküleyici metinde
+    Kişi, Olay, Mekan ve Zaman unsurlarını fark ettirmeye yönelik,
+    görsel destekli ve 4 seçenekli standart soru üretim şablonu.
+  kullanim_notu: >
+    Bu şablon, harici olarak kullanılan 3. Sınıf TYMM Ortak Kuralları YAML'ı,
+    3. sınıf öğretim programı ve 3. sınıf MEB Türkçe kitapları ile birlikte
+    doğrulanmalıdır.
+
+format:
+  type: "llm_generated_html"
+  description: "Görsel + kısa hikâye/öyküleyici metin + soru kökü + 4 seçenek"
+
+  question_variant:
+    allowed:
+      - "metinle_ilgili_hangisi_dogrudur"
+      - "hangi_hikaye_unsurlari_belirtilmistir"
+      - "hangi_hikaye_unsuru_belirtilmemistir"
+      - "hangi_hikaye_unsuru_dogrudur"
+    default: "metinle_ilgili_hangisi_dogrudur"
+
+  text:
+    required: true
+    text_variant_allowed:
+      - "short_narrative"
+    sentence_count_min: 4
+    sentence_count_max: 6
+    word_count_min: 38
+    word_count_max: 85
+    style: "simple_clear_primary_text"
+    kurallar:
+      - "Metin kısa bir hikâye ya da öyküleyici anlatım biçiminde kurulmalıdır."
+      - "Metinde en az 2 hikâye unsuru açıkça bulunmalıdır."
+      - "İdeal olarak kişi ve olay açıkça verilmelidir."
+      - "Mekan ve zaman unsurları açıkça verilebilir ya da yalnız biri açık olabilir."
+      - "Metin 3. sınıf öğrencisinin anlayabileceği kadar açık, sade ve akıcı olmalıdır."
+      - "Metin dış bilgi gerektirmemelidir."
+      - "Metinde anlatıcı bakış açısı, çatışma türü, yardımcı karakter işlevi gibi ileri çözümleme gerektiren yapı kurulmaz."
+      - "Soru, kim, ne oldu, nerede oldu, ne zaman oldu düzeyinde kalmalıdır."
+      - "Duygu mekan alabilir; ancak asıl odak hikâye unsurları olmalıdır."
+      - "KRITIK: Hikaye unsurlari YALNIZ 4 tanedir: Kişi, Zaman, Mekan, Olay. Bu 4 unsur disinda hicbir sey hikaye unsuru olarak sunulmaz (anlatici, olay orgusu, tema vb. YASAK)."
+
+  hikaye_unsurlari_kurallari:
+    kisi:
+      tanim: "Olayı yaşayan, konuşan, etkilenen insan, hayvan veya hayali varlıklar"
+      kurallar:
+        - "Kişi adı veya kişi türü metinde açıkça anlaşılmalıdır."
+        - "Kişi sorularında temel kahraman ya da geçen kişi ölçülmelidir."
+    olay:
+      tanim: "Hikâyede olan şey, yaşanan durum veya yapılan iş"
+      kurallar:
+        - "Olay kısa ve açık olmalıdır."
+        - "Olay metnin ana ekseni olmalıdır."
+    mekan:
+      tanim: "Hikâyenin geçtiği mekân"
+      kurallar:
+        - "Mekan açıkça verilebileceği gibi basit bağlamla anlaşılabilir olabilir."
+        - "Mekan belirsizse soru buna göre kurulmalı; olmayan bilgi varmış gibi sorulmamalıdır."
+    zaman:
+      tanim: "Hikâyenin ne zaman geçtiğini gösteren ifade"
+      kurallar:
+        - "Zaman sabah, akşam, kış, bayram sabahı, ilk okul günü gibi açık düzeyde olmalıdır."
+        - "Belirsiz zaman varsa zaman unsuru sorusuna temel yapılmamalıdır."
+
+  visual:
+    required: true
+    description: "Metnin ana olayını veya temel kahramanını destekleyen işlevsel görsel"
+    placement: "text_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illüstrasyon"
+      - "tek sahneli fotoğraf benzeri çizim"
+      - "tek olay veya tek kahraman odaklı sahne"
+      - "hikâyenin geçtiği ortamı destekleyen sade görsel"
+    kurallar:
+      - "Her soru için görsel zorunludur."
+      - "Görsel metnin ana içeriğiyle açık uyumlu olmalıdır."
+      - "Görsel süs olmamalı, bağlamı desteklemelidir."
+      - "Görsel tek başına doğru cevabı açıkça vermemelidir."
+      - "Görsel ile metin birlikte değerlendirildiğinde hikâye unsurları daha netleşebilir."
+      - "Görsel dikkat dağıtıcı gereksiz ayrıntılar içermemelidir."
+    yasaklar:
+      - "dekoratif ve metinden bağımsız görsel"
+      - "çok sahneli karmaşık kolaj"
+      - "birden fazla olayın iç içe verildiği karışık kompozisyon"
+
+  stem:
+    required: true
+    selection: "random_from_list_by_variant"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    correct_count: 1
+    style_by_variant:
+      metinle_ilgili_hangisi_dogrudur: "short_judgment"
+      hangi_hikaye_unsurlari_belirtilmistir: "element_set"
+      hangi_hikaye_unsuru_belirtilmemistir: "element_label"
+      hangi_hikaye_unsuru_dogrudur: "short_judgment"
+    word_count_min: 1
+    word_count_max: 12
+    kurallar:
+      - "3. sınıfta her soru 4 seçenekli olmalıdır."
+      - "Seçenekler kısa, sade ve 3. sınıf düzeyinde olmalıdır."
+      - "Doğru seçenek yalnız metinde açıkça bulunan ya da basit biçimde çıkarılabilen hikâye unsuruna dayanmalıdır."
+      - "Yanlış seçenekler metne yakın görünebilir; ancak açık bilgiyle çelişmelidir."
+      - "Birden fazla makul doğru seçenek oluşmamalıdır."
+
+soru_kokleri:
+  metinle_ilgili_hangisi_dogrudur:
+    - "Bu metinle ilgili aşağıdakilerden hangisi doğrudur?"
+    - "Bu hikâye ile ilgili aşağıdakilerden hangisi doğrudur?"
+    - "Metne göre aşağıdakilerden hangisi söylenebilir?"
+    - "Aşağıdakilerden hangisi bu metin için doğrudur?"
+    - "Parçaya göre aşağıdakilerden hangisi doğrudur?"
+
+  hangi_hikaye_unsurlari_belirtilmistir:
+    - "Bu metinde aşağıdaki hikâye unsurlarından hangileri belirtilmiştir?"
+    - "Bu hikâyede aşağıdaki unsurlardan hangileri vardır?"
+    - "Metinde verilen hikâye unsurları hangileridir?"
+    - "Bu parçada hangi hikâye unsurlarına mekan verilmiştir?"
+    - "Aşağıdaki hikâye unsurlarından hangileri bu metinde vardır?"
+
+  hangi_hikaye_unsuru_belirtilmemistir:
+    - "Bu metinde aşağıdaki hikâye unsurlarından hangisi belirtilmemiştir?"
+    - "Bu hikâyede aşağıdaki unsurlardan hangisine mekan verilmemiştir?"
+    - "Parçada aşağıdaki hikâye unsurlarından hangisi yoktur?"
+    - "Aşağıdakilerden hangisi bu metinde belirtilmemiştir?"
+    - "Bu metinde hangi hikâye unsuru açıkça verilmemiştir?"
+
+  hangi_hikaye_unsuru_dogrudur:
+    - "Bu metne göre aşağıdakilerden hangisi hikâye unsurlarından biri olarak doğrudur?"
+    - "Parçadaki hikâye unsurlarına göre aşağıdakilerden hangisi doğrudur?"
+    - "Bu hikâyede verilen unsurlardan biri aşağıdakilerden hangisidir?"
+    - "Aşağıdakilerden hangisi bu metindeki hikâye unsuruna uygundur?"
+    - "Metindeki hikâye unsurlarından biri aşağıdakilerden hangisidir?"
+
+hikaye_unsuru_kume_secenekleri:
+  izinli_kumeler:
+    - "Kişi"
+    - "Olay"
+    - "Mekan"
+    - "Zaman"
+    - "Kişi – olay"
+    - "Kişi – mekan"
+    - "Kişi – zaman"
+    - "Olay – mekan"
+    - "Olay – zaman"
+    - "Mekan – zaman"
+    - "Kişi – olay – mekan"
+    - "Kişi – olay – zaman"
+    - "Kişi – mekan – zaman"
+    - "Olay – mekan – zaman"
+    - "Kişi – olay – mekan – zaman"
+  kurallar:
+    - "Küme seçenekleri yalnız metinde açıkça bulunan unsurlara göre hazırlanmalıdır."
+    - "Belirsiz olan unsur açık verilmiş gibi kabul edilmemelidir."
+    - "Kişi – olay – mekan – zaman tipi seçenekler yalnız metin gerçekten hepsini veriyorsa kullanılmalıdır."
+
+beceri_odagi:
+  birincil_beceri:
+    - "Hikâye unsurlarını bulma"
+  ikincil_beceriler:
+    - "Kişi, Olay, Mekan ve Zaman bilgisini ayırt etme"
+    - "Metindeki açık bilgileri fark etme"
+    - "Belirtilen ve belirtilmeyen unsurları ayırma"
+    - "Görsel ve metni birlikte değerlendirerek hikâye bağlamını anlama"
+
+dogru_cevap:
+  tanim: "Metinde açıkça verilen ya da basit biçimde çıkarılabilen hikâye unsuruna dayanan doğru seçenek"
+  kurallar:
+    - "Doğru cevap metinde açıkça bulunan hikâye unsuruna dayanmalıdır."
+    - "Doğru cevap dış bilgi gerektirmemelidir."
+    - "Doğru cevap 3. sınıf öğrencisinin dikkatli okuyarak bulabileceği açıklıkta olmalıdır."
+    - "Mekan veya zaman açık değilse bunlar doğru seçenek içinde kesin bilgi gibi sunulmamalıdır."
+    - "Hikâye unsurları küme sorularında yalnız metinde gerçekten bulunan unsurlar seçilmelidir."
+
+yanlis_secenek_stratejileri:
+  count_per_question: 3
+  strategy_pool:
+    - id: "metinde_gecmeyen_ayrinti"
+      tanim: "Metinde hiç verilmeyen mekan, zaman veya kişi ayrıntısını doğruymuş gibi sunma"
+
+    - id: "yakın_ama_yanlis_hikaye_unsuru"
+      tanim: "Metne yakın görünen ama yanlış unsur veya yanlış unsur kümesi sunma"
+
+    - id: "olay_yer_zaman_karistirma"
+      tanim: "Metindeki olay, mekan ve zaman bilgisini birbiriyle karıştıran seçenek"
+
+    - id: "kismi_dogru_kismi_yanlis"
+      tanim: "Bir kısmı metne uyar gibi görünür ama tamamı doğru değildir"
+
+  secim_kurali:
+    - "Her soruda 3 yanlış seçenek farklı stratejilerden seçilmelidir."
+    - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+    - "En az 1 yanlış seçenek metinde geçmeyen ayrıntı içermelidir."
+    - "Hikâye unsurları küme sorularında yanlış kümeler metne yakın ama eksik veya fazla unsur içermelidir."
+
+zorluk_duzeyleri:
+  kolay:
+    text:
+      kurallar:
+        - "Metinde kişi ve olay açıkça verilmelidir."
+        - "Mekan veya zaman unsurlarından en az biri açıkça verilmelidir."
+        - "Doğru cevap doğrudan metinden bulunabilmelidir."
+    preferred_variants:
+      - "metinle_ilgili_hangisi_dogrudur"
+      - "hangi_hikaye_unsurlari_belirtilmistir"
+    distractors:
+      kurallar:
+        - "1 seçenek metinde geçmeyen ayrıntı içermelidir."
+        - "1 seçenek hikâye unsurunu eksik vermelidir."
+        - "1 seçenek mekan veya zamanı yanlış vermelidir."
+    difficulty_note: >
+      Kolay düzeyde öğrenci kişi, olay, mekan ve zaman gibi açık bilgileri doğrudan fark eder.
+
+  orta:
+    text:
+      kurallar:
+        - "Metinde kişi ve olay açık, mekan veya zaman daha dolaylı olabilir."
+        - "Doğru cevap için metnin tamamı düşünülmelidir."
+        - "Yanlış seçenekler metne yakın görünebilir."
+    preferred_variants:
+      - "metinle_ilgili_hangisi_dogrudur"
+      - "hangi_hikaye_unsuru_belirtilmemistir"
+      - "hangi_hikaye_unsuru_dogrudur"
+      - "hangi_hikaye_unsurlari_belirtilmistir"
+    distractors:
+      kurallar:
+        - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+        - "Yanlış seçeneklerden biri kısmi doğru-kısmi yanlış olmalıdır."
+        - "Yanlış seçeneklerden biri mekan-zaman karışıklığı taşımalıdır."
+    difficulty_note: >
+      Orta düzeyde öğrenci metindeki açık ve dolaylı hikâye unsurlarını ayırt etmelidir.
+
+  zor:
+    text:
+      kurallar:
+        - "Metinde dört unsurun hepsi bulunmak zorunda değildir."
+        - "Öğrenci, açıkça verilen ile verilmeyen bilgiyi dikkatle ayırmalıdır."
+        - "Zor düzeyde bile bakış açısı, çatışma türü veya karakter işlevi gibi ileri analizler kullanılmaz."
+    preferred_variants:
+      - "hangi_hikaye_unsuru_belirtilmemistir"
+      - "hangi_hikaye_unsurlari_belirtilmistir"
+      - "metinle_ilgili_hangisi_dogrudur"
+    distractors:
+      kurallar:
+        - "3 yanlış seçeneğin en az 2'si metne yakın görünmelidir."
+        - "Yanlış seçeneklerden biri metinde olmayan ama mantıklı görünen ayrıntı içermelidir."
+        - "Yanlış seçeneklerden biri unsur kümesini fazla ya da eksik vermelidir."
+    difficulty_note: >
+      Zor düzeyde öğrencinin açık bilgi ile metinde verilmeyen bilgiyi karıştırmadan doğru unsurları seçmesi beklenir.
+
+difficulty_selection_policy:
+  default: "Orta"
+  allowed_values: ["Kolay", "Orta", "Zor"]
+  hard_limits:
+    - "Her soru 4 seçenekli olmalıdır."
+    - "Her soru için görsel zorunludur."
+    - "Metin 3. sınıf düzeyini aşan ağır soyutluk içermemelidir."
+    - "Zor düzey seçilse bile soru anlatıcı bakış açısı, çatışma türü, yardımcı karakter işlevi gibi 4. sınıf üstü analizlere dönüşemez."
+    - "Kolay düzeyde aşırı yakın çeldirici yükü kurulmamalıdır."
+
+sinif_uygunluk_kurallari:
+  uygundur:
+    - "Kim, ne oldu, nerede, ne zaman düzeyinde hikâye unsuru soruluyorsa"
+    - "Kişi, olay, mekan ve zaman açık ya da basit biçimde çıkarılabiliyorsa"
+    - "Sorular açık bilgiye ve temel fark etmeye dayanıyorsa"
+  yasaktir:
+    - "Anlatıcı bakış açısı analizi"
+    - "Çatışma türleri analizi"
+    - "Yardımcı karakter işlevi analizi"
+    - "Ağır sembolik ya da çok katmanlı olay çözümleme"
+  ucuncu_sinifa_kayar:
+    - "Kişi, olay, mekan ve zamanı ayırt etme"
+    - "Metinde hangi hikâye unsurlarının bulunduğunu bulma"
+    - "Belirtilen ve belirtilmeyen unsurları ayırma"
+  dorduncu_sinifa_kayar:
+    - "Karakter işlevi ve anlatım tekniği yorumlatma"
+    - "Çatışma ve bakış açısı çözümletme"
+    - "Örtük, tartışmalı veya çok katmanlı unsur yorumlatma"
+
+konu_alani:
+  izinli_ornekler:
+    - "mahalle yaşamı"
+    - "okulun ilk günü"
+    - "aile içi kısa olaylar"
+    - "arkadaşlık"
+    - "yardımlaşma"
+    - "bayram günü"
+    - "okul etkinlikleri"
+    - "kısa günlük yaşam olayları"
+  kurallar:
+    - "Konu 3. sınıf öğrencisinin anlayabileceği kadar somut ve açık olmalıdır."
+    - "Öyküleyici metin yapısı korunmalıdır."
+    - "Hikâye unsurları doğal biçimde metne yerleştirilmelidir."
+    - "Görselle desteklenebilen konular tercih edilmelidir."
+    - "Dış bilgi gerektirmeyen kısa anlatımlar kullanılmalıdır."
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "3. sınıfa uygun, kısa hikâye unsurları içeren somut bir konu seç"
+    - step: 2
+      action: "Seçilen konu için 4-6 cümlelik kısa bir öyküleyici metin oluştur"
+      details:
+        - "Kişi ve olayı açıkça kur"
+        - "Mekan veya zaman unsurlarından en az birini yerleştir"
+        - "Metni sade ve doğal tut"
+    - step: 3
+      action: "Metni destekleyen işlevsel görsel tasarla"
+      details:
+        - "Görsel ana kişi veya olayı desteklesin"
+        - "Görsel zorunlu olsun"
+        - "Görsel tek başına cevabı vermesin"
+    - step: 4
+      action: "Soru varyantını seç"
+      details:
+        - "metinle_ilgili_hangisi_dogrudur"
+        - "hangi_hikaye_unsurlari_belirtilmistir"
+        - "hangi_hikaye_unsuru_belirtilmemistir"
+        - "hangi_hikaye_unsuru_dogrudur"
+    - step: 5
+      action: "Varyanta uygun 1 doğru ve 3 yanlış seçenek oluştur"
+      details:
+        - "Bir yanlış seçenek metinde olmayan ayrıntı eklesin"
+        - "Bir yanlış seçenek unsur kümesini eksik ya da fazla versin"
+        - "Bir yanlış seçenek olay-mekan-zaman bilgisini karıştırsın"
+    - step: 6
+      action: "Soru kökünü listeden rastgele seç"
+    - step: 7
+      action: "Şıkları A-B-C-D olarak karıştır"
+    - step: 8
+      action: "Harici 3. Sınıf TYMM Ortak Kuralları ile doğrulama yap"
+
+validation_checklist:
+  text:
+    - "Metin kısa ve öyküleyici mi?"
+    - "Metin 3. sınıf düzeyinde açık ve sade mi?"
+    - "Metinde en az 2 hikâye unsuru var mı?"
+    - "Mekan veya zaman açık değilse soru buna uygun kurulmuş mu?"
+    - "Dış bilgi gerektiriyor mu? Gerektiriyorsa reddet."
+
+  visual:
+    - "Görsel zorunlu olarak var mı?"
+    - "Görsel metnin ana kişi veya olayıyla uyumlu mu?"
+    - "Görsel destekleyici ama tek başına cevap verici değil mi?"
+    - "Görsel dekoratif kalmıyor mu?"
+
+  stem:
+    - "Soru kökü seçilen varyanta uygun mu?"
+    - "Soru kökü açık ve 3. sınıf düzeyinde mi?"
+    - "Ekstra beceri yüklemiyor mu?"
+
+  options:
+    - "Toplam 4 seçenek var mı?"
+    - "Doğru seçenek yalnız metne dayanıyor mu?"
+    - "Yanlış seçenekler gerçekten metne aykırı mı?"
+    - "Birden fazla makul doğru seçenek oluşuyor mu? Oluşuyorsa reddet."
+
+  difficulty:
+    - "Zorluk seçilen düzeye göre metin ve çeldirici kuralları uygulanmış mı?"
+    - "Zor düzey bile 3. sınıf sınırında mı?"
+    - "4. sınıfa kayan ileri hikâye çözümleme var mı?"
+
+hard_fail_rules:
+  - "Seçenek sayısı 4 değilse"
+  - "Görsel yoksa"
+  - "Doğru cevap dış bilgi gerektiriyorsa"
+  - "İki veya daha fazla seçenek makul doğruysa"
+  - "Metin 3. sınıf için fazla soyut veya ağırsa"
+  - "Soru hikâye unsurları yerine bakış açısı, çatışma veya karakter işlevi sorusuna kayıyorsa"
+  - "Soru 4. sınıfa kayan ileri anlatı çözümlemesine dönüşüyorsa"
+  - "Görsel metinle uyumsuzsa"
+
+ornek_bicim_notlari:
+  - "Elif nine metninde temel kahraman Elif ninedir; mekan ve zaman açık verilmemiş olabilir."
+  - "Okulun ilk günü metninde kişi, zaman, mekan ve olay unsurlarının hepsi açıkça verilebilir."
+  - "Bu bölümde amaç, hikâyenin temel parçalarını fark ettirmektir; bakış açısı veya çatışma çözümletmek değildir."

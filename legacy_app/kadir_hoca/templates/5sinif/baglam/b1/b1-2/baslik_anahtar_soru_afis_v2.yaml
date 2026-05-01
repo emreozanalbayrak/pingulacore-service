@@ -1,0 +1,110 @@
+# B1.2 — Afişli Başlık/Anahtar/Soru Cevap — Sabit soru kökleri
+meta:
+  id: "baslik_anahtar_soru_afis_v2"
+  ad: "Afişli — Başlık/Anahtar/Soru Cevap (3 Soru) v2"
+  sinif_seviyesi: 5
+  aciklama: "Konuya giriş senaryosu + AI afiş görseli, sabit soru kökleri"
+  frequency: "Medium"
+
+context:
+  type: "baslik_anahtar_soru_afis_v2"
+  question_count: 3
+  question_count_min: 3
+  question_count_max: 3
+  generation:
+    word_count_min: 80
+    word_count_max: 140
+    image_type: "afis"
+    structure:
+      - "KONUYA GİRİŞ yapan kısa bir senaryo oluştur (4-6 cümle)"
+      - "Senaryo konunun GENEL ÇERÇEVESİNİ çizsin — detaylı bilgileri afiş görseli verecek"
+      - "Senaryoda bir veya birkaç karakter olmalı (isimli)"
+      - "Senaryoda en az 2-3 anahtar sözcük belirgin olmalı"
+      - "Senaryoda bazı soruların cevabı verilirken bazılarının cevabı olmayacak şekilde yazılmalı"
+      - "KRİTİK — SENARYO AFİŞİ ANLATMAMALI: Senaryo afişin içeriğini, görselini veya detaylarını TANIMLAMAZ"
+      - "YASAK: 'Aşağıdaki afiş...', 'İnfografikte görüldüğü gibi...' gibi görsele referans veren ifadeler"
+      - "YASAK: HTML tablosu (<table>) EKLEME — sadece düz metin yaz"
+      - "YASAK: Metne BAŞLIK koyma — ne konu başlığı ne numara"
+    kurallar:
+      - "KRİTİK — BAŞLIK YASAĞI: Metne ve görsele konunun ana fikrini veren başlık KOYMA! 1. soruda başlık sorulacak"
+      - "Senaryo 5. sınıf seviyesinde, anlaşılır olmalı"
+      - "Senaryo konuya GİRİŞ yapmalı — afişi ANLATMAMALI"
+      - "Anahtar sözcükler metinde doğal olarak geçmeli"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+    - slot: 1
+      type: "baslik"
+      soru_kokleri:
+        - "<b>Bu afişin başlığı aşağıdakilerden hangisi olabilir?</b>"
+      options_style: "headline_title"
+      word_count_min: 2
+      word_count_max: 6
+      beceri:
+        katman: "KB2"
+        bilesenler: ["ozetleme"]
+        surec_bileseni: "bilgiyi_cikartma"
+    - slot: 2
+      type: "anahtar_sozcuk"
+      soru_kokleri:
+        - "<b>Bu afişteki anahtar sözcükler aşağıdakilerden hangileri olabilir?</b>"
+      options_style: "keyword_set"
+      word_count_min: 2
+      word_count_max: 8
+      beceri:
+        katman: "KB2"
+        bilesenler: ["cozumleme"]
+        surec_bileseni: "bilgiyi_cikartma"
+    - slot: 3
+      type: "soru_cevap"
+      soru_kokleri:
+        - "<b>Aşağıdakilerden hangisi bu metni okuyan birinin cevap bulabileceği sorulardan biri <u>olamaz</u>?</b>"
+      options_style: "question_sentence"
+      word_count_min: 4
+      word_count_max: 15
+      beceri:
+        katman: "KB3"
+        bilesenler: ["cikarim_yapma", "mantiksal_denetleme"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+header_template: "1-3. soruları aşağıdaki bilgilere göre birbirinden bağımsız olarak cevaplayınız."
+
+format:
+  type: "llm_generated_html"
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 140
+    sentence_count_min: 4
+    sentence_count_max: 6
+  stem:
+    required: true
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 15
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+dogru_cevap:
+  tanim: "Afiş ve senaryodan doğru çıkarılan başlık, anahtar sözcük veya soru-cevap"
+  kurallar:
+    - "HATALI YAKLASIM: Metinde geçen bir cümlenin AYNEN seçeneklerde kullanılması YASAK"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin ANLAMCA ÖZDESİ olmalı"
+    - "Doğru seçenek paragraftaki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farklılığı olmalı"
+    - "BİLİMSEL TERİM KORUMASI: Teknik terimler değiştirilmemeli"
+    - "Doğru şık en uzun şık OLMAMALI"
+
+distractors:
+  stratejiler:
+    - ad: "YAKIN_BASLIK"
+      aciklama: "Ana fikirle ilişkili ama tam karşılamayan başlık"
+    - ad: "DETAY_TUZAGI"
+      aciklama: "Bir detayı ana konu gibi sunma"
+    - ad: "CEVABI_VAR"
+      aciklama: "Metinde cevabı bulunan soruyu çeldirici olarak sunma"
+
+use_shared_strategies: false

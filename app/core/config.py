@@ -71,12 +71,28 @@ class Settings:
 
     use_stub_agents: bool
 
+    legacy_geo_yaml_dir: Path
+    legacy_turkce_templates_dir: Path
+    legacy_turkce_meb_books_dir: Path
+    legacy_turkce_data_dir: Path
+    legacy_turkce_configs_dir: Path
+    legacy_turkce_konular_dir: Path
+    legacy_uploads_dir: Path
+    legacy_state_dir: Path
+    legacy_timeout_seconds: int
+
+    auth_token_ttl_hours: int
+    password_min_length: int
+    signup_enabled: bool
+    admin_seed_email: str | None
+    admin_seed_password: str | None
+
 
 def build_settings() -> Settings:
     root_dir = Path(__file__).resolve().parents[2]
     _load_dotenv_file(root_dir)
 
-    primary_yaml = root_dir / "ortak"
+    primary_yaml = root_dir / "legacy_app" / "geometri" / "ortak"
     fallback_yaml = root_dir / "old" / "ortak"
     output_dir = root_dir / "generated_assets"
     catalog_dir = root_dir / "catalog"
@@ -88,11 +104,18 @@ def build_settings() -> Settings:
     anthropic_key = os.getenv("ANTHROPIC_API_KEY")
 
     # PydanticAI's Google provider expects GOOGLE_API_KEY.
-    # If user configured only GEMINI_API_KEY, mirror it for compatibility.
+    # If user configured only GEMINI_API_KEY, mirror it. Drop the duplicate so the
+    # google-genai SDK doesn't emit a warning on every client init.
     if gemini_key and not os.getenv("GOOGLE_API_KEY"):
-        os.environ.setdefault("GOOGLE_API_KEY", gemini_key)
+        os.environ["GOOGLE_API_KEY"] = gemini_key
+    if os.getenv("GOOGLE_API_KEY") and os.getenv("GEMINI_API_KEY"):
+        os.environ.pop("GEMINI_API_KEY", None)
 
     use_stub_default = not (gemini_key or anthropic_key)
+
+    def _path_or_none(env: str) -> Path | None:
+        raw = os.getenv(env)
+        return Path(raw) if raw else None
 
     return Settings(
         root_dir=root_dir,
@@ -109,6 +132,20 @@ def build_settings() -> Settings:
         rule_eval_parallelism=_as_int(os.getenv("RULE_EVAL_PARALLELISM"), 4),
         rule_eval_max_rules=_as_int(os.getenv("RULE_EVAL_MAX_RULES"), 12),
         use_stub_agents=_as_bool(os.getenv("AI_USE_STUB"), use_stub_default),
+        legacy_geo_yaml_dir=Path(os.getenv("LEGACY_GEO_YAML_DIR", str(root_dir / "legacy_app" / "geometri" / "ortak"))),
+        legacy_turkce_templates_dir=Path(os.getenv("LEGACY_TURKCE_TEMPLATES_DIR", str(root_dir / "legacy_app" / "kadir_hoca" / "templates"))),
+        legacy_turkce_meb_books_dir=Path(os.getenv("LEGACY_TURKCE_MEB_BOOKS_DIR", str(root_dir / "meb_books"))),
+        legacy_turkce_data_dir=Path(os.getenv("LEGACY_TURKCE_DATA_DIR", str(root_dir / "data"))),
+        legacy_turkce_configs_dir=Path(os.getenv("LEGACY_TURKCE_CONFIGS_DIR", str(root_dir / "legacy_app" / "kadir_hoca" / "configs"))),
+        legacy_turkce_konular_dir=Path(os.getenv("LEGACY_TURKCE_KONULAR_DIR", str(root_dir / "legacy_app" / "kadir_hoca" / "konular"))),
+        legacy_uploads_dir=Path(os.getenv("LEGACY_UPLOADS_DIR", str(root_dir / ".legacy_uploads"))),
+        legacy_state_dir=Path(os.getenv("LEGACY_STATE_DIR", str(root_dir / ".legacy_state"))),
+        legacy_timeout_seconds=_as_int(os.getenv("LEGACY_TIMEOUT_SECONDS"), 1800),
+        auth_token_ttl_hours=_as_int(os.getenv("AUTH_TOKEN_TTL_HOURS"), 168),
+        password_min_length=_as_int(os.getenv("PASSWORD_MIN_LENGTH"), 8),
+        signup_enabled=_as_bool(os.getenv("SIGNUP_ENABLED"), True),
+        admin_seed_email=(os.getenv("ADMIN_EMAIL") or None),
+        admin_seed_password=(os.getenv("ADMIN_PASSWORD") or None),
     )
 
 
@@ -118,4 +155,6 @@ def get_settings() -> Settings:
     settings.output_dir.mkdir(parents=True, exist_ok=True)
     settings.catalog_dir.mkdir(parents=True, exist_ok=True)
     settings.runs_dir.mkdir(parents=True, exist_ok=True)
+    settings.legacy_state_dir.mkdir(parents=True, exist_ok=True)
+    settings.legacy_uploads_dir.mkdir(parents=True, exist_ok=True)
     return settings

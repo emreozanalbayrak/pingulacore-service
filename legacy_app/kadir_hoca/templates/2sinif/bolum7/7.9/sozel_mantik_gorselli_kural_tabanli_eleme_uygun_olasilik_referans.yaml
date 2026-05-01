@@ -1,0 +1,127 @@
+meta:
+  id: "7_9_kural_tabanli_elemenin_basit_hali_sinif2"
+  ad: "7.9 Kural Tabanlı Eleme / Uygun Olasılığı Bulma"
+  sinif_seviyesi: 2
+  ders: "Türkçe"
+  bolum: "2. Sınıf Paragraf Soru Bankası"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    Görselde verilen nesne, kart, kutu, şifre alanı veya sıra düzeni ile
+    kısa kuralları birlikte kullanarak hangi seçeneğin uygun olabileceğini
+    buldurmaya yönelik, 2. sınıfa uyarlanmış 3 seçenekli standart şablon.
+
+format:
+  tip: "llm_generated_html"
+  aciklama: "Ana görsel + kısa kural bloğu + soru kökü + 3 seçenek"
+
+  cift_kaynak_zorunlu: true
+  sadece_gorselle_cozum_yasak: true
+  sadece_metinle_cozum_yasak: true
+
+  gorsel:
+    gerekli: true
+    aciklama: "Seçilecek düzeni veya nesneleri gösteren sade görsel"
+    kurallar:
+      - "Görsel soru çözümünün zorunlu kaynaklarından biri olmalıdır."
+      - "Görsel somut ve çocuk düzeyine uygun olmalıdır."
+      - "Şifre alanı, kart dizisi, kutu dizisi, renkli sembol dizisi veya benzeri sade yapı kullanılabilir."
+      - "Görsel tek başına cevabı vermemelidir."
+    yasaklar:
+      - "büyük-küçük harf gibi soyut teknik ayrımlar zorunlu kılınmamalıdır"
+      - "uzun kod dizileri"
+      - "5'ten fazla öğeli karmaşık kurgu"
+
+  bilgi_bloku:
+    gerekli: true
+    aciklama: "Seçim için kullanılacak kısa kurallar"
+    kural_sayisi:
+      kolay: 2
+      orta: 3
+      zor: 3
+    kurallar:
+      - "Kurallar kısa, açık ve doğrudan olmalıdır."
+      - "Kurallar somut seçim yapmaya yardımcı olmalıdır."
+      - "İzinli kural türleri: önce/sonra, yan yana gelmeme, sayı toplamı, renk sırası, harf-rakam sayısı."
+      - "Yalnız bir seçenek tüm kuralları sağlamalıdır."
+    yasaklar:
+      - "4 ve üzeri kural"
+      - "birden fazla soyut dil kuralı"
+      - "üst üste iki teknik dil işlemi"
+      - "2. sınıf düzeyini aşan karmaşık kombinasyon"
+
+  soru_koku:
+    gerekli: true
+    secim: "listeden_rastgele"
+
+  secenekler:
+    sayi: 3
+    etiketler: ["A", "B", "C"]
+    dogru_sayisi: 1
+    stil: "kisa_dizi_veya_kisa_secenek"
+    kurallar:
+      - "Seçenekler kısa ve okunabilir olmalıdır."
+      - "Her seçenek tüm kurallara göre değerlendirilebilir olmalıdır."
+      - "Yanlış seçenekler en az bir kuralı bozmalıdır."
+      - "Doğru seçenek tüm kuralları sağlamalıdır."
+
+soru_kokleri:
+  - "Buna göre aşağıdakilerden hangisi olabilir?"
+  - "Verilen kurallara göre doğru seçenek hangisidir?"
+  - "Kurallara uygun olan seçenek aşağıdakilerden hangisidir?"
+  - "Buna göre aşağıdakilerden hangisi seçilebilir?"
+
+beceri_odagi:
+  birincil_beceri:
+    - "Kurala uygun seçeneği bulma"
+  ikincil_beceriler:
+    - "Eleme yapma"
+    - "Kural karşılaştırma"
+    - "Görsel ve metni birleştirme"
+
+zorluk_duzeyleri:
+  kolay:
+    kurallar:
+      - "En fazla 2 kural kullanılmalıdır."
+      - "Kurallar çok somut olmalıdır."
+      - "Seçenek uzunluğu 3-4 karakter/öğe ile sınırlı tutulmalıdır."
+      - "Sayı toplamı kullanılacaksa en fazla tek bir toplam kuralı olmalıdır."
+  orta:
+    kurallar:
+      - "En fazla 3 kural kullanılabilir."
+      - "Kuralların biri sıra, biri sayı, biri yan yana gelmeme olabilir."
+      - "Seçenekler kısa kalmalıdır."
+  zor:
+    kurallar:
+      - "En fazla 3 kısa kural kullanılabilir."
+      - "Doğru seçenek için iki kuralı birlikte elemek gerekebilir."
+      - "Büyük-küçük harf, dil bilgisel teknik ayrım ve çok soyut kural kullanılmamalıdır."
+
+sinif_uygunluk_kurallari:
+  uygundur:
+    - "Kurallar kısa ve somutsa"
+    - "Seçim günlük yaşam nesnesi, basit şifre, renk veya sıra üstünden yapılıyorsa"
+    - "Eleme en fazla 2-3 adım sürüyorsa"
+  yasaktir:
+    - "Büyük-küçük harf zorunluluğu"
+    - "çok sayıda soyut kural"
+    - "uzun şifre ve uzun kod dizisi"
+  ucuncu_sinifa_kayar:
+    - "Kurallar arasında dolaylı ilişki kuruluyorsa"
+    - "Bir kural diğer kuralın yorumuna bağlıysa"
+  dorduncu_sinifa_kayar:
+    - "Çoklu olasılık tartışması ve açıklama istenirse"
+
+validation_checklist:
+  - "Soru yalnız görselle çözülemiyor mu?"
+  - "Soru yalnız metinle çözülemiyor mu?"
+  - "Kural sayısı 3'ü geçmiyor mu?"
+  - "Yalnız bir seçenek tüm kuralları sağlıyor mu?"
+  - "Büyük-küçük harf gibi ağır soyutluk yok mu?"
+  - "Şifre/dizi uzunluğu kısa mı?"
+
+hard_fail_rules:
+  - "4 veya daha fazla kural varsa"
+  - "Büyük-küçük harf zorunluluğu varsa"
+  - "İki veya daha fazla doğru seçenek varsa"
+  - "Soru yalnız metinden çözülebiliyorsa"
+  - "Soru yalnız görselden çözülebiliyorsa"

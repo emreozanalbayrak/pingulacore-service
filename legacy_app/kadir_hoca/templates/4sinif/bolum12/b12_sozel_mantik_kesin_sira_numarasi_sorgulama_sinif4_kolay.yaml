@@ -1,0 +1,174 @@
+# Kaynak: sozel_mantik_kesin_sira_numarasi_sorgulama_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.kolay
+# 4. sinif sözel mantık kesin sıra numarası sorgulama sorusu — kolay duzey
+
+meta:
+  id: "b12_sozel_mantik_kesin_sira_numarasi_sorgulama_sinif4_kolay"
+  ad: "Sözel Mantık ve Muhakeme - Kesin Sıra Numarası Sorgulama Sorusu (Kolay)"
+  sinif_seviyesi: 4
+  aciklama: "Kolay duzey — 5 öğe, 3-4 koşul, en az 1 dolaylı çıkarım, 1-2 ana ihtimal, belirsiz konum yoğunluğu: düşük-orta."
+  frequency: "High"
+
+kesin_sira_sorgulama_senaryolari:
+  - ad: "gecit_toreni_sirasi"
+    aciklama: "Kortej yürüyüşündeki farklı grupların geçiş sırasının numaralandırılması"
+    ornek_setup: "Bahar şenliği geçit töreninde bando, akrobatlar, maskotlar, dansçılar ve sporcular 1'den 5'e kadar numaralandırılmış bir sırayla yürüyecektir."
+
+  - ad: "uzay_mekigi_firlatma_sirasi"
+    aciklama: "Farklı gezegenlere gidecek araştırma mekiklerinin fırlatma rampasından kalkış sırası"
+    ornek_setup: "Uzay üssündeki altı farklı keşif mekiği, art arda 1'den 6'ya kadar belirlenmiş bir sırayla fırlatılacaktır."
+
+  - ad: "teleferik_kabin_sirasi"
+    aciklama: "Zirveye doğru arka arkaya hareket eden teleferik kabinlerinin konum numaraları"
+    ornek_setup: "Zirveye tırmanan bir teleferik hattında kırmızı, mavi, yeşil, sarı ve beyaz kabinler art arda sıralanmıştır."
+
+  - ad: "bayrak_yarisi_kosuculari"
+    aciklama: "Bayrak yarışında koşucuların bayrağı devralma sırası (1. koşucu, 2. koşucu vb.)"
+    ornek_setup: "Bir bayrak yarışında okul takımındaki beş sporcu, 1'den 5'e kadar belirlenmiş sıralarda koşacaktır."
+
+  - ad: "define_haritasi_duraklari"
+    aciklama: "Bir maceradaki numaralandırılmış keşif duraklarına varış sırası"
+    ornek_setup: "Bir define avında kaşifler; Mağara, Şelale, Ulu Ağaç, Tapınak ve Köprü duraklarından 1'den 5'e kadar numaralanmış bir sırayla geçecektir."
+
+  - ad: "ejderha_binicileri_ucus_sirasi"
+    aciklama: "Fantastik bir evrende ejderha binicilerinin kanyondan geçiş sırası"
+    ornek_setup: "Ejderha binicisi altı çırak, dar bir kanyondan 1'den 6'ya kadar uzanan doğrusal bir kuyruk halinde geçmektedir."
+
+  - ad: "drone_gosterisi_kalkis_sirasi"
+    aciklama: "Işık gösterisi yapacak farklı drone takımlarının sahaya çıkış sırası"
+    ornek_setup: "Bir teknoloji festivalinde beş farklı drone takımı, gösteri alanına 1. sıradan 5. sıraya kadar art arda havalanarak girecektir."
+
+  - ad: "antik_tuzak_gecis_sirasi"
+    aciklama: "Maceracıların dar bir koridordaki tek sıra halindeki dizilimi"
+    ornek_setup: "Antik bir tapınakta ilerleyen beş maceracı, tuzaklı koridoru 1'den 5'e kadar numaralanmış tek bir sıra halinde geçmektedir."
+
+  - ad: "siber_veri_aktarim_sirasi"
+    aciklama: "Farklı veri paketlerinin ana sunucuya ulaşma sırası"
+    ornek_setup: "Bir siber güvenlik ağında şifrelenmiş beş farklı veri paketi, ana sunucuya 1'den 5'e kadar numaralanmış bir sırayla ulaşmıştır."
+
+  - ad: "otonom_arac_konvoyu"
+    aciklama: "Sürücüsüz araçların akıllı bir köprüden geçiş sırası"
+    ornek_setup: "Test aşamasındaki beş otonom araç, dar bir köprüden 1'den 5'e kadar doğrusal bir konvoy halinde geçmektedir."
+
+  - ad: "zaman_kapsulu_acilis_sirasi"
+    aciklama: "Farklı yıllara ait zaman kapsüllerinin törenle açılış sırası"
+    ornek_setup: "Tarih müzesinde bulunan beş farklı zaman kapsülü, 1'den 5'e kadar belirlenmiş bir sırayla açılacaktır."
+
+  - ad: "penguen_atlama_sirasi"
+    aciklama: "Buzuldan suya art arda atlayan penguenlerin sırası"
+    ornek_setup: "Bir belgesel çekiminde, işaretlenmiş beş penguen buzuldan suya 1'den 5'e kadar ardışık bir sırayla atlamıştır."
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Setup cümlesi + maddeli koşullar + soru kökü + 4 seçenekten (yalnızca sıra numarası içeren) oluşan kesin sıra sorgulama sorusu (kolay)"
+
+  paragraph:
+    required: true
+    word_count_min: 35
+    word_count_max: 90
+    sentence_count_min: 2
+    sentence_count_max: 8
+    stil: "mantik_bulmacasi"
+
+    amac: >
+      Öğrencinin, doğrusal bir dizilime yerleştirilen kişilerle/varlıklarla ilgili verilen
+      ilişkisel koşulları değerlendirerek, sıranın hangi konumlarının (numaralarının) kesin olarak dolduğunu
+      veya hangilerinin kendi içinde yer değiştirme ihtimali taşıdığını mantıksal çıkarımla bulması gerekir.
+      Kolay düzey: 5 öğe, 3-4 koşul, en az 1 dolaylı çıkarım, 1-2 ana ihtimal, belirsiz konum yoğunluğu düşük-orta.
+
+    kurallar:
+      - "Paragraf iki bölümden oluşur: (1) SETUP CÜMLESİ + (2) MADDELİ KOŞULLAR"
+      - "SETUP CÜMLESİ (1-2 cümle): Sıralamanın neye ait olduğunu açıklar; dizilimin boyutu (örn: 1'den 5'e kadar) ve yönü/yapısı tanıtılır"
+      - "MADDELİ KOŞULLAR 3-4 madde olmalıdır; her koşul • ile başlamalı ve <br> ile ayrılmalıdır"
+      - "FORMAT ŞEKLİ şu mantıkta olmalıdır: Setup cümlesi.<br>Bu sıralamayla ilgili aşağıdaki bilgiler verilmektedir:<br>• Koşul 1<br>• Koşul 2<br>• Koşul 3"
+      - "YASAK: Düz paragraf yazma; mutlaka setup + • maddeli koşul yapısı kullanılmalıdır"
+      - "YASAK: <ul>, <li>, <ol> tag'leri kullanma; yalnızca • karakteri ve <br> kullanılmalıdır"
+      - "Kolay düzey: sıradaki öğe sayısı 5 ile sınırlandırılmalıdır"
+      - "Kolay düzey: dolaylı çıkarım gerektiren koşul sayısı en az 1 olmalıdır"
+      - "Kolay düzey: öğrenci 1-2 alternatif tablo üzerinden sonuca ulaşabilmelidir"
+      - "Koşullar öğrenciyi tam dizilime yaklaştırmalı, ancak en az bir küçük belirsizlik bırakmalıdır"
+      - "Önce gizli sıralama senaryosu kurulmalı; ardından yalnızca bu olasılık tablosuna götüren koşullar yazılmalıdır"
+      - "Koşullar arasında çelişki olmamalıdır"
+      - "Paragrafta hikâye unsurlarıyla ilgili AÇIKLAMA veya EK BİLGİ verme!"
+      - "Paragraf SADECE mantık bulmacasını anlatsın — unsur analizi veya tanımlaması YAPMA"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 5
+    style: "sira_numarasi_ikilisi"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu bilgilere göre hangi sıra numaralarındaki kişilerin yerleri kesin olarak bilinebilir?</b>"
+  - "<b>Bu bilgilere göre aşağıda verilen konumlardan hangilerinde kimin olduğu kesin olarak bellidir?</b>"
+  - "<b>Bu bilgilere göre hangi sıra numaralarındaki kişilerin yerleri kesin olarak <u>bilinemez</u>?</b>"
+  - "<b>Bu bilgilere göre aşağıda verilen konumlardan hangilerinde kimin olduğu kesin olarak söylenemez (kendi aralarında yer değiştirebilirler)?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: >
+    Doğru cevap, yalnızca verilen tüm koşullar birlikte değerlendirilip gizli dizilimdeki
+    kilitlenmiş (kesin) ve yer değiştirebilir (ihtimalli) konumlar tespit edildikten sonra,
+    soru kökünün istediği durumu sağlayan sıra numaralarıdır (Örn: 2. ve 4. sıra).
+  kurallar:
+    - "Doğru cevap SADECE tüm koşullar ve olasılıklar birlikte değerlendirildiğinde ulaşılabilir olmalıdır"
+    - "Doğru cevap 2-5 kelime arasında, SADECE konum/sıra numaralarından oluşmalıdır"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "BELIRSIZ_KONUM_KESIN_SAYMA"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Belirsiz kalan bir konumu kesinmiş gibi sayan ve yanlış sıra numarası veren seçenek"
+    nasil_olusturulur: |
+      Koşullar tam dizilimi kilitlemediğinde bazı konumlar belirsiz kalır. Bu belirsiz konumu tek bir değere sabitleyen ama bunu kanıtlayamayan bir seçenek sun.
+    kategori: "cognitive"
+
+  - ad: "DOLAYLI_KOŞUL_DOĞRUDAN_OKUMA"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Dolaylı çıkarım gerektiren koşulu doğrudan sıra bilgisi gibi okuyarak yapılan hata"
+    nasil_olusturulur: |
+      Örneğin 'A, B'den önce ve C, B'den sonra' koşullarını tek bir satıra indirgeyen ve A'nın tam sırasını yanlış bulmaya neden olan bir seçenek oluştur.
+    kategori: "cognitive"
+
+  - ad: "ALTERNATİF_İHTIMAL_GÖZDEN_KAÇIRMA"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "1-2 alternatif ihtimalden birini fark etmeden doğru saydığı ihtimale göre sıra numarası veren seçenek"
+    nasil_olusturulur: |
+      Öğrencinin gözden kaçırabileceği ikinci ihtimale göre sıra numarası hesaplayan, gerçekte ise soru farklı ihtimali sorgulayan bir seçenek sun.
+    kategori: "yanlis_cikarim"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB3"
+  bilesenler: ["mantiksal_cikarim", "olasilik_degerlendirme", "degerlendirme", "sorgulama"]
+  surec_bileseni: "karar_verme"
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

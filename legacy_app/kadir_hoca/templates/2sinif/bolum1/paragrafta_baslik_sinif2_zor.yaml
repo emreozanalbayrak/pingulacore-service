@@ -1,0 +1,141 @@
+# templates/2sinif/baslik_sinif2_zor.yaml
+# 2. Sinif — Paragrafta Baslik — ZOR zorluk
+# Konu birkac bilgiye dagilmis, 2 yanlis secenek de metinle iliskili gorunur
+# NOT: Zor duzey bile 3. sinif ana fikir duzeyine tasmamali!
+
+meta:
+  id: "paragrafta_baslik_sinif2_zor"
+  ad: "2. Sinif - Paragrafta Baslik (Zor)"
+  sinif_seviyesi: 2
+  aciklama: "Zor duzey — konu birkac bilgiye dagilmis, 2 yanlis secenek de metinle iliskili gorunur ama ana odagi kapsamaz, 3 secenekli"
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Tek paragraf + soru koku + 3 baslik secenegi (zor)"
+
+  paragraph:
+    required: true
+    word_count_min: 46
+    word_count_max: 62
+    sentence_count_min: 5
+    sentence_count_max: 6
+    stil: "bilgilendirici_veya_oykusel"
+    background_color: "#fce8e8"
+    kurallar:
+      - "Konu acik kalmalidir fakat metin icinde birkac bilgiye dagilmis olabilir."
+      - "Metinde 1 yan ayrinti bulunabilir ve bu ayrinti celdirici uretimine malzeme verebilir."
+      - "Dogru baslik metindeki butun bilgileri en iyi toplayan secenek olmalidir."
+      - "Zor duzey bile 3. sinif ana fikir duzeyine tasmamalidir."
+      - "Metin kisa, sade, somut ve gunluk yasama yakin olmalidir."
+      - "Cumleler kisa ve dogrudan olmalidir."
+      - "Metin ana dusunce, mesaj veya gizli anlam cozumlemeye zorlamamalidir."
+      - "Metin dis bilgi gerektirmemelidir."
+      - "2. sinif ogrencisinin anlayabilecegi sadelikte kelime hazinesi kullanilmalidir."
+      - "Metinde konu disina cikan yan olaylar sinirli tutulmalidir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 1
+    word_count_max: 5
+    style: "headline_title"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "Tum secenekler baslik biciminde olmalidir (1-4 sozcuk)."
+      - "Secenekler kisa, sade ve 2. sinif duzeyinde olmalidir."
+      - "Dogru secenek metnin tamamini kapsamalidir."
+      - "Dogru baslik tek ayrinti degil butun odak icin en uygun secenek olmalidir."
+      - "Dogru baslik sade kalmali, yaratici ama soyut olmamalidir."
+      - "Dogru baslik gereginden genis olmamalidir."
+      - "2 yanlis secenegin ikisi de metinle iliskili gorunmelidir."
+      - "1 yanlis secenek fazla genel olmalidir."
+      - "1 yanlis secenek metindeki yan unsur ya da tek ayrintidan uretilmis yakin celdirici olmalidir."
+      - "Tum secenekler bicimce paralel olmalidir."
+
+soru_kokleri:
+  - "<b>Bu paragrafa <u>en uygun</u> baslik hangisidir?</b>"
+  # KULLANILDI: - "<b>Paragraf icin <u>en uygun</u> baslik asagidakilerden hangisidir?</b>"
+  # KULLANILDI: - "<b>Yukaridaki paragrafin basligi hangisi olabilir?</b>"
+  - "<b>Bu metnin basligi asagidakilerden hangisi olabilir?</b>"
+  - "<b>Bu metne verilebilecek <u>en uygun</u> baslik asagidakilerden hangisidir?</b>"
+  - "<b>Bu metne <u>en uygun</u> baslik asagidakilerden hangisidir?</b>"
+  - "<b>Asagidakilerden hangisi bu metnin basligi olmaya <u>en uygundur</u>?</b>"
+  - "<b>Asagidakilerden hangisi bu metne baslik olmaya <u>en uygundur</u>?</b>"
+  - "<b>Bu metne getirilebilecek <u>en uygun</u> baslik asagidakilerden hangisidir?</b>"
+  # KULLANILDI: - "\"{topic}\" <b>ile ilgili yazilmis bu metne verilebilecek <u>en uygun</u> baslik asagidakilerden hangisidir?</b>"
+  - "\"{topic}\" <b>konulu bu metne <u>en uygun</u> baslik asagidakilerden hangisidir?</b>"
+
+dogru_cevap:
+  tanim: "Metnin tamamini kapsayan en uygun kisa baslik"
+  kurallar:
+    - "Dogru cevap metnin tek baskin konusunu veya ana olayini yansitmalidir."
+    - "Dogru baslik tek ayrinti degil butun odak icin en uygun secenek olmalidir."
+    - "Dogru baslik sade kalmali, yaratici ama soyut olmamalidir."
+    - "Dogru baslik gereginden genis olmamalidir."
+    - "Dogru cevap cok genel olmamalidir."
+    - "Dogru cevap cok dar olmamalidir."
+    - "Dogru cevap cocuk duzeyini asan mecazli veya soyut kullanim icermemelidir."
+    - "Dogru cevap genellikle 1-4 sozcuk arasinda olmalidir."
+    - "Dogru secenek paragraftaki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farkliligi olmali — ayni cumleyi kopyalayip yapistirma YASAK"
+
+celdirici_stratejileri:
+  - ad: "COK_GENIS"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metinle iliskili ama odagi gereginden fazla genis baslik"
+    nasil_olusturulur: |
+      Metnin konusuyla ayni alan icinde ama cok genel bir baslik olustur.
+      Zor duzey: bu secenek ilk bakista makul gorunmeli, sadece dikkatli dusununce genis oldugu anlasilmali.
+    kategori: "semantic"
+
+  - ad: "YAKIN_CELDIRICI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metindeki yan unsur veya tek ayrintidan uretilmis yakin celdirici"
+    nasil_olusturulur: |
+      Metinde gercekten gecen bir yan bilgiyi veya tek bir ayrintiyi baslik haline getir.
+      Zor duzey: bu secenek metinle dogrudan iliskili gorunmeli, sadece metnin TAMAMINI degil bir BOLUMUNU kapsamasi yuzunden yanlis olmali.
+    kategori: "cognitive"
+
+  - ad: "YANLIS_ODAK"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Metindeki yan bilgiye yonelen ama ana konu olmayan baslik"
+    nasil_olusturulur: |
+      Metinde gecen ama ana konu olmayan bir bilgiyi baslik haline getir.
+      Zor duzey: bu secenek metinle baglantili gorunmeli ama ana odagi kacirir.
+    kategori: "cognitive"
+
+  - ad: "ILISKILI_AMA_FARKLI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Ayni alan icinde duran ama gercek metin konusunu karsilamayan baslik"
+    nasil_olusturulur: |
+      Metnin alaniyla iliskili ama metnin asil konusundan farkli bir baslik olustur.
+      Zor duzey: bu secenek ayni konunun farkli bir yonune odaklanir, ogrenciyi yaniltabilir.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB1"
+  bilesenler: ["konu_belirleme", "baslik_eslestirme"]
+  surec_bileseni: "metni_anlama"
+
+sinif2_ek_kurallar:
+  metin_tasarim:
+    - "Metin 2 ila 6 kisa cumle araliginda olmalidir."
+    - "Metinde tek baskin konu veya tek baskin olay zinciri bulunmalidir."
+    - "Metin cocuk dunyasina ve gunluk yasama yakin olmalidir."
+    - "Karakter, olay ve bilgi acikca izlenebilir olmalidir."
+    - "Neden-sonuc varsa acik ve tek adimli olmalidir."
+  yasak_alanlar:
+    - "Ana fikir / ana duygu odakli sorular YASAK"
+    - "Paragrafin ana dusuncesini bulma YASAK"
+    - "Metnin vermek istedigi mesaji bulma YASAK"
+    - "Giris-gelisme-sonuc gibi bicimsel paragraf bolumleri YASAK"
+    - "Cok katmanli ortuk anlam cozumleme YASAK"
+    - "Zor duzey bile 3. sinif ana fikir duzeyine TASMAMALI"

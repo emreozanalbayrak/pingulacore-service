@@ -1,0 +1,103 @@
+meta:
+  id: grafik_anket_2q
+  ad: Anket Sonuçları + Grafik Görseli (2 Soru)
+  sinif_seviyesi: 5
+  aciklama: Anket senaryosu + AI üretimi sütun/pasta grafiği üzerinden 2 soru
+  frequency: Medium
+context:
+  type: grafik_anket_2q
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 60
+    word_count_max: 120
+    image_type: infografik
+    structure:
+    - Bir karakter (isimli, 5. sınıf öğrencisi) okulunda veya çevresinde bir ANKET uygulamıştır (2-3 cümle)
+    - Anket sonuçlarını bir grafik ile göstermiştir
+    - 'KRİTİK: Senaryoda anketin konusunu ve nerede yapıldığını belirt ama sayısal sonuçları YAZMA'
+    - 'Ardından anket verilerini bir HTML tablosu olarak ekle:'
+    - <table><tr><th>Anket Seçeneği</th><th>Öğrenci Sayısı</th></tr><tr><td>...</td><td>sayı</td></tr>...</table>
+    - En az 3, en fazla 5 anket seçeneği
+    - Toplamda 50-200 arası katılımcı olmalı
+    - Değerler tam sayı ve birbirine göre belirgin farklı olmalı
+    - 'NOT: Bu tablo AI tarafından grafiğe dönüştürülecektir. Tablo son çıktıda GÖRÜNMEYECEKTİR.'
+    kurallar:
+    - Senaryo 5. sınıf seviyesinde, okul/mahalle ortamında olmalı
+    - Anket konusu günlük hayattan olmalı (beslenme, spor, kitap, çevre, ulaşım vb.)
+    - Veriler gerçekçi dağılım göstermeli (hepsi eşit olmamalı)
+    - Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)
+  questions:
+  - slot: 1
+    type: anket_okuma
+    soru_kokleri:
+    - <b>Grafiğe göre öğrencilerin en çok tercih ettiği seçenek aşağıdakilerden hangisidir?</b>
+    - <b>Anket sonuçlarına göre aşağıdakilerden hangisi doğrudur?</b>
+    - <b>Grafikteki verilere göre en az tercih edilen seçenek aşağıdakilerden hangisidir?</b>
+    options_style: complete_sentence
+    word_count_min: 3
+    word_count_max: 15
+    beceri:
+      katman: KB2
+      bilesenler:
+      - grafik_okuma
+      - karsilastirma
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 2
+    type: anket_cikarim
+    soru_kokleri:
+    - <b>Anket sonuçları değerlendirildiğinde aşağıdaki çıkarımlardan hangisine ulaşılır?</b>
+    - <b>Grafikteki veriler karşılaştırıldığında aşağıdakilerden hangisi <u>söylenemez</u>?</b>
+    - <b>Anket sonuçlarına göre aşağıdakilerden hangisi yanlış bir yargıdır?</b>
+    options_style: complete_sentence
+    word_count_min: 5
+    word_count_max: 20
+    beceri:
+      katman: KB3
+      bilesenler:
+      - cikarim_yapma
+      - degerlendirme
+      surec_bileseni: problemi_yapilandirma
+header_template: 1-2. soruları aşağıdaki bilgilere göre birbirinden bağımsız olarak cevaplayınız.
+format:
+  type: llm_generated_html
+  paragraph:
+    required: true
+    word_count_min: 60
+    word_count_max: 120
+    sentence_count_min: 2
+    sentence_count_max: 5
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 3
+    word_count_max: 20
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Anket grafiğindeki verilerden doğru okunan veya çıkarılan bilgi
+  kurallar:
+  - 'KRİTİK: Doğru cevap grafiği OKUYARAK ve YORUMLAYARAK bulunmalı'
+  - Doğru şık en uzun şık OLMAMALI
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: teleskop → mercekli araç GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: VERI_CARPITMA
+    aciklama: Grafikteki değeri yanlış aktarma
+  - ad: YANLIS_KARSILASTIRMA
+    aciklama: Kategorileri yanlış sıralama
+  - ad: GENELLEME_HATASI
+    aciklama: Anket verisinden çıkarılamayacak genelleme
+use_shared_strategies: false

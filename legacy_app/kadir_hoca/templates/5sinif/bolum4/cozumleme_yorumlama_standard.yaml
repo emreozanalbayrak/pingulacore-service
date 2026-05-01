@@ -1,0 +1,152 @@
+# templates/bolum4/cozumleme_yorumlama_standard.yaml
+# Bolum 4.2 - Ozel Bolum: Cozumleme ve Yorumlama
+#
+# STANDART YORUM/CIKARIM FORMATI
+# Metin verilir, ogrenci yorum, cikarim veya degerlendirme yapar
+# Hem pozitif (yapilabilir) hem negatif (soylenemez) soru kokleri icerir
+
+meta:
+  id: "cozumleme_yorumlama_standard"
+  ad: "Çözümleme ve Yorumlama (Standart)"
+  sinif_seviyesi: 5
+  aciklama: "Metin analizi ile yorum, çıkarım ve değerlendirme yapma"
+  frequency: "High (~27 questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Bilgilendirici/öyküleyici paragraf + soru kökü + 4 cümle seçenek"
+
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 110
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "bilgilendirici"
+    kurallar:
+      - "Bilgilendirici veya öyküleyici metin olabilir"
+      - "Metinden çıkarım yapılabilecek yeterli bilgi içermeli"
+      - "Yorum ve değerlendirmeye açık olmalı — tek bir doğru yorum değil birden fazla bakış açısı"
+      - "Metinde açıkça söylenmeyen ama çıkarılabilecek bilgiler olmalı"
+      - "5. sınıf seviyesinde, doğa, bilim, toplum veya günlük hayat konuları"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 8
+    word_count_max: 25
+    style: "complete_sentence"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metinle ilgili aşağıdaki yorumlardan hangisi yapılabilir?</b>"
+  - "<b>Metindeki bilgilerden hareketle aşağıdaki çıkarımlardan hangisine ulaşılabilir?</b>"
+  - "<b>Bu metni okuyan biri aşağıdaki değerlendirmelerden hangisini yapabilir?</b>"
+  - "<b>Bu metinden hareketle aşağıdakilerden hangisi <u>söylenemez</u>?</b>"
+  # Davranış öngörüsü ve numaralı yargı (ARI Paragraf 2025 kaynak)
+  - "<b>Bu metinde bahsedilen kişinin aşağıdaki davranışlardan hangisini sergilemesi <u>beklenemez</u>?</b>"
+  - "<b>Bu metinden numaralanmış yargılardan hangileri çıkarılabilir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metindeki bilgilerden mantıksal olarak çıkarılabilen yorum veya değerlendirme"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Pozitif soru köklerinde: Metindeki bilgilere dayanan geçerli çıkarım/yorum"
+    - "Negatif soru köklerinde (söylenemez): Metinde desteği OLMAYAN ifade"
+    - "Metnin bütününü kapsamalı, tek detaya dayanmamalı"
+    - "8-25 kelime, tam bir cümle formatında olmalı"
+    - "Çıkarım mantıksal olmalı — metinde doğrudan yazması gerekmez ama desteklenmeli"
+  ornekler:
+    - paragraf: "Göçmen kuşlar, mevsim değişikliklerine bağlı olarak uzun yolculuklar yapar. Kış aylarında sıcak bölgelere göç ederler. Bu yolculuk sırasında V şeklinde uçarak enerji tasarrufu sağlarlar. Bilim insanları, kuşların manyetik alanları kullanarak yön bulduğunu keşfetmiştir."
+      dogru: "Göçmen kuşlar yolculuklarında hem fiziksel hem de doğal yönlendirme avantajlarından yararlanmaktadır."
+      neden: "V uçuşu (fiziksel avantaj) + manyetik alan (doğal yönlendirme) çıkarımı metnin bütününden desteklenir"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# KAVRAM_YANILGISI, EKSIK_ANALIZ, HATALI_GENELLEME,
+# VERI_YANLIS_YORUMLAMA, ASIRI_CIKARIM uygun
+
+beceri:
+  katman: "KB3"
+  bilesenler: ["cikarim_yapma", "degerlendirme", "yorumlama"]
+  surec_bileseni: "karar_verme"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Konu seç ve çıkarım noktalarını planla"
+      details: |
+        Konuyla ilgili birden fazla çıkarım yapılabilecek metin planla:
+        - Doğrudan söylenmeyen ama desteklenen bilgiler
+        - Farklı bakış açılarından yorumlanabilecek olaylar
+        - Neden-sonuç ilişkileri
+
+    - step: 2
+      action: "Paragraf yaz (55-110 kelime)"
+      details: |
+        - Bilgilendirici veya öyküleyici metin
+        - Çıkarım yapılabilecek yeterli veri
+        - Açıkça söylenmemiş ama ima edilen bilgiler
+
+    - step: 3
+      action: "Doğru cevap = geçerli yorum/çıkarım"
+      details: |
+        - Pozitif: Metnin bütününden desteklenen çıkarım
+        - Negatif (söylenemez): Metinde desteği olmayan ifade
+        - 8-25 kelime, tam cümle
+
+    - step: 4
+      action: "3 çeldirici oluştur"
+      details: |
+        - Aşırı çıkarım yapan (metinde söylenmeyeni kesinleştiren)
+        - Eksik analiz (tek detaya dayanan genelleme)
+        - Kavram kaydıran (konuyla ilgili ama yanlış bağlamda)
+
+    - step: 5
+      action: "Seçenekleri rastgele sırala"
+      details: "A-B-C-D seçeneklerini rastgele sırala"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayısı 55-110 arasında mı?"
+    - "Çıkarım yapılabilecek yeterli bilgi var mı?"
+    - "Birden fazla bakış açısına açık mı?"
+
+  correct_answer:
+    - "8-25 kelime tam cümle mi?"
+    - "Metinden mantıksal olarak destekleniyor mu?"
+    - "Metnin bütününü kapsıyor mu?"
+
+  distractors:
+    - "Konuyla ilgili ama geçersiz çıkarımlar mı?"
+    - "Her çeldirici farklı bir yanılgı türü mü?"
+    - "Tüm seçenekler aynı formatta mı?"

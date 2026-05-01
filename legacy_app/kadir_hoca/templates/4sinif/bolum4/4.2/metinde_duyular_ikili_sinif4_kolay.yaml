@@ -1,0 +1,113 @@
+# Kaynak: metinde_duyular_ikili_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.kolay
+# 4. sinif metinde duyular ikili — kolay duzey
+
+meta:
+  id: "metinde_duyular_ikili_sinif4_kolay"
+  ad: "Metinde Duyular - İkili Duyular (Kolay)"
+  sinif_seviyesi: 4
+  aciklama: "Kolay duzey — metinde kullanılan duyular arasından doğru ikiliyi seçme."
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Duyusal ifadeler içeren paragraf + soru kökü + ikili duyular seçenekleri (kolay)"
+
+  paragraph:
+    required: true
+    word_count_min: 50
+    word_count_max: 65
+    background_color: "#e8f8e8"
+    sentence_count_min: 4
+    sentence_count_max: 5
+    stil: "oykuleyici"
+    kurallar:
+      - "Duyular daha acik ve dogrudan ifadelerle verilmelidir."
+      - "Dogru duyu grubu daha belirgin olmalidir."
+      - "Celdiriciler arasinda en az 1 belirgin eksik/fazla duyu farki bulunmalidir."
+      - "Paragraf en az iki farklı duyu organını harekete geçiren ifadeler içermeli."
+      - "Duyusal ifadeler doğal bağlamda geçmeli, listelemek gibi sıralanmamalı."
+      - "Paragrafta konuyla ilgili AÇIKLAMA, TANIM veya EK BİLGİ verme! Paragraf SADECE hikâyeyi/olayı anlatsın."
+      - "YASAK: Ders kitabı açıklamaları yapma."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+      - "Dis bilgi gerektirmemelidir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 6
+    style: "keyword_set"
+    correct_count: 1
+    correct_type: "matches"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  # KULLANILDI: - "<b>Bu metinde aşağıdaki duyu organlarından hangilerine ait ifadelere yer verilmiştir?</b>"
+  # KULLANILDI: - "<b>Bu metinde hangi duyu organlarını harekete geçiren ifadeler kullanılmıştır?</b>"
+  - "<b>Yukarıdaki metinde aşağıdaki duyulardan hangileri kullanılmıştır?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metinde gerçekten kullanılan iki duyuyu doğru gösteren seçenek"
+  kurallar:
+    - "Her iki duyunun da metinde açıkça ifade edilmis olmali."
+    - "Seçenekler 'duygu1 - duygu2' formatında olmali."
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI BILGILERI
+# ═══════════════════════════════════════════════════════════════
+
+distractors:
+  notlar:
+    - "Celdiriciler metinde kullanilmayan duyulardan en az birini icermeli"
+    - "Tum secenekler ayni formatta olmali (iki duygu 'duygu1 - duygu2' biciminde)"
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["yorumlama"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+
+celdirici_stratejileri:
+  - ad: "BELIRGIN_EKSIK_DUYU"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Doğru duyu grubundan belirgin şekilde farklı, kolay elenebilir seçenek"
+    nasil_olusturulur: |
+      Duyular daha açık ve doğrudan ifadelerle verilmeli.
+      Doğru duyu grubu daha belirgin olmalı.
+      Celdiriciler arasında en az 1 belirgin eksik/fazla duyu farkı bulunmalı — öğrenci kolayca elemelidir.
+    kategori: "content"
+
+  - ad: "YANLIS_DUYU_EKSTRA"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metinde yer almayan bir duyuyu içeren veya eksik duyu olan seçenek"
+    nasil_olusturulur: |
+      Metinde yer almayan bir duyuyu içeren ya da doğru grupta olması gereken bir duyuyu eksik bırakan seçenek oluştur.
+      Kolay seviyede bu fark açıkça fark edilebilir olmalı.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

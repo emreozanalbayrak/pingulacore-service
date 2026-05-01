@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -25,7 +26,14 @@ def write_pipeline_log(
 ) -> int:
     ts = datetime.now(timezone.utc).isoformat()
     line = f"{ts} [{level.upper()}] [{component}] {message}"
-    print(line, flush=True)
+    # sys.__stdout__: vendored pipeline'lar contextlib.redirect_stdout ile sys.stdout'u
+    # capture eder. Buradan print() etmek bu capture'a tekrar girip sonsuz feedback loop
+    # üretir; orijinal stdout'a yazıp redirect'i bypass ediyoruz.
+    try:
+        sys.__stdout__.write(line + "\n")
+        sys.__stdout__.flush()
+    except Exception:
+        pass
     if log_path is not None:
         try:
             with log_path.open("a", encoding="utf-8") as fh:

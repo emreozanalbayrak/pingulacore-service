@@ -1,0 +1,144 @@
+# Referans: metnin_bolumleri_giris_gelisme_sonuc_sinif3_referans.yaml → zorluk_duzeyleri.kolay
+# Kolay duzey — giris bolumu — Giris (Olabilir / Getirilebilir)
+
+meta:
+  id: "giris_olabilir_sinif3_kolay"
+  ad: "3. Sinif - Metnin Bolumleri / Giris (Olabilir / Getirilebilir) (Kolay)"
+  sinif_seviyesi: 3
+  aciklama: "Kolay duzey — giris bolumu, giris (olabilir / getirilebilir). 4 secenekli, gorselli."
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Gorsel + tek paragraf + soru koku + 4 secenek (kolay, giris)"
+
+  paragraph:
+    required: true
+    word_count_min: 42
+    word_count_max: 60
+    sentence_count_min: 4
+    sentence_count_max: 5
+    stil: "simple_clear_primary_text"
+    background_color: "#e8f8e8"
+    kurallar:
+      - "Metin 3. sinif ogrencisinin anlayabilecegi kadar acik, sade ve akici olmalidir."
+      - "Metin giris, gelisme ve sonuc mantigina uygun kurulmalidir."
+      - "Giris bolumu konuyu acmali, gelisme bolumu ayrintilari vermeli, sonuc bolumu anlami toparlamalidir."
+      - "Metin tek baskin konu veya tek kisa olay etrafinda kurulmalidir."
+      - "Metin dis bilgi gerektirmemelidir."
+      - "Bolumler arasi gecis anlamli ve dogal olmalidir."
+      - "Soru, paragrafin yapisini fark ettirmeli; ama 4. sinifa kayan ayrintili metin cozumlemesine donusmemelidir."
+      - "Metin yapisi acik ve belirgin olmalidir."
+      - "Giris, gelisme ve sonuc bolumleri kolay ayirt edilebilir olmalidir."
+      - "Eksik baslangicli veya eksik sonlu metinler oncelikli kullanilabilir."
+      - "Giris bolumu genellikle metnin ilk bolumudur."
+      - "Giris cumlesi konuyu baslatmali veya tanitmalidir."
+      - "Giris cumlesi ani sonuc, cikarim veya toparlama havasi tasimamalidir."
+      - "Giris cumlesi cogu durumda aciklayici, tanitici veya hazirlayici olmalidir."
+      - "Giris bolumunde olayin ya da konunun ayrintisina cok hizli girilmemelidir."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  visual:
+    required: true
+    description: "Metnin ana icerigini destekleyen islevsel gorsel"
+    placement: "paragraph_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illustrasyon"
+      - "tek sahneli fotograf benzeri cizim"
+      - "tek olay veya tek varlik odakli sahne"
+      - "metnin ana konusunu destekleyen sade konu gorseli"
+    kurallar:
+      - "Her soru icin gorsel zorunludur."
+      - "Gorsel metnin ana icerigiyle acik uyumlu olmalidir."
+      - "Gorsel sus olmamali, cozumde anlam destegi sunmalidir."
+      - "Gorsel tek basina dogru cevabi acikca vermemelidir."
+      - "Gorsel ile metin birlikte degerlendirildiginde dogru bolum veya dogru cümle daha netlesebilir."
+      - "Gorsel dikkat dagitici gereksiz ayrintilar icermemelidir."
+    yasaklar:
+      - "dekoratif ve metinden bagimsiz gorsel"
+      - "cok sahneli karmasik kolaj"
+      - "grafik, tablo veya infografik yogunlugu tasiyan tasarim"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 3
+    word_count_max: 16
+    style: "sentence_option"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "3. sinifta her soru 4 secenekli olmalidir."
+      - "Cümle secenekleri anlamli ve kurallı olmalidir."
+      - "Dogru secenek metnin bolum yapisina ve dusuncenin akisina tam uymalidir."
+      - "Yanlis secenekler metne yakin gorunmeli ama dusuncenin akisini bozmalidir."
+      - "Birden fazla makul dogru secenek olusmamalidir."
+      - "1 secenek giris yerine sonuc havasi tasimalidir."
+      - "1 secenek ayrintiya erken girmelidir."
+      - "1 secenek konu disina veya akis disina kaymalidir."
+
+soru_kokleri:
+  - "<b>Aşağıdaki ifadelerden hangisi bu metnin giriş cümlesi olabilir?</b>"
+  # KULLANILDI: - "<b>Aşağıdakilerden hangisi bu metnin giriş cümlesi olmaya uygundur?</b>"
+  # KULLANILDI: - "<b>Aşağıdaki cümlelerden hangisi bu metnin giriş cümlesi olabilir?</b>"
+  - "<b>Aşağıdakilerden hangisi giriş cümlesi olarak kullanılabilir?</b>"
+  - "<b>Bu metnin başına düşüncenin akışına göre aşağıdakilerden hangisi getirilebilir?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metnin başına getirilebilir?</b>"
+  - "<b>Bu parçanın başına aşağıdakilerden hangisi uygun olur?</b>"
+  - "<b>Metnin başına düşüncenin akışına göre uygun cümle hangisidir?</b>"
+  - "<b>Bu metnin giriş cümlesi aşağıdakilerden hangisi olabilir?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metnin giriş cümlesi olabilir?</b>"
+  - "<b>Bu parca icin uygun giriş cümlesi hangisidir?</b>"
+  - "<b>Metnin basinda yer alabilecek cümle aşağıdakilerden hangisidir?</b>"
+
+dogru_cevap:
+  tanim: "Metnin bolum yapisina ve dusuncenin akisina tam uyan dogru cümle"
+  kurallar:
+    - "KRITIK PARAPHRASE: Dogru cevap paragraftaki cumleleri/ifadeleri AYNEN KULLANMA — paragraf kelimelerini es anlamli sozcuklerle degistir ve farkli cümle yapisiyla yeniden ifade et. En az %50 kelime farkliligi zorunlu. Paragrafa cok benzer secenekler FAIL olur."
+    - "Giris sorularinda dogru cevap konuyu dogal bicimde baslatmalidir."
+    - "Dogru cevap metnin tamamiyla uyumlu olmalidir."
+    - "Dogru cevap dis bilgi gerektirmemelidir."
+    - "Dogru cevap 3. sinif ogrencisinin metni dikkatle okuyarak bulabilecegi aciklikta olmalidir."
+
+celdirici_stratejileri:
+  - ad: "SONUC_HAVALI_CUMLE"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Baslangic yerine toparlama veya sonuc havasi tasiyan cümle"
+    nasil_olusturulur: |
+      Konuyu acmak yerine toparlayan, sonuc havasi tasiyan bir cümle olustur.
+      Ornek baglayicilar: "bu yuzden", "sonuc olarak", "ozetle", "kisacasi".
+    kategori: "semantic"
+
+  - ad: "GELISME_AYRINTISI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Dogrudan konu ici ayrintiya giren, hazirliksiz baslayan cümle"
+    nasil_olusturulur: |
+      Konuyu tanitmak yerine dogrudan ayrinti ya da ornek veren cümle olustur.
+    kategori: "cognitive"
+
+  - ad: "KONU_DISI_BASLANGIC"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Metnin ana odagina uymayan baslangic"
+    nasil_olusturulur: |
+      Metnin ana konusuyla iliskili olmayan bir giris cumlesi olustur.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["metin_yapisi_ayirt_etme", "giris_bolumu_belirleme"]
+  surec_bileseni: "metni_anlama"
+
+sinif3_ek_kurallar:
+  yasak_alanlar:
+    - "Yazarin uslup tercihini veya niyetini yorumlatma YASAK"
+    - "Asiri soyut paragraf yapisi tartismalari YASAK"
+    - "Metin disi dunya bilgisi gerektiren secenekler YASAK"
+    - "Metnin orgutlenme bicimini ayrintili gerekceyle tartistirma (4. sinif) YASAK"
+    - "Birden fazla paragraf arasinda yapi karsilastirmasi yaptirma (4. sinif) YASAK"
+    - "Yazar tercihini ve bolum etkisini analiz ettirme (4. sinif) YASAK"

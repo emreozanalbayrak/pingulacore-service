@@ -1,0 +1,345 @@
+meta:
+  id: "siirde_baslik_sinif2_standart_uc_secenekli"
+  ad: "Şiirde Başlık"
+  sinif_seviyesi: 2
+  ders: "Türkçe"
+  bolum: "2. Sınıf Paragraf Soru Bankası"
+  alt_bolum: "1.1 Şiirde Başlık"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    2. sınıf öğrencisi için kısa ve sade bir şiirin tamamını en iyi karşılayan başlığı
+    seçtirmeye yönelik, 3 seçenekli standart soru üretim şablonu.
+
+format:
+  type: "llm_generated_html"
+  description: "Kısa şiir + soru kökü + 3 başlık seçeneği"
+
+  poem:
+    required: true
+    line_count_min: 3
+    line_count_max: 6
+    stanza_count_min: 1
+    stanza_count_max: 2
+    word_count_min: 14
+    word_count_max: 34
+    style: "simple_primary_poem"
+    kurallar:
+      - "Şiir tek baskın konu, varlık, olay veya doğa ögesi etrafında kurulmalıdır."
+      - "Şiir 2. sınıf öğrencisinin anlayabileceği kadar sade, açık ve somut olmalıdır."
+      - "Şiirde kullanılan sözcükler yüksek frekanslı, tanıdık ve kısa olmalıdır."
+      - "Şiir bir bütün olarak tek bir uygun başlıkla kapsanabilmelidir."
+      - "Şiir başlık seçimini şiirin geneline bakarak yaptırmalıdır; tek mısraya dayalı kurgu kurulamaz."
+      - "Şiirde aşırı soyutluk, yoğun mecaz, kapalı anlam ve yetişkin dili kullanılmamalıdır."
+      - "Şiir dış bilgi gerektirmemelidir."
+      - "Şiir ana duygu çözümlemesi yaptıracak kadar örtük olmamalıdır."
+      - "Şiir, çocukta önce 'şiir ne hakkında?' sorusunu uyandıracak açıklıkta olmalıdır."
+      - "Kafiye ve ses tekrarları olabilir ancak anlamı gölgelememelidir."
+
+  visual:
+    required: false
+    description: "İstenirse şiirin ana içeriğini destekleyen sade görsel"
+    kurallar:
+      - "Görsel varsa şiirin ana konusu veya ana varlığıyla doğrudan uyumlu olmalıdır."
+      - "Görsel şiiri desteklemeli, fakat tek başına cevabı vermemelidir."
+      - "Görsel dikkat dağıtıcı olmamalıdır."
+      - "Görsel 2. sınıf düzeyinde tek bakışta anlaşılır olmalıdır."
+    yasaklar:
+      - "karmaşık kolaj"
+      - "çok sahneli kompozisyon"
+      - "şiirle zayıf ilişkili dekoratif görsel"
+
+  stem:
+    required: true
+    selection: "random_from_list"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    correct_count: 1
+    style: "short_title"
+    word_count_min: 1
+    word_count_max: 4
+    kurallar:
+      - "Tüm seçenekler başlık biçiminde olmalıdır."
+      - "Seçenekler kısa, sade ve 2. sınıf düzeyinde olmalıdır."
+      - "Doğru seçenek şiirin tamamını kapsamalıdır."
+      - "Yanlış seçenekler şiire yakın görünmeli ama dikkatli okuyunca elenebilmelidir."
+      - "Yanlış seçenekler şiirde geçmeyen yeni baskın konu getirmemelidir."
+      - "Tüm seçenekler biçimce paralel olmalıdır."
+
+soru_kokleri:
+  - "Bu şiirin başlığı aşağıdakilerden hangisi olabilir?"
+  - "Bu şiire getirilebilecek en uygun başlık aşağıdakilerden hangisidir?"
+  - "Bu şiire en uygun başlık hangisidir?"
+  - "Şiir için en uygun başlık aşağıdakilerden hangisidir?"
+  - "Yukarıdaki şiirin başlığı hangisi olabilir?"
+  - "Bu şiirin başlığı ne olabilir?"
+  - "Bu şiire verilebilecek en uygun başlık hangisidir?"
+  - "Aşağıdakilerden hangisi bu şiirin başlığı olmaya en uygundur?"
+  - "Bu şiire konulabilecek en uygun başlık hangisidir?"
+  - "Şiirde anlatılanlara göre en uygun başlık hangisidir?"
+  - "Bu şiirde anlatılanlara uygun başlık hangisidir?"
+  - "Aşağıdakilerden hangisi bu şiire başlık olarak en uygundur?"
+  - "Bu şiirin konusuna en uygun başlık hangisidir?"
+  - "Şiirin başlığı aşağıdakilerden hangisi olabilir?"
+  - "\"{topic}\" konulu bu şiire en uygun başlık aşağıdakilerden hangisidir?"
+
+topic_placeholder_rules:
+  kullanim_kosulu:
+    - "{topic} yalnızca şiirin konusu çok açık, somut ve kısa biçimde söylenebiliyorsa kullanılmalıdır."
+    - "{topic} ifadesi 1-2 sözcük arasında tutulmalıdır."
+  yasaklar:
+    - "{topic} alanı ana duygu, mesaj, ders veya soyut tema ile doldurulamaz."
+    - "{topic} alanı şiirin tüm açıklamasını veren uzun ifade olamaz."
+
+beceri_odagi:
+  birincil_beceri:
+    - "Şiirin tamamını kapsayan uygun başlığı seçme"
+  ikincil_beceriler:
+    - "Şiirin ne hakkında olduğunu fark etme"
+    - "Şiirin genel içeriğini tek başlıkta toplama"
+    - "Tek ayrıntı ile şiirin bütünü arasındaki farkı ayırt etme"
+
+dogru_cevap:
+  tanim: "Şiirin tamamını kapsayan en uygun kısa başlık"
+  kurallar:
+    - "Doğru cevap şiirin tek baskın konusunu veya ana varlığını yansıtmalıdır."
+    - "Doğru cevap çok genel olmamalıdır."
+    - "Doğru cevap çok dar olmamalıdır."
+    - "Doğru cevap yalnız tek bir ayrıntıyı merkeze almamalıdır."
+    - "Doğru cevap sade ve doğrudan olmalıdır."
+    - "Doğru cevap çocuk düzeyini aşan mecazlı veya soyut kullanım içermemelidir."
+    - "Doğru cevap genellikle 1-3 sözcük arasında tutulmalıdır."
+    - "Doğru cevap şiirin ana konusu ile uyumlu olmalıdır."
+    - "Doğru cevap, 2. sınıf düzeyinde ana duygu çözümlemesi gerektirmeden bulunabilmelidir."
+
+yanlis_secenek_stratejileri:
+  count_per_question: 2
+  strategy_pool:
+    - id: "cok_genis"
+      tanim: "Şiirle ilişkili ama odağı gereğinden fazla geniş başlık"
+      ornek_mantik:
+        - "Doğa"
+        - "Gökyüzü"
+        - "Hayat"
+        - "Mevsimler"
+
+    - id: "cok_dar"
+      tanim: "Şiirdeki tek ayrıntıya odaklanan başlık"
+      ornek_mantik:
+        - "Işık"
+        - "Sıcaklık"
+        - "Kolları"
+        - "Sabah"
+
+    - id: "yanlis_varlik"
+      tanim: "Şiire yakın alandan ama yanlış nesne veya varlık seçen başlık"
+      ornek_mantik:
+        - "Ay"
+        - "Bulut"
+        - "Yıldız"
+        - "Rüzgâr"
+
+    - id: "iliskili_ama_farkli"
+      tanim: "Aynı tema alanında duran ama şiirin gerçek odağını karşılamayan başlık"
+      ornek_mantik:
+        - "Gökyüzü"
+        - "Sabah"
+        - "Yaz Günü"
+        - "Doğadaki Işık"
+
+  secim_kurali:
+    - "Her soruda 2 yanlış seçenek farklı stratejilerden seçilmelidir."
+    - "En az 1 yanlış seçenek şiire yakın ama fazla genel ya da tek ayrıntıya dayalı olmalıdır."
+    - "Zor düzeyde iki yanlış seçenek de ilk bakışta makul görünmelidir."
+
+zorluk_duzeyleri:
+  kolay:
+    poem:
+      line_count_min: 3
+      line_count_max: 4
+      word_count_min: 14
+      word_count_max: 22
+      kurallar:
+        - "Şiirin ana konusu ilk iki dizede açıkça verilmelidir."
+        - "Şiir tek varlık veya tek nesne etrafında kurulmalıdır."
+        - "Şiirde yan bilgi neredeyse hiç olmamalıdır."
+        - "Doğru başlık şiirde geçen temel sözcüklerden biriyle doğrudan kurulabilir."
+    correct_answer:
+      kurallar:
+        - "Doğru başlık şiirdeki ana varlığı doğrudan söyleyebilir."
+        - "Başlık açık, kısa ve doğrudan adlandırma biçiminde olmalıdır."
+    distractors:
+      kurallar:
+        - "1 seçenek çok genel olmalıdır."
+        - "1 seçenek yanlış varlık ya da açıkça alakasız yakın alan olmalıdır."
+        - "Yanlış seçenekler kolay elenebilir olmalıdır."
+    difficulty_note: >
+      Kolay düzeyde öğrenci şiirin ne hakkında olduğunu hemen fark eder ve
+      doğrudan uygun başlığı seçer.
+
+  orta:
+    poem:
+      line_count_min: 4
+      line_count_max: 5
+      word_count_min: 20
+      word_count_max: 28
+      kurallar:
+        - "Şiirin ana konusu açık olmalıdır ancak birkaç ipucuna dağılmış olabilir."
+        - "Şiirde 1 destekleyici ayrıntı veya 1 yan özellik bulunabilir."
+        - "Doğru başlık, şiirin bütününe bakılarak seçilmelidir."
+        - "Şiir yine de 2. sınıf düzeyinde somut kalmalıdır."
+    correct_answer:
+      kurallar:
+        - "Doğru başlık şiirin genel odağını kapsamalıdır."
+        - "Doğru başlık, tek dizedeki ayrıntıdan değil şiirin tamamından çıkmalıdır."
+    distractors:
+      kurallar:
+        - "1 seçenek çok genel"
+        - "1 seçenek yanlış varlık ya da tek ayrıntıya odaklı"
+        - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+    difficulty_note: >
+      Orta düzeyde öğrenci, şiirin birkaç dizesini birlikte düşünerek en uygun başlığı seçer.
+      Ancak soru yine de ana duygu çözümlemesine dönüşmez.
+
+  zor:
+    poem:
+      line_count_min: 5
+      line_count_max: 6
+      word_count_min: 26
+      word_count_max: 34
+      kurallar:
+        - "Şiirin ana konusu açık kalmalıdır fakat birkaç özelliğe dağılmış olabilir."
+        - "Şiirde 1 yakın alan unsuru bulunabilir ve bu unsur çeldirici üretimine malzeme verebilir."
+        - "Doğru başlık, şiirdeki tüm ipuçlarını en iyi toplayan seçenek olmalıdır."
+        - "Zor düzeyde bile soru ana duygu veya mesaj sorusuna dönüşmemelidir."
+    correct_answer:
+      kurallar:
+        - "Doğru başlık şiirin tümünü kapsamalıdır."
+        - "Doğru başlık şiirdeki baskın varlığı veya konuyu en iyi karşılayan seçenek olmalıdır."
+        - "Doğru başlık sade kalmalı, aşırı soyut olmamalıdır."
+    distractors:
+      kurallar:
+        - "2 yanlış seçeneğin ikisi de şiirle ilişkili görünmelidir."
+        - "1 seçenek fazla genel olmalıdır."
+        - "1 seçenek şiirdeki yan unsurdan ya da yakın varlıktan üretilmiş yakın çeldirici olmalıdır."
+    difficulty_note: >
+      Zor düzey 2. sınıfta gizli mesaj, ana duygu ya da derin yorum zorluğu değildir.
+      Zorluk, şiirin tamamını kapsayan başlığı yakın seçeneklerden ayırma düzeyinde kalır.
+
+difficulty_selection_policy:
+  default: "Orta"
+  allowed_values: ["Kolay", "Orta", "Zor"]
+  hard_limits:
+    - "Tüm düzeylerde soru 2. sınıf sözcük ve anlam düzeyinde kalmalıdır."
+    - "Zor düzey seçilse bile ana duygu, mesaj veya yorum sorusu üretilemez."
+    - "Kolay düzeyde gereksiz yakın çeldirici yükü kurulamaz."
+    - "Şiir tüm düzeylerde kısa, sade ve tek odaklı kalmalıdır."
+
+konu_alani:
+  izinli_ornekler:
+    - "güneş"
+    - "ay"
+    - "yıldız"
+    - "bulut"
+    - "çiçek"
+    - "ağaç"
+    - "kuş"
+    - "kelebek"
+    - "yağmur"
+    - "kar"
+    - "mevsimler"
+    - "anne"
+    - "arkadaş"
+    - "okul"
+    - "kitap"
+    - "bayrak"
+  kurallar:
+    - "Konu 2. sınıf öğrencisinin kolayca anlayabileceği kadar somut olmalıdır."
+    - "Doğa, nesne, hayvan, aile, okul ve günlük yaşam temaları önceliklidir."
+    - "Şiirsel ama kapalı anlatımlar yerine açık ve çocukça söyleyiş tercih edilmelidir."
+    - "Başlığı somut biçimde destekleyebilen konular seçilmelidir."
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "2. sınıfa uygun, şiire elverişli tek ve açık bir konu seç"
+    - step: 2
+      action: "Seçilen konu için kısa ve sade bir şiir oluştur"
+      details:
+        - "Tek baskın konu kur"
+        - "2. sınıf sözcük dağarcığında kal"
+        - "Şiir, en uygun başlığı tekleyecek açıklıkta olsun"
+    - step: 3
+      action: "Şiirin tamamını kapsayan doğru başlığı üret"
+      details:
+        - "Kısa ol"
+        - "Sade ol"
+        - "Çok genel ya da çok dar olma"
+    - step: 4
+      action: "Zorluk düzeyine uygun 2 çeldirici üret"
+      details:
+        - "Farklı çeldirici stratejileri kullan"
+        - "Şiire yakın görün ama yanlış odakta kal"
+    - step: 5
+      action: "Soru kökünü listeden rastgele seç"
+    - step: 6
+      action: "Şıkları A-B-C olarak karıştır"
+    - step: 7
+      action: "Harici 2. Sınıf TYMM Ortak Kuralları ile doğrulama yap"
+
+validation_checklist:
+  poem:
+    - "Şiir 3-6 dize arasında mı?"
+    - "Şiir seçilen zorluk düzeyinin kelime aralığında mı?"
+    - "Şiir tek baskın konuya sahip mi?"
+    - "Şiir somut ve sade mi?"
+    - "Şiirde dış bilgi gerektiren unsur var mı? Varsa reddet."
+    - "Şiir ana duygu çözümlemesi gerektirmeden çözülebiliyor mu?"
+    - "Şiir yalnız başlık seçimini konu düzeyinde mi ölçüyor?"
+
+  stem:
+    - "Soru kökü şiirde başlık seçimini açıkça istiyor mu?"
+    - "Soru kökü ek beceri yüklemiyor mu?"
+
+  options:
+    - "Toplam 3 seçenek var mı?"
+    - "Seçenekler başlık biçiminde mi?"
+    - "Seçenekler kısa ve sade mi?"
+    - "Doğru başlık şiirin tamamını kapsıyor mu?"
+    - "Yanlış seçeneklerden biri fazla genel mi?"
+    - "Yanlış seçeneklerden biri yanlış varlık, yan odak veya tek ayrıntıya mı dayanıyor?"
+
+  difficulty:
+    - "Zorluk seçilen düzeye göre şiir ve çeldirici kuralları uygulanmış mı?"
+    - "Zor düzey bile 2. sınıf sınırında mı?"
+    - "Kolay düzey gereksiz yere karmaşık değil mi?"
+
+hard_fail_rules:
+  - "Seçenek sayısı 3 değilse"
+  - "Şiir 3 dizeden kısa ya da 6 dizeden uzunsa"
+  - "Doğru cevap şiirin konusu yerine ana duygusuna dayanıyorsa"
+  - "Doğru cevap yalnız tek bir ayrıntıyı kapsıyorsa"
+  - "İki veya daha fazla seçenek makul doğruysa"
+  - "Şiir 2. sınıf için fazla soyut veya karmaşıksa"
+  - "Soru ana duygu, mesaj veya yorum sorusuna kayıyorsa"
+  - "Başlıklar cümle biçimine dönüşmüşse"
+  - "Şiirdeki konu ile seçenekler arasında açık uyum kurulamıyorsa"
+
+ornek_bicim_notlari:
+  - "Güneşi anlatan bir şiirde doğru başlık 'Güneş' olabilir."
+  - "Yanlış seçenekler 'Gökyüzü' gibi fazla genel ya da 'Ay' gibi yakın ama yanlış varlık olabilir."
+  - "Şiirde ana varlık açıkça verilmişse doğru başlık doğrudan o varlık adıyla kurulabilir."
+  - "2. sınıf düzeyinde başlık yaratıcı mecazdan çok açık uygunluk üzerinden seçilmelidir."
+
+output_contract:
+  required_fields:
+    - "poem"
+    - "stem"
+    - "options"
+    - "answer"
+    - "difficulty"
+    - "topic"
+  answer_format:
+    - "answer yalnızca A/B/C olarak verilebilir"
+    - "difficulty yalnızca Kolay / Orta / Zor olabilir"

@@ -1,0 +1,195 @@
+# templates/bolum4/metin_ici_karsilastirma_ortak_nokta.yaml
+# Bolum 4.1 - Ozel Bolum: Metin Ici Karsilastirma (Ortak Nokta Bulma)
+#
+# ORTAK NOKTA FORMATI
+# Birden fazla kisa bilgi/ornek verilir, ogrenci ortak noktayi bulur
+# paragraph.required: false — coklu madde/premises formatinda
+
+meta:
+  id: "metin_ici_karsilastirma_ortak_nokta"
+  ad: "Metin İçi Karşılaştırma - Ortak Nokta Bulma"
+  sinif_seviyesi: 5
+  aciklama: "Birden fazla kısa bilgi ya da örnek verilerek bunların ortak yönünü buldurur"
+  frequency: "Medium (~30% of comparison questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Çoklu kısa bilgi (öncül) + soru kökü + 4 kavramsal yargı seçeneği"
+
+  paragraph:
+    required: false  # Çoklu madde formatı, premises kullanılır
+
+  premises:
+    required: true
+    structure:
+      - "3-4 kısa durum/olay maddesi — madde işareti (•) ile nokta şeklinde listelenmeli"
+      - "Her madde 2-3 cümle — bilgi vermek yerine bir durum, olay veya senaryo anlatsın"
+      - "Maddeler birbirinden bağımsız ama ortak eksende birleşebilir"
+      - "YASAK: Ansiklopedik bilgi veya tanım vermek — bunun yerine somut bir kişi, olay veya durum üzerinden anlat"
+      - "FORMAT: Her madde • ile başlamalı ve alt alta sıralanmalı"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 5
+    word_count_max: 20
+    style: "short_phrase"
+    correct_count: 1
+    kurallar:
+      - "Seçenekler maddelerden çıkarılabilecek ÇIKARIMLARDAN oluşmalı"
+      - "Her seçenek bir yargı/çıkarım cümlesi olmalı"
+      - "YASAK: Maddelerin tekrarı veya özeti — çıkarım yapılmalı"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu bilgilerin ortak noktası aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu parçalarda anlatılanların ortak yönü nedir?</b>"
+  - "<b>Bu örneklerin tümü göz önüne alındığında ortak tema aşağıdakilerden hangisidir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Verilen tüm maddeleri eksiksiz ve en uygun biçimde kapsayan ortak yargı"
+  kurallar:
+    - "KRITIK: Dogru secenekte paragraftaki hicbir cumle kelimesi kelimesine TEKRARLANMAMALI — es anlamli sozcuklerle yeniden ifade edilmeli"
+    - "Paragraftaki ifadelerle en az %40 kelime farkliligi olmali — kopyala-yapistir YASAK"
+    - "Ayni anlam korunmali ama farkli sozcukler ve cumle yapilari kullanilmali"
+    - "Tüm bilgi maddelerini kapsayan ortak bir yargı olmalı"
+    - "Doğru seçenek paragraftaki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI — eş anlamlı sözcüklerle yeniden ifade edilmeli"
+    - "Paragraftaki ifadelerle en az %40 kelime farklılığı olmalı — kopyala-yapıştır YASAK"
+    - "Aynı anlam korunmalı ama farklı sözcükler ve cümle yapıları kullanılmalı"
+    - "5-20 kelime, kısa ifade veya tek cümle formatında olmalı"
+    - "Ne çok dar ne çok geniş olmalı"
+    - "Metin dışı bilgi gerektirmemeli"
+    - "Tek ve tartışmasız olmalı"
+  ornekler:
+    - unsurlar:
+        madde_1: "Thomas Edison binlerce deney yaparak ampulü icat etti."
+        madde_2: "J.K. Rowling kitabı 12 yayınevi tarafından reddedildikten sonra başarıya ulaştı."
+        madde_3: "Michael Jordan lise basketbol takımından atıldıktan sonra efsane oldu."
+      dogru: "Başarısızlıklara rağmen azimle çalışarak başarıya ulaşma"
+      neden: "Her üç örnekte ortak olan engel + azim + başarı zinciri"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI (CUSTOM — ortak nokta bulma icin ozel)
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "KISMI_ORTAKLIK_TUZAGI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Bazı maddeler için doğru olan ama hepsi için geçerli olmayan özellik seçenek yapılır."
+    nasil_olusturulur: |
+      Verilen maddelerden yalnızca 1-2 tanesini kapsayan bir ortak nokta öner.
+      Örnek: "Benzer iş kollarında çalışıyor olmaları" — ilk bakışta güçlü ama spor, edebiyat ve sinema aynı iş kolu değildir.
+      Öğrenci yüzey benzerliğe aldanabilir.
+    kategori: "scope"
+
+  - ad: "IKINCIL_SONUCU_ANA_NOKTA_SANMA"
+    bilisssel_hata_kategorisi: "yuzeysel_okuma_hatasi"
+    aciklama: "Metindeki yan sonucu, temel ortak nokta gibi sunar."
+    nasil_olusturulur: |
+      Maddelerde dolaylı olarak bulunan ikincil bir özelliği ana ortak nokta gibi sun.
+      Örnek: "Alanlarında yaptıkları yeniliklerle hatırlanmaları" — doğru gibi görünür ama metnin vurgusu engellere rağmen başarı.
+      Ana tema ile ikincil sonuç ayrımını test eder.
+    kategori: "cognitive"
+
+  - ad: "METIN_DISI_GENISLETME"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Okuyucunun genel kültüründen yararlanarak doğruymuş gibi duran seçenek oluşturur."
+    nasil_olusturulur: |
+      Öğrencinin genel bilgisiyle doğru gibi duran ama maddelerde açıkça söylenmeyen bir ortak nokta öner.
+      Örnek: "Çevrelerindeki insanlardan destek görmeleri" — metin bunu açıkça söylemez.
+      Genel kültür bilgisi metne taşınma hatasını test eder.
+    kategori: "content"
+
+  - ad: "DAR_KAPSAMLI_DOGRU"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Seçenek doğru bir ayrıntı içerir ama tüm maddeleri kapsayacak kadar geniş değildir."
+    nasil_olusturulur: |
+      Ortak temanın yalnızca bir boyutunu veren ama diğer boyutları atlayan dar bir yargı yaz.
+      Örnek: Yalnızca azim var ama başarı sonucu yok, ya da yalnızca başarısızlık var ama çaba boyutu yok.
+      Kapsayıcılık ile daraltma arasındaki farkı test eder.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ETIKETI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB3"
+  bilesenler: ["karsilastirma", "cikarim"]
+  surec_bileseni: "karar_verme"
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Ortak ekseni belirle"
+      details: |
+        Temel ortak temayı seç:
+        azim, fedakârlık, yardımlaşma, doğa sevgisi, kararlılık,
+        başarısızlıktan ders çıkarma, topluma katkı, üretkenlik.
+
+    - step: 2
+      action: "3-4 kısa örnek oluştur"
+      details: |
+        Her örnek:
+        - Kendi içinde bağımsız olmalı
+        - Ama ortak eksene bağlanmalı
+        - Farklı alanlardan seçilmeli (spor, bilim, sanat, edebiyat, günlük yaşam)
+        Her madde 1-3 cümle olmalı.
+
+    - step: 3
+      action: "1 doğru ortak yargı + 3 çeldirici yargı oluştur"
+      details: |
+        Doğru: hepsini kapsayan ortak yargı
+        Çeldiriciler:
+        - 1 kısmi ortaklık (bazı maddeler için geçerli)
+        - 1 metin dışı genişletme
+        - 1 ikincil sonucu ana nokta sanma veya dar kapsamlı doğru
+
+    - step: 4
+      action: "Kapsama testi yap ve seçenekleri sırala"
+      details: |
+        Her seçenek için: "Bu seçenek bütün maddeler için ayrı ayrı doğru mu?"
+        Evetse doğru aday, hayırsa çeldirici.
+        A-B-C-D seçeneklerini rastgele sırala.
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  premises:
+    - "En az 3 madde var mı?"
+    - "Her madde ortak temaya bağlanıyor mu?"
+    - "Maddeler birbirinden çok kopuk değil mi?"
+    - "Ortak tema yüzeyde değil, anlam düzeyinde kurulmuş mu?"
+
+  correct_answer:
+    - "5-20 kelime kısa ifade veya tek cümle mi?"
+    - "Tüm maddeleri kapsıyor mu?"
+    - "Çok geniş ya da çok dar değil mi?"
+
+  distractors:
+    - "Yanlış seçenekler kısmi doğruluk taşıyor mu?"
+    - "Seçenekler aynı soyutluk düzeyinde mi?"
+    - "Bariz alakasız seçenek var mı?"

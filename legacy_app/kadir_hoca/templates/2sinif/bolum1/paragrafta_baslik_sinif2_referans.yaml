@@ -1,0 +1,370 @@
+meta:
+  id: "baslik_sinif2_standart_gorselli_uc_secenekli"
+  ad: "Paragrafta Başlık"
+  sinif_seviyesi: 2
+  ders: "Türkçe"
+  bolum: "2. Sınıf Paragraf Soru Bankası"
+  soru_turu: "çoktan seçmeli"
+  aciklama: >
+    2. sınıf öğrencisi için kısa bir paragrafın tamamını en iyi karşılayan başlığı
+    seçtirmeye yönelik, görsel destekli ve 3 seçenekli standart soru üretim şablonu.
+  kullanim_notu: >
+    Bu şablon, harici olarak kullanılan 2. Sınıf TYMM Ortak Kuralları YAML'ı ile birlikte
+    doğrulanmalıdır. TYMM ortak kuralları bu şablonun içine gömülmemiştir.
+
+format:
+  type: "llm_generated_html"
+  description: "Görsel + tek paragraf + soru kökü + 3 başlık seçeneği"
+
+  paragraph:
+    required: true
+    text_modes:
+      - "simple_info"
+      - "short_narrative"
+    sentence_count_min: 4
+    sentence_count_max: 6
+    word_count_min: 32
+    word_count_max: 62
+    style: "simple_clear_primary_text"
+    kurallar:
+      - "Metin tek baskın konu veya tek baskın olay etrafında kurulmalıdır."
+      - "Metnin konusu 2. sınıf öğrencisi tarafından açıkça anlaşılabilir olmalıdır."
+      - "Metin kısa, sade, somut ve günlük yaşama yakın olmalıdır."
+      - "Cümleler kısa ve doğrudan olmalıdır."
+      - "Metinde konu dışına çıkan yan olaylar bulunmamalıdır."
+      - "Metin ana düşünce, mesaj veya gizli anlam çözümlemeye zorlamamalıdır."
+      - "Metin yalnızca metnin tamamına uygun başlık seçimini ölçmelidir."
+      - "Metin dış bilgi gerektirmemelidir."
+      - "Paragrafın içeriği görselle açık biçimde desteklenebilir yapıda olmalıdır."
+
+  visual:
+    required: true
+    description: "Paragrafın ana içeriğiyle doğrudan uyumlu destekleyici görsel"
+    placement: "paragraph_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illüstrasyon"
+      - "tek sahneli fotoğraf benzeri çizim"
+      - "tek nesne veya tek olay odaklı sahne"
+    kurallar:
+      - "Görsel paragrafın ana konusu veya ana olayını doğrudan göstermelidir."
+      - "Görsel süs amaçlı olmamalı, anlamı desteklemelidir."
+      - "Görselde dikkat dağıtan gereksiz ayrıntılar bulunmamalıdır."
+      - "Görsel tek bakışta anlaşılır olmalıdır."
+      - "Görsel ile paragraf arasında açık uyum bulunmalıdır."
+      - "Görsel, yanlış başlığı destekleyecek biçimde yanıltıcı olmamalıdır."
+      - "Görsel 2. sınıf öğrencisinin rahat yorumlayabileceği sadelikte olmalıdır."
+    yasaklar:
+      - "çok sahneli karmaşık kolaj"
+      - "yoğun veri içeren grafik"
+      - "çok sayıda karakter ve olay barındıran karışık kompozisyon"
+      - "metinle zayıf ilişkili dekoratif görsel"
+      - "görselden bağımsız çözülmesi gereken soru yapısı"
+
+  stem:
+    required: true
+    selection: "random_from_list"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    correct_count: 1
+    style: "short_title"
+    word_count_min: 1
+    word_count_max: 5
+    kurallar:
+      - "Tüm seçenekler başlık biçiminde olmalıdır."
+      - "Seçenekler kısa, sade ve 2. sınıf düzeyinde olmalıdır."
+      - "Doğru seçenek metnin tamamını kapsamalıdır."
+      - "Yanlış seçenekler metne yakın görünmeli ama dikkatli okuyunca elenebilmelidir."
+      - "Yanlış seçenekler yeni ana olay veya yeni baskın bilgi eklememelidir."
+      - "Tüm seçenekler biçimce paralel olmalıdır."
+
+soru_kokleri:
+  - "Bu paragrafa en uygun başlık hangisidir?"
+  - "Paragraf için en uygun başlık aşağıdakilerden hangisidir?"
+  - "Yukarıdaki paragrafın başlığı hangisi olabilir?"
+  - "<b>Bu metnin başlığı aşağıdakilerden hangisi olabilir?</b>"
+  - "<b>Bu metne verilebilecek <u>en uygun</u> başlık aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu metne <u>en uygun</u> başlık aşağıdakilerden hangisidir?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metnin başlığı olmaya <u>en uygundur</u>?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metne başlık olmaya <u>en uygundur</u>?</b>"
+  - "<b>Bu metne getirilebilecek <u>en uygun</u> başlık aşağıdakilerden hangisidir?</b>"
+  - "\"{topic}\" <b>ile ilgili yazılmış bu metne verilebilecek <u>en uygun</u> başlık aşağıdakilerden hangisidir?</b>"
+  - "\"{topic}\" <b>konulu bu metne <u>en uygun</u> başlık aşağıdakilerden hangisidir?</b>"
+
+topic_placeholder_rules:
+  kullanim_kosulu:
+    - "{topic} yalnızca metnin konusu çok açık, somut ve kısa biçimde söylenebiliyorsa kullanılmalıdır."
+    - "{topic} ifadesi 1-3 sözcük arasında tutulmalıdır."
+  yasaklar:
+    - "{topic} alanı ana düşünce, mesaj, ders veya soyut tema ile doldurulamaz."
+    - "{topic} alanı metnin tüm açıklamasını veren uzun ifade olamaz."
+
+dogru_cevap:
+  tanim: "Metnin tamamını kapsayan en uygun kısa başlık"
+  kurallar:
+    - "Doğru cevap metnin tek baskın konusunu veya ana olayını yansıtmalıdır."
+    - "Doğru cevap çok genel olmamalıdır."
+    - "Doğru cevap çok dar olmamalıdır."
+    - "Doğru cevap yalnız bir ayrıntıyı merkeze almamalıdır."
+    - "Doğru cevap sade ve doğrudan olmalıdır."
+    - "Doğru cevap çocuk düzeyini aşan mecazlı veya soyut kullanım içermemelidir."
+    - "Doğru cevap genellikle 1-4 sözcük arasında olmalıdır."
+    - "Doğru cevap görselle de desteklenebilir nitelikte olmalıdır."
+
+yanlis_secenek_stratejileri:
+  count_per_question: 2
+  strategy_pool:
+    - id: "cok_genis"
+      tanim: "Metinle ilişkili ama odağı gereğinden fazla geniş başlık"
+      ornek_mantik:
+        - "Hayvanlar"
+        - "Doğa"
+        - "Okul"
+        - "Bitkiler"
+
+    - id: "cok_dar"
+      tanim: "Metindeki tek ayrıntıya odaklanan başlık"
+      ornek_mantik:
+        - "Kırmızı Çiçek"
+        - "Uzun Sap"
+        - "Sabah Gezisi"
+
+    - id: "yanlis_odak"
+      tanim: "Metindeki yan bilgiye yönelen ama ana konu olmayan başlık"
+      ornek_mantik:
+        - "Dağ Gezisi"
+        - "Bahçe Saksıları"
+        - "Küçük Tohum"
+
+    - id: "iliskili_ama_farkli"
+      tanim: "Aynı alan içinde duran ama gerçek metin konusunu karşılamayan başlık"
+      ornek_mantik:
+        - "Güzel Çiçekler"
+        - "Bahçe Bitkileri"
+        - "Doğadaki Ağaçlar"
+
+  secim_kurali:
+    - "Her soruda 2 yanlış seçenek farklı stratejilerden seçilmelidir."
+    - "En az 1 yanlış seçenek metne yakın ama fazla genel ya da fazla dar olmalıdır."
+    - "Zor düzeyde iki yanlış seçenek de ilk bakışta makul görünmelidir."
+
+zorluk_duzeyleri:
+  kolay:
+    paragraph:
+      sentence_count_min: 4
+      sentence_count_max: 4
+      word_count_min: 32
+      word_count_max: 40
+      kurallar:
+        - "Konu ilk cümlede ya da çok açık biçimde verilmelidir."
+        - "Metin tek olaylı veya tek bilgi odaklı olmalıdır."
+        - "Metindeki ana odak çok görünür olmalıdır."
+        - "Yan bilgi kullanılmamalı ya da çok sınırlı olmalıdır."
+    visual:
+      kurallar:
+        - "Görsel doğrudan doğru başlığı desteklemelidir."
+        - "Görsel tek nesne veya tek olay odaklı olmalıdır."
+    dogru_cevap:
+      kurallar:
+        - "Doğru başlık metindeki konuya çok yakın ve açık olmalıdır."
+        - "Doğru başlık çoğunlukla metindeki temel sözcüklerden biriyle kurulabilir."
+        - "Başlık doğrudan adlandırma biçiminde olmalıdır."
+    distractors:
+      kurallar:
+        - "1 seçenek çok genel olmalıdır."
+        - "1 seçenek çok dar ya da tek ayrıntıya dayalı olmalıdır."
+        - "Yanlış seçenekler kolay elenebilir olmalıdır."
+    difficulty_note: >
+      Kolay düzeyde öğrenci, metnin ne hakkında olduğunu açık biçimde görür ve
+      yalnızca en uygun başlığı seçer.
+
+  orta:
+    paragraph:
+      sentence_count_min: 4
+      sentence_count_max: 5
+      word_count_min: 38
+      word_count_max: 50
+      kurallar:
+        - "Konu açık olmalıdır ancak metnin geneline bakmayı gerektirmelidir."
+        - "Metinde 1 veya 2 destekleyici ayrıntı bulunabilir."
+        - "Başlık, tek ayrıntıya değil tüm metne uygun olmalıdır."
+        - "Küçük bir yan bilgi yer alabilir ama ana odağı gölgelememelidir."
+    visual:
+      kurallar:
+        - "Görsel ana odağı desteklemeli, fakat tek başına doğru cevabı tamamen vermemelidir."
+        - "Metin ve görsel birlikte değerlendirildiğinde doğru başlık daha netleşmelidir."
+    dogru_cevap:
+      kurallar:
+        - "Doğru başlık metnin ana konusunu kapsamalıdır."
+        - "Doğru başlık metindeki tek ayrıntıyı değil genel odağı taşımalıdır."
+        - "Doğru başlık bazen metni birebir tekrar etmeyebilir ama sade kalmalıdır."
+    distractors:
+      kurallar:
+        - "1 seçenek çok genel"
+        - "1 seçenek yan bilgiye ya da dar ayrıntıya odaklı"
+        - "En az 1 yanlış seçenek ilk bakışta makul görünmelidir."
+    difficulty_note: >
+      Orta düzeyde öğrenci metnin tamamına bakarak en uygun başlığı seçmelidir.
+      Ancak soru yine de ana fikir ya da yorum gerektirmez.
+
+  zor:
+    paragraph:
+      sentence_count_min: 5
+      sentence_count_max: 6
+      word_count_min: 46
+      word_count_max: 62
+      kurallar:
+        - "Konu açık kalmalıdır fakat metin içinde birkaç bilgiye dağılmış olabilir."
+        - "Metinde 1 yan ayrıntı bulunabilir ve bu ayrıntı çeldirici üretimine malzeme verebilir."
+        - "Doğru başlık metindeki bütün bilgileri en iyi toplayan seçenek olmalıdır."
+        - "Zor düzeyde bile soru 3. sınıf ana fikir düzeyine taşmamalıdır."
+    visual:
+      kurallar:
+        - "Görsel ana konuyu desteklemelidir ama yakın bir çeldiriciye de zemin hazırlayabilecek doğal ayrıntılar içerebilir."
+        - "Görsel yine de karışık olmamalı ve 2. sınıf sadeliğini korumalıdır."
+    dogru_cevap:
+      kurallar:
+        - "Doğru başlık tek ayrıntı değil bütün odak için en uygun seçenek olmalıdır."
+        - "Doğru başlık sade kalmalı, yaratıcı ama soyut olmamalıdır."
+        - "Doğru başlık gereğinden geniş olmamalıdır."
+    distractors:
+      kurallar:
+        - "2 yanlış seçeneğin ikisi de metinle ilişkili görünmelidir."
+        - "1 seçenek fazla genel olmalıdır."
+        - "1 seçenek metindeki yan unsur ya da tek ayrıntıdan üretilmiş yakın çeldirici olmalıdır."
+    difficulty_note: >
+      Zor düzey 2. sınıfta gizli anlam veya mesaj zorluğu değildir.
+      Zorluk, metnin tamamını kapsayan başlığı ayrıntı başlıklarından ayırma düzeyinde kalır.
+
+difficulty_selection_policy:
+  default: "orta"
+  allowed_values: ["Kolay", "Orta", "Zor"]
+  hard_limits:
+    - "Tüm düzeylerde paragraf 4-6 cümle arasında kalmalıdır."
+    - "Tüm düzeylerde görsel zorunludur."
+    - "Zor düzey seçilse bile soru ana fikir, ana duygu veya yorum sorusuna dönüşemez."
+    - "Kolay düzeyde gereksiz yakın çeldirici yükü oluşturulamaz."
+    - "Tüm düzeylerde metin 2. sınıf sözcük ve cümle düzeyini aşamaz."
+
+konu_alani:
+  izinli_ornekler:
+    - "çiçekler"
+    - "hayvanlar"
+    - "okul"
+    - "oyun"
+    - "arkadaşlık"
+    - "yardımlaşma"
+    - "doğa"
+    - "temizlik"
+    - "sağlıklı yaşam"
+    - "kitap okuma"
+    - "müze"
+    - "bayram"
+    - "meslekler"
+    - "uzay"
+    - "aile"
+  kurallar:
+    - "Konu 2. sınıf öğrencisinin anlayabileceği kadar somut ve açık olmalıdır."
+    - "Bilgi metni seçilirse bilgiler çok temel ve kısa olmalıdır."
+    - "Öyküleyici metin seçilirse olay akışı sade olmalıdır."
+    - "Görselle rahat desteklenebilen konular tercih edilmelidir."
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "2. sınıfa uygun, görselle desteklenebilir tek ve açık bir konu seç"
+    - step: 2
+      action: "Seçilen konu için 4-6 cümlelik kısa ve sade paragraf oluştur"
+      details:
+        - "Tek baskın konu kur"
+        - "2. sınıf sözcük dağarcığında kal"
+        - "Metne en uygun başlığı tekleyecek açıklıkta yaz"
+    - step: 3
+      action: "Paragrafın ana içeriğiyle uyumlu görsel tasarımını belirle"
+      details:
+        - "Görsel ana konuya doğrudan bağlı olsun"
+        - "Görsel tek sahneli ve sade olsun"
+        - "Görsel yanlış başlıkları destekleyecek kadar yanıltıcı olmasın"
+    - step: 4
+      action: "Metnin tamamını kapsayan doğru başlığı üret"
+      details:
+        - "Kısa ol"
+        - "Sade ol"
+        - "Çok genel ya da çok dar olma"
+    - step: 5
+      action: "Zorluk düzeyine uygun 2 çeldirici üret"
+      details:
+        - "Farklı çeldirici stratejileri kullan"
+        - "Metne yakın görün ama yanlış odakta kal"
+    - step: 6
+      action: "Soru kökünü listeden rastgele seç"
+    - step: 7
+      action: "Şıkları A-B-C olarak karıştır"
+    - step: 8
+      action: "Harici TYMM ortak kuralları ile doğrulama yap"
+
+validation_checklist:
+  paragraph:
+    - "Metin 4-6 cümle arasında mı?"
+    - "Metin seçilen zorluk düzeyinin kelime aralığında mı?"
+    - "Metin tek baskın konuya sahip mi?"
+    - "Metin somut ve sade mi?"
+    - "Metinde dış bilgi gerektiren unsur var mı? Varsa reddet."
+    - "Metin başlık seçimini konu düzeyinde mi ölçüyor? Ana fikir düzeyine kayıyorsa reddet."
+
+  visual:
+    - "Görsel zorunlu olarak var mı?"
+    - "Görsel paragrafın ana içeriğiyle uyumlu mu?"
+    - "Görsel tek bakışta anlaşılır mı?"
+    - "Görsel destekleyici ama yanıltıcı değil mi?"
+    - "Görsel dekoratif kalmıyor mu?"
+
+  stem:
+    - "Soru kökü başlık seçimini açıkça istiyor mu?"
+    - "Soru kökü ek beceri yüklemiyor mu?"
+
+  options:
+    - "Toplam 3 seçenek var mı?"
+    - "Seçenekler başlık biçiminde mi?"
+    - "Seçenekler kısa ve sade mi?"
+    - "Doğru başlık metnin tamamını kapsıyor mu?"
+    - "Bir seçenek fazla genel mi?"
+    - "Bir seçenek fazla dar ya da yan odaklı mı?"
+
+  difficulty:
+    - "Zorluk seçilen düzeye göre paragraf ve çeldirici kuralları uygulanmış mı?"
+    - "Zor düzey bile 2. sınıf sınırında mı?"
+    - "Kolay düzey gereksiz yere karmaşık değil mi?"
+
+hard_fail_rules:
+  - "Seçenek sayısı 3 değilse"
+  - "Görsel yoksa"
+  - "Paragraf 4 cümleden kısa ya da 6 cümleden uzunsa"
+  - "Doğru cevap metnin konusu yerine ana fikrine dayanıyorsa"
+  - "Doğru cevap yalnız bir ayrıntıyı kapsıyorsa"
+  - "İki veya daha fazla seçenek makul doğruysa"
+  - "Metin 2. sınıf için fazla soyut veya karmaşıksa"
+  - "Soru ana fikir, ana duygu, mesaj veya yorum sorusuna kayıyorsa"
+  - "Başlıklar cümle biçimine dönüşmüşse"
+  - "Görsel metinle uyumsuzsa"
+
+ornek_bicim_notlari:
+  - "Bilgi metinlerinde görsel, metindeki ana nesne ya da varlığı açıkça göstermelidir."
+  - "Öyküleyici metinlerde görsel, metindeki ana olay anını yansıtmalıdır."
+  - "Örnek olarak dünyanın en büyük çiçeğini anlatan bir paragrafta görsel, o çiçeği açıkça göstermelidir."
+  - "Doğru başlık, 'Dünyanın En Büyük Çiçeği' gibi metnin asıl odağını kapsayan yapıdadır."
+  - "Yanlış seçenekler 'Saksı Çiçekleri' gibi yanlış alan ya da 'Dünyanın En Güzel Çiçeği' gibi metinde dayanağı olmayan vurgu taşıyabilir."
+
+output_contract:
+  required_fields:
+    - "paragraph"
+    - "visual_description"
+    - "stem"
+    - "options"
+    - "answer"
+    - "difficulty"
+    - "topic"
+  answer_format:
+    - "answer yalnızca A/B/C olarak verilebilir"
+    - "difficulty yalnızca Kolay / Orta / Zor olabilir"

@@ -1,0 +1,124 @@
+meta:
+  id: baglam_cikarim
+  ad: Bağlam Temelli Çıkarım
+  sinif_seviyesi: 5
+  aciklama: Kronolojik değişim metni üzerinden neden analizi ve sınıflandırma soruları
+  kaynak: kadirhocasorukokleri.md
+  frequency: Medium
+context:
+  type: baglam_cikarim
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 80
+    word_count_max: 150
+    structure:
+    - KRONOLOJİK DEĞİŞİM formatında bir metin oluştur
+    - '[Yer] başlangıçta [özellik] cümlesiyle başla'
+    - Ancak [önemli değişim] ile devam et
+    - Bu durum sonucunda [olaylar] belirt
+    - Zamanla [etkiler] ekle
+    - Bu gelişmeler [çevre/toplum] üzerinde etkili oldu şeklinde bitir
+    kurallar:
+    - Metin bir yerin/durumun zaman içindeki değişimini anlatmalı
+    - 'KRİTİK — SENARYO KAPSAMI: Senaryo sadece DURUMU ve MERAKı anlatsın, CEVAPLARI vermesin!'
+    - Detaylı bilgiler ve veriler SADECE tablo/grafikte olmalı — senaryo bunları içermemeli
+    - Soruların cevabı senaryodan değil tablo/grafikten çıkarılmalı
+    - Değişimin nedenleri açıkça belirtilmeli
+    - Değişimin sonuçları farklı kategorilere ayrılabilir olmalı
+    - 5. sınıf seviyesinde, anlaşılır ve somut örneklerle yazılmalı
+    - Neden-sonuç ilişkileri metinde bulunabilir olmalı
+    - Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)
+  questions:
+  - slot: 1
+    type: neden
+    soru_kokleri:
+    - <b>[Durumun gerçekleşmesine] etki eden temel faktör hangisidir?</b>
+    options_style: complete_sentence
+    word_count_min: 4
+    word_count_max: 18
+    kurallar:
+    - Şıklar tablodaki ifadeyi aynen tekrarlamamalı — veriyi YORUMLAYARAK veya TERS ÇEVİREREK yazmalı
+    - Öğrenci tablodaki birden fazla satırı KARŞILAŞTIRMAK zorunda kalmalı
+    - Doğru cevap tablodaki tek bir hücreden direkt okunaMAMALI
+    beceri:
+      katman: KB2
+      bilesenler:
+      - cikarim_yapma
+      - karsilastirma
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 2
+    type: siniflandirma
+    soru_kokleri:
+    - <b>[Bu gelişmeler sonucunda] aşağıdakilerden hangisi [belirli kategoriye] girer?</b>
+    - <b>Eldeki bu kanıtlar bizi hangi sonuca ulaştırır?</b>
+    - <b>… verilerine dayanılarak hangi çıkarım yapılabilir?</b>
+    - <b>Bu gelismeler sonucunda asagidakilerden hangisi belirli bir kategoriye girer?</b>
+    options_style: complete_sentence
+    word_count_min: 4
+    word_count_max: 18
+    kurallar:
+    - Öğrenci senaryodaki durumu ANLAYIP tablodaki veriyi YORUMLAMALI
+    - Şıklar tablodaki verileri ters çevirerek, karşılaştırarak veya sentezleyerek yazılmalı
+    - Tek bir sütuna veya satıra bakarak çözülemez olmalı
+    beceri:
+      katman: KB3
+      bilesenler:
+      - siniflandirma
+      - cikarim_yapma
+      surec_bileseni: bilgiyi_cikartma
+header_template: 1-2. soruları aşağıdaki bilgilere göre birbirinden bağımsız olarak cevaplayınız.
+format:
+  type: llm_generated_html
+  description: Kronolojik değişim metni üzerinden 2 çıkarım sorusu
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 150
+    sentence_count_min: 4
+    sentence_count_max: 7
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 4
+    word_count_max: 18
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Kronolojik değişim metnindeki neden-sonuç ilişkilerine dayalı cevap
+  kurallar:
+  - 'KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI'
+  - Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI
+  - Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil
+  - 'YASAK: Tablodaki değeri aynen şıkka yazmak (örn: ''yalıtımı azdır'' tabloda yazıyorsa şıkta aynen yazmamalı)'
+  - Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli
+  - Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı
+  - Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı
+  - Neden sorusunda doğru cevap metinde açıkça belirtilen temel değişim faktörü olmalı
+  - Sınıflandırma sorusunda doğru cevap metindeki gelişmelerin doğru kategoriye ait olduğunu göstermeli
+  - Her soru farklı bir çıkarım becerisini ölçmeli
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: ''teleskop'' → ''mercekli araç'' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: YANLIS_NEDEN
+    aciklama: Sonucu neden olarak sunma veya yan nedeni temel neden olarak gösterme
+    ornek: Değişimin sonucunu nedeni olarak aktarma
+  - ad: YANLIS_KATEGORI
+    aciklama: Gelişmeyi yanlış kategoriye koyma
+    ornek: Çevresel etkiyi toplumsal etki olarak sınıflandırma
+  - ad: METINDE_OLMAYAN
+    aciklama: Metinde bahsedilmeyen ama mantıklı görünen bir neden/sınıf sunma
+    ornek: Konuyla ilgili ama metinde geçmeyen bir faktörü neden olarak gösterme
+use_shared_strategies: false

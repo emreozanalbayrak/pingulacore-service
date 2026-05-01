@@ -1,0 +1,150 @@
+# templates/baglam/siralama_baglam_3q.yaml
+# Bağlam Tipi: Bölüm 3 — Yapı Bölümü (3Q)
+# Soru Sayısı: 3
+# Soru Tipleri: Sıralama + Tamamlama + Akışı bozan
+
+meta:
+  id: "siralama_baglam_3q"
+  ad: "Sıralama Bağlam (3 Soru)"
+  sinif_seviyesi: 5
+  aciklama: "Numaralı cümlelerden oluşan metin — sıralama, tamamlama ve akışı bozan cümle soruları"
+  kaynak: "kaynak-soru-kokleri.md"
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# BAĞLAM KONFİGÜRASYONU
+# ═══════════════════════════════════════════════════════════════
+
+context:
+  type: "siralama_baglam_3q"
+  question_count: 3
+  question_count_min: 3
+  question_count_max: 3
+  generation:
+    word_count_min: 100
+    word_count_max: 180
+    structure:
+      - "Bir konu hakkında 6-8 cümlelik bir metin oluştur"
+      - "Cümleleri 1'den başlayan Arap rakamlarıyla numarala (1, 2, 3, 4, 5, 6, 7, 8)"
+      - "Cümleler mantıksal bir sıra izlemeli (neden-sonuç, zaman dizisi veya süreç)"
+      - "Cümleleri KARIŞIK sırada sun — doğru sıra 1-2-3-4-5-6 OLMAMALI"
+      - "5 cümle tutarlı akış oluştursun, 1 cümle konuyla ilgili ama akışa uymasın"
+      - "Son cümle çıkarılabilir yapıda olmalı — tamamlama sorusu sorulabilmeli"
+      - "YASAK: HTML tablosu (<table>) EKLEME — sadece numaralı cümleler yaz, tablo KULLANMA"
+    kurallar:
+      - "5. sınıf seviyesinde, bilgilendirici bir konu (fen, sosyal bilgiler, günlük hayat)"
+      - "Cümle numaralama 1'den başlayan Arap rakamlarıyla (1, 2, 3…) yapılmalı"
+      - "Akışı bozan cümle bariz değil ince bir sapma olmalı"
+      - "Karışık sırada sunulduğunda doğru sıra bulmayı gerektirecek yapıda olmalı"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+    - slot: 1
+      type: "siralama"
+      soru_kokleri:
+        - "<b>Numaralanmış cümleler anlamlı bir paragraf oluşturacak şekilde sıralandığında doğru sıralama aşağıdakilerden hangisidir?</b>"
+        - "<b>Bu cümleler anlamlı bir bütün oluşturacak şekilde sıralandığında doğru sıra hangisidir?</b>"
+        - "<b>…Karakter…'in oluşturduğu anlamlı metnin doğru sıralaması aşağıdakilerden hangisidir?</b>"
+        - "<b>…Karakter…'in oluşturduğu metinde hangisi baştan ikinci sırada yer alır?</b>"
+      options_style: "short_phrase"
+      word_count_min: 3
+      word_count_max: 12
+      beceri:
+        katman: "KB2"
+        bilesenler: ["siralama", "yapilandirma"]
+        surec_bileseni: "metin_yapisini_analiz_etme"
+
+    - slot: 2
+      type: "tamamlama"
+      soru_kokleri:
+        - "<b>Bu metnin sonuna aşağıdaki cümlelerden hangisi eklenebilir?</b>"
+        - "<b>Metne eklenen son cümle aşağıdakilerden hangisi olabilir?</b>"
+        - "<b>Paragrafın son cümlesinin eksik olduğu fark edilmiştir. Aşağıdakilerden hangisi paragrafın son cümlesi olabilir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 8
+      word_count_max: 22
+      beceri:
+        katman: "KB2"
+        bilesenler: ["cikarim_yapma", "yapilandirma"]
+        surec_bileseni: "metin_yapisini_analiz_etme"
+
+    - slot: 3
+      type: "akis_bozan"
+      soru_kokleri:
+        - "<b>Numaralanmış cümlelerden hangisi metnin anlam akışını <u>bozmaktadır</u>?</b>"
+        - "<b>Bu cümlelerden hangisi metnin bütünlüğünü <u>bozmaktadır</u>?</b>"
+        - "<b>…Karakter…'in metinden çıkardığı metnin akışını bozan cümle aşağıdakilerden hangisidir?</b>"
+        - "<b>Bu metnin anlam bütünlüğünü sağlamak için numaralanmış cümlelerden hangilerinin yeri değiştirilmelidir?</b>"
+        - "<b>…Karakter…'in bulduğu yazıda konunun farklı bir yönünden bahseden numaralanmış cümle hangisidir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 8
+      word_count_max: 22
+      beceri:
+        katman: "KB2"
+        bilesenler: ["degerlendirme", "yapilandirma"]
+        surec_bileseni: "metin_yapisini_analiz_etme"
+
+header_template: "1-3. soruları aşağıdaki numaralanmış cümlelere göre cevaplayınız."
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Numaralı cümlelerden oluşan metin üzerinden sıralama, tamamlama ve akışı bozan soruları"
+
+  paragraph:
+    required: true
+    word_count_min: 100
+    word_count_max: 180
+    sentence_count_min: 6
+    sentence_count_max: 10
+
+  stem:
+    required: true
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 3
+    word_count_max: 22
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+# ═══════════════════════════════════════════════════════════════
+# DOĞRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Doğru sıralama, uygun tamamlama cümlesi veya akışı bozan cümle"
+  kurallar:
+    - "KRİTİK: Doğru cevap metindeki tek bir cümleden direkt okunaMAMALI — çıkarım gerektirmeli"
+    - "Öğrenci doğru cevaba ulaşmak için numaralı cümlelerin mantıksal sırasını ANLAMALI"
+    - "Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri doğru olmalı"
+    - "Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı"
+    - "Sıralama sorusunda doğru cevap mantıksal akışı doğru yansıtan sıralama olmalı"
+    - "Tamamlama sorusunda doğru cevap metnin anlam bütünlüğünü koruyan cümle olmalı"
+    - "Akışı bozan sorusunda doğru cevap konuyla ilgili ama akışa uymayan cümle olmalı"
+    - "NOT: Tamamlama ve akışı bozan sorularında seçenekler metindeki cümlelere benzer olabilir — bu normaldir"
+    - "Sıralama şıklarında cümle numaraları (1-2-3-4...) kullanılmalı, uzun metin YASAK"
+    - "BİLİMSEL TERİM KORUMASI: Bilimsel terimler değiştirilmemeli"
+
+# ═══════════════════════════════════════════════════════════════
+# ÇELDİRİCİ STRATEJİLERİ
+# ═══════════════════════════════════════════════════════════════
+
+distractors:
+  stratejiler:
+    - ad: "BITISIK_CUMLE_TAKASI"
+      aciklama: "Doğru sırada bitişik iki cümlenin yerini değiştirerek yakın ama yanlış sıralama sunma"
+      ornek: "Doğru sıralama 'I-II-III-IV-V' ise 'I-III-II-IV-V' sunma"
+    - ad: "KONU_SAPMASI"
+      aciklama: "Konuyla ilgili ama metnin akışına uymayan tamamlama cümlesi sunma"
+      ornek: "Aynı genel konuda ama farklı alt konuya geçen bir cümle önerme"
+    - ad: "DETAY_TEKRARI"
+      aciklama: "Metinde zaten var olan bir bilgiyi farklı kelimelerle tekrarlayan cümle sunma"
+      ornek: "Yeni bilgi eklemeyen, sadece önceki cümleleri özetleyen ifade"
+
+use_shared_strategies: false

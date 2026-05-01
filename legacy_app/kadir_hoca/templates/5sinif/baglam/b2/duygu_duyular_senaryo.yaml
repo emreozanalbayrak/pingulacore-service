@@ -1,0 +1,157 @@
+# templates/baglam/duygu_duyular_senaryo.yaml
+# Bağlam Tipi: Bölüm 2 — Duygu + Duyular + Karakter Senaryosu
+# Soru Sayısı: 3
+# Kaynak: kaynak-soru-kokleri.md — Bölüm 2
+# Soru Tipleri: Duyu belirleme + Duygu çıkarımı + Karakter analizi
+
+meta:
+  id: "duygu_duyular_senaryo"
+  ad: "Duygu + Duyular + Karakter Senaryosu"
+  sinif_seviyesi: 5
+  aciklama: "Duyusal detayları zengin bir senaryo — duyu belirleme, duygu çıkarımı ve karakter analizi"
+  kaynak: "kaynak-soru-kokleri.md"
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# BAĞLAM KONFİGÜRASYONU
+# ═══════════════════════════════════════════════════════════════
+
+context:
+  type: "duygu_duyular_senaryo"
+  question_count: 3
+  question_count_min: 3
+  question_count_max: 3
+  generation:
+    word_count_min: 140
+    word_count_max: 200
+    structure:
+      - "Doğa/okul/gezi senaryosu oluştur — duyusal detaylar zengin olmalı"
+      - "En az 3 farklı duyuya (görme, işitme, dokunma, koku, tat) hitap eden detaylar içermeli"
+      - "Senaryoda en az 1 ana karakter olmalı ve karakterin kişilik özellikleri davranışlarından belli olmalı"
+      - "Metnin genel duygu tonu belirgin olmalı (huzur, heyecan, nostalji, merak gibi)"
+      - "Duyusal detaylar doğal ve akıcı bir şekilde metne yerleştirilmeli"
+      - "Karakterin bir olay/durum karşısındaki tepkisi anlatılmalı"
+      - "YASAK: HTML tablosu (<table>) EKLEME — sadece düz metin hikâye yaz, tablo KULLANMA"
+    kurallar:
+      - "5. sınıf seviyesinde, doğa gezisi, okul etkinliği veya aile ziyareti gibi konular"
+      - "Betimleyici anlatım ağırlıklı, öyküleyici öğelerle desteklenmiş"
+      - "Her duyu için somut, canlı ifadeler kullanılmalı"
+      - "Bazı duyulara hitap EDİLMEMELİ — soru mantığı için gerekli"
+      - "YASAK: HTML tablosu (<table>) EKLEME — bu bir senaryo template'i, sadece düz metin hikâye yaz"
+      - "Karakter ismi Türkçe olmalı"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+    - slot: 1
+      type: "duyu_belirleme"
+      soru_kokleri:
+        - "<b>Metinde aşağıdaki duyulardan hangisine hitap edilmektedir?</b>"
+        - "<b>Bu metinde aşağıdaki duyulardan hangisiyle ilgili bir ayrıntı bulunmaktadır?</b>"
+        - "<b>Bu metinde aşağıdaki duyulardan hangisine ait bir ayrıntıya yer <u>verilmemiştir</u>?</b>"
+        - "<b>Bu metinde yer alan duyulara ait ayrıntılar aşağıdakilerin hangisinde doğru verilmiştir?</b>"
+      options_style: "concept"
+      word_count_min: 1
+      word_count_max: 3
+      beceri:
+        katman: "KB1"
+        bilesenler: ["bilgiyi_bulma", "siniflandirma"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+    - slot: 2
+      type: "duygu_cikarim"
+      soru_kokleri:
+        - "<b>Metnin genel duygu tonu aşağıdakilerden hangisidir?</b>"
+        - "<b>Bu metinden çıkarılabilecek baskın duygu aşağıdakilerden hangisidir?</b>"
+        - "<b>Bu metinde …Karakter…, hangi duyguları yaşamıştır?</b>"
+        - "<b>Bu metindeki …Karakter…'in yaşadığı duygu için aşağıdakilerden hangisi söylenebilir?</b>"
+      options_style: "concept"
+      word_count_min: 1
+      word_count_max: 3
+      beceri:
+        katman: "KB2"
+        bilesenler: ["cikarim_yapma", "yorumlama"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+    - slot: 3
+      type: "karakter_analiz"
+      soru_kokleri:
+        - "<b>Metindeki karakterin kişilik özelliği aşağıdakilerden hangisidir?</b>"
+        - "<b>…Karakter…'in davranışlarından çıkarılabilecek kişilik özelliği hangisidir?</b>"
+        - "<b>Bu metinde bahsedilen kişi hangi kişilik özelliğine sahiptir?</b>"
+        - "<b>Bu metinde …Karakter…'in hangi özelliğinden şikâyet edilmektedir?</b>"
+      options_style: "complete_sentence"
+      word_count_min: 8
+      word_count_max: 22
+      beceri:
+        katman: "KB3"
+        bilesenler: ["cikarim_yapma", "degerlendirme"]
+        surec_bileseni: "problemi_yapilandirma"
+
+header_template: "1-3. soruları aşağıdaki metne göre cevaplayınız."
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Duygu, duyular ve karakter analizi senaryosu üzerinden 3 soru"
+
+  paragraph:
+    required: true
+    word_count_min: 140
+    word_count_max: 200
+    sentence_count_min: 6
+    sentence_count_max: 12
+
+  stem:
+    required: true
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 22
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "matches"
+
+# ═══════════════════════════════════════════════════════════════
+# DOĞRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metindeki duyusal detaylarla, duygu tonuyla veya karakter davranışlarıyla desteklenen cevap"
+  kurallar:
+    - "KRİTİK: Doğru cevap metindeki tek bir cümleden direkt okunaMAMALI"
+    - "Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve metindeki veriyi YORUMLAMALI"
+    - "Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil"
+    - "YASAK: Metindeki değeri aynen şıkka yazmak (örn: 'yalıtımı azdır' metinde yazıyorsa şıkta aynen yazmamalı)"
+    - "Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin birlikte değerlendirildiğinde doğru olmalı"
+    - "Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı"
+    - "Duyu belirleme sorusunda doğru cevap metinde somut karşılığı olan duyu olmalı"
+    - "Duygu çıkarımı sorusunda doğru cevap metnin genel atmosferini yansıtan baskın duygu olmalı"
+    - "Karakter analizi sorusunda doğru cevap karakterin davranışlarından tutarlı şekilde çıkarılan özellik olmalı"
+    - "HATALI YAKLASIM: Metinde geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer"
+    - "Doğru seçenek paragraftaki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK"
+    - "BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: 'teleskop' → 'mercekli araç' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı"
+
+# ═══════════════════════════════════════════════════════════════
+# ÇELDİRİCİ STRATEJİLERİ
+# ═══════════════════════════════════════════════════════════════
+
+distractors:
+  stratejiler:
+    - ad: "DUYU_KARISTIRMA"
+      aciklama: "Metinde hitap edilmeyen bir duyuyu hitap edilen gibi gösterme"
+      ornek: "Koku detayı olmayan metinde 'koku duyusu' seçeneği sunma"
+    - ad: "DUYGU_YAKINLIK"
+      aciklama: "Baskın duyguya yakın ama farklı bir duygu tonu önerme"
+      ornek: "Huzur yerine mutluluk, nostalji yerine üzüntü sunma"
+    - ad: "KARAKTER_SAPMA"
+      aciklama: "Yüzeysel bir davranıştan yanlış kişilik özelliği çıkarma"
+      ornek: "Tek bir çekingen davranıştan 'içine kapanık' kişilik çıkarımı yapma"
+
+use_shared_strategies: false

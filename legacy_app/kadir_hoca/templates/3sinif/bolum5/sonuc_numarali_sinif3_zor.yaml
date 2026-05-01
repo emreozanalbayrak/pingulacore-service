@@ -1,0 +1,139 @@
+# Referans: metnin_bolumleri_giris_gelisme_sonuc_sinif3_referans.yaml → zorluk_duzeyleri.zor
+# Zor duzey — sonuc bolumu — Sonuc Numarali (Hangi Cumleyle Baslar)
+
+meta:
+  id: "sonuc_numarali_sinif3_zor"
+  ad: "3. Sinif - Metnin Bolumleri / Sonuc Numarali (Hangi Cumleyle Baslar) (Zor)"
+  sinif_seviyesi: 3
+  aciklama: "Zor duzey — sonuc bolumu, sonuc numarali (hangi cumleyle baslar). 4 secenekli, gorselli."
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Gorsel + tek paragraf + soru koku + 4 secenek (zor, sonuc)"
+
+  paragraph:
+    required: true
+    word_count_min: 72
+    word_count_max: 95
+    sentence_count_min: 6
+    sentence_count_max: 7
+    stil: "numaralanmis_yanyana_metin"
+    background_color: "#fce8e8"
+    kurallar:
+      - "Metin 3. sinif ogrencisinin anlayabilecegi kadar acik, sade ve akici olmalidir."
+      - "Metin giris, gelisme ve sonuc mantigina uygun kurulmalidir."
+      - "Giris bolumu konuyu acmali, gelisme bolumu ayrintilari vermeli, sonuc bolumu anlami toparlamalidir."
+      - "Metin tek baskin konu veya tek kisa olay etrafinda kurulmalidir."
+      - "Metin dis bilgi gerektirmemelidir."
+      - "Bolumler arasi gecis anlamli ve dogal olmalidir."
+      - "Soru, paragrafin yapisini fark ettirmeli; ama 4. sinifa kayan ayrintili metin cozumlemesine donusmemelidir."
+      - "Metinde giris-gelisme-sonuc gecisleri acik kalmali; fakat yakin celdiricilere izin vermelidir."
+      - "Numaralanmış cümle yapisi kullanilabilir."
+      - "Dogru secenek icin paragrafin tamami dusunulmelidir."
+      - "Zor duzeyde bile soru 4. sinifa kayan ileri yapi cozumlemesine donusmemelidir."
+      - "Sonuc bolumu anlatilanlari toparlamali veya bir sonuca baglamalidir."
+      - "Sonuc cumlesi metnin sonunda dogal kapanis saglamalidir."
+      - "Sonuc cumlesi yeni bir ana konu baslatmamalidir."
+      - "Sonuc bolumunde cikarim, kapanis veya toparlama havasi bulunabilir."
+      - "Sonuc bolumu onceki cumlelerin dogal devami olmalidir."
+      - "Numaralanmış metin varyantinda sonuc bolumunun basladigi cümle acik bicimde ayirt edilebilir olmalidir."
+      - "Metindeki cumleler (1), (2), (3), (4), (5) seklinde parantezli rakamlarla numaralandirilmalidir."
+      - "Cumleler ayni paragraf icinde YANYANA akici bicimde yazilmalidir; her cümle parantezli numarasiyla baslar (ornek: (1) Ali okula gitti. (2) Okulda arkadasini gordu. (3) ...). Cumleler arasinda <br> KULLANILMAZ, sadece normal bosluk birakilir. Cumleler alt alta degil, tek paragrafta arka arkaya yazilir."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  visual:
+    required: true
+    description: "Metnin ana icerigini destekleyen islevsel gorsel"
+    placement: "paragraph_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illustrasyon"
+      - "tek sahneli fotograf benzeri cizim"
+      - "tek olay veya tek varlik odakli sahne"
+      - "metnin ana konusunu destekleyen sade konu gorseli"
+    kurallar:
+      - "Her soru icin gorsel zorunludur."
+      - "Gorsel metnin ana icerigiyle acik uyumlu olmalidir."
+      - "Gorsel sus olmamali, cozumde anlam destegi sunmalidir."
+      - "Gorsel tek basina dogru cevabi acikca vermemelidir."
+      - "Gorsel ile metin birlikte degerlendirildiginde dogru bolum veya dogru cümle daha netlesebilir."
+      - "Gorsel dikkat dagitici gereksiz ayrintilar icermemelidir."
+    yasaklar:
+      - "dekoratif ve metinden bagimsiz gorsel"
+      - "cok sahneli karmasik kolaj"
+      - "grafik, tablo veya infografik yogunlugu tasiyan tasarim"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 1
+    word_count_max: 2
+    style: "number_option"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "3. sinifta her soru 4 secenekli olmalidir."
+      - "Cümle secenekleri anlamli ve kurallı olmalidir."
+      - "Dogru secenek metnin bolum yapisina ve dusuncenin akisina tam uymalidir."
+      - "Yanlis secenekler metne yakin gorunmeli ama dusuncenin akisini bozmalidir."
+      - "Birden fazla makul dogru secenek olusmamalidir."
+      - "Numara secenekli sorularda secenekler yalniz sayi biciminde olabilir."
+      - "3 yanlis secenegin en az 2'si metne yakin gorunmelidir."
+      - "Yanlis seceneklerden biri girise, biri gelismeye, biri sonuca yakin islev tasiyabilir."
+
+soru_kokleri:
+  - "<b>Bu metnin sonuç bölümü kaç numaralı cümle ile başlamaktadır?</b>"
+  - "<b>Numaralanmış cumlelere göre sonuç bölümü hangi cümle ile başlar?</b>"
+  - "<b>Bu parçanın sonuç bölümü hangi cümleyle başlamaktadır?</b>"
+  - "<b>Metnin sonuç bölümü aşağıdaki numaralanmış cümlelerden hangisi ile başlar?</b>"
+
+dogru_cevap:
+  tanim: "Metnin bolum yapisina ve dusuncenin akisina tam uyan dogru numara"
+  kurallar:
+    - "KRITIK PARAPHRASE: Dogru cevap paragraftaki cumleleri/ifadeleri AYNEN KULLANMA — paragraf kelimelerini es anlamli sozcuklerle degistir ve farkli cümle yapisiyla yeniden ifade et. En az %50 kelime farkliligi zorunlu. Paragrafa cok benzer secenekler FAIL olur."
+    - "Numaralanmış metin sorularinda dogru cevap bolum gecisini acik bicimde gostermelidir."
+    - "Dogru cevap metnin tamamiyla uyumlu olmalidir."
+    - "Dogru cevap dis bilgi gerektirmemelidir."
+    - "Dogru cevap 3. sinif ogrencisinin metni dikkatle okuyarak bulabilecegi aciklikta olmalidir."
+
+celdirici_stratejileri:
+  - ad: "BIR_ONCEKI_BOLUMLE_KARISTIRMA"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Gelisme ile sonucu ya da giris ile gelismeyi karistran numara"
+    nasil_olusturulur: |
+      Dogru bolumun bir oncesi ya da sonrasiyla karistrilabilecek bir numara sec.
+    kategori: "semantic"
+
+  - ad: "ERKEN_BASLATMA"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Bolumu oldugundan once baslatan secenek"
+    nasil_olusturulur: |
+      Dogru bolum numarasindan once gelen bir cumleyi bolum basi olarak sun.
+    kategori: "cognitive"
+
+  - ad: "GEC_BASLATMA"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Bolumu oldugundan sonra baslatan secenek"
+    nasil_olusturulur: |
+      Dogru bolum numarasindan sonra gelen bir cumleyi bolum basi olarak sun.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["metin_yapisi_ayirt_etme", "sonuc_bolumu_belirleme"]
+  surec_bileseni: "metni_anlama"
+
+sinif3_ek_kurallar:
+  yasak_alanlar:
+    - "Yazarin uslup tercihini veya niyetini yorumlatma YASAK"
+    - "Asiri soyut paragraf yapisi tartismalari YASAK"
+    - "Metin disi dunya bilgisi gerektiren secenekler YASAK"
+    - "Metnin orgutlenme bicimini ayrintili gerekceyle tartistirma (4. sinif) YASAK"
+    - "Birden fazla paragraf arasinda yapi karsilastirmasi yaptirma (4. sinif) YASAK"
+    - "Yazar tercihini ve bolum etkisini analiz ettirme (4. sinif) YASAK"

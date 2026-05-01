@@ -1,0 +1,113 @@
+# B1.2 — Gazete Haberli Başlık/Anahtar Sözcük/Soru Cevap (3Q)
+meta:
+  id: "baslik_anahtar_soru_gazete"
+  ad: "Gazete Haberi — Başlık/Anahtar/Soru Cevap (3 Soru)"
+  sinif_seviyesi: 5
+  aciklama: "Gazete haberi formatında başlık, anahtar sözcük ve soru-cevap soruları"
+  frequency: "Medium"
+
+context:
+  type: "baslik_anahtar_soru_gazete"
+  question_count: 3
+  question_count_min: 3
+  question_count_max: 3
+  generation:
+    word_count_min: 80
+    word_count_max: 140
+    visual_format: "newspaper"
+    structure:
+      - "Gerçek bir GAZETE HABERİ yaz — DÜZ METİN olarak"
+      - "İlk satır: Bu satır başlık satırıdır ancak boş bırakılmalıdır. Başlık verilmemelidir."
+      - "İkinci satır: Alt başlık (5N1K özeti)"
+      - "Sonraki satırlar: HABER DİLİYLE yaz (4-6 cümle)"
+      - "KRİTİK — HABER DİLİ: 3. tekil şahıs, nesnel, resmî dil"
+      - "En az 1 doğrudan alıntı (tırnak içi söz) olmalı"
+      - "Haberde 2-3 anahtar sözcük doğal olarak geçmeli"
+      - "Haberde bazı soruların cevabı verilirken bazılarının cevabı olmayacak şekilde yazılmalı"
+      - "NOT: Bu metin otomatik olarak gazete haberi formatına dönüştürülecektir"
+    kurallar:
+      - "5. sınıf seviyesinde yerel haber"
+      - "YASAK: Hikâye/öykü dili — betimlemeler, iç monologlar"
+      - "Haberde isim, yer, tarih, kurum adı gibi somut bilgiler olmalı"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+  - slot: 1
+    type: "baslik"
+    soru_kokleri:
+      - "<b>Bu gazete haberine başlık olarak aşağıdakilerden hangisi gelebilir?</b>"
+      - "<b>Bu haberin manşeti aşağıdakilerden hangisi olabilir?</b>"
+    options_style: "headline_title"
+    word_count_min: 2
+    word_count_max: 6
+    beceri:
+      katman: "KB2"
+      bilesenler: ["ozetleme"]
+      surec_bileseni: "bilgiyi_cikartma"
+  - slot: 2
+    type: "anahtar_sozcuk"
+    soru_kokleri:
+      - "<b>Bu haberdeki anahtar sözcükler aşağıdakilerden hangileri olabilir?</b>"
+      - "<b>Gazete haberinin anahtar kavramları aşağıdakilerden hangisidir?</b>"
+    options_style: "keyword_set"
+    word_count_min: 2
+    word_count_max: 8
+    beceri:
+      katman: "KB2"
+      bilesenler: ["cozumleme"]
+      surec_bileseni: "bilgiyi_cikartma"
+  - slot: 3
+    type: "soru_cevap"
+    soru_kokleri:
+      - "<b>Bu haberde aşağıdaki sorulardan hangisinin cevabı <u>yoktur</u>?</b>"
+      - "<b>Gazete haberine göre aşağıdaki soruların hangisine cevap <u>verilemez</u>?</b>"
+      - "<b>Aşağıdakilerden hangisi bu haberin içeriğiyle cevaplanamayacak bir sorudur?</b>"
+    options_style: "question_sentence"
+    word_count_min: 4
+    word_count_max: 15
+    beceri:
+      katman: "KB3"
+      bilesenler: ["cikarim_yapma", "mantiksal_denetleme"]
+      surec_bileseni: "bilgiyi_cikartma"
+
+header_template: "1-3. soruları aşağıdaki gazete haberine göre birbirinden bağımsız olarak cevaplayınız."
+
+format:
+  type: "llm_generated_html"
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 140
+    sentence_count_min: 4
+    sentence_count_max: 8
+  stem:
+    required: true
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 15
+    style: "headline_title"
+    correct_count: 1
+    correct_type: "matches"
+
+dogru_cevap:
+  tanim: "Gazete haberinden doğru çıkarılan başlık, anahtar sözcük veya soru-cevap bilgisi"
+  kurallar:
+    - "HATALI YAKLASIM: Metinde geçen bir cümlenin AYNEN seçeneklerde kullanılması YASAK"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin ANLAMCA ÖZDESİ olmalı"
+    - "Doğru seçenek paragraftaki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "En az %40 kelime farklılığı olmalı"
+    - "BİLİMSEL TERİM KORUMASI: Teknik terimler değiştirilmemeli"
+    - "Doğru şık en uzun şık OLMAMALI"
+
+distractors:
+  stratejiler:
+    - ad: "YAKIN_BASLIK"
+      aciklama: "Haberin konusuna yakın ama ana fikri yansıtmayan başlık"
+    - ad: "DETAY_TUZAGI"
+      aciklama: "Haberdeki bir detayı ana konu gibi sunma"
+    - ad: "KAPSAM_KAYDIRMA"
+      aciklama: "Haberin kapsamını genişletme veya daraltma"
+
+use_shared_strategies: false

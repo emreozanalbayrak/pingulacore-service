@@ -3,6 +3,7 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from sqlalchemy.orm import Session
 
+from app.api.deps import get_current_user
 from app.db.database import get_db
 from app.schemas.api import (
     ExplorerFavoriteRequest,
@@ -13,7 +14,11 @@ from app.schemas.api import (
 )
 from app.services.explorer_service import ExplorerService
 
-router = APIRouter(prefix="/v1/explorer", tags=["explorer"])
+router = APIRouter(
+    prefix="/v1/explorer",
+    tags=["explorer"],
+    dependencies=[Depends(get_current_user)],
+)
 
 
 @router.get("/tree", response_model=ExplorerTreeResponse)

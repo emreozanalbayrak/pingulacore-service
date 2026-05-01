@@ -1,0 +1,91 @@
+meta:
+  id: test_sutun
+  ad: TEST — Sütun Grafiği Görselli
+  sinif_seviyesi: 5
+  aciklama: Senaryo + tablo → AI sütun grafiği görseli
+  frequency: Medium
+context:
+  type: test_sutun
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 60
+    word_count_max: 120
+    image_type: sutun_grafigi
+    structure:
+    - Bir karakter (isimli) araştırma/gözlem yapmış, sonuçları tablo olarak sunmuştur (2-3 cümle)
+    - 'KRİTİK: Senaryoda sayısal değerleri YAZMA — veriler sadece tabloda olmalı'
+    - 'Tablo: <table> ile, 2 sütun (Kategori | Değer), en az 4 satır'
+    - Değerler sayısal ve birimli olmalı
+    - 'NOT: Bu tablo AI tarafından SÜTUN GRAFİĞİNE dönüştürülecektir'
+    kurallar:
+    - 5. sınıf seviyesi, günlük hayattan konu
+    - Değerler arasında belirgin farklar olmalı
+    - Türkçe karakterler doğru kullanılmalı
+  questions:
+  - slot: 1
+    type: grafik_okuma
+    soru_kokleri:
+    - <b>Grafiğe göre en yüksek değere sahip kategori aşağıdakilerden hangisidir?</b>
+    - <b>Grafikteki verilere göre aşağıdakilerden hangisi doğrudur?</b>
+    options_style: complete_sentence
+    word_count_min: 4
+    word_count_max: 18
+    beceri:
+      katman: KB2
+      bilesenler:
+      - grafik_okuma
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 2
+    type: grafik_cikarim
+    soru_kokleri:
+    - <b>Grafikteki veriler karşılaştırıldığında aşağıdakilerden hangisi <u>söylenemez</u>?</b>
+    - <b>Grafik yorumlandığında aşağıdaki çıkarımlardan hangisi doğrudur?</b>
+    options_style: complete_sentence
+    word_count_min: 5
+    word_count_max: 20
+    beceri:
+      katman: KB3
+      bilesenler:
+      - cikarim_yapma
+      surec_bileseni: problemi_yapilandirma
+header_template: 1-2. soruları aşağıdaki bilgilere göre birbirinden bağımsız olarak cevaplayınız.
+format:
+  type: llm_generated_html
+  paragraph:
+    required: true
+    word_count_min: 60
+    word_count_max: 120
+    sentence_count_min: 2
+    sentence_count_max: 6
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 4
+    word_count_max: 20
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Grafikteki verilerden doğru okunan veya çıkarılan bilgi
+  kurallar:
+  - Doğru cevap grafiği OKUYARAK ve YORUMLAYARAK bulunmalı
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: teleskop → mercekli araç GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: VERI_CARPITMA
+    aciklama: Grafikteki değeri yanlış okuma
+  - ad: YANLIS_KARSILASTIRMA
+    aciklama: Kategorileri yanlış karşılaştırma
+use_shared_strategies: false

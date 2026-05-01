@@ -1,0 +1,104 @@
+# templates/gorsel_siklar_mockup.yaml
+# Gorsel Siklar - Mockup (Senaryo → Cihaz Ekrani/Arayuz)
+#
+# Senaryo + sayisal veri verilir → 4 ekran/arayuz seceneginden dogrusunu sec
+# Ornekler: telefon ekrani (kalori takibi), uygulama arayuzu
+
+meta:
+  id: "gorsel_siklar_mockup"
+  ad: "Gorsel Secenekli Soru (Mockup)"
+  sinif_seviyesi: 5
+  aciklama: "Senaryo + veri verilir, ogrenci dogru ekran goruntusunu secer"
+  kaynak: "options_with_images/"
+  frequency: "yeni soru tipi"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Senaryo metni + soru koku + 4 mockup secenegi"
+
+  paragraph:
+    required: true
+    word_count_min: 40
+    word_count_max: 90
+    sentence_count_min: 2
+    sentence_count_max: 6
+    stil: "bilgilendirici"
+    kurallar:
+      - "Bir kisi/ogrenci senaryosu olmali (isim + aktivite)"
+      - "Sayisal veri icermeli (sure, miktar, puan vb.)"
+      - "Bir uygulama veya cihaz ekraninda gosterilecek bilgiler icermeli"
+      - "Hesaplanabilir veya karsilastirilabilir degerler olmali"
+      - "Ekranda gorunecek kategoriler (baslik, hedef, sonuc) net olmali"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 20
+    word_count_max: 60
+    style: "image_description"
+    image_style: "mockup"
+    correct_count: 1
+    layout: "two_column"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Buna göre ekranda karşılaşması muhtemel görüntü aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu bilgilere göre uygulama ekranı aşağıdakilerden hangisi gibi olabilir?</b>"
+  - "<b>Buna göre aşağıdaki ekran görüntülerinden hangisi doğrudur?</b>"
+  - "<b>Bu verilere göre uygulamada görünecek ekran aşağıdakilerden hangisidir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Senaryodaki TUM verileri ve kosullari dogru gosteren ekran/arayuz tasviri"
+  kurallar:
+    - "Senaryodaki her veri noktasi (sayi, durum, hedef) ekranda dogru yansimali"
+    - "Ikon/emoji secimi mantikli olmali (basari = gulumseme, basarisizlik = uzgun yuz)"
+    - "Hesaplama gerektiren degerler DOGRU hesaplanmis olmali"
+  ornekler:
+    - paragraf_konusu: "60dk yuruyus + 30dk bisiklet + 50dk kosu yapan kisi"
+      dogru: "Telefon ekrani: Haftalik Sure: gulumseme ikonu, Kalori Hedefi: gulumseme, Yakilan Kalori: 1100"
+      neden_dogru: "Toplam sure ve kalori dogru hesaplanmis, hedefler karsilanmis"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+use_shared_strategies: true
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["veri_okuma", "hesaplama", "eslestirme"]
+  surec_bileseni: "bilgiyi_eslestirme"
+
+# ═══════════════════════════════════════════════════════════════
+# KONU KAYNAGI
+# ═══════════════════════════════════════════════════════════════
+
+konu_kaynagi:
+  klasor: "konular/"
+  dosyalar:
+    - "5_sinif_matematik_1_donem_konular.txt"
+    - "5_sinif_matematik_2_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_1_donem_konular.txt"
+    - "5_sinif_fen_bilimleri_2_donem_konular.txt"
+  hierarchy:
+    separator: " / "
+    levels:
+      - name: "unite"
+      - name: "alt_unite"
+      - name: "konu"
+      - name: "alt_konu"

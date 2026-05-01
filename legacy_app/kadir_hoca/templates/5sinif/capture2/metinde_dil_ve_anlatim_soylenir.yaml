@@ -1,0 +1,202 @@
+# templates/capture2/metinde_dil_ve_anlatim_soylenir.yaml
+# Kaynak: 5. Sinif ARI Paragraf Soru Bankasi - Bolum 2 - Metinde Dil ve Anlatim
+#
+# SOYLENIR FORMATI (tum dil ve anlatim sorularinin ~%15'i)
+# Paragraf verilir, ogrenci metinde bulunan belirgin anlatim ozelligini secer
+#
+# MANTIK: 1 secenek metinde acikca bulunan belirgin ozellik (dogru cevap),
+# 3 secenek metinde bulunmayan veya belirsiz ozellikler (celdiriciler)
+# Standart (pozitif) mantik - dogru cevap = metinde BULUNAN ozellik
+
+meta:
+  id: "metinde_dil_ve_anlatim_soylenir"
+  ad: "Metinde Dil ve Anlatım (Söylenebilir)"
+  sinif_seviyesi: 5
+  aciklama: "Metinde bulunan belirgin bir anlatım özelliğini tespit etme"
+  kaynak: "data/metinde_dil_ve_anlatim.pdf"
+  frequency: "Low (~15% of topic questions)"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Paragraf + soru kökü + seçenekler"
+
+  paragraph:
+    required: true
+    word_count_min: 55
+    word_count_max: 100
+    sentence_count_min: 4
+    sentence_count_max: 7
+    stil: "karma"
+    kurallar:
+      - "Belirgin bir özellik (Örn: Sadece nesnel cümleler veya yoğun benzetme) ön planda olmalı."
+      - "Metin, dil ve anlatim ozellikleri acisindan zengin olmali ama bir ozellik BASKIN olmali."
+      - "Baskin ozellik kolayca tespit edilebilir olmali."
+      - "Diger ozellikler metinde bulunmamali veya cok belirsiz olmali (celdirici icin)."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 4
+    word_count_max: 15
+    style: "complete_sentence"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI (PDF'den cikarilan 2 varyasyon)
+# Sayfa 130-132
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metnin dil ve anlatımı ile ilgili aşağıdakilerden hangisi söylenebilir?</b>"
+  - "<b>Bu metnin anlatımında aşağıdakilerden hangisine başvurulmuştur?</b>"
+  - "<b>Bu metinde aşağıdaki anlatım özelliklerinden hangisi kullanılmıştır?</b>"
+  - "<b>Bu metnin dil ve anlatımıyla ilgili aşağıdakilerden hangisi doğrudur?</b>"
+  - "<b>Bu metnin anlatım özellikleri düşünüldüğünde aşağıdakilerden hangisine ulaşılabilir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Metinde belirgin olarak bulunan anlatım özelliği"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Metinde acikca ve belirgin olarak bulunan bir anlatim ozelligi olmali"
+    - "Ozellik kolayca dogrulanabilir olmali"
+    - "Tam cumle formatinda olmali (4-15 kelime)"
+    - "Paragraftaki baskin anlatim ozelligini yansitmali"
+    - "Kelime sayısı bakımından en uzun şık olmamalı."
+  ornekler:
+    - dogru: "Bilgilendirici bir metinden alınmıştır."
+      neden: "Metin acikca bilgilendirici bir uslupla yazilmis"
+    - dogru: "Karşılaştırma yapılmıştır."
+      neden: "Metinde iki varlik/kavram kiyaslanmis"
+    - dogru: "Tanım cümlesine yer verilmiştir."
+      neden: "Metinde '...dir', '...denir' ile tanimlama yapilmis"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+# Merkezi strateji havuzunu kullan (_strategies.yaml)
+# Celdiriciler: Metinde bulunmayan veya belirsiz olan anlatim ozellikleri
+
+distractors:
+  kurallar:
+    - "Metinde ornegi bulunmayan veya belirsiz olan 3 farkli anlatim ozelligi"
+    - "Her biri farkli bir teknik ozellik olmali"
+    - "Makul gorunmeli ama metinde desteklenmemeli"
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["yorumlama"]
+  surec_bileseni: "bilgiyi_cikartma"
+
+use_shared_strategies: true
+
+# ═══════════════════════════════════════════════════════════════
+# URETIM MANTIGI (Generator icin rehber)
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  steps:
+    - step: 1
+      action: "Select topic and determine ONE dominant literary feature"
+      details: |
+        Baskin olacak ozellik secilmeli:
+        - Benzetme, Kisilelstirme, Deyim, Ikileme
+        - Oznel yargi, Nesnel yargi, Karsilastirma, Tanimlama
+        - Bilgilendirici anlatim, Oykuleyici anlatim
+        - 1. Kisi agzi, Soru cumlesi
+
+    - step: 2
+      action: "Generate paragraph (55-100 words) with one dominant feature"
+      details: |
+        Paragrafta:
+        - Secilen ozellik BASKIN ve belirgin olmali
+        - Diger ozellikler bulunmamali veya cok az olmali
+        - Metin dogal ve akici olmali
+
+    - step: 3
+      action: "Set correct answer = dominant feature in text"
+      details: |
+        Metinde belirgin olarak bulunan ozellik dogru cevaptir:
+        - Tam cumle formatinda (4-15 kelime)
+        - Ornekler: "Bilgilendirici bir metinden alinmistir."
+        - "Karsilastirma yapilmistir."
+        - "Tanim cumlesine yer verilmistir."
+
+    - step: 4
+      action: "Generate 3 distractors from features NOT in text"
+      details: |
+        - 3x metinde bulunmayan veya belirsiz olan anlatim ozelligi
+        - Her biri 4-15 kelimelik tam cumle
+        - Makul ama metinde desteklenmeyen ozellikler
+
+    - step: 5
+      action: "Randomize option order"
+      details: "A-B-C-D seceneklerini rastgele sirala"
+
+    - step: 6
+      action: "Select random stem from variations"
+      details: "soru_kokleri listesinden rastgele sec"
+
+# ═══════════════════════════════════════════════════════════════
+# PDF'DEN ORNEK SORULAR (Sayfa 130-132)
+# ═══════════════════════════════════════════════════════════════
+
+ornekler:
+  - sayfa: 130
+    konu: "Bilgilendirici metin ozellikleri"
+    metin: "Dunyanin en buyuk okyanusu Pasifik Okyanusudur. Yuzolcumu 165 milyon kilometrekaredir. Atlas Okyanusu ise 106 milyon kilometrekarelik alani kaplar."
+    dogru_cevap: "Bilgilendirici bir metinden alınmıştır."
+    celdirici_1: "Kişileştirmeden yararlanılmıştır."
+    celdirici_2: "Benzetme yapılmıştır."
+    celdirici_3: "Olay birinci kişi ağzından anlatılmıştır."
+
+  - sayfa: 131
+    konu: "Karsilastirma iceren metin"
+    metin: "Karincalar vucutlarinin 50 kati agirliginda yuk tasiyabilirken, insanlar ancak kendi agirliklarinin yarisini tasiyabilir."
+    dogru_cevap: "Karşılaştırma yapılmıştır."
+    celdirici_1: "İkilemelere yer verilmiştir."
+    celdirici_2: "Deyim kullanılmıştır."
+    celdirici_3: "Soru yoluyla anlatıma doğallık kazandırılmıştır."
+
+  - sayfa: 132
+    konu: "Tanim cumlesi iceren metin"
+    metin: "Enzimler, vucudumuzdaki kimyasal tepkimeleri hizlandiran ozel proteinlerdir. Bu proteinler olmadan sindirim islemi gerceklesemez."
+    dogru_cevap: "Tanım cümlesine yer verilmiştir."
+    celdirici_1: "Benzetme yapılmıştır."
+    celdirici_2: "Kişileştirmeden yararlanılmıştır."
+    celdirici_3: "Öznel ifadelere yer verilmiştir."
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Kelime sayisi 55-100 arasinda mi?"
+    - "Cumle sayisi 4-7 arasinda mi?"
+    - "Belirgin bir baskin anlatim ozelligi var mi?"
+    - "Baskin ozellik kolayca tespit edilebilir mi?"
+    - "Diger ozellikler metinde bulunmuyor veya cok belirsiz mi?"
+
+  correct_answer:
+    - "4-15 kelime arasinda mi?"
+    - "Metinde gercekten belirgin olan bir ozellik mi?"
+    - "Tam cumle formatinda mi?"
+
+  distractors:
+    - "Her celdirici metinde bulunmayan bir ozellik mi?"
+    - "Celdiriciler makul gorunuyor mu?"
+    - "Hicbiri metinde acikca desteklenmiyor mu?"
+    - "Tum secenekler ayni gramer yapida mi? (tam cumle)"

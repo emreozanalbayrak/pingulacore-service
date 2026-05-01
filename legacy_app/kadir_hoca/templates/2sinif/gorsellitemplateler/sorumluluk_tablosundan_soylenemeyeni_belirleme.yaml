@@ -1,0 +1,151 @@
+meta:
+  id: "sorumluluk_tablosundan_soylenemeyeni_belirleme"
+  ad: "Sorumluluk Tablosundan Söylenemeyeni Belirleme"
+  ders: "Türkçe"
+  sinif_seviyesi: "2. Sınıf"
+  tema: "Veri Okuma ve Yorumlama"
+  model: "TYMM"
+  format_turu: "llm_generated_html"
+  aciklama: "Bir çocuğun haftalık sorumluluk tablosundaki işaretlerden hareketle görev tamamlama ve düzenlilik hakkında söylenemeyen ifadeyi seçtiren 3 seçenekli soru formatı"
+  frequency: "orta"
+
+context:
+  type: "haftalik_sorumluluk_tablosu"
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 18
+    word_count_max: 45
+    structure:
+      - "Önce kısa bir bağlam cümlesi verilir."
+      - "Bir çocuğun yaptığı görevler için yıldız, işaret ya da simge kazandığı açıklanır."
+      - "Ardından günler ve görevlerden oluşan bir sorumluluk tablosu gösterilir."
+      - "Tabloda yapılan görevler işaretlidir, yapılmayanlar boş bırakılır."
+    kurallar:
+      - "Bağlam 2. sınıf seviyesine uygun, sade ve günlük yaşamdan olmalıdır."
+      - "Görevler çocukların anlayabileceği gerçek sorumluluklardan seçilmelidir."
+      - "Metin tek başına cevabı vermemelidir."
+      - "Görsel tablo çözümün ana kaynağı olmalıdır."
+      - "Türkçe karakterler doğru kullanılmalıdır."
+
+format:
+  type: "llm_generated_html"
+  description: "Kısa bağlam + haftalık sorumluluk tablosu + tek soru + 3 seçenek"
+
+  paragraph:
+    required: true
+    word_count_min: 18
+    word_count_max: 45
+    sentence_count_min: 2
+    sentence_count_max: 3
+
+  visual:
+    required: true
+    count: 1
+    description: "Günler sütunlarda, görevler satırlarda; yapılan görevlerin yıldız ya da işaretle gösterildiği haftalık tablo"
+
+  stem:
+    required: true
+    sentence_count_min: 1
+    sentence_count_max: 1
+    soru_koku_ornekleri:
+      - "Bu sorumluluk tablosundan hareketle aşağıdakilerden hangisi söylenemez?"
+      - "Tabloya göre aşağıdakilerden hangisi doğru değildir?"
+      - "Verilen sorumluluk tablosuna göre aşağıdakilerden hangisine ulaşılamaz?"
+      - "Aşağıdakilerden hangisi tabloya göre yanlıştır?"
+
+  options:
+    count: 3
+    labels: ["A", "B", "C"]
+    word_count_min: 5
+    word_count_max: 16
+    style: "complete_sentence"
+    correct_count: 1
+    correct_type: "mismatch"
+
+gorsel:
+  required: true
+  tur: "haftalik_isaret_tablosu"
+  amac: "Öğrencinin gün-görev ilişkisini okuyup tamamlanan görevler hakkında yorum yapmasını sağlamak"
+  kurallar:
+    - "Tabloda 7 gün ya da 5-7 zaman dilimi bulunmalıdır."
+    - "Tabloda en az 4 görev satırı bulunmalıdır."
+    - "Yapılan görevler yıldız, tik ya da benzeri tek tip sembolle gösterilmelidir."
+    - "Boş hücreler yapılmayan görevi göstermelidir."
+    - "Gün başlıkları ve görev adları açıkça okunmalıdır."
+    - "Görsel sade, düzenli ve 2. sınıf seviyesine uygun olmalıdır."
+    - "Görsel süsleyici değil, çözüm için zorunlu olmalıdır."
+
+olculen_beceri:
+  tanim: "Sorumluluk tablosundaki işaretleri okuyup görev tamamlama, düzenlilik ve toplam duruma ilişkin yorum yapma"
+  bilesenler:
+    - "tablo_okuma"
+    - "gun_gorev_eslestirme"
+    - "duzenlilik_yorumu"
+    - "toplam_durum_degerlendirme"
+    - "yanlis_yargiyi_belirleme"
+
+dogru_cevap:
+  tanim: "Tablodaki işaretlerle desteklenmeyen ifade"
+  kurallar:
+    - "Doğru cevap tabloya göre söylenemeyen seçenek olmalıdır."
+    - "Yanlış olmayan seçenekler tabloyla açıkça doğrulanabilmelidir."
+    - "En az bir seçenek belirli bir günde tüm görevlerin yapılıp yapılmadığını sorgulamalıdır."
+    - "En az bir seçenek bir görevin hafta boyunca düzenli yapılıp yapılmadığını sorgulamalıdır."
+    - "En az bir seçenek toplam yıldız ya da ödül durumuna ilişkin yorum içerebilir."
+    - "Toplam yıldıza dayalı sonuç soruluyorsa tablo bunu hesaplamaya elverişli olmalıdır."
+
+distractors:
+  stratejiler:
+    - ad: "BOS_HUCREYI_GOZDEN_KACIRMA"
+      aciklama: "Öğrencinin bir boş hücreyi fark etmeyip görevin yapıldığını sanması"
+      ornek: "Tüm görevleri yaptı ifadesi"
+    - ad: "DUZENLILIK_YANILGISI"
+      aciklama: "Bir görev çoğu gün yapılmışsa her gün yapılmış gibi düşündürme"
+      ornek: "Hafta boyunca düzenli olarak yaptı"
+    - ad: "TOPLAMI_YANLIS_TAHMIN"
+      aciklama: "Yıldızları saymadan ödül kazanıldığını ya da kazanılmadığını düşündürme"
+      ornek: "Ödül almaya hak kazandı"
+    - ad: "GUN_KARISTIRMA"
+      aciklama: "Belirli bir güne ait işaretleri başka günle karıştırmaya açık ifade sunma"
+      ornek: "Salı günü bütün görevleri yaptı"
+
+use_shared_strategies: false
+
+tymm_uyum_kurallari:
+  - "2. sınıf seviyesine uygun kısa ve açık cümleler kullanılmalıdır."
+  - "Görevler günlük yaşamdan seçilmelidir."
+  - "Çözüm doğrudan tablo okumaya dayanmalıdır."
+  - "Çok adımlı karmaşık işlem gerektirilmemelidir."
+  - "Söylenemez / doğru değildir ifadesi açık ve belirgin olmalıdır."
+  - "Görsel olmadan doğru cevap kesinleşmemelidir."
+  - "Seçenekler aynı temsil düzeyinde, yani hepsi yargı cümlesi biçiminde olmalıdır."
+  - "3 seçenekli yapıda iki çeldirici de güçlü olmalıdır."
+
+izinli_icerikler:
+  - "diş fırçalama"
+  - "oyuncak toplama"
+  - "yatağını düzeltme"
+  - "zamanında uyuma"
+  - "kıyafet düzenleme"
+  - "çanta hazırlama"
+  - "ev içi basit sorumluluklar"
+  - "haftalık görev takibi"
+
+yasakli_icerikler:
+  - "karmaşık sayma tablosu"
+  - "ileri düzey zaman planlama"
+  - "çarpma, bölme, oran gerektiren yapı"
+  - "birden fazla doğru seçenek"
+  - "metinden çözülebilen yapı"
+  - "çocuk seviyesine uzak görevler"
+
+ornek_sablon:
+  ust_metin: "Aşağıda bir çocuğun haftalık sorumluluk tablosu verilmiştir."
+  gorsel: "Günler ve görevlerden oluşan, yapılan görevlerin yıldızla gösterildiği tablo"
+  soru_koku: "Bu sorumluluk tablosundan hareketle aşağıdakilerden hangisi söylenemez?"
+  secenekler:
+    A: "................................"
+    B: "................................"
+    C: "................................"

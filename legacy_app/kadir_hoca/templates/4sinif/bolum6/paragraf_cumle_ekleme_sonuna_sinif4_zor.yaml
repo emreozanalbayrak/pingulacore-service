@@ -1,0 +1,129 @@
+# Kaynak: paragraf_cumle_ekleme_sonuna_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.zor
+# 4. sinif metne cumle ekleme (sonuna) — zor duzey
+
+meta:
+  id: "paragraf_cumle_ekleme_sonuna_sinif4_zor"
+  ad: "Metne Cümle Ekleme (Sonuna) (Zor)"
+  sinif_seviyesi: 4
+  aciklama: "Zor duzey — paragrafın SONUNA hangi tam cümlenin getirileceğini seçme"
+  frequency: "Medium"
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Paragraf (sonunda boşluk) + soru kökü + 4 tam cümle seçenek (zor)"
+
+  paragraph:
+    required: true
+    background_color: "#f8d7da"
+    word_count_min: 65
+    word_count_max: 75
+    sentence_count_min: 3
+    sentence_count_max: 4
+    stil: "bilgilendirici"
+    kurallar:
+      - |
+        ★★★ TEMEL KURAL (KRİTİK!) ★★★
+        Bu soru tipinde öğrenciden paragrafın SONUNA hangi TAM CÜMLENİN getirileceği sorulur.
+        YASAK: Cümleyi yarıda kesip tamamlatmak! Bu bir cümle tamamlama sorusu DEĞİLDİR!
+        DOĞRU: Paragrafta bir cümle eksiktir ve o cümlenin tamamı seçeneklerde verilir.
+        ★ Paragraf 4 cümlelik bir bütün olarak PLANLANMALI (giriş-gelişme-sonuç akışıyla)
+        ★ 4. cümleyi çıkar, yerine "----" koy — kalan 3 cümle paragrafta kalır
+        ★ Çıkarılan cümle = doğru cevap (seçeneklerde tam cümle olarak verilir)
+        ★ Kalan 3 cümle paragrafta kalır ve kendi başına anlaşılır olmalı
+        ★ "----" işareti çıkarılan cümlenin yerini gösterir
+
+        ★★★ "----" PARAGRAFIN EN SONUNDA OLMALI ★★★
+        ★ "----" paragrafın EN SONUNDA olmalı — son karakter "----" olmalı
+        ★ "----" kesinlikle başta veya ortada OLMAMALI!
+        ★ Format: [1. cümle]. [2. cümle]. [3. cümle]. "----"
+
+        ★★★ SEÇENEKLERDEKİ CÜMLELER ★★★
+        ★ Her seçenek kendi başına TAM ve BAĞIMSIZ bir cümle olmalı
+        ★ YASAK: Yarım cümle, cümle parçası veya paragraftaki cümlenin devamı
+        ★ Her seçenek büyük harfle başlamalı ve nokta ile bitmeli
+      - "Paragraf düz metin olarak yazılmalı — Roma rakamı (I., II., III.) KULLANMA"
+      - "Paragraf üst uzunluk bandına yakın tutulmalıdır"
+      - "Doğru cevap doğrudan tekrar yapmadan paragrafı anlamlı ve doğal biçimde kapatmalıdır"
+      - "En az iki çeldirici konuya ve sonuç işlevine semantik olarak yakın görünmelidir"
+      - "Zorluk, metin uzunluğu ile birlikte çeldirici yakınlığı ve sonuç cümlesinin incelikli bağlanışıyla artırılmalıdır"
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+      - "Dis bilgi gerektirmemelidir."
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 8
+    word_count_max: 14
+    style: "complete_sentence"
+    correct_count: 1
+    kurallar:
+      - "Her seçenek TAM BİR CÜMLE olmalı — büyük harfle başlar, nokta ile biter"
+      - "YASAK: Yarım cümle, kelime grubu veya cümle parçası"
+      - "YASAK: Paragraftaki bir cümlenin devamı niteliğinde seçenek"
+      - "Her seçenek bağımsız okunduğunda kendi başına anlamlı olmalı"
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu metnin sonuna aşağıdaki cümlelerden hangisi getirilmelidir?</b>"
+  - "<b>Bu metnin sonuna düşüncenin akışına göre aşağıdakilerden hangisi getirilebilir?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: "Paragraftan çıkarılan ve paragrafın SONUNA konulması gereken TAM CÜMLE"
+  kurallar:
+    - "Dogru secenek paragraftaki/metindeki hicbir cumleyi kelimesi kelimesine TEKRARLAMAMALI"
+    - "Paragraftaki ifadeler es anlamli sozcuklerle yeniden ifade edilmeli — en az %40 kelime farkliligi olmali"
+    - "Paragrafın ana konusuyla tutarlı olmalı"
+    - "Paragrafın sonuç cümlesi olarak konuyu bağlamalı veya çıkarım yapmalı"
+    - "Kendi başına TAM ve BAĞIMSIZ bir cümle olmalı — büyük harfle başlar, nokta ile biter"
+    - "8-22 kelime olmalı"
+    - "Paragraftaki bir cümlenin devamı veya parçası OLMAMALI"
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["cikarim_yapma", "yapilandirma"]
+  surec_bileseni: "metin_yapisini_analiz_etme"
+
+
+celdirici_stratejileri:
+  - ad: "COKLU_YAKIN_SONUCLAR"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "En az 2 celdirici sonuç işlevine semantik olarak yakın güçlü tuzak"
+    nasil_olusturulur: |
+      En az 2 celdirici konuya ve sonuç işlevine semantik olarak yakın görünmeli.
+      Zor seviyede doğru cevap doğrudan tekrar yapmadan paragrafı anlamlı ve doğal biçimde kapatmalı.
+    kategori: "semantic"
+
+  - ad: "INCE_KAPANIŞ_ANALIZI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Metin uzunluğu ve celdirici yakınlığı birlikte değerlendirilen güçlü yapı"
+    nasil_olusturulur: |
+      Zorluk metin uzunluğu ile birlikte celdirici yakınlığı ve sonuç cümlesinin incelikli bağlanışıyla artırılmalı.
+      Zor seviyede doğru cevap yalnızca anlam bütünlüğü tam analizi ile seçilebilmeli.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

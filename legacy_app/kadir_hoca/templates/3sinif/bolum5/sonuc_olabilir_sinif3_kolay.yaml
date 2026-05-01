@@ -1,0 +1,140 @@
+# Referans: metnin_bolumleri_giris_gelisme_sonuc_sinif3_referans.yaml → zorluk_duzeyleri.kolay
+# Kolay duzey — sonuc bolumu — Sonuc (Olabilir / Getirilebilir)
+
+meta:
+  id: "sonuc_olabilir_sinif3_kolay"
+  ad: "3. Sinif - Metnin Bolumleri / Sonuc (Olabilir / Getirilebilir) (Kolay)"
+  sinif_seviyesi: 3
+  aciklama: "Kolay duzey — sonuc bolumu, sonuc (olabilir / getirilebilir). 4 secenekli, gorselli."
+  frequency: "Medium"
+
+format:
+  type: "llm_generated_html"
+  description: "Gorsel + tek paragraf + soru koku + 4 secenek (kolay, sonuc)"
+
+  paragraph:
+    required: true
+    word_count_min: 42
+    word_count_max: 60
+    sentence_count_min: 4
+    sentence_count_max: 5
+    stil: "simple_clear_primary_text"
+    background_color: "#e8f8e8"
+    kurallar:
+      - "Metin 3. sinif ogrencisinin anlayabilecegi kadar acik, sade ve akici olmalidir."
+      - "Metin giris, gelisme ve sonuc mantigina uygun kurulmalidir."
+      - "Giris bolumu konuyu acmali, gelisme bolumu ayrintilari vermeli, sonuc bolumu anlami toparlamalidir."
+      - "Metin tek baskin konu veya tek kisa olay etrafinda kurulmalidir."
+      - "Metin dis bilgi gerektirmemelidir."
+      - "Bolumler arasi gecis anlamli ve dogal olmalidir."
+      - "Soru, paragrafin yapisini fark ettirmeli; ama 4. sinifa kayan ayrintili metin cozumlemesine donusmemelidir."
+      - "Metin yapisi acik ve belirgin olmalidir."
+      - "Giris, gelisme ve sonuc bolumleri kolay ayirt edilebilir olmalidir."
+      - "Eksik baslangicli veya eksik sonlu metinler oncelikli kullanilabilir."
+      - "Sonuc bolumu anlatilanlari toparlamali veya bir sonuca baglamalidir."
+      - "Sonuc cumlesi metnin sonunda dogal kapanis saglamalidir."
+      - "Sonuc cumlesi yeni bir ana konu baslatmamalidir."
+      - "Sonuc bolumunde cikarim, kapanis veya toparlama havasi bulunabilir."
+      - "Sonuc bolumu onceki cumlelerin dogal devami olmalidir."
+      - "Numaralanmış metin varyantinda sonuc bolumunun basladigi cümle acik bicimde ayirt edilebilir olmalidir."
+      - "KRITIK: Karakter/kisi ismi kullanirken Ozan ismini KESINLIKLE KULLANMA."
+
+  visual:
+    required: true
+    description: "Metnin ana icerigini destekleyen islevsel gorsel"
+    placement: "paragraph_right_or_top"
+    visual_type_allowed:
+      - "tek sahneli illustrasyon"
+      - "tek sahneli fotograf benzeri cizim"
+      - "tek olay veya tek varlik odakli sahne"
+      - "metnin ana konusunu destekleyen sade konu gorseli"
+    kurallar:
+      - "Her soru icin gorsel zorunludur."
+      - "Gorsel metnin ana icerigiyle acik uyumlu olmalidir."
+      - "Gorsel sus olmamali, cozumde anlam destegi sunmalidir."
+      - "Gorsel tek basina dogru cevabi acikca vermemelidir."
+      - "Gorsel ile metin birlikte degerlendirildiginde dogru bolum veya dogru cümle daha netlesebilir."
+      - "Gorsel dikkat dagitici gereksiz ayrintilar icermemelidir."
+    yasaklar:
+      - "dekoratif ve metinden bagimsiz gorsel"
+      - "cok sahneli karmasik kolaj"
+      - "grafik, tablo veya infografik yogunlugu tasiyan tasarim"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 3
+    word_count_max: 16
+    style: "sentence_option"
+    correct_count: 1
+    correct_type: "matches"
+    kurallar:
+      - "3. sinifta her soru 4 secenekli olmalidir."
+      - "Cümle secenekleri anlamli ve kurallı olmalidir."
+      - "Dogru secenek metnin bolum yapisina ve dusuncenin akisina tam uymalidir."
+      - "Yanlis secenekler metne yakin gorunmeli ama dusuncenin akisini bozmalidir."
+      - "Birden fazla makul dogru secenek olusmamalidir."
+      - "1 secenek giris yerine sonuc havasi tasimalidir."
+      - "1 secenek ayrintiya erken girmelidir."
+      - "1 secenek konu disina veya akis disina kaymalidir."
+
+soru_kokleri:
+  - "<b>Aşağıdaki cümlelerden hangisi bu metnin sonuç cümlesi olabilir?</b>"
+  # KULLANILDI: - "<b>Aşağıdakilerden hangisi bu metnin sonuç cümlesi olmaya uygundur?</b>"
+  # KULLANILDI: - "<b>Bir metnin sonuç cümlesi aşağıdakilerden hangisi olabilir?</b>"
+  - "<b>Aşağıdakilerden hangisi sonuç cümlesi olarak kullanılabilir?</b>"
+  - "<b>Bu metnin sonuna düşüncenin akışına göre aşağıdakilerden hangisi getirilebilir?</b>"
+  - "<b>Aşağıdakilerden hangisi bu metnin sonuna getirilebilir?</b>"
+  - "<b>Bu parçanın sonuna aşağıdakilerden hangisi uygun olur?</b>"
+  - "<b>Metnin sonuna düşüncenin akışına göre uygun cümle hangisidir?</b>"
+
+dogru_cevap:
+  tanim: "Metnin bolum yapisina ve dusuncenin akisina tam uyan dogru cümle"
+  kurallar:
+    - "KRITIK PARAPHRASE: Dogru cevap paragraftaki cumleleri/ifadeleri AYNEN KULLANMA — paragraf kelimelerini es anlamli sozcuklerle degistir ve farkli cümle yapisiyla yeniden ifade et. En az %50 kelime farkliligi zorunlu. Paragrafa cok benzer secenekler FAIL olur."
+    - "Sonuc sorularinda dogru cevap metni dogal bicimde toparlamalidir."
+    - "Dogru cevap metnin tamamiyla uyumlu olmalidir."
+    - "Dogru cevap dis bilgi gerektirmemelidir."
+    - "Dogru cevap 3. sinif ogrencisinin metni dikkatle okuyarak bulabilecegi aciklikta olmalidir."
+
+celdirici_stratejileri:
+  - ad: "YENI_KONU_BASLATMA"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Metni toparlamak yerine yeni konu baslatan cümle"
+    nasil_olusturulur: |
+      Sonuc olarak toparlamak yerine yeni bir konu acan cümle olustur.
+    kategori: "semantic"
+
+  - ad: "GELISME_AYRINTISI"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "Kapanis yerine yalniz ek bilgi veren cümle"
+    nasil_olusturulur: |
+      Sonuc yerine metne ek bir ayrinti getiren cümle olustur.
+    kategori: "cognitive"
+
+  - ad: "GIRIS_TANITIMI"
+    bilisssel_hata_kategorisi: "kavram_karisikligi"
+    aciklama: "Sonuc yerine konuyu yeni aciyormuş gibi duran cümle"
+    nasil_olusturulur: |
+      Toparlama yerine konuyu yeni tanitan giris havasi tasiyan cümle olustur.
+    kategori: "semantic"
+
+use_shared_strategies: false
+
+beceri:
+  katman: "KB2"
+  bilesenler: ["metin_yapisi_ayirt_etme", "sonuc_bolumu_belirleme"]
+  surec_bileseni: "metni_anlama"
+
+sinif3_ek_kurallar:
+  yasak_alanlar:
+    - "Yazarin uslup tercihini veya niyetini yorumlatma YASAK"
+    - "Asiri soyut paragraf yapisi tartismalari YASAK"
+    - "Metin disi dunya bilgisi gerektiren secenekler YASAK"
+    - "Metnin orgutlenme bicimini ayrintili gerekceyle tartistirma (4. sinif) YASAK"
+    - "Birden fazla paragraf arasinda yapi karsilastirmasi yaptirma (4. sinif) YASAK"
+    - "Yazar tercihini ve bolum etkisini analiz ettirme (4. sinif) YASAK"

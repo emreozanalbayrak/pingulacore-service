@@ -1,0 +1,94 @@
+# B1.1 — 1Q Çizgi Grafik (Konu/Problem Belirleme)
+# Görsel: cizgi_grafigi (AI çizgi grafiğine dönüştürülecek)
+# Soru Tipi: Konu/Problem — B1.1 soru kökleri
+
+meta:
+  id: "b1_konu_cizgi_1q"
+  ad: "1Q Çizgi Grafik — Konu/Problem"
+  sinif_seviyesi: 5
+  aciklama: "Senaryo + çizgi grafiği üzerinden konu/problem belirleme sorusu"
+  kaynak: "baglamb1sorukoku.md"
+  frequency: "Medium"
+
+context:
+  type: "b1_konu_cizgi_1q"
+  question_count: 1
+  question_count_min: 1
+  question_count_max: 1
+  generation:
+    word_count_min: 80
+    word_count_max: 140
+    image_type: "cizgi_grafigi"
+    structure:
+      - "Bir karakter (isimli) bir araştırma/gözlem yapmış, zaman içindeki değişimi kaydetmiştir (3-4 cümle)"
+      - "KRİTİK: Senaryoda sayısal değerleri YAZMA — veriler sadece tabloda olmalı"
+      - "Ardından verileri HTML tablosu olarak ekle: <table> ile, 2 sütun (Zaman | Değer), en az 5 satır"
+      - "Senaryo konunun genel çerçevesini çizsin — detaylı bilgileri grafik verecek"
+      - "NOT: Bu tablo AI tarafından çizgi grafiğine dönüştürülecektir"
+    kurallar:
+      - "5. sınıf seviyesinde, zaman serisi verisi"
+      - "KRİTİK — SENARYO KAPSAMI: Senaryo sadece DURUMU ve MERAKı anlatsın, CEVAPLARI vermesin!"
+      - "Detaylı bilgiler ve veriler SADECE tabloda/grafikte olmalı"
+      - "Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)"
+
+  questions:
+    - slot: 1
+      type: "konu_problem"
+      soru_kokleri:
+        - "<b>Grafikteki verilere dayanılarak varılabilecek en kapsamlı çıkarım aşağıdakilerden hangisidir?</b>"
+        - "<b>Bu araştırmada ele alınan asıl mesele aşağıdakilerden hangisidir?</b>"
+      options_style: "short_phrase"
+      word_count_min: 3
+      word_count_max: 12
+      beceri:
+        katman: "KB2"
+        bilesenler: ["anlama", "cikarim_yapma"]
+        surec_bileseni: "bilgiyi_cikartma"
+
+header_template: null
+
+format:
+  type: "llm_generated_html"
+  description: "1Q çizgi grafik üzerinden konu/problem belirleme"
+  paragraph:
+    required: true
+    word_count_min: 80
+    word_count_max: 140
+    sentence_count_min: 3
+    sentence_count_max: 6
+  stem:
+    required: true
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 3
+    word_count_max: 12
+    style: "short_phrase"
+    correct_count: 1
+    correct_type: "matches"
+
+dogru_cevap:
+  tanim: "Grafikteki verilerden çıkarılan ana konu/problem"
+  kurallar:
+    - "KRİTİK: Doğru cevap metindeki tek bir cümleden direkt okunaMAMALI"
+    - "Öğrenci doğru cevaba ulaşmak için senaryoyu ve grafik verilerini birlikte değerlendirmeli"
+    - "Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil"
+    - "HATALI YAKLASIM: Metinde geçen bir cümlenin AYNEN seçeneklerde kullanılması YASAK"
+    - "DOĞRU YAKLASIM: Seçenek, metindeki ifadenin ANLAMCA ÖZDESİ olmalı"
+    - "En az %40 kelime farklılığı olmalı"
+    - "BİLİMSEL TERİM KORUMASI: Teknik terimler değiştirilmemeli"
+    - "Doğru şık en uzun şık OLMAMALI"
+
+distractors:
+  stratejiler:
+    - ad: "DETAY_ODAK"
+      aciklama: "Grafikteki bir detayı ana mesele gibi sunma"
+      ornek: "Tek bir zaman noktasındaki değeri genel eğilim gibi gösterme"
+    - ad: "YANLIS_EGITIM"
+      aciklama: "Grafikteki eğilimi ters yönde yorumlama"
+      ornek: "Artış eğilimini azalış gibi sunma"
+    - ad: "UST_KAVRAM_GENELLEME"
+      aciklama: "Çok geniş/genel bir ifade kullanarak belirli konuyu kaybetme"
+      ornek: "Spesifik konuyu aşırı genel bir kavramla ifade etme"
+
+use_shared_strategies: false

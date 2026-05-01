@@ -1,0 +1,116 @@
+meta:
+  id: dgy_tablo
+  ad: DGY +/- Tablo
+  sinif_seviyesi: 5
+  aciklama: +/- tablo ile öğrencilerin kullandığı DGY yolları verilir — metin eşleştirme ve profil farklılığı
+  kaynak: kaynak-soru-kokleri.md
+  frequency: Medium
+context:
+  type: dgy_tablo
+  question_count: 2
+  question_count_min: 2
+  question_count_max: 2
+  generation:
+    word_count_min: 100
+    word_count_max: 180
+    structure:
+    - 'Bir senaryo oluştur: Öğretmen sınıfta düşünceyi geliştirme yollarını işliyor'
+    - 4 öğrenci (isimli) farklı DGY yollarını kullanarak metin yazmış
+    - 'HTML tablosu ekle: satırlar öğrenciler, sütunlar DGY yolları (Tanımlama, Örneklendirme, Karşılaştırma, Benzetme)'
+    - Tabloda + (kullandı) ve - (kullanmadı) işaretleri olmalı
+    - Her öğrencinin en az 2 yol kullandığı, en az 1 yol kullanmadığı görünmeli
+    - Öğrenciler arasında farklılıklar olmalı — her birinin profili benzersiz
+    kurallar:
+    - '5. sınıf seviyesinde, DGY yolları: Tanımlama, Örneklendirme, Karşılaştırma, Benzetme'
+    - 'KRİTİK — SENARYO KAPSAMI: Senaryo sadece DURUMU ve MERAKı anlatsın, CEVAPLARI vermesin!'
+    - Detaylı bilgiler ve veriler SADECE tablo/grafikte olmalı — senaryo bunları içermemeli
+    - Soruların cevabı senaryodan değil tablo/grafikten çıkarılmalı
+    - Tablo <table>, <tr>, <th>, <td> etiketleriyle oluşturulmalı
+    - + ve - işaretleri anlamlı ve tutarlı olmalı
+    - Öğrenci isimleri Türkçe olmalı
+    - Her öğrencinin profili diğerlerinden farklı olmalı
+    - Türkçe karakterler doğru kullanılmalı (ş, ı, ğ, ü, ö, ç)
+  questions:
+  - slot: 1
+    type: metin_eslestirme
+    soru_kokleri:
+    - <b>Aşağıdaki metinlerden hangisi …Öğrenci…'nin yazdığı metin olabilir?</b>
+    - <b>Tabloya göre aşağıdakilerden hangisi …Öğrenci…'ye ait bir paragraf olabilir?</b>
+    - <b>Buna gore asagidaki metinlerden hangisi ...Ogrenci...nun yazdigi metindir?</b>
+    options_style: mini_paragraph
+    word_count_min: 20
+    word_count_max: 45
+    beceri:
+      katman: KB2
+      bilesenler:
+      - siniflandirma
+      - karsilastirma
+      surec_bileseni: bilgiyi_cikartma
+  - slot: 2
+    type: dgy_profil_farkliligi
+    soru_kokleri:
+    - <b>…Öğrenci 1…, yazdığı metinden vazgeçip …Öğrenci 2…'nin <u>kullanmadığı</u> düşünceyi geliştirme yollarını kullanarak metin yazmak istemiştir. Aşağıdakilerden hangisi …Öğrenci 1…'in yazdığı yeni metin olabilir?</b>
+    - <b>...Ogrenci 1... kullanmadigi dusunceyi gelistirme yollarini kullanarak yeni metin yazmak isterse asagidakilerden hangisini yazabilir?</b>
+    options_style: concept
+    word_count_min: 10
+    word_count_max: 45
+    beceri:
+      katman: KB2
+      bilesenler:
+      - karsilastirma
+      - analiz
+      surec_bileseni: bilgiyi_cikartma
+header_template: 1-2. soruları aşağıdaki senaryo ve tabloya göre cevaplayınız.
+format:
+  type: llm_generated_html
+  description: +/- tablo üzerinden DGY yolu eşleştirme ve karşılaştırma soruları
+  paragraph:
+    required: true
+    word_count_min: 100
+    word_count_max: 180
+    sentence_count_min: 3
+    sentence_count_max: 10
+  stem:
+    required: true
+  options:
+    count: 4
+    labels:
+    - A
+    - B
+    - C
+    - D
+    word_count_min: 1
+    word_count_max: 45
+    style: complete_sentence
+    correct_count: 1
+    correct_type: matches
+dogru_cevap:
+  tanim: Tablodaki +/- bilgileriyle uyumlu metin veya öğrenci karşılaştırması
+  kurallar:
+  - 'KRİTİK: Doğru cevap tablodaki tek bir hücreden veya metindeki tek bir cümleden direkt okunaMAMALI'
+  - Öğrenci doğru cevaba ulaşmak için senaryodaki durumu ANLAMALI ve tablodaki veriyi YORUMLAMALI
+  - Doğru şık bir YORUM veya ÇIKARIM içermeli — ham veri tekrarı değil
+  - 'YASAK: Tablodaki değeri aynen şıkka yazmak (örn: ''yalıtımı azdır'' tabloda yazıyorsa şıkta aynen yazmamalı)'
+  - Şıklar senaryodaki probleme çözüm, tablodaki verilerden yargı veya karşılaştırma içermeli
+  - Seçenekler arasında en az 2 tanesi makul görünmeli ama sadece biri metin+tablo birlikte değerlendirildiğinde doğru olmalı
+  - Doğru şık en uzun şık OLMAMALI — seçenekler arası uzunluk dengeli olmalı
+  - Metin eşleştirme sorusunda doğru cevap öğrencinin + aldığı DGY yollarını içeren, - aldığı yolları İÇERMEYEN metin
+  - Farklılık sorusunda doğru cevap +/- profili diğerlerinden en çok farklılık gösteren öğrenci
+  - Mini paragraf seçenekleri belirgin DGY yolu özellikleri taşımalı
+  - 'HATALI YAKLASIM: Metinde/tabloda/grafikte geçen bir cümlenin, kelime grubunun ya da kelimenin AYNEN seçeneklerde kullanılması — öğrenci metni anlamasa bile görsel eşleştirme yaparak doğru cevabı bulabilir!'
+  - 'DOĞRU YAKLASIM: Seçenek, metindeki ifadenin AYNISI değil, ANLAMCA ÖZDESİ (farklı kelimelerle ifade edilmiş hâli) olmalı — öğrencinin ezberini değil, okuduğunu anlama ve yorumlama becerisini ölçer'
+  - Doğru seçenek paragraftaki/tablodaki/grafikteki hiçbir cümleyi kelimesi kelimesine TEKRARLAMAMALI
+  - En az %40 kelime farklılığı olmalı — aynı cümleyi kopyalayıp yapıştırma YASAK
+  - 'BİLİMSEL TERİM KORUMASI: Bilimsel terimler, teknik kavramlar ve özel isimler DEĞİŞTİRİLMEMELİ (ör: ''teleskop'' → ''mercekli araç'' GEÇERSİZ). Sadece GÜNLÜK DİL kelimeleri için eş anlamlı kullanılmalı'
+distractors:
+  stratejiler:
+  - ad: DGY_KARISTIRMA
+    aciklama: Öğrencinin kullanmadığı (-) DGY yolunu içeren metin sunma
+    ornek: Benzetme kullanmayan öğrenciye benzetme içeren metin eşleştirme
+  - ad: KISMI_UYUM
+    aciklama: Bazı DGY yollarını doğru yansıtan ama en az birini yanlış içeren metin
+    ornek: 2 yolu doğru, 1 yolu yanlış taşıyan paragraf önerme
+  - ad: BENZER_PROFIL
+    aciklama: Farklılık sorusunda profili az farklı olan öğrenciyi öne çıkarma
+    ornek: Sadece 1 sütunda farklı olan öğrenciyi en farklı gibi gösterme
+use_shared_strategies: false

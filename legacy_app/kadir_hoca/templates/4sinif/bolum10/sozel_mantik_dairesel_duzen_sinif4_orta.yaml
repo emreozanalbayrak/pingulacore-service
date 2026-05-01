@@ -1,0 +1,178 @@
+# Kaynak: sozel_mantik_dairesel_duzen_sinif4_zorluk_eklenmis.yaml → zorluk_duzeyleri.orta
+# 4. sinif sözel mantık dairesel düzen — orta duzey
+
+meta:
+  id: "sozel_mantik_dairesel_duzen_sinif4_orta"
+  ad: "Sözel Mantık ve Muhakeme - Dairesel Düzen Sorusu (Orta)"
+  sinif_seviyesi: 4
+  aciklama: "Orta duzey — 6 kişi/varlık, 4 koşul, en az 2 dolaylı çıkarım, en az 3 ilişki türü. Öğrenci küçük bir komşuluk bloğunu başka bir yön veya karşılıklılık ilişkisiyle birleştirmelidir."
+  frequency: "High"
+
+dairesel_duzen_senaryolari:
+  - ad: "yuvarlak_masa_kahvalti_duzeni"
+    aciklama: "Kişilerin yuvarlak bir kahvaltı masasında oturma düzeninin belirlenmesi"
+    ornek_setup: "Altı kişi yuvarlak bir kahvaltı masasının etrafında oturmaktadır."
+
+  - ad: "kamp_atesi_cevresi"
+    aciklama: "Kamp ateşinin etrafında oturan kişilerin yerlerinin belirlenmesi"
+    ornek_setup: "Altı öğrenci kamp ateşinin etrafında dairesel biçimde oturmaktadır."
+
+  - ad: "dogum_gunu_pastasi_cevresi"
+    aciklama: "Doğum günü masasının etrafında oturan çocukların düzeninin kurulması"
+    ornek_setup: "Bir doğum günü kutlamasında çocuklar yuvarlak masanın etrafında oturmaktadır."
+
+  - ad: "planetaryum_koltuk_duzeni"
+    aciklama: "Planetaryumdaki halka biçimli oturma düzeninde kişilerin yerlerinin belirlenmesi"
+    ornek_setup: "Bir planetaryum gösterisinde öğrenciler dairesel oturma alanında yerlerini almıştır."
+
+  - ad: "tiyatro_prova_cemberi"
+    aciklama: "Prova sırasında çember oluşturan öğrencilerin konumlarının bulunması"
+    ornek_setup: "Bir tiyatro provasına katılan öğrenciler çember şeklinde dizilmiştir."
+
+  - ad: "drama_atolyesi_cemberi"
+    aciklama: "Drama etkinliğinde halka oluşturan katılımcıların yerleşiminin belirlenmesi"
+    ornek_setup: "Bir drama atölyesinde katılımcılar yuvarlak bir düzen oluşturmuştur."
+
+  - ad: "muzik_dinleti_halkasi"
+    aciklama: "Müzik etkinliğinde halka biçiminde oturan çocukların düzeni"
+    ornek_setup: "Bir müzik etkinliğinde çocuklar dairesel biçimde oturmaktadır."
+
+  - ad: "sinif_sohbet_cemberi"
+    aciklama: "Sınıf içinde sohbet için oluşturulan çemberde öğrencilerin yerleri"
+    ornek_setup: "Bir sınıf etkinliğinde öğrenciler sandalyelerini çember şeklinde yerleştirmiştir."
+
+  - ad: "uzay_kampi_kontrol_masasi"
+    aciklama: "Uzay kampındaki dairesel kontrol masasının etrafındaki katılımcıların yerleşimi"
+    ornek_setup: "Bir uzay kampında katılımcılar yuvarlak kontrol masasının etrafında oturmaktadır."
+
+  - ad: "robotik_takim_degerlendirme_cemberi"
+    aciklama: "Robotik takım üyelerinin çember düzenindeki değerlendirme toplantısı"
+    ornek_setup: "Bir robotik takım toplantısında öğrenciler dairesel düzende oturmaktadır."
+
+  - ad: "bilim_kulubu_tartisma_halkasi"
+    aciklama: "Bilim kulübü üyelerinin halka biçimindeki tartışma düzeni"
+    ornek_setup: "Bir bilim kulübü toplantısında öğrenciler halka şeklinde yer almıştır."
+
+  - ad: "masal_saati_halkasi"
+    aciklama: "Masal anlatımı sırasında halka oluşturan çocukların oturma düzeni"
+    ornek_setup: "Masal saatinde çocuklar anlatıcının etrafında halka biçiminde oturmaktadır."
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Setup cümlesi + maddeli koşullar + soru kökü + 4 ikili seçenekten oluşan dairesel düzen sorusu (orta)"
+
+  paragraph:
+    required: true
+    word_count_min: 35
+    word_count_max: 95
+    sentence_count_min: 2
+    sentence_count_max: 8
+    stil: "mantik_bulmacasi"
+
+    amac: >
+      Öğrencinin, kişi veya varlıkların dairesel bir düzende yer aldığı yapıda
+      sağ-sol, karşısı, yan yana ve arasında olma ilişkilerini birlikte
+      değerlendirerek gizli oturma düzenini kurması gerekir.
+      Orta düzey: 6 kişi/varlık, 4 koşul, en az 2 dolaylı çıkarım, en az 3 ilişki türü.
+      Öğrenci en az bir komşuluk bloğunu başka bir yön veya karşılıklılık bilgisiyle birleştirmelidir.
+
+    kurallar:
+      - "Paragraf iki bölümden oluşur: (1) SETUP CÜMLESİ + (2) MADDELİ KOŞULLAR"
+      - "SETUP CÜMLESİ (1-2 cümle): Kaç kişi/varlık olduğu, dairesel düzenin türü açıkça tanıtılmalıdır"
+      - "Dairesel düzende tüm bireylerin merkeze dönük oturduğu varsayımı korunmalıdır"
+      - "MADDELİ KOŞULLAR 4 madde olmalıdır; her koşul • ile başlamalı ve <br> ile ayrılmalıdır"
+      - "FORMAT ŞEKLİ şu mantıkta olmalıdır: Setup cümlesi.<br>Bu dairesel düzenle ilgili aşağıdaki bilgiler verilmektedir:<br>• Koşul 1<br>• Koşul 2<br>• Koşul 3<br>• Koşul 4"
+      - "YASAK: Düz paragraf yazma; mutlaka setup + • maddeli koşul yapısı kullanılmalıdır"
+      - "YASAK: <ul>, <li>, <ol> tag'leri kullanma; yalnızca • karakteri ve <br> kullanılmalıdır"
+      - "Orta düzey: 6 kişi/varlık tercih edilmelidir"
+      - "Orta düzey: en az 2 koşul dolaylı çıkarım gerektirmelidir"
+      - "Orta düzey: en az 3 ilişki türü birlikte kullanılmalıdır"
+      - "Koşullar bütünsel düşünmeyi gerektirmelidir"
+      - "Koşullar arasında çelişki olmamalıdır"
+      - "Kişi kullanılacaksa Türk isimleri tercih edilmelidir (Ali, Ayşe, Ece, Baran, Defne vb.)"
+      - "Paragrafta hikâye unsurlarıyla ilgili AÇIKLAMA veya EK BİLGİ verme!"
+      - "Paragraf SADECE mantık bulmacasını anlatsın — unsur analizi veya tanımlaması YAPMA"
+
+  stem:
+    required: true
+    description: "Soru kokleri listesinden rastgele secilir; [hedef_kisi] yer tutucusu gerçek isimle değiştirilir"
+
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 8
+    style: "neighbor_pair"
+    correct_count: 1
+
+# ═══════════════════════════════════════════════════════════════
+# SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu bilgilere göre [hedef_kisi] hangi kişilerin arasında oturmaktadır?</b>"
+  - "<b>Bu bilgilere göre [hedef_kisi] aşağıdakilerden hangisinin arasındadır?</b>"
+  - "<b>Bu bilgilere göre [hedef_kisi] adlı kişi hangi iki kişinin arasında yer almaktadır?</b>"
+  - "<b>Bu bilgilere göre [hedef_kisi]'nin iki yanındaki kişiler aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu bilgilere göre [hedef_kisi]'nin komşuları aşağıdakilerden hangisidir?</b>"
+  - "<b>Bu bilgilere göre [hedef_kisi], aşağıdaki ikililerden hangisinin arasında bulunur?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+# DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: >
+    Doğru cevap, yalnızca verilen tüm koşullar birlikte değerlendirilip gizli
+    dairesel düzen kurulduktan sonra kesin biçimde belirlenebilen komşu çiftidir.
+  kurallar:
+    - "Doğru cevap SADECE tüm koşullar birlikte değerlendirildiğinde ulaşılabilir olmalıdır"
+    - "Doğru cevap, hedef kişinin iki yanında oturan kişileri eksiksiz ve doğru biçimde vermelidir"
+    - "Doğru cevap 2-8 kelime arasında olmalıdır"
+
+# ═══════════════════════════════════════════════════════════════
+# CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  - ad: "BLOK_BIRLESTIRME_HATASI"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Birden fazla ilişki türünü birleştirirken komşuluk bloğunu yanlış yöne açan seçenek"
+    nasil_olusturulur: |
+      İki komşuluk koşulunu birleştirip bloğu saat yönüne göre ters konumlandıran ama bireysel koşullar tek tek geçerli görünen bir yerleşim sun.
+    kategori: "cognitive"
+
+  - ad: "UCUNCU_ILISKI_ATLAMA"
+    bilisssel_hata_kategorisi: "eksik_analiz"
+    aciklama: "3 ilişki türünden birini göz ardı ederek oluşturulan dairesel düzen"
+    nasil_olusturulur: |
+      Yön, komşuluk ve karşısındalık ilişkilerinden birini uygulamamış gibi davranan, geri kalanı sağlayan ama 1 ilişkiyi ihlal eden seçenek oluştur.
+    kategori: "eksik_analiz"
+
+  - ad: "BÜTÜNSEL_DÜŞÜNME_EKSIKLIĞI"
+    bilisssel_hata_kategorisi: "yanlis_cikarim"
+    aciklama: "Her koşulu ayrı ayrı uygulayıp tümünü birlikte değerlendirmeyen ve iç çelişkili bir dairesel düzen sunan seçenek"
+    nasil_olusturulur: |
+      Her koşulu izole uygulayan ama birlikte değerlendirildiğinde iki koşulun birbiriyle çeliştiği bir yerleşim sun. Tek tek mantıklı görünmeli.
+    kategori: "cognitive"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB3"
+  bilesenler: ["mantiksal_cikarim", "dairesel_duzen_cozme", "iliski_kurma", "degerlendirme", "sorgulama"]
+  surec_bileseni: "karar_verme"
+
+sinif4_ek_kurallar:
+  yasak_alanlar:
+    - "5. sınıfa kayan aşırı soyut yorum soruları YASAK"
+    - "Metinde açıkça geçmeyen bilgiye dayanan sorular YASAK"
+    - "Birden fazla makul doğru seçenek oluşturan kurgu YASAK"

@@ -1,0 +1,568 @@
+# bolum6/sozel_mantik_zaman_dizisi_eslestirme_sorusu.yaml
+# Bölüm 6 - Sözel Mantık ve Muhakeme
+#
+# FORMAT: Setup cümlesi + maddeli koşullar (•) + soru kökü + 4 gün/öğe eşleştirme seçeneği
+# Bu sürüm yalnızca "zaman dizisi eşleştirme sorusu" kalıbı içindir.
+
+meta:
+  id: "sozel_mantik_zaman_dizisi_eslestirme_sorusu"
+  ad: "Sözel Mantık ve Muhakeme - Zaman Dizisi Eşleştirme Sorusu"
+  sinif_seviyesi: 5
+  aciklama: "Öğe, ürün veya etkinlikleri günlere ya da zaman sırasına her biri yalnızca bir kez gelecek şekilde yerleştirerek gizli zaman dizisini bulma ve buna göre çıkarım yapma"
+  frequency: "High (~24 questions)"
+
+zaman_dizisi_senaryolari:
+  - ad: "haftalik_cizgi_film_yayini"
+    aciklama: "Haftanın günlerinde yayınlanan farklı çizgi filmlerin günlerle eşleştirilmesi"
+    ornek_setup: "Bir çocuk kanalında pazartesiden cumaya her gün farklı bir çizgi film yayınlanacaktır."
+
+  - ad: "okul_duyuru_haftasi"
+    aciklama: "Bir okulda hafta boyunca her gün farklı bir duyuru temasının yapılması"
+    ornek_setup: "Bir okulda hafta boyunca her gün farklı bir duyuru konusu paylaşılacaktır."
+
+  - ad: "kutuphane_tema_gunleri"
+    aciklama: "Kütüphanede farklı günlerde yapılan tema etkinliklerinin günlerle eşleştirilmesi"
+    ornek_setup: "Bir kütüphanede hafta boyunca her gün farklı bir tema etkinliği yapılacaktır."
+
+  - ad: "firin_urun_takvimi"
+    aciklama: "Bir fırında günlere göre hazırlanan özel ürünlerin sıralanması"
+    ornek_setup: "Bir fırında hafta boyunca her gün farklı bir özel ürün hazırlanacaktır."
+
+  - ad: "bilim_merkezi_gosteri_takvimi"
+    aciklama: "Bilim merkezinde yapılan günlük gösterilerin günlere yerleştirilmesi"
+    ornek_setup: "Bir bilim merkezinde beş gün boyunca her gün farklı bir gösteri yapılacaktır."
+
+  - ad: "planetaryum_gok_cismi_programi"
+    aciklama: "Planetaryumda farklı günlerde tanıtılan gök cisimlerinin günlerle eşleştirilmesi"
+    ornek_setup: "Bir planetaryumda hafta boyunca her gün farklı bir gök cismi tanıtılacaktır."
+
+  - ad: "hayvanat_bahcesi_besleme_programi"
+    aciklama: "Hayvanat bahçesinde farklı günlerde öne çıkan besleme etkinliklerinin günlere yerleştirilmesi"
+    ornek_setup: "Bir hayvanat bahçesinde hafta boyunca her gün farklı bir hayvanın özel besleme etkinliği yapılacaktır."
+
+  - ad: "muzede_rehberli_tur_takvimi"
+    aciklama: "Müzede farklı günlerde düzenlenen rehberli turların günlerle eşleştirilmesi"
+    ornek_setup: "Bir müzede hafta boyunca her gün farklı bir rehberli tur yapılacaktır."
+
+  - ad: "kampus_kulup_tanitim_gunleri"
+    aciklama: "Kulüp tanıtımlarının farklı günlere dağıtılması"
+    ornek_setup: "Bir okul kampüsünde hafta boyunca her gün farklı bir kulübün tanıtımı yapılacaktır."
+
+  - ad: "sera_bakim_takvimi"
+    aciklama: "Serada farklı bakım işlerinin günlere göre sıralanması"
+    ornek_setup: "Bir serada hafta boyunca her gün farklı bir bakım işi yapılacaktır."
+
+  - ad: "akvaryum_gunluk_gosteri_programi"
+    aciklama: "Akvaryumda günlük yapılan gösterilerin zaman dizisine yerleştirilmesi"
+    ornek_setup: "Bir akvaryumda beş gün boyunca her gün farklı bir gösteri düzenlenecektir."
+
+  - ad: "uzay_kampi_atolye_takvimi"
+    aciklama: "Uzay kampındaki atölyelerin günlere göre sıralanması"
+    ornek_setup: "Bir uzay kampında hafta boyunca her gün farklı bir atölye yapılacaktır."
+
+  - ad: "robot_bakim_plani"
+    aciklama: "Farklı robotlar için yapılan bakım günlerinin dizilmesi"
+    ornek_setup: "Bir atölyede beş robotun bakımı hafta boyunca her gün birer tane olacak şekilde yapılacaktır."
+
+  - ad: "oyuncak_magazasi_tanitim_haftasi"
+    aciklama: "Mağazada her gün farklı bir oyuncağın tanıtılması"
+    ornek_setup: "Bir oyuncak mağazasında hafta boyunca her gün farklı bir oyuncak tanıtılacaktır."
+
+  - ad: "okul_menusu_tema_gunleri"
+    aciklama: "Okulda hafta boyunca yapılan tematik menü günlerinin sıralanması"
+    ornek_setup: "Bir okulda hafta boyunca her gün farklı bir tema menüsü uygulanacaktır."
+
+  - ad: "cocuk_dergisi_bulmaca_serisi"
+    aciklama: "Bir çocuk dergisinde günlere göre paylaşılan bulmaca türlerinin dizilmesi"
+    ornek_setup: "Bir çocuk dergisi sitesinde beş gün boyunca her gün farklı bir bulmaca türü paylaşılacaktır."
+
+  - ad: "spor_salonu_etkinlik_takvimi"
+    aciklama: "Spor salonunda farklı günlerde yapılan etkinliklerin günlerle eşleştirilmesi"
+    ornek_setup: "Bir spor salonunda hafta boyunca her gün farklı bir etkinlik yapılacaktır."
+
+  - ad: "festival_sahne_programi"
+    aciklama: "Festivalde farklı günlerde sahne alan grupların günlerle eşleştirilmesi"
+    ornek_setup: "Bir çocuk festivalinde beş gün boyunca her gün farklı bir grup sahne alacaktır."
+
+# ═══════════════════════════════════════════════════════════════
+# FORMAT / STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+format:
+  type: "llm_generated_html"
+  description: "Setup cümlesi + maddeli koşullar + soru kökü + 4 gün/öğe eşleştirme seçeneğinden oluşan zaman dizisi eşleştirme sorusu"
+
+  paragraph:
+    required: true
+    word_count_min: 35
+    word_count_max: 95
+    sentence_count_min: 2
+    sentence_count_max: 8
+    stil: "mantik_bulmacasi"
+
+    amac: >
+      Öğrencinin, günler ya da zaman sıraları boyunca her biri yalnızca bir kez
+      yer alan öğeleri verilen ilişkisel koşullara göre doğru zaman dizisine
+      yerleştirmesi gerekir. Koşullar dizilişi doğrudan doldurmamalı; öğrenci bazı
+      gün-öğe eşleşmelerini mantıksal çıkarımla tamamlamalı ve sonunda belirli bir
+      gün+öğe önermesinin kesin doğru, kesin yanlış, söylenebilir ya da
+      söylenemez olup olmadığını belirlemelidir.
+
+    kurallar:
+      - "Paragraf iki bölümden oluşur: (1) SETUP CÜMLESİ + (2) MADDELİ KOŞULLAR"
+      - "SETUP CÜMLESİ (1-2 cümle): Zaman dizisinin türünü açıklar; kaç gün/zaman adımı olduğu, hangi öğelerin yerleştirileceği ve genel çerçeve tanıtılır"
+      - "Kurgu öğe-merkezli olmalıdır; kişi merkezli anlatım zorunlu değildir"
+      - "Her öğe yalnızca bir kez kullanılmalı ve her gün/zaman adımında yalnızca bir öğe yer almalıdır"
+      - "MADDELİ KOŞULLAR 3-5 madde olmalıdır; her koşul • ile başlamalı ve <br> ile ayrılmalıdır"
+      - "FORMAT ŞEKLİ şu mantıkta olmalıdır: Setup cümlesi.<br>Bu zaman dizisiyle ilgili aşağıdaki bilgiler verilmektedir:<br>• Koşul 1<br>• Koşul 2<br>• Koşul 3"
+      - "YASAK: Düz paragraf yazma; mutlaka setup + • maddeli koşul yapısı kullanılmalıdır"
+      - "YASAK: <ul>, <li>, <ol> tag'leri kullanma; yalnızca • karakteri ve <br> kullanılmalıdır"
+
+      - "Önce gizli doğru zaman dizisi kurulmalı; ardından yalnızca bu dizilişe götüren koşullar yazılmalıdır"
+      - "Koşullar tek tek değil, birlikte değerlendirildiğinde anlam kazanmalıdır"
+      - "Her bir madde farklı bilgi taşımalıdır; maddeler birbirini tekrar etmemelidir"
+      - "Aynı sonuca götüren gereksiz veya yinelenen iki ayrı koşul yazılmamalıdır"
+
+      - "Koşullar takvimi gün gün doğrudan doldurmamalıdır"
+      - "Maddeler, gizli zaman dizisinin yalnızca bazı parçalarını, sıralı ilişkilerini veya dışlamalarını vermelidir"
+      - "Öğrenci, verilen ilişkilerden hareketle bazı gün-öğe eşleşmelerini kendi mantıksal çıkarımıyla tamamlamak zorunda kalmalıdır"
+      - "Koşullar çözümü doğrudan ele vermemelidir; sorulan gün+öğe eşleşmesi açıkça söylenmemelidir"
+      - "Sorunun çözümü, tek bir koşula bakılarak değil, tüm koşullar analiz edildikten sonra yapılabilmelidir"
+      - "Şıklara bakmadan önce gizli zaman dizisi büyük ölçüde kurulabilir olmalı; şıklar diziyi kurdurmamalı, kurulmuş dizi üzerinden test edilmelidir"
+      - "Koşullar arasında çelişki olmamalıdır"
+      - "Koşullar, hedeflenen soru köküne göre tek bir doğru cevap üretmelidir"
+      - "Koşullar, öğrenciyi adım adım sona götürmeli; ancak ara adımlardan biri nihai cevabı tek başına vermemelidir"
+
+      - "Koşullar ağırlıklı olarak zaman ilişkisi içermelidir"
+      - "Öncelikli ilişki türleri: bir önceki gün/bir sonraki gün, önce/sonra, ardışık günlerde yer alma, belirli günlerde yer alma, iki gün arasında belirli sayıda gün bulunması, hafta başı/hafta sonu konumu, gün sırası farkı"
+      - "Tek bir maddeyle doğrudan tam zaman dizisi veren açık takvim cümleleri kullanılmamalıdır"
+      - "Koşullar, öğrencinin yalnızca alt alta günleri yazıp mekanik eşleme yapacağı kadar açık olmamalıdır"
+      - "En az 2 koşul dolaylı çıkarım gerektirmelidir; yani bir madde başka bir maddeyle birleşmeden tam anlam kazanmamalıdır"
+      - "En az 1 koşul, öğrencinin önce küçük bir ara zaman bloğu kurup sonra bunu diğer gün ilişkileriyle birleştirmesini gerektirmelidir"
+      - "Dizinin bazı parçaları doğrudan verilebilir; ancak sorulan gün+öğe eşleşmesi mutlaka düşünerek bulunmalıdır"
+
+      - "5. sınıf seviyesinde 4-6 öğe ve 4-6 zaman adımı/gün tercih edilmelidir"
+      - "Günler ya da zaman adımları açık ve anlaşılır olmalıdır: pazartesi-cuma, 1. gün-5. gün, sabah-öğle-akşam gibi"
+      - "Öğeler somut ve anlaşılır olmalıdır: ürün, gösteri, etkinlik, atölye, yiyecek, bölüm, robot, çizgi film vb."
+      - "Bağlam, öğrencinin aşina olduğu günlük yaşam durumlarından seçilmelidir"
+      - "Dil açık, kısa ve kesin olmalıdır"
+      - "'bir önceki gün' ve 'önce', 'bir sonraki gün' ve 'sonra', 'ardışık' ve 'aynı gün' gibi kavramlar net ayrılmalıdır"
+      - "Gün sırası ve zaman ilişkileri belirsizlik taşımamalıdır"
+      - "Koşullar yalnızca zaman dizisini kurmaya ve sorulan gün+öğe ilişkisini test etmeye hizmet etmelidir; konu dışı süsleme veya dikkat dağıtıcı detay eklenmemelidir"
+
+    kosul_dagilimi:
+      preferred_structure:
+        - "1 madde: ardışık gün veya bir önceki/bir sonraki gün ilişkisi"
+        - "1 madde: belirli gün veya sınırlı gün bilgisi"
+        - "1 madde: önce/sonra ya da arada gün farkı ilişkisi"
+        - "Gerekirse 1 madde: dolaylı bağ kuran çapraz zaman koşulu"
+      yasaklar:
+        - "Her günün öğesini tek tek tarif eden koşullar yazma"
+        - "Koşulları takvimi gün gün dolduracak biçimde dizme"
+        - "Tek bir öğeyi birden fazla zaman ilişkisiyle tamamen çözen açık koşullar yazma"
+        - "Koşulları soldan sağa çözüm şeması gibi dizme"
+        - "Tek bir maddeyle doğru seçeneğin kesinleşmesine yol açma"
+
+  stem:
+    required: true
+    description: >
+      Soru kökü, öğrenciyi gizli zaman dizisini kurmaya ve ardından belirli bir
+      gün+öğe eşleşmesinin kesin doğru, kesin yanlış, söylenebilir ya da
+      söylenemez olduğunu seçmeye zorlamalıdır.
+    kurallar:
+      - "Soru kökü gizli dizi yeterince kurulduktan sonra cevaplanabilir olmalıdır"
+      - "Soru kökü, tek bir maddeye bakılarak çözülebilecek kadar dar olmamalıdır"
+      - "Bu formatta soru kökü esas olarak belirli bir gün+öğe önermesinin doğruluk durumunu sorgulamalıdır"
+      - "Tercihen 'kesinlikle doğrudur', 'kesinlikle yanlıştır', 'kesin olarak söylenebilir', 'kesin olarak söylenemez' türünde kökler kullanılmalıdır"
+      - "Soru kökü, öğrenciyi doğrudan tek bir gün bilgisini okumaya değil, kurulmuş gizli zaman dizisini yorumlamaya yöneltmelidir"
+  options:
+    count: 4
+    labels: ["A", "B", "C", "D"]
+    word_count_min: 2
+    word_count_max: 10
+    style: "day_item_proposition"
+    correct_count: 1
+    kurallar:
+      - "Her seçenek bir gün + öğe eşleştirmesi biçiminde yazılmalıdır"
+      - "Seçenekler tam zaman dizisini vermemelidir"
+      - "Tüm seçenekler aynı temsil düzeyinde olmalıdır; hepsi gün/konum + öğe önermesi biçiminde yazılmalıdır"
+      - "Bir seçenek gün+öğe, bir diğeri iki öğenin ardışıklığı gibi dağınık yapılmamalıdır; tüm seçenek yapıları paralel olmalıdır"
+      - "Seçenekler, gizli zaman dizisi üzerinden test edilen tekil eşleştirmeler olmalıdır"
+      - "Doğru seçenek, belirtilen gün/konum için kesin doğru ya da kesin yanlış olan tek eşleştirme olmalıdır"
+      - "Hiçbir seçenek doğrudan bir koşul cümlesinin tekrar yazılmış hâli olmamalıdır"
+      - "Hiçbir seçenek tek bir maddeye bakılarak doğrudan doğrulanabilir veya elenebilir olmamalıdır"
+      - "Seçenekler biçimsel olarak dengeli olmalıdır"
+      - "Doğru cevap uzunluk, vurgu veya özel ifade nedeniyle ayırt edilmemelidir"
+
+# ═══════════════════════════════════════════════════════════════
+      # SORU KOKLERI
+# ═══════════════════════════════════════════════════════════════
+
+soru_kokleri:
+  - "<b>Bu bilgilere göre aşağıdakilerden hangisi kesinlikle <u>doğrudur</u>?</b>"
+  - "<b>Bu bilgilere göre aşağıdakilerden hangisi kesinlikle <u>yanlıştır</u>?</b>"
+  - "<b>Bu bilgilere göre aşağıdakilerden hangisi kesinlikle <u>söylenebilir</u>?</b>"
+  - "<b>Bu bilgilere göre aşağıdakilerden hangisi kesinlikle <u>söylenemez</u>?</b>"
+  - "<b>Bu bilgilere göre aşağıdaki gün–öğe eşleştirmelerinden hangisi <u>doğrudur</u>?</b>"
+  - "<b>Bu bilgilere göre aşağıdaki gün–öğe eşleştirmelerinden hangisi <u>yanlıştır</u>?</b>"
+
+# ═══════════════════════════════════════════════════════════════
+  # DOGRU CEVAP KURALLARI
+# ═══════════════════════════════════════════════════════════════
+
+dogru_cevap:
+  tanim: >
+    Doğru cevap, yalnızca verilen tüm koşullar birlikte değerlendirilip gizli zaman
+    dizisi kurulduktan sonra mantıksal olarak kesin biçimde belirlenebilen gün+öğe
+    eşleştirmesidir. Öğrenciden tek bir ipucuna dayanarak değil, tüm maddeleri
+    analiz ederek doğru eşleştirmeyi ya da kesin doğru/yanlış önermeyi seçmesi beklenir.
+
+  temel_ilke: >
+    Gizli zaman dizisi kurulmadan doğru cevap belirlenememelidir. Doğru seçenek,
+    bir veya iki koşuldan doğrudan fark edilebilen değil; ancak tüm koşulların
+    ortak sonucu olarak ortaya çıkan kesin gün+öğe eşleşmesi olmalıdır.
+
+  kurallar:
+    - "Doğru cevap SADECE tüm koşullar birlikte değerlendirildiğinde ulaşılabilir olmalıdır"
+    - "Doğru cevap bir tek maddeye bakılarak anlaşılmamalıdır"
+    - "Doğru cevap yalnızca iki koşul birleştirilerek doğrudan bulunamamalıdır; gerekli ise ara zaman blokları ve gün eşleştirmeleri üzerinden gizli dizi kurulmalıdır"
+    - "Öğrenci, seçeneklere geçmeden önce gün-öğe dizisini kurabilecek durumda olmalıdır"
+    - "Doğru cevap, maddelerden doğrudan alınmış tekil bir bilgi değil; kurulmuş gizli dizinin zorunlu sonucu olmalıdır"
+    - "Pozitif köklerde doğru cevap: gizli diziden KESİNLİKLE çıkan gün+öğe eşleşmesi olmalıdır"
+    - "Negatif köklerde doğru cevap: gizli diziyle çelişen ya da gizli diziden kesin olarak çıkarılamayan gün+öğe eşleşmesi olmalıdır"
+    - "Çıkarım köklerinde yalnızca bir seçenek kesin doğru ya da kesin yanlış olmalıdır"
+    - "Doğru cevap tahmine, sezgiye veya eksik okumaya değil; mantıksal zincire dayanmalıdır"
+    - "Sorunun tek bir doğru cevabı olmalıdır; belirsizlik ve alternatif doğru cevap YASAKTIR"
+    - "Doğru cevap, koşullardan biri tekrar edilerek yazılmamalıdır"
+    - "Doğru cevap, madde cümlelerinden birinin neredeyse aynısı olmamalıdır"
+    - "Doğru seçenek, verilen koşulları sadece yeniden söylemek yerine onların birleşiminden doğan yeni bir çıkarım olmalıdır"
+    - "Doğru cevap 2-10 kelime arasında olmalıdır"
+    - "Duruma göre kısa ifade ya da tam cümle olabilir"
+    - "Biçimsel olarak diğer şıklardan ayrışmamalıdır"
+
+  yasaklar:
+    - "Doğru cevabın tek bir koşulun yeniden yazılmış hâli olması"
+    - "Doğru cevabın iki koşuldan hemen fark edilecek kadar açık olması"
+    - "Gizli zaman dizisi kurulmadan seçenek elemesi yapılabilmesi"
+    - "Doğru cevabın, maddelerden birinde açıkça verilen gün/öğe ilişkisinin doğrudan tekrarına dönüşmesi"
+    - "Birden fazla seçeneğin gizli diziden eşit derecede doğru ya da yanlış çıkması"
+    - "Doğru cevabın tüm diziyi açık eden kapsamlı bir açıklama biçiminde yazılması"
+
+  kontrol:
+    - "Tek bir koşul çıkarıldığında doğru cevap hâlâ açıkça görünür hâle geliyor mu?"
+    - "Sadece ilk iki koşula bakılarak doğru seçenek bulunabiliyor mu?"
+    - "Gizli zaman dizisi kurulmadan doğru seçenek tahmin edilebiliyor mu?"
+    - "Doğru seçenek, maddelerde verilen ifadelerden birini tekrar mı ediyor?"
+    - "Doğru seçenek gerçekten tüm koşulların birleşiminden mi doğuyor?"
+    - "Diğer seçeneklerin de aynı ölçüde doğru ya da yanlış olma ihtimali kalıyor mu?"
+
+# ═══════════════════════════════════════════════════════════════
+    # CELDIRICI STRATEJILERI
+# ═══════════════════════════════════════════════════════════════
+
+celdirici_stratejileri:
+  temel_ilke: >
+    Bu formatta çeldiriciler, tek bir koşula bakılarak yanlış olduğu anlaşılabilen
+    yüzeysel gün+öğe eşleştirmeleri olmamalıdır. Her yanlış seçenek, öğrencinin
+    gizli zaman dizisini kurarken yapabileceği bütünsel bir muhakeme hatasının
+    sonucu olmalıdır. Öğrenci yanlış bir ara dizi kurarsa ya da bir gün+öğe
+    eşleşmesini gereğinden erken kesinleştirirse, bu şıklardan birini işaretlemeye
+    yatkın olmalıdır.
+
+  ana_prensipler:
+    - "Çeldirici, bir koşulun doğrudan olumsuzu ya da kaba ters çevrilmiş hâli olmamalıdır"
+    - "Çeldirici, tek bir maddeyle hemen elenmemelidir"
+    - "Her çeldirici, yanlış kurulmuş bir alternatif gizli zaman dizisinin sonucu olmalıdır"
+    - "Yanlış seçenek, koşulların bir kısmını doğru kullanıp bir kısmını yanlış yorumlayan öğrencinin ulaşacağı gün+öğe eşleştirmesi olmalıdır"
+    - "Çeldirici, tüm dizi kurulmadan değil; yanlış dizi kurulduğunda güçlü görünmelidir"
+    - "Çeldiriciler, çözüm sürecindeki farklı yanlış zaman yerleştirme yollarını temsil etmelidir"
+    - "Her çeldirici, doğru cevaba biçimsel olarak benzemeli; ama yalnızca tam ve doğru zaman dizisi ile test edildiğinde geçersiz olmalıdır"
+    - "Amaç, açık yanlış yazmak değil; yanlış kurulmuş dizide doğruymuş gibi görünen makul gün+öğe önermesi yazmaktır"
+
+  uretim_proseduru:
+    - "1. Önce doğru gizli zaman dizisini kur."
+    - "2. Ardından öğrencinin düşebileceği 3 farklı yanlış zaman dizisi veya yanlış kesinleştirme kurgusu tasarla."
+    - "3. Her yanlış kurgu, koşulların en az bir kısmını sağlamalı; fakat tümünü sağlamamalıdır."
+    - "4. Çeldiricileri bu yanlış kurguların sonuçlarından üret."
+    - "5. Her çeldiricinin yanlışlığı ancak tüm koşullar yeniden kontrol edildiğinde ortaya çıkmalıdır."
+    - "6. Bir çeldirici tek bir madde ile hemen eleniyorsa yeniden yaz."
+    - "7. Her çeldirici, sorudaki gün+öğe önermesi biçimini korumalıdır."
+
+  genel_kurallar:
+    - "Her çeldirici farklı bir yanlış zaman dizisi mantığına dayanmalıdır"
+    - "Bazı çeldirici türleri tek başına yeterince güçlü olmayabilir; bu türler başka bir yanlış zaman stratejisiyle birlikte kullanılmalıdır"
+    - "'ILISKIYI_EKSIK_TASIMA' tek başına ana çeldirici olarak kullanılmamalı; daha güçlü bir yanlış zaman dizisi stratejisini destekleyici olarak kullanılmalıdır"
+    - "Çeldiriciler, öğrencinin gizli diziyi yanlış ya da eksik tamamlaması hâlinde makul görünmelidir"
+    - "Çeldiriciler, maddelerde açıkça yazan bilgileri kopyalayıp bozarak üretilmemelidir"
+    - "Yanlış seçenekler, eksik çözüm değil yanlış zaman yerleşimi sonucu olmalıdır"
+    - "Çeldiriciler, doğru cevabın yalnızca rastgele başka bir günle veya başka bir öğeyle değiştirilmiş hâli olmamalıdır"
+    - "Bir çeldirici, yalnızca son kontrol aşamasında çürütülebilecek güçte olmalıdır"
+    - "Her yanlış seçenek aynı temsil düzeyinde gün+öğe eşleştirmesi biçiminde olmalıdır"
+
+  stratejiler:
+    - ad: "ARDISIK_GUN_ILISKISINI_YANLIS_TASIMA"
+      bilisssel_hata_kategorisi: "ardisiklik_hatasi"
+      aciklama: "Öğrenci iki öğenin ardışık günlerde olma ilişkisini yanlış yorumlayarak hatalı gün+öğe eşleşmesi kurar"
+      nasil_olusturulur: |
+        Ardışık günlerde yer alması gereken iki öğeyi koru; ancak bunların başlangıç
+        gününü ya da yönünü yanlış taşıyan alternatif bir dizi kur. Çeldirici,
+        bu yanlış bloktan çıkan ama ilk bakışta makul görünen gün+öğe eşleşmesine dayanmalıdır.
+
+    - ad: "BIR_ONCEKI_BIR_SONRAKI_GUN_HATASI"
+      bilisssel_hata_kategorisi: "yon_hatasi"
+      aciklama: "Öğrenci bir öğenin başka bir öğeden bir önceki ya da bir sonraki gün geldiğini ters yorumlar"
+      nasil_olusturulur: |
+        'Bir önceki gün' ve 'bir sonraki gün' ilişkisini ters taşıyan alternatif
+        bir zaman dizisi kur. Çeldirici, yön karışıklığı nedeniyle doğruymuş gibi
+        görünen ama tüm koşullar kontrol edildiğinde bozulan gün+öğe eşleşmesine dayanmalıdır.
+
+    - ad: "BELIRLI_GUN_BILGISINI_DAR_YORUMLAMA"
+      bilisssel_hata_kategorisi: "eksik_analiz"
+      aciklama: "Öğrenci belirli bir gün ya da sınırlı gün bilgisini gereğinden fazla kesinleştirir"
+      nasil_olusturulur: |
+        Belirli günlerde çıkan öğelerden bazılarının verildiği koşullarda, öğrencinin
+        olası günleri daraltıp erken kesinleştireceği bir alternatif dizi kur.
+        Çeldirici, bu erken sabitlemenin sonucunda ortaya çıkan yanlış gün+öğe eşleşmesi olmalıdır.
+
+    - ad: "ILISKIYI_EKSIK_TASIMA"
+      bilisssel_hata_kategorisi: "eksik_analiz"
+      aciklama: "Öğrenci bir koşulu doğru kullanır; fakat bu koşulun diğer maddelerle birleşince doğurduğu sonucu taşımaz"
+      nasil_olusturulur: |
+        Bir veya iki koşula göre makul görünen, ancak başka bir koşulla birleşince
+        bozulması gereken yanlış bir zaman dizisi kur. Çeldirici, öğrencinin ara
+        çıkarımı yapıp sonraki mantıksal taşıma adımını atlaması sonucu yanlış
+        gün+öğe eşleşmesini doğru ya da mümkün sanmasına dayanmalıdır.
+      kullanim_notu: >
+        Bu strateji tek başına kullanıldığında çeldirici zayıf kalabilir. Bu nedenle
+        tek başına ana çeldirici olarak kullanılmamalı; "ARDISIK_GUN_ILISKISINI_YANLIS_TASIMA",
+        "BIR_ONCEKI_BIR_SONRAKI_GUN_HATASI", "BELIRLI_GUN_BILGISINI_DAR_YORUMLAMA" veya
+        "KALAN_GUNLERI_YANLIS_TAMAMLAMA" gibi daha güçlü bir yanlış zaman dizisi
+        stratejisini destekleyici biçimde kullanılmalıdır.
+      tek_basina_kullanilabilir: false
+      birlikte_kullan:
+        - "ARDISIK_GUN_ILISKISINI_YANLIS_TASIMA"
+        - "BIR_ONCEKI_BIR_SONRAKI_GUN_HATASI"
+        - "BELIRLI_GUN_BILGISINI_DAR_YORUMLAMA"
+        - "KALAN_GUNLERI_YANLIS_TAMAMLAMA"
+
+    - ad: "KALAN_GUNLERI_YANLIS_TAMAMLAMA"
+      bilisssel_hata_kategorisi: "yanlis_tamamlama"
+      aciklama: "Öğrenci dizinin büyük kısmını doğru kurar; fakat kalan günleri elde kalana göre yanlış tamamlar"
+      nasil_olusturulur: |
+        Gizli dizinin çoğunu doğru tut; ancak son 1-2 günü, tüm koşulları tekrar
+        kontrol etmeden yanlış tamamlanmış gibi kurgula. Çeldirici, bu yanlış
+        tamamlama sonucunda doğruymuş gibi görünen gün+öğe eşleşmesine dayanmalıdır.
+
+    - ad: "GUN_FARKI_MESAFE_HATASI"
+      bilisssel_hata_kategorisi: "mesafe_hatasi"
+      aciklama: "Öğrenci iki öğe arasında bulunan gün sayısını yanlış kurar"
+      nasil_olusturulur: |
+        'Aralarında bir gün vardır', 'iki gün sonra gelir' gibi koşullarda mesafeyi
+        yanlış taşıyan alternatif bir dizi kur. Çeldirici, bu mesafe hatası nedeniyle
+        makul görünen ama tüm koşullar altında geçersiz olan gün+öğe eşleşmesi olmalıdır.
+
+    - ad: "NEGATIF_KOKTE_MUMKUN_ESLESMEYI_YANLIS_SECME"
+      bilisssel_hata_kategorisi: "kok_yon_hatasi"
+      aciklama: "Öğrenci kökün yönünü karıştırdığı için doğru olan yerine yanlış olanı ya da tersini seçer"
+      nasil_olusturulur: |
+        Eğer soru kökü 'yanlıştır' veya 'söylenemez' türündeyse, gizli diziyle büyük
+        ölçüde uyumlu ve güçlü görünen ama aslında işaretlenmemesi gereken bir
+        gün+öğe eşleşmesi üret. Bu çeldirici, kök yönünü ve kesinlik derecesini
+        karıştıran öğrencinin yapacağı hataya dayanmalıdır.
+
+  yasaklar:
+    - "Bir koşulun açık tersini yazmak"
+    - "Bir maddede verilen bilgiyi bozup kolay eleme yapılacak gün+öğe eşleşmesi üretmek"
+    - "Tek başına tek koşulla elenen çeldirici üretmek"
+    - "Koşullardan bağımsız, rastgele yanlış eşleşme yazmak"
+    - "Çeldiriciyi yanlış zaman dizisi düzeyinde tasarlamadan üretmek"
+    - "Aynı yanlış çözüm mantığını temsil eden birden fazla çeldirici kullanmak"
+    - "Bir yanlış seçenekte temsil düzeyini bozmak; örneğin biri gün+öğe, biri tüm hafta özeti gibi dengesiz yapı kurmak"
+
+  kalite_kontrol:
+    - "Bu çeldirici, öğrencinin kurabileceği yanlış bir zaman dizisinin sonucu mu?"
+    - "Bu seçenek bir tek maddeyle hemen eleniyor mu?"
+    - "Bu seçenek ancak tüm koşullar kontrol edilince mi yanlışlaşıyor?"
+    - "Bu çeldirici, doğru diziye yakın ama hatalı bir alternatif kurguya dayanıyor mu?"
+    - "Her çeldirici farklı bir yanlış çözüm yolunu temsil ediyor mu?"
+    - "Tüm çeldiriciler aynı temsil düzeyinde gün+öğe eşleştirmesi biçiminde mi?"
+
+  önerilen_dagilim:
+    - "1 ana çeldirici: ARDISIK_GUN_ILISKISINI_YANLIS_TASIMA veya BIR_ONCEKI_BIR_SONRAKI_GUN_HATASI"
+    - "1 ana çeldirici: BELIRLI_GUN_BILGISINI_DAR_YORUMLAMA veya GUN_FARKI_MESAFE_HATASI"
+    - "1 ana çeldirici: KALAN_GUNLERI_YANLIS_TAMAMLAMA veya NEGATIF_KOKTE_MUMKUN_ESLESMEYI_YANLIS_SECME"
+    - "'ILISKIYI_EKSIK_TASIMA' tek başına kullanılmamalı; yalnızca yukarıdaki ana çeldiricilerden biriyle birlikte destekleyici mantık olarak kullanılmalıdır"
+
+use_shared_strategies: false
+
+# ═══════════════════════════════════════════════════════════════
+# BECERI ETIKETI
+# ═══════════════════════════════════════════════════════════════
+
+beceri:
+  katman: "KB3"
+  bilesenler: ["mantiksal_cikarim", "zaman_dizisi_kurma", "degerlendirme", "sorgulama"]
+  surec_bileseni: "karar_verme"
+
+# ═══════════════════════════════════════════════════════════════
+    # URETIM MANTIGI
+# ═══════════════════════════════════════════════════════════════
+
+generation_logic:
+  temel_ilke: >
+    Bu formatta soru, öğrenciyi gizli zaman dizisini tamamen ya da büyük ölçüde
+    kurmaya zorlamalıdır. Doğru cevap; tek bir koşuldan, iki koşulun hızlı
+    birleşiminden veya yüzeysel elemeden bulunamamalı; ancak günler/zaman adımları
+    ile öğeler arasındaki ilişkiler birlikte değerlendirildikten sonra sorulan
+    gün+öğe eşleşmesinin kesin doğru, kesin yanlış, söylenebilir ya da
+    söylenemez olduğu anlaşılmalıdır.
+
+  steps:
+    - step: 1
+      action: "Senaryo alanı seç"
+      details: |
+        Yalnızca zaman dizisi eşleştirme sorusuna uygun bir bağlam seç.
+        Örnek alanlar:
+        - haftalık çizgi film yayını
+        - fırın ürün takvimi
+        - planetaryum programı
+        - robot bakım planı
+        - festival sahne programı
+        - akvaryum gösteri takvimi
+
+    - step: 2
+      action: "Öğeleri ve gizli doğru zaman dizisini kur"
+      details: |
+        - Önce 4-6 öğe belirle
+        - Sonra 4-6 gün/zaman adımı belirle
+        - Her öğeyi bu zaman adımlarına yalnızca bir kez gelecek şekilde yerleştir
+        - Bu diziliş, sorunun görünmeyen çözüm tablosu olmalıdır
+        - Soru yazımına geçmeden önce tüm zaman dizisi kesinleşmiş olmalıdır
+
+    - step: 3
+      action: "Soru kökünü belirle"
+      details: |
+        Soru kökü, tam diziyi değil; belirli bir gün+öğe önermesinin
+        kesin doğru, kesin yanlış, söylenebilir ya da söylenemez olup olmadığını sormalıdır.
+        Tercihen şu tür kökler seçilmelidir:
+        - kesinlikle doğrudur
+        - kesinlikle yanlıştır
+        - kesinlikle söylenebilir
+        - kesinlikle söylenemez
+        - gün-öğe eşleştirmelerinden hangisi doğrudur
+        - gün-öğe eşleştirmelerinden hangisi yanlıştır
+
+    - step: 4
+      action: "Koşulları gizli diziden türet"
+      details: |
+        - 3-5 madde oluştur
+        - Her madde farklı bilgi taşımalı
+        - Koşullar birbirini tekrar etmemeli
+        - Hiçbir madde tek başına doğru cevabı vermemeli
+        - İki madde birleşince doğru aday doğrudan görünür olmamalı
+        - Koşullar ancak birlikte değerlendirildiğinde zaman dizisi yeterince kurulmalıdır
+        - Koşullar arasında çelişki olmamalıdır
+        - Koşullar, hedeflenen soru köküne göre yalnızca bir doğru cevap üretmelidir
+        - Koşullar ağırlıklı olarak zaman ve sıra ilişkisi içermelidir
+
+    - step: 5
+      action: "Setup cümlesini yaz"
+      details: |
+        - 1-2 cümlede zaman dizisinin çerçevesini tanıt
+        - Kaç gün/zaman adımı olduğu anlaşılır olsun
+        - Hangi öğelerin yerleştirileceği net olsun
+        - Bağlam sade, öğrenciye yakın ve zaman-merkezli olsun
+        - Gereksiz süsleme yapma
+
+    - step: 6
+      action: "Doğru seçeneği üret"
+      details: |
+        - Doğru seçenek, sorulan gün+öğe önermesi için kesin doğru ya da kesin yanlış olan tek eşleştirme olmalıdır
+        - Doğru cevap maddelerden biri tekrar edilerek yazılmamalıdır
+        - Öğrenci gizli diziyi kurmadan bu eşleşmeye ulaşamamalıdır
+        - Doğru seçenek gün+öğe önermesi biçiminde olmalıdır
+
+    - step: 7
+      action: "3 çeldirici üret"
+      details: |
+        - Her çeldirici farklı bir muhakeme hatasına dayanmalıdır
+        - Tek bir maddeden hemen elenmemelidir
+        - Çeldiriciler, gizli diziyi eksik veya yanlış kuran öğrencinin düşebileceği yanlış gün+öğe eşleşmeleri olmalıdır
+        - Çeldiriciler, ardışıklığı yanlış taşıma, gün yönünü ters kurma, kalan günleri yanlış tamamlama gibi hatalara dayanmalıdır
+        - 'ILISKIYI_EKSIK_TASIMA' tek başına ana çeldirici olarak kullanılmamalıdır
+
+    - step: 8
+      action: "Seçenekleri dengele ve sırala"
+      details: |
+        - A-B-C-D seçeneklerini rastgele sırala
+        - Tüm seçenekler gün+öğe önermesi biçiminde olsun
+        - Doğru cevap biçimsel olarak öne çıkmasın
+        - Uzunluk, ton ve yapı bakımından şıklar dengeli olsun
+        - Tüm seçenekler aynı temsil düzeyinde kalsın
+
+    - step: 9
+      action: "Tam çözüm testi yap"
+      details: |
+        Aşağıdaki soruları kontrol et:
+        - Öğrenci gizli zaman dizisini kurmadan doğru cevabı bulabilir mi?
+        - Tek bir madde doğru cevabı ele veriyor mu?
+        - Yalnızca ilk iki maddeyle doğru seçenek tahmin edilebiliyor mu?
+        - Yanlış şıklardan biri tek bir maddeyle eleniyor mu?
+        - Sorulan gün+öğe önermesi için yalnızca bir seçenek mi kesin doğru/yanlış?
+        - Şıklardan biri maddelerde açıkça verilen bilgiyi tekrar ediyor mu?
+        Bu sorulardan herhangi birine 'evet' deniyorsa soru yeniden kurulmalıdır.
+
+# ═══════════════════════════════════════════════════════════════
+    # DOGRULAMA KONTROL LISTESI
+# ═══════════════════════════════════════════════════════════════
+
+validation_checklist:
+  paragraph:
+    - "Setup cümlesi + maddeli koşul formatında mı?"
+    - "Koşullar 3-5 madde arasında mı?"
+    - "Her madde farklı bilgi taşıyor mu?"
+    - "Maddeler birbirini tekrar etmiyor mu?"
+    - "Koşullar arasında çelişki yok mu?"
+    - "5. sınıf seviyesine uygun mu?"
+    - "Bağlam zaman dizisi-merkezli ve sade mi?"
+    - "Bir tane madde ile yanlış şıklardan herhangi biri eleniyor mu? ELENMEMELİ"
+
+  hidden_structure:
+    - "Soru yazılmadan önce gizli doğru zaman dizisi kurulmuş mu?"
+    - "Tüm öğeler günlere/zaman adımlarına net biçimde yerleştirilmiş mi?"
+    - "Soru metni bu gizli diziyi doğrudan ele veriyor mu?"
+    - "Koşullar ancak birlikte değerlendirildiğinde mi diziyi yeterince kuruyor?"
+    - "Sorulan gün+öğe önermesi için yalnızca bir seçeneğin doğru/yanlış statüsü netleşiyor mu?"
+
+  condition_quality:
+    - "Tek bir koşul doğru cevabı doğrudan ele veriyor mu?"
+    - "Yalnızca iki koşul birleştirilerek doğru cevap hızlıca bulunabiliyor mu?"
+    - "Koşullar, öğrenciyi dizi kurmaya ve eşleşmeleri karşılaştırmaya zorlayacak derinlikte mi?"
+    - "Her koşul çözüm için işlevli mi?"
+    - "Gereksiz veya dekoratif koşul var mı?"
+    - "Koşullardan biri doğrudan bir gün+öğe eşleşmesini kesinleştiriyor mu?"
+    - "Koşulların çoğu zaman, ardışıklık ve gün farkı ilişkisi içeriyor mu?"
+
+  correct_answer:
+    - "Doğru cevap ancak tüm koşullar birlikte değerlendirildiğinde bulunabiliyor mu?"
+    - "Doğru cevap, maddelerden birinin tekrar yazılmış hâli değil mi?"
+    - "Doğru cevap, sorulan gün+öğe önermesi için kesin doğru ya da kesin yanlış olan tek eşleşme mi?"
+    - "Tek doğru cevap var mı?"
+    - "Belirsizlik veya ikinci doğru seçenek ihtimali var mı?"
+    - "Öğrenci gizli zaman dizisini kurmadan doğru cevabı seçebilir mi?"
+    - "Doğru seçenek gün+öğe önermesi biçiminde mi?"
+
+  distractors:
+    - "Her çeldirici farklı bir muhakeme hatasına dayanıyor mu?"
+    - "Hiçbir çeldirici tek bir maddeden hemen elenmiyor mu?"
+    - "Çeldiriciler gizli zaman dizisinin yanlış kurulmuş alternatiflerine dayanıyor mu?"
+    - "Çeldiriciler makul ama mantıksal olarak geçersiz mi?"
+    - "Tüm seçenekler aynı formatta mı?"
+    - "Tüm yanlış seçenekler gün+öğe önermesi biçiminde mi?"
+    - "Şıklar arasında biçimsel dengesizlik var mı?"
+    - "'ILISKIYI_EKSIK_TASIMA' destekleyici olarak mı kullanılmış?"
+
+  final_gate:
+    - "Öğrenci gizli zaman dizisini yeterince kurmadan hiçbir seçeneği güvenle işaretleyemiyor mu?"
+    - "Soru, eleme değil gerçek zaman dizisi analizi gerektiriyor mu?"
+    - "Cevap, ancak günler ve öğeler arasındaki ilişki tamamlandıktan sonra kesinleşiyor mu?"
