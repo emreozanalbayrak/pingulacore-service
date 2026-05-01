@@ -1,0 +1,38 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pingulacore-backend:latest
+    container_name: pingulacore-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: sqlite:////data/service.db
+      ASSET_OUTPUT_DIR: /data/generated_assets
+      RUNS_DIR: /data/runs
+      CATALOG_DIR: /app/catalog
+      YAML_PRIMARY_DIR: /app/ortak
+    volumes:
+      - backend_data:/data
+    expose:
+      - "8000"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: pingulacore-frontend:latest
+    container_name: pingulacore-frontend
+    restart: unless-stopped
+    environment:
+      BACKEND_URL: http://backend:8000
+      PORT: "80"
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+volumes:
+  backend_data:
