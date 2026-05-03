@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
-import { NavLink, Route, Routes } from 'react-router-dom'
-import { Sparkles, GitBranch, Split, Bot, Home, FolderTree, BookOpen } from 'lucide-react'
+import { Navigate, NavLink, Route, Routes } from 'react-router-dom'
+import { Sparkles, GitBranch, Split, Bot, Home, BookOpen, FilePlus2 } from 'lucide-react'
 
 import { api } from './lib/api'
 import { AgentsPage } from './pages/AgentsPage'
-import { FilesPage } from './pages/FilesPage'
+import { ContentManagementPage } from './pages/ContentManagementPage'
 import { FullPipelinePage } from './pages/FullPipelinePage'
 import { HomePage } from './pages/HomePage'
 import { SubPipelinesPage } from './pages/SubPipelinesPage'
-import { TemplatesPage } from './pages/TemplatesPage'
+import { YamlCreatePage } from './pages/YamlCreatePage'
 import type { RuntimeInfoResponse } from './types'
 
 const navigation = [
@@ -16,8 +16,8 @@ const navigation = [
   { to: '/full', label: 'Full Pipeline', Icon: GitBranch, end: false },
   { to: '/sub-pipelines', label: 'Sub-Pipelines', Icon: Split, end: false },
   { to: '/agents', label: 'Standalone Agents', Icon: Bot, end: false },
-  { to: '/files', label: 'Files & Favorites', Icon: FolderTree, end: false },
-  { to: '/templates', label: 'Şablonlar', Icon: BookOpen, end: false },
+  { to: '/content', label: 'Müfredat Yönetimi', Icon: BookOpen, end: false },
+  { to: '/content/yaml-create', label: 'YAML Oluştur', Icon: FilePlus2, end: false },
 ]
 
 export default function App() {
@@ -102,8 +102,9 @@ export default function App() {
           <Route path="/full" element={<FullPipelinePage />} />
           <Route path="/sub-pipelines" element={<SubPipelinesPage />} />
           <Route path="/agents" element={<AgentsPage />} />
-          <Route path="/files" element={<FilesPage />} />
-          <Route path="/templates" element={<TemplatesPage />} />
+          <Route path="/content" element={<ContentManagementPage />} />
+          <Route path="/content/yaml-create" element={<YamlCreatePage />} />
+          <Route path="/templates" element={<Navigate to="/content" replace />} />
         </Routes>
       </main>
     </div>

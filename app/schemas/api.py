@@ -20,7 +20,7 @@ class RetryConfig(BaseModel):
 
 
 class FullPipelineRunRequest(BaseModel):
-    yaml_filename: str
+    yaml_instance_id: str
     retry_config: RetryConfig | None = None
     stream_key: str | None = None
 
@@ -128,56 +128,58 @@ class FavoriteResponse(BaseModel):
 class FullPipelineRunResponse(BaseModel):
     pipeline_id: str
     sub_pipeline_ids: dict[str, str]
+    question_artifact_id: str
+    layout_artifact_id: str
+    html_artifact_id: str
+    rendered_image_artifact_id: str | None = None
     question_json: QuestionSpec
     layout_plan_json: LayoutPlan
     question_html: dict[str, Any]
-    rendered_image_path: str | None = None
-    run_path: str | None = None
 
 
 class YamlToQuestionRunRequest(BaseModel):
-    yaml_filename: str
+    yaml_instance_id: str
     retry_config: RetryConfig | None = None
     stream_key: str | None = None
 
 
 class YamlToQuestionRunResponse(BaseModel):
     sub_pipeline_id: str
+    question_artifact_id: str
     question_json: QuestionSpec
     rule_evaluation: dict[str, Any]
     attempts: int
-    run_path: str | None = None
 
 
 class QuestionToLayoutRunRequest(BaseModel):
-    question_json: QuestionSpec
+    question_artifact_id: str
     retry_config: RetryConfig | None = None
     stream_key: str | None = None
 
 
 class QuestionToLayoutRunResponse(BaseModel):
     sub_pipeline_id: str
+    layout_artifact_id: str
     layout_plan_json: LayoutPlan
     validation: QuestionLayoutValidationResult
     attempts: int
-    run_path: str | None = None
 
 
 class LayoutToHtmlRunRequest(BaseModel):
-    question_json: QuestionSpec
-    layout_plan_json: LayoutPlan
+    question_artifact_id: str
+    layout_artifact_id: str
     retry_config: RetryConfig | None = None
     stream_key: str | None = None
 
 
 class LayoutToHtmlRunResponse(BaseModel):
     sub_pipeline_id: str
+    html_artifact_id: str
+    rendered_image_artifact_id: str | None = None
     question_html: dict[str, Any]
     validation: HtmlValidationResult
     attempts: int
     generated_assets: dict[str, str] = Field(default_factory=dict)
-    rendered_image_path: str | None = None
-    run_path: str | None = None
 
 
 class StandaloneGenerateQuestionRequest(BaseModel):
@@ -233,12 +235,13 @@ class StandaloneGenerateCompositeImageRequest(BaseModel):
 class StandaloneAgentResponse(BaseModel):
     run_id: str
     result: Any
+    artifact_id: str | None = None
 
 
 class PipelineGetResponse(BaseModel):
     id: str
     mode: str
-    yaml_filename: str
+    yaml_instance_id: str | None = None
     status: str
     retry_config: Any
     error: str | None = None

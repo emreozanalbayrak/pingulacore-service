@@ -62,6 +62,14 @@ class Settings:
     catalog_dir: Path
     runs_dir: Path
 
+    s3_endpoint_url: str
+    s3_access_key: str
+    s3_secret_key: str
+    s3_region: str
+    s3_catalog_bucket: str
+    s3_generated_bucket: str
+    s3_rendered_bucket: str
+
     question_max_retries: int
     layout_max_retries: int
     html_max_retries: int
@@ -102,6 +110,13 @@ def build_settings() -> Settings:
         output_dir=Path(os.getenv("ASSET_OUTPUT_DIR", str(output_dir))),
         catalog_dir=Path(os.getenv("CATALOG_DIR", str(catalog_dir))),
         runs_dir=Path(os.getenv("RUNS_DIR", str(runs_dir))),
+        s3_endpoint_url=os.getenv("S3_ENDPOINT_URL", "http://localhost:9000"),
+        s3_access_key=os.getenv("S3_ACCESS_KEY", "pingula"),
+        s3_secret_key=os.getenv("S3_SECRET_KEY", "pingula-secret"),
+        s3_region=os.getenv("S3_REGION", "us-east-1"),
+        s3_catalog_bucket=os.getenv("S3_BUCKET_CATALOG", "catalog-assets"),
+        s3_generated_bucket=os.getenv("S3_BUCKET_GENERATED", "generated-assets"),
+        s3_rendered_bucket=os.getenv("S3_BUCKET_RENDERED", "rendered-outputs"),
         question_max_retries=_as_int(os.getenv("QUESTION_MAX_RETRIES"), 3),
         layout_max_retries=_as_int(os.getenv("LAYOUT_MAX_RETRIES"), 3),
         html_max_retries=_as_int(os.getenv("HTML_MAX_RETRIES"), 3),

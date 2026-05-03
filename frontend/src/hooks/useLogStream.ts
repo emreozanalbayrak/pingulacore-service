@@ -53,6 +53,12 @@ export function useLogStream(): LogStreamState {
     setRenders([])
     setValidations([])
 
+    if (typeof EventSource === 'undefined') {
+      setConnected(false)
+      setDone(true)
+      return
+    }
+
     const es = new EventSource(`/v1/logs/stream/${key}`)
     esRef.current = es
 

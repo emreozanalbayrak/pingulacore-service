@@ -7,24 +7,28 @@ import { HtmlIterationsPanel } from '../components/HtmlIterationsPanel'
 import { HtmlLayoutEditor } from '../components/HtmlLayoutEditor'
 import { HtmlViewer } from '../components/HtmlViewer'
 import { Modal } from '../components/Modal'
-import { JsonEditor } from '../components/JsonEditor'
+import { JsonPanel } from '../components/JsonPanel'
 import { LayoutOutputDisplay } from '../components/LayoutOutputDisplay'
 import { LogStreamPanel } from '../components/LogStreamPanel'
 import { PipelineLogsPanel } from '../components/PipelineLogsPanel'
 import { QuestionOutputDisplay } from '../components/QuestionOutputDisplay'
 import { StatusBadge } from '../components/StatusBadge'
+import { YamlInstanceCascadeSelector } from '../components/YamlInstanceCascadeSelector'
 import { useLogStream } from '../hooks/useLogStream'
 import { usePolling } from '../hooks/usePolling'
 import { ApiError, api } from '../lib/api'
-import { pickHtmlContent, toAssetUrlFromPath } from '../lib/html'
+import { pickHtmlContent } from '../lib/html'
 import type {
+  ArtifactItem,
+  CurriculumNodeItem,
   LayoutToHtmlRunResponse,
   PipelineLogEntryResponse,
   PipelineAgentLinkResponse,
   QuestionToLayoutRunResponse,
   RetryConfig,
-  StoredJsonFileItem,
   SubPipelineGetResponse,
+  YamlInstanceItem,
+  YamlTemplateItem,
   YamlToQuestionRunResponse,
 } from '../types'
 
@@ -38,10 +42,6 @@ interface StepState {
 type SubTab = 'yaml' | 'layout' | 'html'
 
 const EMPTY_STEP: StepState = { id: '', detail: null, links: [], logs: [] }
-
-function parseJson(text: string): Record<string, unknown> {
-  return JSON.parse(text) as Record<string, unknown>
-}
 
 function toRetryConfig(input: RetryConfig): RetryConfig {
   const output: Record<string, number> = {}
@@ -65,13 +65,15 @@ const tabs: { id: SubTab; label: string }[] = [
 ]
 
 export function SubPipelinesPage() {
-  const [yamlFiles, setYamlFiles] = useState<string[]>([])
-  const [yamlFilename, setYamlFilename] = useState('')
-  const [storedQuestionFiles, setStoredQuestionFiles] = useState<StoredJsonFileItem[]>([])
-  const [selectedQuestionFile, setSelectedQuestionFile] = useState('')
-  const [selectedHtmlQuestionFile, setSelectedHtmlQuestionFile] = useState('')
-  const [storedLayoutFiles, setStoredLayoutFiles] = useState<StoredJsonFileItem[]>([])
-  const [selectedLayoutFile, setSelectedLayoutFile] = useState('')
+  const [curriculumTree, setCurriculumTree] = useState<CurriculumNodeItem[]>([])
+  const [yamlTemplates, setYamlTemplates] = useState<YamlTemplateItem[]>([])
+  const [yamlInstances, setYamlInstances] = useState<YamlInstanceItem[]>([])
+  const [yamlInstanceId, setYamlInstanceId] = useState('')
+  const [questionArtifacts, setQuestionArtifacts] = useState<ArtifactItem[]>([])
+  const [selectedQuestionArtifactId, setSelectedQuestionArtifactId] = useState('')
+  const [selectedHtmlQuestionArtifactId, setSelectedHtmlQuestionArtifactId] = useState('')
+  const [layoutArtifacts, setLayoutArtifacts] = useState<ArtifactItem[]>([])
+  const [selectedLayoutArtifactId, setSelectedLayoutArtifactId] = useState('')
   const [retryConfig, setRetryConfig] = useState<RetryConfig>({
     question_max_retries: 3,
     layout_max_retries: 3,
@@ -80,13 +82,13 @@ export function SubPipelinesPage() {
     rule_eval_parallelism: 4,
   })
 
-  const [questionInput, setQuestionInput] = useState('{}')
-  const [htmlQuestionInput, setHtmlQuestionInput] = useState('{}')
-  const [layoutInput, setLayoutInput] = useState('{}')
-
   const [yamlToQuestion, setYamlToQuestion] = useState<YamlToQuestionRunResponse | null>(null)
   const [questionToLayout, setQuestionToLayout] = useState<QuestionToLayoutRunResponse | null>(null)
   const [layoutToHtml, setLayoutToHtml] = useState<LayoutToHtmlRunResponse | null>(null)
+
+  const [selectedQuestionArtifact, setSelectedQuestionArtifact] = useState<ArtifactItem | null>(null)
+  const [selectedHtmlQuestionArtifact, setSelectedHtmlQuestionArtifact] = useState<ArtifactItem | null>(null)
+  const [selectedLayoutArtifact, setSelectedLayoutArtifact] = useState<ArtifactItem | null>(null)
 
   const [stepYaml, setStepYaml] = useState<StepState>(EMPTY_STEP)
   const [stepLayout, setStepLayout] = useState<StepState>(EMPTY_STEP)
@@ -99,55 +101,89 @@ export function SubPipelinesPage() {
   useEffect(() => {
     void (async () => {
       try {
-        const [yaml, questionFiles, layoutFiles] = await Promise.all([
-          api.listYamlFiles(),
-          api.listStoredQuestionFiles(),
-          api.listStoredLayoutFiles(),
+        const [tree, templates, yaml, questions, layouts] = await Promise.all([
+          api.getCurriculumTree(),
+          api.listYamlTemplates(),
+          api.listYamlInstances(),
+          api.listArtifacts('question'),
+          api.listArtifacts('layout'),
         ])
-        setYamlFiles(yaml)
-        if (yaml.length > 0) setYamlFilename(yaml[0])
-        setStoredQuestionFiles(questionFiles)
-        if (questionFiles.length > 0) {
-          setSelectedQuestionFile(questionFiles[0].filename)
-          setSelectedHtmlQuestionFile(questionFiles[0].filename)
+        setCurriculumTree(tree)
+        setYamlTemplates(templates)
+        setYamlInstances(yaml)
+        if (yaml.length > 0) setYamlInstanceId(yaml[0].id)
+        setQuestionArtifacts(questions)
+        if (questions.length > 0) {
+          setSelectedQuestionArtifactId(questions[0].id)
+          setSelectedHtmlQuestionArtifactId(questions[0].id)
         }
-        setStoredLayoutFiles(layoutFiles)
-        if (layoutFiles.length > 0) setSelectedLayoutFile(layoutFiles[0].filename)
+        setLayoutArtifacts(layouts)
+        if (layouts.length > 0) setSelectedLayoutArtifactId(layouts[0].id)
       } catch (e) {
-        setError(e instanceof Error ? e.message : 'Dosya listeleri alınamadı')
+        setError(e instanceof Error ? e.message : 'DB input listeleri alınamadı')
       }
     })()
   }, [])
 
-  const refreshStoredFiles = async () => {
-    const [questionFiles, layoutFiles] = await Promise.all([
-      api.listStoredQuestionFiles(),
-      api.listStoredLayoutFiles(),
+  const refreshArtifacts = async () => {
+    const [questions, layouts] = await Promise.all([
+      api.listArtifacts('question'),
+      api.listArtifacts('layout'),
     ])
-    setStoredQuestionFiles(questionFiles)
-    setStoredLayoutFiles(layoutFiles)
-    if (!selectedQuestionFile && questionFiles.length > 0) setSelectedQuestionFile(questionFiles[0].filename)
-    if (!selectedHtmlQuestionFile && questionFiles.length > 0) setSelectedHtmlQuestionFile(questionFiles[0].filename)
-    if (!selectedLayoutFile && layoutFiles.length > 0) setSelectedLayoutFile(layoutFiles[0].filename)
+    setQuestionArtifacts(questions)
+    setLayoutArtifacts(layouts)
+    if (!selectedQuestionArtifactId && questions.length > 0) setSelectedQuestionArtifactId(questions[0].id)
+    if (!selectedHtmlQuestionArtifactId && questions.length > 0) setSelectedHtmlQuestionArtifactId(questions[0].id)
+    if (!selectedLayoutArtifactId && layouts.length > 0) setSelectedLayoutArtifactId(layouts[0].id)
   }
 
   useEffect(() => {
-    if (!storedQuestionFiles.some((item) => item.filename === selectedQuestionFile)) {
-      setSelectedQuestionFile(storedQuestionFiles[0]?.filename ?? '')
+    if (!questionArtifacts.some((item) => item.id === selectedQuestionArtifactId)) {
+      setSelectedQuestionArtifactId(questionArtifacts[0]?.id ?? '')
     }
-  }, [storedQuestionFiles, selectedQuestionFile])
+  }, [questionArtifacts, selectedQuestionArtifactId])
 
   useEffect(() => {
-    if (!storedQuestionFiles.some((item) => item.filename === selectedHtmlQuestionFile)) {
-      setSelectedHtmlQuestionFile(storedQuestionFiles[0]?.filename ?? '')
+    if (!questionArtifacts.some((item) => item.id === selectedHtmlQuestionArtifactId)) {
+      setSelectedHtmlQuestionArtifactId(questionArtifacts[0]?.id ?? '')
     }
-  }, [storedQuestionFiles, selectedHtmlQuestionFile])
+  }, [questionArtifacts, selectedHtmlQuestionArtifactId])
 
   useEffect(() => {
-    if (!storedLayoutFiles.some((item) => item.filename === selectedLayoutFile)) {
-      setSelectedLayoutFile(storedLayoutFiles[0]?.filename ?? '')
+    if (!layoutArtifacts.some((item) => item.id === selectedLayoutArtifactId)) {
+      setSelectedLayoutArtifactId(layoutArtifacts[0]?.id ?? '')
     }
-  }, [storedLayoutFiles, selectedLayoutFile])
+  }, [layoutArtifacts, selectedLayoutArtifactId])
+
+  useEffect(() => {
+    if (!selectedQuestionArtifactId) {
+      setSelectedQuestionArtifact(null)
+      return
+    }
+    void api.getArtifact(selectedQuestionArtifactId)
+      .then(setSelectedQuestionArtifact)
+      .catch(() => setSelectedQuestionArtifact(null))
+  }, [selectedQuestionArtifactId])
+
+  useEffect(() => {
+    if (!selectedHtmlQuestionArtifactId) {
+      setSelectedHtmlQuestionArtifact(null)
+      return
+    }
+    void api.getArtifact(selectedHtmlQuestionArtifactId)
+      .then(setSelectedHtmlQuestionArtifact)
+      .catch(() => setSelectedHtmlQuestionArtifact(null))
+  }, [selectedHtmlQuestionArtifactId])
+
+  useEffect(() => {
+    if (!selectedLayoutArtifactId) {
+      setSelectedLayoutArtifact(null)
+      return
+    }
+    void api.getArtifact(selectedLayoutArtifactId)
+      .then(setSelectedLayoutArtifact)
+      .catch(() => setSelectedLayoutArtifact(null))
+  }, [selectedLayoutArtifactId])
 
   const refreshStep = async (kind: 'yaml' | 'layout' | 'html', id: string) => {
     const [detail, links, logs] = await Promise.all([
@@ -173,20 +209,23 @@ export function SubPipelinesPage() {
 
   const runYamlToQuestion = async () => {
     setError('')
+    if (!yamlInstanceId) {
+      setError('YAML instance seçilmedi')
+      return
+    }
     const key = crypto.randomUUID()
     connect(key)
     try {
       const result = await api.runSubYamlToQuestion({
-        yaml_filename: yamlFilename,
+        yaml_instance_id: yamlInstanceId,
         retry_config: toRetryConfig(retryConfig),
         stream_key: key,
       })
       setYamlToQuestion(result)
-      const next = JSON.stringify(result.question_json, null, 2)
-      setQuestionInput(next)
-      setHtmlQuestionInput(next)
+      setSelectedQuestionArtifactId(result.question_artifact_id)
+      setSelectedHtmlQuestionArtifactId(result.question_artifact_id)
       await refreshStep('yaml', result.sub_pipeline_id)
-      await refreshStoredFiles()
+      await refreshArtifacts()
     } catch (e) {
       setError(e instanceof ApiError ? e.message : 'YAML → Question hatası')
     }
@@ -194,20 +233,22 @@ export function SubPipelinesPage() {
 
   const runQuestionToLayout = async () => {
     setError('')
+    if (!selectedQuestionArtifactId) {
+      setError('Question artifact seçilmedi')
+      return
+    }
     const key = crypto.randomUUID()
     connect(key)
     try {
-      const questionJson = parseJson(questionInput)
-      setHtmlQuestionInput(JSON.stringify(questionJson, null, 2))
       const result = await api.runSubQuestionToLayout({
-        question_json: questionJson,
+        question_artifact_id: selectedQuestionArtifactId,
         retry_config: toRetryConfig(retryConfig),
         stream_key: key,
       })
       setQuestionToLayout(result)
-      setLayoutInput(JSON.stringify(result.layout_plan_json, null, 2))
+      setSelectedLayoutArtifactId(result.layout_artifact_id)
       await refreshStep('layout', result.sub_pipeline_id)
-      await refreshStoredFiles()
+      await refreshArtifacts()
     } catch (e) {
       setError(e instanceof ApiError ? e.message : 'Question → Layout hatası')
     }
@@ -216,14 +257,17 @@ export function SubPipelinesPage() {
   const runLayoutToHtml = async () => {
     setError('')
     setHtmlRunning(true)
+    if (!selectedHtmlQuestionArtifactId || !selectedLayoutArtifactId) {
+      setError('Question ve layout artifact seçimi gerekli')
+      setHtmlRunning(false)
+      return
+    }
     const key = crypto.randomUUID()
     connect(key)
     try {
-      const questionJson = parseJson(htmlQuestionInput)
-      const layoutJson = parseJson(layoutInput)
       const result = await api.runSubLayoutToHtml({
-        question_json: questionJson,
-        layout_plan_json: layoutJson,
+        question_artifact_id: selectedHtmlQuestionArtifactId,
+        layout_artifact_id: selectedLayoutArtifactId,
         retry_config: toRetryConfig(retryConfig),
         stream_key: key,
       })
@@ -236,39 +280,6 @@ export function SubPipelinesPage() {
     }
   }
 
-  const loadStoredQuestionInput = async () => {
-    if (!selectedQuestionFile) return
-    setError('')
-    try {
-      const data = await api.getStoredQuestionFile(selectedQuestionFile)
-      setQuestionInput(JSON.stringify(data, null, 2))
-    } catch (e) {
-      setError(e instanceof ApiError ? e.message : 'Question dosyası yüklenemedi')
-    }
-  }
-
-  const loadStoredQuestionInputForHtml = async () => {
-    if (!selectedHtmlQuestionFile) return
-    setError('')
-    try {
-      const data = await api.getStoredQuestionFile(selectedHtmlQuestionFile)
-      setHtmlQuestionInput(JSON.stringify(data, null, 2))
-    } catch (e) {
-      setError(e instanceof ApiError ? e.message : 'Question dosyası yüklenemedi')
-    }
-  }
-
-  const loadStoredLayoutInput = async () => {
-    if (!selectedLayoutFile) return
-    setError('')
-    try {
-      const data = await api.getStoredLayoutFile(selectedLayoutFile)
-      setLayoutInput(JSON.stringify(data, null, 2))
-    } catch (e) {
-      setError(e instanceof ApiError ? e.message : 'Layout dosyası yüklenemedi')
-    }
-  }
-
   const [htmlOverride, setHtmlOverride] = useState<string | null>(null)
   const [editorOpen, setEditorOpen] = useState(false)
 
@@ -278,11 +289,10 @@ export function SubPipelinesPage() {
   const yamlQuestionOutput = yamlToQuestion?.question_json ?? asRecord(stepYamlOutput?.question) ?? undefined
   const questionLayoutOutput = questionToLayout?.layout_plan_json ?? asRecord(stepLayoutOutput?.layout) ?? undefined
   const stepHtmlOutput = (stepHtml.detail?.output_json as Record<string, unknown> | undefined) ?? undefined
-  const renderedImagePath =
-    layoutToHtml?.rendered_image_path ??
-    (typeof stepHtmlOutput?.rendered_image_path === 'string' ? stepHtmlOutput.rendered_image_path : null)
-  const renderedImageUrl = toAssetUrlFromPath(renderedImagePath)
-
+  const renderedImageArtifactId =
+    layoutToHtml?.rendered_image_artifact_id ??
+    (typeof stepHtmlOutput?.rendered_image_artifact_id === 'string' ? stepHtmlOutput.rendered_image_artifact_id : null)
+  const renderedImageUrl = renderedImageArtifactId ? `/v1/assets/${encodeURIComponent(renderedImageArtifactId)}` : ''
   const btnPrimary =
     'flex items-center gap-2 px-6 py-3 rounded-xl text-white font-medium shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-200'
   const btnSecondary =
@@ -359,18 +369,19 @@ export function SubPipelinesPage() {
               <>
                 <div className="grid grid-cols-2 gap-5">
                   <div className="space-y-2">
-                    <label className={labelClass}>
+                    <div className={labelClass}>
                       <FileCode className="w-4 h-4" style={{ color: 'var(--primary)' }} />
-                      YAML Dosyası
-                    </label>
-                    <select
-                      value={yamlFilename}
-                      onChange={(e) => setYamlFilename(e.target.value)}
-                      className={selectClass}
-                      style={{ borderColor: 'var(--border)' }}
-                    >
-                      {yamlFiles.map((f) => <option key={f} value={f}>{f}</option>)}
-                    </select>
+                      YAML Instance
+                    </div>
+                    <YamlInstanceCascadeSelector
+                      curriculumTree={curriculumTree}
+                      templates={yamlTemplates}
+                      instances={yamlInstances}
+                      value={yamlInstanceId}
+                      onChange={setYamlInstanceId}
+                      selectClassName={selectClass}
+                      inputClassName={selectClass}
+                    />
                   </div>
                   <div className="space-y-2">
                     <label className={labelClass}>
@@ -393,9 +404,9 @@ export function SubPipelinesPage() {
                     className={btnSecondary} style={{ borderColor: 'var(--border)', color: 'var(--foreground)' }}>
                     <RefreshCw className="w-4 h-4" /> Refresh now
                   </button>
-                  <button type="button" onClick={() => void refreshStoredFiles()}
+                  <button type="button" onClick={() => void refreshArtifacts()}
                     className={btnSecondary} style={{ borderColor: 'var(--border)', color: 'var(--foreground)' }}>
-                    Dosya Listesini Yenile
+                    Artifact Listesini Yenile
                   </button>
                   <button type="button" onClick={() => void runYamlToQuestion()}
                     className={btnPrimary}
@@ -422,18 +433,18 @@ export function SubPipelinesPage() {
               <>
                 <div className="grid grid-cols-3 gap-5">
                   <div className="space-y-2">
-                    <label className={labelClass}>Kayıtlı Question</label>
+                    <label className={labelClass}>Question Artifact</label>
                     <select
-                      value={selectedQuestionFile}
-                      onChange={(e) => setSelectedQuestionFile(e.target.value)}
+                      value={selectedQuestionArtifactId}
+                      onChange={(e) => setSelectedQuestionArtifactId(e.target.value)}
                       className={selectClass}
                       style={{ borderColor: 'var(--border)' }}
                     >
-                      {storedQuestionFiles.length === 0
-                        ? <option value="">Kayıtlı dosya yok</option>
-                        : storedQuestionFiles.map((f) => (
-                          <option key={f.filename} value={f.filename}>
-                            {f.filename}
+                      {questionArtifacts.length === 0
+                        ? <option value="">Question artifact yok</option>
+                        : questionArtifacts.map((item) => (
+                          <option key={item.id} value={item.id}>
+                            {item.id}
                           </option>
                         ))
                       }
@@ -460,18 +471,11 @@ export function SubPipelinesPage() {
                     className={btnSecondary} style={{ borderColor: 'var(--border)', color: 'var(--foreground)' }}>
                     <RefreshCw className="w-4 h-4" /> Refresh now
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => void loadStoredQuestionInput()}
-                    disabled={!selectedQuestionFile || storedQuestionFiles.length === 0}
-                    className={btnSecondary}
-                    style={{ borderColor: 'var(--border)', color: 'var(--foreground)' }}
-                  >
-                    Question Dosyasını Yükle
-                  </button>
                 </div>
-
-                <JsonEditor label="Question JSON Input" value={questionInput} onChange={setQuestionInput} />
+                <JsonPanel
+                  title="Question Artifact İçeriği"
+                  data={(selectedQuestionArtifact?.content_json as Record<string, unknown> | null) ?? null}
+                />
 
                 <button type="button" onClick={() => void runQuestionToLayout()}
                   className={btnPrimary}
@@ -497,36 +501,36 @@ export function SubPipelinesPage() {
               <>
                 <div className="grid grid-cols-3 gap-5">
                   <div className="space-y-2">
-                    <label className={labelClass}>Kayıtlı Question</label>
+                    <label className={labelClass}>Question Artifact</label>
                     <select
-                      value={selectedHtmlQuestionFile}
-                      onChange={(e) => setSelectedHtmlQuestionFile(e.target.value)}
+                      value={selectedHtmlQuestionArtifactId}
+                      onChange={(e) => setSelectedHtmlQuestionArtifactId(e.target.value)}
                       className={selectClass}
                       style={{ borderColor: 'var(--border)' }}
                     >
-                      {storedQuestionFiles.length === 0
-                        ? <option value="">Kayıtlı dosya yok</option>
-                        : storedQuestionFiles.map((f) => (
-                          <option key={f.filename} value={f.filename}>
-                            {f.filename}
+                      {questionArtifacts.length === 0
+                        ? <option value="">Question artifact yok</option>
+                        : questionArtifacts.map((item) => (
+                          <option key={item.id} value={item.id}>
+                            {item.id}
                           </option>
                         ))
                       }
                     </select>
                   </div>
                   <div className="space-y-2">
-                    <label className={labelClass}>Kayıtlı Layout</label>
+                    <label className={labelClass}>Layout Artifact</label>
                     <select
-                      value={selectedLayoutFile}
-                      onChange={(e) => setSelectedLayoutFile(e.target.value)}
+                      value={selectedLayoutArtifactId}
+                      onChange={(e) => setSelectedLayoutArtifactId(e.target.value)}
                       className={selectClass}
                       style={{ borderColor: 'var(--border)' }}
                     >
-                      {storedLayoutFiles.length === 0
-                        ? <option value="">Kayıtlı dosya yok</option>
-                        : storedLayoutFiles.map((f) => (
-                          <option key={f.filename} value={f.filename}>
-                            {f.filename}
+                      {layoutArtifacts.length === 0
+                        ? <option value="">Layout artifact yok</option>
+                        : layoutArtifacts.map((item) => (
+                          <option key={item.id} value={item.id}>
+                            {item.id}
                           </option>
                         ))
                       }
@@ -553,28 +557,15 @@ export function SubPipelinesPage() {
                     className={btnSecondary} style={{ borderColor: 'var(--border)', color: 'var(--foreground)' }}>
                     <RefreshCw className="w-4 h-4" /> Refresh now
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => void loadStoredQuestionInputForHtml()}
-                    disabled={!selectedHtmlQuestionFile || storedQuestionFiles.length === 0}
-                    className={btnSecondary}
-                    style={{ borderColor: 'var(--border)', color: 'var(--foreground)' }}
-                  >
-                    Question Dosyasını Yükle
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => void loadStoredLayoutInput()}
-                    disabled={!selectedLayoutFile || storedLayoutFiles.length === 0}
-                    className={btnSecondary}
-                    style={{ borderColor: 'var(--border)', color: 'var(--foreground)' }}
-                  >
-                    Layout Dosyasını Yükle
-                  </button>
                 </div>
-
-                <JsonEditor label="Question JSON Input" value={htmlQuestionInput} onChange={setHtmlQuestionInput} />
-                <JsonEditor label="Layout JSON Input" value={layoutInput} onChange={setLayoutInput} />
+                <JsonPanel
+                  title="Question Artifact İçeriği"
+                  data={(selectedHtmlQuestionArtifact?.content_json as Record<string, unknown> | null) ?? null}
+                />
+                <JsonPanel
+                  title="Layout Artifact İçeriği"
+                  data={(selectedLayoutArtifact?.content_json as Record<string, unknown> | null) ?? null}
+                />
 
                 <button type="button" onClick={() => void runLayoutToHtml()}
                   className={btnPrimary}

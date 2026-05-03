@@ -7,7 +7,7 @@ interface ModalProps {
   onClose: () => void
   title?: string
   children: ReactNode
-  size?: 'default' | 'full'
+  size?: 'default' | 'wide' | 'full'
 }
 
 export function Modal({ open, onClose, title, children, size = 'default' }: ModalProps) {
@@ -28,7 +28,11 @@ export function Modal({ open, onClose, title, children, size = 'default' }: Moda
 
   if (!open) return null
 
-  const sizeClass = size === 'full' ? 'w-[95vw] h-[92vh]' : 'w-[640px] max-h-[80vh]'
+  const sizeClass = size === 'full'
+    ? 'w-[95vw] h-[92vh]'
+    : size === 'wide'
+      ? 'w-[860px] max-h-[84vh]'
+      : 'w-[640px] max-h-[80vh]'
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center">

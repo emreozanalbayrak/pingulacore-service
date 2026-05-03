@@ -1,5 +1,5 @@
 import { motion } from 'motion/react'
-import { GitBranch, Split, Bot, Sparkles, FolderTree, BookOpen } from 'lucide-react'
+import { GitBranch, Split, Bot, Sparkles, BookOpen } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 
 const features = [
@@ -22,16 +22,10 @@ const features = [
     to: '/agents',
   },
   {
-    Icon: FolderTree,
-    title: 'Files & Favorites',
-    desc: 'runs ve sp_files dosyalarını tree görünümünde aç, sil ve favorile.',
-    to: '/files',
-  },
-  {
     Icon: BookOpen,
-    title: 'Şablonlar',
-    desc: 'Ders ve sınıf sekmelerine göre mock tema/alt başlık içeriklerini görüntüle.',
-    to: '/templates',
+    title: 'Müfredat Yönetimi',
+    desc: 'Property definitions, YAML templates ve YAML instances kayıtlarını yönet.',
+    to: '/content',
   },
 ]
 
@@ -58,7 +52,7 @@ export function HomePage() {
         </div>
 
         {/* Feature Cards */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-5">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
           {features.map(({ Icon, title, desc, to }, i) => (
             <motion.div
               key={to}

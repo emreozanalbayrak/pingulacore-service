@@ -22,11 +22,12 @@ def utcnow() -> datetime:
 
 
 class Pipeline(Base):
-    __tablename__ = "pipelines"
+    __tablename__ = "pipeline_runs"
 
     id: Mapped[str] = mapped_column(primary_key=True)
     mode: Mapped[str] = mapped_column(default="full")
     yaml_filename: Mapped[str] = mapped_column(default="")
+    yaml_instance_id: Mapped[str | None] = mapped_column(ForeignKey("yaml_instances.id"), nullable=True)
     status: Mapped[str] = mapped_column(default="running")
     retry_config_json: Mapped[str] = mapped_column(Text, default="{}")
     error: Mapped[str | None] = mapped_column(Text, nullable=True)
@@ -37,10 +38,10 @@ class Pipeline(Base):
 
 
 class SubPipeline(Base):
-    __tablename__ = "sub_pipelines"
+    __tablename__ = "sub_pipeline_runs"
 
     id: Mapped[str] = mapped_column(primary_key=True)
-    pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("pipelines.id"), nullable=True)
+    pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("pipeline_runs.id"), nullable=True)
     mode: Mapped[str] = mapped_column(default="sub")
     kind: Mapped[str] = mapped_column(Text, default="")
     status: Mapped[str] = mapped_column(default="running")
@@ -57,8 +58,8 @@ class PipelineAgentLink(Base):
     __tablename__ = "pipeline_agent_links"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("pipelines.id"), nullable=True)
-    sub_pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("sub_pipelines.id"), nullable=True)
+    pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("pipeline_runs.id"), nullable=True)
+    sub_pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("sub_pipeline_runs.id"), nullable=True)
     agent_name: Mapped[str] = mapped_column(default="")
     agent_table: Mapped[str] = mapped_column(default="")
     agent_run_id: Mapped[str] = mapped_column(default="")
@@ -69,8 +70,8 @@ class PipelineLog(Base):
     __tablename__ = "pipeline_logs"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("pipelines.id"), nullable=True)
-    sub_pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("sub_pipelines.id"), nullable=True)
+    pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("pipeline_runs.id"), nullable=True)
+    sub_pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("sub_pipeline_runs.id"), nullable=True)
     mode: Mapped[str] = mapped_column(default="")
     level: Mapped[str] = mapped_column(default="info")
     component: Mapped[str] = mapped_column(default="pipeline")
@@ -82,8 +83,8 @@ class PipelineLog(Base):
 class AgentRunMixin:
     id: Mapped[str] = mapped_column(primary_key=True)
     mode: Mapped[str] = mapped_column(default="standalone")
-    pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("pipelines.id"), nullable=True)
-    sub_pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("sub_pipelines.id"), nullable=True)
+    pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("pipeline_runs.id"), nullable=True)
+    sub_pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("sub_pipeline_runs.id"), nullable=True)
     attempt_no: Mapped[int] = mapped_column(Integer, default=1)
     status: Mapped[str] = mapped_column(default="success")
     input_json: Mapped[str] = mapped_column(Text, default="{}")
@@ -138,7 +139,7 @@ class StoredJsonOutput(Base):
     filename: Mapped[str] = mapped_column(Text, default="")
     content_json: Mapped[str] = mapped_column(Text, default="{}")
     is_favorite: Mapped[bool] = mapped_column(Boolean, default=False)
-    source_sub_pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("sub_pipelines.id"), nullable=True)
+    source_sub_pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("sub_pipeline_runs.id"), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
 
@@ -150,28 +151,60 @@ class FavoriteOutput(Base):
     name: Mapped[str] = mapped_column(Text, default="")
     kind: Mapped[str] = mapped_column(default="")
     content_json: Mapped[str] = mapped_column(Text, default="{}")
-    source_sub_pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("sub_pipelines.id"), nullable=True)
+    source_sub_pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("sub_pipeline_runs.id"), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
 
-class TaxonomyNode(Base):
-    __tablename__ = "taxonomy_nodes"
+class Artifact(Base):
+    __tablename__ = "artifacts"
     __table_args__ = (
-        UniqueConstraint("parent_id", "slug", name="uq_taxonomy_nodes_parent_slug"),
-        UniqueConstraint("path", name="uq_taxonomy_nodes_path"),
         CheckConstraint(
-            "node_type IN ('root','grade','subject','theme','topic','yaml_template')",
-            name="ck_taxonomy_nodes_node_type",
+            "kind IN ('yaml_rendered','question','layout','html','generated_asset','catalog_asset','rendered_image')",
+            name="ck_artifacts_kind",
         ),
-        CheckConstraint("depth >= 0", name="ck_taxonomy_nodes_depth_non_negative"),
-        Index("ix_taxonomy_nodes_parent_id", "parent_id"),
-        Index("ix_taxonomy_nodes_node_type", "node_type"),
-        Index("ix_taxonomy_nodes_path", "path"),
+        Index("ix_artifacts_kind", "kind"),
+        Index("ix_artifacts_is_favorite", "is_favorite"),
+        Index("ix_artifacts_source_pipeline_id", "source_pipeline_id"),
+        Index("ix_artifacts_source_sub_pipeline_id", "source_sub_pipeline_id"),
     )
 
     id: Mapped[str] = mapped_column(primary_key=True)
-    parent_id: Mapped[str | None] = mapped_column(ForeignKey("taxonomy_nodes.id", ondelete="CASCADE"), nullable=True)
-    node_type: Mapped[str] = mapped_column(Text, default="topic")
+    kind: Mapped[str] = mapped_column(Text, default="")
+    content_json: Mapped[str | None] = mapped_column(Text, nullable=True)
+    content_text: Mapped[str | None] = mapped_column(Text, nullable=True)
+    object_bucket: Mapped[str | None] = mapped_column(Text, nullable=True)
+    object_key: Mapped[str | None] = mapped_column(Text, nullable=True)
+    mime_type: Mapped[str | None] = mapped_column(Text, nullable=True)
+    is_favorite: Mapped[bool] = mapped_column(Boolean, default=False)
+    source_pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("pipeline_runs.id"), nullable=True)
+    source_sub_pipeline_id: Mapped[str | None] = mapped_column(ForeignKey("sub_pipeline_runs.id"), nullable=True)
+    source_agent_name: Mapped[str | None] = mapped_column(Text, nullable=True)
+    source_agent_run_id: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
+
+
+class CurriculumConstantNode(Base):
+    __tablename__ = "curriculum_constant_nodes"
+    __table_args__ = (
+        UniqueConstraint("parent_id", "slug", name="uq_curriculum_constant_nodes_parent_slug"),
+        UniqueConstraint("path", name="uq_curriculum_constant_nodes_path"),
+        CheckConstraint(
+            "node_type IN ('root','grade','subject','theme')",
+            name="ck_curriculum_constant_nodes_node_type",
+        ),
+        CheckConstraint("depth >= 0", name="ck_curriculum_constant_nodes_depth_non_negative"),
+        Index("ix_curriculum_constant_nodes_parent_id", "parent_id"),
+        Index("ix_curriculum_constant_nodes_node_type", "node_type"),
+        Index("ix_curriculum_constant_nodes_path", "path"),
+    )
+
+    id: Mapped[str] = mapped_column(primary_key=True)
+    parent_id: Mapped[str | None] = mapped_column(
+        ForeignKey("curriculum_constant_nodes.id", ondelete="CASCADE"),
+        nullable=True,
+    )
+    node_type: Mapped[str] = mapped_column(Text, default="theme")
     name: Mapped[str] = mapped_column(Text, default="")
     slug: Mapped[str] = mapped_column(Text, default="")
     code: Mapped[str | None] = mapped_column(Text, nullable=True)
@@ -182,26 +215,65 @@ class TaxonomyNode(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
 
-    parent: Mapped["TaxonomyNode | None"] = relationship(
+    parent: Mapped["CurriculumConstantNode | None"] = relationship(
         back_populates="children",
-        remote_side=lambda: [TaxonomyNode.id],
+        remote_side=lambda: [CurriculumConstantNode.id],
     )
-    children: Mapped[list["TaxonomyNode"]] = relationship(back_populates="parent", cascade="all, delete-orphan")
+    children: Mapped[list["CurriculumConstantNode"]] = relationship(back_populates="parent", cascade="all, delete-orphan")
+
+
+class CurriculumFolderNode(Base):
+    __tablename__ = "curriculum_folder_nodes"
+    __table_args__ = (
+        UniqueConstraint("parent_id", "slug", name="uq_curriculum_folder_nodes_parent_slug"),
+        UniqueConstraint("path", name="uq_curriculum_folder_nodes_path"),
+        CheckConstraint("node_type IN ('folder')", name="ck_curriculum_folder_nodes_node_type"),
+        CheckConstraint("depth >= 0", name="ck_curriculum_folder_nodes_depth_non_negative"),
+        Index("ix_curriculum_folder_nodes_parent_id", "parent_id"),
+        Index("ix_curriculum_folder_nodes_grade", "grade"),
+        Index("ix_curriculum_folder_nodes_subject", "subject"),
+        Index("ix_curriculum_folder_nodes_theme", "theme"),
+        Index("ix_curriculum_folder_nodes_path", "path"),
+    )
+
+    id: Mapped[str] = mapped_column(primary_key=True)
+    parent_id: Mapped[str | None] = mapped_column(
+        ForeignKey("curriculum_folder_nodes.id", ondelete="CASCADE"),
+        nullable=True,
+    )
+    node_type: Mapped[str] = mapped_column(Text, default="folder")
+    name: Mapped[str] = mapped_column(Text, default="")
+    slug: Mapped[str] = mapped_column(Text, default="")
+    code: Mapped[str | None] = mapped_column(Text, nullable=True)
+    sort_order: Mapped[int] = mapped_column(Integer, default=0)
+    depth: Mapped[int] = mapped_column(Integer, default=0)
+    path: Mapped[str] = mapped_column(Text, default="")
+    grade: Mapped[str] = mapped_column(Text, default="")
+    subject: Mapped[str] = mapped_column(Text, default="")
+    theme: Mapped[str] = mapped_column(Text, default="")
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
+
+    parent: Mapped["CurriculumFolderNode | None"] = relationship(
+        back_populates="children",
+        remote_side=lambda: [CurriculumFolderNode.id],
+    )
+    children: Mapped[list["CurriculumFolderNode"]] = relationship(back_populates="parent", cascade="all, delete-orphan")
 
 
 class YamlTemplate(Base):
     __tablename__ = "yaml_templates"
     __table_args__ = (
-        UniqueConstraint("taxonomy_node_id", name="uq_yaml_templates_taxonomy_node_id"),
         UniqueConstraint("template_code", name="uq_yaml_templates_template_code"),
         CheckConstraint("status IN ('active','archived')", name="ck_yaml_templates_status"),
-        Index("ix_yaml_templates_taxonomy_node_id", "taxonomy_node_id"),
+        Index("ix_yaml_templates_curriculum_folder_node_id", "curriculum_folder_node_id"),
         Index("ix_yaml_templates_status", "status"),
     )
 
     id: Mapped[str] = mapped_column(primary_key=True)
-    taxonomy_node_id: Mapped[str] = mapped_column(
-        ForeignKey("taxonomy_nodes.id", ondelete="CASCADE"),
+    curriculum_folder_node_id: Mapped[str] = mapped_column(
+        ForeignKey("curriculum_folder_nodes.id", ondelete="CASCADE"),
         nullable=False,
     )
     template_code: Mapped[str] = mapped_column(Text, default="")
@@ -214,7 +286,7 @@ class YamlTemplate(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
 
-    taxonomy_node: Mapped[TaxonomyNode] = relationship()
+    curriculum_folder_node: Mapped[CurriculumFolderNode] = relationship()
     instances: Mapped[list["YamlInstance"]] = relationship(back_populates="template")
 
 
@@ -276,35 +348,34 @@ class YamlVariantRelationship(Base):
 class PropertyDefinition(Base):
     __tablename__ = "property_definitions"
     __table_args__ = (
-        UniqueConstraint("defined_at_node_id", "canonical_path", name="uq_property_definitions_node_path"),
+        UniqueConstraint("defined_at_curriculum_node_id", "canonical_path", name="uq_property_definitions_curriculum_node_path"),
         CheckConstraint(
             "data_type IN ('text','bool','number','json','array','enum','object')",
             name="ck_property_definitions_data_type",
         ),
-        Index("ix_property_definitions_defined_at_node_id", "defined_at_node_id"),
+        Index("ix_property_definitions_defined_at_curriculum_node_id", "defined_at_curriculum_node_id"),
         Index("ix_property_definitions_parent_property_id", "parent_property_id"),
         Index("ix_property_definitions_canonical_path", "canonical_path"),
     )
 
     id: Mapped[str] = mapped_column(primary_key=True)
-    defined_at_node_id: Mapped[str] = mapped_column(
-        ForeignKey("taxonomy_nodes.id", ondelete="CASCADE"),
-        nullable=False,
-    )
+    defined_at_curriculum_node_id: Mapped[str] = mapped_column(Text, nullable=False)
     parent_property_id: Mapped[str | None] = mapped_column(
         ForeignKey("property_definitions.id", ondelete="CASCADE"),
         nullable=True,
     )
+    label: Mapped[str] = mapped_column(Text, default="")
+    description: Mapped[str | None] = mapped_column(Text, nullable=True)
     property_key: Mapped[str] = mapped_column(Text, default="")
     canonical_path: Mapped[str] = mapped_column(Text, default="")
     data_type: Mapped[str] = mapped_column(Text, default="text")
+    default_value: Mapped[str | None] = mapped_column(Text, nullable=True)
     constraints_json: Mapped[str | None] = mapped_column(Text, nullable=True)
     is_required: Mapped[bool] = mapped_column(Boolean, default=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
 
-    defined_at_node: Mapped[TaxonomyNode] = relationship()
     parent_property: Mapped["PropertyDefinition | None"] = relationship(
         back_populates="child_properties",
         remote_side=lambda: [PropertyDefinition.id],

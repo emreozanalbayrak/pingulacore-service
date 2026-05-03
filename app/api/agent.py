@@ -25,8 +25,8 @@ from app.schemas.api import (
 )
 from app.schemas.domain import AssetSpec
 from app.services.log_stream_service import publish_done
+from app.services.object_storage_service import ObjectStorageService
 from app.services.pipeline_log_service import write_pipeline_log
-from app.services.run_dir_service import create_standalone_run_dir, write_manifest
 
 router = APIRouter(prefix="/v1", tags=["agent"])
 
@@ -87,6 +87,13 @@ def standalone_generate_question(
             pipeline_id=None,
             sub_pipeline_id=None,
         )
+        artifact = repository.create_artifact(
+            db,
+            kind="question",
+            content_json=result.model_dump(),
+            source_agent_name="main_generate_question",
+            source_agent_run_id=run_id,
+        )
         _log_standalone(
             db,
             component=component,
@@ -94,7 +101,7 @@ def standalone_generate_question(
             details={"run_id": run_id},
             stream_key=stream_key,
         )
-        return StandaloneAgentResponse(run_id=run_id, result=result)
+        return StandaloneAgentResponse(run_id=run_id, result=result, artifact_id=artifact.id)
     except Exception as exc:
         _log_standalone(db, component=component, message=f"Run hata ile sonlandı: {exc}", level="error", stream_key=stream_key)
         raise
@@ -125,6 +132,13 @@ def standalone_generate_layout(req: StandaloneGenerateLayoutRequest, db: Session
             pipeline_id=None,
             sub_pipeline_id=None,
         )
+        artifact = repository.create_artifact(
+            db,
+            kind="layout",
+            content_json=result.model_dump(),
+            source_agent_name="main_generate_layout",
+            source_agent_run_id=run_id,
+        )
         _log_standalone(
             db,
             component=component,
@@ -132,7 +146,7 @@ def standalone_generate_layout(req: StandaloneGenerateLayoutRequest, db: Session
             details={"run_id": run_id},
             stream_key=stream_key,
         )
-        return StandaloneAgentResponse(run_id=run_id, result=result)
+        return StandaloneAgentResponse(run_id=run_id, result=result, artifact_id=artifact.id)
     except Exception as exc:
         _log_standalone(db, component=component, message=f"Run hata ile sonlandı: {exc}", level="error", stream_key=stream_key)
         raise
@@ -170,6 +184,14 @@ def standalone_generate_html(req: StandaloneGenerateHtmlRequest, db: Session = D
             pipeline_id=None,
             sub_pipeline_id=None,
         )
+        artifact = repository.create_artifact(
+            db,
+            kind="html",
+            content_json=result.model_dump(),
+            content_text=result.html_content,
+            source_agent_name="main_generate_html",
+            source_agent_run_id=run_id,
+        )
         _log_standalone(
             db,
             component=component,
@@ -177,7 +199,7 @@ def standalone_generate_html(req: StandaloneGenerateHtmlRequest, db: Session = D
             details={"run_id": run_id},
             stream_key=stream_key,
         )
-        return StandaloneAgentResponse(run_id=run_id, result=result)
+        return StandaloneAgentResponse(run_id=run_id, result=result, artifact_id=artifact.id)
     except Exception as exc:
         _log_standalone(db, component=component, message=f"Run hata ile sonlandı: {exc}", level="error", stream_key=stream_key)
         raise
@@ -381,21 +403,9 @@ def standalone_generate_composite_image(
     stream_key = req.stream_key
     try:
         asset = AssetSpec(**req.asset)
-        run_dir = create_standalone_run_dir(settings.runs_dir, agent_name="generate_composite_image")
-        log_path = run_dir / "log.txt"
         _log_standalone(db, component=component, message="Run başlatıldı.", log_path=log_path, stream_key=stream_key)
-        write_manifest(
-            run_dir,
-            run_type="standalone",
-            yaml_filename=None,
-            agent_name="generate_composite_image",
-            pipeline_id=None,
-            sub_pipeline_id=None,
-            sub_kind=None,
-        )
-        img_output_path = run_dir / f"{asset.slug}.png"
         result = agents.generate_composite_image(
-            asset, settings.image_max_retries, output_path=img_output_path
+            asset, settings.image_max_retries, output_path=None
         )
         run_id = repository.record_agent_run(
             db,
@@ -412,7 +422,28 @@ def standalone_generate_composite_image(
             sub_pipeline_id=None,
         )
         result_dict: Any = result.model_dump()
-        result_dict["run_path"] = str(run_dir.relative_to(settings.root_dir))
+        artifact_id = None
+        image_path = Path(result.image_path)
+        if image_path.exists() and image_path.is_file():
+            storage = ObjectStorageService(settings)
+            key = f"standalone/{run_id}/{image_path.name}"
+            storage.upload_file(
+                bucket=settings.s3_generated_bucket,
+                key=key,
+                path=image_path,
+                content_type="image/png",
+            )
+            artifact = repository.create_artifact(
+                db,
+                kind="generated_asset",
+                object_bucket=settings.s3_generated_bucket,
+                object_key=key,
+                mime_type="image/png",
+                source_agent_name="helper_generate_composite_image",
+                source_agent_run_id=run_id,
+            )
+            artifact_id = artifact.id
+            result_dict["image_url"] = f"/v1/assets/{artifact_id}"
         _log_standalone(
             db,
             component=component,
@@ -421,7 +452,7 @@ def standalone_generate_composite_image(
             log_path=log_path,
             stream_key=stream_key,
         )
-        return StandaloneAgentResponse(run_id=run_id, result=result_dict)
+        return StandaloneAgentResponse(run_id=run_id, result=result_dict, artifact_id=artifact_id)
     except Exception as exc:
         _log_standalone(db, component=component, message=f"Run hata ile sonlandı: {exc}", level="error", log_path=log_path, stream_key=stream_key)
         raise

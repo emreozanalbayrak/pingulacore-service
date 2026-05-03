@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import asyncio
 import inspect
-import shutil
 from pathlib import Path
 from typing import Any
 
@@ -24,15 +23,7 @@ from app.schemas.domain import LayoutPlan, QuestionSpec
 from app.services.log_stream_service import publish_done, publish_event
 from app.services.pipeline_log_service import write_pipeline_log
 from app.services.retry_service import RetrySettings, merge_retry_config
-from app.services.run_dir_service import (
-    create_full_run_dir,
-    create_sub_run_dir,
-    run_relative_path,
-    update_manifest_status,
-    write_manifest,
-)
-from app.services.sub_pipeline_files_service import write_html_file, write_layout_file, write_question_file
-from app.services.yaml_service import load_yaml_file
+from app.services.object_storage_service import ObjectStorageService
 
 
 class PipelineService:
@@ -40,6 +31,7 @@ class PipelineService:
         self.db = db
         self.settings = settings or get_settings()
         self.agents = AgentService(self.settings)
+        self.storage = ObjectStorageService(self.settings)
         self._log_path: Path | None = None
         self._stream_key: str | None = None
 
@@ -67,77 +59,86 @@ class PipelineService:
             stream_key=self._stream_key,
         )
 
-    def _persist_sub_output_question(
+    def _artifact_response_url(self, artifact_id: str) -> str:
+        return f"/v1/assets/{artifact_id}"
+
+    def _load_yaml_instance_payload(self, yaml_instance_id: str) -> dict[str, Any]:
+        row = repository.get_yaml_instance(self.db, yaml_instance_id)
+        if row is None:
+            raise HTTPException(status_code=404, detail="YAML instance bulunamadı")
+        data = repository.parse_json(row.values_json)
+        if not isinstance(data, dict):
+            raise HTTPException(status_code=400, detail="YAML instance values dict olmalı")
+        if not row.rendered_yaml_text:
+            repository.update_yaml_instance(
+                self.db,
+                yaml_instance_id,
+                rendered_yaml_text=str(data),
+            )
+        return data
+
+    def _create_json_artifact(
         self,
         *,
-        mode: str,
-        sub_pipeline_id: str,
-        question: QuestionSpec,
+        kind: str,
+        payload: Any,
         pipeline_id: str | None = None,
+        sub_pipeline_id: str | None = None,
+        text: str | None = None,
     ) -> str:
-        filename = write_question_file(question, sub_pipeline_id=sub_pipeline_id)
-        repository.upsert_stored_json_output(
+        artifact = repository.create_artifact(
             self.db,
-            kind="q_json",
-            filename=filename,
-            content=question.model_dump(),
+            kind=kind,
+            content_json=payload,
+            content_text=text,
+            source_pipeline_id=pipeline_id,
             source_sub_pipeline_id=sub_pipeline_id,
         )
-        self._log(
-            mode=mode,
-            component="filesystem",
-            message=f"QuestionSpec dosyaya kaydedildi: sp_files/q_json/{filename}",
-            pipeline_id=pipeline_id,
-            sub_pipeline_id=sub_pipeline_id,
-            details={"file": filename, "kind": "q_json", "db_saved": True},
-        )
-        return filename
+        return artifact.id
 
-    def _persist_sub_output_layout(
+    def _upload_file_artifact(
         self,
         *,
-        mode: str,
-        sub_pipeline_id: str,
-        layout: LayoutPlan,
+        kind: str,
+        path: Path,
+        bucket: str,
+        key: str,
+        mime_type: str,
         pipeline_id: str | None = None,
+        sub_pipeline_id: str | None = None,
     ) -> str:
-        filename = write_layout_file(layout, sub_pipeline_id=sub_pipeline_id)
-        repository.upsert_stored_json_output(
+        existing = repository.get_artifact_by_object(self.db, bucket=bucket, key=key)
+        if existing is not None:
+            return existing.id
+        self.storage.upload_file(bucket=bucket, key=key, path=path, content_type=mime_type)
+        artifact = repository.create_artifact(
             self.db,
-            kind="layout",
-            filename=filename,
-            content=layout.model_dump(),
+            kind=kind,
+            object_bucket=bucket,
+            object_key=key,
+            mime_type=mime_type,
+            source_pipeline_id=pipeline_id,
             source_sub_pipeline_id=sub_pipeline_id,
         )
-        self._log(
-            mode=mode,
-            component="filesystem",
-            message=f"LayoutPlan dosyaya kaydedildi: sp_files/layout/{filename}",
-            pipeline_id=pipeline_id,
-            sub_pipeline_id=sub_pipeline_id,
-            details={"file": filename, "kind": "layout", "db_saved": True},
-        )
-        return filename
+        return artifact.id
 
-    def _persist_sub_output_html(
+    def _artifactize_html_asset_urls(
         self,
-        *,
-        mode: str,
-        sub_pipeline_id: str,
-        html_payload: dict[str, Any],
-        question_id: str | None = None,
-        pipeline_id: str | None = None,
-    ) -> None:
-        normalized_payload = self._normalize_html_payload_for_server(html_payload)
-        filename = write_html_file(normalized_payload, sub_pipeline_id=sub_pipeline_id, question_id=question_id)
-        self._log(
-            mode=mode,
-            component="filesystem",
-            message=f"HTML dosyaya kaydedildi: sp_files/q_html/{filename}",
-            pipeline_id=pipeline_id,
-            sub_pipeline_id=sub_pipeline_id,
-            details={"file": filename, "kind": "q_html"},
-        )
+        html_content: str,
+        asset_map: dict[str, str],
+        asset_artifact_ids: dict[str, str],
+    ) -> str:
+        updated = html_content
+        for slug, artifact_id in asset_artifact_ids.items():
+            url = self._artifact_response_url(artifact_id)
+            mapped = asset_map.get(slug)
+            candidates = [mapped, Path(str(mapped)).name if mapped else None]
+            for candidate in [item for item in candidates if item]:
+                updated = updated.replace(f"catalog/{candidate}", url)
+                updated = updated.replace(f"generated_assets/{candidate}", url)
+                updated = updated.replace(f"runs/{candidate}", url)
+                updated = updated.replace(str(candidate), url)
+        return updated
 
     def _normalize_html_payload_for_server(self, html_payload: dict[str, Any]) -> dict[str, Any]:
         normalized = dict(html_payload)
@@ -494,7 +495,7 @@ class PipelineService:
         pipeline_id: str | None,
         sub_pipeline_id: str | None,
         run_dir: Path | None = None,
-    ) -> tuple[dict[str, Any], dict[str, Any], int, dict[str, str], str | None]:
+    ) -> tuple[dict[str, Any], dict[str, Any], int, dict[str, str], str | None, str | None]:
         self._log(
             mode=mode,
             component="pipeline",
@@ -517,7 +518,9 @@ class PipelineService:
         last_validation = None
         last_html: dict[str, Any] | None = None
         last_rendered_image_path: str | None = None
+        last_rendered_image_artifact_id: str | None = None
         asset_map: dict[str, str] = {}
+        asset_artifact_ids: dict[str, str] = {}
         catalog_context_filenames = sorted(
             {
                 Path(asset.source_filename or asset.output_filename).name
@@ -528,14 +531,31 @@ class PipelineService:
 
         for asset in layout.asset_library.values():
             if asset.asset_type.value == "catalog_component":
-                asset_map[asset.slug] = Path(asset.source_filename or asset.output_filename).name
+                filename = Path(asset.source_filename or asset.output_filename).name
+                asset_map[asset.slug] = filename
+                catalog_path = self.settings.catalog_dir / filename
+                if catalog_path.exists() and catalog_path.is_file():
+                    asset_artifact_ids[asset.slug] = self._upload_file_artifact(
+                        kind="catalog_asset",
+                        path=catalog_path,
+                        bucket=self.settings.s3_catalog_bucket,
+                        key=filename,
+                        mime_type="image/png",
+                        pipeline_id=pipeline_id,
+                        sub_pipeline_id=sub_pipeline_id,
+                    )
                 self._log(
                     mode=mode,
                     component="helper.assets",
                     message=f"Catalog asset eşlendi: {asset.slug}",
                     pipeline_id=pipeline_id,
                     sub_pipeline_id=sub_pipeline_id,
-                    details={"slug": asset.slug, "filename": asset_map[asset.slug], "type": "catalog_component"},
+                    details={
+                        "slug": asset.slug,
+                        "filename": asset_map[asset.slug],
+                        "type": "catalog_component",
+                        "artifact_id": asset_artifact_ids.get(asset.slug),
+                    },
                 )
                 continue
 
@@ -551,20 +571,25 @@ class PipelineService:
                     "catalog_context_count": len(catalog_context_filenames),
                 },
             )
-            img_output_path = (
-                run_dir / "assets" / f"{asset.slug}.png" if run_dir is not None else None
-            )
             result = await asyncio.to_thread(
                 self.agents.generate_composite_image,
                 asset,
                 retry.image_max_retries,
                 catalog_context_filenames=catalog_context_filenames,
-                output_path=img_output_path,
+                output_path=None,
             )
-            if run_dir is not None:
-                asset_map[asset.slug] = run_relative_path(run_dir, self.settings.runs_dir, "assets", f"{asset.slug}.png")
-            else:
-                asset_map[asset.slug] = Path(result.image_path).name
+            generated_path = Path(result.image_path)
+            asset_map[asset.slug] = generated_path.name
+            if generated_path.exists() and generated_path.is_file():
+                asset_artifact_ids[asset.slug] = self._upload_file_artifact(
+                    kind="generated_asset",
+                    path=generated_path,
+                    bucket=self.settings.s3_generated_bucket,
+                    key=f"{sub_pipeline_id or pipeline_id or 'standalone'}/{generated_path.name}",
+                    mime_type="image/png",
+                    pipeline_id=pipeline_id,
+                    sub_pipeline_id=sub_pipeline_id,
+                )
             repository.record_agent_run(
                 self.db,
                 agent_name="helper_generate_composite_image",
@@ -585,7 +610,12 @@ class PipelineService:
                 message=f"Composite image hazır: {asset.slug} -> {asset_map[asset.slug]}",
                 pipeline_id=pipeline_id,
                 sub_pipeline_id=sub_pipeline_id,
-                details={"slug": asset.slug, "filename": asset_map[asset.slug], "note": result.note},
+                details={
+                    "slug": asset.slug,
+                    "filename": asset_map[asset.slug],
+                    "artifact_id": asset_artifact_ids.get(asset.slug),
+                    "note": result.note,
+                },
             )
 
         for attempt in range(1, retry.html_max_retries + 1):
@@ -647,16 +677,29 @@ class PipelineService:
                 asset_map=asset_map,
                 question_id=layout.question_id,
                 attempt=attempt,
-                run_assets_dir=run_dir / "assets" if run_dir is not None else None,
-                render_dir=run_dir,
+                run_assets_dir=None,
+                render_dir=None,
             )
+            rendered_internal = Path(rendered_image_internal_path)
+            rendered_image_artifact_id = None
+            if rendered_internal.exists() and rendered_internal.is_file():
+                rendered_image_artifact_id = self._upload_file_artifact(
+                    kind="rendered_image",
+                    path=rendered_internal,
+                    bucket=self.settings.s3_rendered_bucket,
+                    key=f"{sub_pipeline_id or pipeline_id or 'standalone'}/{rendered_internal.name}",
+                    mime_type="image/png",
+                    pipeline_id=pipeline_id,
+                    sub_pipeline_id=sub_pipeline_id,
+                )
             rendered_image_path = (
-                run_relative_path(run_dir, self.settings.runs_dir, Path(rendered_image_internal_path).name)
-                if run_dir is not None
+                self._artifact_response_url(rendered_image_artifact_id)
+                if rendered_image_artifact_id
                 else rendered_image_internal_path
             )
             last_html = html.model_dump()
             last_rendered_image_path = rendered_image_path
+            last_rendered_image_artifact_id = rendered_image_artifact_id
             self._log(
                 mode=mode,
                 component="html.render",
@@ -740,18 +783,12 @@ class PipelineService:
 
             if validation.overall_status == "pass":
                 final_rendered_image_path = rendered_image_path
-                if run_dir is not None:
-                    final_internal_path = run_dir / "render_final.png"
-                    shutil.copyfile(rendered_image_internal_path, final_internal_path)
-                    final_rendered_image_path = run_relative_path(run_dir, self.settings.runs_dir, final_internal_path.name)
-                    self._log(
-                        mode=mode,
-                        component="html.render",
-                        message="Final render kaydedildi: render_final.png",
-                        pipeline_id=pipeline_id,
-                        sub_pipeline_id=sub_pipeline_id,
-                        details={"attempt": attempt, "rendered_image_path": final_rendered_image_path},
-                    )
+                final_html_payload = html.model_dump()
+                final_html_payload["html_content"] = self._artifactize_html_asset_urls(
+                    str(final_html_payload.get("html_content") or ""),
+                    asset_map,
+                    asset_artifact_ids,
+                )
                 self._log(
                     mode=mode,
                     component="pipeline",
@@ -759,7 +796,14 @@ class PipelineService:
                     pipeline_id=pipeline_id,
                     sub_pipeline_id=sub_pipeline_id,
                 )
-                return html.model_dump(), validation.model_dump(), attempt, asset_map, final_rendered_image_path
+                return (
+                    final_html_payload,
+                    validation.model_dump(),
+                    attempt,
+                    {slug: self._artifact_response_url(artifact_id) for slug, artifact_id in asset_artifact_ids.items()},
+                    final_rendered_image_path,
+                    rendered_image_artifact_id,
+                )
 
             current_feedback = validation.feedback or "\n".join(validation.issues)
             feedback_history.append(current_feedback)
@@ -786,6 +830,12 @@ class PipelineService:
 
         if last_html is None:
             last_html = {"selected_template": "unknown", "html_content": "", "schema_version": "question-html.v1"}
+        else:
+            last_html["html_content"] = self._artifactize_html_asset_urls(
+                str(last_html.get("html_content") or ""),
+                asset_map,
+                asset_artifact_ids,
+            )
 
         self._log(
             mode=mode,
@@ -800,36 +850,49 @@ class PipelineService:
                 "rendered_image_path": last_rendered_image_path,
             },
         )
-        return last_html, last_validation_payload, retry.html_max_retries, asset_map, last_rendered_image_path
+        return (
+            last_html,
+            last_validation_payload,
+            retry.html_max_retries,
+            {slug: self._artifact_response_url(artifact_id) for slug, artifact_id in asset_artifact_ids.items()},
+            last_rendered_image_path,
+            last_rendered_image_artifact_id,
+        )
 
-    async def run_full_pipeline(self, yaml_filename: str, retry_config: RetryConfig | None, stream_key: str | None = None) -> FullPipelineRunResponse:
+    def _question_from_artifact(self, artifact_id: str) -> QuestionSpec:
+        artifact = repository.get_artifact(self.db, artifact_id)
+        if artifact is None or artifact.kind != "question":
+            raise HTTPException(status_code=404, detail="Question artifact bulunamadı")
+        data = repository.parse_json(artifact.content_json)
+        if not isinstance(data, dict):
+            raise HTTPException(status_code=400, detail="Question artifact içeriği geçersiz")
+        return QuestionSpec.model_validate(data)
+
+    def _layout_from_artifact(self, artifact_id: str) -> LayoutPlan:
+        artifact = repository.get_artifact(self.db, artifact_id)
+        if artifact is None or artifact.kind != "layout":
+            raise HTTPException(status_code=404, detail="Layout artifact bulunamadı")
+        data = repository.parse_json(artifact.content_json)
+        if not isinstance(data, dict):
+            raise HTTPException(status_code=400, detail="Layout artifact içeriği geçersiz")
+        return LayoutPlan.model_validate(data)
+
+    async def run_full_pipeline(self, yaml_instance_id: str, retry_config: RetryConfig | None, stream_key: str | None = None) -> FullPipelineRunResponse:
         self._stream_key = stream_key
         retry = merge_retry_config(retry_config, self.settings)
 
         pipeline = repository.create_pipeline(
             self.db,
-            yaml_filename=yaml_filename,
+            yaml_filename="",
+            yaml_instance_id=yaml_instance_id,
             retry_config=retry.__dict__,
         )
-
-        run_dir = create_full_run_dir(self.settings.runs_dir, yaml_filename)
-        self._log_path = run_dir / "log.txt"
-        self.agents.log_path = self._log_path
         self.agents.stream_key = self._stream_key
-        write_manifest(
-            run_dir,
-            run_type="full",
-            yaml_filename=yaml_filename,
-            agent_name=None,
-            pipeline_id=pipeline.id,
-            sub_pipeline_id=None,
-            sub_kind=None,
-        )
 
         self._log(
             mode="full",
             component="pipeline",
-            message=f"Full pipeline başlatıldı. yaml={yaml_filename}",
+            message=f"Full pipeline başlatıldı. yaml_instance_id={yaml_instance_id}",
             pipeline_id=pipeline.id,
             sub_pipeline_id=None,
             details=retry.__dict__,
@@ -840,7 +903,7 @@ class PipelineService:
             kind="yaml_to_question",
             mode="full",
             pipeline_id=pipeline.id,
-            input_payload={"yaml_filename": yaml_filename},
+            input_payload={"yaml_instance_id": yaml_instance_id},
         )
         sub_l = repository.create_sub_pipeline(
             self.db,
@@ -873,15 +936,15 @@ class PipelineService:
             self._log(
                 mode="full",
                 component="pipeline",
-                message=f"YAML okunuyor: {yaml_filename}",
+                message=f"YAML instance okunuyor: {yaml_instance_id}",
                 pipeline_id=pipeline.id,
                 sub_pipeline_id=sub_q.id,
             )
-            yaml_content = load_yaml_file(yaml_filename)
+            yaml_content = self._load_yaml_instance_payload(yaml_instance_id)
             self._log(
                 mode="full",
                 component="pipeline",
-                message="YAML başarıyla okundu ve parse edildi.",
+                message="YAML instance başarıyla okundu.",
                 pipeline_id=pipeline.id,
                 sub_pipeline_id=sub_q.id,
                 details={"top_level_keys": sorted(list(yaml_content.keys()))},
@@ -904,11 +967,11 @@ class PipelineService:
                     "attempts": qa,
                 },
             )
-            self._persist_sub_output_question(
-                mode="full",
+            question_artifact_id = self._create_json_artifact(
+                kind="question",
+                payload=question.model_dump(),
                 pipeline_id=pipeline.id,
                 sub_pipeline_id=sub_q.id,
-                question=question,
             )
             self._log(
                 mode="full",
@@ -916,6 +979,7 @@ class PipelineService:
                 message=f"Sub-pipeline tamamlandı: yaml_to_question (attempts={qa})",
                 pipeline_id=pipeline.id,
                 sub_pipeline_id=sub_q.id,
+                details={"question_artifact_id": question_artifact_id},
             )
 
             layout, ql_validation, la = await self._run_question_to_layout_loop(
@@ -931,11 +995,11 @@ class PipelineService:
                 status="success",
                 output_payload={"layout": layout.model_dump(), "validation": ql_validation, "attempts": la},
             )
-            self._persist_sub_output_layout(
-                mode="full",
+            layout_artifact_id = self._create_json_artifact(
+                kind="layout",
+                payload=layout.model_dump(),
                 pipeline_id=pipeline.id,
                 sub_pipeline_id=sub_l.id,
-                layout=layout,
             )
             self._log(
                 mode="full",
@@ -943,18 +1007,26 @@ class PipelineService:
                 message=f"Sub-pipeline tamamlandı: question_to_layout (attempts={la})",
                 pipeline_id=pipeline.id,
                 sub_pipeline_id=sub_l.id,
+                details={"layout_artifact_id": layout_artifact_id},
             )
 
-            raw_html, lh_validation, ha, asset_map, rendered_image_path = await self._run_layout_to_html_loop(
+            raw_html, lh_validation, ha, asset_map, rendered_image_path, rendered_image_artifact_id = await self._run_layout_to_html_loop(
                 mode="full",
                 question=question,
                 layout=layout,
                 retry=retry,
                 pipeline_id=pipeline.id,
                 sub_pipeline_id=sub_h.id,
-                run_dir=run_dir,
+                run_dir=None,
             )
             html = self._normalize_html_payload_for_server(raw_html)
+            html_artifact_id = self._create_json_artifact(
+                kind="html",
+                payload=html,
+                text=str(html.get("html_content") or ""),
+                pipeline_id=pipeline.id,
+                sub_pipeline_id=sub_h.id,
+            )
             repository.finish_sub_pipeline(
                 self.db,
                 sub_h.id,
@@ -965,20 +1037,10 @@ class PipelineService:
                     "attempts": ha,
                     "asset_map": asset_map,
                     "rendered_image_path": rendered_image_path,
+                    "html_artifact_id": html_artifact_id,
+                    "rendered_image_artifact_id": rendered_image_artifact_id,
                 },
             )
-            self._persist_sub_output_html(
-                mode="full",
-                pipeline_id=pipeline.id,
-                sub_pipeline_id=sub_h.id,
-                html_payload=html,
-                question_id=layout.question_id,
-            )
-
-            # Write all pipeline artifacts into the structured run directory
-            (run_dir / "question.json").write_text(question.model_dump_json(indent=2), encoding="utf-8")
-            (run_dir / "layout.json").write_text(layout.model_dump_json(indent=2), encoding="utf-8")
-            (run_dir / "question.html").write_text(html.get("html_content", ""), encoding="utf-8")
 
             self._log(
                 mode="full",
@@ -986,10 +1048,13 @@ class PipelineService:
                 message=f"Sub-pipeline tamamlandı: layout_to_html (attempts={ha})",
                 pipeline_id=pipeline.id,
                 sub_pipeline_id=sub_h.id,
+                details={
+                    "html_artifact_id": html_artifact_id,
+                    "rendered_image_artifact_id": rendered_image_artifact_id,
+                },
             )
 
             repository.finish_pipeline(self.db, pipeline.id, status="success")
-            update_manifest_status(run_dir, "success")
             self._log(
                 mode="full",
                 component="pipeline",
@@ -998,7 +1063,6 @@ class PipelineService:
                 sub_pipeline_id=None,
             )
 
-            run_path = str(run_dir.relative_to(self.settings.root_dir))
             return FullPipelineRunResponse(
                 pipeline_id=pipeline.id,
                 sub_pipeline_ids={
@@ -1006,11 +1070,13 @@ class PipelineService:
                     "question_to_layout": sub_l.id,
                     "layout_to_html": sub_h.id,
                 },
+                question_artifact_id=question_artifact_id,
+                layout_artifact_id=layout_artifact_id,
+                html_artifact_id=html_artifact_id,
+                rendered_image_artifact_id=rendered_image_artifact_id,
                 question_json=question,
                 layout_plan_json=layout,
                 question_html=html,
-                rendered_image_path=rendered_image_path,
-                run_path=run_path,
             )
         except Exception as exc:
             self._log(
@@ -1021,7 +1087,6 @@ class PipelineService:
                 sub_pipeline_id=None,
                 level="error",
             )
-            update_manifest_status(run_dir, "failed")
             repository.finish_sub_pipeline(self.db, sub_q.id, status="failed", error=str(exc))
             repository.finish_sub_pipeline(self.db, sub_l.id, status="failed", error=str(exc))
             repository.finish_sub_pipeline(self.db, sub_h.id, status="failed", error=str(exc))
@@ -1030,7 +1095,7 @@ class PipelineService:
         finally:
             publish_done(self._stream_key or "")
 
-    async def run_sub_yaml_to_question(self, yaml_filename: str, retry_config: RetryConfig | None, stream_key: str | None = None) -> YamlToQuestionRunResponse:
+    async def run_sub_yaml_to_question(self, yaml_instance_id: str, retry_config: RetryConfig | None, stream_key: str | None = None) -> YamlToQuestionRunResponse:
         self._stream_key = stream_key
         retry = merge_retry_config(retry_config, self.settings)
         sub = repository.create_sub_pipeline(
@@ -1038,28 +1103,15 @@ class PipelineService:
             kind="yaml_to_question",
             mode="sub",
             pipeline_id=None,
-            input_payload={"yaml_filename": yaml_filename},
+            input_payload={"yaml_instance_id": yaml_instance_id},
         )
         sub_id = sub.id
-
-        run_dir = create_sub_run_dir(self.settings.runs_dir, yaml_filename=yaml_filename)
-        self._log_path = run_dir / "log.txt"
-        self.agents.log_path = self._log_path
         self.agents.stream_key = self._stream_key
-        write_manifest(
-            run_dir,
-            run_type="sub",
-            yaml_filename=yaml_filename,
-            agent_name=None,
-            pipeline_id=None,
-            sub_pipeline_id=sub_id,
-            sub_kind="yaml_to_question",
-        )
 
         self._log(
             mode="sub",
             component="pipeline",
-            message=f"Sub-pipeline başlatıldı: yaml_to_question (yaml={yaml_filename})",
+            message=f"Sub-pipeline başlatıldı: yaml_to_question (yaml_instance_id={yaml_instance_id})",
             pipeline_id=None,
             sub_pipeline_id=sub_id,
             details=retry.__dict__,
@@ -1069,15 +1121,15 @@ class PipelineService:
             self._log(
                 mode="sub",
                 component="pipeline",
-                message=f"YAML okunuyor: {yaml_filename}",
+                message=f"YAML instance okunuyor: {yaml_instance_id}",
                 pipeline_id=None,
                 sub_pipeline_id=sub_id,
             )
-            yaml_content = load_yaml_file(yaml_filename)
+            yaml_content = self._load_yaml_instance_payload(yaml_instance_id)
             self._log(
                 mode="sub",
                 component="pipeline",
-                message="YAML başarıyla okundu.",
+                message="YAML instance başarıyla okundu.",
                 pipeline_id=None,
                 sub_pipeline_id=sub_id,
                 details={"top_level_keys": sorted(list(yaml_content.keys()))},
@@ -1091,10 +1143,11 @@ class PipelineService:
             )
             payload = {"question": question.model_dump(), "rule_evaluation": rule_eval, "attempts": attempts}
             repository.finish_sub_pipeline(self.db, sub_id, status="success", output_payload=payload)
-            self._persist_sub_output_question(mode="sub", sub_pipeline_id=sub_id, question=question)
-
-            (run_dir / "question.json").write_text(question.model_dump_json(indent=2), encoding="utf-8")
-            update_manifest_status(run_dir, "success")
+            question_artifact_id = self._create_json_artifact(
+                kind="question",
+                payload=question.model_dump(),
+                sub_pipeline_id=sub_id,
+            )
 
             self._log(
                 mode="sub",
@@ -1102,13 +1155,14 @@ class PipelineService:
                 message=f"Sub-pipeline başarıyla tamamlandı: yaml_to_question (attempts={attempts})",
                 pipeline_id=None,
                 sub_pipeline_id=sub_id,
+                details={"question_artifact_id": question_artifact_id},
             )
             return YamlToQuestionRunResponse(
                 sub_pipeline_id=sub_id,
+                question_artifact_id=question_artifact_id,
                 question_json=question,
                 rule_evaluation=rule_eval,
                 attempts=attempts,
-                run_path=str(run_dir.relative_to(self.settings.root_dir)),
             )
         except Exception as exc:
             self._log(
@@ -1119,7 +1173,6 @@ class PipelineService:
                 sub_pipeline_id=sub_id,
                 level="error",
             )
-            update_manifest_status(run_dir, "failed")
             repository.finish_sub_pipeline(self.db, sub_id, status="failed", error=str(exc))
             raise
         finally:
@@ -1127,34 +1180,22 @@ class PipelineService:
 
     async def run_sub_question_to_layout(
         self,
-        question: QuestionSpec,
+        question_artifact_id: str,
         retry_config: RetryConfig | None,
         stream_key: str | None = None,
     ) -> QuestionToLayoutRunResponse:
         self._stream_key = stream_key
         retry = merge_retry_config(retry_config, self.settings)
+        question = self._question_from_artifact(question_artifact_id)
         sub = repository.create_sub_pipeline(
             self.db,
             kind="question_to_layout",
             mode="sub",
             pipeline_id=None,
-            input_payload=question.model_dump(),
+            input_payload={"question_artifact_id": question_artifact_id},
         )
         sub_id = sub.id
-
-        run_dir = create_sub_run_dir(self.settings.runs_dir, token=question.question_id)
-        self._log_path = run_dir / "log.txt"
-        self.agents.log_path = self._log_path
         self.agents.stream_key = self._stream_key
-        write_manifest(
-            run_dir,
-            run_type="sub",
-            yaml_filename=None,
-            agent_name=None,
-            pipeline_id=None,
-            sub_pipeline_id=sub_id,
-            sub_kind="question_to_layout",
-        )
 
         self._log(
             mode="sub",
@@ -1175,10 +1216,11 @@ class PipelineService:
             )
             payload = {"layout": layout.model_dump(), "validation": validation, "attempts": attempts}
             repository.finish_sub_pipeline(self.db, sub_id, status="success", output_payload=payload)
-            self._persist_sub_output_layout(mode="sub", sub_pipeline_id=sub_id, layout=layout)
-
-            (run_dir / "layout.json").write_text(layout.model_dump_json(indent=2), encoding="utf-8")
-            update_manifest_status(run_dir, "success")
+            layout_artifact_id = self._create_json_artifact(
+                kind="layout",
+                payload=layout.model_dump(),
+                sub_pipeline_id=sub_id,
+            )
 
             self._log(
                 mode="sub",
@@ -1186,13 +1228,14 @@ class PipelineService:
                 message=f"Sub-pipeline başarıyla tamamlandı: question_to_layout (attempts={attempts})",
                 pipeline_id=None,
                 sub_pipeline_id=sub_id,
+                details={"layout_artifact_id": layout_artifact_id},
             )
             return QuestionToLayoutRunResponse(
                 sub_pipeline_id=sub_id,
+                layout_artifact_id=layout_artifact_id,
                 layout_plan_json=layout,
                 validation=validation,
                 attempts=attempts,
-                run_path=str(run_dir.relative_to(self.settings.root_dir)),
             )
         except Exception as exc:
             self._log(
@@ -1203,7 +1246,6 @@ class PipelineService:
                 sub_pipeline_id=sub_id,
                 level="error",
             )
-            update_manifest_status(run_dir, "failed")
             repository.finish_sub_pipeline(self.db, sub_id, status="failed", error=str(exc))
             raise
         finally:
@@ -1211,35 +1253,24 @@ class PipelineService:
 
     async def run_sub_layout_to_html(
         self,
-        question: QuestionSpec,
-        layout: LayoutPlan,
+        question_artifact_id: str,
+        layout_artifact_id: str,
         retry_config: RetryConfig | None,
         stream_key: str | None = None,
     ) -> LayoutToHtmlRunResponse:
         self._stream_key = stream_key
         retry = merge_retry_config(retry_config, self.settings)
+        question = self._question_from_artifact(question_artifact_id)
+        layout = self._layout_from_artifact(layout_artifact_id)
         sub = repository.create_sub_pipeline(
             self.db,
             kind="layout_to_html",
             mode="sub",
             pipeline_id=None,
-            input_payload={"question": question.model_dump(), "layout": layout.model_dump()},
+            input_payload={"question_artifact_id": question_artifact_id, "layout_artifact_id": layout_artifact_id},
         )
         sub_id = sub.id
-
-        run_dir = create_sub_run_dir(self.settings.runs_dir, token=question.question_id)
-        self._log_path = run_dir / "log.txt"
-        self.agents.log_path = self._log_path
         self.agents.stream_key = self._stream_key
-        write_manifest(
-            run_dir,
-            run_type="sub",
-            yaml_filename=None,
-            agent_name=None,
-            pipeline_id=None,
-            sub_pipeline_id=sub_id,
-            sub_kind="layout_to_html",
-        )
 
         self._log(
             mode="sub",
@@ -1251,33 +1282,32 @@ class PipelineService:
         )
 
         try:
-            raw_html, validation, attempts, asset_map, rendered_image_path = await self._run_layout_to_html_loop(
+            raw_html, validation, attempts, asset_map, rendered_image_path, rendered_image_artifact_id = await self._run_layout_to_html_loop(
                 mode="sub",
                 question=question,
                 layout=layout,
                 retry=retry,
                 pipeline_id=None,
                 sub_pipeline_id=sub_id,
-                run_dir=run_dir,
+                run_dir=None,
             )
             html = self._normalize_html_payload_for_server(raw_html)
+            html_artifact_id = self._create_json_artifact(
+                kind="html",
+                payload=html,
+                text=str(html.get("html_content") or ""),
+                sub_pipeline_id=sub_id,
+            )
             payload = {
                 "html": html,
                 "validation": validation,
                 "attempts": attempts,
                 "asset_map": asset_map,
                 "rendered_image_path": rendered_image_path,
+                "html_artifact_id": html_artifact_id,
+                "rendered_image_artifact_id": rendered_image_artifact_id,
             }
             repository.finish_sub_pipeline(self.db, sub_id, status="success", output_payload=payload)
-            self._persist_sub_output_html(
-                mode="sub",
-                sub_pipeline_id=sub_id,
-                html_payload=html,
-                question_id=layout.question_id,
-            )
-
-            (run_dir / "question.html").write_text(html.get("html_content", ""), encoding="utf-8")
-            update_manifest_status(run_dir, "success")
 
             self._log(
                 mode="sub",
@@ -1285,15 +1315,19 @@ class PipelineService:
                 message=f"Sub-pipeline başarıyla tamamlandı: layout_to_html (attempts={attempts})",
                 pipeline_id=None,
                 sub_pipeline_id=sub_id,
+                details={
+                    "html_artifact_id": html_artifact_id,
+                    "rendered_image_artifact_id": rendered_image_artifact_id,
+                },
             )
             return LayoutToHtmlRunResponse(
                 sub_pipeline_id=sub_id,
+                html_artifact_id=html_artifact_id,
+                rendered_image_artifact_id=rendered_image_artifact_id,
                 question_html=html,
                 validation=validation,
                 attempts=attempts,
                 generated_assets=asset_map,
-                rendered_image_path=rendered_image_path,
-                run_path=str(run_dir.relative_to(self.settings.root_dir)),
             )
         except Exception as exc:
             self._log(
@@ -1304,7 +1338,6 @@ class PipelineService:
                 sub_pipeline_id=sub_id,
                 level="error",
             )
-            update_manifest_status(run_dir, "failed")
             repository.finish_sub_pipeline(self.db, sub_id, status="failed", error=str(exc))
             raise
         finally:

@@ -1,0 +1,53 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: pingula-postgres
+    environment:
+      POSTGRES_DB: pingula
+      POSTGRES_USER: pingula
+      POSTGRES_PASSWORD: pingula
+    ports:
+      - "5434:5432"
+    volumes:
+      - pingula_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pingula -d pingula"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  minio:
+    image: minio/minio:latest
+    container_name: pingula-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: pingula
+      MINIO_ROOT_PASSWORD: pingula-secret
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - pingula_minio_data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  minio-init:
+    image: minio/mc:latest
+    container_name: pingula-minio-init
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 pingula pingula-secret &&
+      (mc mb -p local/catalog-assets || true) &&
+      (mc mb -p local/generated-assets || true) &&
+      (mc mb -p local/rendered-outputs || true)
+      "
+
+volumes:
+  pingula_postgres_data:
+  pingula_minio_data:

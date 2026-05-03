@@ -11,17 +11,21 @@ import { JsonPanel } from '../components/JsonPanel'
 import { LogStreamPanel } from '../components/LogStreamPanel'
 import { PipelineLogsPanel } from '../components/PipelineLogsPanel'
 import { StatusBadge } from '../components/StatusBadge'
+import { YamlInstanceCascadeSelector } from '../components/YamlInstanceCascadeSelector'
 import { useLogStream } from '../hooks/useLogStream'
 import { usePolling } from '../hooks/usePolling'
 import { ApiError, api } from '../lib/api'
-import { pickHtmlContent, toAssetUrlFromPath } from '../lib/html'
+import { pickHtmlContent } from '../lib/html'
 import type {
+  CurriculumNodeItem,
   FullPipelineRunResponse,
   PipelineAgentLinkResponse,
   PipelineGetResponse,
   PipelineLogEntryResponse,
   RetryConfig,
   SubPipelineGetResponse,
+  YamlInstanceItem,
+  YamlTemplateItem,
 } from '../types'
 
 const EMPTY_RETRY: RetryConfig = {
@@ -44,8 +48,10 @@ function toRetryConfig(input: RetryConfig): RetryConfig {
 }
 
 export function FullPipelinePage() {
-  const [yamlFiles, setYamlFiles] = useState<string[]>([])
-  const [yamlFilename, setYamlFilename] = useState('')
+  const [curriculumTree, setCurriculumTree] = useState<CurriculumNodeItem[]>([])
+  const [yamlTemplates, setYamlTemplates] = useState<YamlTemplateItem[]>([])
+  const [yamlInstances, setYamlInstances] = useState<YamlInstanceItem[]>([])
+  const [yamlInstanceId, setYamlInstanceId] = useState('')
   const [retryConfig, setRetryConfig] = useState<RetryConfig>(EMPTY_RETRY)
 
   const [running, setRunning] = useState(false)
@@ -62,16 +68,22 @@ export function FullPipelinePage() {
   useEffect(() => {
     void (async () => {
       try {
-        const files = await api.listYamlFiles()
-        setYamlFiles(files)
-        if (!yamlFilename && files.length > 0) {
-          setYamlFilename(files[0])
+        const [tree, templates, items] = await Promise.all([
+          api.getCurriculumTree(),
+          api.listYamlTemplates(),
+          api.listYamlInstances(),
+        ])
+        setCurriculumTree(tree)
+        setYamlTemplates(templates)
+        setYamlInstances(items)
+        if (!yamlInstanceId && items.length > 0) {
+          setYamlInstanceId(items[0].id)
         }
       } catch (e) {
-        setError(e instanceof Error ? e.message : 'YAML listesi alınamadı')
+        setError(e instanceof Error ? e.message : 'YAML instance listesi alınamadı')
       }
     })()
-  }, [yamlFilename])
+  }, [])
 
   const refreshAll = async (snapshot?: FullPipelineRunResponse | null): Promise<void> => {
     const source = snapshot ?? response
@@ -114,8 +126,8 @@ export function FullPipelinePage() {
   }, [response?.pipeline_id])
 
   const run = async () => {
-    if (!yamlFilename) {
-      setError('YAML dosyası seçilmedi.')
+    if (!yamlInstanceId) {
+      setError('YAML instance seçilmedi.')
       return
     }
     setRunning(true)
@@ -124,7 +136,7 @@ export function FullPipelinePage() {
     connect(key)
     try {
       const result = await api.runFullPipeline({
-        yaml_filename: yamlFilename,
+        yaml_instance_id: yamlInstanceId,
         retry_config: toRetryConfig(retryConfig),
         stream_key: key,
       })
@@ -144,10 +156,10 @@ export function FullPipelinePage() {
 
   const rawHtmlFromResponse = useMemo(() => pickHtmlContent(response?.question_html), [response])
   const htmlFromResponse = htmlOverrideMain ?? rawHtmlFromResponse
-  const fullRenderedImageUrl = useMemo(
-    () => toAssetUrlFromPath(response?.rendered_image_path),
-    [response?.rendered_image_path],
-  )
+  const fullRenderedImageUrl = useMemo(() => {
+    if (!response?.rendered_image_artifact_id) return ''
+    return `/v1/assets/${encodeURIComponent(response.rendered_image_artifact_id)}`
+  }, [response?.rendered_image_artifact_id])
 
   return (
     <div className="p-8 max-w-5xl mx-auto">
@@ -177,20 +189,19 @@ export function FullPipelinePage() {
           <div className="p-8 space-y-6">
             {/* YAML File */}
             <div className="space-y-2">
-              <label className="flex items-center gap-2 text-sm font-medium text-foreground">
+              <div className="flex items-center gap-2 text-sm font-medium text-foreground">
                 <FileCode className="w-4 h-4" style={{ color: 'var(--primary)' }} />
-                YAML Dosyası
-              </label>
-              <select
-                value={yamlFilename}
-                onChange={(e) => setYamlFilename(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border-2 bg-white focus:outline-none transition-colors"
-                style={{ borderColor: 'var(--border)' }}
-              >
-                {yamlFiles.map((file) => (
-                  <option key={file} value={file}>{file}</option>
-                ))}
-              </select>
+                <span>YAML Instance</span>
+              </div>
+              <YamlInstanceCascadeSelector
+                curriculumTree={curriculumTree}
+                templates={yamlTemplates}
+                instances={yamlInstances}
+                value={yamlInstanceId}
+                onChange={setYamlInstanceId}
+                selectClassName="w-full px-4 py-3 rounded-xl border-2 bg-white focus:outline-none transition-colors"
+                inputClassName="w-full px-4 py-3 rounded-xl border-2 bg-white focus:outline-none transition-colors"
+              />
             </div>
 
             {/* Retry Grid */}
@@ -274,6 +285,12 @@ export function FullPipelinePage() {
                     <StatusBadge status={pipeline.status} />
                   </div>
                 )}
+                {pipeline?.yaml_instance_id && (
+                  <div className="flex items-center gap-3">
+                    <span className="text-muted-foreground w-28 shrink-0">yaml_instance_id</span>
+                    <code className="text-xs bg-muted px-2 py-1 rounded-lg truncate">{pipeline.yaml_instance_id}</code>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -321,9 +338,9 @@ export function FullPipelinePage() {
                   const row = subPipelines[name]
                   const rawHtml = pickHtmlContent((row?.output_json as Record<string, unknown> | undefined)?.html)
                   const html = subHtmlOverrides[name] ?? rawHtml
-                  const subRenderedImagePath = (row?.output_json as Record<string, unknown> | undefined)?.rendered_image_path
+                  const subRenderedImageArtifactId = (row?.output_json as Record<string, unknown> | undefined)?.rendered_image_artifact_id
                   const subRenderedImageUrl =
-                    typeof subRenderedImagePath === 'string' ? toAssetUrlFromPath(subRenderedImagePath) : ''
+                    typeof subRenderedImageArtifactId === 'string' ? `/v1/assets/${encodeURIComponent(subRenderedImageArtifactId)}` : ''
                   return (
                     <div key={id} className="border border-border rounded-xl p-5">
                       <div className="flex items-center justify-between mb-3">

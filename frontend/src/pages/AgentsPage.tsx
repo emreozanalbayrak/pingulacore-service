@@ -9,7 +9,7 @@ import { StatusBadge } from '../components/StatusBadge'
 import { useLogStream } from '../hooks/useLogStream'
 import { ApiError, api } from '../lib/api'
 import { pickHtmlContent } from '../lib/html'
-import type { AgentRunGetResponse, StandaloneAgentName, StandaloneAgentResponse } from '../types'
+import type { AgentRunGetResponse, StandaloneAgentName, StandaloneAgentResponse, YamlInstanceItem } from '../types'
 
 interface FieldConfig {
   key: string
@@ -128,8 +128,8 @@ export function AgentsPage() {
   const [runHistory, setRunHistory] = useState<LocalRunItem[]>([])
   const [error, setError] = useState('')
   const [running, setRunning] = useState(false)
-  const [yamlFiles, setYamlFiles] = useState<string[]>([])
-  const [selectedYamlFilename, setSelectedYamlFilename] = useState('')
+  const [yamlInstances, setYamlInstances] = useState<YamlInstanceItem[]>([])
+  const [selectedYamlInstanceId, setSelectedYamlInstanceId] = useState('')
   const { lines, connected, done, active, connect } = useLogStream()
 
   const selectAgent = (next: StandaloneAgentName) => {
@@ -149,27 +149,27 @@ export function AgentsPage() {
     }
   }
 
-  const refreshYamlFiles = async () => {
+  const refreshYamlInstances = async () => {
     setError('')
     try {
-      const files = await api.listYamlFiles()
-      setYamlFiles(files)
-      if (files.length > 0) setSelectedYamlFilename(files[0])
-      else setSelectedYamlFilename('')
+      const items = await api.listYamlInstances()
+      setYamlInstances(items)
+      if (items.length > 0) setSelectedYamlInstanceId(items[0].id)
+      else setSelectedYamlInstanceId('')
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : 'YAML dosya listesi alınamadı')
+      setError(e instanceof ApiError ? e.message : 'YAML instance listesi alınamadı')
     }
   }
 
   const loadYamlContent = async () => {
-    if (!selectedYamlFilename) {
-      setError('YAML dosyası seçilmedi')
+    if (!selectedYamlInstanceId) {
+      setError('YAML instance seçilmedi')
       return
     }
     setError('')
     try {
-      const yamlData = await api.getYamlFileContent(selectedYamlFilename)
-      const yamlText = JSON.stringify(yamlData, null, 2)
+      const yamlInstance = await api.getYamlInstance(selectedYamlInstanceId)
+      const yamlText = JSON.stringify(yamlInstance.values, null, 2)
       setFieldValues((prev) => {
         const next = { ...prev, yaml_content: yamlText }
         if (!advancedMode) {
@@ -259,6 +259,7 @@ export function AgentsPage() {
                 Agent
               </label>
               <select
+                aria-label="Agent"
                 value={agentId}
                 onChange={(e) => selectAgent(e.target.value as StandaloneAgentName)}
                 className="w-full px-4 py-3 rounded-xl border-2 bg-white focus:outline-none transition-colors"
@@ -300,7 +301,7 @@ export function AgentsPage() {
                       <div className="flex gap-2">
                         <button
                           type="button"
-                          onClick={() => void refreshYamlFiles()}
+                          onClick={() => void refreshYamlInstances()}
                           className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg text-white shadow-sm"
                           style={{ background: 'linear-gradient(to right, var(--primary), var(--secondary))' }}
                         >
@@ -310,7 +311,7 @@ export function AgentsPage() {
                         <button
                           type="button"
                           onClick={() => void loadYamlContent()}
-                          disabled={!selectedYamlFilename || yamlFiles.length === 0}
+                          disabled={!selectedYamlInstanceId || yamlInstances.length === 0}
                           className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg border-2 hover:bg-accent transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
                           style={{ borderColor: 'var(--border)', color: 'var(--foreground)' }}
                         >
@@ -319,14 +320,15 @@ export function AgentsPage() {
                       </div>
                     </div>
                     <select
-                      value={selectedYamlFilename}
-                      onChange={(e) => setSelectedYamlFilename(e.target.value)}
+                      aria-label="Ortak YAML"
+                      value={selectedYamlInstanceId}
+                      onChange={(e) => setSelectedYamlInstanceId(e.target.value)}
                       className="w-full px-4 py-3 rounded-xl border-2 bg-white focus:outline-none transition-colors"
                       style={{ borderColor: 'var(--border)' }}
                     >
-                      {yamlFiles.length === 0
+                      {yamlInstances.length === 0
                         ? <option value="">Önce listeyi yükleyin</option>
-                        : yamlFiles.map((f) => <option key={f} value={f}>{f}</option>)
+                        : yamlInstances.map((item) => <option key={item.id} value={item.id}>{item.instance_name}</option>)
                       }
                     </select>
                   </div>
